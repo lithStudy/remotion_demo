@@ -1,0 +1,16 @@
+export { Boxer } from "./Boxer";
+export { Scarecrow } from "./Scarecrow";
+export { ShieldIcon } from "./ShieldIcon";
+export { StrawIcon } from "./StrawIcon";
+export { PersonA } from "./PersonA";
+export { PersonB } from "./PersonB";
+export { BombIcon } from "./BombIcon";
+export { FoodNoIcon } from "./FoodNoIcon";
+export { BrainCheck } from "./BrainCheck";
+export { TextBubble } from "./TextBubble";
+export { PersonAThinking } from "./PersonAThinking";
+export { PersonBAngry } from "./PersonBAngry";
+export { AcademicIcon } from "./AcademicIcon";
+export { AuthoritySeal } from "./AuthoritySeal";
+export { QuestionIcon } from "./QuestionIcon";
+export { ShieldCheckIcon } from "./ShieldCheckIcon";

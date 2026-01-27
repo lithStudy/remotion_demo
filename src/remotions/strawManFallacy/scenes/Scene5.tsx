@@ -4,6 +4,7 @@ import {
     COLORS,
     ChatBubble,
     HighlightText,
+    TypewriterText,
 } from "../../../components";
 import { AnimationConfig, calculateAnimationTimings, calculateSceneDuration } from "../../../utils";
 
@@ -19,30 +20,27 @@ import { AnimationConfig, calculateAnimationTimings, calculateSceneDuration } fr
  */
 const animationConfigs: AnimationConfig[] = [
     { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 20, preName: null },           // 标题动画
-    { name: "chatBubble1", delayBefore: 30, delayAfter: 0, durationInFrames: 5, preName: "title" },     // 第一个聊天气泡
-    { name: "chatBubble2", delayBefore: 45, delayAfter: 0, durationInFrames: 10, preName: "chatBubble1" },     // 第二个聊天气泡
-    { name: "analysis", delayBefore: 15, delayAfter: 0, durationInFrames: 20, preName: "chatBubble2" },        // 谬误剖析区域
+    { name: "chatBubble1", delayBefore: 0, delayAfter: 0, durationInFrames: 5, preName: "title" },     // 第一个聊天气泡    
+    { name: "chatBubble2", delayBefore: 30, delayAfter: 0, durationInFrames: 10, preName: "chatBubble1" },     // 第二个聊天气泡
+    { name: "analysis", delayBefore: 30, delayAfter: 0, durationInFrames: 20, preName: "chatBubble2" },        // 谬误剖析区域
     { name: "highlight1", delayBefore: 5, delayAfter: 0, durationInFrames: 20, preName: "analysis" },   // 高亮1
     { name: "highlight2", delayBefore: 5, delayAfter: 0, durationInFrames: 20, preName: "highlight1" },   // 高亮2
     { name: "highlight3", delayBefore: 5, delayAfter: 0, durationInFrames: 20, preName: "highlight2" }, // 高亮3
-    { name: "response", delayBefore: 0, delayAfter: 100, durationInFrames: 50, preName: "highlight3" },        // 回应实例
+    { name: "response", delayBefore: 30, delayAfter: 100, durationInFrames: 150, preName: "highlight3" },        // 回应实例
 ];
 
 /**
  * 计算场景总时长：最后一个动画的结束时间
  * 结束时间 = 起始时间 + 持续时间 + delayAfter
  */
-export const calculateCase3SceneDuration = (): number => {
+export const calculateScene5Duration = (): number => {
     return calculateSceneDuration(animationConfigs);
 };
 
 /**
- * P5: 案例三 - 立场绑架（忠诚度测试）
- * 画面：网络舆论场
- * 
- * 时间范围：由主场景配置决定
+ * 场景入口
  */
-export const Case3Scene: React.FC = () => {
+export const Scene5: React.FC = () => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
 
@@ -110,7 +108,6 @@ export const Case3Scene: React.FC = () => {
                     backgroundColor="#FED7D7"
                     delay={animationTimings.chatBubble2.startTime}
                     durationInFrames={animationTimings.chatBubble2.durationInFrames}
-                    style={{ fontWeight: "bold" }}
                 />
             </div>
 
@@ -118,7 +115,7 @@ export const Case3Scene: React.FC = () => {
             <div
                 style={{
                     opacity: analysisOpacity,
-                    backgroundColor: "rgba(255,255,255,0.95)",
+                    backgroundColor: "rgba(255,255,255,0.9)",
                     borderRadius: 20,
                     padding: "20px 30px",
                     marginBottom: 20,
@@ -129,9 +126,10 @@ export const Case3Scene: React.FC = () => {
                     🔍 谬误剖析：
                 </div>
                 <div style={{ fontSize: 36, color: COLORS.text, lineHeight: 1.6 }}>
-                    "<HighlightText delay={animationTimings.highlight1.startTime} durationInFrames={animationTimings.highlight1.durationInFrames} highlightColor={COLORS.highlightDefend}>承认差距</HighlightText>"
+                    观点"<HighlightText delay={animationTimings.highlight1.startTime} durationInFrames={animationTimings.highlight1.durationInFrames} highlightColor={COLORS.highlightDefend}>承认差距</HighlightText>"
                     被歪曲为"<HighlightText delay={animationTimings.highlight2.startTime} durationInFrames={animationTimings.highlight2.durationInFrames} highlightColor={COLORS.highlightAttack}>崇洋媚外</HighlightText>"
                     和"<HighlightText delay={animationTimings.highlight3.startTime} durationInFrames={animationTimings.highlight3.durationInFrames} highlightColor={COLORS.highlightAttack}>嫌弃祖国</HighlightText>"。
+                    对方在攻击"卖国贼"这个稻草人。
                 </div>
             </div>
 
@@ -149,7 +147,13 @@ export const Case3Scene: React.FC = () => {
                     🛡️ 回应实例：
                 </div>
                 <div style={{ fontSize: 36, color: "white", fontStyle: "italic", lineHeight: 1.6 }}>
-                    "指出差距是为了追赶，盲目自大才是害了国家。正视不足，才是真正有自信的表现。"
+                    <TypewriterText
+                        text="指出差距是为了追赶，盲目自大才是害了国家。正视不足，才是真正有自信的表现。"
+                        delay={animationTimings.response.startTime}
+                        durationInFrames={animationTimings.response.durationInFrames}
+                        charFrames={2}
+                        showCursor={true}
+                    />
                 </div>
             </div>
         </AbsoluteFill>

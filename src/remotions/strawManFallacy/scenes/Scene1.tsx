@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring } from "remotion";
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, staticFile } from "remotion";
 import {
     TypewriterText,
     TypewriterContent,
@@ -21,7 +21,9 @@ const animationConfigs: AnimationConfig[] = [
     { name: "conceptContainer", delayBefore: 0, delayAfter: 0, durationInFrames: 20, preName: "title" },  // 概念解析容器
     { name: "conceptTitle", delayBefore: 0, delayAfter: 0, durationInFrames: 20, preName: "conceptContainer" },  // 概念解析标题
     { name: "conceptContent", delayBefore: 0, delayAfter: 0, durationInFrames: 50, preName: "conceptTitle" },  // 概念解析内容
-    { name: "example", delayBefore: 30, delayAfter: 100, durationInFrames: 20, preName: "conceptContent" }, // 典型话术
+    { name: "strawMan", delayBefore: 20, delayAfter: 0, durationInFrames: 20, preName: "conceptContent" },  // 稻草人图片
+    { name: "exampleTitle", delayBefore: 20, delayAfter: 0, durationInFrames: 20, preName: "strawMan" }, // 典型话术标题
+    { name: "exampleContent", delayBefore: 10, delayAfter: 100, durationInFrames: 60, preName: "exampleTitle" }, // 典型话术内容
 ];
 
 /**
@@ -76,11 +78,40 @@ export const Scene1: React.FC = () => {
         durationInFrames: animationTimings.conceptTitle.durationInFrames,
     });
 
-    const exampleOpacity = spring({
-        frame: frame - animationTimings.example.startTime,
+    // 稻草人动画
+    const strawManOpacity = spring({
+        frame: frame - animationTimings.strawMan.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: animationTimings.example.durationInFrames,
+        durationInFrames: animationTimings.strawMan.durationInFrames,
+    });
+
+    const strawManScale = spring({
+        frame: frame - animationTimings.strawMan.startTime,
+        fps,
+        config: { damping: 80 },
+        durationInFrames: animationTimings.strawMan.durationInFrames,
+    });
+
+    const exampleTitleScale = spring({
+        frame: frame - animationTimings.exampleTitle.startTime,
+        fps,
+        config: { damping: 12, stiffness: 200 },
+        durationInFrames: animationTimings.exampleTitle.durationInFrames,
+    });
+
+    const exampleTitleOpacity = spring({
+        frame: frame - animationTimings.exampleTitle.startTime,
+        fps,
+        config: { damping: 100 },
+        durationInFrames: animationTimings.exampleTitle.durationInFrames,
+    });
+
+    const exampleContentOpacity = spring({
+        frame: frame - animationTimings.exampleContent.startTime,
+        fps,
+        config: { damping: 100 },
+        durationInFrames: animationTimings.exampleContent.durationInFrames,
     });
 
 
@@ -141,7 +172,7 @@ export const Scene1: React.FC = () => {
                     backgroundColor: "rgba(0,0,0,0.3)",
                     borderRadius: 20,
                     padding: "25px 40px",
-                    marginTop: 150,
+                    marginTop: 80,
                     maxWidth: 1000,
                     position: "relative",
                     opacity: conceptContainerOpacity,
@@ -176,16 +207,75 @@ export const Scene1: React.FC = () => {
                 </div>
             </div>
 
-            {/* 典型话术 */}
+            {/* 稻草人图片 - 轻微抖动动画 */}
+            <img
+                src={staticFile("稻草人.png")}
+                alt="稻草人"
+                style={{
+                    width: 180,
+                    height: 180,
+                    marginTop: 40,
+                    objectFit: "contain",
+                    opacity: strawManOpacity,
+                    transform: `scale(${strawManScale}) rotate(${Math.sin(frame * 0.8) * 3}deg)`,
+                }}
+            />
+
+            {/* 典型话术区域 */}
             <div
                 style={{
-                    opacity: exampleOpacity,
-                    marginTop: 150,
-                    fontSize: 36,
-                    color: "#FED7D7",
+                    marginTop: 40,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 20,
+                    width: "100%",
+                    maxWidth: 1000,
                 }}
             >
-                ❌ 典型话术："你觉得明朝不好，那你是想赞美清朝咯？"
+                {/* 标题 */}
+                <div
+                    style={{
+                        opacity: exampleTitleOpacity,
+                        transform: `scale(${exampleTitleScale})`,
+                        backgroundColor: "#F1C40F",
+                        color: "#2C3E50",
+                        padding: "10px 30px",
+                        borderRadius: "50px",
+                        fontSize: 32,
+                        fontWeight: "bold",
+                        boxShadow: "0 4px 20px rgba(241, 196, 15, 0.4)",
+                    }}
+                >
+                    ❌ 典型话术
+                </div>
+
+                {/* 内容盒子 */}
+                <div
+                    style={{
+                        opacity: exampleContentOpacity,
+                        backgroundColor: "rgba(255, 255, 255, 0.1)",
+                        border: "2px dashed rgba(255, 255, 255, 0.3)",
+                        borderRadius: 20,
+                        padding: "25px 40px",
+                        fontSize: 38,
+                        color: "#FED7D7",
+                        width: "100%",
+                        textAlign: "center",
+                        minHeight: 100,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <TypewriterText
+                        text='"你觉得明朝不好，那你是想赞美清朝咯？"'
+                        delay={animationTimings.exampleContent.startTime}
+                        durationInFrames={animationTimings.exampleContent.durationInFrames}
+                        charFrames={2}
+                        showCursor={true}
+                    />
+                </div>
             </div>
         </AbsoluteFill>
     );

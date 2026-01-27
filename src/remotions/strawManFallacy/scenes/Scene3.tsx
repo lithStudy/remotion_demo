@@ -4,6 +4,7 @@ import {
     COLORS,
     ChatBubble,
     HighlightText,
+    TypewriterText,
 } from "../../../components";
 import { AnimationConfig, calculateAnimationTimings, calculateSceneDuration } from "../../../utils";
 
@@ -19,30 +20,27 @@ import { AnimationConfig, calculateAnimationTimings, calculateSceneDuration } fr
  */
 const animationConfigs: AnimationConfig[] = [
     { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 20, preName: null },           // 标题动画
-    { name: "chatBubble1", delayBefore: 30, delayAfter: 0, durationInFrames: 5, preName: "title" },     // 第一个聊天气泡
-    { name: "chatBubble2", delayBefore: 45, delayAfter: 0, durationInFrames: 10, preName: "chatBubble1" },     // 第二个聊天气泡
-    { name: "analysis", delayBefore: 15, delayAfter: 0, durationInFrames: 20, preName: "chatBubble2" },        // 谬误剖析区域
+    { name: "chatBubble1", delayBefore: 0, delayAfter: 0, durationInFrames: 5, preName: "title" },     // 第一个聊天气泡
+    { name: "chatBubble2", delayBefore: 30, delayAfter: 0, durationInFrames: 10, preName: "chatBubble1" },     // 第二个聊天气泡
+    { name: "analysis", delayBefore: 30, delayAfter: 0, durationInFrames: 20, preName: "chatBubble2" },        // 谬误剖析区域
     { name: "highlight1", delayBefore: 5, delayAfter: 0, durationInFrames: 20, preName: "analysis" },   // 高亮1
     { name: "highlight2", delayBefore: 5, delayAfter: 0, durationInFrames: 20, preName: "highlight1" },   // 高亮2
     { name: "highlight3", delayBefore: 5, delayAfter: 0, durationInFrames: 20, preName: "highlight2" }, // 高亮3
-    { name: "response", delayBefore: 0, delayAfter: 100, durationInFrames: 50, preName: "highlight3" },        // 回应实例
+    { name: "response", delayBefore: 30, delayAfter: 100, durationInFrames: 150, preName: "highlight3" },        // 回应实例
 ];
 
 /**
  * 计算场景总时长：最后一个动画的结束时间
  * 结束时间 = 起始时间 + 持续时间 + delayAfter
  */
-export const calculateCase2SceneDuration = (): number => {
+export const calculateScene3Duration = (): number => {
     return calculateSceneDuration(animationConfigs);
 };
 
 /**
- * P4: 案例二 - 极端化推演
- * 画面：网络讨论场景
- * 
- * 时间范围：由主场景配置决定
+ * 场景入口
  */
-export const Case2Scene: React.FC = () => {
+export const Scene3: React.FC = () => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
 
@@ -73,7 +71,7 @@ export const Case2Scene: React.FC = () => {
     return (
         <AbsoluteFill
             style={{
-                background: "linear-gradient(135deg, #EBF8FF 0%, #BEE3F8 100%)",
+                background: "linear-gradient(135deg, #FFF5F5 0%, #FED7E2 100%)",
                 padding: 60,
                 display: "flex",
                 flexDirection: "column",
@@ -90,27 +88,26 @@ export const Case2Scene: React.FC = () => {
                     textAlign: "center",
                 }}
             >
-                💬 案例二：极端化推演
+                📋 案例一：情感滑坡（家庭版）
             </div>
 
             {/* 对话区域 */}
             <div style={{ display: "flex", flexDirection: "column", gap: 20, marginBottom: 30 }}>
                 <ChatBubble
-                    content="我觉得这款游戏的角色设计有点过于暴露，不适合未成年人。"
+                    content="妈，我不想喝这碗鸡汤，太油了。"
                     side="left"
-                    color="#2C5282"
-                    backgroundColor="#BEE3F8"
+                    color="#2C7A7B"
+                    backgroundColor="#B2F5EA"
                     delay={animationTimings.chatBubble1.startTime}
                     durationInFrames={animationTimings.chatBubble1.durationInFrames}
                 />
                 <ChatBubble
-                    content="笑死，大清亡了！你是不是想让所有女性都裹上黑袍你才满意？"
+                    content="你现在长大了，嫌弃妈妈做的饭难吃了是吧？嫌弃这个家了是吧？"
                     side="right"
                     color="#C53030"
                     backgroundColor="#FED7D7"
                     delay={animationTimings.chatBubble2.startTime}
                     durationInFrames={animationTimings.chatBubble2.durationInFrames}
-                    style={{ fontWeight: "bold" }}
                 />
             </div>
 
@@ -118,7 +115,7 @@ export const Case2Scene: React.FC = () => {
             <div
                 style={{
                     opacity: analysisOpacity,
-                    backgroundColor: "rgba(255,255,255,0.95)",
+                    backgroundColor: "rgba(255,255,255,0.9)",
                     borderRadius: 20,
                     padding: "20px 30px",
                     marginBottom: 20,
@@ -129,9 +126,10 @@ export const Case2Scene: React.FC = () => {
                     🔍 谬误剖析：
                 </div>
                 <div style={{ fontSize: 36, color: COLORS.text, lineHeight: 1.6 }}>
-                    "<HighlightText delay={animationTimings.highlight1.startTime} durationInFrames={animationTimings.highlight1.durationInFrames} highlightColor={COLORS.highlightDefend}>过于暴露</HighlightText>"
-                    被歪曲为"<HighlightText delay={animationTimings.highlight2.startTime} durationInFrames={animationTimings.highlight2.durationInFrames} highlightColor={COLORS.highlightAttack}>封建保守</HighlightText>"
-                    和"<HighlightText delay={animationTimings.highlight3.startTime} durationInFrames={animationTimings.highlight3.durationInFrames} highlightColor={COLORS.highlightAttack}>强迫裹黑袍</HighlightText>"。
+                    观点"<HighlightText delay={animationTimings.highlight1.startTime} durationInFrames={animationTimings.highlight1.durationInFrames} highlightColor={COLORS.highlightDefend}>汤太油</HighlightText>"
+                    被歪曲为"<HighlightText delay={animationTimings.highlight2.startTime} durationInFrames={animationTimings.highlight2.durationInFrames} highlightColor={COLORS.highlightAttack}>嫌弃妈妈</HighlightText>"
+                    和"<HighlightText delay={animationTimings.highlight3.startTime} durationInFrames={animationTimings.highlight3.durationInFrames} highlightColor={COLORS.highlightAttack}>嫌弃家</HighlightText>"。
+                    妈妈在攻击"不孝"这个稻草人。
                 </div>
             </div>
 
@@ -149,7 +147,13 @@ export const Case2Scene: React.FC = () => {
                     🛡️ 回应实例：
                 </div>
                 <div style={{ fontSize: 36, color: "white", fontStyle: "italic", lineHeight: 1.6 }}>
-                    "我提议的是'分级'或'适度调整'，不是'全面封建化'。请不要把温和的建议极端化。"
+                    <TypewriterText
+                        text="妈，我说的是'汤太油'，不是'你做饭难吃'，更不是'嫌弃家'。让我们针对'油'这个问题讨论吧。"
+                        delay={animationTimings.response.startTime}
+                        durationInFrames={animationTimings.response.durationInFrames}
+                        charFrames={2}
+                        showCursor={true}
+                    />
                 </div>
             </div>
         </AbsoluteFill>

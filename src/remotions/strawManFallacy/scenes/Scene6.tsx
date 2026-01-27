@@ -2,9 +2,8 @@ import React from "react";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring } from "remotion";
 import {
     COLORS,
-    SpringText,
-    FadeInText,
     StaggeredList,
+    StrawManToTarget,
 } from "../../../components";
 import { AnimationConfig, calculateAnimationTimings, calculateSceneDuration } from "../../../utils";
 
@@ -20,7 +19,7 @@ import { AnimationConfig, calculateAnimationTimings, calculateSceneDuration } fr
  */
 const animationConfigs: AnimationConfig[] = [
     { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 20, preName: null },           // 标题动画
-    { name: "preview", delayBefore: 30, delayAfter: 0, durationInFrames: 20, preName: "title" },     // 散架的稻草人描述
+    { name: "preview", delayBefore: 0, delayAfter: 0, durationInFrames: 60, preName: "title" },     // 散架的稻草人描述
     { name: "summaryItems", delayBefore: 30, delayAfter: 0, durationInFrames: 100, preName: "preview" },  // 总结列表（交错列表）
     { name: "nextPreview", delayBefore: 30, delayAfter: 100, durationInFrames: 20, preName: "summaryItems" },  // 下期预告
 ];
@@ -29,17 +28,14 @@ const animationConfigs: AnimationConfig[] = [
  * 计算场景总时长：最后一个动画的结束时间
  * 结束时间 = 起始时间 + 持续时间 + delayAfter
  */
-export const calculateSummarySceneDuration = (): number => {
+export const calculateScene6Duration = (): number => {
     return calculateSceneDuration(animationConfigs);
 };
 
 /**
- * P6: 总结场景
- * 画面：稻草人散架
- * 
- * 时间范围：由主场景配置决定
+ * 场景入口
  */
-export const SummaryScene: React.FC = () => {
+export const Scene6: React.FC = () => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
 
@@ -140,21 +136,14 @@ export const SummaryScene: React.FC = () => {
                 </div>
             </div>
 
-            {/* 散架的稻草人描述 */}
-            <FadeInText
+            {/* 稻草人切换为靶子动画 */}
+            <StrawManToTarget
                 delay={animationTimings.preview.startTime}
-                duration={animationTimings.preview.durationInFrames}
+                duration={animationTimings.preview.durationInFrames} // 稍微延长动画时长
                 style={{
-                    backgroundColor: "rgba(255,255,255,0.8)",
-                    borderRadius: 15,
-                    padding: "15px 30px",
-                    marginBottom: 30,
-                    fontSize: 34,
-                    color: "#718096",
+                    marginBottom: 20,
                 }}
-            >
-                🌾 画面：稻草人散架倒塌
-            </FadeInText>
+            />
 
             {/* 总结列表 */}
             <div style={{ marginBottom: 40, width: "100%", maxWidth: 800 }}>

@@ -2,9 +2,7 @@ import React from "react";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring } from "remotion";
 import {
     COLORS,
-    SpringText,
     StaggeredList,
-    HighlightText,
 } from "../../../components";
 import { AnimationConfig, calculateAnimationTimings, calculateSceneDuration } from "../../../utils";
 
@@ -20,8 +18,8 @@ import { AnimationConfig, calculateAnimationTimings, calculateSceneDuration } fr
  */
 const animationConfigs: AnimationConfig[] = [
     { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 20, preName: null },           // 标题动画
-    { name: "core", delayBefore: 30, delayAfter: 0, durationInFrames: 20, preName: "title" },        // 核心心法
-    { name: "steps", delayBefore: 30, delayAfter: 0, durationInFrames: 100, preName: "core" },        // 三步法（交错列表）
+    { name: "core", delayBefore: 10, delayAfter: 0, durationInFrames: 20, preName: "title" },        // 核心心法
+    { name: "steps", delayBefore: 30, delayAfter: 20, durationInFrames: 100, preName: "core" },        // 三步法（交错列表）
     { name: "golden", delayBefore: 30, delayAfter: 100, durationInFrames: 20, preName: "steps" },    // 万能金句
 ];
 
@@ -29,17 +27,14 @@ const animationConfigs: AnimationConfig[] = [
  * 计算场景总时长：最后一个动画的结束时间
  * 结束时间 = 起始时间 + 持续时间 + delayAfter
  */
-export const calculateStrategySceneDuration = (): number => {
+export const calculateScene2Duration = (): number => {
     return calculateSceneDuration(animationConfigs);
 };
 
 /**
- * P2: 策略场景 - 复读机矫正法
- * 画面：录音笔，按下"重放"键
- * 
- * 时间范围：由主场景配置决定
+ * 场景入口
  */
-export const StrategyScene: React.FC = () => {
+export const Scene2: React.FC = () => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
 
@@ -150,12 +145,12 @@ export const StrategyScene: React.FC = () => {
                     opacity: coreOpacity,
                     backgroundColor: "rgba(52,152,219,0.2)",
                     borderRadius: 20,
-                    padding: "20px 35px",
+                    padding: "20px 25px",
                     marginBottom: 30,
                     border: "2px solid #3498DB",
                 }}
             >
-                <div style={{ fontSize: 40, color: "white", display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ fontSize: 30, color: "white", display: "flex", alignItems: "center", gap: 10 }}>
                     💡 <strong>核心心法：</strong>
                     <span style={{ color: "#F1C40F" }}>不要去保卫稻草人，要直接指出他在歪曲。</span>
                 </div>

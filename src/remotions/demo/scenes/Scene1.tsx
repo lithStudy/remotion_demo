@@ -1,10 +1,8 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring } from "remotion";
 import {
-    COLORS,
-    SpringText,
-    FadeInText,
     TypewriterText,
+    TypewriterContent,
 } from "../../../components";
 import { AnimationConfig, calculateAnimationTimings, calculateSceneDuration } from "../../../utils";
 
@@ -20,9 +18,10 @@ import { AnimationConfig, calculateAnimationTimings, calculateSceneDuration } fr
  */
 const animationConfigs: AnimationConfig[] = [
     { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 20, preName: null },           // 主标题动画
-    { name: "subtitle", delayBefore: 30, delayAfter: 0, durationInFrames: 20, preName: "title" },    // 副标题
-    { name: "concept", delayBefore: 30, delayAfter: 0, durationInFrames: 20, preName: "subtitle" },  // 概念解析
-    { name: "example", delayBefore: 30, delayAfter: 100, durationInFrames: 20, preName: "concept" }, // 典型话术
+    { name: "conceptContainer", delayBefore: 0, delayAfter: 0, durationInFrames: 20, preName: "title" },  // 概念解析容器
+    { name: "conceptTitle", delayBefore: 0, delayAfter: 0, durationInFrames: 20, preName: "conceptContainer" },  // 概念解析标题
+    { name: "conceptContent", delayBefore: 0, delayAfter: 0, durationInFrames: 50, preName: "conceptTitle" },  // 概念解析内容
+    { name: "example", delayBefore: 30, delayAfter: 100, durationInFrames: 20, preName: "conceptContent" }, // 典型话术
 ];
 
 /**
@@ -34,48 +33,56 @@ export const calculateScene1Duration = (): number => {
 };
 
 /**
- * P1: 标题场景 - 概念引入
- * 画面：骑士攻击稻草人，真正对手在旁边懵逼
- * 
- * 时间范围：由主场景配置决定
+ * 场景入口
  */
 export const Scene1: React.FC = () => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
 
-    // 计算所有动画的延迟时间
+    // 计算所有动画的延迟时间和配置信息
     const animationTimings = calculateAnimationTimings(animationConfigs);
 
-    // 获取动画配置，用于获取 durationInFrames
-    const getConfig = (name: string) => animationConfigs.find(c => c.name === name);
-
+    // 计算主标题缩放动画，解释各参数：
+    // - frame: 当前帧减去主标题动画实际开始的帧数，使 spring 在动画开始时由 0 计数
+    // - fps: 视频帧率，用于弹簧动画的物理计算
+    // - config: 弹簧配置，damping（阻尼）越大，动画更容易收敛、颤动更少
+    // - durationInFrames: 动画持续帧数，影响 spring 在这段时间内完成（可选，具体实现可根据 utils 内 spring 定义决定）
     const titleScale = spring({
-        frame: frame - animationTimings.title,
+        frame: frame - animationTimings.title.startTime, // 当前帧数减去动画开始帧，使动画从0开始
+        fps, // 视频帧率
+        config: { damping: 80 }, // 阻尼系数，影响动画弹性收敛速度
+        durationInFrames: animationTimings.title.durationInFrames, // 动画持续帧数
+    });
+
+
+    const conceptContainerOpacity = spring({
+        frame: frame - animationTimings.conceptContainer.startTime,
+        fps,
+        config: { damping: 100 },
+        durationInFrames: animationTimings.conceptContainer.durationInFrames,
+    });
+
+    const conceptContainerScale = spring({
+        frame: frame - animationTimings.conceptContainer.startTime,
         fps,
         config: { damping: 80 },
-        durationInFrames: getConfig("title")?.durationInFrames || 20,
+        durationInFrames: animationTimings.conceptContainer.durationInFrames,
     });
 
-    const subtitleOpacity = spring({
-        frame: frame - animationTimings.subtitle,
+    const conceptTitleOpacity = spring({
+        frame: frame - animationTimings.conceptTitle.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("subtitle")?.durationInFrames || 20,
-    });
-
-    const conceptOpacity = spring({
-        frame: frame - animationTimings.concept,
-        fps,
-        config: { damping: 100 },
-        durationInFrames: getConfig("concept")?.durationInFrames || 20,
+        durationInFrames: animationTimings.conceptTitle.durationInFrames,
     });
 
     const exampleOpacity = spring({
-        frame: frame - animationTimings.example,
+        frame: frame - animationTimings.example.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("example")?.durationInFrames || 20,
+        durationInFrames: animationTimings.example.durationInFrames,
     });
+
 
     return (
         <AbsoluteFill
@@ -84,16 +91,20 @@ export const Scene1: React.FC = () => {
                 padding: 60,
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "center",
+                // justifyContent: "center",
                 alignItems: "center",
+                position: "relative",
+                overflow: "hidden",
             }}
         >
+
             {/* 主标题 */}
             <div
                 style={{
                     transform: `scale(${titleScale})`,
                     textAlign: "center",
-                    marginBottom: 20,
+                    marginTop: 10,
+                    // marginBottom: 90,
                 }}
             >
                 <div
@@ -104,7 +115,7 @@ export const Scene1: React.FC = () => {
                         textShadow: "0 4px 30px rgba(0,0,0,0.3)",
                     }}
                 >
-                    逻辑谬误05：稻草人谬误
+                    稻草人谬误
                 </div>
                 <div
                     style={{
@@ -115,61 +126,53 @@ export const Scene1: React.FC = () => {
                 >
                     <TypewriterText 
                         text="Straw Man Fallacy" 
-                        delay={animationTimings.title} 
+                        delay={animationTimings.title.startTime} 
                         charFrames={2}
-                        durationInFrames={getConfig("title")?.durationInFrames}
+                        durationInFrames={animationTimings.title.durationInFrames}
                     />
                 </div>
             </div>
 
-            {/* 漫画场景描述 */}
-            <FadeInText
-                delay={animationTimings.subtitle}
-                duration={getConfig("subtitle")?.durationInFrames || 20}
-                style={{
-                    backgroundColor: "rgba(255,255,255,0.15)",
-                    borderRadius: 20,
-                    padding: "20px 40px",
-                    marginBottom: 30,
-                }}
-            >
-                <div style={{ fontSize: 40, color: "white", textAlign: "center" }}>
-                    🗡️ 画面：骑士对着稻草人疯狂输出，真正的对手在旁边一脸懵逼
-                </div>
-                <div style={{ fontSize: 45, color: "#FFD700", fontWeight: "bold", marginTop: 10, textAlign: "center" }}>
-                    "你赢了，但这关我什么事？"
-                </div>
-            </FadeInText>
 
-            {/* 副标题 */}
-            <div
-                style={{
-                    opacity: subtitleOpacity,
-                    fontSize: 50,
-                    color: "#F1C40F",
-                    fontWeight: "bold",
-                    marginBottom: 30,
-                }}
-            >
-                为什么他们总是在反驳我没说过的话？
-            </div>
 
             {/* 概念解析 */}
             <div
                 style={{
-                    opacity: conceptOpacity,
                     backgroundColor: "rgba(0,0,0,0.3)",
                     borderRadius: 20,
                     padding: "25px 40px",
+                    marginTop:150,
                     maxWidth: 1000,
+                    position: "relative",
+                    opacity: conceptContainerOpacity,
+                    transform: `scale(${conceptContainerScale})`,
                 }}
             >
-                <div style={{ fontSize: 34, color: "white", marginBottom: 10 }}>
-                    💡 <strong>概念解析：</strong>
+                <div style={{ 
+                    fontSize: 34, 
+                    color: "white", 
+                    marginBottom: 10, 
+                    display: "flex", 
+                    alignItems: "center", 
+                    justifyContent: "center", 
+                    gap: 10,
+                    opacity: conceptTitleOpacity,
+                }}>
+                    <strong>概念解析：</strong>
                 </div>
-                <div style={{ fontSize: 36, color: "white", lineHeight: 1.7 }}>
-                    对方<span style={{ color: "#E74C3C" }}>歪曲你的观点</span>（树立稻草人），
-                    然后攻击这个歪曲后的观点。看起来他赢了，其实他打败的只是幻觉。
+                <div style={{ 
+                    fontSize: 36, 
+                    color: "white", 
+                    lineHeight: 1.7,
+                }}>
+                    <TypewriterContent
+                        delay={animationTimings.conceptContent.startTime}
+                        durationInFrames={animationTimings.conceptContent.durationInFrames}
+                        charFrames={2}
+                    >
+                        对方<span style={{ color: "#E74C3C" }}>歪曲你的观点</span>（树立稻草人），
+                        然后攻击这个<span style={{ color: "#E74C3C" }}>歪曲后的观点</span>。看起来他赢了，其实他打败的只是幻觉。
+                    </TypewriterContent>
                 </div>
             </div>
 
@@ -177,7 +180,7 @@ export const Scene1: React.FC = () => {
             <div
                 style={{
                     opacity: exampleOpacity,
-                    marginTop: 25,
+                    marginTop: 150,
                     fontSize: 36,
                     color: "#FED7D7",
                 }}

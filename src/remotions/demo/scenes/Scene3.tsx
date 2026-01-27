@@ -38,40 +38,34 @@ export const calculateScene3Duration = (): number => {
 };
 
 /**
- * P3: 案例一 - 情感滑坡（家庭版）
- * 画面：家庭对话场景
- * 
- * 时间范围：由主场景配置决定
+ * 场景入口
  */
 export const Scene3: React.FC = () => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
 
-    // 计算所有动画的延迟时间
+    // 计算所有动画的延迟时间和配置信息
     const animationTimings = calculateAnimationTimings(animationConfigs);
 
-    // 获取动画配置，用于获取 durationInFrames
-    const getConfig = (name: string) => animationConfigs.find(c => c.name === name);
-
     const titleOpacity = spring({
-        frame: frame - animationTimings.title,
+        frame: frame - animationTimings.title.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("title")?.durationInFrames || 20,
+        durationInFrames: animationTimings.title.durationInFrames,
     });
 
     const analysisOpacity = spring({
-        frame: frame - animationTimings.analysis,
+        frame: frame - animationTimings.analysis.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("analysis")?.durationInFrames || 20,
+        durationInFrames: animationTimings.analysis.durationInFrames,
     });
 
     const responseOpacity = spring({
-        frame: frame - animationTimings.response,
+        frame: frame - animationTimings.response.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("response")?.durationInFrames || 20,
+        durationInFrames: animationTimings.response.durationInFrames,
     });
 
     return (
@@ -104,16 +98,16 @@ export const Scene3: React.FC = () => {
                     side="left"
                     color="#2C7A7B"
                     backgroundColor="#B2F5EA"
-                    delay={animationTimings.chatBubble1}
-                    durationInFrames={getConfig("chatBubble1")?.durationInFrames}          
+                    delay={animationTimings.chatBubble1.startTime}
+                    durationInFrames={animationTimings.chatBubble1.durationInFrames}          
                 />
                 <ChatBubble
                     content="你现在长大了，嫌弃妈妈做的饭难吃了是吧？嫌弃这个家了是吧？"
                     side="right"
                     color="#C53030"
                     backgroundColor="#FED7D7"
-                    delay={animationTimings.chatBubble2}      
-                    durationInFrames={getConfig("chatBubble2")?.durationInFrames}              
+                    delay={animationTimings.chatBubble2.startTime}      
+                    durationInFrames={animationTimings.chatBubble2.durationInFrames}              
                 />
             </div>
 
@@ -132,9 +126,9 @@ export const Scene3: React.FC = () => {
                     🔍 谬误剖析：
                 </div>
                 <div style={{ fontSize: 36, color: COLORS.text, lineHeight: 1.6 }}>
-                    观点"<HighlightText delay={animationTimings.highlight1} durationInFrames={getConfig("highlight1")?.durationInFrames} highlightColor={COLORS.highlightDefend}>汤太油</HighlightText>"
-                    被歪曲为"<HighlightText delay={animationTimings.highlight2} durationInFrames={getConfig("highlight2")?.durationInFrames} highlightColor={COLORS.highlightAttack}>嫌弃妈妈</HighlightText>"
-                    和"<HighlightText delay={animationTimings.highlight3} durationInFrames={getConfig("highlight3")?.durationInFrames} highlightColor={COLORS.highlightAttack}>嫌弃家</HighlightText>"。
+                    观点"<HighlightText delay={animationTimings.highlight1.startTime} durationInFrames={animationTimings.highlight1.durationInFrames} highlightColor={COLORS.highlightDefend}>汤太油</HighlightText>"
+                    被歪曲为"<HighlightText delay={animationTimings.highlight2.startTime} durationInFrames={animationTimings.highlight2.durationInFrames} highlightColor={COLORS.highlightAttack}>嫌弃妈妈</HighlightText>"
+                    和"<HighlightText delay={animationTimings.highlight3.startTime} durationInFrames={animationTimings.highlight3.durationInFrames} highlightColor={COLORS.highlightAttack}>嫌弃家</HighlightText>"。
                     妈妈在攻击"不孝"这个稻草人。
                 </div>
             </div>
@@ -155,8 +149,8 @@ export const Scene3: React.FC = () => {
                 <div style={{ fontSize: 36, color: "white", fontStyle: "italic", lineHeight: 1.6 }}>
                     <TypewriterText
                         text="妈，我说的是'汤太油'，不是'你做饭难吃'，更不是'嫌弃家'。请针对'油'这个问题讨论。"
-                        delay={animationTimings.response}
-                        durationInFrames={getConfig("response")?.durationInFrames}
+                        delay={animationTimings.response.startTime}
+                        durationInFrames={animationTimings.response.durationInFrames}
                         charFrames={2}
                         showCursor={true}
                     />

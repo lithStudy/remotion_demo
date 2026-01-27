@@ -43,38 +43,35 @@ export const TitleScene: React.FC = () => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
 
-    // 计算所有动画的延迟时间
+    // 计算所有动画的延迟时间和配置信息
     const animationTimings = calculateAnimationTimings(animationConfigs);
 
-    // 获取动画配置，用于获取 durationInFrames
-    const getConfig = (name: string) => animationConfigs.find(c => c.name === name);
-
     const titleScale = spring({
-        frame: frame - animationTimings.title,
+        frame: frame - animationTimings.title.startTime,
         fps,
         config: { damping: 80 },
-        durationInFrames: getConfig("title")?.durationInFrames || 20,
+        durationInFrames: animationTimings.title.durationInFrames,
     });
 
     const subtitleOpacity = spring({
-        frame: frame - animationTimings.subtitle,
+        frame: frame - animationTimings.subtitle.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("subtitle")?.durationInFrames || 20,
+        durationInFrames: animationTimings.subtitle.durationInFrames,
     });
 
     const conceptOpacity = spring({
-        frame: frame - animationTimings.concept,
+        frame: frame - animationTimings.concept.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("concept")?.durationInFrames || 20,
+        durationInFrames: animationTimings.concept.durationInFrames,
     });
 
     const exampleOpacity = spring({
-        frame: frame - animationTimings.example,
+        frame: frame - animationTimings.example.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("example")?.durationInFrames || 20,
+        durationInFrames: animationTimings.example.durationInFrames,
     });
 
     return (
@@ -115,17 +112,17 @@ export const TitleScene: React.FC = () => {
                 >
                     <TypewriterText 
                         text="Straw Man Fallacy" 
-                        delay={animationTimings.title} 
+                        delay={animationTimings.title.startTime} 
                         charFrames={2}
-                        durationInFrames={getConfig("title")?.durationInFrames}
+                        durationInFrames={animationTimings.title.durationInFrames}
                     />
                 </div>
             </div>
 
             {/* 漫画场景描述 */}
             <FadeInText
-                delay={animationTimings.subtitle}
-                duration={getConfig("subtitle")?.durationInFrames || 20}
+                delay={animationTimings.subtitle.startTime}
+                duration={animationTimings.subtitle.durationInFrames}
                 style={{
                     backgroundColor: "rgba(255,255,255,0.15)",
                     borderRadius: 20,

@@ -46,31 +46,28 @@ export const Case2Scene: React.FC = () => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
 
-    // 计算所有动画的延迟时间
+    // 计算所有动画的延迟时间和配置信息
     const animationTimings = calculateAnimationTimings(animationConfigs);
 
-    // 获取动画配置，用于获取 durationInFrames
-    const getConfig = (name: string) => animationConfigs.find(c => c.name === name);
-
     const titleOpacity = spring({
-        frame: frame - animationTimings.title,
+        frame: frame - animationTimings.title.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("title")?.durationInFrames || 20,
+        durationInFrames: animationTimings.title.durationInFrames,
     });
 
     const analysisOpacity = spring({
-        frame: frame - animationTimings.analysis,
+        frame: frame - animationTimings.analysis.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("analysis")?.durationInFrames || 20,
+        durationInFrames: animationTimings.analysis.durationInFrames,
     });
 
     const responseOpacity = spring({
-        frame: frame - animationTimings.response,
+        frame: frame - animationTimings.response.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("response")?.durationInFrames || 20,
+        durationInFrames: animationTimings.response.durationInFrames,
     });
 
     return (
@@ -103,16 +100,16 @@ export const Case2Scene: React.FC = () => {
                     side="left"
                     color="#2C5282"
                     backgroundColor="#BEE3F8"
-                    delay={animationTimings.chatBubble1}
-                    durationInFrames={getConfig("chatBubble1")?.durationInFrames}
+                    delay={animationTimings.chatBubble1.startTime}
+                    durationInFrames={animationTimings.chatBubble1.durationInFrames}
                 />
                 <ChatBubble
                     content="笑死，大清亡了！你是不是想让所有女性都裹上黑袍你才满意？"
                     side="right"
                     color="#C53030"
                     backgroundColor="#FED7D7"
-                    delay={animationTimings.chatBubble2}
-                    durationInFrames={getConfig("chatBubble2")?.durationInFrames}
+                    delay={animationTimings.chatBubble2.startTime}
+                    durationInFrames={animationTimings.chatBubble2.durationInFrames}
                     style={{ fontWeight: "bold" }}
                 />
             </div>
@@ -132,9 +129,9 @@ export const Case2Scene: React.FC = () => {
                     🔍 谬误剖析：
                 </div>
                 <div style={{ fontSize: 36, color: COLORS.text, lineHeight: 1.6 }}>
-                    "<HighlightText delay={animationTimings.highlight1} durationInFrames={getConfig("highlight1")?.durationInFrames} highlightColor={COLORS.highlightDefend}>过于暴露</HighlightText>"
-                    被歪曲为"<HighlightText delay={animationTimings.highlight2} durationInFrames={getConfig("highlight2")?.durationInFrames} highlightColor={COLORS.highlightAttack}>封建保守</HighlightText>"
-                    和"<HighlightText delay={animationTimings.highlight3} durationInFrames={getConfig("highlight3")?.durationInFrames} highlightColor={COLORS.highlightAttack}>强迫裹黑袍</HighlightText>"。
+                    "<HighlightText delay={animationTimings.highlight1.startTime} durationInFrames={animationTimings.highlight1.durationInFrames} highlightColor={COLORS.highlightDefend}>过于暴露</HighlightText>"
+                    被歪曲为"<HighlightText delay={animationTimings.highlight2.startTime} durationInFrames={animationTimings.highlight2.durationInFrames} highlightColor={COLORS.highlightAttack}>封建保守</HighlightText>"
+                    和"<HighlightText delay={animationTimings.highlight3.startTime} durationInFrames={animationTimings.highlight3.durationInFrames} highlightColor={COLORS.highlightAttack}>强迫裹黑袍</HighlightText>"。
                 </div>
             </div>
 

@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  AbsoluteFill,
   interpolate,
   spring,
   useCurrentFrame,
@@ -144,6 +143,161 @@ export const TypewriterText: React.FC<TypewriterTextProps> = ({
     <span style={style}>
       {displayText}
       {showCursor && typedChars < text.length && (
+        <span style={{ opacity: cursorOpacity }}>▌</span>
+      )}
+    </span>
+  );
+};
+
+// ==================== 支持 React 节点的打字机效果 ====================
+interface TypewriterContentProps {
+  children: React.ReactNode;
+  delay?: number;
+  durationInFrames?: number;
+  charFrames?: number;
+  showCursor?: boolean;
+  style?: React.CSSProperties;
+}
+
+// 将 React 节点转换为字符数组，保留样式信息
+interface CharInfo {
+  char: string;
+  elementType?: React.ElementType;
+  elementProps?: Record<string, unknown>;
+}
+
+const flattenNodeToChars = (node: React.ReactNode): CharInfo[] => {
+  if (typeof node === 'string') {
+    return node.split('').map(char => ({ char }));
+  }
+  
+  if (React.isValidElement(node)) {
+    const element = node as React.ReactElement<Record<string, unknown>>;
+    const props = element.props as Record<string, unknown>;
+    const children = props.children;
+    const elementType = element.type as React.ElementType;
+    const elementProps: Record<string, unknown> = { ...props };
+    delete elementProps.children; // 移除 children，因为我们会单独处理
+    
+    if (typeof children === 'string') {
+      return children.split('').map(char => ({ char, elementType, elementProps }));
+    }
+    if (Array.isArray(children)) {
+      const result: CharInfo[] = [];
+      (children as React.ReactNode[]).forEach(child => {
+        result.push(...flattenNodeToChars(child));
+      });
+      return result;
+    }
+    if (children !== null && children !== undefined) {
+      return flattenNodeToChars(children as React.ReactNode);
+    }
+    return [];
+  }
+  
+  if (Array.isArray(node)) {
+    const result: CharInfo[] = [];
+    node.forEach(child => {
+      result.push(...flattenNodeToChars(child));
+    });
+    return result;
+  }
+  
+  return [];
+};
+
+export const TypewriterContent: React.FC<TypewriterContentProps> = ({
+  children,
+  delay = 0,
+  durationInFrames,
+  charFrames = 2,
+  showCursor = true,
+  style,
+}) => {
+  const frame = useCurrentFrame();
+  const localFrame = Math.max(0, frame - delay);
+  
+  const chars = flattenNodeToChars(children);
+  const totalChars = chars.length;
+  
+  const actualCharFrames = durationInFrames 
+    ? durationInFrames / totalChars 
+    : charFrames;
+  
+  const typedChars = Math.min(totalChars, Math.floor(localFrame / actualCharFrames));
+  
+  // 光标闪烁周期
+  const cursorBlinkFrames = 20;
+  const cursorOpacity = interpolate(
+    (frame % cursorBlinkFrames),
+    [0, 10, 20],
+    [1, 0, 1],
+    { 
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp"
+    }
+  );
+
+  // 渲染已打字的字符
+  const renderTypedChars = () => {
+    if (typedChars === 0) return null;
+    
+    const result: React.ReactNode[] = [];
+    let currentElementType: React.ElementType | undefined;
+    let currentElementProps: Record<string, unknown> | undefined;
+    let currentText = '';
+    let segmentStart = 0;
+    
+    for (let i = 0; i < typedChars; i++) {
+      const { char, elementType, elementProps } = chars[i];
+      
+      // 检查是否切换到新的元素类型
+      const isNewElement = elementType !== currentElementType;
+      
+      if (isNewElement && currentText) {
+        // 输出之前的文本段
+        if (currentElementType && currentElementProps) {
+          result.push(
+            React.createElement(
+              currentElementType,
+              { key: `seg-${segmentStart}`, ...currentElementProps },
+              currentText
+            )
+          );
+        } else {
+          result.push(<React.Fragment key={`seg-${segmentStart}`}>{currentText}</React.Fragment>);
+        }
+        currentText = '';
+        segmentStart = i;
+      }
+      
+      currentElementType = elementType;
+      currentElementProps = elementProps;
+      currentText += char;
+    }
+    
+    // 输出最后一个文本段
+    if (currentText) {
+      if (currentElementType && currentElementProps) {
+        result.push(
+          React.createElement(
+            currentElementType,
+            { key: `seg-${segmentStart}`, ...currentElementProps },
+            currentText
+          )
+        );
+      } else {
+        result.push(<React.Fragment key={`seg-${segmentStart}`}>{currentText}</React.Fragment>);
+      }
+    }
+    
+    return result;
+  };
+
+  return (
+    <span style={style}>
+      {renderTypedChars()}
+      {showCursor && typedChars < totalChars && (
         <span style={{ opacity: cursorOpacity }}>▌</span>
       )}
     </span>
@@ -308,10 +462,10 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({
           color,
           borderRadius: 20,
           padding: "20px 30px",
-          fontSize: 45,
+          fontSize: 35,
           fontWeight: 500,
           boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-          maxWidth: 600,
+          maxWidth: 800,
           ...style,
         }}
       >

@@ -43,31 +43,28 @@ export const StrategyScene: React.FC = () => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
 
-    // 计算所有动画的延迟时间
+    // 计算所有动画的延迟时间和配置信息
     const animationTimings = calculateAnimationTimings(animationConfigs);
 
-    // 获取动画配置，用于获取 durationInFrames
-    const getConfig = (name: string) => animationConfigs.find(c => c.name === name);
-
     const titleOpacity = spring({
-        frame: frame - animationTimings.title,
+        frame: frame - animationTimings.title.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("title")?.durationInFrames || 20,
+        durationInFrames: animationTimings.title.durationInFrames,
     });
 
     const coreOpacity = spring({
-        frame: frame - animationTimings.core,
+        frame: frame - animationTimings.core.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("core")?.durationInFrames || 20,
+        durationInFrames: animationTimings.core.durationInFrames,
     });
 
     const goldenOpacity = spring({
-        frame: frame - animationTimings.golden,
+        frame: frame - animationTimings.golden.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("golden")?.durationInFrames || 20,
+        durationInFrames: animationTimings.golden.durationInFrames,
     });
 
     const steps = [
@@ -168,7 +165,7 @@ export const StrategyScene: React.FC = () => {
             <div style={{ marginBottom: 30 }}>
                 <StaggeredList
                     items={steps}
-                    startFrame={animationTimings.steps}
+                    startFrame={animationTimings.steps.startTime}
                     staggerDelay={50}
                 />
             </div>

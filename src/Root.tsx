@@ -5,7 +5,7 @@ import {
   StrawManFallacy2Schema,
   STRAW_MAN_FALLACY_2_TOTAL_DURATION,
 } from "./remotions/StrawManFallacy2/StrawManFallacy2";
-import { Demo,DemoSchema,DEMO_TOTAL_DURATION } from "./remotions/demo/Demo";
+import { Demo,DemoSchema,TOTAL_DURATION_DEMO } from "./remotions/demo/Demo";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -16,10 +16,24 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="Demo"
         component={Demo}
-        durationInFrames={DEMO_TOTAL_DURATION}
+        durationInFrames={TOTAL_DURATION_DEMO}
         fps={30}
         width={1920}
         height={1080}
+        schema={DemoSchema}
+        defaultProps={{
+          backgroundColor: "#F7F9FC",
+          primaryColor: "#38B2AC",
+          accentColor: "#E53E3E",
+        }}
+      />
+      <Composition
+        id="Demo2"
+        component={Demo}
+        durationInFrames={TOTAL_DURATION_DEMO}
+        fps={30}
+        width={960}
+        height={1280}
         schema={DemoSchema}
         defaultProps={{
           backgroundColor: "#F7F9FC",

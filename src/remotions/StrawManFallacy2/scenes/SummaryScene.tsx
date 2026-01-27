@@ -43,24 +43,21 @@ export const SummaryScene: React.FC = () => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
 
-    // 计算所有动画的延迟时间
+    // 计算所有动画的延迟时间和配置信息
     const animationTimings = calculateAnimationTimings(animationConfigs);
 
-    // 获取动画配置，用于获取 durationInFrames
-    const getConfig = (name: string) => animationConfigs.find(c => c.name === name);
-
     const titleOpacity = spring({
-        frame: frame - animationTimings.title,
+        frame: frame - animationTimings.title.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("title")?.durationInFrames || 20,
+        durationInFrames: animationTimings.title.durationInFrames,
     });
 
     const previewOpacity = spring({
-        frame: frame - animationTimings.nextPreview,
+        frame: frame - animationTimings.nextPreview.startTime,
         fps,
         config: { damping: 100 },
-        durationInFrames: getConfig("nextPreview")?.durationInFrames || 20,
+        durationInFrames: animationTimings.nextPreview.durationInFrames,
     });
 
     const summaryItems = [
@@ -145,8 +142,8 @@ export const SummaryScene: React.FC = () => {
 
             {/* 散架的稻草人描述 */}
             <FadeInText
-                delay={animationTimings.preview}
-                duration={getConfig("preview")?.durationInFrames || 20}
+                delay={animationTimings.preview.startTime}
+                duration={animationTimings.preview.durationInFrames}
                 style={{
                     backgroundColor: "rgba(255,255,255,0.8)",
                     borderRadius: 15,
@@ -163,7 +160,7 @@ export const SummaryScene: React.FC = () => {
             <div style={{ marginBottom: 40, width: "100%", maxWidth: 800 }}>
                 <StaggeredList
                     items={summaryItems}
-                    startFrame={animationTimings.summaryItems}
+                    startFrame={animationTimings.summaryItems.startTime}
                     staggerDelay={32}
                 />
             </div>

@@ -19,10 +19,15 @@
   },
   "devDependencies": {
     "@remotion/eslint-config-flat": "4.0.409",
+    "@types/fs-extra": "^11.0.4",
     "@types/react": "19.2.7",
     "@types/web": "0.0.166",
+    "edge-tts": "^1.0.1",
     "eslint": "9.19.0",
+    "fs-extra": "^11.3.3",
+    "get-audio-duration": "^4.0.1",
     "prettier": "3.6.0",
+    "tsx": "^4.21.0",
     "typescript": "5.9.3"
   },
   "scripts": {

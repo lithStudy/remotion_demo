@@ -2,6 +2,7 @@ import "./index.css";
 import { Composition } from "remotion";
 import { Demo, DemoSchema, TOTAL_DURATION_DEMO } from "./remotions/demo/Demo";
 import { Demo as StrawManFallacy, DemoSchema as StrawManFallacySchema, TOTAL_DURATION_DEMO as STRAW_MAN_FALLACY_TOTAL_DURATION } from "./remotions/strawManFallacy/StrawManFallacy";
+import { Crowd, CrowdSchema, TOTAL_DURATION_CROWD } from "./remotions/crowd/Crowd";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -23,19 +24,16 @@ export const RemotionRoot: React.FC = () => {
           accentColor: "#E53E3E",
         }}
       />
+      {/* 乌合之众 / 群体效应 */}
       <Composition
-        id="Demo2"
-        component={Demo}
-        durationInFrames={TOTAL_DURATION_DEMO}
+        id="Crowd"
+        component={Crowd}
+        durationInFrames={TOTAL_DURATION_CROWD}
         fps={30}
         width={960}
         height={1280}
-        schema={DemoSchema}
-        defaultProps={{
-          backgroundColor: "#F7F9FC",
-          primaryColor: "#38B2AC",
-          accentColor: "#E53E3E",
-        }}
+        schema={CrowdSchema}
+        defaultProps={{}}
       />
       {/* 稻草人谬误讲解动画 */}
       <Composition

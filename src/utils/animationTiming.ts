@@ -12,6 +12,11 @@ export interface AnimationConfig {
     durationInFrames: number;
     /** 前一个动画的名称，null 表示这是第一个动画 */
     preName: string | null;
+    /** 
+     * 可选：关联的音频 ID，格式为 "sceneId_order" (如 "scene1_1")
+     * 如果提供，将从 audio-map.json 读取实际时长并覆盖 durationInFrames
+     */
+    audioId?: string;
 }
 
 /**
@@ -121,27 +126,101 @@ export const calculateAnimationTimings = (
 };
 
 /**
+ * 音频映射条目接口
+ */
+export interface AudioMapEntry {
+    duration: number;
+    file: string;
+    sceneId: string;
+    order: number;
+    type: string;
+    text: string;
+}
+
+/**
+ * 音频映射接口
+ */
+export interface AudioMap {
+    [key: string]: AudioMapEntry;
+}
+
+/**
+ * 根据音频时长计算帧数
+ * @param durationInSeconds 音频时长（秒）
+ * @param fps 帧率
+ * @param bufferSeconds 可选的缓冲时间（秒），默认 0.3 秒
+ * @returns 帧数
+ */
+export const audioDurationToFrames = (
+    durationInSeconds: number,
+    fps: number = 30,
+    bufferSeconds: number = 0.3
+): number => {
+    return Math.ceil((durationInSeconds + bufferSeconds) * fps);
+};
+
+/**
+ * 从音频映射中获取并应用音频时长
+ * @param configs 动画配置数组
+ * @param audioMap 音频映射对象（可选）
+ * @param fps 帧率，默认 30
+ * @returns 应用音频时长后的配置数组
+ */
+export const applyAudioDurations = (
+    configs: AnimationConfig[],
+    audioMap?: AudioMap,
+    fps: number = 30
+): AnimationConfig[] => {
+    if (!audioMap) {
+        return configs;
+    }
+
+    return configs.map(config => {
+        if (config.audioId && audioMap[config.audioId]) {
+            const audioDuration = audioMap[config.audioId].duration;
+            const durationInFrames = audioDurationToFrames(audioDuration, fps);
+            
+            console.log(
+                `[applyAudioDurations] ${config.name}: 使用音频时长 ${audioDuration.toFixed(2)}s => ${durationInFrames} 帧`
+            );
+            
+            return {
+                ...config,
+                durationInFrames,
+            };
+        }
+        return config;
+    });
+};
+
+/**
  * 计算场景总时长：根据动画链路求总和，返回最长链路的结束时间
  * 结束时间 = 起始时间 + 持续时间 + delayAfter
  * 
  * @param animationConfigs 动画配置数组
+ * @param audioMap 可选的音频映射对象，用于覆盖时长
+ * @param fps 帧率，默认 30
  * @returns 场景总时长（帧数）
  */
 export const calculateSceneDuration = (
-    animationConfigs: AnimationConfig[]
+    animationConfigs: AnimationConfig[],
+    audioMap?: AudioMap,
+    fps: number = 30
 ): number => {
-    const timings = calculateAnimationTimings(animationConfigs);
+    // 应用音频时长
+    const configsWithAudio = applyAudioDurations(animationConfigs, audioMap, fps);
+    const timings = calculateAnimationTimings(configsWithAudio);
     
     // 找出所有链路的终点（没有其他动画依赖它的动画）
     // 收集所有被依赖的动画名称
     const dependentNames = new Set(
-        animationConfigs
+        configsWithAudio
             .filter(config => config.preName !== null)
             .map(config => config.preName!)
     );
     
     // 终点动画：存在于配置中，但没有其他动画依赖它
-    const endAnimations = animationConfigs.filter(
+    const endAnimations = configsWithAudio.filter(
         config => !dependentNames.has(config.name)
     );
     

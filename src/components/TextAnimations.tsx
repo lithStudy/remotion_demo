@@ -117,13 +117,13 @@ export const TypewriterText: React.FC<TypewriterTextProps> = ({
   const frame = useCurrentFrame();
 
   const localFrame = Math.max(0, frame - delay);
-  
+
   // 如果提供了 durationInFrames，根据总时长和文本长度计算每个字符的帧数
   // 否则使用 charFrames 参数
-  const actualCharFrames = durationInFrames 
-    ? durationInFrames / text.length 
+  const actualCharFrames = durationInFrames
+    ? durationInFrames / text.length
     : charFrames;
-  
+
   const typedChars = Math.min(text.length, Math.floor(localFrame / actualCharFrames));
   const displayText = text.slice(0, typedChars);
 
@@ -133,7 +133,7 @@ export const TypewriterText: React.FC<TypewriterTextProps> = ({
     (frame % cursorBlinkFrames), // 当前帧在闪烁周期中的位置，决定光标是否显示
     [0, 10, 20],                // 输入区间：[0,10] 区间内光标从显示到消失，[10,20] 区间内光标从消失又回到显示，形成循环
     [1, 0, 1],                  // 输出区间：1为完全显示，0为完全隐藏，形成闪烁效果
-    { 
+    {
       extrapolateLeft: "clamp", // 超出左边界时，结果保持最左侧输出值
       extrapolateRight: "clamp" // 超出右边界时，结果保持最右侧输出值
     }
@@ -170,7 +170,7 @@ const flattenNodeToChars = (node: React.ReactNode): CharInfo[] => {
   if (typeof node === 'string') {
     return node.split('').map(char => ({ char }));
   }
-  
+
   if (React.isValidElement(node)) {
     const element = node as React.ReactElement<Record<string, unknown>>;
     const props = element.props as Record<string, unknown>;
@@ -178,7 +178,7 @@ const flattenNodeToChars = (node: React.ReactNode): CharInfo[] => {
     const elementType = element.type as React.ElementType;
     const elementProps: Record<string, unknown> = { ...props };
     delete elementProps.children; // 移除 children，因为我们会单独处理
-    
+
     if (typeof children === 'string') {
       return children.split('').map(char => ({ char, elementType, elementProps }));
     }
@@ -194,7 +194,7 @@ const flattenNodeToChars = (node: React.ReactNode): CharInfo[] => {
     }
     return [];
   }
-  
+
   if (Array.isArray(node)) {
     const result: CharInfo[] = [];
     node.forEach(child => {
@@ -202,7 +202,7 @@ const flattenNodeToChars = (node: React.ReactNode): CharInfo[] => {
     });
     return result;
   }
-  
+
   return [];
 };
 
@@ -216,23 +216,23 @@ export const TypewriterContent: React.FC<TypewriterContentProps> = ({
 }) => {
   const frame = useCurrentFrame();
   const localFrame = Math.max(0, frame - delay);
-  
+
   const chars = flattenNodeToChars(children);
   const totalChars = chars.length;
-  
-  const actualCharFrames = durationInFrames 
-    ? durationInFrames / totalChars 
+
+  const actualCharFrames = durationInFrames
+    ? durationInFrames / totalChars
     : charFrames;
-  
+
   const typedChars = Math.min(totalChars, Math.floor(localFrame / actualCharFrames));
-  
+
   // 光标闪烁周期
   const cursorBlinkFrames = 20;
   const cursorOpacity = interpolate(
     (frame % cursorBlinkFrames),
     [0, 10, 20],
     [1, 0, 1],
-    { 
+    {
       extrapolateLeft: "clamp",
       extrapolateRight: "clamp"
     }
@@ -241,19 +241,19 @@ export const TypewriterContent: React.FC<TypewriterContentProps> = ({
   // 渲染已打字的字符
   const renderTypedChars = () => {
     if (typedChars === 0) return null;
-    
+
     const result: React.ReactNode[] = [];
     let currentElementType: React.ElementType | undefined;
     let currentElementProps: Record<string, unknown> | undefined;
     let currentText = '';
     let segmentStart = 0;
-    
+
     for (let i = 0; i < typedChars; i++) {
       const { char, elementType, elementProps } = chars[i];
-      
+
       // 检查是否切换到新的元素类型
       const isNewElement = elementType !== currentElementType;
-      
+
       if (isNewElement && currentText) {
         // 输出之前的文本段
         if (currentElementType && currentElementProps) {
@@ -270,12 +270,12 @@ export const TypewriterContent: React.FC<TypewriterContentProps> = ({
         currentText = '';
         segmentStart = i;
       }
-      
+
       currentElementType = elementType;
       currentElementProps = elementProps;
       currentText += char;
     }
-    
+
     // 输出最后一个文本段
     if (currentText) {
       if (currentElementType && currentElementProps) {
@@ -290,7 +290,7 @@ export const TypewriterContent: React.FC<TypewriterContentProps> = ({
         result.push(<React.Fragment key={`seg-${segmentStart}`}>{currentText}</React.Fragment>);
       }
     }
-    
+
     return result;
   };
 
@@ -316,7 +316,7 @@ interface HighlightTextProps {
 export const HighlightText: React.FC<HighlightTextProps> = ({
   children,
   delay = 0,
-  durationInFrames=20,
+  durationInFrames = 20,
   highlightColor = COLORS.highlightAttack,
   style,
 }) => {
@@ -424,7 +424,7 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({
   color = COLORS.text,
   backgroundColor = "white",
   delay = 0,
-  durationInFrames=20,
+  durationInFrames = 20,
   style,
 }) => {
   const frame = useCurrentFrame();

@@ -4,6 +4,7 @@ import { Demo, DemoSchema, TOTAL_DURATION_DEMO } from "./remotions/demo/Demo";
 import { Demo as StrawManFallacy, DemoSchema as StrawManFallacySchema, TOTAL_DURATION_DEMO as STRAW_MAN_FALLACY_TOTAL_DURATION } from "./remotions/strawManFallacy/StrawManFallacy";
 import { Crowd, CrowdSchema, TOTAL_DURATION_CROWD } from "./remotions/crowd/Crowd";
 import { BabyProbiotics, BabyProbioticsSchema, TOTAL_DURATION_BABY_PROBIOTICS } from "./remotions/babyProbiotics/BabyProbiotics";
+import { ConfirmationBias, ConfirmationBiasSchema, TOTAL_DURATION_CONFIRMATION_BIAS } from "./remotions/confirmationBias/ConfirmationBias";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -60,6 +61,17 @@ export const RemotionRoot: React.FC = () => {
         width={960}
         height={1280}
         schema={BabyProbioticsSchema}
+        defaultProps={{}}
+      />
+      {/* 认知偏见 - 确认偏误动画 */}
+      <Composition
+        id="ConfirmationBias"
+        component={ConfirmationBias}
+        durationInFrames={TOTAL_DURATION_CONFIRMATION_BIAS}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={ConfirmationBiasSchema}
         defaultProps={{}}
       />
 

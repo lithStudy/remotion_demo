@@ -23,7 +23,8 @@ metadata:
 - [ ] Step 2: 生成场景脚本JSON
 - [ ] Step 3: 生成TTS语音
 - [ ] Step 4: 同步音频时长
-- [ ] Step 5: 验证并预览
+- [ ] Step 5: 生成场景插图
+- [ ] Step 6: 生成场景动画
 
 ---
 
@@ -58,10 +59,10 @@ metadata:
 
 ### Step 3: 生成TTS语音
 
-运行skill包中的TTS生成脚本：
+运行语音生成脚本：
 
 ```bash
-python {skill路径}/scripts/generate_audio.py --input "{项目路径}/src/remotions/{动画名称}/scenes/scene-scripts.json" --output "{项目路径}/public/audio/{动画名称}"
+python {skill路径}/scripts/generate_audio_azure.py --input "{项目路径}/src/remotions/{动画名称}/scenes/scene-scripts.json" --output "{项目路径}/public/audio/{动画名称}"
 ```
 
 此脚本会：
@@ -87,21 +88,24 @@ python {skill路径}/scripts/sync_durations.py --script "{项目路径}/src/remo
 
 ---
 
-### Step 5: 验证并预览
+### Step 5: 生成场景插图
 
-1. 启动Remotion预览：
+1. 创建图片目录：
    ```bash
-   npm run dev
+   mkdir public/images/{动画名称}
    ```
 
-2. 在浏览器中打开预览，检查：
-   - 文字动画是否与语音同步
-   - 场景切换是否流畅
-   - 整体节奏是否合适
+2. 为每个场景生成插图：
+   - **风格**：Modern corporate flat art style, minimal, clean, vector illustration, white background
+   - **内容**：根据 `scene-scripts.json` 中每个场景的核心内容生成
+   - **保存路径**：`public/images/{动画名称}/{scene_name}.png` (例如 `scene_1.png`)
+   - **尺寸**： 适应动画场景的尺寸，只作为插图存在，不占用文字显示区域。
 
-3. 询问用户是否满意，如需调整可以：
-   - 修改 `scene-scripts.json` 中的文案
-   - 重新运行 Step 3-4 更新语音和时长
+---
+
+### Step 6: 生成场景动画
+
+1. 根据脚本 {项目路径}/src/remotions/{动画名称}/scenes/scene-scripts.json   通过remotion生成动画场景，并插入生成的插图。基本遵循标题在上，插图在中间，正文在下面的结构，插图显示的尺寸不能太大，要适中。
 
 ---
 

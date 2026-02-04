@@ -1,0 +1,250 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "topic": "认知偏见 - 确认偏误",
+    "generatedAt": "2026-02-05T00:00:00Z",
+    "fps": 30,
+    "scenes": [
+        {
+            "sceneId": "scene1",
+            "sceneName": "开场：概念解析",
+            "items": [
+                {
+                    "order": 1,
+                    "type": "主标题",
+                    "text": "确认偏误",
+                    "audioDuration": 1.62,
+                    "durationInFrames": 58,
+                    "audioFile": "/audio/confirmationBias/scene1/01_主标题.mp3"
+                },
+                {
+                    "order": 2,
+                    "type": "副标题",
+                    "text": "我总是对的！",
+                    "audioDuration": 1.764,
+                    "durationInFrames": 62,
+                    "audioFile": "/audio/confirmationBias/scene1/02_副标题.mp3"
+                },
+                {
+                    "order": 3,
+                    "type": "正文",
+                    "text": "大脑会自动过滤掉与你观点不符的信息，只让你看到、记住支持你的证据。",
+                    "audioDuration": 6.516,
+                    "durationInFrames": 205,
+                    "audioFile": "/audio/confirmationBias/scene1/03_正文.mp3"
+                },
+                {
+                    "order": 4,
+                    "type": "正文",
+                    "text": "典型表现：\"我就知道会这样！\"\"你看，果然又是这样！\"",
+                    "audioDuration": 4.608,
+                    "durationInFrames": 148,
+                    "audioFile": "/audio/confirmationBias/scene1/04_正文.mp3"
+                }
+            ]
+        },
+        {
+            "sceneId": "scene2",
+            "sceneName": "危害分析",
+            "items": [
+                {
+                    "order": 1,
+                    "type": "标题",
+                    "text": "被偏见勒索的隐形成本",
+                    "audioDuration": 2.664,
+                    "durationInFrames": 89,
+                    "audioFile": "/audio/confirmationBias/scene2/01_标题.mp3"
+                },
+                {
+                    "order": 2,
+                    "type": "正文",
+                    "text": "危害一：信息茧房。你以为看遍了世界，其实只是在镜子里看自己。",
+                    "audioDuration": 6.552,
+                    "durationInFrames": 206,
+                    "audioFile": "/audio/confirmationBias/scene2/02_正文.mp3"
+                },
+                {
+                    "order": 3,
+                    "type": "正文",
+                    "text": "危害二：认知盲区。致命的错误往往来自你\"视而不见\"的信息。",
+                    "audioDuration": 5.868,
+                    "durationInFrames": 186,
+                    "audioFile": "/audio/confirmationBias/scene2/03_正文.mp3"
+                }
+            ]
+        },
+        {
+            "sceneId": "scene3",
+            "sceneName": "总策略",
+            "items": [
+                {
+                    "order": 1,
+                    "type": "标题",
+                    "text": "总策略：主动找反例法",
+                    "audioDuration": 2.952,
+                    "durationInFrames": 98,
+                    "audioFile": "/audio/confirmationBias/scene3/01_标题.mp3"
+                },
+                {
+                    "order": 2,
+                    "type": "策略内容",
+                    "text": "核心心法：强迫自己去寻找\"反对自己\"的证据。",
+                    "audioDuration": 4.536,
+                    "durationInFrames": 146,
+                    "audioFile": "/audio/confirmationBias/scene3/02_策略内容.mp3"
+                },
+                {
+                    "order": 3,
+                    "type": "策略内容",
+                    "text": "1. 换位搜索：用对方的关键词去搜索，看看他们的论据是什么。",
+                    "audioDuration": 5.688,
+                    "durationInFrames": 180,
+                    "audioFile": "/audio/confirmationBias/scene3/03_策略内容.mp3"
+                },
+                {
+                    "order": 4,
+                    "type": "策略内容",
+                    "text": "2. 红队思维：假设自己是错的，找5个理由证明。",
+                    "audioDuration": 4.824,
+                    "durationInFrames": 154,
+                    "audioFile": "/audio/confirmationBias/scene3/04_策略内容.mp3"
+                },
+                {
+                    "order": 5,
+                    "type": "名言",
+                    "text": "万能金句：\"如果我错了，会有什么证据？\"",
+                    "audioDuration": 3.924,
+                    "durationInFrames": 127,
+                    "audioFile": "/audio/confirmationBias/scene3/05_名言.mp3"
+                }
+            ]
+        },
+        {
+            "sceneId": "scene4",
+            "sceneName": "案例一：饭圈",
+            "items": [
+                {
+                    "order": 1,
+                    "type": "标题",
+                    "text": "案例一：饭圈信息茧房",
+                    "audioDuration": 2.88,
+                    "durationInFrames": 96,
+                    "audioFile": "/audio/confirmationBias/scene4/01_标题.mp3"
+                },
+                {
+                    "order": 2,
+                    "type": "正文",
+                    "text": "偏见剖析：粉丝甲只看自家超话的夸赞，粉丝乙只看黑料合集。双方都只接收符合自己立场的信息。",
+                    "audioDuration": 9.72,
+                    "durationInFrames": 301,
+                    "audioFile": "/audio/confirmationBias/scene4/02_正文.mp3"
+                },
+                {
+                    "order": 3,
+                    "type": "策略内容",
+                    "text": "纠偏实例：\"我承认他在某方面确实有不足，但这不影响我喜欢他的其他特质。我不需要他完美。\"",
+                    "audioDuration": 8.892,
+                    "durationInFrames": 276,
+                    "audioFile": "/audio/confirmationBias/scene4/03_策略内容.mp3"
+                }
+            ]
+        },
+        {
+            "sceneId": "scene5",
+            "sceneName": "案例二：投资",
+            "items": [
+                {
+                    "order": 1,
+                    "type": "标题",
+                    "text": "案例二：选择性引用（投资领域）",
+                    "audioDuration": 3.42,
+                    "durationInFrames": 112,
+                    "audioFile": "/audio/confirmationBias/scene5/01_标题.mp3"
+                },
+                {
+                    "order": 2,
+                    "type": "正文",
+                    "text": "偏见剖析：只搜集支持自己判断的\"利好消息\"，忽略风险警告。",
+                    "audioDuration": 6.048,
+                    "durationInFrames": 191,
+                    "audioFile": "/audio/confirmationBias/scene5/02_正文.mp3"
+                },
+                {
+                    "order": 3,
+                    "type": "策略内容",
+                    "text": "纠偏实例：\"我需要同时看看看跌的分析是什么理由。如果我决定买入，我能反驳这些看跌理由吗？\"",
+                    "audioDuration": 8.676,
+                    "durationInFrames": 270,
+                    "audioFile": "/audio/confirmationBias/scene5/03_策略内容.mp3"
+                }
+            ]
+        },
+        {
+            "sceneId": "scene6",
+            "sceneName": "案例三：养生",
+            "items": [
+                {
+                    "order": 1,
+                    "type": "标题",
+                    "text": "案例三：养生谣言传播",
+                    "audioDuration": 2.988,
+                    "durationInFrames": 99,
+                    "audioFile": "/audio/confirmationBias/scene6/01_标题.mp3"
+                },
+                {
+                    "order": 2,
+                    "type": "正文",
+                    "text": "偏见剖析：老人家已经相信\"热水养生\"，所以只会注意到支持这个观点的文章。",
+                    "audioDuration": 7.128,
+                    "durationInFrames": 223,
+                    "audioFile": "/audio/confirmationBias/scene6/02_正文.mp3"
+                },
+                {
+                    "order": 3,
+                    "type": "策略内容",
+                    "text": "纠偏实例：\"妈妈，我们一起来看看正规医学网站怎么说的，对比一下？我也希望你健康。\"",
+                    "audioDuration": 7.632,
+                    "durationInFrames": 238,
+                    "audioFile": "/audio/confirmationBias/scene6/03_策略内容.mp3"
+                }
+            ]
+        },
+        {
+            "sceneId": "scene7",
+            "sceneName": "总结",
+            "items": [
+                {
+                    "order": 1,
+                    "type": "标题",
+                    "text": "本期总结",
+                    "audioDuration": 1.692,
+                    "durationInFrames": 60,
+                    "audioFile": "/audio/confirmationBias/scene7/01_标题.mp3"
+                },
+                {
+                    "order": 2,
+                    "type": "结语",
+                    "text": "你的大脑不是客观的摄像头，它是带滤镜的。",
+                    "audioDuration": 4.392,
+                    "durationInFrames": 141,
+                    "audioFile": "/audio/confirmationBias/scene7/02_结语.mp3"
+                },
+                {
+                    "order": 3,
+                    "type": "结语",
+                    "text": "主动寻找\"反对自己\"的证据。",
+                    "audioDuration": 2.844,
+                    "durationInFrames": 95,
+                    "audioFile": "/audio/confirmationBias/scene7/03_结语.mp3"
+                },
+                {
+                    "order": 4,
+                    "type": "结语",
+                    "text": "承认自己可能是错的，是智慧的开始。",
+                    "audioDuration": 3.636,
+                    "durationInFrames": 119,
+                    "audioFile": "/audio/confirmationBias/scene7/04_结语.mp3"
+                }
+            ]
+        }
+    ]
+}

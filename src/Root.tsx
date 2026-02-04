@@ -3,6 +3,7 @@ import { Composition } from "remotion";
 import { Demo, DemoSchema, TOTAL_DURATION_DEMO } from "./remotions/demo/Demo";
 import { Demo as StrawManFallacy, DemoSchema as StrawManFallacySchema, TOTAL_DURATION_DEMO as STRAW_MAN_FALLACY_TOTAL_DURATION } from "./remotions/strawManFallacy/StrawManFallacy";
 import { Crowd, CrowdSchema, TOTAL_DURATION_CROWD } from "./remotions/crowd/Crowd";
+import { BabyProbiotics, BabyProbioticsSchema, TOTAL_DURATION_BABY_PROBIOTICS } from "./remotions/babyProbiotics/BabyProbiotics";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -49,6 +50,17 @@ export const RemotionRoot: React.FC = () => {
           primaryColor: "#38B2AC",
           accentColor: "#E53E3E",
         }}
+      />
+      {/* 宝宝益生菌科普动画 */}
+      <Composition
+        id="BabyProbiotics"
+        component={BabyProbiotics}
+        durationInFrames={TOTAL_DURATION_BABY_PROBIOTICS}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={BabyProbioticsSchema}
+        defaultProps={{}}
       />
 
     </>

@@ -1,0 +1,110 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Remotion Scene Scripts",
+    "description": "动画场景脚本数据模板",
+    "type": "object",
+    "required": [
+        "topic",
+        "generatedAt",
+        "scenes"
+    ],
+    "properties": {
+        "topic": {
+            "type": "string",
+            "description": "主题名称"
+        },
+        "generatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "生成时间（ISO 8601格式）"
+        },
+        "fps": {
+            "type": "integer",
+            "default": 30,
+            "description": "帧率"
+        },
+        "scenes": {
+            "type": "array",
+            "description": "场景列表",
+            "items": {
+                "type": "object",
+                "required": [
+                    "sceneId",
+                    "sceneName",
+                    "items"
+                ],
+                "properties": {
+                    "sceneId": {
+                        "type": "string",
+                        "pattern": "^scene[0-9]+$",
+                        "description": "场景ID，如 scene1, scene2"
+                    },
+                    "sceneName": {
+                        "type": "string",
+                        "description": "场景名称，如 '开场', '概念解析'"
+                    },
+                    "items": {
+                        "type": "array",
+                        "description": "场景内的文案条目",
+                        "items": {
+                            "type": "object",
+                            "required": [
+                                "order",
+                                "type",
+                                "text"
+                            ],
+                            "properties": {
+                                "order": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "description": "场景内序号"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "主标题",
+                                        "副标题",
+                                        "标题",
+                                        "小标题",
+                                        "正文",
+                                        "标签",
+                                        "画面文字",
+                                        "卡片标题",
+                                        "卡片内容",
+                                        "卡片标题+内容",
+                                        "策略标题",
+                                        "策略内容",
+                                        "名言",
+                                        "出处",
+                                        "结语"
+                                    ],
+                                    "description": "文案类型"
+                                },
+                                "text": {
+                                    "type": "string",
+                                    "description": "纯文本内容，用于TTS朗读"
+                                },
+                                "note": {
+                                    "type": "string",
+                                    "description": "备注，如 '不读', '可按需读或不读'"
+                                },
+                                "durationInFrames": {
+                                    "type": "integer",
+                                    "description": "动画时长（帧数），由sync_durations.py填充"
+                                },
+                                "audioFile": {
+                                    "type": "string",
+                                    "description": "音频文件路径，由generate_audio.py填充"
+                                },
+                                "audioDuration": {
+                                    "type": "number",
+                                    "description": "音频时长（秒），由generate_audio.py填充"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

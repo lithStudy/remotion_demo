@@ -7,23 +7,23 @@ import {
     calculateSceneDuration,
     type AudioMap,
 } from "../../../utils";
-import { useSceneAudio, useAudioMap } from "../../../hooks/useSceneAudio";
+import { useAudioMap } from "../../../hooks/useSceneAudio";
 import audioMapData from './audio-map.json';
 
 const animationConfigs: AnimationConfig[] = [
-    { 
-        name: "title", 
-        delayBefore: 15, 
-        delayAfter: 0, 
-        durationInFrames: 40, 
+    {
+        name: "title",
+        delayBefore: 15,
+        delayAfter: 0,
+        durationInFrames: 40,
         preName: null,
         audioId: "scene1_1" // 关联音频 ID
     },
-    { 
-        name: "subtitle", 
-        delayBefore: 15, 
-        delayAfter: 0, 
-        durationInFrames: 30, 
+    {
+        name: "subtitle",
+        delayBefore: 15,
+        delayAfter: 0,
+        durationInFrames: 30,
         preName: "title",
         audioId: "scene1_2" // 关联音频 ID
     },
@@ -102,21 +102,7 @@ const BackgroundParticles: React.FC = () => {
 };
 
 export const Scene1: React.FC = () => {
-    const audioMap = useAudioMap();
-    const { getAudioFile } = useSceneAudio('scene1');
-    
-    // 应用音频时长到配置
-    const configsWithAudio = animationConfigs.map(config => {
-        if (config.audioId && audioMap[config.audioId]) {
-            const audioDuration = audioMap[config.audioId].duration;
-            const fps = 30;
-            const durationInFrames = Math.ceil((audioDuration + 0.3) * fps);
-            return { ...config, durationInFrames };
-        }
-        return config;
-    });
-    
-    const timings = calculateAnimationTimings(configsWithAudio);
+
 
     return (
         <AbsoluteFill
@@ -124,16 +110,9 @@ export const Scene1: React.FC = () => {
                 background: BACKGROUND,
             }}
         >
-            {/* 音频轨道 */}
-            {getAudioFile(1) && (
-                <Audio src={staticFile(getAudioFile(1)!)} startFrom={timings.title.startTime} />
-            )}
-            {getAudioFile(2) && (
-                <Audio src={staticFile(getAudioFile(2)!)} startFrom={timings.subtitle.startTime} />
-            )}
-            
+
             <BackgroundParticles />
-            
+
             <div
                 style={{
                     position: "absolute",
@@ -149,7 +128,7 @@ export const Scene1: React.FC = () => {
                 }}
             >
                 {/* Main Title */}
-                <SpringText delay={timings.title.startTime}>
+                <SpringText>
                     <div
                         style={{
                             fontSize: 96,
@@ -168,10 +147,7 @@ export const Scene1: React.FC = () => {
                 </SpringText>
 
                 {/* Subtitle */}
-                <FadeInText
-                    delay={timings.subtitle.startTime}
-                    duration={timings.subtitle.durationInFrames}
-                >
+                <FadeInText>
                     <div
                         style={{
                             fontSize: 42,
@@ -209,7 +185,6 @@ export const Scene1: React.FC = () => {
                     <div key={tag.text} style={{ transform: `rotate(${tag.rot}deg)` }}>
                         <Stamp
                             text={`#${tag.text}`}
-                            delay={timings.tags.startTime + i * 6}
                             style={{
                                 fontSize: 24,
                                 padding: "8px 16px",

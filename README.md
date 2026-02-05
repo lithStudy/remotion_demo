@@ -11,6 +11,15 @@
 - **ConfirmationBias (确认偏误)**: 认知偏见系列动画。
 - **ScienceIntro**: 科普类视频通用的开场动画模板（卡片闪烁 → 定格 → 下移）。
 
+## 📺 演示视频 (Demos)
+
+### Crowd (乌合之众)
+<video src="out/Crowd.mp4" controls width="100%"></video>
+
+### ConfirmationBias (确认偏误)
+<video src="out/ConfirmationBias.mp4" controls width="100%"></video>
+
+
 ## 🚀 使用说明 (Usage)
 
 ### 1. 安装依赖

@@ -14,10 +14,10 @@
 ## 📺 演示视频 (Demos)
 
 ### Crowd (乌合之众)
-<video src="out/Crowd.mp4" controls width="100%"></video>
+https://github.com/lithStudy/remotion_demo/blob/main/out/Crowd.mp4
 
 ### ConfirmationBias (确认偏误)
-<video src="out/ConfirmationBias.mp4" controls width="100%"></video>
+https://github.com/lithStudy/remotion_demo/blob/main/out/ConfirmationBias.mp4
 
 
 ## 🚀 使用说明 (Usage)
@@ -34,17 +34,6 @@ npm install
 
 ```bash
 npm run dev
-```
-
-### 3. 生成视频 (Render)
-
-渲染指定 Composition 为视频文件：
-
-```bash
-npx remotion render <CompositionID> out/video.mp4
-
-# 示例: 渲染"乌合之众"视频
-npx remotion render Crowd out/crowd.mp4
 ```
 
 ### 4. TTS 语音工作流 (TTS Workflow)

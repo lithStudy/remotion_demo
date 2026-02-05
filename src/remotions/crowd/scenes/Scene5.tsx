@@ -23,9 +23,9 @@ const baseConfigs: AnimationConfig[] = [
     { name: "performanceText", delayBefore: 0, delayAfter: 0, durationInFrames: 1, preName: "performance", audioId: "scene5_4" },
 
     // 表现部分的高亮 - 依赖 performanceText (开始读表现正文时)
-    { name: "highlight_silence", delayBefore: 80, delayAfter: 0, durationInFrames: 20, preName: "performance" }, // 没人敢反对
-    { name: "highlight_follow", delayBefore: 60, delayAfter: 0, durationInFrames: 20, preName: "highlight_silence" }, // 别人没说话
-    { name: "highlight_hindsight", delayBefore: 110, delayAfter: 0, durationInFrames: 20, preName: "highlight_follow" }, // 马后炮
+    { name: "highlight_silence", delayBefore: 70, delayAfter: 0, durationInFrames: 20, preName: "performance" }, // 没人敢反对
+    { name: "highlight_follow", delayBefore: 50, delayAfter: 0, durationInFrames: 20, preName: "highlight_silence" }, // 别人没说话
+    { name: "highlight_hindsight", delayBefore: 100, delayAfter: 0, durationInFrames: 20, preName: "highlight_follow" }, // 马后炮
 
     // 原理部分 "原理" - 依赖 performanceText (第一段读完)
     { name: "principle", delayBefore: 0, delayAfter: 0, durationInFrames: 40, preName: "performanceText", audioId: "scene5_5" },
@@ -35,7 +35,7 @@ const baseConfigs: AnimationConfig[] = [
     // 原理部分的高亮 - 依赖 principleText (开始读原理正文时)
     { name: "highlight_suppress", delayBefore: 0, delayAfter: 0, durationInFrames: 20, preName: "principle" }, // 扼杀异议 (开头)
     { name: "highlight_belonging", delayBefore: 50, delayAfter: 0, durationInFrames: 20, preName: "highlight_suppress" }, // 归属感
-    { name: "highlight_repress", delayBefore: 60, delayAfter: 60, durationInFrames: 20, preName: "highlight_belonging" }, // 压抑判断
+    { name: "highlight_repress", delayBefore: 50, delayAfter: 60, durationInFrames: 10, preName: "highlight_belonging" }, // 压抑判断
 ];
 
 // 应用音频时长

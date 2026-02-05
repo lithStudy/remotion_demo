@@ -24,8 +24,8 @@ const baseConfigs: AnimationConfig[] = [
     { name: "performanceText", delayBefore: 0, delayAfter: 0, durationInFrames: 1, preName: "performance", audioId: "scene4_5" },
 
     // 表现部分的高亮 - 依赖 performanceText (开始读表现正文时)
-    { name: "highlight_queuing", delayBefore: 120, delayAfter: 0, durationInFrames: 20, preName: "performance" }, // 几百人在排队
-    { name: "highlight_moment", delayBefore: 120, delayAfter: 0, durationInFrames: 20, preName: "highlight_queuing" }, // 终于喝到了
+    { name: "highlight_queuing", delayBefore: 100, delayAfter: 0, durationInFrames: 20, preName: "performance" }, // 几百人在排队
+    { name: "highlight_moment", delayBefore: 100, delayAfter: 0, durationInFrames: 20, preName: "highlight_queuing" }, // 终于喝到了
 
     // 原理部分 "原理" - 依赖 performanceText (第一段读完)
     { name: "principle", delayBefore: 0, delayAfter: 0, durationInFrames: 40, preName: "performanceText", audioId: "scene4_6" },
@@ -34,7 +34,7 @@ const baseConfigs: AnimationConfig[] = [
 
     // 原理部分的高亮 - 依赖 principleText (开始读原理正文时)
     { name: "highlight_contagion_word", delayBefore: 0, delayAfter: 0, durationInFrames: 20, preName: "principle" }, // 传染性 (开头就是)
-    { name: "highlight_virus", delayBefore: 90, delayAfter: 0, durationInFrames: 20, preName: "highlight_contagion_word" }, // 病毒一样传播
+    { name: "highlight_virus", delayBefore: 80, delayAfter: 0, durationInFrames: 20, preName: "highlight_contagion_word" }, // 病毒一样传播
     { name: "highlight_everyone", delayBefore: 30, delayAfter: 60, durationInFrames: 20, preName: "highlight_virus" }, // 大家都在做
 ];
 

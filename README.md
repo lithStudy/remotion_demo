@@ -44,6 +44,12 @@ npx remotion render Crowd out/crowd.mp4
 
 **核心脚本位置**: `.agent/skills/remotion-script-generator/scripts/`
 
+**配置说明**:
+
+如果你没有Azure账号，可以：
+1. 自行注册，免费的：https://zhuanlan.zhihu.com/p/49711377
+2. 直接使用 `generate_audio.py` 脚本，它会调用 Edge TTS 生成语音。
+
 **操作步骤**:
 
 1.  **修改文案**: 编辑对应场景的 `scene-scripts.ts` 或配置文件。

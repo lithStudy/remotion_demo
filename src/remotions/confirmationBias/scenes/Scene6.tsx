@@ -52,10 +52,10 @@ export const Scene6: React.FC = () => {
                 delay={animationTimings.title.startTime}
                 duration={20}
                 style={{
-                    fontSize: 48,
+                    fontSize: 60,
                     fontWeight: "bold",
                     color: "#38A169",
-                    marginBottom: 20,
+                    marginBottom: 50,
                     marginTop: 20,
                     borderBottom: "4px solid #48BB78",
                     paddingBottom: 10,
@@ -64,8 +64,12 @@ export const Scene6: React.FC = () => {
                 案例三：养生谣言传播
             </FadeInText>
 
-            {/* 插图 */}
-            <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'center', height: 320 }}>
+            {/* 插图：与标题同步淡入 */}
+            <FadeInText
+                delay={animationTimings.title.startTime}
+                duration={20}
+                style={{ marginBottom: 30, display: 'flex', justifyContent: 'center', height: 320 }}
+            >
                 <Img
                     src={staticFile("images/confirmationBias/cb_scene_6.png")}
                     style={{
@@ -76,7 +80,7 @@ export const Scene6: React.FC = () => {
                         boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
                     }}
                 />
-            </div>
+            </FadeInText>
 
             {/* 偏见剖析 */}
             <div style={{ width: "100%", marginBottom: 20 }}>
@@ -84,7 +88,7 @@ export const Scene6: React.FC = () => {
                     delay={animationTimings.analysis.startTime}
                     duration={20}
                     style={{
-                        fontSize: 24,
+                        fontSize: 32,
                         color: "#4A5568",
                         background: "white",
                         padding: 20,
@@ -109,7 +113,7 @@ export const Scene6: React.FC = () => {
                     delay={animationTimings.strategy.startTime}
                     duration={20}
                     style={{
-                        fontSize: 24,
+                        fontSize: 32,
                         color: "#2C5282",
                         background: "#EBF8FF",
                         padding: 20,

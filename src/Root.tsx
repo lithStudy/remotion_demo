@@ -3,8 +3,9 @@ import { Composition } from "remotion";
 import { Demo, DemoSchema, TOTAL_DURATION_DEMO } from "./remotions/demo/Demo";
 import { Demo as StrawManFallacy, DemoSchema as StrawManFallacySchema, TOTAL_DURATION_DEMO as STRAW_MAN_FALLACY_TOTAL_DURATION } from "./remotions/strawManFallacy/StrawManFallacy";
 import { Crowd, CrowdSchema, TOTAL_DURATION_CROWD } from "./remotions/crowd/Crowd";
-import { BabyProbiotics, BabyProbioticsSchema, TOTAL_DURATION_BABY_PROBIOTICS } from "./remotions/babyProbiotics/BabyProbiotics";
 import { ConfirmationBias, ConfirmationBiasSchema, TOTAL_DURATION_CONFIRMATION_BIAS } from "./remotions/confirmationBias/ConfirmationBias";
+import { ScienceIntro, ScienceIntroSchema, TOTAL_DURATION_SCIENCE_INTRO } from "./remotions/scienceIntro/ScienceIntro";
+import { Vocation, VocationSchema, TOTAL_DURATION_VOCATION } from "./remotions/vocation/Vocation";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -17,8 +18,8 @@ export const RemotionRoot: React.FC = () => {
         component={Demo}
         durationInFrames={TOTAL_DURATION_DEMO}
         fps={30}
-        width={1920}
-        height={1080}
+        width={960}
+        height={1280}
         schema={DemoSchema}
         defaultProps={{
           backgroundColor: "#F7F9FC",
@@ -52,17 +53,6 @@ export const RemotionRoot: React.FC = () => {
           accentColor: "#E53E3E",
         }}
       />
-      {/* 宝宝益生菌科普动画 */}
-      <Composition
-        id="BabyProbiotics"
-        component={BabyProbiotics}
-        durationInFrames={TOTAL_DURATION_BABY_PROBIOTICS}
-        fps={30}
-        width={960}
-        height={1280}
-        schema={BabyProbioticsSchema}
-        defaultProps={{}}
-      />
       {/* 认知偏见 - 确认偏误动画 */}
       <Composition
         id="ConfirmationBias"
@@ -72,6 +62,30 @@ export const RemotionRoot: React.FC = () => {
         width={960}
         height={1280}
         schema={ConfirmationBiasSchema}
+        defaultProps={{}}
+      />
+      {/* 科普类开场动画：卡片闪烁 → 定格 → 下移 + 主题文字 */}
+      <Composition
+        id="ScienceIntro"
+        component={ScienceIntro}
+        durationInFrames={TOTAL_DURATION_SCIENCE_INTRO}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={ScienceIntroSchema}
+        defaultProps={{
+          titleText: "稻草人谬误",
+        }}
+      />
+      {/* vocation 单词记忆 - 方案0 专注向 8 场景 */}
+      <Composition
+        id="Vocation"
+        component={Vocation}
+        durationInFrames={TOTAL_DURATION_VOCATION}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={VocationSchema}
         defaultProps={{}}
       />
 

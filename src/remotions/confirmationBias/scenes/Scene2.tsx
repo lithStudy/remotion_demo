@@ -51,10 +51,10 @@ export const Scene2: React.FC = () => {
                 delay={animationTimings.title.startTime}
                 duration={20}
                 style={{
-                    fontSize: 56,
+                    fontSize: 72,
                     fontWeight: "bold",
                     color: "#C53030",
-                    marginBottom: 20,
+                    marginBottom: 50,
                     marginTop: 20,
                     borderBottom: "4px solid #F56565",
                     paddingBottom: 10,
@@ -63,8 +63,12 @@ export const Scene2: React.FC = () => {
                 被偏见勒索的隐形成本
             </FadeInText>
 
-            {/* 插图 */}
-            <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'center', height: 320 }}>
+            {/* 插图：与标题同步淡入 */}
+            <FadeInText
+                delay={animationTimings.title.startTime}
+                duration={20}
+                style={{ marginBottom: 20, display: 'flex', justifyContent: 'center', height: 320 }}
+            >
                 <Img
                     src={staticFile("images/confirmationBias/cb_scene_2.png")}
                     style={{
@@ -75,7 +79,7 @@ export const Scene2: React.FC = () => {
                         boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
                     }}
                 />
-            </div>
+            </FadeInText>
 
             {/* 正文1 */}
             <div style={{ width: "100%", marginBottom: 20 }}>
@@ -83,7 +87,7 @@ export const Scene2: React.FC = () => {
                     delay={animationTimings.content1.startTime}
                     duration={20}
                     style={{
-                        fontSize: 28,
+                        fontSize: 36,
                         color: "#2D3748",
                         lineHeight: 1.5,
                         background: "white",
@@ -108,7 +112,7 @@ export const Scene2: React.FC = () => {
                     delay={animationTimings.content2.startTime}
                     duration={20}
                     style={{
-                        fontSize: 28,
+                        fontSize: 36,
                         color: "#2D3748",
                         lineHeight: 1.5,
                         background: "white",

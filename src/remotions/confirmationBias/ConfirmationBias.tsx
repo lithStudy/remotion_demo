@@ -8,6 +8,8 @@ import {
 } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 
+import { ScienceIntro, TOTAL_DURATION_SCIENCE_INTRO } from "../scienceIntro/ScienceIntro";
+
 // 导入场景组件
 import {
     Scene1,
@@ -53,12 +55,15 @@ const sceneConfigs = [
 const TRANSITION_DURATION = 15;
 
 /**
- * 计算总时长
+ * 计算总时长（含科普开场）
  */
-export const TOTAL_DURATION_CONFIRMATION_BIAS = sceneConfigs.reduce(
-    (total, config) => total + config.durationInFrames,
-    0
-) - (sceneConfigs.length - 1) * TRANSITION_DURATION;
+export const TOTAL_DURATION_CONFIRMATION_BIAS =
+    TOTAL_DURATION_SCIENCE_INTRO +
+    sceneConfigs.reduce(
+        (total, config) => total + config.durationInFrames,
+        0
+    ) -
+    sceneConfigs.length * TRANSITION_DURATION;
 
 /**
  * 认知偏见 - 确认偏误动画
@@ -67,6 +72,13 @@ export const ConfirmationBias: React.FC<z.infer<typeof ConfirmationBiasSchema>> 
     return (
         <AbsoluteFill>
             <TransitionSeries>
+                <TransitionSeries.Sequence durationInFrames={TOTAL_DURATION_SCIENCE_INTRO}>
+                    <ScienceIntro titleText="确认偏误" />
+                </TransitionSeries.Sequence>
+                <TransitionSeries.Transition
+                    timing={linearTiming({ durationInFrames: TRANSITION_DURATION })}
+                    presentation={fade()}
+                />
                 {sceneConfigs.map((config, index) => {
                     const SceneComponent = config.component;
                     const isLast = index === sceneConfigs.length - 1;

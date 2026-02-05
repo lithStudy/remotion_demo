@@ -67,7 +67,7 @@ export const Scene1: React.FC = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    marginBottom: 20,
+                    marginBottom: 50,
                     width: "100%",
                     marginTop: 20,
                 }}
@@ -77,54 +77,26 @@ export const Scene1: React.FC = () => {
                     <div
                         style={{
                             transform: `scale(${titleScale})`,
-                            fontSize: 64,
+                            fontSize: 80,
                             fontWeight: "bold",
                             color: "#2D3748",
                             zIndex: 1,
+                            borderBottom: "4px solid #0E0000",
                         }}
                     >
-                        <HighlightText delay={animationTimings.title.startTime + 15} highlightColor="#27eeeeff">
-                            确认偏误
-                        </HighlightText>
+                            概念解析
                     </div>
 
-                    {/* 印章：认知偏见 */}
-                    <Stamp
-                        text="认知偏见"
-                        delay={animationTimings.stamp.startTime}
-                        style={{
-                            padding: "10px 20px",
-                            fontSize: 24,
-                            position: "absolute",
-                            top: -60,
-                            right: -120,
-                            zIndex: 2,
-                        }}
-                    />
                 </div>
             </div>
-
-            {/* 插图 */}
-            <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'center', height: 320 }}>
-                <Img
-                    src={staticFile("images/confirmationBias/cb_scene_1.png")}
-                    style={{
-                        maxHeight: "100%",
-                        maxWidth: "100%",
-                        objectFit: "contain",
-                        borderRadius: 20,
-                        boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
-                    }}
-                />
-            </div>
-
+            
             {/* 副标题 */}
-            <div style={{ marginBottom: 20 }}>
+            {/* <div style={{ marginBottom: 20 }}>
                 <FadeInText
                     delay={animationTimings.subtitle.startTime}
                     duration={15}
                     style={{
-                        fontSize: 40,
+                        fontSize: 52,
                         fontWeight: "bold",
                         color: "#E53E3E",
                         background: "#FFE4E6",
@@ -134,7 +106,7 @@ export const Scene1: React.FC = () => {
                 >
                     我总是对的！
                 </FadeInText>
-            </div>
+            </div> */}
 
 
             {/* 正文1 */}
@@ -143,7 +115,7 @@ export const Scene1: React.FC = () => {
                     delay={animationTimings.content1.startTime}
                     duration={20}
                     style={{
-                        fontSize: 28,
+                        fontSize: 36,
                         color: "#4A5568",
                         lineHeight: 1.5,
                         background: "white",
@@ -171,7 +143,7 @@ export const Scene1: React.FC = () => {
                     delay={animationTimings.content2.startTime}
                     duration={20}
                     style={{
-                        fontSize: 28,
+                        fontSize: 36,
                         color: "#2C5282",
                         lineHeight: 1.5,
                         background: "#EBF8FF",

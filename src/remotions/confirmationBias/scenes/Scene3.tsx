@@ -54,10 +54,10 @@ export const Scene3: React.FC = () => {
                 delay={animationTimings.title.startTime}
                 duration={20}
                 style={{
-                    fontSize: 48, // Reduced from 56
+                    fontSize: 60,
                     fontWeight: "bold",
                     color: "#276749",
-                    marginBottom: 10,
+                    marginBottom: 50,
                     marginTop: 10,
                     borderBottom: "4px solid #38A169",
                     paddingBottom: 10,
@@ -66,8 +66,12 @@ export const Scene3: React.FC = () => {
                 总策略：<HighlightText delay={animationTimings.title.startTime + 20} highlightColor="#9AE6B4">主动找反例法</HighlightText>
             </FadeInText>
 
-            {/* 插图 */}
-            <div style={{ marginBottom: 15, display: 'flex', justifyContent: 'center', height: 320 }}>
+            {/* 插图：与标题同步淡入 */}
+            <FadeInText
+                delay={animationTimings.title.startTime}
+                duration={20}
+                style={{ marginBottom: 30, display: 'flex', justifyContent: 'center', height: 320 }}
+            >
                 <Img
                     src={staticFile("images/confirmationBias/cb_scene_3.png")}
                     style={{
@@ -78,15 +82,15 @@ export const Scene3: React.FC = () => {
                         boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
                     }}
                 />
-            </div>
+            </FadeInText>
 
             {/* 核心心法 */}
-            <div style={{ width: "100%", marginBottom: 15 }}>
+            <div style={{ width: "100%", marginBottom: 20 }}>
                 <FadeInText
                     delay={animationTimings.core.startTime}
                     duration={20}
                     style={{
-                        fontSize: 26, // Reduced from 32
+                        fontSize: 34,
                         color: "#22543D",
                         background: "#C6F6D5",
                         padding: "15px 20px",
@@ -105,12 +109,12 @@ export const Scene3: React.FC = () => {
             </div>
 
             {/* 策略点1 */}
-            <div style={{ width: "100%", marginBottom: 10 }}>
+            <div style={{ width: "100%", marginBottom: 20 }}>
                 <FadeInText
                     delay={animationTimings.point1.startTime}
                     duration={20}
                     style={{
-                        fontSize: 22, // Reduced from 28
+                        fontSize: 36,
                         color: "#2D3748",
                         background: "white",
                         padding: "10px 20px",
@@ -127,15 +131,15 @@ export const Scene3: React.FC = () => {
             </div>
 
             {/* 策略点2 */}
-            <div style={{ width: "100%", marginBottom: 15 }}>
+            <div style={{ width: "100%", marginBottom: 40 }}>
                 <FadeInText
                     delay={animationTimings.point2.startTime}
                     duration={20}
                     style={{
-                        fontSize: 22, // Reduced from 28
+                        fontSize: 36,
                         color: "#2D3748",
                         background: "white",
-                        padding: "10px 20px",
+                        padding: "10px 20px",                        
                         borderRadius: 15,
                         boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
                     }}
@@ -154,7 +158,7 @@ export const Scene3: React.FC = () => {
                     delay={animationTimings.quote.startTime}
                     duration={20}
                     style={{
-                        fontSize: 28, // Reduced from 34
+                        fontSize: 36,
                         color: "#744210",
                         background: "#FEFCBF",
                         padding: "15px 20px",

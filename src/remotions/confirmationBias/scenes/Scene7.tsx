@@ -53,10 +53,10 @@ export const Scene7: React.FC = () => {
                 delay={animationTimings.title.startTime}
                 duration={20}
                 style={{
-                    fontSize: 48,
+                    fontSize: 60,
                     fontWeight: "bold",
                     color: "#63B3ED",
-                    marginBottom: 20,
+                    marginBottom: 50,
                     marginTop: 20,
                     borderBottom: "4px solid #63B3ED",
                     paddingBottom: 10,
@@ -65,8 +65,12 @@ export const Scene7: React.FC = () => {
                 本期总结
             </FadeInText>
 
-            {/* 插图 */}
-            <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'center', height: 320 }}>
+            {/* 插图：与标题同步淡入 */}
+            <FadeInText
+                delay={animationTimings.title.startTime}
+                duration={20}
+                style={{ marginBottom: 30, display: 'flex', justifyContent: 'center', height: 320 }}
+            >
                 <Img
                     src={staticFile("images/confirmationBias/cb_scene_7.png")}
                     style={{
@@ -77,7 +81,7 @@ export const Scene7: React.FC = () => {
                         boxShadow: "0 8px 16px rgba(0,0,0,0.3)",
                     }}
                 />
-            </div>
+            </FadeInText>
 
             {/* 总结点1 */}
             <div style={{ width: "100%", marginBottom: 20 }}>
@@ -85,7 +89,7 @@ export const Scene7: React.FC = () => {
                     delay={animationTimings.point1.startTime}
                     duration={20}
                     style={{
-                        fontSize: 28,
+                        fontSize: 36,
                         textAlign: "center",
                     }}
                 >
@@ -104,7 +108,7 @@ export const Scene7: React.FC = () => {
                     delay={animationTimings.point2.startTime}
                     duration={20}
                     style={{
-                        fontSize: 28,
+                        fontSize: 36,
                         textAlign: "center",
                         fontWeight: "bold",
                         color: "#F6E05E",
@@ -114,7 +118,7 @@ export const Scene7: React.FC = () => {
                         delay={animationTimings.point2.startTime}
                         durationInFrames={animationTimings.point2.durationInFrames - 30}
                     >
-                        主动寻找<HighlightText delay={animationTimings.point2.startTime + 15} highlightColor="#D69E2E">“反对自己”</HighlightText>的证据。
+                        主动寻找<HighlightText delay={animationTimings.point2.startTime + 15} highlightColor="#4A5568">“反对自己”</HighlightText>的证据。
                     </TypewriterContent>
                 </FadeInText>
             </div>
@@ -125,7 +129,7 @@ export const Scene7: React.FC = () => {
                     delay={animationTimings.point3.startTime}
                     duration={20}
                     style={{
-                        fontSize: 28,
+                        fontSize: 36,
                         textAlign: "center",
                     }}
                 >

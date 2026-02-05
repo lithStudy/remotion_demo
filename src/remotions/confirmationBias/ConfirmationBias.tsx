@@ -6,7 +6,7 @@ import {
     linearTiming,
     TransitionSeries,
 } from "@remotion/transitions";
-import { fade } from "@remotion/transitions/fade";
+import { slide } from "@remotion/transitions/slide";
 
 import { ScienceIntro, TOTAL_DURATION_SCIENCE_INTRO } from "../scienceIntro/ScienceIntro";
 
@@ -52,7 +52,7 @@ const sceneConfigs = [
 /**
  * 转场配置
  */
-const TRANSITION_DURATION = 15;
+const TRANSITION_DURATION = 10;
 
 /**
  * 计算总时长（含科普开场）
@@ -73,11 +73,11 @@ export const ConfirmationBias: React.FC<z.infer<typeof ConfirmationBiasSchema>> 
         <AbsoluteFill>
             <TransitionSeries>
                 <TransitionSeries.Sequence durationInFrames={TOTAL_DURATION_SCIENCE_INTRO}>
-                    <ScienceIntro titleText="确认偏误" />
+                    <ScienceIntro titleText="确认偏误" titleAudio="/audio/confirmationBias/scene1/01_主标题.mp3" />
                 </TransitionSeries.Sequence>
                 <TransitionSeries.Transition
                     timing={linearTiming({ durationInFrames: TRANSITION_DURATION })}
-                    presentation={fade()}
+                    presentation={slide({ direction: "from-right" })}
                 />
                 {sceneConfigs.map((config, index) => {
                     const SceneComponent = config.component;
@@ -92,7 +92,7 @@ export const ConfirmationBias: React.FC<z.infer<typeof ConfirmationBiasSchema>> 
                             {!isLast && (
                                 <TransitionSeries.Transition
                                     timing={linearTiming({ durationInFrames: TRANSITION_DURATION })}
-                                    presentation={fade()}
+                                    presentation={slide({ direction: "from-right" })}
                                 />
                             )}
                         </React.Fragment>

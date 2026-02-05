@@ -11,11 +11,13 @@ python generate_audio_azure.py --input <scene-scripts.json路径> --output <音�
 {
   "speech_key": "YOUR_KEY",
   "service_region": "eastasia",
-  "voice_name": "zh-CN-XiaoxiaoNeural"
+  "voice_name": "zh-CN-XiaochenNeural" //可选语音：https://learn.microsoft.com/zh-cn/azure/ai-services/speech-service/language-support?tabs=tts
 }
 
 依赖安装：
 pip install requests mutagen
+
+
 """
 
 import asyncio
@@ -43,7 +45,23 @@ def load_config():
         exit(1)
     
     with open(config_path, "r", encoding="utf-8") as f:
-        return json.load(f)
+        config = json.load(f)
+    
+    # 尝试读取 .env 文件
+    env_path = Path(__file__).parent / ".env"
+    if env_path.exists():
+        with open(env_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, value = line.split("=", 1)
+                    os.environ[key.strip()] = value.strip()
+    
+    # 优先从环境变量获取 key
+    if "SPEECH_KEY" in os.environ:
+        config["speech_key"] = os.environ["SPEECH_KEY"]
+        
+    return config
 
 def get_token(subscription_key, region):
     """获取 Azure Access Token"""
@@ -58,7 +76,7 @@ def get_token(subscription_key, region):
         print(f"❌ 获取 Token 失败: {response.status_code} - {response.text}")
         return None
 
-def generate_audio_azure(text, output_path, token, region, voice_name):
+def generate_audio_azure(text, output_path, token, region, voice_name, speech_rate="0%"):
     """使用 Azure REST API 生成音频"""
     url = f"https://{region}.tts.speech.microsoft.com/cognitiveservices/v1"
     headers = {
@@ -73,7 +91,9 @@ def generate_audio_azure(text, output_path, token, region, voice_name):
     ssml = f"""
     <speak version='1.0' xml:lang='zh-CN'>
         <voice xml:lang='zh-CN' xml:gender='Female' name='{voice_name}'>
-            {text}
+            <prosody rate='{speech_rate}'>
+                {text}
+            </prosody>
         </voice>
     </speak>
     """
@@ -88,7 +108,7 @@ def generate_audio_azure(text, output_path, token, region, voice_name):
         print(f"❌ TTS 请求失败: {response.status_code} - {response.text}")
         return False
 
-async def process_scene(scene: dict, output_dir: Path, animation_name: str, token: str, region: str, voice_name: str, audio_map: dict):
+async def process_scene(scene: dict, output_dir: Path, animation_name: str, token: str, region: str, voice_name: str, audio_map: dict, speech_rate: str):
     """处理单个场景的所有条目"""
     scene_id = scene["sceneId"]
     scene_name = scene["sceneName"]
@@ -124,7 +144,7 @@ async def process_scene(scene: dict, output_dir: Path, animation_name: str, toke
             # Azure Token 有效期 10 分钟。如果脚本运行时间很长，需要重新获取。
             # 为简单起见，这里复用传入的 token。如果经常失败可以改进。
             
-            success = generate_audio_azure(item["text"], str(filepath), token, region, voice_name)
+            success = generate_audio_azure(item["text"], str(filepath), token, region, voice_name, speech_rate)
             
             if success:
                 # 测量时长
@@ -188,6 +208,7 @@ async def main():
     speech_key = config.get("speech_key")
     region = config.get("service_region")
     voice_name = config.get("voice_name")
+    speech_rate = config.get("speech_rate", "+0%")
     
     if not all([speech_key, region, voice_name]):
         print("❌ 配置不完整，请检查 tts_config.json")
@@ -206,6 +227,7 @@ async def main():
     print(f"🎤 开始生成 Azure TTS 音频...")
     print(f"📄 脚本主题: {scripts_data.get('topic', '未知')}")
     print(f"🔊 使用语音: {voice_name}")
+    print(f"🚀 语速设置: {speech_rate}")
     
     # 确保输出目录存在
     output_dir = Path(args.output)
@@ -258,12 +280,12 @@ async def main():
                  print(f"❌ 未找到条目: {target_scene}_{target_item}")
                  return
 
-        await process_scene(target_scene_data, output_dir, animation_name, token, region, voice_name, audio_map)
+        await process_scene(target_scene_data, output_dir, animation_name, token, region, voice_name, audio_map, speech_rate)
 
     else:
         # 全量模式
          for scene in scripts_data.get("scenes", []):
-            await process_scene(scene, output_dir, animation_name, token, region, voice_name, audio_map)
+            await process_scene(scene, output_dir, animation_name, token, region, voice_name, audio_map, speech_rate)
             
     # 保存音频映射
     with open(audio_map_path, "w", encoding="utf-8") as f:

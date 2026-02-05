@@ -1,37 +1,51 @@
 import React, { useMemo } from "react";
-import { AbsoluteFill, useCurrentFrame, interpolate, useVideoConfig, random, spring } from "remotion";
+import { AbsoluteFill, useCurrentFrame, interpolate, useVideoConfig, random, spring, Audio, Sequence, staticFile } from "remotion";
 import { FadeInText, SpringText, HighlightText } from "../../../components";
 import {
     AnimationConfig,
     calculateAnimationTimings,
     calculateSceneDuration,
+    applyAudioDurations,
+    type AudioMap,
 } from "../../../utils";
+import audioMapData from './audio-map.json';
 
-const animationConfigs: AnimationConfig[] = [
-    { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 22, preName: null },
-    { name: "subtitle", delayBefore: 12, delayAfter: 0, durationInFrames: 22, preName: "title" },
-    { name: "figure", delayBefore: 25, delayAfter: 0, durationInFrames: 28, preName: "subtitle" },
-    { name: "performance", delayBefore: 10, delayAfter: 0, durationInFrames: 15, preName: "figure" }, // 15帧淡入完成
-    
-    // 表现部分的高亮
-    { name: "highlight_crazyStanding", delayBefore: 0, delayAfter: 0, durationInFrames: 20, preName: "performance" }, // 疯狂站队
+const audioMap = audioMapData as AudioMap;
+
+const baseConfigs: AnimationConfig[] = [
+    { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 22, preName: null, audioId: "scene3_1" },
+    { name: "subtitle", delayBefore: 0, delayAfter: 0, durationInFrames: 22, preName: "title", audioId: "scene3_2" },
+    { name: "figure", delayBefore: 0, delayAfter: 0, durationInFrames: 28, preName: "subtitle" },
+
+    // 表现部分 "表现"
+    { name: "performance", delayBefore: 0, delayAfter: 0, durationInFrames: 15, preName: "subtitle", audioId: "scene3_3" }, // 15帧淡入完成
+    // 表现部分 "热搜一出..."
+    { name: "performanceText", delayBefore: 5, delayAfter: 0, durationInFrames: 1, preName: "performance", audioId: "scene3_4" },
+
+    // 表现部分的高亮 - 依赖 performance (开始读表现正文时)
+    { name: "highlight_crazyStanding", delayBefore: 90, delayAfter: 0, durationInFrames: 20, preName: "performance" }, // 疯狂站队
     { name: "highlight_cyberViolence", delayBefore: 10, delayAfter: 0, durationInFrames: 20, preName: "highlight_crazyStanding" }, // 网暴
     { name: "highlight_lateButArrive", delayBefore: 15, delayAfter: 0, durationInFrames: 20, preName: "highlight_cyberViolence" }, // 虽迟但到
     { name: "highlight_deathPenalty", delayBefore: 10, delayAfter: 0, durationInFrames: 20, preName: "highlight_lateButArrive" }, // 死刑起步
-    { name: "highlight_reversal", delayBefore: 20, delayAfter: 0, durationInFrames: 20, preName: "highlight_deathPenalty" }, // 反转
+    { name: "highlight_reversal", delayBefore: 60, delayAfter: 0, durationInFrames: 20, preName: "highlight_deathPenalty" }, // 反转
     { name: "highlight_scatter", delayBefore: 10, delayAfter: 0, durationInFrames: 20, preName: "highlight_reversal" }, // 一哄而散
 
-    // 原理部分
-    { name: "principle", delayBefore: 30, delayAfter: 0, durationInFrames: 40, preName: "highlight_scatter" }, // 原理部分整体出现
+    // 原理部分 "原理" - 依赖 performanceText (第一段读完)
+    { name: "principle", delayBefore: 0, delayAfter: 0, durationInFrames: 40, preName: "performanceText", audioId: "scene3_5" }, // 原理部分整体出现
+    // 原理部分 "群体只接受..."
+    { name: "principleText", delayBefore: 0, delayAfter: 0, durationInFrames: 1, preName: "principle", audioId: "scene3_6" },
 
-    // 原理部分的高亮
+    // 原理部分的高亮 - 依赖 principle (开始读原理正文时)
     { name: "highlight_simpleSuggestion", delayBefore: 25, delayAfter: 0, durationInFrames: 20, preName: "principle" }, // 简单的暗示
-    { name: "highlight_realityIllusion", delayBefore: 15, delayAfter: 0, durationInFrames: 20, preName: "highlight_simpleSuggestion" }, // 现实与幻觉
-    { name: "highlight_emotionalIncitement", delayBefore: 15, delayAfter: 60, durationInFrames: 20, preName: "highlight_realityIllusion" }, // 情绪煽动
+    { name: "highlight_realityIllusion", delayBefore: 40, delayAfter: 0, durationInFrames: 20, preName: "highlight_simpleSuggestion" }, // 现实与幻觉
+    { name: "highlight_emotionalIncitement", delayBefore: 30, delayAfter: 60, durationInFrames: 20, preName: "highlight_realityIllusion" }, // 情绪煽动
 ];
 
+// 应用音频时长
+const animationConfigs = applyAudioDurations(baseConfigs, audioMap, 30);
+
 export const calculateScene3Duration = (): number => {
-    return calculateSceneDuration(animationConfigs);
+    return calculateSceneDuration(baseConfigs, audioMapData as AudioMap);
 };
 
 /** 与 Crowd 过渡时长一致，前若干帧不抢戏，避免与 Scene2 结尾重叠 */
@@ -77,7 +91,7 @@ const UserNode: React.FC<{
     const startFrame = baseFrame + delay;
     const opacity = interpolate(frame, [startFrame, startFrame + 10], [0, 0.8], { extrapolateRight: "clamp" });
     const scale = spring({ frame: frame - startFrame, fps, config: { damping: 12 } });
-    
+
     // 站队/网暴时轻微震动
     const shakeX = state === "violence" ? Math.sin(frame * 0.8) * 3 : 0;
     const shakeY = state === "violence" ? Math.cos(frame * 0.9) * 3 : 0;
@@ -97,12 +111,12 @@ const UserNode: React.FC<{
     return (
         <g transform={`translate(${currentX}, ${currentY}) scale(${scale})`} style={{ opacity }}>
             {showBeam && (
-                <line 
-                    x1={0} y1={0} 
+                <line
+                    x1={0} y1={0}
                     x2={480 - x} y2={640 - y} // 指向中心 (480, 640)
-                    stroke="#ef4444" 
-                    strokeWidth={1} 
-                    opacity={beamOpacity} 
+                    stroke="#ef4444"
+                    strokeWidth={1}
+                    opacity={beamOpacity}
                     strokeDasharray="4 4"
                 />
             )}
@@ -114,24 +128,24 @@ const UserNode: React.FC<{
 /** 中心事件 (手机屏幕/热搜) */
 const CenterDevice: React.FC<{ frame: number; opacity: number; isReversed: boolean }> = ({ frame, opacity, isReversed }) => {
     const floatY = Math.sin(frame * 0.05) * 10;
-    
+
     return (
         <g transform={`translate(480, ${640 + floatY})`} style={{ opacity }}>
             {/* 光晕 */}
             <circle r={80} fill={isReversed ? "#22c55e" : "#ef4444"} opacity={0.2} filter="blur(20px)" />
-            
+
             {/* 手机框 */}
             <rect x={-30} y={-50} width={60} height={100} rx={8} fill="#0f172a" stroke="#334155" strokeWidth={2} />
-            
+
             {/* 屏幕内容 */}
             <rect x={-26} y={-46} width={52} height={92} rx={6} fill={isReversed ? "#14532d" : "#450a0a"} opacity={0.8} />
-            
+
             {/* 模拟信息流 */}
             <g transform="translate(-20, -30)">
-                 <rect width={40} height={4} rx={2} fill={isReversed ? "#4ade80" : "#f87171"} opacity={0.8} />
-                 <rect y={10} width={30} height={4} rx={2} fill="rgba(255,255,255,0.3)" />
-                 <rect y={20} width={35} height={4} rx={2} fill="rgba(255,255,255,0.3)" />
-                 <rect y={30} width={25} height={4} rx={2} fill="rgba(255,255,255,0.3)" />
+                <rect width={40} height={4} rx={2} fill={isReversed ? "#4ade80" : "#f87171"} opacity={0.8} />
+                <rect y={10} width={30} height={4} rx={2} fill="rgba(255,255,255,0.3)" />
+                <rect y={20} width={35} height={4} rx={2} fill="rgba(255,255,255,0.3)" />
+                <rect y={30} width={25} height={4} rx={2} fill="rgba(255,255,255,0.3)" />
             </g>
 
             {/* 警告图标 / 反转图标 */}
@@ -149,7 +163,9 @@ const CenterDevice: React.FC<{ frame: number; opacity: number; isReversed: boole
 export const Scene3: React.FC = () => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
-    const timings = calculateAnimationTimings(animationConfigs);
+    const configsWithAudio = useMemo(() => applyAudioDurations(baseConfigs, audioMapData as AudioMap, 30), []);
+    const timings = useMemo(() => calculateAnimationTimings(configsWithAudio), [configsWithAudio]);
+    const animationTimings = calculateAnimationTimings(animationConfigs);
     const cardInStart =
         timings.subtitle.startTime + timings.subtitle.durationInFrames + 18 + TRANSITION_OFFSET;
     const cardInDuration = 26;
@@ -166,7 +182,7 @@ export const Scene3: React.FC = () => {
         [60, 0],
         { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
     );
-    
+
     // 表现部分的不透明度
     const performanceOpacity = interpolate(
         frame,
@@ -231,6 +247,21 @@ export const Scene3: React.FC = () => {
                 background: BACKGROUND,
             }}
         >
+            {/* Audio Playback */}
+            {/* Audio Playback */}
+            {baseConfigs.map((config) => {
+                if (!config.audioId || !audioMap[config.audioId]) return null;
+                return (
+                    <Sequence
+                        key={config.name}
+                        from={animationTimings[config.name].startTime + TRANSITION_OFFSET}
+                        durationInFrames={animationTimings[config.name].durationInFrames}
+                    >
+                        <Audio src={staticFile(audioMap[config.audioId].file)} />
+                    </Sequence>
+                );
+            })}
+
             {/* 标题区 */}
             <div
                 style={{
@@ -303,10 +334,10 @@ export const Scene3: React.FC = () => {
                 }}
             >
                 <CyberGrid frame={frame} opacity={0.6} />
-                
+
                 <svg width="100%" height="100%" viewBox="0 0 960 1280">
                     <CenterDevice frame={frame} opacity={1} isReversed={isReversed} />
-                    
+
                     {users.map((u, i) => (
                         <UserNode
                             key={i}
@@ -445,7 +476,7 @@ export const Scene3: React.FC = () => {
 
                         {/* 原理部分 */}
                         <div style={{ opacity: principleOpacity, maxHeight: principleMaxHeight, overflow: "hidden" }}>
-                             <div
+                            <div
                                 style={{
                                     marginTop: 24, // 增加一点间距
                                     borderTop: "1px solid rgba(255, 255, 255, 0.1)",

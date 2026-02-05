@@ -1,36 +1,48 @@
-import React from "react";
-import { AbsoluteFill, useCurrentFrame, interpolate } from "remotion";
+import React, { useMemo } from "react";
+import { AbsoluteFill, useCurrentFrame, interpolate, Audio, Sequence, staticFile } from "remotion";
 import { FadeInText, SpringText, HighlightText } from "../../../components";
 import {
     AnimationConfig,
     calculateAnimationTimings,
     calculateSceneDuration,
+    applyAudioDurations,
+    type AudioMap,
 } from "../../../utils";
+import audioMapData from './audio-map.json';
 
-const animationConfigs: AnimationConfig[] = [
-    { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 22, preName: null },
-    { name: "subtitle", delayBefore: 12, delayAfter: 0, durationInFrames: 22, preName: "title" },
-    { name: "meeting", delayBefore: 20, delayAfter: 0, durationInFrames: 40, preName: "subtitle" }, // 会议场景出现
-    
-    // 表现部分
-    { name: "performance", delayBefore: 10, delayAfter: 0, durationInFrames: 15, preName: "meeting" },
+const audioMap = audioMapData as AudioMap;
 
-    // 表现部分的高亮
-    { name: "highlight_silence", delayBefore: 10, delayAfter: 0, durationInFrames: 20, preName: "performance" }, // 没人敢反对
-    { name: "highlight_follow", delayBefore: 15, delayAfter: 0, durationInFrames: 20, preName: "highlight_silence" }, // 别人没说话
-    { name: "highlight_hindsight", delayBefore: 15, delayAfter: 0, durationInFrames: 20, preName: "highlight_follow" }, // 马后炮
+const baseConfigs: AnimationConfig[] = [
+    { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 22, preName: null, audioId: "scene5_1" },
+    { name: "subtitle", delayBefore: 0, delayAfter: 0, durationInFrames: 22, preName: "title", audioId: "scene5_2" },
+    { name: "meeting", delayBefore: 0, delayAfter: 0, durationInFrames: 40, preName: "subtitle" }, // 会议场景出现
 
-    // 原理部分
-    { name: "principle", delayBefore: 30, delayAfter: 0, durationInFrames: 40, preName: "highlight_hindsight" },
+    // 表现部分 "表现"
+    { name: "performance", delayBefore: 0, delayAfter: 0, durationInFrames: 15, preName: "subtitle", audioId: "scene5_3" },
+    // 表现部分 "明明老板..."
+    { name: "performanceText", delayBefore: 0, delayAfter: 0, durationInFrames: 1, preName: "performance", audioId: "scene5_4" },
 
-    // 原理部分的高亮
-    { name: "highlight_suppress", delayBefore: 20, delayAfter: 0, durationInFrames: 20, preName: "principle" }, // 扼杀异议
-    { name: "highlight_belonging", delayBefore: 10, delayAfter: 0, durationInFrames: 20, preName: "highlight_suppress" }, // 归属感
-    { name: "highlight_repress", delayBefore: 10, delayAfter: 60, durationInFrames: 20, preName: "highlight_belonging" }, // 压抑判断
+    // 表现部分的高亮 - 依赖 performanceText (开始读表现正文时)
+    { name: "highlight_silence", delayBefore: 80, delayAfter: 0, durationInFrames: 20, preName: "performance" }, // 没人敢反对
+    { name: "highlight_follow", delayBefore: 60, delayAfter: 0, durationInFrames: 20, preName: "highlight_silence" }, // 别人没说话
+    { name: "highlight_hindsight", delayBefore: 110, delayAfter: 0, durationInFrames: 20, preName: "highlight_follow" }, // 马后炮
+
+    // 原理部分 "原理" - 依赖 performanceText (第一段读完)
+    { name: "principle", delayBefore: 0, delayAfter: 0, durationInFrames: 40, preName: "performanceText", audioId: "scene5_5" },
+    // 原理部分 "群体扼杀..."
+    { name: "principleText", delayBefore: 0, delayAfter: 0, durationInFrames: 1, preName: "principle", audioId: "scene5_6" },
+
+    // 原理部分的高亮 - 依赖 principleText (开始读原理正文时)
+    { name: "highlight_suppress", delayBefore: 0, delayAfter: 0, durationInFrames: 20, preName: "principle" }, // 扼杀异议 (开头)
+    { name: "highlight_belonging", delayBefore: 50, delayAfter: 0, durationInFrames: 20, preName: "highlight_suppress" }, // 归属感
+    { name: "highlight_repress", delayBefore: 60, delayAfter: 60, durationInFrames: 20, preName: "highlight_belonging" }, // 压抑判断
 ];
 
+// 应用音频时长
+const animationConfigs = applyAudioDurations(baseConfigs, audioMap, 30);
+
 export const calculateScene5Duration = (): number => {
-    return calculateSceneDuration(animationConfigs);
+    return calculateSceneDuration(baseConfigs, audioMapData as AudioMap);
 };
 
 const BACKGROUND =
@@ -54,10 +66,10 @@ const MeetingPerson: React.FC<{
 
     // 老板动作：激情演讲（挥手）
     const bossHandWave = isBoss ? Math.sin(frame * 0.3) * 15 : 0;
-    
+
     // 员工动作：鼓掌
     const clap = !isBoss && !isHesitant ? Math.abs(Math.sin(frame * 0.4)) * 5 : 0;
-    
+
     // 犹豫者动作：举手又放下
     // 假设 hesitantStart 在 appearDelay 后 40 帧开始
     const hesitantStart = appearDelay + 40;
@@ -70,9 +82,9 @@ const MeetingPerson: React.FC<{
 
     return (
         <g transform={`translate(${x}, ${y})`} style={{ opacity }}>
-             {/* 身体 */}
-             <path
-                d={isBoss 
+            {/* 身体 */}
+            <path
+                d={isBoss
                     ? "M -18 20 L -14 70 L 14 70 L 18 20 Z" // 站立
                     : "M -20 30 Q 0 25 20 30 L 20 60 L -20 60 Z" // 坐着
                 }
@@ -80,22 +92,22 @@ const MeetingPerson: React.FC<{
                 stroke="#1e293b"
                 strokeWidth={1}
             />
-            
+
             {/* 头 */}
             <circle cx={0} cy={isBoss ? 0 : 10} r={14} fill={isBoss ? "#60a5fa" : "#94a3b8"} />
 
             {/* 老板的手臂 (挥舞) */}
             {isBoss && (
-                 <g transform={`rotate(${bossHandWave} 18 30)`}>
+                <g transform={`rotate(${bossHandWave} 18 30)`}>
                     <path d="M 18 30 L 35 10" stroke="#3b82f6" strokeWidth={4} strokeLinecap="round" />
                     <circle cx={35} cy={10} r={4} fill="#60a5fa" />
-                 </g>
+                </g>
             )}
 
-             {/* 老板的另一只手 (指屏幕) */}
-             {isBoss && (
+            {/* 老板的另一只手 (指屏幕) */}
+            {isBoss && (
                 <path d="M -18 30 L -40 20" stroke="#3b82f6" strokeWidth={4} strokeLinecap="round" />
-             )}
+            )}
 
             {/* 员工的手 (鼓掌) */}
             {!isBoss && !isHesitant && (
@@ -107,27 +119,27 @@ const MeetingPerson: React.FC<{
 
             {/* 犹豫者的手 (举起又放下) */}
             {isHesitant && (
-                 <g transform={`translate(15, 35)`}>
+                <g transform={`translate(15, 35)`}>
                     {/* 手臂 */}
-                    <path 
-                        d={`M 0 0 L ${handRaise * 0.5} ${handRaise}`} 
-                        stroke="#64748b" 
-                        strokeWidth={3} 
-                        strokeLinecap="round" 
+                    <path
+                        d={`M 0 0 L ${handRaise * 0.5} ${handRaise}`}
+                        stroke="#64748b"
+                        strokeWidth={3}
+                        strokeLinecap="round"
                     />
                     <circle cx={handRaise * 0.5} cy={handRaise} r={4} fill="#cbd5e1" />
                 </g>
             )}
-            
+
             {/* 犹豫者的表情 (简单表示) */}
             {isHesitant && (
-                 <g transform="translate(0, 10)">
+                <g transform="translate(0, 10)">
                     <circle cx={-4} cy={-2} r={1.5} fill="#1e293b" />
                     <circle cx={4} cy={-2} r={1.5} fill="#1e293b" />
                     <path d="M -4 4 Q 0 2 4 4" stroke="#1e293b" strokeWidth={1} fill="none" />
                     {/* 汗珠 */}
                     <circle cx={10} cy={-5} r={1.5} fill="#38bdf8" opacity={0.8} />
-                 </g>
+                </g>
             )}
 
         </g>
@@ -137,41 +149,43 @@ const MeetingPerson: React.FC<{
 const PPT: React.FC<{ x: number; y: number; scale: number; frame: number }> = ({ x, y, scale, frame }) => {
     // 错误闪烁
     const errorOpacity = interpolate(frame % 30, [0, 15, 30], [0.5, 1, 0.5]);
-    
+
     return (
         <g transform={`translate(${x}, ${y}) scale(${scale})`}>
             {/* 支架 */}
             <rect x={-5} y={100} width={10} height={80} fill="#475569" />
             <rect x={-40} y={180} width={80} height={5} fill="#475569" />
-            
+
             {/* 屏幕框 */}
             <rect x={-100} y={-70} width={200} height={150} fill="#1e293b" stroke="#94a3b8" strokeWidth={4} rx={4} />
-            
+
             {/* 屏幕内容 */}
             <rect x={-95} y={-65} width={190} height={140} fill="#fff" />
-            
+
             {/* PPT 内容：大坑 */}
             <text x={0} y={-30} textAnchor="middle" fontSize={24} fontWeight="bold" fill="#334155">PLAN A</text>
-            
+
             {/* 明显的错误/大坑 */}
             <path d="M -60 10 L 60 10" stroke="#cbd5e1" strokeWidth={2} />
             <path d="M -60 30 L 60 30" stroke="#cbd5e1" strokeWidth={2} />
-            
+
             {/* 红色大叉/漏洞 */}
             <g opacity={errorOpacity}>
-                 <path d="M -30 0 L 30 60" stroke="#ef4444" strokeWidth={8} strokeLinecap="round" />
-                 <path d="M 30 0 L -30 60" stroke="#ef4444" strokeWidth={8} strokeLinecap="round" />
+                <path d="M -30 0 L 30 60" stroke="#ef4444" strokeWidth={8} strokeLinecap="round" />
+                <path d="M 30 0 L -30 60" stroke="#ef4444" strokeWidth={8} strokeLinecap="round" />
             </g>
 
-             <text x={0} y={80} textAnchor="middle" fontSize={14} fontWeight="bold" fill="#ef4444" opacity={errorOpacity}>CRITICAL ERROR</text>
+            <text x={0} y={80} textAnchor="middle" fontSize={14} fontWeight="bold" fill="#ef4444" opacity={errorOpacity}>CRITICAL ERROR</text>
         </g>
     );
 }
 
 export const Scene5: React.FC = () => {
     const frame = useCurrentFrame();
-    const timings = calculateAnimationTimings(animationConfigs);
-    
+    const configsWithAudio = useMemo(() => applyAudioDurations(baseConfigs, audioMapData as AudioMap, 30), []);
+    const timings = useMemo(() => calculateAnimationTimings(configsWithAudio), [configsWithAudio]);
+    const animationTimings = calculateAnimationTimings(animationConfigs);
+
     // 场景入场
     const sceneOpacity = interpolate(
         frame,
@@ -193,7 +207,7 @@ export const Scene5: React.FC = () => {
         [60, 0],
         { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
     );
-    
+
     const performanceOpacity = interpolate(
         frame,
         [performanceStart, performanceStart + 15],
@@ -217,6 +231,21 @@ export const Scene5: React.FC = () => {
 
     return (
         <AbsoluteFill style={{ background: BACKGROUND }}>
+            {/* Audio Playback */}
+            {/* Audio Playback */}
+            {baseConfigs.map((config) => {
+                if (!config.audioId || !audioMap[config.audioId]) return null;
+                return (
+                    <Sequence
+                        key={config.name}
+                        from={animationTimings[config.name].startTime}
+                        durationInFrames={animationTimings[config.name].durationInFrames}
+                    >
+                        <Audio src={staticFile(audioMap[config.audioId].file)} />
+                    </Sequence>
+                );
+            })}
+
             {/* 标题区 */}
             <div
                 style={{
@@ -275,7 +304,7 @@ export const Scene5: React.FC = () => {
             </div>
 
             {/* 中部动画区域 */}
-            <div style={{ position: "absolute", inset: 0, opacity: sceneOpacity}}>
+            <div style={{ position: "absolute", inset: 0, opacity: sceneOpacity }}>
                 <svg width="100%" height="100%" viewBox="0 0 960 1280">
                     <g transform="translate(0, -150)">
                         {/* 背景墙面/地板 */}
@@ -286,12 +315,12 @@ export const Scene5: React.FC = () => {
                         <PPT x={250} y={550} scale={1.2} frame={frame} />
 
                         {/* 老板 */}
-                        <MeetingPerson 
-                            x={400} 
-                            y={680} 
-                            isBoss={true} 
-                            frame={frame} 
-                            appearDelay={timings.meeting.startTime} 
+                        <MeetingPerson
+                            x={400}
+                            y={680}
+                            isBoss={true}
+                            frame={frame}
+                            appearDelay={timings.meeting.startTime}
                         />
 
                         {/* 会议桌 (长条) */}
@@ -300,10 +329,10 @@ export const Scene5: React.FC = () => {
                         {/* 员工们 */}
                         <MeetingPerson x={200} y={850} frame={frame} appearDelay={timings.meeting.startTime + 5} />
                         <MeetingPerson x={350} y={850} frame={frame} appearDelay={timings.meeting.startTime + 10} />
-                        
+
                         {/* 犹豫的员工 */}
-                        <MeetingPerson x={500} y={850}  frame={frame} appearDelay={timings.meeting.startTime + 15} />
-                        
+                        <MeetingPerson x={500} y={850} frame={frame} appearDelay={timings.meeting.startTime + 15} />
+
                         <MeetingPerson x={650} y={850} frame={frame} appearDelay={timings.meeting.startTime + 20} />
                         <MeetingPerson x={800} y={850} frame={frame} appearDelay={timings.meeting.startTime + 25} />
                     </g>
@@ -344,10 +373,10 @@ export const Scene5: React.FC = () => {
                     }}
                 >
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                         <div style={{ height: spacerHeight }} />
+                        <div style={{ height: spacerHeight }} />
 
-                         {/* 表现部分 */}
-                         <div style={{ opacity: performanceOpacity }}>
+                        {/* 表现部分 */}
+                        <div style={{ opacity: performanceOpacity }}>
                             <div
                                 style={{
                                     fontSize: 20,

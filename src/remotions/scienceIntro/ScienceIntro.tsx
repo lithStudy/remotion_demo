@@ -6,6 +6,8 @@ import {
 	interpolate,
 	Img,
 	staticFile,
+	Audio,
+	Sequence,
 } from "remotion";
 import { z } from "zod";
 
@@ -38,6 +40,7 @@ export const ScienceIntroSchema = z.object({
 	finalCardIndex: z.number().int().min(0).optional(),
 	titleText: z.string().optional(),
 	watermarkText: z.string().optional(),
+	titleAudio: z.string().optional(),
 });
 
 const DEFAULT_CARD_IMAGES = [
@@ -57,6 +60,7 @@ export const ScienceIntro: React.FC<z.infer<typeof ScienceIntroSchema>> = ({
 	finalCardIndex: finalIndexProp,
 	titleText = "确认偏误",
 	watermarkText = "认知偏见",
+	titleAudio,
 }) => {
 	const frame = useCurrentFrame();
 	const { width, height } = useVideoConfig();
@@ -94,7 +98,7 @@ export const ScienceIntro: React.FC<z.infer<typeof ScienceIntroSchema>> = ({
 	);
 	// 取余数得到当前图
 	const cycledIndex = rawIndex % totalCards;
-	
+
 	// 计算当前卡片展示的微进度 (0~1)，用于做缩放动画
 	// 当 easedT 变大，rawIndex 增长变慢，这个进度也会变慢，完美契合
 	const stepProgress = (easedT * totalSteps) % 1;
@@ -135,20 +139,26 @@ export const ScienceIntro: React.FC<z.infer<typeof ScienceIntroSchema>> = ({
 	const displaySrc = cardImages[displayIndex];
 	const cardSize = Math.min(width, height) * 0.6; // 稍微调大一点，因为圆形视觉上会比矩形小
 
-    // F. 旋转动画 (模拟唱片转动)
-    // 33 RPM 约等于每秒 0.55 转 => 每秒转 198 度
-    // 30 FPS => 每帧转 6.6 度
-    // 修改：只在图片下移固定后开始转动
-    const ROTATION_START = START_MOVE + MOVE_DURATION;
-    const rotation = interpolate(
-        frame, 
-        [ROTATION_START, ROTATION_START + 1], 
-        [0, 6], 
-        {
-            extrapolateLeft: "clamp",
-            extrapolateRight: "extend",
-        }
-    );
+	// F. 旋转动画 (模拟唱片转动)
+	// 33 RPM 约等于每秒 0.55 转 => 每秒转 198 度
+	// 30 FPS => 每帧转 6.6 度
+	// 修改：只在图片下移固定后开始转动
+	const ROTATION_START = START_MOVE + MOVE_DURATION;
+	const rotation = interpolate(
+		frame,
+		[ROTATION_START, ROTATION_START + 1],
+		[0, 6],
+		{
+			extrapolateLeft: "clamp",
+			extrapolateRight: "extend",
+		}
+	);
+
+	const audioSrc = titleAudio
+		? titleAudio.startsWith("http")
+			? titleAudio
+			: staticFile(titleAudio)
+		: null;
 
 	return (
 		<AbsoluteFill
@@ -158,6 +168,12 @@ export const ScienceIntro: React.FC<z.infer<typeof ScienceIntroSchema>> = ({
 				justifyContent: "center",
 			}}
 		>
+			{audioSrc && (
+				<Sequence from={START_TEXT}>
+					<Audio src={audioSrc} />
+				</Sequence>
+			)}
+
 			{/* 背景水印文字 - 按文字占用空间动态计算格子与数量 */}
 			{(() => {
 				const wmFontSize = 36;
@@ -224,13 +240,13 @@ export const ScienceIntro: React.FC<z.infer<typeof ScienceIntroSchema>> = ({
 					height: cardSize,
 					transform: `translate(-50%, calc(-50% + ${cardOffsetY}px)) rotate(${rotation}deg)`,
 					borderRadius: "50%",
-                    backgroundColor: "#111", // 唱片黑胶底色
+					backgroundColor: "#111", // 唱片黑胶底色
 					boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    // 模拟黑胶纹理
-                    background: `
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+					// 模拟黑胶纹理
+					background: `
                         radial-gradient(
                             circle, 
                             #111 25%, 
@@ -240,61 +256,61 @@ export const ScienceIntro: React.FC<z.infer<typeof ScienceIntroSchema>> = ({
                             #111 29%
                         )
                     `,
-                    border: "8px solid #000",
+					border: "8px solid #000",
 				}}
 			>
-                {/* 唱片纹理覆盖层 (可选，为了更好看的反光效果) */}
-                <div 
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        borderRadius: "50%",
-                        background: "repeating-radial-gradient(#222 0, #111 2px, #222 4px)",
-                        opacity: 0.3,
-                        pointerEvents: "none",
-                    }}
-                />
-
-                {/* 封面图片 (作为唱片中间的 Label) */}
+				{/* 唱片纹理覆盖层 (可选，为了更好看的反光效果) */}
 				<div
-                    style={{
-                        width: "65%", // 图片占唱片的大部分，留出黑胶边缘
-                        height: "65%",
-                        borderRadius: "50%",
-                        overflow: "hidden",
-                        position: "relative",
-                        border: "2px solid rgba(255,255,255,0.2)",
-                        transform: `scale(${scaleAnim})`, // 只缩放图片
-                    }}
-                >
-                    <Img
-                        src={displaySrc}
-                        style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                        }}
-                    />
-                </div>
+					style={{
+						position: "absolute",
+						top: 0,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						borderRadius: "50%",
+						background: "repeating-radial-gradient(#222 0, #111 2px, #222 4px)",
+						opacity: 0.3,
+						pointerEvents: "none",
+					}}
+				/>
 
-                {/* 中间的小孔 */}
-                <div 
-                    style={{
-                        position: "absolute",
-                        width: 12,
-                        height: 12,
-                        backgroundColor: "#eee",
-                        borderRadius: "50%",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        boxShadow: "inset 1px 1px 2px rgba(0,0,0,0.5)",
-                        zIndex: 10,
-                    }}
-                />
+				{/* 封面图片 (作为唱片中间的 Label) */}
+				<div
+					style={{
+						width: "65%", // 图片占唱片的大部分，留出黑胶边缘
+						height: "65%",
+						borderRadius: "50%",
+						overflow: "hidden",
+						position: "relative",
+						border: "2px solid rgba(255,255,255,0.2)",
+						transform: `scale(${scaleAnim})`, // 只缩放图片
+					}}
+				>
+					<Img
+						src={displaySrc}
+						style={{
+							width: "100%",
+							height: "100%",
+							objectFit: "cover",
+						}}
+					/>
+				</div>
+
+				{/* 中间的小孔 */}
+				<div
+					style={{
+						position: "absolute",
+						width: 12,
+						height: 12,
+						backgroundColor: "#eee",
+						borderRadius: "50%",
+						top: "50%",
+						left: "50%",
+						transform: "translate(-50%, -50%)",
+						boxShadow: "inset 1px 1px 2px rgba(0,0,0,0.5)",
+						zIndex: 10,
+					}}
+				/>
 			</div>
 
 			{/* 文字容器 */}

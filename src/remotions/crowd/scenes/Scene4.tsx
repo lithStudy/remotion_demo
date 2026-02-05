@@ -1,36 +1,48 @@
-import React from "react";
-import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
+import React, { useMemo } from "react";
+import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig, Audio, Sequence, staticFile } from "remotion";
 import { FadeInText, SpringText, HighlightText } from "../../../components";
 import {
     AnimationConfig,
     calculateAnimationTimings,
     calculateSceneDuration,
+    applyAudioDurations,
+    type AudioMap,
 } from "../../../utils";
+import audioMapData from './audio-map.json';
 
-const animationConfigs: AnimationConfig[] = [
-    { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 22, preName: null },
-    { name: "subtitle", delayBefore: 12, delayAfter: 0, durationInFrames: 22, preName: "title" },
-    { name: "queue", delayBefore: 25, delayAfter: 0, durationInFrames: 90, preName: "subtitle" },
+const audioMap = audioMapData as AudioMap;
+
+const baseConfigs: AnimationConfig[] = [
+    { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 22, preName: null, audioId: "scene4_1" },
+    { name: "subtitle", delayBefore: 0, delayAfter: 0, durationInFrames: 22, preName: "title", audioId: "scene4_2" },
+    { name: "queue", delayBefore: 0, delayAfter: 0, durationInFrames: 90, preName: "subtitle" },
     { name: "contagion", delayBefore: 20, delayAfter: 0, durationInFrames: 28, preName: "queue" },
-    
-    // 表现部分
-    { name: "performance", delayBefore: 10, delayAfter: 0, durationInFrames: 15, preName: "subtitle" },
 
-    // 表现部分的高亮
-    { name: "highlight_queuing", delayBefore: 30, delayAfter: 0, durationInFrames: 20, preName: "performance" }, // 几百人在排队
-    { name: "highlight_moment", delayBefore: 30, delayAfter: 0, durationInFrames: 20, preName: "highlight_queuing" }, // 终于喝到了
+    // 表现部分 "表现"
+    { name: "performance", delayBefore: 0, delayAfter: 0, durationInFrames: 15, preName: "subtitle", audioId: "scene4_4" },
+    // 表现部分 "其实你并不渴..."
+    { name: "performanceText", delayBefore: 0, delayAfter: 0, durationInFrames: 1, preName: "performance", audioId: "scene4_5" },
 
-    // 原理部分
-    { name: "principle", delayBefore: 30, delayAfter: 0, durationInFrames: 40, preName: "highlight_moment" },
+    // 表现部分的高亮 - 依赖 performanceText (开始读表现正文时)
+    { name: "highlight_queuing", delayBefore: 120, delayAfter: 0, durationInFrames: 20, preName: "performance" }, // 几百人在排队
+    { name: "highlight_moment", delayBefore: 120, delayAfter: 0, durationInFrames: 20, preName: "highlight_queuing" }, // 终于喝到了
 
-    // 原理部分的高亮
-    { name: "highlight_contagion_word", delayBefore: 20, delayAfter: 0, durationInFrames: 20, preName: "principle" }, // 传染性
-    { name: "highlight_virus", delayBefore: 30, delayAfter: 0, durationInFrames: 20, preName: "highlight_contagion_word" }, // 病毒一样传播
+    // 原理部分 "原理" - 依赖 performanceText (第一段读完)
+    { name: "principle", delayBefore: 0, delayAfter: 0, durationInFrames: 40, preName: "performanceText", audioId: "scene4_6" },
+    // 原理部分 "传染性..."
+    { name: "principleText", delayBefore: 0, delayAfter: 20, durationInFrames: 1, preName: "principle", audioId: "scene4_7" },
+
+    // 原理部分的高亮 - 依赖 principleText (开始读原理正文时)
+    { name: "highlight_contagion_word", delayBefore: 0, delayAfter: 0, durationInFrames: 20, preName: "principle" }, // 传染性 (开头就是)
+    { name: "highlight_virus", delayBefore: 90, delayAfter: 0, durationInFrames: 20, preName: "highlight_contagion_word" }, // 病毒一样传播
     { name: "highlight_everyone", delayBefore: 30, delayAfter: 60, durationInFrames: 20, preName: "highlight_virus" }, // 大家都在做
 ];
 
+// 应用音频时长
+const animationConfigs = applyAudioDurations(baseConfigs, audioMap, 30);
+
 export const calculateScene4Duration = (): number => {
-    return calculateSceneDuration(animationConfigs);
+    return calculateSceneDuration(baseConfigs, audioMapData as AudioMap);
 };
 
 const BACKGROUND =
@@ -50,10 +62,10 @@ const QueuePerson: React.FC<{
 }> = ({ x, y, startX, startY, delay = 0, frame, baseAppearFrame, index, color }) => {
     // 实际开始动作的时间
     const startFrame = baseAppearFrame + delay;
-    
+
     // 是否是移动入场的人物
     const isMoving = startX !== undefined || startY !== undefined;
-    
+
     // 出现/透明度动画
     const opacity = interpolate(
         frame,
@@ -70,24 +82,24 @@ const QueuePerson: React.FC<{
         [0, 1],
         { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
     );
-    
+
     // 如果没有 startX/Y，就使用固定的 x/y
-    const currentX = isMoving && startX !== undefined 
-        ? interpolate(progress, [0, 1], [startX, x]) 
+    const currentX = isMoving && startX !== undefined
+        ? interpolate(progress, [0, 1], [startX, x])
         : x;
-    const currentY = isMoving && startY !== undefined 
-        ? interpolate(progress, [0, 1], [startY, y]) 
+    const currentY = isMoving && startY !== undefined
+        ? interpolate(progress, [0, 1], [startY, y])
         : y;
 
     // 摆动动画：移动时摆动幅度大（模拟走路），到位后幅度小（模拟站立）
     const isWalking = progress < 1 && isMoving;
     const swayBase = isWalking ? Math.sin(frame * 0.4) * 4 : Math.sin((frame * 0.12 + index * 4) * 0.06) * 1.5;
-    
+
     // 手机微光：只有到位停下后才看手机
-    const phoneLightOpacity = !isWalking 
+    const phoneLightOpacity = !isWalking
         ? 0.4 + 0.1 * Math.sin(frame * 0.2 + index)
         : 0;
-    
+
     // 手臂动作：走路时摆臂，停下时看手机
     const armRotate = isWalking ? Math.sin(frame * 0.4) * 20 : -15;
 
@@ -105,7 +117,7 @@ const QueuePerson: React.FC<{
             />
             {/* 头 */}
             <circle cx={0} cy={-24} r={16} fill="#334155" />
-            
+
             {/* 手机屏幕微光 (仅在站立时显示) */}
             {!isWalking && (
                 <>
@@ -123,7 +135,7 @@ const QueuePerson: React.FC<{
             <g transform={`rotate(${armRotate} 0 10)`}>
                 {/* 手臂形状 */}
                 <path d="M -8 15 Q -12 25 0 20 L 4 14" fill="none" stroke="#475569" strokeWidth={3} strokeLinecap="round" opacity={isWalking ? 1 : 0} />
-                
+
                 {/* 站立看手机时的手臂+手机 */}
                 {!isWalking && (
                     <>
@@ -132,7 +144,7 @@ const QueuePerson: React.FC<{
                         <rect x={3} y={10} width={8} height={12} rx={1} fill="#93c5fd" transform="rotate(0 7 16)" opacity={0.8} />
                     </>
                 )}
-                
+
                 {/* 走路时的简单手臂 */}
                 {isWalking && (
                     <path d="M 0 10 L 0 35" stroke="#475569" strokeWidth={4} strokeLinecap="round" />
@@ -152,7 +164,7 @@ const ContagionIcon: React.FC<{ cx: number; cy: number; size: number; frame: num
 }) => {
     const pulse = 1 + 0.05 * Math.sin(frame * 0.15);
     const rotate = frame * 0.5;
-    
+
     // 生成病毒突触
     const spikes = 8;
     const spikePaths: string[] = [];
@@ -174,14 +186,14 @@ const ContagionIcon: React.FC<{ cx: number; cy: number; size: number; frame: num
                 {/* 核心 */}
                 <circle cx={cx} cy={cy} r={size * 0.4} fill="#1e3a8a" stroke="#3b82f6" strokeWidth={2} />
                 <circle cx={cx} cy={cy} r={size * 0.25} fill="#60a5fa" opacity={0.6} />
-                
+
                 {/* 突触 */}
                 {spikePaths.map((d, i) => (
                     <g key={i}>
                         <path d={d} stroke="#3b82f6" strokeWidth={3} strokeLinecap="round" />
-                        <circle cx={cx + size * 0.8 * Math.cos((i * 360 / spikes) * Math.PI / 180)} 
-                                cy={cy + size * 0.8 * Math.sin((i * 360 / spikes) * Math.PI / 180)} 
-                                r={size * 0.12} fill="#93c5fd" />
+                        <circle cx={cx + size * 0.8 * Math.cos((i * 360 / spikes) * Math.PI / 180)}
+                            cy={cy + size * 0.8 * Math.sin((i * 360 / spikes) * Math.PI / 180)}
+                            r={size * 0.12} fill="#93c5fd" />
                     </g>
                 ))}
             </g>
@@ -192,7 +204,9 @@ const ContagionIcon: React.FC<{ cx: number; cy: number; size: number; frame: num
 export const Scene4: React.FC = () => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
-    const timings = calculateAnimationTimings(animationConfigs);
+    const configsWithAudio = useMemo(() => applyAudioDurations(baseConfigs, audioMapData as AudioMap, 30), []);
+    const timings = useMemo(() => calculateAnimationTimings(configsWithAudio), [configsWithAudio]);
+    const animationTimings = calculateAnimationTimings(animationConfigs);
 
     // 奶茶店进场弹簧动画
     const shopEntrance = spring({
@@ -238,7 +252,7 @@ export const Scene4: React.FC = () => {
         [60, 0],
         { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
     );
-    
+
     // 表现部分的不透明度
     const performanceOpacity = interpolate(
         frame,
@@ -269,7 +283,7 @@ export const Scene4: React.FC = () => {
         { x: 470, y: 575, color: "#475569", delay: 4 },
         { x: 540, y: 582, color: "#334155", delay: 8 },
         { x: 610, y: 578, color: "#1e293b", delay: 12 },
-        
+
         // 后来加入的人 (从左侧走入)
         { x: 330, y: 580, startX: -50, startY: 600, delay: 20, color: "#475569" },
         { x: 260, y: 582, startX: -80, startY: 560, delay: 35, color: "#334155" },
@@ -283,6 +297,21 @@ export const Scene4: React.FC = () => {
                 background: BACKGROUND,
             }}
         >
+            {/* Audio Playback */}
+            {/* Audio Playback */}
+            {baseConfigs.map((config) => {
+                if (!config.audioId || !audioMap[config.audioId]) return null;
+                return (
+                    <Sequence
+                        key={config.name}
+                        from={animationTimings[config.name].startTime}
+                        durationInFrames={animationTimings[config.name].durationInFrames}
+                    >
+                        <Audio src={staticFile(audioMap[config.audioId].file)} />
+                    </Sequence>
+                );
+            })}
+
             {/* 标题区 */}
             <div
                 style={{
@@ -369,7 +398,7 @@ export const Scene4: React.FC = () => {
                                 </feMerge>
                             </filter>
                         </defs>
-                        
+
                         {/* 地面/人行道：侧视剖面 */}
                         <g opacity={queueOpacity}>
                             <rect x={0} y={640} width={960} height={300} fill="#020617" opacity={0.9} />
@@ -394,7 +423,7 @@ export const Scene4: React.FC = () => {
                             height={60}
                             fill="#1e293b"
                         />
-                        
+
                         {/* 霓虹招牌文字 */}
                         <text
                             x={810}
@@ -409,37 +438,37 @@ export const Scene4: React.FC = () => {
                         </text>
 
                         {/* 橱窗/门面区域 */}
-                        <rect 
-                            x={690} 
-                            y={420} 
-                            width={240} 
-                            height={160} 
-                            fill="#1e293b" 
+                        <rect
+                            x={690}
+                            y={420}
+                            width={240}
+                            height={160}
+                            fill="#1e293b"
                             stroke="#f59e0b"
                             strokeWidth={2}
                             filter="url(#neonGlow)"
                             opacity={0.8}
                         />
-                        <rect 
-                            x={695} 
-                            y={425} 
-                            width={230} 
-                            height={150} 
-                            fill="#0f172a" 
+                        <rect
+                            x={695}
+                            y={425}
+                            width={230}
+                            height={150}
+                            fill="#0f172a"
                             opacity={0.6}
                         />
 
                         {/* 奶茶杯装饰 (扁平化) */}
                         <g transform="translate(740, 490)">
-                             <path d="M 0 0 L 24 0 L 20 36 L 4 36 Z" fill="#fcd34d" opacity={0.6} />
-                             <circle cx={12} cy={-2} r={3} fill="#333" />
-                             <line x1={12} y1={-2} x2={18} y2={-12} stroke="#fcd34d" strokeWidth={2} />
+                            <path d="M 0 0 L 24 0 L 20 36 L 4 36 Z" fill="#fcd34d" opacity={0.6} />
+                            <circle cx={12} cy={-2} r={3} fill="#333" />
+                            <line x1={12} y1={-2} x2={18} y2={-12} stroke="#fcd34d" strokeWidth={2} />
                         </g>
                         <g transform="translate(800, 490)">
-                             <path d="M 0 0 L 24 0 L 20 36 L 4 36 Z" fill="#f87171" opacity={0.6} />
-                             <line x1={12} y1={-2} x2={6} y2={-12} stroke="#f87171" strokeWidth={2} />
+                            <path d="M 0 0 L 24 0 L 20 36 L 4 36 Z" fill="#f87171" opacity={0.6} />
+                            <line x1={12} y1={-2} x2={6} y2={-12} stroke="#f87171" strokeWidth={2} />
                         </g>
-                        
+
                         {/* 排队提示牌 (扁平悬挂) */}
                         <g transform="translate(670, 440)">
                             <rect x={0} y={0} width={28} height={90} fill="#334155" rx={2} />

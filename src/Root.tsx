@@ -1,6 +1,5 @@
 import "./index.css";
 import { Composition } from "remotion";
-import { Demo, DemoSchema, TOTAL_DURATION_DEMO } from "./remotions/demo/Demo";
 import { Demo as StrawManFallacy, DemoSchema as StrawManFallacySchema, TOTAL_DURATION_DEMO as STRAW_MAN_FALLACY_TOTAL_DURATION } from "./remotions/strawManFallacy/StrawManFallacy";
 import { Crowd, CrowdSchema, TOTAL_DURATION_CROWD } from "./remotions/crowd/Crowd";
 import { ConfirmationBias, ConfirmationBiasSchema, TOTAL_DURATION_CONFIRMATION_BIAS } from "./remotions/confirmationBias/ConfirmationBias";
@@ -12,21 +11,6 @@ import { Vocation, VocationSchema, TOTAL_DURATION_VOCATION } from "./remotions/v
 export const RemotionRoot: React.FC = () => {
   return (
     <>
-      {/* demo */}
-      <Composition
-        id="Demo"
-        component={Demo}
-        durationInFrames={TOTAL_DURATION_DEMO}
-        fps={30}
-        width={960}
-        height={1280}
-        schema={DemoSchema}
-        defaultProps={{
-          backgroundColor: "#F7F9FC",
-          primaryColor: "#38B2AC",
-          accentColor: "#E53E3E",
-        }}
-      />
       {/* 乌合之众 / 群体效应 */}
       <Composition
         id="Crowd"
@@ -77,17 +61,7 @@ export const RemotionRoot: React.FC = () => {
           titleText: "稻草人谬误",
         }}
       />
-      {/* vocation 单词记忆 - 方案0 专注向 8 场景 */}
-      <Composition
-        id="Vocation"
-        component={Vocation}
-        durationInFrames={TOTAL_DURATION_VOCATION}
-        fps={30}
-        width={960}
-        height={1280}
-        schema={VocationSchema}
-        defaultProps={{}}
-      />
+
 
     </>
   );

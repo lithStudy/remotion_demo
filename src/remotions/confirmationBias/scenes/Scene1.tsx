@@ -16,11 +16,8 @@ const audioMap = audioMapData as AudioMap;
  * 动画配置：Scene1 - 开场：概念解析
  */
 const baseConfigs: AnimationConfig[] = [
-    { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: null, audioId: "scene1_1" },
-    { name: "stamp", delayBefore: 10, delayAfter: 0, durationInFrames: 10, preName: null, audioId: "" },
-    { name: "subtitle", delayBefore: 0, delayAfter: 10, durationInFrames: 60, preName: "title", audioId: "scene1_2" },
-    { name: "content1", delayBefore: 0, delayAfter: 10, durationInFrames: 200, preName: "subtitle", audioId: "scene1_3" },
-    { name: "content2", delayBefore: 0, delayAfter: 10, durationInFrames: 150, preName: "content1", audioId: "scene1_4" },
+    { name: "content1", delayBefore: 10, delayAfter: 10, durationInFrames: 200, preName: null, audioId: "scene1_3" },
+    { name: "content2", delayBefore: 0, delayAfter: 20, durationInFrames: 150, preName: "content1", audioId: "scene1_4" },
 ];
 
 // 应用音频时长
@@ -42,13 +39,7 @@ export const Scene1: React.FC = () => {
 
     const animationTimings = calculateAnimationTimings(animationConfigs);
 
-    // 标题动画
-    const titleScale = spring({
-        frame: frame - animationTimings.title.startTime,
-        fps,
-        config: { damping: 200 },
-        durationInFrames: 30,
-    });
+
 
     return (
         <AbsoluteFill
@@ -61,7 +52,7 @@ export const Scene1: React.FC = () => {
                 justifyContent: "center", // Changed to center content
             }}
         >
-            {/* 主标题区域 */}
+
             <div
                 style={{
                     display: "flex",
@@ -76,7 +67,7 @@ export const Scene1: React.FC = () => {
                     {/* 主标题：确认偏误 */}
                     <div
                         style={{
-                            transform: `scale(${titleScale})`,
+
                             fontSize: 80,
                             fontWeight: "bold",
                             color: "#2D3748",
@@ -84,12 +75,12 @@ export const Scene1: React.FC = () => {
                             borderBottom: "4px solid #0E0000",
                         }}
                     >
-                            概念解析
+                        概念解析
                     </div>
 
                 </div>
             </div>
-            
+
             {/* 副标题 */}
             {/* <div style={{ marginBottom: 20 }}>
                 <FadeInText

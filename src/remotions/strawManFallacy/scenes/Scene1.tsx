@@ -209,7 +209,7 @@ export const Scene1: React.FC = () => {
 
             {/* 稻草人图片 - 轻微抖动动画 */}
             <img
-                src={staticFile("稻草人.png")}
+                src={staticFile("/images/strawManFallacy/稻草人.png")}
                 alt="稻草人"
                 style={{
                     width: 180,

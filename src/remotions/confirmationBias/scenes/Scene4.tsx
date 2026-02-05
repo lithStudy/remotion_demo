@@ -14,9 +14,9 @@ const audioMap = audioMapData as AudioMap;
  * 动画配置：Scene4 - 案例一：饭圈
  */
 const baseConfigs: AnimationConfig[] = [
-    { name: "title", delayBefore: 0, delayAfter: 10, durationInFrames: 90, preName: null, audioId: "scene4_1" },
-    { name: "analysis", delayBefore: 0, delayAfter: 15, durationInFrames: 300, preName: "title", audioId: "scene4_2" },
-    { name: "strategy", delayBefore: 0, delayAfter: 10, durationInFrames: 270, preName: "analysis", audioId: "scene4_3" },
+    { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 90, preName: null, audioId: "scene4_1" },
+    { name: "analysis", delayBefore: 0, delayAfter: 0, durationInFrames: 300, preName: "title", audioId: "scene4_2" },
+    { name: "strategy", delayBefore: 0, delayAfter: 20, durationInFrames: 270, preName: "analysis", audioId: "scene4_3" },
 ];
 
 // 应用音频时长
@@ -122,15 +122,15 @@ export const Scene4: React.FC = () => {
                     }}
                 >
                     <div style={{ fontWeight: "bold", marginBottom: 10, color: "#4299E1", fontStyle: "normal" }}>纠偏实例</div>
-                    <TypewriterContent                        
+                    <TypewriterContent
                         delay={animationTimings.strategy.startTime + 15}
                         durationInFrames={animationTimings.strategy.durationInFrames - 40}
                     >
-                    “我承认他在某方面确实
-                    <HighlightText delay={animationTimings.strategy.startTime + 20} highlightColor='#E9D8FD'>有不足</HighlightText>
-                    ，但这不影响我喜欢他的
-                    <HighlightText delay={animationTimings.strategy.startTime + 20} highlightColor='#E9D8FD'>其他特质</HighlightText>
-                    。我不需要他完美。”
+                        “我承认他在某方面确实
+                        <HighlightText delay={animationTimings.strategy.startTime + 20} highlightColor='#E9D8FD'>有不足</HighlightText>
+                        ，但这不影响我喜欢他的
+                        <HighlightText delay={animationTimings.strategy.startTime + 20} highlightColor='#E9D8FD'>其他特质</HighlightText>
+                        。我不需要他完美。”
                     </TypewriterContent>
                 </FadeInText>
             </div>

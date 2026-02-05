@@ -49,19 +49,19 @@ export const calculateAnimationTimings = (
 ): Record<string, AnimationTimingInfo> => {
     const timings: Record<string, AnimationTimingInfo> = {};
     const configMap = new Map(animationConfigs.map(config => [config.name, config]));
-    
+
     // 按依赖关系排序：先计算 preName 为 null 的，再计算依赖其他动画的
     // 使用拓扑排序确保被依赖的动画先被计算
     const sortedConfigs: AnimationConfig[] = [];
     const processed = new Set<string>();
-    
+
     // 递归函数：计算一个动画及其所有依赖
     const processConfig = (config: AnimationConfig) => {
         // 如果已经处理过，跳过
         if (processed.has(config.name)) {
             return;
         }
-        
+
         // 如果有依赖，先处理依赖
         if (config.preName !== null) {
             const preConfig = configMap.get(config.preName);
@@ -71,21 +71,21 @@ export const calculateAnimationTimings = (
             // 递归处理依赖的动画
             processConfig(preConfig);
         }
-        
+
         // 处理当前动画
         sortedConfigs.push(config);
         processed.add(config.name);
     };
-    
+
     // 处理所有配置
     animationConfigs.forEach(config => {
         processConfig(config);
     });
-    
+
     // 按排序后的顺序计算每个动画的起始时间
     sortedConfigs.forEach((config) => {
         let startTime: number;
-        
+
         if (config.preName === null) {
             // 第一个动画，从0开始
             startTime = config.delayBefore;
@@ -97,20 +97,20 @@ export const calculateAnimationTimings = (
             if (!preConfig) {
                 throw new Error(`找不到前一个动画: ${config.preName}`);
             }
-            
+
             // 确保前一个动画已经被计算
             if (!timings[preConfig.name]) {
                 throw new Error(`前一个动画 ${config.preName} 尚未被计算，可能存在循环依赖`);
             }
-            
+
             // 前一个动画的结束时间 = 起始时间 + 持续时间 + delayAfter
             const preEndTime = timings[preConfig.name].startTime + preConfig.durationInFrames + preConfig.delayAfter;
-            
+
             // 当前动画的起始时间 = 前一个动画的结束时间 + delayBefore
             startTime = preEndTime + config.delayBefore;
             console.log(`[calculateAnimationTimings] Calculating start time for: ${config.name}, delayBefore: ${startTime}`);
         }
-        
+
         // 返回包含起始时间和完整配置的对象
         timings[config.name] = {
             name: config.name,
@@ -121,7 +121,7 @@ export const calculateAnimationTimings = (
             preName: config.preName,
         };
     });
-    
+
     return timings;
 };
 
@@ -179,11 +179,11 @@ export const applyAudioDurations = (
         if (config.audioId && audioMap[config.audioId]) {
             const audioDuration = audioMap[config.audioId].duration;
             const durationInFrames = audioDurationToFrames(audioDuration, fps);
-            
+
             console.log(
                 `[applyAudioDurations] ${config.name}: 使用音频时长 ${audioDuration.toFixed(2)}s => ${durationInFrames} 帧`
             );
-            
+
             return {
                 ...config,
                 durationInFrames,
@@ -210,7 +210,7 @@ export const calculateSceneDuration = (
     // 应用音频时长
     const configsWithAudio = applyAudioDurations(animationConfigs, audioMap, fps);
     const timings = calculateAnimationTimings(configsWithAudio);
-    
+
     // 找出所有链路的终点（没有其他动画依赖它的动画）
     // 收集所有被依赖的动画名称
     const dependentNames = new Set(
@@ -218,12 +218,12 @@ export const calculateSceneDuration = (
             .filter(config => config.preName !== null)
             .map(config => config.preName!)
     );
-    
+
     // 终点动画：存在于配置中，但没有其他动画依赖它
     const endAnimations = configsWithAudio.filter(
         config => !dependentNames.has(config.name)
     );
-    
+
     // 计算每条链路的结束时间，取最大值
     let maxDuration = 0;
     endAnimations.forEach(config => {
@@ -231,6 +231,6 @@ export const calculateSceneDuration = (
         const endTime = timingInfo.startTime + timingInfo.durationInFrames + timingInfo.delayAfter;
         maxDuration = Math.max(maxDuration, endTime);
     });
-    
+
     return maxDuration;
 };

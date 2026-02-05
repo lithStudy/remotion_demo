@@ -1,21 +1,30 @@
-import React from "react";
-import { AbsoluteFill, useCurrentFrame, interpolate } from "remotion";
+import React, { useMemo } from "react";
+import { AbsoluteFill, useCurrentFrame, interpolate, Audio, Sequence, staticFile } from "remotion";
 import { FadeInText, SpringText } from "../../../components/TextAnimations";
 import {
     AnimationConfig,
     calculateAnimationTimings,
     calculateSceneDuration,
+    applyAudioDurations,
+    type AudioMap,
 } from "../../../utils";
+import audioMapData from './audio-map.json';
 
-const animationConfigs: AnimationConfig[] = [
-    { name: "title", delayBefore: 10, delayAfter: 0, durationInFrames: 30, preName: null },
-    { name: "gear1", delayBefore: 20, delayAfter: 0, durationInFrames: 30, preName: "title" },
-    { name: "gear2", delayBefore: 30, delayAfter: 0, durationInFrames: 30, preName: "gear1" },
-    { name: "gear3", delayBefore: 30, delayAfter: 60, durationInFrames: 30, preName: "gear2" },
+const audioMap = audioMapData as AudioMap;
+
+const baseConfigs: AnimationConfig[] = [
+    { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: null, audioId: "scene6_1" },
+    { name: "subtitle", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "title", audioId: "scene6_2" },
+    { name: "gear1", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "subtitle", audioId: "scene6_3" }, // 匿名性
+    { name: "gear2", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "gear1", audioId: "scene6_4" }, // 传染性
+    { name: "gear3", delayBefore: 0, delayAfter: 30, durationInFrames: 30, preName: "gear2", audioId: "scene6_5" }, // 易受暗示性
 ];
 
+// 应用音频时长
+const animationConfigs = applyAudioDurations(baseConfigs, audioMap, 30);
+
 export const calculateScene6Duration = (): number => {
-    return calculateSceneDuration(animationConfigs);
+    return calculateSceneDuration(baseConfigs, audioMapData as AudioMap);
 };
 
 const BACKGROUND =
@@ -43,21 +52,21 @@ const Gear: React.FC<{
     for (let i = 0; i < teeth; i++) {
         const angle = i * angleStep;
         const nextAngle = (i + 1) * angleStep;
-        
+
         // 齿根
         const r1 = innerRadius;
         const x1 = Math.cos(angle) * r1;
         const y1 = Math.sin(angle) * r1;
-        
+
         // 齿顶起点
         const r2 = radius;
         const x2 = Math.cos(angle + angleStep * 0.2) * r2;
         const y2 = Math.sin(angle + angleStep * 0.2) * r2;
-        
+
         // 齿顶终点
         const x3 = Math.cos(angle + angleStep * 0.8) * r2;
         const y3 = Math.sin(angle + angleStep * 0.8) * r2;
-        
+
         // 下一个齿根
         const x4 = Math.cos(nextAngle) * r1;
         const y4 = Math.sin(nextAngle) * r1;
@@ -117,7 +126,7 @@ const InfoCard: React.FC<{
                 stroke={color}
                 strokeWidth={2}
             />
-            
+
             {/* 序号/图标背景 */}
             <circle cx={40} cy={50} r={24} fill={color} />
             <text x={40} y={60} textAnchor="middle" fill="#1e293b" fontSize={28} fontWeight="bold">
@@ -131,9 +140,9 @@ const InfoCard: React.FC<{
 
             {/* 内容 */}
             <foreignObject x={30} y={85} width={450} height={120}>
-                <div style={{ 
-                    color: "#e2e8f0", 
-                    fontSize: "26px", 
+                <div style={{
+                    color: "#e2e8f0",
+                    fontSize: "26px",
                     lineHeight: "1.5",
                     fontFamily: "sans-serif",
                     fontWeight: 500
@@ -147,13 +156,15 @@ const InfoCard: React.FC<{
 
 export const Scene6: React.FC = () => {
     const frame = useCurrentFrame();
-    const timings = calculateAnimationTimings(animationConfigs);
+    const configsWithAudio = useMemo(() => applyAudioDurations(baseConfigs, audioMapData as AudioMap, 30), []);
+    const timings = useMemo(() => calculateAnimationTimings(configsWithAudio), [configsWithAudio]);
+    const animationTimings = calculateAnimationTimings(animationConfigs);
 
     // 布局参数
     const cardHeight = 220;
     const gap = 60;
     const startY = 180;
-    
+
     const item1Y = startY;
     const item2Y = startY + cardHeight + gap;
     const item3Y = startY + (cardHeight + gap) * 2;
@@ -169,8 +180,8 @@ export const Scene6: React.FC = () => {
 
     // 旋转动画
     // 假设每帧旋转 1 度
-    const baseRotation = frame * 1; 
-    
+    const baseRotation = frame * 1;
+
     // 齿轮1顺时针
     const rotation1 = baseRotation;
     // 齿轮2逆时针 (咬合)
@@ -190,6 +201,21 @@ export const Scene6: React.FC = () => {
 
     return (
         <AbsoluteFill style={{ background: BACKGROUND }}>
+            {/* Audio Playback */}
+            {/* Audio Playback */}
+            {baseConfigs.map((config) => {
+                if (!config.audioId || !audioMap[config.audioId]) return null;
+                return (
+                    <Sequence
+                        key={config.name}
+                        from={animationTimings[config.name].startTime}
+                        durationInFrames={animationTimings[config.name].durationInFrames}
+                    >
+                        <Audio src={staticFile(audioMap[config.audioId].file)} />
+                    </Sequence>
+                );
+            })}
+
             {/* 标题 */}
             <div style={{ position: "absolute", top: 50, width: "100%", textAlign: "center", zIndex: 10 }}>
                 <SpringText delay={timings.title.startTime}>
@@ -197,7 +223,7 @@ export const Scene6: React.FC = () => {
                         为什么我们会“降智”？
                     </div>
                 </SpringText>
-                <FadeInText delay={timings.title.startTime + 10}>
+                <FadeInText delay={timings.subtitle.startTime}>
                     <div style={{ fontSize: 32, color: "#94a3b8" }}>
                         勒庞总结了三大成因
                     </div>
@@ -206,24 +232,24 @@ export const Scene6: React.FC = () => {
 
             <svg width="100%" height="100%" style={{ position: "absolute", top: 150, left: 0 }}>
                 {/* 连接线 */}
-                <path 
+                <path
                     d={`M 260 ${gear1Y} L 420 ${gear1Y}`}
-                    stroke={gear1Config.color} 
-                    strokeWidth={3} 
+                    stroke={gear1Config.color}
+                    strokeWidth={3}
                     strokeDasharray="8,8"
                     opacity={gear1Opacity}
                 />
-                 <path 
+                <path
                     d={`M 380 ${gear2Y} L 420 ${gear2Y}`}
-                    stroke={gear2Config.color} 
-                    strokeWidth={3} 
+                    stroke={gear2Config.color}
+                    strokeWidth={3}
                     strokeDasharray="8,8"
                     opacity={gear2Opacity}
                 />
-                 <path 
+                <path
                     d={`M 260 ${gear3Y} L 420 ${gear3Y}`}
-                    stroke={gear3Config.color} 
-                    strokeWidth={3} 
+                    stroke={gear3Config.color}
+                    strokeWidth={3}
                     strokeDasharray="8,8"
                     opacity={gear3Opacity}
                 />

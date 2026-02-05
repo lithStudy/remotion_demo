@@ -1,19 +1,22 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, random, useVideoConfig, Audio, staticFile } from "remotion";
+import { AbsoluteFill, useCurrentFrame, random, useVideoConfig, Sequence, Audio, staticFile } from "remotion";
 import { FadeInText, SpringText, Stamp } from "../../../components";
+import { useMemo } from "react";
 import {
     AnimationConfig,
     calculateAnimationTimings,
     calculateSceneDuration,
+    applyAudioDurations,
     type AudioMap,
 } from "../../../utils";
-import { useAudioMap } from "../../../hooks/useSceneAudio";
-import audioMapData from './audio-map.json';
+import audioMapData from "./audio-map.json";
 
-const animationConfigs: AnimationConfig[] = [
+const audioMap = audioMapData as AudioMap;
+
+const baseConfigs: AnimationConfig[] = [
     {
         name: "title",
-        delayBefore: 15,
+        delayBefore: 5,
         delayAfter: 0,
         durationInFrames: 40,
         preName: null,
@@ -21,17 +24,20 @@ const animationConfigs: AnimationConfig[] = [
     },
     {
         name: "subtitle",
-        delayBefore: 15,
+        delayBefore: 5,
         delayAfter: 0,
         durationInFrames: 30,
         preName: "title",
         audioId: "scene1_2" // 关联音频 ID
     },
-    { name: "tags", delayBefore: 20, delayAfter: 60, durationInFrames: 30, preName: "subtitle" },
+    { name: "tags", delayBefore: 0, delayAfter: 60, durationInFrames: 30, preName: "title" },
 ];
 
+// 应用音频时长
+const animationConfigs = applyAudioDurations(baseConfigs, audioMap, 30);
+
 export const calculateScene1Duration = (): number => {
-    return calculateSceneDuration(animationConfigs, audioMapData as AudioMap, 30);
+    return calculateSceneDuration(baseConfigs, audioMapData as AudioMap, 30);
 };
 
 const BACKGROUND =
@@ -101,8 +107,12 @@ const BackgroundParticles: React.FC = () => {
     );
 };
 
-export const Scene1: React.FC = () => {
 
+export const Scene1: React.FC = () => {
+    const configsWithAudio = useMemo(() => applyAudioDurations(baseConfigs, audioMapData as AudioMap, 30), []);
+    const timings = useMemo(() => calculateAnimationTimings(configsWithAudio), [configsWithAudio]);
+
+    const animationTimings = calculateAnimationTimings(animationConfigs);
 
     return (
         <AbsoluteFill
@@ -110,6 +120,7 @@ export const Scene1: React.FC = () => {
                 background: BACKGROUND,
             }}
         >
+
 
             <BackgroundParticles />
 
@@ -128,7 +139,7 @@ export const Scene1: React.FC = () => {
                 }}
             >
                 {/* Main Title */}
-                <SpringText>
+                <SpringText delay={timings["title"].startTime}>
                     <div
                         style={{
                             fontSize: 96,
@@ -147,7 +158,7 @@ export const Scene1: React.FC = () => {
                 </SpringText>
 
                 {/* Subtitle */}
-                <FadeInText>
+                <FadeInText delay={timings["subtitle"].startTime}>
                     <div
                         style={{
                             fontSize: 42,
@@ -185,6 +196,7 @@ export const Scene1: React.FC = () => {
                     <div key={tag.text} style={{ transform: `rotate(${tag.rot}deg)` }}>
                         <Stamp
                             text={`#${tag.text}`}
+                            delay={timings["tags"].startTime + i * 5}
                             style={{
                                 fontSize: 24,
                                 padding: "8px 16px",
@@ -193,6 +205,21 @@ export const Scene1: React.FC = () => {
                     </div>
                 ))}
             </div>
+
+
+            {/* 音频 */}
+            {baseConfigs.map((config) => {
+                if (!config.audioId || !audioMap[config.audioId]) return null;
+                return (
+                    <Sequence
+                        key={config.name}
+                        from={animationTimings[config.name].startTime}
+                        durationInFrames={animationTimings[config.name].durationInFrames}
+                    >
+                        <Audio src={staticFile(audioMap[config.audioId].file)} />
+                    </Sequence>
+                );
+            })}
         </AbsoluteFill>
     );
 };

@@ -1,41 +1,48 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, interpolate } from "remotion";
+import { AbsoluteFill, useCurrentFrame, interpolate, Audio, Sequence, staticFile } from "remotion";
 import { FadeInText, SpringText, HighlightText } from "../../../components";
+import { useMemo } from "react";
 import {
     AnimationConfig,
     calculateAnimationTimings,
     calculateSceneDuration,
+    applyAudioDurations,
+    type AudioMap,
 } from "../../../utils";
+import audioMapData from './audio-map.json';
 
-const animationConfigs: AnimationConfig[] = [
-    { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 22, preName: null },
-    { name: "subtitle", delayBefore: 12, delayAfter: 0, durationInFrames: 22, preName: "title" },
-    
+const audioMap = audioMapData as AudioMap;
+
+const baseConfigs: AnimationConfig[] = [
+    { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 22, preName: null, audioId: "" },
+    { name: "subtitle", delayBefore: 5, delayAfter: 0, durationInFrames: 22, preName: "title", audioId: "scene2_2" },
+
     // 图形动画
     { name: "leftFigure", delayBefore: 0, delayAfter: 0, durationInFrames: 25, preName: "subtitle" },
     { name: "arrow", delayBefore: 15, delayAfter: 0, durationInFrames: 20, preName: "leftFigure" },
     { name: "rightGroup", delayBefore: 0, delayAfter: 0, durationInFrames: 35, preName: "subtitle" },
-    
+
     // 表现部分
-    { name: "performance", delayBefore: 5, delayAfter: 0, durationInFrames: 15, preName: "subtitle" },
+    { name: "performance", delayBefore: 0, delayAfter: 0, durationInFrames: 15, preName: "subtitle" },
 
-    // 表现部分的高亮
-    { name: "highlight_wise", delayBefore: 15, delayAfter: 0, durationInFrames: 20, preName: "subtitle" }, // 智者
-    { name: "highlight_baby", delayBefore: 15, delayAfter: 0, durationInFrames: 20, preName: "subtitle" }, // 情绪巨婴
+    // 原理部分 (等待图形动画稍微进行一会儿) - 对应 "概念解析"
+    { name: "conceptTitle", delayBefore: 0, delayAfter: 0, durationInFrames: 40, preName: "subtitle", audioId: "scene2_3" },
+    // 添加正文朗读
+    { name: "principleText", delayBefore: 5, delayAfter: 0, durationInFrames: 1, preName: "conceptTitle", audioId: "scene2_4" },
 
-    // 原理部分 (等待图形动画稍微进行一会儿)
-    { name: "principle", delayBefore: 40, delayAfter: 0, durationInFrames: 40, preName: "subtitle" },
-
-    // 原理部分的高亮
-    { name: "highlight_disappear", delayBefore: 20, delayAfter: 0, durationInFrames: 20, preName: "principle" }, // 个性消失，智力下降
-    { name: "highlight_spirit", delayBefore: 10, delayAfter: 0, durationInFrames: 20, preName: "highlight_disappear" }, // 群体精神
-    { name: "highlight_impulsive", delayBefore: 10, delayAfter: 0, durationInFrames: 20, preName: "highlight_spirit" }, // 易怒、冲动
-    { name: "highlight_brainless", delayBefore: 10, delayAfter: 0, durationInFrames: 20, preName: "highlight_impulsive" }, // 没脑子...
-    { name: "highlight_bug", delayBefore: 15, delayAfter: 100, durationInFrames: 20, preName: "highlight_brainless" }, // 一群人是虫
+    // 原理部分的高亮 - 依赖 conceptTitle
+    { name: "highlight_disappear", delayBefore: 50, delayAfter: 0, durationInFrames: 20, preName: "conceptTitle" }, // 个性消失，智力下降
+    { name: "highlight_spirit", delayBefore: 80, delayAfter: 0, durationInFrames: 20, preName: "highlight_disappear" }, // 群体精神
+    { name: "highlight_impulsive", delayBefore: 20, delayAfter: 0, durationInFrames: 20, preName: "highlight_spirit" }, // 易怒、冲动
+    { name: "highlight_brainless", delayBefore: 30, delayAfter: 0, durationInFrames: 20, preName: "highlight_impulsive" }, // 没脑子...
+    { name: "highlight_bug", delayBefore: 90, delayAfter: 20, durationInFrames: 20, preName: "highlight_brainless" }, // 一群人是虫
 ];
 
+// 应用音频时长
+const animationConfigs = applyAudioDurations(baseConfigs, audioMap, 30);
+
 export const calculateScene2Duration = (): number => {
-    return calculateSceneDuration(animationConfigs);
+    return calculateSceneDuration(baseConfigs, audioMapData as AudioMap);
 };
 
 const BACKGROUND =
@@ -282,15 +289,17 @@ const SCENE2_FADE_OUT_START = 20; // 结尾多少帧开始淡出，与下一景�
 
 export const Scene2: React.FC = () => {
     const frame = useCurrentFrame();
-    const timings = calculateAnimationTimings(animationConfigs);
+    const configsWithAudio = useMemo(() => applyAudioDurations(baseConfigs, audioMapData as AudioMap, 30), []);
+    const timings = useMemo(() => calculateAnimationTimings(configsWithAudio), [configsWithAudio]);
+    const animationTimings = calculateAnimationTimings(animationConfigs);
     const sceneDuration = calculateScene2Duration();
 
     // 表现部分出现的时间
     const performanceStart = timings.performance.startTime;
     // 原理部分出现的时间（也就是表现部分上移的时间）
-    const principleStart = timings.principle.startTime;
+    const principleStart = timings.conceptTitle.startTime;
 
-    const cardInStart = performanceStart - 20;
+    const cardInStart = performanceStart;
     const cardInDuration = 26;
 
     // 结尾淡出，避免与 Scene3 过渡时两景内容重叠
@@ -324,6 +333,21 @@ export const Scene2: React.FC = () => {
                 background: BACKGROUND,
             }}
         >
+            {/* Audio Playback */}
+            {/* Audio Playback */}
+            {baseConfigs.map((config) => {
+                if (!config.audioId || !audioMap[config.audioId]) return null;
+                return (
+                    <Sequence
+                        key={config.name}
+                        from={animationTimings[config.name].startTime}
+                        durationInFrames={animationTimings[config.name].durationInFrames}
+                    >
+                        <Audio src={staticFile(audioMap[config.audioId].file)} />
+                    </Sequence>
+                );
+            })}
+
             {/* 标题区 */}
             <div
                 style={{
@@ -353,7 +377,7 @@ export const Scene2: React.FC = () => {
                     </div>
                 </SpringText>
                 <FadeInText delay={timings.subtitle.startTime} duration={12}>
-                     <div
+                    <div
                         style={{
                             width: 48,
                             height: 3,
@@ -363,7 +387,7 @@ export const Scene2: React.FC = () => {
                         }}
                     />
                 </FadeInText>
-                 <FadeInText
+                <FadeInText
                     delay={timings.subtitle.startTime}
                     duration={timings.subtitle.durationInFrames}
                 >
@@ -384,27 +408,27 @@ export const Scene2: React.FC = () => {
 
             {/* 中部：上方智者(金+蓝) → 向下箭头 → 下方群体 */}
             <div style={{ opacity: endFadeOut }}>
-            <TopIndividual
-                frame={frame}
-                start={timings.leftFigure.startTime}
-                duration={timings.leftFigure.durationInFrames}
-                arrowStart={timings.arrow.startTime}
-                flameType="gold"
-                offsetX={-48}
-            />
-            <TopIndividual
-                frame={frame}
-                start={timings.leftFigure.startTime}
-                duration={timings.leftFigure.durationInFrames}
-                arrowStart={timings.arrow.startTime}
-                flameType="blue"
-                offsetX={48}
-            />
-            <RightGroup
-                frame={frame}
-                start={timings.rightGroup.startTime}
-                duration={timings.rightGroup.durationInFrames}
-            />
+                <TopIndividual
+                    frame={frame}
+                    start={timings.leftFigure.startTime}
+                    duration={timings.leftFigure.durationInFrames}
+                    arrowStart={timings.arrow.startTime}
+                    flameType="gold"
+                    offsetX={-48}
+                />
+                <TopIndividual
+                    frame={frame}
+                    start={timings.leftFigure.startTime}
+                    duration={timings.leftFigure.durationInFrames}
+                    arrowStart={timings.arrow.startTime}
+                    flameType="blue"
+                    offsetX={48}
+                />
+                <RightGroup
+                    frame={frame}
+                    start={timings.rightGroup.startTime}
+                    duration={timings.rightGroup.durationInFrames}
+                />
             </div>
 
             {/* 底部文案卡片 */}
@@ -442,7 +466,7 @@ export const Scene2: React.FC = () => {
                     }}
                 >
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                        
+
 
                         {/* 原理部分 */}
                         <div style={{ opacity: principleOpacity, maxHeight: principleMaxHeight, overflow: "hidden" }}>

@@ -1,23 +1,45 @@
-import React from "react";
-import { AbsoluteFill, useCurrentFrame, interpolate, random } from "remotion";
-import { FadeInText, SpringText, HighlightText } from "../../../components/TextAnimations";
+import React, { useMemo } from "react";
+import { AbsoluteFill, useCurrentFrame, interpolate, Audio, Sequence, staticFile } from "remotion";
+import { SpringText, HighlightText } from "../../../components/TextAnimations";
 import {
     AnimationConfig,
     calculateAnimationTimings,
     calculateSceneDuration,
+    applyAudioDurations,
+    type AudioMap,
 } from "../../../utils";
+import audioMapData from './audio-map.json';
 
-const animationConfigs: AnimationConfig[] = [
-    { name: "title", delayBefore: 10, delayAfter: 0, durationInFrames: 30, preName: null },
-    { name: "shield_person", delayBefore: 10, delayAfter: 0, durationInFrames: 30, preName: "title" },
-    { name: "arrows", delayBefore: 10, delayAfter: 0, durationInFrames: 40, preName: "shield_person" },
-    { name: "item1", delayBefore: 20, delayAfter: 0, durationInFrames: 30, preName: "arrows" },
-    { name: "item2", delayBefore: 15, delayAfter: 0, durationInFrames: 30, preName: "item1" },
-    { name: "item3", delayBefore: 15, delayAfter: 60, durationInFrames: 30, preName: "item2" },
+const audioMap = audioMapData as AudioMap;
+
+const baseConfigs: AnimationConfig[] = [
+    { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: null, audioId: "scene7_1" },
+    { name: "shield_person", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "title" },
+    { name: "arrows", delayBefore: 0, delayAfter: 0, durationInFrames: 40, preName: "shield_person" },
+
+    // Item 1
+    { name: "item1", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "title", audioId: "scene7_2" }, // Title: 让子弹飞
+    { name: "item1_content", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "item1", audioId: "scene7_3" }, // Content: 遇到热点...
+    { name: "highlight_delay3Hours", delayBefore: 30, delayAfter: 0, durationInFrames: 20, preName: "item1" },
+    { name: "highlight_highIQ", delayBefore: 90, delayAfter: 0, durationInFrames: 20, preName: "highlight_delay3Hours" },
+
+    // Item 2
+    { name: "item2", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "item1_content", audioId: "scene7_4" }, // Title: 警惕绝对化
+    { name: "item2_content", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "item2", audioId: "scene7_5" }, // Content: 听到...
+    { name: "highlight_absoluteWords", delayBefore: 15, delayAfter: 0, durationInFrames: 20, preName: "item2" },
+
+    // Item 3
+    { name: "item3", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "item2_content", audioId: "scene7_6" }, // Title: 寻找反对
+    { name: "item3_content", delayBefore: 10, delayAfter: 0, durationInFrames: 30, preName: "item3", audioId: "scene7_7" }, // Content: 刻意去听...
+    { name: "highlight_listenBothSides", delayBefore: 80, delayAfter: 0, durationInFrames: 20, preName: "item3" },
+
 ];
 
+// 应用音频时长
+const animationConfigs = applyAudioDurations(baseConfigs, audioMap, 30);
+
 export const calculateScene7Duration = (): number => {
-    return calculateSceneDuration(animationConfigs);
+    return calculateSceneDuration(baseConfigs, audioMapData as AudioMap);
 };
 
 const BACKGROUND =
@@ -42,21 +64,21 @@ const PersonWithShield: React.FC<{
 
     return (
         <g transform={`translate(${x}, ${y}) scale(1.5)`} style={{ opacity }}>
-             {/* 身体 */}
-             <path d="M -20 80 L -20 0 Q 0 -5 20 0 L 20 80 Z" fill="#64748b" />
-             
-             {/* 头 */}
-             <circle cx={0} cy={-25} r={20} fill="#94a3b8" />
-             
-             {/* 眼睛 (闭眼享受/冷静) */}
-             <path d="M -8 -25 Q -4 -22 0 -25" stroke="#1e293b" strokeWidth={2} fill="none" />
-             <path d="M 4 -25 Q 8 -22 12 -25" stroke="#1e293b" strokeWidth={2} fill="none" />
+            {/* 身体 */}
+            <path d="M -20 80 L -20 0 Q 0 -5 20 0 L 20 80 Z" fill="#64748b" />
 
-             {/* 左手 (拿盾牌的手) - 简单的线条 */}
-             <path d="M -20 20 L -50 40" stroke="#64748b" strokeWidth={8} strokeLinecap="round" />
+            {/* 头 */}
+            <circle cx={0} cy={-25} r={20} fill="#94a3b8" />
 
-             {/* 右手 (拿茶杯) */}
-             <g transform="translate(20, 20)">
+            {/* 眼睛 (闭眼享受/冷静) */}
+            <path d="M -8 -25 Q -4 -22 0 -25" stroke="#1e293b" strokeWidth={2} fill="none" />
+            <path d="M 4 -25 Q 8 -22 12 -25" stroke="#1e293b" strokeWidth={2} fill="none" />
+
+            {/* 左手 (拿盾牌的手) - 简单的线条 */}
+            <path d="M -20 20 L -50 40" stroke="#64748b" strokeWidth={8} strokeLinecap="round" />
+
+            {/* 右手 (拿茶杯) */}
+            <g transform="translate(20, 20)">
                 <g transform={`rotate(${armRotate})`}>
                     <path d="M 0 0 L 20 20" stroke="#64748b" strokeWidth={8} strokeLinecap="round" />
                     {/* 茶杯 */}
@@ -65,28 +87,28 @@ const PersonWithShield: React.FC<{
                         <path d="M 9 -6 Q 14 -6 14 0 Q 14 6 9 6" stroke="#e2e8f0" strokeWidth={2} fill="none" />
                         {/* 热气 */}
                         <path d="M 0 -15 Q 5 -20 0 -25" stroke="white" strokeWidth={1} opacity={0.5}>
-                             <animate attributeName="d" values="M 0 -15 Q 5 -20 0 -25; M 0 -18 Q -5 -23 0 -28; M 0 -15 Q 5 -20 0 -25" dur="2s" repeatCount="indefinite" />
+                            <animate attributeName="d" values="M 0 -15 Q 5 -20 0 -25; M 0 -18 Q -5 -23 0 -28; M 0 -15 Q 5 -20 0 -25" dur="2s" repeatCount="indefinite" />
                         </path>
                     </g>
                 </g>
-             </g>
+            </g>
 
-             {/* 盾牌 (在最前面) */}
-             <g transform="translate(-60, 0)">
-                <path 
-                    d="M -30 -50 L 30 -50 L 30 10 Q 0 60 -30 10 Z" 
-                    fill="#3b82f6" 
-                    stroke="#60a5fa" 
-                    strokeWidth={4} 
+            {/* 盾牌 (在最前面) */}
+            <g transform="translate(-60, 0)">
+                <path
+                    d="M -30 -50 L 30 -50 L 30 10 Q 0 60 -30 10 Z"
+                    fill="#3b82f6"
+                    stroke="#60a5fa"
+                    strokeWidth={4}
                 />
-                <path 
-                    d="M 0 -40 L 0 45" 
-                    stroke="rgba(255,255,255,0.3)" 
-                    strokeWidth={20} 
+                <path
+                    d="M 0 -40 L 0 45"
+                    stroke="rgba(255,255,255,0.3)"
+                    strokeWidth={20}
                 />
                 <circle cx={0} cy={-10} r={12} fill="#1d4ed8" />
-                <path d="M -8 -10 L 0 -2 L 8 -18" stroke="white" strokeWidth={3} fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-             </g>
+                <path d="M -8 -10 L 0 -2 L 8 -18" stroke="white" strokeWidth={3} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            </g>
         </g>
     );
 };
@@ -108,7 +130,7 @@ const Arrow: React.FC<{
 
     const currentX = interpolate(progress, [0, 1], [startX, endX]);
     const currentY = interpolate(progress, [0, 1], [startY, endY]);
-    
+
     // 撞击后消失或掉落
     const opacity = interpolate(
         frame,
@@ -140,7 +162,7 @@ const StrategyItem: React.FC<{
         [0, 1],
         { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
     );
-    
+
     const translateY = interpolate(
         frame,
         [delay, delay + 20],
@@ -195,7 +217,9 @@ const StrategyItem: React.FC<{
 
 export const Scene7: React.FC = () => {
     const frame = useCurrentFrame();
-    const timings = calculateAnimationTimings(animationConfigs);
+    const configsWithAudio = useMemo(() => applyAudioDurations(baseConfigs, audioMapData as AudioMap, 30), []);
+    const timings = useMemo(() => calculateAnimationTimings(configsWithAudio), [configsWithAudio]);
+    const animationTimings = calculateAnimationTimings(animationConfigs);
 
     // 盾牌人出现
     const shieldOpacity = interpolate(
@@ -204,7 +228,7 @@ export const Scene7: React.FC = () => {
         [0, 1],
         { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
     );
-    
+
     // 从左侧滑入到中间
     const shieldX = interpolate(
         frame,
@@ -215,6 +239,21 @@ export const Scene7: React.FC = () => {
 
     return (
         <AbsoluteFill style={{ background: BACKGROUND }}>
+            {/* Audio Playback */}
+            {/* Audio Playback */}
+            {baseConfigs.map((config) => {
+                if (!config.audioId || !audioMap[config.audioId]) return null;
+                return (
+                    <Sequence
+                        key={config.name}
+                        from={animationTimings[config.name].startTime}
+                        durationInFrames={animationTimings[config.name].durationInFrames}
+                    >
+                        <Audio src={staticFile(audioMap[config.audioId].file)} />
+                    </Sequence>
+                );
+            })}
+
             {/* 标题 */}
             <div style={{ position: "absolute", top: 60, width: "100%", textAlign: "center", zIndex: 10 }}>
                 <SpringText delay={timings.title.startTime}>
@@ -226,15 +265,41 @@ export const Scene7: React.FC = () => {
 
             {/* 中间视觉区 */}
             <div style={{ position: "absolute", top: 180, left: 0, width: "100%", height: 400, overflow: "visible" }}>
-                 <svg width="100%" height="100%" viewBox="0 0 960 400" style={{ overflow: "visible" }}>
-                    {/* 盾牌人 */}
-                    <PersonWithShield 
-                        x={shieldX} 
-                        y={200} 
-                        opacity={shieldOpacity} 
+                <svg width="100%" height="100%" viewBox="0 0 960 400" style={{ overflow: "visible" }}>
+                    {/* 飞来的子弹/箭头 */}
+                    <Arrow
+                        startX={900}
+                        startY={200}
+                        endX={shieldX + 60} // 打在盾牌上
+                        endY={200}
+                        delay={timings.arrows.startTime}
                         frame={frame}
                     />
-                 </svg>
+                    <Arrow
+                        startX={950}
+                        startY={150}
+                        endX={shieldX + 60}
+                        endY={190}
+                        delay={timings.arrows.startTime + 5}
+                        frame={frame}
+                    />
+                    <Arrow
+                        startX={920}
+                        startY={250}
+                        endX={shieldX + 60}
+                        endY={210}
+                        delay={timings.arrows.startTime + 10}
+                        frame={frame}
+                    />
+
+                    {/* 盾牌人 */}
+                    <PersonWithShield
+                        x={shieldX}
+                        y={200}
+                        opacity={shieldOpacity}
+                        frame={frame}
+                    />
+                </svg>
             </div>
 
             {/* 下方文字内容区 */}
@@ -257,7 +322,7 @@ export const Scene7: React.FC = () => {
                         <>
                             遇到热点事件，
                             <HighlightText
-                                delay={timings.item1.startTime + 15}
+                                delay={timings.highlight_delay3Hours.startTime}
                                 durationInFrames={20}
                                 highlightColor="rgba(52, 211, 153, 0.5)"
                                 style={{ margin: "0 2px" }}
@@ -266,7 +331,7 @@ export const Scene7: React.FC = () => {
                             </HighlightText>
                             。情绪退去，
                             <HighlightText
-                                delay={timings.item1.startTime + 35}
+                                delay={timings.highlight_highIQ.startTime}
                                 durationInFrames={20}
                                 highlightColor="rgba(52, 211, 153, 0.5)"
                                 style={{ margin: "0 2px" }}
@@ -286,7 +351,7 @@ export const Scene7: React.FC = () => {
                         <>
                             当你听到“
                             <HighlightText
-                                delay={timings.item2.startTime + 15}
+                                delay={timings.highlight_absoluteWords.startTime}
                                 durationInFrames={20}
                                 highlightColor="rgba(239, 68, 68, 0.5)"
                                 style={{ margin: "0 2px" }}
@@ -306,7 +371,7 @@ export const Scene7: React.FC = () => {
                         <>
                             刻意去听不同的观点。
                             <HighlightText
-                                delay={timings.item3.startTime + 15}
+                                delay={timings.highlight_listenBothSides.startTime}
                                 durationInFrames={20}
                                 highlightColor="rgba(52, 211, 153, 0.5)"
                                 style={{ margin: "0 2px" }}

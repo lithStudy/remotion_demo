@@ -1,21 +1,29 @@
-import React from "react";
-import { AbsoluteFill, useCurrentFrame, interpolate, random } from "remotion";
+import React, { useMemo } from "react";
+import { AbsoluteFill, useCurrentFrame, interpolate, random, Audio, Sequence, staticFile } from "remotion";
 import { FadeInText } from "../../../components/TextAnimations";
 import {
     AnimationConfig,
     calculateAnimationTimings,
     calculateSceneDuration,
+    applyAudioDurations,
+    type AudioMap,
 } from "../../../utils";
+import audioMapData from './audio-map.json';
 
-const animationConfigs: AnimationConfig[] = [
-    { name: "quote_part1", delayBefore: 20, delayAfter: 0, durationInFrames: 40, preName: null },
-    { name: "quote_part2", delayBefore: 10, delayAfter: 0, durationInFrames: 40, preName: "quote_part1" },
-    { name: "transition", delayBefore: 40, delayAfter: 0, durationInFrames: 30, preName: "quote_part2" },
-    { name: "final_text", delayBefore: 10, delayAfter: 90, durationInFrames: 40, preName: "transition" },
+const audioMap = audioMapData as AudioMap;
+
+const baseConfigs: AnimationConfig[] = [
+    { name: "quote_part1", delayBefore: 20, delayAfter: 0, durationInFrames: 40, preName: null, audioId: "scene8_1" },
+    { name: "quote_part2", delayBefore: 0, delayAfter: 0, durationInFrames: 10, preName: null, audioId: "" },
+    { name: "transition", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "quote_part1" },
+    { name: "final_text", delayBefore: 0, delayAfter: 90, durationInFrames: 40, preName: "transition", audioId: "scene8_3" },
 ];
 
+// 应用音频时长
+const animationConfigs = applyAudioDurations(baseConfigs, audioMap, 30);
+
 export const calculateScene8Duration = (): number => {
-    return calculateSceneDuration(animationConfigs);
+    return calculateSceneDuration(baseConfigs, audioMapData as AudioMap);
 };
 
 const BACKGROUND = "linear-gradient(180deg, #020617 0%, #0f172a 100%)";
@@ -27,7 +35,7 @@ const LonelyStar: React.FC<{ frame: number }> = ({ frame }) => {
         [-1, 1],
         [0.4, 1]
     );
-    
+
     const scale = interpolate(
         Math.sin(frame * 0.1),
         [-1, 1],
@@ -71,7 +79,7 @@ const NoiseParticles: React.FC<{ frame: number; opacity: number }> = ({ frame, o
         const x = random(seed) * 100; // %
         const y = random(seed + 100) * 100; // %
         const size = 2 + random(seed + 200) * 4;
-        
+
         // 闪烁效果
         const blinkSpeed = 0.05 + random(seed + 300) * 0.1;
         const blinkOffset = random(seed + 400) * 100;
@@ -80,7 +88,7 @@ const NoiseParticles: React.FC<{ frame: number; opacity: number }> = ({ frame, o
             [-1, 1],
             [0.1, 0.8]
         );
-        
+
         return (
             <div
                 key={i}
@@ -108,7 +116,9 @@ const NoiseParticles: React.FC<{ frame: number; opacity: number }> = ({ frame, o
 
 export const Scene8: React.FC = () => {
     const frame = useCurrentFrame();
-    const timings = calculateAnimationTimings(animationConfigs);
+    const configsWithAudio = useMemo(() => applyAudioDurations(baseConfigs, audioMapData as AudioMap, 30), []);
+    const timings = useMemo(() => calculateAnimationTimings(configsWithAudio), [configsWithAudio]);
+    const animationTimings = calculateAnimationTimings(animationConfigs);
 
     // 引用语淡出
     const quoteOpacity = interpolate(
@@ -128,8 +138,23 @@ export const Scene8: React.FC = () => {
 
     return (
         <AbsoluteFill style={{ background: BACKGROUND }}>
+            {/* Audio Playback */}
+            {/* Audio Playback */}
+            {baseConfigs.map((config) => {
+                if (!config.audioId || !audioMap[config.audioId]) return null;
+                return (
+                    <Sequence
+                        key={config.name}
+                        from={animationTimings[config.name].startTime}
+                        durationInFrames={animationTimings[config.name].durationInFrames}
+                    >
+                        <Audio src={staticFile(audioMap[config.audioId].file)} />
+                    </Sequence>
+                );
+            })}
+
             <NoiseParticles frame={frame} opacity={1} />
-            
+
             <LonelyStar frame={frame} />
 
             {/* 名言部分 */}
@@ -149,7 +174,7 @@ export const Scene8: React.FC = () => {
                 }}
             >
                 <div style={{ height: 100 }} /> {/* 避开中间的星星 */}
-                
+
                 <FadeInText delay={timings.quote_part1.startTime}>
                     <div
                         style={{
@@ -166,7 +191,7 @@ export const Scene8: React.FC = () => {
                         个体愿意抛弃是非，用智商去换取那份让人备感安全的归属感。”
                     </div>
                 </FadeInText>
-                
+
                 <FadeInText delay={timings.quote_part2.startTime}>
                     <div
                         style={{

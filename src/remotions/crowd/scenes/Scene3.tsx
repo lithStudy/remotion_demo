@@ -1,11 +1,12 @@
 import React, { useMemo } from "react";
 import { AbsoluteFill, useCurrentFrame, interpolate, useVideoConfig, random, spring, Audio, Sequence, staticFile } from "remotion";
-import { FadeInText, SpringText, HighlightText } from "../../../components";
+import { FadeInText, SpringText, AutoHighlightText } from "../../../components";
 import {
     AnimationConfig,
     calculateAnimationTimings,
     calculateSceneDuration,
     applyAudioDurations,
+    applyHighlightDelays,
     type AudioMap,
 } from "../../../utils";
 import audioMapData from './audio-map.json';
@@ -20,29 +21,23 @@ const baseConfigs: AnimationConfig[] = [
     // 表现部分 "表现"
     { name: "performance", delayBefore: 0, delayAfter: 0, durationInFrames: 15, preName: "subtitle", audioId: "scene3_3" }, // 15帧淡入完成
     // 表现部分 "热搜一出..."
-    { name: "performanceText", delayBefore: 5, delayAfter: 0, durationInFrames: 1, preName: "performance", audioId: "scene3_4" },
-
-    // 表现部分的高亮 - 依赖 performance (开始读表现正文时)
-    { name: "highlight_crazyStanding", delayBefore: 90, delayAfter: 0, durationInFrames: 20, preName: "performance" }, // 疯狂站队
-    { name: "highlight_cyberViolence", delayBefore: 10, delayAfter: 0, durationInFrames: 20, preName: "highlight_crazyStanding" }, // 网暴
-    { name: "highlight_lateButArrive", delayBefore: 15, delayAfter: 0, durationInFrames: 20, preName: "highlight_cyberViolence" }, // 虽迟但到
-    { name: "highlight_deathPenalty", delayBefore: 10, delayAfter: 0, durationInFrames: 20, preName: "highlight_lateButArrive" }, // 死刑起步
-    { name: "highlight_reversal", delayBefore: 60, delayAfter: 0, durationInFrames: 20, preName: "highlight_deathPenalty" }, // 反转
-    { name: "highlight_scatter", delayBefore: 10, delayAfter: 0, durationInFrames: 20, preName: "highlight_reversal" }, // 一哄而散
+    {
+        name: "performanceText", delayBefore: 5, delayAfter: 0, durationInFrames: 1, preName: "performance", audioId: "scene3_4",
+        highlight: ["疯狂站队", "网暴", "虽迟但到", "死刑起步", "反转", "一哄而散"]
+    },
 
     // 原理部分 "原理" - 依赖 performanceText (第一段读完)
     { name: "principle", delayBefore: 0, delayAfter: 0, durationInFrames: 40, preName: "performanceText", audioId: "scene3_5" }, // 原理部分整体出现
     // 原理部分 "群体只接受..."
-    { name: "principleText", delayBefore: 0, delayAfter: 0, durationInFrames: 1, preName: "principle", audioId: "scene3_6" },
-
-    // 原理部分的高亮 - 依赖 principle (开始读原理正文时)
-    { name: "highlight_simpleSuggestion", delayBefore: 25, delayAfter: 0, durationInFrames: 20, preName: "principle" }, // 简单的暗示
-    { name: "highlight_realityIllusion", delayBefore: 40, delayAfter: 0, durationInFrames: 20, preName: "highlight_simpleSuggestion" }, // 现实与幻觉
-    { name: "highlight_emotionalIncitement", delayBefore: 30, delayAfter: 60, durationInFrames: 20, preName: "highlight_realityIllusion" }, // 情绪煽动
+    {
+        name: "principleText", delayBefore: 0, delayAfter: 0, durationInFrames: 1, preName: "principle", audioId: "scene3_6",
+        highlight: ["简单的暗示", "现实与幻觉", "情绪煽动"]
+    },
 ];
 
-// 应用音频时长
-const animationConfigs = applyAudioDurations(baseConfigs, audioMap, 30);
+// 应用音频时长和高亮延迟
+const configsWithAudio = applyAudioDurations(baseConfigs, audioMap, 30);
+const animationConfigs = applyHighlightDelays(configsWithAudio, audioMap, 30);
 
 export const calculateScene3Duration = (): number => {
     return calculateSceneDuration(baseConfigs, audioMapData as AudioMap);
@@ -160,12 +155,20 @@ const CenterDevice: React.FC<{ frame: number; opacity: number; isReversed: boole
     );
 };
 
+
+
+
+
 export const Scene3: React.FC = () => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
-    const configsWithAudio = useMemo(() => applyAudioDurations(baseConfigs, audioMapData as AudioMap, 30), []);
-    const timings = useMemo(() => calculateAnimationTimings(configsWithAudio), [configsWithAudio]);
-    const animationTimings = calculateAnimationTimings(animationConfigs);
+
+    // 计算所有动画的时序
+    const timings = useMemo(
+        () => calculateAnimationTimings(animationConfigs),
+        []
+    );
+
     const cardInStart =
         timings.subtitle.startTime + timings.subtitle.durationInFrames + 18 + TRANSITION_OFFSET;
     const cardInDuration = 26;
@@ -222,10 +225,17 @@ export const Scene3: React.FC = () => {
     }, []);
 
     // 动画状态判断
-    const crazyStart = timings.highlight_crazyStanding.startTime + TRANSITION_OFFSET;
-    const violenceStart = timings.highlight_cyberViolence.startTime + TRANSITION_OFFSET;
-    const reversalStart = timings.highlight_reversal.startTime + TRANSITION_OFFSET;
-    const scatterStart = timings.highlight_scatter.startTime + TRANSITION_OFFSET;
+    // Performance Highlights
+    const tPerfText = timings.performanceText;
+    const perfHighlights = tPerfText.highlightAbsoluteTimes || [];
+
+    // UserNode 动画依赖这些时间点
+    const crazyStart = (perfHighlights[0] ?? 0) + TRANSITION_OFFSET;
+    const violenceStart = (perfHighlights[1] ?? 0) + TRANSITION_OFFSET;
+
+    const reversalStart = (perfHighlights[4] ?? 0) + TRANSITION_OFFSET;
+    const scatterStart = (perfHighlights[5] ?? 0) + TRANSITION_OFFSET;
+
 
     const isViolence = frame >= violenceStart && frame < reversalStart;
     const isReversed = frame >= reversalStart;
@@ -248,14 +258,13 @@ export const Scene3: React.FC = () => {
             }}
         >
             {/* Audio Playback */}
-            {/* Audio Playback */}
             {baseConfigs.map((config) => {
                 if (!config.audioId || !audioMap[config.audioId]) return null;
                 return (
                     <Sequence
                         key={config.name}
-                        from={animationTimings[config.name].startTime + TRANSITION_OFFSET}
-                        durationInFrames={animationTimings[config.name].durationInFrames}
+                        from={timings[config.name].startTime + TRANSITION_OFFSET}
+                        durationInFrames={timings[config.name].durationInFrames}
                     >
                         <Audio src={staticFile(audioMap[config.audioId].file)} />
                     </Sequence>
@@ -413,61 +422,14 @@ export const Scene3: React.FC = () => {
                                     textShadow: "0 1px 6px rgba(0,0,0,0.4)",
                                 }}
                             >
-                                热搜一出，真相未明，大家就开始
-                                <HighlightText
-                                    delay={timings.highlight_crazyStanding.startTime + TRANSITION_OFFSET}
-                                    durationInFrames={timings.highlight_crazyStanding.durationInFrames}
-                                    highlightColor="rgba(220, 38, 38, 0.6)"
+                                <AutoHighlightText
+                                    text={audioMap['scene3_4'].text}
+                                    highlights={baseConfigs.find(c => c.name === 'performanceText')?.highlight || []}
+                                    highlightTimings={perfHighlights}
+                                    baseDelay={TRANSITION_OFFSET}
+                                    highlightColors="rgba(220, 38, 38, 0.6)"
                                     style={{ margin: "0 2px" }}
-                                >
-                                    疯狂站队
-                                </HighlightText>
-                                、
-                                <HighlightText
-                                    delay={timings.highlight_cyberViolence.startTime + TRANSITION_OFFSET}
-                                    durationInFrames={timings.highlight_cyberViolence.durationInFrames}
-                                    highlightColor="rgba(220, 38, 38, 0.6)"
-                                    style={{ margin: "0 2px" }}
-                                >
-                                    网暴
-                                </HighlightText>
-                                。「
-                                <HighlightText
-                                    delay={timings.highlight_lateButArrive.startTime + TRANSITION_OFFSET}
-                                    durationInFrames={timings.highlight_lateButArrive.durationInFrames}
-                                    highlightColor="rgba(220, 38, 38, 0.6)"
-                                    style={{ margin: "0 2px" }}
-                                >
-                                    虽迟但到
-                                </HighlightText>
-                                」、「
-                                <HighlightText
-                                    delay={timings.highlight_deathPenalty.startTime + TRANSITION_OFFSET}
-                                    durationInFrames={timings.highlight_deathPenalty.durationInFrames}
-                                    highlightColor="rgba(220, 38, 38, 0.6)"
-                                    style={{ margin: "0 2px" }}
-                                >
-                                    死刑起步
-                                </HighlightText>
-                                」刷满屏。结果
-                                <HighlightText
-                                    delay={timings.highlight_reversal.startTime + TRANSITION_OFFSET}
-                                    durationInFrames={timings.highlight_reversal.durationInFrames}
-                                    highlightColor="rgba(220, 38, 38, 0.6)"
-                                    style={{ margin: "0 2px" }}
-                                >
-                                    反转
-                                </HighlightText>
-                                了，大家又
-                                <HighlightText
-                                    delay={timings.highlight_scatter.startTime + TRANSITION_OFFSET}
-                                    durationInFrames={timings.highlight_scatter.durationInFrames}
-                                    highlightColor="rgba(220, 38, 38, 0.6)"
-                                    style={{ margin: "0 2px" }}
-                                >
-                                    一哄而散
-                                </HighlightText>
-                                ，仿佛无事发生。
+                                />
                             </div>
                         </div>
 
@@ -503,34 +465,18 @@ export const Scene3: React.FC = () => {
                                         textShadow: "0 1px 6px rgba(0,0,0,0.4)",
                                     }}
                                 >
-                                    群体只接受
-                                    <HighlightText
-                                        delay={timings.highlight_simpleSuggestion.startTime + TRANSITION_OFFSET}
-                                        durationInFrames={timings.highlight_simpleSuggestion.durationInFrames}
-                                        highlightColor="rgba(49, 179, 240, 0.5)"
+                                    <AutoHighlightText
+                                        text={audioMap['scene3_6'].text}
+                                        highlights={baseConfigs.find(c => c.name === 'principleText')?.highlight || []}
+                                        highlightTimings={timings.principleText.highlightAbsoluteTimes || []}
+                                        baseDelay={TRANSITION_OFFSET}
+                                        highlightColors={[
+                                            "rgba(49, 179, 240, 0.5)",
+                                            "rgba(248, 244, 15, 0.63)",
+                                            "rgba(14, 165, 233, 0.5)"
+                                        ]}
                                         style={{ margin: "0 2px" }}
-                                    >
-                                        简单的暗示
-                                    </HighlightText>
-                                    ，分不清
-                                    <HighlightText
-                                        delay={timings.highlight_realityIllusion.startTime + TRANSITION_OFFSET}
-                                        durationInFrames={timings.highlight_realityIllusion.durationInFrames}
-                                        highlightColor="rgba(248, 244, 15, 0.63)"
-                                        style={{ margin: "0 2px" }}
-                                    >
-                                        现实与幻觉
-                                    </HighlightText>
-                                    ，极易被
-                                    <HighlightText
-                                        delay={timings.highlight_emotionalIncitement.startTime + TRANSITION_OFFSET}
-                                        durationInFrames={timings.highlight_emotionalIncitement.durationInFrames}
-                                        highlightColor="rgba(14, 165, 233, 0.5)"
-                                        style={{ margin: "0 2px" }}
-                                    >
-                                        情绪煽动
-                                    </HighlightText>
-                                    。
+                                    />
                                 </div>
                             </div>
                         </div>

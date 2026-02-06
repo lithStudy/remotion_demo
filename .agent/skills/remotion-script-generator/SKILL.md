@@ -23,8 +23,9 @@ metadata:
 - [ ] Step 2: 生成场景脚本JSON
 - [ ] Step 3: 生成TTS语音
 - [ ] Step 4: 同步音频时长
-- [ ] Step 5: 生成场景插图
-- [ ] Step 6: 生成场景动画
+- [ ] Step 5: 计算高亮时间
+- [ ] Step 6: 生成场景插图
+- [ ] Step 7: 生成场景动画
 
 ---
 
@@ -88,7 +89,22 @@ python {skill路径}/scripts/sync_durations.py --script "{项目路径}/src/remo
 
 ---
 
-### Step 5: 生成场景插图
+### Step 5: 计算高亮时间
+
+运行高亮时间计算脚本（在Step 4之后运行）：
+
+```bash
+python {skill路径}/scripts/calculate_highlight_delays.py "{项目路径}/src/remotions/{动画名称}/scenes/scene-scripts.json"
+```
+
+此脚本会：
+1. 检查 `scene-scripts.json` 中带有 `highlight` 字段的条目
+2. 根据高亮文字在整段文本中的位置比例，自动计算高亮显示的起始时间
+3. 生成 `highlightDelays` 字段，与 `highlight` 数组一一对应
+
+---
+
+### Step 6: 生成场景插图
 
 1. 创建图片目录：
    ```bash
@@ -103,7 +119,7 @@ python {skill路径}/scripts/sync_durations.py --script "{项目路径}/src/remo
 
 ---
 
-### Step 6: 生成场景动画
+### Step 7: 生成场景动画
 
 1. 根据脚本 {项目路径}/src/remotions/{动画名称}/scenes/scene-scripts.json   通过remotion生成动画场景，并插入生成的插图。基本遵循标题在上，插图在中间，正文在下面的结构，插图显示的尺寸不能太大，要适中。
 

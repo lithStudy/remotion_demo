@@ -1,11 +1,12 @@
 import React, { useMemo } from "react";
 import { AbsoluteFill, useCurrentFrame, interpolate, Audio, Sequence, staticFile } from "remotion";
-import { FadeInText, SpringText } from "../../../components/TextAnimations";
+import { FadeInText, SpringText, AutoHighlightText } from "../../../components";
 import {
     AnimationConfig,
     calculateAnimationTimings,
     calculateSceneDuration,
     applyAudioDurations,
+    applyHighlightDelays,
     type AudioMap,
 } from "../../../utils";
 import audioMapData from './audio-map.json';
@@ -15,13 +16,24 @@ const audioMap = audioMapData as AudioMap;
 const baseConfigs: AnimationConfig[] = [
     { name: "title", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: null, audioId: "scene6_1" },
     { name: "subtitle", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "title", audioId: "scene6_2" },
-    { name: "gear1", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "subtitle", audioId: "scene6_3" }, // 匿名性
-    { name: "gear2", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "gear1", audioId: "scene6_4" }, // 传染性
-    { name: "gear3", delayBefore: 0, delayAfter: 30, durationInFrames: 30, preName: "gear2", audioId: "scene6_5" }, // 易受暗示性
+    {
+        name: "gear1", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "subtitle", audioId: "scene6_3", // 匿名性
+        highlight: ["法不责众", "责任感消失", "胆子变大"]
+    },
+    {
+        name: "gear2", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "gear1", audioId: "scene6_4", // 传染性
+        highlight: ["情绪也是病毒", "几何级数扩散"]
+    },
+    {
+        name: "gear3", delayBefore: 0, delayAfter: 30, durationInFrames: 30, preName: "gear2", audioId: "scene6_5", // 易受暗示性
+        highlight: ["大脑像被催眠", "逻辑下线", "听谁的"]
+    },
 ];
 
 // 应用音频时长
-const animationConfigs = applyAudioDurations(baseConfigs, audioMap, 30);
+// 应用音频时长
+const configsWithAudio = applyAudioDurations(baseConfigs, audioMap, 30);
+const animationConfigs = applyHighlightDelays(configsWithAudio, audioMap, 30);
 
 export const calculateScene6Duration = (): number => {
     return calculateSceneDuration(baseConfigs, audioMapData as AudioMap);
@@ -107,7 +119,7 @@ const Gear: React.FC<{
 
 const InfoCard: React.FC<{
     title: string;
-    content: string;
+    content: React.ReactNode;
     icon: string;
     x: number;
     y: number;
@@ -157,7 +169,8 @@ const InfoCard: React.FC<{
 export const Scene6: React.FC = () => {
     const frame = useCurrentFrame();
     const configsWithAudio = useMemo(() => applyAudioDurations(baseConfigs, audioMapData as AudioMap, 30), []);
-    const timings = useMemo(() => calculateAnimationTimings(configsWithAudio), [configsWithAudio]);
+    const configsWithHighlights = useMemo(() => applyHighlightDelays(configsWithAudio, audioMapData as AudioMap, 30), [configsWithAudio]);
+    const timings = useMemo(() => calculateAnimationTimings(configsWithHighlights), [configsWithHighlights]);
     const animationTimings = calculateAnimationTimings(animationConfigs);
 
     // 布局参数
@@ -277,10 +290,18 @@ export const Scene6: React.FC = () => {
                     scale={gear3Scale}
                 />
 
-                {/* 信息卡片 */}
                 <InfoCard
                     title="匿名性"
-                    content="“法不责众”。藏在人群里，责任感消失，胆子变大，敢做平时不敢做的坏事。"
+                    content={
+                        <AutoHighlightText
+                            text="“法不责众”。藏在人群里，责任感消失，胆子变大，敢做平时不敢做的坏事。"
+                            highlights={baseConfigs.find(c => c.name === 'gear1')?.highlight || []}
+                            highlightTimings={timings.gear1.highlightAbsoluteTimes || []}
+                            baseDelay={0}
+                            highlightColors={gear1Config.color}
+                            style={{ margin: "0 2px" }}
+                        />
+                    }
                     icon="1"
                     x={420}
                     y={item1Y}
@@ -289,7 +310,16 @@ export const Scene6: React.FC = () => {
                 />
                 <InfoCard
                     title="传染性"
-                    content="情绪也是病毒。狂热、恐慌、愤怒，在人群中会以几何级数扩散。"
+                    content={
+                        <AutoHighlightText
+                            text="情绪也是病毒。狂热、恐慌、愤怒，在人群中会以几何级数扩散。"
+                            highlights={baseConfigs.find(c => c.name === 'gear2')?.highlight || []}
+                            highlightTimings={timings.gear2.highlightAbsoluteTimes || []}
+                            baseDelay={0}
+                            highlightColors={gear2Config.color}
+                            style={{ margin: "0 2px" }}
+                        />
+                    }
                     icon="2"
                     x={420}
                     y={item2Y}
@@ -298,7 +328,16 @@ export const Scene6: React.FC = () => {
                 />
                 <InfoCard
                     title="易受暗示性"
-                    content="大脑像被催眠。此时逻辑下线，谁声音大、谁情绪激昂，就听谁的。"
+                    content={
+                        <AutoHighlightText
+                            text="大脑像被催眠。此时逻辑下线，谁声音大、谁情绪激昂，就听谁的。"
+                            highlights={baseConfigs.find(c => c.name === 'gear3')?.highlight || []}
+                            highlightTimings={timings.gear3.highlightAbsoluteTimes || []}
+                            baseDelay={0}
+                            highlightColors={gear3Config.color}
+                            style={{ margin: "0 2px" }}
+                        />
+                    }
                     icon="3"
                     x={420}
                     y={item3Y}

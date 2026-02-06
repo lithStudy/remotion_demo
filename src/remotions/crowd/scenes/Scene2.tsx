@@ -1,12 +1,13 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, interpolate, Audio, Sequence, staticFile } from "remotion";
-import { FadeInText, SpringText, HighlightText } from "../../../components";
+import { FadeInText, SpringText, AutoHighlightText } from "../../../components";
 import { useMemo } from "react";
 import {
     AnimationConfig,
     calculateAnimationTimings,
     calculateSceneDuration,
     applyAudioDurations,
+    applyHighlightDelays,
     type AudioMap,
 } from "../../../utils";
 import audioMapData from './audio-map.json';
@@ -28,18 +29,22 @@ const baseConfigs: AnimationConfig[] = [
     // 原理部分 (等待图形动画稍微进行一会儿) - 对应 "概念解析"
     { name: "conceptTitle", delayBefore: 0, delayAfter: 0, durationInFrames: 40, preName: "subtitle", audioId: "scene2_3" },
     // 添加正文朗读
-    { name: "principleText", delayBefore: 5, delayAfter: 0, durationInFrames: 1, preName: "conceptTitle", audioId: "scene2_4" },
-
-    // 原理部分的高亮 - 依赖 conceptTitle
-    { name: "highlight_disappear", delayBefore: 50, delayAfter: 0, durationInFrames: 20, preName: "conceptTitle" }, // 个性消失，智力下降
-    { name: "highlight_spirit", delayBefore: 80, delayAfter: 0, durationInFrames: 20, preName: "highlight_disappear" }, // 群体精神
-    { name: "highlight_impulsive", delayBefore: 20, delayAfter: 0, durationInFrames: 20, preName: "highlight_spirit" }, // 易怒、冲动
-    { name: "highlight_brainless", delayBefore: 30, delayAfter: 0, durationInFrames: 20, preName: "highlight_impulsive" }, // 没脑子...
-    { name: "highlight_bug", delayBefore: 90, delayAfter: 20, durationInFrames: 20, preName: "highlight_brainless" }, // 一群人是虫
+    {
+        name: "principleText", delayBefore: 5, delayAfter: 0, durationInFrames: 1, preName: "conceptTitle", audioId: "scene2_4",
+        highlight: [
+            "个性消失，智力下降",
+            "群体精神",
+            "易怒、冲动",
+            "没脑子，还觉得自己无所不能",
+            "一个人是龙，一群人是虫"
+        ]
+    },
 ];
 
 // 应用音频时长
-const animationConfigs = applyAudioDurations(baseConfigs, audioMap, 30);
+// 应用音频时长
+const configsWithAudio = applyAudioDurations(baseConfigs, audioMap, 30);
+const animationConfigs = applyHighlightDelays(configsWithAudio, audioMap, 30);
 
 export const calculateScene2Duration = (): number => {
     return calculateSceneDuration(baseConfigs, audioMapData as AudioMap);
@@ -290,7 +295,8 @@ const SCENE2_FADE_OUT_START = 20; // 结尾多少帧开始淡出，与下一景�
 export const Scene2: React.FC = () => {
     const frame = useCurrentFrame();
     const configsWithAudio = useMemo(() => applyAudioDurations(baseConfigs, audioMapData as AudioMap, 30), []);
-    const timings = useMemo(() => calculateAnimationTimings(configsWithAudio), [configsWithAudio]);
+    const configsWithHighlights = useMemo(() => applyHighlightDelays(configsWithAudio, audioMapData as AudioMap, 30), [configsWithAudio]);
+    const timings = useMemo(() => calculateAnimationTimings(configsWithHighlights), [configsWithHighlights]);
     const animationTimings = calculateAnimationTimings(animationConfigs);
     const sceneDuration = calculateScene2Duration();
 
@@ -495,52 +501,20 @@ export const Scene2: React.FC = () => {
                                         textShadow: "0 1px 6px rgba(0,0,0,0.4)",
                                     }}
                                 >
-                                    当个人融入群体，
-                                    <HighlightText
-                                        delay={timings.highlight_disappear.startTime}
-                                        durationInFrames={timings.highlight_disappear.durationInFrames}
-                                        highlightColor="rgba(49, 179, 240, 0.5)"
+                                    <AutoHighlightText
+                                        text={audioMap['scene2_4'].text}
+                                        highlights={baseConfigs.find(c => c.name === 'principleText')?.highlight || []}
+                                        highlightTimings={timings.principleText.highlightAbsoluteTimes || []}
+                                        baseDelay={0}
+                                        highlightColors={[
+                                            "rgba(49, 179, 240, 0.5)",
+                                            "rgba(248, 244, 15, 0.63)",
+                                            "rgba(220, 38, 38, 0.6)",
+                                            "rgba(14, 165, 233, 0.5)",
+                                            "rgba(255, 220, 150, 0.6)"
+                                        ]}
                                         style={{ margin: "0 2px" }}
-                                    >
-                                        个性消失，智力下降
-                                    </HighlightText>
-                                    ，取而代之的是「
-                                    <HighlightText
-                                        delay={timings.highlight_spirit.startTime}
-                                        durationInFrames={timings.highlight_spirit.durationInFrames}
-                                        highlightColor="rgba(248, 244, 15, 0.63)"
-                                        style={{ margin: "0 2px" }}
-                                    >
-                                        群体精神
-                                    </HighlightText>
-                                    」——
-                                    <HighlightText
-                                        delay={timings.highlight_impulsive.startTime}
-                                        durationInFrames={timings.highlight_impulsive.durationInFrames}
-                                        highlightColor="rgba(220, 38, 38, 0.6)"
-                                        style={{ margin: "0 2px" }}
-                                    >
-                                        易怒、冲动
-                                    </HighlightText>
-                                    ，不仅
-                                    <HighlightText
-                                        delay={timings.highlight_brainless.startTime}
-                                        durationInFrames={timings.highlight_brainless.durationInFrames}
-                                        highlightColor="rgba(14, 165, 233, 0.5)"
-                                        style={{ margin: "0 2px" }}
-                                    >
-                                        没脑子，还觉得自己无所不能
-                                    </HighlightText>
-                                    。简单说就是：
-                                    <HighlightText
-                                        delay={timings.highlight_bug.startTime}
-                                        durationInFrames={timings.highlight_bug.durationInFrames}
-                                        highlightColor="rgba(255, 220, 150, 0.6)"
-                                        style={{ margin: "0 2px" }}
-                                    >
-                                        一个人是龙，一群人是虫
-                                    </HighlightText>
-                                    。
+                                    />
                                 </div>
                             </div>
                         </div>

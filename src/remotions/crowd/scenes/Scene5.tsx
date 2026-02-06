@@ -1,11 +1,12 @@
 import React, { useMemo } from "react";
 import { AbsoluteFill, useCurrentFrame, interpolate, Audio, Sequence, staticFile } from "remotion";
-import { FadeInText, SpringText, HighlightText } from "../../../components";
+import { FadeInText, SpringText, AutoHighlightText } from "../../../components";
 import {
     AnimationConfig,
     calculateAnimationTimings,
     calculateSceneDuration,
     applyAudioDurations,
+    applyHighlightDelays,
     type AudioMap,
 } from "../../../utils";
 import audioMapData from './audio-map.json';
@@ -20,26 +21,24 @@ const baseConfigs: AnimationConfig[] = [
     // 表现部分 "表现"
     { name: "performance", delayBefore: 0, delayAfter: 0, durationInFrames: 15, preName: "subtitle", audioId: "scene5_3" },
     // 表现部分 "明明老板..."
-    { name: "performanceText", delayBefore: 0, delayAfter: 0, durationInFrames: 1, preName: "performance", audioId: "scene5_4" },
-
-    // 表现部分的高亮 - 依赖 performanceText (开始读表现正文时)
-    { name: "highlight_silence", delayBefore: 70, delayAfter: 0, durationInFrames: 20, preName: "performance" }, // 没人敢反对
-    { name: "highlight_follow", delayBefore: 50, delayAfter: 0, durationInFrames: 20, preName: "highlight_silence" }, // 别人没说话
-    { name: "highlight_hindsight", delayBefore: 100, delayAfter: 0, durationInFrames: 20, preName: "highlight_follow" }, // 马后炮
+    {
+        name: "performanceText", delayBefore: 0, delayAfter: 0, durationInFrames: 1, preName: "performance", audioId: "scene5_4",
+        highlight: ["没人敢反对", "别人没说话，我也不说", "其实我当时就觉得不行……"]
+    },
 
     // 原理部分 "原理" - 依赖 performanceText (第一段读完)
     { name: "principle", delayBefore: 0, delayAfter: 0, durationInFrames: 40, preName: "performanceText", audioId: "scene5_5" },
     // 原理部分 "群体扼杀..."
-    { name: "principleText", delayBefore: 0, delayAfter: 0, durationInFrames: 1, preName: "principle", audioId: "scene5_6" },
-
-    // 原理部分的高亮 - 依赖 principleText (开始读原理正文时)
-    { name: "highlight_suppress", delayBefore: 0, delayAfter: 0, durationInFrames: 20, preName: "principle" }, // 扼杀异议 (开头)
-    { name: "highlight_belonging", delayBefore: 50, delayAfter: 0, durationInFrames: 20, preName: "highlight_suppress" }, // 归属感
-    { name: "highlight_repress", delayBefore: 50, delayAfter: 60, durationInFrames: 10, preName: "highlight_belonging" }, // 压抑判断
+    {
+        name: "principleText", delayBefore: 0, delayAfter: 0, durationInFrames: 1, preName: "principle", audioId: "scene5_6",
+        highlight: ["群体扼杀异议", "获得群体的归属感", "压抑正确的判断"]
+    },
 ];
 
 // 应用音频时长
-const animationConfigs = applyAudioDurations(baseConfigs, audioMap, 30);
+// 应用音频时长
+const configsWithAudio = applyAudioDurations(baseConfigs, audioMap, 30);
+const animationConfigs = applyHighlightDelays(configsWithAudio, audioMap, 30);
 
 export const calculateScene5Duration = (): number => {
     return calculateSceneDuration(baseConfigs, audioMapData as AudioMap);
@@ -183,7 +182,8 @@ const PPT: React.FC<{ x: number; y: number; scale: number; frame: number }> = ({
 export const Scene5: React.FC = () => {
     const frame = useCurrentFrame();
     const configsWithAudio = useMemo(() => applyAudioDurations(baseConfigs, audioMapData as AudioMap, 30), []);
-    const timings = useMemo(() => calculateAnimationTimings(configsWithAudio), [configsWithAudio]);
+    const configsWithHighlights = useMemo(() => applyHighlightDelays(configsWithAudio, audioMapData as AudioMap, 30), [configsWithAudio]);
+    const timings = useMemo(() => calculateAnimationTimings(configsWithHighlights), [configsWithHighlights]);
     const animationTimings = calculateAnimationTimings(animationConfigs);
 
     // 场景入场
@@ -397,34 +397,14 @@ export const Scene5: React.FC = () => {
                                     textShadow: "0 1px 6px rgba(0,0,0,0.4)",
                                 }}
                             >
-                                明明老板的方案有大坑，但会议上
-                                <HighlightText
-                                    delay={timings.highlight_silence.startTime}
-                                    durationInFrames={timings.highlight_silence.durationInFrames}
-                                    highlightColor="rgba(220, 38, 38, 0.6)"
+                                <AutoHighlightText
+                                    text={audioMap['scene5_4'].text}
+                                    highlights={baseConfigs.find(c => c.name === 'performanceText')?.highlight || []}
+                                    highlightTimings={timings.performanceText.highlightAbsoluteTimes || []}
+                                    baseDelay={0}
+                                    highlightColors="rgba(220, 38, 38, 0.6)"
                                     style={{ margin: "0 2px" }}
-                                >
-                                    没人敢反对
-                                </HighlightText>
-                                。大家都在想：「
-                                <HighlightText
-                                    delay={timings.highlight_follow.startTime}
-                                    durationInFrames={timings.highlight_follow.durationInFrames}
-                                    highlightColor="rgba(220, 38, 38, 0.6)"
-                                    style={{ margin: "0 2px" }}
-                                >
-                                    别人没说话，我也不说
-                                </HighlightText>
-                                」。最后项目黄了，大家才说：「
-                                <HighlightText
-                                    delay={timings.highlight_hindsight.startTime}
-                                    durationInFrames={timings.highlight_hindsight.durationInFrames}
-                                    highlightColor="rgba(220, 38, 38, 0.6)"
-                                    style={{ margin: "0 2px" }}
-                                >
-                                    其实我当时就觉得不行……
-                                </HighlightText>
-                                」
+                                />
                             </div>
                         </div>
 
@@ -459,33 +439,18 @@ export const Scene5: React.FC = () => {
                                         textShadow: "0 1px 6px rgba(0,0,0,0.4)",
                                     }}
                                 >
-                                    <HighlightText
-                                        delay={timings.highlight_suppress.startTime}
-                                        durationInFrames={timings.highlight_suppress.durationInFrames}
-                                        highlightColor="rgba(49, 179, 240, 0.5)"
+                                    <AutoHighlightText
+                                        text={audioMap['scene5_6'].text}
+                                        highlights={baseConfigs.find(c => c.name === 'principleText')?.highlight || []}
+                                        highlightTimings={timings.principleText.highlightAbsoluteTimes || []}
+                                        baseDelay={0}
+                                        highlightColors={[
+                                            "rgba(49, 179, 240, 0.5)",
+                                            "rgba(248, 244, 15, 0.63)",
+                                            "rgba(14, 165, 233, 0.5)"
+                                        ]}
                                         style={{ margin: "0 2px" }}
-                                    >
-                                        群体扼杀异议
-                                    </HighlightText>
-                                    。为了
-                                    <HighlightText
-                                        delay={timings.highlight_belonging.startTime}
-                                        durationInFrames={timings.highlight_belonging.durationInFrames}
-                                        highlightColor="rgba(248, 244, 15, 0.63)"
-                                        style={{ margin: "0 2px" }}
-                                    >
-                                        获得群体的归属感
-                                    </HighlightText>
-                                    ，个人会本能地
-                                    <HighlightText
-                                        delay={timings.highlight_repress.startTime}
-                                        durationInFrames={timings.highlight_repress.durationInFrames}
-                                        highlightColor="rgba(14, 165, 233, 0.5)"
-                                        style={{ margin: "0 2px" }}
-                                    >
-                                        压抑正确的判断
-                                    </HighlightText>
-                                    。
+                                    />
                                 </div>
                             </div>
                         </div>

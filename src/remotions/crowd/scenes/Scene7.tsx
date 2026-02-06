@@ -1,11 +1,12 @@
 import React, { useMemo } from "react";
 import { AbsoluteFill, useCurrentFrame, interpolate, Audio, Sequence, staticFile } from "remotion";
-import { SpringText, HighlightText } from "../../../components/TextAnimations";
+import { SpringText, AutoHighlightText } from "../../../components";
 import {
     AnimationConfig,
     calculateAnimationTimings,
     calculateSceneDuration,
     applyAudioDurations,
+    applyHighlightDelays,
     type AudioMap,
 } from "../../../utils";
 import audioMapData from './audio-map.json';
@@ -19,24 +20,31 @@ const baseConfigs: AnimationConfig[] = [
 
     // Item 1
     { name: "item1", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "title", audioId: "scene7_2" }, // Title: 让子弹飞
-    { name: "item1_content", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "item1", audioId: "scene7_3" }, // Content: 遇到热点...
-    { name: "highlight_delay3Hours", delayBefore: 30, delayAfter: 0, durationInFrames: 20, preName: "item1" },
-    { name: "highlight_highIQ", delayBefore: 90, delayAfter: 0, durationInFrames: 20, preName: "highlight_delay3Hours" },
+    {
+        name: "item1_content", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "item1", audioId: "scene7_3",
+        highlight: ["延迟3小时再表态", "智商才能占领高地"]
+    },
 
     // Item 2
     { name: "item2", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "item1_content", audioId: "scene7_4" }, // Title: 警惕绝对化
-    { name: "item2_content", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "item2", audioId: "scene7_5" }, // Content: 听到...
-    { name: "highlight_absoluteWords", delayBefore: 15, delayAfter: 0, durationInFrames: 20, preName: "item2" },
+    {
+        name: "item2_content", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "item2", audioId: "scene7_5",
+        highlight: ["肯定、绝对、全是、必须"]
+    },
 
     // Item 3
     { name: "item3", delayBefore: 0, delayAfter: 0, durationInFrames: 30, preName: "item2_content", audioId: "scene7_6" }, // Title: 寻找反对
-    { name: "item3_content", delayBefore: 10, delayAfter: 0, durationInFrames: 30, preName: "item3", audioId: "scene7_7" }, // Content: 刻意去听...
-    { name: "highlight_listenBothSides", delayBefore: 80, delayAfter: 0, durationInFrames: 20, preName: "item3" },
+    {
+        name: "item3_content", delayBefore: 10, delayAfter: 0, durationInFrames: 30, preName: "item3", audioId: "scene7_7",
+        highlight: ["兼听则明，偏信则暗"]
+    },
 
 ];
 
 // 应用音频时长
-const animationConfigs = applyAudioDurations(baseConfigs, audioMap, 30);
+// 应用音频时长
+const configsWithAudio = applyAudioDurations(baseConfigs, audioMap, 30);
+const animationConfigs = applyHighlightDelays(configsWithAudio, audioMap, 30);
 
 export const calculateScene7Duration = (): number => {
     return calculateSceneDuration(baseConfigs, audioMapData as AudioMap);
@@ -218,7 +226,8 @@ const StrategyItem: React.FC<{
 export const Scene7: React.FC = () => {
     const frame = useCurrentFrame();
     const configsWithAudio = useMemo(() => applyAudioDurations(baseConfigs, audioMapData as AudioMap, 30), []);
-    const timings = useMemo(() => calculateAnimationTimings(configsWithAudio), [configsWithAudio]);
+    const configsWithHighlights = useMemo(() => applyHighlightDelays(configsWithAudio, audioMapData as AudioMap, 30), [configsWithAudio]);
+    const timings = useMemo(() => calculateAnimationTimings(configsWithHighlights), [configsWithHighlights]);
     const animationTimings = calculateAnimationTimings(animationConfigs);
 
     // 盾牌人出现
@@ -319,27 +328,14 @@ export const Scene7: React.FC = () => {
                     index={0}
                     title="让子弹飞一会儿"
                     content={
-                        <>
-                            遇到热点事件，
-                            <HighlightText
-                                delay={timings.highlight_delay3Hours.startTime}
-                                durationInFrames={20}
-                                highlightColor="rgba(52, 211, 153, 0.5)"
-                                style={{ margin: "0 2px" }}
-                            >
-                                延迟3小时再表态
-                            </HighlightText>
-                            。情绪退去，
-                            <HighlightText
-                                delay={timings.highlight_highIQ.startTime}
-                                durationInFrames={20}
-                                highlightColor="rgba(52, 211, 153, 0.5)"
-                                style={{ margin: "0 2px" }}
-                            >
-                                智商才能占领高地
-                            </HighlightText>
-                            。
-                        </>
+                        <AutoHighlightText
+                            text={audioMap['scene7_3'].text}
+                            highlights={baseConfigs.find(c => c.name === 'item1_content')?.highlight || []}
+                            highlightTimings={timings.item1_content.highlightAbsoluteTimes || []}
+                            baseDelay={0}
+                            highlightColors="rgba(52, 211, 153, 0.5)"
+                            style={{ margin: "0 2px" }}
+                        />
                     }
                     delay={timings.item1.startTime}
                     frame={frame}
@@ -348,18 +344,14 @@ export const Scene7: React.FC = () => {
                     index={1}
                     title="警惕“绝对化”词汇"
                     content={
-                        <>
-                            当你听到“
-                            <HighlightText
-                                delay={timings.highlight_absoluteWords.startTime}
-                                durationInFrames={20}
-                                highlightColor="rgba(239, 68, 68, 0.5)"
-                                style={{ margin: "0 2px" }}
-                            >
-                                肯定、绝对、全是、必须
-                            </HighlightText>
-                            ”这些词时，警铃要大作。
-                        </>
+                        <AutoHighlightText
+                            text={audioMap['scene7_5'].text}
+                            highlights={baseConfigs.find(c => c.name === 'item2_content')?.highlight || []}
+                            highlightTimings={timings.item2_content.highlightAbsoluteTimes || []}
+                            baseDelay={0}
+                            highlightColors="rgba(239, 68, 68, 0.5)"
+                            style={{ margin: "0 2px" }}
+                        />
                     }
                     delay={timings.item2.startTime}
                     frame={frame}
@@ -368,18 +360,14 @@ export const Scene7: React.FC = () => {
                     index={2}
                     title="寻找反对声音"
                     content={
-                        <>
-                            刻意去听不同的观点。
-                            <HighlightText
-                                delay={timings.highlight_listenBothSides.startTime}
-                                durationInFrames={20}
-                                highlightColor="rgba(52, 211, 153, 0.5)"
-                                style={{ margin: "0 2px" }}
-                            >
-                                兼听则明，偏信则暗
-                            </HighlightText>
-                            。
-                        </>
+                        <AutoHighlightText
+                            text={audioMap['scene7_7'].text}
+                            highlights={baseConfigs.find(c => c.name === 'item3_content')?.highlight || []}
+                            highlightTimings={timings.item3_content.highlightAbsoluteTimes || []}
+                            baseDelay={0}
+                            highlightColors="rgba(52, 211, 153, 0.5)"
+                            style={{ margin: "0 2px" }}
+                        />
                     }
                     delay={timings.item3.startTime}
                     frame={frame}

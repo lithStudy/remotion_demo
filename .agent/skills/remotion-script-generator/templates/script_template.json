@@ -99,6 +99,20 @@
                                 "audioDuration": {
                                     "type": "number",
                                     "description": "音频时长（秒），由generate_audio.py填充"
+                                },
+                                "highlight": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "description": "需要高亮显示的文字片段列表"
+                                },
+                                "highlightDelays": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "number"
+                                    },
+                                    "description": "高亮显示相对于音频开始的时间延迟（秒），由脚本主要自动计算"
                                 }
                             }
                         }

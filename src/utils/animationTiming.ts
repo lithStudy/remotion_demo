@@ -17,6 +17,29 @@ export interface AnimationConfig {
      * 如果提供，将从 audio-map.json 读取实际时长并覆盖 durationInFrames
      */
     audioId?: string;
+    /**
+     * 可选：高亮引用，用于自动计算 delayBefore
+     */
+    highlightRef?: HighlightReference;
+    /**
+     * 可选：高亮文字列表，用于配置音频节点的文字片段
+     */
+    highlight?: string[];
+    /**
+     * [Runtime Calculated] 高亮延迟帧数（相对动画开始）
+     * 由 applyHighlightDelays 计算并填充
+     */
+    highlightDelays?: number[];
+}
+
+/**
+ * 高亮引用接口
+ */
+export interface HighlightReference {
+    /** 关联的音频 ID (e.g. "scene3_4") */
+    audioId: string;
+    /** 高亮索引 */
+    index: number;
 }
 
 /**
@@ -35,6 +58,8 @@ export interface AnimationTimingInfo {
     durationInFrames: number;
     /** 前一个动画的名称，null 表示这是第一个动画 */
     preName: string | null;
+    /** 高亮绝对时间（帧数）列表 */
+    highlightAbsoluteTimes?: number[];
 }
 
 /**
@@ -90,7 +115,7 @@ export const calculateAnimationTimings = (
             // 第一个动画，从0开始
             startTime = config.delayBefore;
             // 添加日志
-            console.log(`[calculateAnimationTimings] Calculating start time for: ${config.name}, delayBefore: ${startTime}`);
+            // console.log(`[calculateAnimationTimings] Calculating start time for: ${config.name}, delayBefore: ${startTime}`);
         } else {
             // 找到前一个动画的配置
             const preConfig = configMap.get(config.preName);
@@ -108,7 +133,13 @@ export const calculateAnimationTimings = (
 
             // 当前动画的起始时间 = 前一个动画的结束时间 + delayBefore
             startTime = preEndTime + config.delayBefore;
-            console.log(`[calculateAnimationTimings] Calculating start time for: ${config.name}, delayBefore: ${startTime}`);
+            // console.log(`[calculateAnimationTimings] Calculating start time for: ${config.name}, delayBefore: ${startTime}`);
+        }
+
+        // 计算高亮绝对时间
+        let highlightAbsoluteTimes: number[] | undefined;
+        if (config.highlightDelays) {
+            highlightAbsoluteTimes = config.highlightDelays.map(delay => startTime + delay);
         }
 
         // 返回包含起始时间和完整配置的对象
@@ -119,6 +150,7 @@ export const calculateAnimationTimings = (
             delayAfter: config.delayAfter,
             durationInFrames: config.durationInFrames,
             preName: config.preName,
+            highlightAbsoluteTimes,
         };
     });
 
@@ -233,4 +265,113 @@ export const calculateSceneDuration = (
     });
 
     return maxDuration;
+};
+
+/**
+ * 应用高亮延迟 (支持直接计算)
+ * 遍历配置，对于包含 highlight 字段的配置，计算高亮词相对于该动画/音频开始的时间延迟（帧数）
+ * 并填充到 highlightDelays 字段中
+ * 
+ * 同时保留对 highlightRef 的支持（如果仍有旧代码使用），但主要通过 highlight 本身来驱动
+ * 
+ * @param configs 动画配置数组
+ * @param audioMap 音频映射对象
+ * @param fps 帧率
+ * @returns 更新后的配置数组
+ */
+export const applyHighlightDelays = (
+    configs: AnimationConfig[],
+    audioMap: AudioMap,
+    fps: number = 30
+): AnimationConfig[] => {
+    // 创建查找表以便快速获取配置 (用于 highlightRef 处理)
+    const configMap = new Map(configs.map(c => [c.name, c]));
+
+    // 查找包含 highlights 的配置，建立 audioId -> highlights 映射
+    const highlightsMap = new Map<string, string[]>();
+    configs.forEach(c => {
+        if (c.audioId && c.highlight) {
+            highlightsMap.set(c.audioId, c.highlight);
+        }
+    });
+
+    return configs.map(config => {
+        let newConfig = { ...config };
+
+        // 1. 处理本节点定义的 highlight 列表，计算相对延迟
+        if (config.audioId && config.highlight && audioMap[config.audioId]) {
+            const audioEntry = audioMap[config.audioId];
+            const fullText = audioEntry.text;
+            const audioDuration = audioEntry.duration;
+            const highlightDelays: number[] = [];
+
+            let searchIndex = 0;
+
+            config.highlight.forEach((word, idx) => {
+                const foundIndex = fullText.indexOf(word, searchIndex);
+                if (foundIndex !== -1) {
+                    const delaySeconds = (foundIndex / fullText.length) * audioDuration;
+                    const delayFrames = Math.round(delaySeconds * fps);
+                    highlightDelays.push(delayFrames);
+                    searchIndex = foundIndex + 1;
+                    console.log(`[applyHighlightDelays] ${config.name}: Generated delay for "${word}" -> ${delaySeconds.toFixed(3)}s (${delayFrames}f)`);
+                } else {
+                    console.warn(`[applyHighlightDelays] Warning: Highlight word "${word}" not found in text for ${config.name}`);
+                    highlightDelays.push(0); // 找不到则默认0
+                }
+            });
+
+            newConfig.highlightDelays = highlightDelays;
+        }
+
+        // 2. 兼容处理 highlightRef (如果有节点仍在使用独立配置)
+        if (config.highlightRef) {
+            const { audioId, index } = config.highlightRef;
+
+            // 必须有 preName 才能计算相对延迟
+            if (!config.preName) {
+                return newConfig;
+            }
+
+            const preConfig = configMap.get(config.preName);
+            if (!preConfig) {
+                return newConfig;
+            }
+
+            // 计算高亮时间
+            let highlightDelaySeconds = 0;
+            const audioEntry = audioMap[audioId];
+            const highlights = highlightsMap.get(audioId);
+
+            if (audioEntry && highlights && highlights[index]) {
+                const fullText = audioEntry.text;
+                // const targetWord = highlights[index]; // unused
+                const audioDuration = audioEntry.duration;
+
+                let searchIndex = 0;
+                let foundIndex = -1;
+
+                for (let i = 0; i <= index; i++) {
+                    const word = highlights[i];
+                    foundIndex = fullText.indexOf(word, searchIndex);
+                    if (foundIndex !== -1) {
+                        searchIndex = foundIndex + 1;
+                    } else {
+                        break;
+                    }
+                }
+
+                if (foundIndex !== -1) {
+                    highlightDelaySeconds = (foundIndex / fullText.length) * audioDuration;
+                }
+            }
+
+            const highlightDelayFrames = Math.round(highlightDelaySeconds * fps);
+            const delayBefore = highlightDelayFrames - preConfig.durationInFrames - preConfig.delayAfter;
+
+            newConfig.delayBefore = delayBefore;
+        }
+
+        return newConfig;
+    });
 };

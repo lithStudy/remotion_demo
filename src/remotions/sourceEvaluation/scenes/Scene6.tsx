@@ -116,7 +116,7 @@ export const Scene6: React.FC = () => {
                         delay={animationTimings.point1.startTime}
                         durationInFrames={animationTimings.point1.durationInFrames - 30}
                     >
-                        ✅ 在相信之前，先问<HighlightText delay={animationTimings.point1.startTime + 20} highlightColor="rgba(99, 179, 237, 0.3)">"谁在说话"</HighlightText>
+                        ✅ 在相信之前，先问<HighlightText delay={animationTimings.point1.startTime + 20} highlightColor="rgba(99, 179, 237, 0.3)">'谁在说话'</HighlightText>
                     </TypewriterContent>
                 </FadeInText>
             </div>

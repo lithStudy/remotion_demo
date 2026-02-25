@@ -137,7 +137,7 @@ export const Scene4: React.FC = () => {
                 >
                     <div style={{ fontWeight: "bold", marginBottom: 10, color: "#38A169" }}>🛡️ 识别</div>
                     <TypewriterText
-                        text=""他的收益和我的行为有关系吗？""
+                        text="'他的收益和我的行为有关系吗？'"
                         delay={animationTimings.strategy.startTime + 15}
                         durationInFrames={animationTimings.strategy.durationInFrames - 40}
                     />

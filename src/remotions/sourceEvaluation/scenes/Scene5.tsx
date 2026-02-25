@@ -158,7 +158,7 @@ export const Scene5: React.FC = () => {
                 >
                     <div style={{ fontWeight: "bold", marginBottom: 10, color: "#38A169" }}>🛡️ 识别</div>
                     <TypewriterText
-                        text=""这条信息来自哪里？""
+                        text="'这条信息来自哪里？'"
                         delay={animationTimings.strategy.startTime + 15}
                         durationInFrames={animationTimings.strategy.durationInFrames - 40}
                     />

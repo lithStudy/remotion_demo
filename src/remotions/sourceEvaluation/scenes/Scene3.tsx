@@ -126,7 +126,7 @@ export const Scene3: React.FC = () => {
                 >
                     <div style={{ fontWeight: "bold", marginBottom: 10, color: "#E53E3E" }}>🔍 剖析</div>
                     <TypewriterText
-                        text=""某某养生堂"是什么？作者是医生吗？"
+                        text="'某某养生堂'是什么？作者是医生吗？"
                         delay={animationTimings.analysis.startTime + 15}
                         durationInFrames={animationTimings.analysis.durationInFrames - 40}
                     />
@@ -148,7 +148,7 @@ export const Scene3: React.FC = () => {
                 >
                     <div style={{ fontWeight: "bold", marginBottom: 10, color: "#38A169" }}>🛡️ 识别</div>
                     <TypewriterText
-                        text=""我先去查查这个'专家'是否真的存在。""
+                        text="'我先去查查这个专家是否真的存在。'"
                         delay={animationTimings.strategy.startTime + 15}
                         durationInFrames={animationTimings.strategy.durationInFrames - 40}
                     />

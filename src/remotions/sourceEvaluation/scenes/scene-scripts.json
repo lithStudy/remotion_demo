@@ -1,0 +1,212 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "topic": "批判性思维01 - 信息源评估",
+  "generatedAt": "2026-02-25T00:00:00Z",
+  "fps": 30,
+  "scenes": [
+    {
+      "sceneId": "scene1",
+      "sceneName": "开场：信息源评估",
+      "items": [
+        {
+          "order": 1,
+          "type": "主标题",
+          "text": "批判性思维01：信息源评估",
+          "audioDuration": 3.648,
+          "durationInFrames": 109,
+          "audioFile": "/audio/sourceEvaluation/scene1/01_主标题.mp3"
+        },
+        {
+          "order": 2,
+          "type": "副标题",
+          "text": "谁在说话比说了什么更重要",
+          "audioDuration": 3.384,
+          "durationInFrames": 102,
+          "audioFile": "/audio/sourceEvaluation/scene1/02_副标题.mp3"
+        },
+        {
+          "order": 3,
+          "type": "正文",
+          "text": "典型陷阱：据网友爆料、有人说、震惊！专家称",
+          "audioDuration": 6.312,
+          "durationInFrames": 189,
+          "audioFile": "/audio/sourceEvaluation/scene1/03_正文.mp3"
+        }
+      ]
+    },
+    {
+      "sceneId": "scene2",
+      "sceneName": "总策略：信源三问法",
+      "items": [
+        {
+          "order": 1,
+          "type": "标题",
+          "text": "总策略：信源三问法",
+          "audioDuration": 3.288,
+          "durationInFrames": 99,
+          "audioFile": "/audio/sourceEvaluation/scene2/01_标题.mp3"
+        },
+        {
+          "order": 2,
+          "type": "策略内容",
+          "text": "第一问：作者是谁？有什么专业背景？",
+          "audioDuration": 4.584,
+          "durationInFrames": 138,
+          "audioFile": "/audio/sourceEvaluation/scene2/02_策略内容.mp3"
+        },
+        {
+          "order": 3,
+          "type": "策略内容",
+          "text": "第二问：平台是什么？有编辑审核吗？",
+          "audioDuration": 4.656,
+          "durationInFrames": 140,
+          "audioFile": "/audio/sourceEvaluation/scene2/03_策略内容.mp3"
+        },
+        {
+          "order": 4,
+          "type": "策略内容",
+          "text": "第三问：利益关系？他从这条信息中获利吗？",
+          "audioDuration": 4.992,
+          "durationInFrames": 150,
+          "audioFile": "/audio/sourceEvaluation/scene2/04_策略内容.mp3"
+        },
+        {
+          "order": 5,
+          "type": "名言",
+          "text": "万能金句：匿名信息、自媒体、有利益关系的说法，三重警惕。",
+          "audioDuration": 6.576,
+          "durationInFrames": 197,
+          "audioFile": "/audio/sourceEvaluation/scene2/05_名言.mp3"
+        }
+      ]
+    },
+    {
+      "sceneId": "scene3",
+      "sceneName": "案例一：伪科学传播",
+      "items": [
+        {
+          "order": 1,
+          "type": "标题",
+          "text": "案例一：伪科学传播",
+          "audioDuration": 2.952,
+          "durationInFrames": 89,
+          "audioFile": "/audio/sourceEvaluation/scene3/01_标题.mp3"
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": "剖析：某某养生堂是什么？作者是医生吗？",
+          "audioDuration": 4.992,
+          "durationInFrames": 150,
+          "audioFile": "/audio/sourceEvaluation/scene3/02_正文.mp3"
+        },
+        {
+          "order": 3,
+          "type": "策略内容",
+          "text": "识别：我先去查查这个专家是否真的存在。",
+          "audioDuration": 4.68,
+          "durationInFrames": 140,
+          "audioFile": "/audio/sourceEvaluation/scene3/03_策略内容.mp3"
+        }
+      ]
+    },
+    {
+      "sceneId": "scene4",
+      "sceneName": "案例二：利益冲突",
+      "items": [
+        {
+          "order": 1,
+          "type": "标题",
+          "text": "案例二：利益冲突",
+          "audioDuration": 2.784,
+          "durationInFrames": 84,
+          "audioFile": "/audio/sourceEvaluation/scene4/01_标题.mp3"
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": "剖析：推荐者自己持有该股票。",
+          "audioDuration": 3.744,
+          "durationInFrames": 112,
+          "audioFile": "/audio/sourceEvaluation/scene4/02_正文.mp3"
+        },
+        {
+          "order": 3,
+          "type": "策略内容",
+          "text": "识别：他的收益和我的行为有关系吗？",
+          "audioDuration": 4.512,
+          "durationInFrames": 135,
+          "audioFile": "/audio/sourceEvaluation/scene4/03_策略内容.mp3"
+        }
+      ]
+    },
+    {
+      "sceneId": "scene5",
+      "sceneName": "案例三：平台差异",
+      "items": [
+        {
+          "order": 1,
+          "type": "标题",
+          "text": "案例三：平台差异",
+          "audioDuration": 2.712,
+          "durationInFrames": 81,
+          "audioFile": "/audio/sourceEvaluation/scene5/01_标题.mp3"
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": "剖析：正规媒体有法律责任；自媒体零门槛。",
+          "audioDuration": 5.112,
+          "durationInFrames": 153,
+          "audioFile": "/audio/sourceEvaluation/scene5/02_正文.mp3"
+        },
+        {
+          "order": 3,
+          "type": "策略内容",
+          "text": "识别：这条信息来自哪里？",
+          "audioDuration": 3.36,
+          "durationInFrames": 101,
+          "audioFile": "/audio/sourceEvaluation/scene5/03_策略内容.mp3"
+        }
+      ]
+    },
+    {
+      "sceneId": "scene6",
+      "sceneName": "本期总结",
+      "items": [
+        {
+          "order": 1,
+          "type": "标题",
+          "text": "本期总结",
+          "audioDuration": 1.968,
+          "durationInFrames": 59,
+          "audioFile": "/audio/sourceEvaluation/scene6/01_标题.mp3"
+        },
+        {
+          "order": 2,
+          "type": "结语",
+          "text": "在相信之前，先问谁在说话。",
+          "audioDuration": 3.504,
+          "durationInFrames": 105,
+          "audioFile": "/audio/sourceEvaluation/scene6/02_结语.mp3"
+        },
+        {
+          "order": 3,
+          "type": "结语",
+          "text": "检查作者资质、平台审核、利益关系。",
+          "audioDuration": 4.44,
+          "durationInFrames": 133,
+          "audioFile": "/audio/sourceEvaluation/scene6/03_结语.mp3"
+        },
+        {
+          "order": 4,
+          "type": "结语",
+          "text": "匿名爆料要打折扣。",
+          "audioDuration": 2.544,
+          "durationInFrames": 76,
+          "audioFile": "/audio/sourceEvaluation/scene6/04_结语.mp3"
+        }
+      ]
+    }
+  ]
+}

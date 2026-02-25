@@ -4,7 +4,7 @@ import { Demo as StrawManFallacy, DemoSchema as StrawManFallacySchema, TOTAL_DUR
 import { Crowd, CrowdSchema, TOTAL_DURATION_CROWD } from "./remotions/crowd/Crowd";
 import { ConfirmationBias, ConfirmationBiasSchema, TOTAL_DURATION_CONFIRMATION_BIAS } from "./remotions/confirmationBias/ConfirmationBias";
 import { ScienceIntro, ScienceIntroSchema, TOTAL_DURATION_SCIENCE_INTRO } from "./remotions/scienceIntro/ScienceIntro";
-import { Vocation, VocationSchema, TOTAL_DURATION_VOCATION } from "./remotions/vocation/Vocation";
+import { SourceEvaluation, SourceEvaluationSchema, TOTAL_DURATION_SOURCE_EVALUATION } from "./remotions/sourceEvaluation/SourceEvaluation";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -63,6 +63,17 @@ export const RemotionRoot: React.FC = () => {
       />
 
 
+      {/* 批判性思维01：信息源评估 */}
+      <Composition
+        id="SourceEvaluation"
+        component={SourceEvaluation}
+        durationInFrames={TOTAL_DURATION_SOURCE_EVALUATION}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={SourceEvaluationSchema}
+        defaultProps={{}}
+      />
     </>
   );
 };

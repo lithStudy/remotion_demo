@@ -1,7 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Sequence, Audio, staticFile, useCurrentFrame, interpolate } from "remotion";
 import {
-    TypewriterText,
     FadeInText,
     HighlightText,
 } from "../../../components";
@@ -84,11 +83,7 @@ const QuestionCard: React.FC<{
                 }}>
                     {number}
                 </span>
-                <TypewriterText
-                    text={text}
-                    delay={delay}
-                    durationInFrames={80}
-                />
+                <span>{text}</span>
             </FadeInText>
         </div>
     );

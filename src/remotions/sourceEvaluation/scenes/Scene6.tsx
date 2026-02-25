@@ -1,7 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Sequence, Audio, staticFile, useCurrentFrame, interpolate } from "remotion";
 import {
-    TypewriterContent,
     FadeInText,
     HighlightText,
 } from "../../../components";
@@ -112,12 +111,7 @@ export const Scene6: React.FC = () => {
                         lineHeight: 1.6,
                     }}
                 >
-                    <TypewriterContent
-                        delay={animationTimings.point1.startTime}
-                        durationInFrames={animationTimings.point1.durationInFrames - 30}
-                    >
-                        ✅ 在相信之前，先问<HighlightText delay={animationTimings.point1.startTime + 20} highlightColor="rgba(99, 179, 237, 0.3)">'谁在说话'</HighlightText>
-                    </TypewriterContent>
+                    ✅ 在相信之前，先问<HighlightText delay={animationTimings.point1.startTime + 20} highlightColor="rgba(99, 179, 237, 0.3)">'谁在说话'</HighlightText>
                 </FadeInText>
             </div>
 
@@ -133,12 +127,7 @@ export const Scene6: React.FC = () => {
                         lineHeight: 1.6,
                     }}
                 >
-                    <TypewriterContent
-                        delay={animationTimings.point2.startTime}
-                        durationInFrames={animationTimings.point2.durationInFrames - 30}
-                    >
-                        ✅ 检查<HighlightText delay={animationTimings.point2.startTime + 15} highlightColor="rgba(246, 224, 94, 0.2)">作者资质</HighlightText>、<HighlightText delay={animationTimings.point2.startTime + 40} highlightColor="rgba(246, 224, 94, 0.2)">平台审核</HighlightText>、<HighlightText delay={animationTimings.point2.startTime + 65} highlightColor="rgba(246, 224, 94, 0.2)">利益关系</HighlightText>
-                    </TypewriterContent>
+                    ✅ 检查<HighlightText delay={animationTimings.point2.startTime + 15} highlightColor="rgba(246, 224, 94, 0.2)">作者资质</HighlightText>、<HighlightText delay={animationTimings.point2.startTime + 40} highlightColor="rgba(246, 224, 94, 0.2)">平台审核</HighlightText>、<HighlightText delay={animationTimings.point2.startTime + 65} highlightColor="rgba(246, 224, 94, 0.2)">利益关系</HighlightText>
                 </FadeInText>
             </div>
 
@@ -152,12 +141,7 @@ export const Scene6: React.FC = () => {
                         lineHeight: 1.6,
                     }}
                 >
-                    <TypewriterContent
-                        delay={animationTimings.point3.startTime}
-                        durationInFrames={animationTimings.point3.durationInFrames - 30}
-                    >
-                        ✅ <HighlightText delay={animationTimings.point3.startTime + 15} highlightColor="rgba(252, 129, 129, 0.3)">匿名爆料</HighlightText>要打折扣
-                    </TypewriterContent>
+                    ✅ <HighlightText delay={animationTimings.point3.startTime + 15} highlightColor="rgba(252, 129, 129, 0.3)">匿名爆料</HighlightText>要打折扣
                 </FadeInText>
             </div>
 

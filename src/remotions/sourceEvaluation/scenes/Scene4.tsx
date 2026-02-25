@@ -1,7 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Sequence, Audio, staticFile, useCurrentFrame, interpolate } from "remotion";
 import {
-    TypewriterText,
     FadeInText,
     HighlightText,
 } from "../../../components";
@@ -114,11 +113,7 @@ export const Scene4: React.FC = () => {
                     }}
                 >
                     <div style={{ fontWeight: "bold", marginBottom: 10, color: "#D69E2E" }}>🔍 剖析</div>
-                    <TypewriterText
-                        text="推荐者自己持有该股票。"
-                        delay={animationTimings.analysis.startTime + 15}
-                        durationInFrames={animationTimings.analysis.durationInFrames - 40}
-                    />
+                    <span>推荐者自己持有该股票。</span>
                 </FadeInText>
             </div>
 
@@ -136,11 +131,7 @@ export const Scene4: React.FC = () => {
                     }}
                 >
                     <div style={{ fontWeight: "bold", marginBottom: 10, color: "#38A169" }}>🛡️ 识别</div>
-                    <TypewriterText
-                        text="'他的收益和我的行为有关系吗？'"
-                        delay={animationTimings.strategy.startTime + 15}
-                        durationInFrames={animationTimings.strategy.durationInFrames - 40}
-                    />
+                    <span>'他的收益和我的行为有关系吗？'</span>
                 </FadeInText>
             </div>
 

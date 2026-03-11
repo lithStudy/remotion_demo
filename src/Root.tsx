@@ -5,6 +5,7 @@ import { Crowd, CrowdSchema, TOTAL_DURATION_CROWD } from "./remotions/crowd/Crow
 import { ConfirmationBias, ConfirmationBiasSchema, TOTAL_DURATION_CONFIRMATION_BIAS } from "./remotions/confirmationBias/ConfirmationBias";
 import { ScienceIntro, ScienceIntroSchema, TOTAL_DURATION_SCIENCE_INTRO } from "./remotions/scienceIntro/ScienceIntro";
 import { Vocation, VocationSchema, TOTAL_DURATION_VOCATION } from "./remotions/vocation/Vocation";
+import { MyVideo, MyVideoSchema, TOTAL_DURATION_MY_VIDEO } from "./remotions/my_video/MyVideo";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -63,6 +64,18 @@ export const RemotionRoot: React.FC = () => {
       />
 
 
+    
+      {/* MyVideo - 自动生成 */}
+      <Composition
+        id="MyVideo"
+        component={MyVideo}
+        durationInFrames={TOTAL_DURATION_MY_VIDEO}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={MyVideoSchema}
+        defaultProps={{}}
+      />
     </>
   );
 };

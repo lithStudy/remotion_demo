@@ -165,6 +165,7 @@ export interface AudioMapEntry {
     file: string;
     sceneId: string;
     order: number;
+    subOrder?: number;
     type: string;
     text: string;
 }

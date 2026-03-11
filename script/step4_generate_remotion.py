@@ -98,65 +98,69 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
     # 过滤可读条目
     readable = [it for it in items if "不读" not in it.get("note", "")]
 
-    # 生成 baseConfigs
+    # 生成 baseConfigs, texts, audios, imgs
     config_entries = []
-    for idx, item in enumerate(readable):
-        pre = "null" if idx == 0 else f'"{scene_id}_{readable[idx-1]["order"]}"'
-        delay_before = 8 if idx == 0 else 3
-        delay_after = 20 if idx == len(readable) - 1 else 0
-        config_entries.append(
-            f'    {{ name: "{scene_id}_{item["order"]}", delayBefore: {delay_before}, '
-            f'delayAfter: {delay_after}, durationInFrames: 60, '
-            f'preName: {pre}, audioId: "{scene_id}_{item["order"]}" }}'
-        )
-
-    configs_str = ",\n".join(config_entries)
-
-    # 生成文本渲染代码
     text_renders = []
-    for item in readable:
-        key = f'{scene_id}_{item["order"]}'
-        style = _get_text_style(item["type"])
-        text_renders.append(f'''
-            {{/* [{item["order"]}] {item["type"]} */}}
+    audio_renders = []
+    image_renders = []
+
+    last_key = "null"
+
+    for idx, item in enumerate(readable):
+        texts = item.get("text", [])
+        if isinstance(texts, str):
+            texts = [texts]
+
+        for sub_idx, sub_text in enumerate(texts):
+            key = f'{scene_id}_{item["order"]}_{sub_idx}'
+            
+            pre = last_key
+            delay_before = 8 if (idx == 0 and sub_idx == 0) else 3
+            delay_after = 20 if (idx == len(readable) - 1 and sub_idx == len(texts) - 1) else 0
+
+            config_entries.append(
+                f'    {{ name: "{key}", delayBefore: {delay_before}, '
+                f'delayAfter: {delay_after}, durationInFrames: 60, '
+                f'preName: {pre}, audioId: "{key}" }}'
+            )
+            
+            style = _get_text_style(item["type"])
+            text_renders.append(f'''
+            {{/* [{item["order"]}-{sub_idx}] {item["type"]} */}}
             <Sequence from={{timings["{key}"].startTime}} durationInFrames={{timings["{key}"].durationInFrames + 30}}>
                 <FadeInText delay={{0}}>
-                    <div style={{{style}}}>{_escape_jsx(item["text"])}</div>
+                    <div style={{{style}}}>{_escape_jsx(sub_text)}</div>
                 </FadeInText>
             </Sequence>''')
 
-    text_renders_str = "\n".join(text_renders)
-
-    # 生成音频渲染代码
-    audio_renders = []
-    for item in readable:
-        key = f'{scene_id}_{item["order"]}'
-        audio_renders.append(f'''
+            audio_renders.append(f'''
             {{audioMap["{key}"] && (
                 <Sequence from={{timings["{key}"].startTime}} durationInFrames={{timings["{key}"].durationInFrames}}>
                     <Audio src={{staticFile(audioMap["{key}"].file)}} />
                 </Sequence>
             )}}''')
 
-    audio_renders_str = "\n".join(audio_renders)
-    # 生成配图渲染代码
-    image_renders = []
-    for item in readable:
-        key = f'{scene_id}_{item["order"]}'
+            last_key = f'"{key}"'
+
+        # image render: one image spans the duration of all its text parts
+        first_key = f'{scene_id}_{item["order"]}_0'
         file_path = f"images/{name}/{scene_id}_{item['order']}.png"
         image_renders.append(f'''
             {{/* 配图 [{item["order"]}] */}}
-            <Sequence from={{timings["{key}"].startTime}}>
+            <Sequence from={{timings["{first_key}"].startTime}}>
                 <Img
                     src={{staticFile("{file_path}")}}
                     style={{{{
                         position: "absolute",
                         width: "100%", height: "100%", objectFit: "cover",
-                        opacity: interpolate(frame, [timings["{key}"].startTime, timings["{key}"].startTime + 15], [0, 1], {{ extrapolateRight: "clamp", extrapolateLeft: "clamp" }}),
+                        opacity: interpolate(frame, [timings["{first_key}"].startTime, timings["{first_key}"].startTime + 15], [0, 1], {{ extrapolateRight: "clamp", extrapolateLeft: "clamp" }}),
                     }}}}
                 />
             </Sequence>''')
 
+    configs_str = ",\n".join(config_entries)
+    text_renders_str = "\n".join(text_renders)
+    audio_renders_str = "\n".join(audio_renders)
     image_renders_str = "\n".join(image_renders)
     bg = _get_background(scene_index)
 
@@ -202,7 +206,7 @@ export const Scene{n}: React.FC = () => {{
 
             {{/* 字幕文本区域 */}}
             <div style={{{{
-                position: "absolute", bottom: 80, left: 40, right: 40,
+                position: "absolute", bottom: 300, left: 40, right: 40,
             }}}}>
 {text_renders_str}
             </div>

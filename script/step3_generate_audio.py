@@ -74,11 +74,25 @@ def sync_durations(script_path: Path, audio_map: dict, fps: int = 30, buffer: fl
     for scene in scripts.get("scenes", []):
         for item in scene["items"]:
             key = f"{scene['sceneId']}_{item['order']}"
-            if key in audio_map:
-                info = audio_map[key]
-                item["audioDuration"] = info["duration"]
-                item["durationInFrames"] = math.ceil((info["duration"] + buffer) * fps)
-                item["audioFile"] = info["file"]
+            if isinstance(item.get("text"), list):
+                durations, frames, files = [], [], []
+                for idx, _ in enumerate(item["text"]):
+                    part_key = f"{key}_{idx}"
+                    if part_key in audio_map:
+                        info = audio_map[part_key]
+                        durations.append(info["duration"])
+                        frames.append(math.ceil((info["duration"] + buffer) * fps))
+                        files.append(info["file"])
+                if durations:
+                    item["audioDuration"] = durations
+                    item["durationInFrames"] = frames
+                    item["audioFile"] = files
+            else:
+                if key in audio_map:
+                    info = audio_map[key]
+                    item["audioDuration"] = info["duration"]
+                    item["durationInFrames"] = math.ceil((info["duration"] + buffer) * fps)
+                    item["audioFile"] = info["file"]
 
     scripts["fps"] = fps
     with open(script_path, "w", encoding="utf-8") as f:
@@ -144,33 +158,40 @@ def main():
 
         for item in scene["items"]:
             note = item.get("note", "")
+            texts = item.get("text", [])
+            if isinstance(texts, str):
+                texts = [texts]
+                
             if "不读" in note:
-                print(f"  ⏭️ 跳过 [{item['order']}]: {item['text'][:20]}...")
+                print(f"  ⏭️ 跳过 [{item['order']}]: {str(texts)[:20]}...")
                 continue
 
             sanitized = item["type"].replace("/", "_").replace("\\", "_").replace(":", "_").replace("+", "_")
-            filename = f"{str(item['order']).zfill(2)}_{sanitized}.mp3"
-            filepath = scene_dir / filename
-            rel_path = f"/audio/{animation_name}/{scene_id}/{filename}"
+            
+            for idx, text_content in enumerate(texts):
+                filename = f"{str(item['order']).zfill(2)}_{sanitized}_{idx}.mp3"
+                filepath = scene_dir / filename
+                rel_path = f"/audio/{animation_name}/{scene_id}/{filename}"
 
-            print(f"  🎵 [{item['order']}] {item['type']}: {item['text'][:30]}...")
+                print(f"  🎵 [{item['order']}-{idx}] {item['type']}: {text_content[:30]}...")
 
-            if synthesize_speech(item["text"], str(filepath), token, region, voice_name, speech_rate):
-                audio = MP3(str(filepath))
-                duration = audio.info.length
-                print(f"  ✅ {filename} ({duration:.2f}s)")
+                if synthesize_speech(text_content, str(filepath), token, region, voice_name, speech_rate):
+                    audio = MP3(str(filepath))
+                    duration = audio.info.length
+                    print(f"  ✅ {filename} ({duration:.2f}s)")
 
-                audio_map[f"{scene_id}_{item['order']}"] = {
-                    "duration": round(duration, 3),
-                    "file": rel_path,
-                    "sceneId": scene_id,
-                    "order": item["order"],
-                    "type": item["type"],
-                    "text": item["text"],
-                }
-                success += 1
-            else:
-                fail += 1
+                    audio_map[f"{scene_id}_{item['order']}_{idx}"] = {
+                        "duration": round(duration, 3),
+                        "file": rel_path,
+                        "sceneId": scene_id,
+                        "order": item["order"],
+                        "subOrder": idx,
+                        "type": item["type"],
+                        "text": text_content,
+                    }
+                    success += 1
+                else:
+                    fail += 1
 
     # 保存 audio-map
     with open(audio_map_path, "w", encoding="utf-8") as f:

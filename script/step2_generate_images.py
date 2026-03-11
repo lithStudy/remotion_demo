@@ -147,7 +147,8 @@ def main():
             full_prompt = f"{image_prompt}. Style: {image_style}" if image_style else image_prompt
             output_path = output_dir / f"{scene_id}_{item['order']}.png"
 
-            print(f"  🖼️ [{item['order']}] {item['text'][:30]}...")
+            text_preview = str(item.get('text', ''))[:30] + "..."
+            print(f"  🖼️ [{item['order']}] {text_preview}")
             print(f"     Prompt: {image_prompt[:60]}...")
 
             if generate_image(client, imagen_model, full_prompt, output_path, aspect_ratio):

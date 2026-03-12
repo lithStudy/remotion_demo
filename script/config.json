@@ -1,6 +1,7 @@
 {
     "gemini_model": "gemini-2.0-flash",
-    "imagen_model": "gemini-3-pro-image-preview",
+    "imagen_model_back": "gemini-3-pro-image-preview",
+    "imagen_model": "gemini-3.1-flash-image-preview",
     "azure_service_region": "eastasia",
     "azure_voice_name": "zh-CN-Xiaoxiao:DragonHDFlashLatestNeural",
     "speech_rate": "+0%",

@@ -5,7 +5,7 @@ Step 2: AI 图片生成
 
 用法：
   python step2_generate_images.py --input scene-scripts.json --output public/images/video_name
-  python step2_generate_images.py --input scene-scripts.json --output public/images/video_name --scene scene1
+  python step2_generate_images.py --input D:\code\study\remotion_test\src\remotions\my_video\scenes\scene-scripts.json --output public/images/video_name --scene scene1
 """
 
 import argparse

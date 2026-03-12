@@ -35,13 +35,14 @@ def generate_composition_tsx(name: str, scenes: list, config: dict) -> str:
         for i in range(len(scenes))
     ])
 
+    def _clean_label(t): return t.replace('"', '\\"') if t else ""
     scene_configs = ",\n    ".join([
-        f'{{ name: "scene{i+1}", duration: calculateScene{i+1}Duration(), component: Scene{i+1} }}'
-        for i in range(len(scenes))
+        f'{{ name: "scene{i+1}", duration: calculateScene{i+1}Duration(), component: Scene{i+1}, label: "{_clean_label(scene.get("sceneName", f"Scene {i+1}"))}" }}'
+        for i, scene in enumerate(scenes)
     ])
 
     return f'''import React from "react";
-import {{ AbsoluteFill }} from "remotion";
+import {{ AbsoluteFill, useCurrentFrame }} from "remotion";
 import {{ z }} from "zod";
 import {{ linearTiming, TransitionSeries }} from "@remotion/transitions";
 import {{ fade }} from "@remotion/transitions/fade";
@@ -59,6 +60,61 @@ const TRANSITION_DURATION = {transition};
 export const TOTAL_DURATION_{name.upper()} =
     sceneConfigs.reduce((total, c) => total + c.duration, 0) -
     (sceneConfigs.length - 1) * TRANSITION_DURATION;
+
+const ProgressBar: React.FC = () => {{
+    const frame = useCurrentFrame();
+    
+    let currentStart = 0;
+    const segments = sceneConfigs.map((c, i) => {{
+        const isLast = i === sceneConfigs.length - 1;
+        const segmentDuration = isLast ? c.duration : c.duration - TRANSITION_DURATION;
+        
+        const segment = {{ start: currentStart, duration: segmentDuration }};
+        currentStart += segmentDuration;
+        return segment;
+    }});
+
+    const activeIndex = segments.findIndex(seg => frame >= seg.start && frame < seg.start + seg.duration);
+    const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
+    const activeLabel = sceneConfigs[validActiveIndex]?.label || "";
+
+    return (
+        <div style={{{{
+            position: "absolute", top: 40, left: 40, right: 40,
+            display: "flex", flexDirection: "column", gap: 16, zIndex: 100
+        }}}}>
+            <div style={{{{ display: "flex", gap: 8, height: 8 }}}}>
+                {{segments.map((seg, i) => {{
+                    const progress = Math.max(0, Math.min(1, (frame - seg.start) / seg.duration));
+                    return (
+                        <div key={{i}} style={{{{
+                            flex: 1, backgroundColor: "rgba(255, 255, 255, 0.3)", borderRadius: 4, overflow: "hidden"
+                        }}}}>
+                            <div style={{{{
+                                width: `${{progress * 100}}%`, height: "100%", backgroundColor: "rgba(255, 255, 255, 0.9)"
+                            }}}} />
+                        </div>
+                    );
+                }})}}
+            </div>
+            
+            <div style={{{{
+                fontSize: 32,
+                fontWeight: 700,
+                color: "rgba(255, 255, 255, 0.95)",
+                textAlign: "left",
+                textShadow: "0 2px 8px rgba(0,0,0,0.8)",
+                padding: "4px 12px",
+                backgroundColor: "rgba(0, 0, 0, 0.4)",
+                borderRadius: 8,
+                alignSelf: "flex-start",
+                backdropFilter: "blur(4px)"
+            }}}}>
+                {{activeLabel}}
+            </div>
+        </div>
+    );
+}};
 
 export const {pascal}: React.FC<z.infer<typeof {pascal}Schema>> = () => {{
     return (
@@ -82,6 +138,7 @@ export const {pascal}: React.FC<z.infer<typeof {pascal}Schema>> = () => {{
                     );
                 }})}}
             </TransitionSeries>
+            <ProgressBar />
         </AbsoluteFill>
     );
 }};
@@ -127,10 +184,10 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
             style = _get_text_style(item["type"])
             text_renders.append(f'''
             {{/* [{item["order"]}-{sub_idx}] {item["type"]} */}}
-            <Sequence from={{timings["{key}"].startTime}} durationInFrames={{timings["{key}"].durationInFrames + 30}}>
-                <FadeInText delay={{0}}>
+            <Sequence from={{timings["{key}"].startTime}} durationInFrames={{timings["{key}"].durationInFrames}}>
+                <div style={{{{ width: "100%", display: "flex", justifyContent: "center" }}}}>
                     <div style={{{style}}}>{_escape_jsx(sub_text)}</div>
-                </FadeInText>
+                </div>
             </Sequence>''')
 
             audio_renders.append(f'''
@@ -166,7 +223,6 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
 
     return f'''import React, {{ useMemo }} from "react";
 import {{ AbsoluteFill, Sequence, Audio, staticFile, Img, useCurrentFrame, interpolate }} from "remotion";
-import {{ FadeInText }} from "../../../components";
 import {{
     AnimationConfig,
     calculateAnimationTimings,
@@ -206,7 +262,7 @@ export const Scene{n}: React.FC = () => {{
 
             {{/* 字幕文本区域 */}}
             <div style={{{{
-                position: "absolute", bottom: 300, left: 40, right: 40,
+                position: "absolute", bottom: 150, left: 40, right: 40,
             }}}}>
 {text_renders_str}
             </div>
@@ -223,18 +279,18 @@ def _escape_jsx(text: str) -> str:
 
 def _get_text_style(item_type: str) -> str:
     styles = {
-        "主标题": '{ fontSize: 64, fontWeight: 900, color: "#fff", textAlign: "center" as const, '
+        "主标题": '{ width: "100%", fontSize: 64, fontWeight: 900, color: "#fff", textAlign: "center" as const, '
                   'lineHeight: 1.3, textShadow: "0 4px 20px rgba(0,0,0,0.5)" }',
-        "副标题": '{ fontSize: 38, fontWeight: 500, color: "rgba(255,255,255,0.9)", '
+        "副标题": '{ width: "100%", fontSize: 38, fontWeight: 500, color: "rgba(255,255,255,0.9)", '
                   'textAlign: "center" as const, lineHeight: 1.4 }',
-        "标题":   '{ fontSize: 52, fontWeight: 800, color: "#fff", textAlign: "center" as const, lineHeight: 1.3 }',
-        "名言":   '{ fontSize: 36, fontWeight: 500, fontStyle: "italic" as const, color: "#FFD700", '
+        "标题":   '{ width: "100%", fontSize: 52, fontWeight: 800, color: "#fff", textAlign: "center" as const, lineHeight: 1.3 }',
+        "名言":   '{ width: "100%", fontSize: 36, fontWeight: 500, fontStyle: "italic" as const, color: "#FFD700", '
                   'textAlign: "center" as const, lineHeight: 1.5 }',
-        "结语":   '{ fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", '
+        "正文":   '{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", '
                   'textAlign: "center" as const, lineHeight: 1.4 }',
     }
     return styles.get(item_type,
-        '{ fontSize: 36, fontWeight: 400, color: "rgba(255,255,255,0.92)", '
+        '{ width: "100%", fontSize: 36, fontWeight: 400, color: "rgba(255,255,255,0.92)", '
         'textAlign: "center" as const, lineHeight: 1.6 }')
 
 def _get_background(index: int) -> str:

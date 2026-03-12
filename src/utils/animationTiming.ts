@@ -187,7 +187,7 @@ export interface AudioMap {
 export const audioDurationToFrames = (
     durationInSeconds: number,
     fps: number = 30,
-    bufferSeconds: number = -0.4
+    bufferSeconds: number = 0
 ): number => {
     return Math.ceil((durationInSeconds + bufferSeconds) * fps);
 };

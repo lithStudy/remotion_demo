@@ -127,7 +127,7 @@ def main():
     parser = argparse.ArgumentParser(description="Step 1: 口播文案分析")
     parser.add_argument("--input", "-i", required=True, help="口播文案文件路径")
     parser.add_argument("--output", "-o", required=True, help="输出目录路径")
-    parser.add_argument("--name", "-n", required=True, help="视频名称（英文）")
+    parser.add_argument("--name", "-n", help="视频名称（英文，不填则读取 config.json）")
     args = parser.parse_args()
 
     script_dir = Path(__file__).parent
@@ -139,6 +139,8 @@ def main():
     if not input_path.exists():
         print(f"❌ 文案文件不存在: {input_path}")
         return False
+
+    name = args.name or config.get("package_name", "my_video")
 
     with open(input_path, "r", encoding="utf-8") as f:
         text = f.read().strip()

@@ -1,0 +1,375 @@
+{
+  "topic": "统计素养：图表骗术",
+  "generatedAt": "2026-03-12T14:31:49.489918+00:00",
+  "fps": 30,
+  "scenes": [
+    {
+      "sceneId": "scene1",
+      "sceneName": "开场：图表的真相",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "你敢相信吗",
+            "两张一模一样的数据图，一张看起来风平浪静，另一张却像世界末日",
+            "这就是我们要聊的《统计素养》第三课：图表骗术"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 左侧一张平静的蓝色曲线图，右侧一张剧烈波动的红色曲线图，背景抽象数据流。",
+          "audioDuration": [
+            1.224,
+            5.796,
+            3.6
+          ],
+          "durationInFrames": [
+            46,
+            183,
+            117
+          ],
+          "audioFile": [
+            "/audio/statistic_2/scene1/01_正文_0.mp3",
+            "/audio/statistic_2/scene1/01_正文_1.mp3",
+            "/audio/statistic_2/scene1/01_正文_2.mp3"
+          ]
+        }
+      ]
+    },
+    {
+      "sceneId": "scene2",
+      "sceneName": "截断坐标轴的陷阱",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "很多时候，同样的增长，只要换个坐标轴，就能把“毛毛雨”变成“大地震”",
+            "这种把1%的差异硬生生画成断崖效果的手段",
+            "就是数据圈最经典的陷阱——截断坐标轴"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 同一条缓慢上升的曲线，分别在两个坐标轴上显示：一个坐标轴从0开始，曲线平缓；另一个坐标轴从高位开始，曲线陡峭，形成对比。",
+          "audioDuration": [
+            5.004,
+            4.248,
+            3.204
+          ],
+          "durationInFrames": [
+            160,
+            137,
+            106
+          ],
+          "audioFile": [
+            "/audio/statistic_2/scene2/01_正文_0.mp3",
+            "/audio/statistic_2/scene2/01_正文_1.mp3",
+            "/audio/statistic_2/scene2/01_正文_2.mp3"
+          ]
+        }
+      ]
+    },
+    {
+      "sceneId": "scene3",
+      "sceneName": "图表审计三问",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "不想被当成韭菜割",
+            "你要学会一套“图表审计法”"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一个卡通人物拿着放大镜，认真审查一张图表。",
+          "audioDuration": [
+            1.656,
+            2.124
+          ],
+          "durationInFrames": [
+            59,
+            73
+          ],
+          "audioFile": [
+            "/audio/statistic_2/scene3/01_正文_0.mp3",
+            "/audio/statistic_2/scene3/01_正文_1.mp3"
+          ]
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": [
+            "下次看到任何让你心跳加速的图表",
+            "先在心里问自己三个问题：",
+            "第一，Y轴是从0开始的吗",
+            "第二，时间范围是不是被“掐头去尾”了",
+            "第三，比例有没有被刻意扭曲"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 画面中显示三个问号，分别对应Y轴、时间轴、比例的图表局部放大。",
+          "audioDuration": [
+            3.096,
+            2.16,
+            2.556,
+            2.844,
+            2.664
+          ],
+          "durationInFrames": [
+            102,
+            74,
+            86,
+            95,
+            89
+          ],
+          "audioFile": [
+            "/audio/statistic_2/scene3/02_正文_0.mp3",
+            "/audio/statistic_2/scene3/02_正文_1.mp3",
+            "/audio/statistic_2/scene3/02_正文_2.mp3",
+            "/audio/statistic_2/scene3/02_正文_3.mp3",
+            "/audio/statistic_2/scene3/02_正文_4.mp3"
+          ]
+        },
+        {
+          "order": 3,
+          "type": "正文",
+          "text": [
+            "永远记住这句万能金句：",
+            "“这张图的坐标轴，到底有没有猫腻？”"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 重点突出坐标轴，上面有一只猫爪的图案，暗示“猫腻”。",
+          "audioDuration": [
+            2.016,
+            2.7
+          ],
+          "durationInFrames": [
+            70,
+            90
+          ],
+          "audioFile": [
+            "/audio/statistic_2/scene3/03_正文_0.mp3",
+            "/audio/statistic_2/scene3/03_正文_1.mp3"
+          ]
+        }
+      ]
+    },
+    {
+      "sceneId": "scene4",
+      "sceneName": "招数一：樱桃采摘",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "我们来看第一种招数：樱桃采摘"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一只手拿着篮子，正在采摘图表上的几颗“樱桃”（红色数据点）。",
+          "audioDuration": [
+            2.556
+          ],
+          "durationInFrames": [
+            86
+          ],
+          "audioFile": [
+            "/audio/statistic_2/scene4/01_正文_0.mp3"
+          ]
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": [
+            "比如你刷到一张理财广告，曲线一路狂飙，涨幅惊人",
+            "但你没看到的是",
+            "它可能隐藏了之前暴跌的半年，只截取了最近反弹的那三天给你看",
+            "这时候你得问：",
+            "“为什么只展示这段时间？之前的数据呢？”"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一张曲线图，只显示了最后的上升部分，前面用阴影遮盖，暗示隐藏了下跌的数据。",
+          "audioDuration": [
+            4.068,
+            1.368,
+            5.4,
+            1.368,
+            2.916
+          ],
+          "durationInFrames": [
+            132,
+            51,
+            171,
+            51,
+            97
+          ],
+          "audioFile": [
+            "/audio/statistic_2/scene4/02_正文_0.mp3",
+            "/audio/statistic_2/scene4/02_正文_1.mp3",
+            "/audio/statistic_2/scene4/02_正文_2.mp3",
+            "/audio/statistic_2/scene4/02_正文_3.mp3",
+            "/audio/statistic_2/scene4/02_正文_4.mp3"
+          ]
+        }
+      ]
+    },
+    {
+      "sceneId": "scene5",
+      "sceneName": "招数二：3D幻觉",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "第二种招数更花哨：3D幻觉"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一个3D饼图，透视感强烈。",
+          "audioDuration": [
+            2.952
+          ],
+          "durationInFrames": [
+            98
+          ],
+          "audioFile": [
+            "/audio/statistic_2/scene5/01_正文_0.mp3"
+          ]
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": [
+            "很多人喜欢用那种炫酷的3D饼图",
+            "但因为“近大远小”的透视原理",
+            "离你近的那块饼哪怕实际占比很小，视觉上也会显得巨大",
+            "记住,",
+            "越花哨的图表，越可能在掩盖事实"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一个3D饼图，其中一块占比很小的扇形因为透视关系显得很大，旁边用箭头标注“视觉陷阱”。",
+          "audioDuration": [
+            3.096,
+            2.448,
+            4.608,
+            0.972,
+            3.024
+          ],
+          "durationInFrames": [
+            102,
+            83,
+            148,
+            39,
+            100
+          ],
+          "audioFile": [
+            "/audio/statistic_2/scene5/02_正文_0.mp3",
+            "/audio/statistic_2/scene5/02_正文_1.mp3",
+            "/audio/statistic_2/scene5/02_正文_2.mp3",
+            "/audio/statistic_2/scene5/02_正文_3.mp3",
+            "/audio/statistic_2/scene5/02_正文_4.mp3"
+          ]
+        }
+      ]
+    },
+    {
+      "sceneId": "scene6",
+      "sceneName": "招数三：截断Y轴",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "第三种是最损的：截断Y轴"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一个被“截断”的Y轴的图表。",
+          "audioDuration": [
+            2.556
+          ],
+          "durationInFrames": [
+            86
+          ],
+          "audioFile": [
+            "/audio/statistic_2/scene6/01_正文_0.mp3"
+          ]
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": [
+            "比如某项指标从98涨到了99，如果坐标轴从0开始，这几乎是一条横线；",
+            "但如果坐标轴从95开始，这1%的增长看起来就像翻了一倍",
+            "这种图专门欺负那些只看柱子高度、不看刻度数字的人"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 并排放置两个柱状图，一个Y轴从0开始，柱子几乎一样高；另一个Y轴从95开始，柱子高度差异明显。",
+          "audioDuration": [
+            6.408,
+            5.004,
+            4.212
+          ],
+          "durationInFrames": [
+            202,
+            160,
+            136
+          ],
+          "audioFile": [
+            "/audio/statistic_2/scene6/02_正文_0.mp3",
+            "/audio/statistic_2/scene6/02_正文_1.mp3",
+            "/audio/statistic_2/scene6/02_正文_2.mp3"
+          ]
+        }
+      ]
+    },
+    {
+      "sceneId": "scene7",
+      "sceneName": "总结与行动",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "最后总结一下：",
+            "图表本身不会说谎，但作图的人会"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一张图表，一半显示真实数据，一半被一只拿着画笔的手篡改。",
+          "audioDuration": [
+            1.404,
+            3.024
+          ],
+          "durationInFrames": [
+            52,
+            100
+          ],
+          "audioFile": [
+            "/audio/statistic_2/scene7/01_正文_0.mp3",
+            "/audio/statistic_2/scene7/01_正文_1.mp3"
+          ]
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": [
+            "永远检查坐标轴、时间跨度和真实比例",
+            "当你学会审视图表的时候，数据才不敢对你撒谎"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 坐标轴、时间轴、比例尺三个图标，表示检查的重点。",
+          "audioDuration": [
+            3.456,
+            3.816
+          ],
+          "durationInFrames": [
+            113,
+            124
+          ],
+          "audioFile": [
+            "/audio/statistic_2/scene7/02_正文_0.mp3",
+            "/audio/statistic_2/scene7/02_正文_1.mp3"
+          ]
+        },
+        {
+          "order": 3,
+          "type": "正文",
+          "text": [
+            "关注我，带你拆穿更多数据背后的真相"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 卡通人物自信地站在数据图表前，手指向屏幕外。",
+          "audioDuration": [
+            3.024
+          ],
+          "durationInFrames": [
+            100
+          ],
+          "audioFile": [
+            "/audio/statistic_2/scene7/03_正文_0.mp3"
+          ]
+        }
+      ]
+    }
+  ]
+}

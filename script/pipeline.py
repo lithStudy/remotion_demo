@@ -53,7 +53,7 @@ def main():
         """,
     )
     parser.add_argument("--input", "-i", required=True, help="口播文案文件路径")
-    parser.add_argument("--name", "-n", required=True, help="视频名称（英文，用作目录名）")
+    parser.add_argument("--name", "-n", help="视频名称（英文，用作目录名，不填则读取 config.json 中的 package_name）")
     parser.add_argument("--start", type=int, default=1, choices=[1, 2, 3, 4],
                         help="从第几步开始（默认1）")
     parser.add_argument("--only", type=int, choices=[1, 2, 3, 4],
@@ -72,7 +72,7 @@ def main():
 
     project_root = Path(config.get("project_root", script_dir.parent))
     input_path = Path(args.input).resolve()
-    name = args.name
+    name = args.name or config.get("package_name", "my_video")
 
     # 中间产物路径
     scenes_dir = project_root / "src" / "remotions" / name / "scenes"
@@ -104,7 +104,7 @@ def main():
         ]),
         3: ("step3_generate_audio.py", [
             "--input", str(scripts_json),
-            "--output", str(audio_dir),
+            "--output", str(audio_dir)            
         ]),
         4: ("step4_generate_remotion.py", [
             "--input", str(scripts_json),

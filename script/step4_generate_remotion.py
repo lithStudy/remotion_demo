@@ -361,14 +361,16 @@ def update_root_tsx(root_path: Path, name: str, pascal: str, config: dict):
 def main():
     parser = argparse.ArgumentParser(description="Step 4: Remotion 代码生成")
     parser.add_argument("--input", "-i", required=True, help="scene-scripts.json 路径")
-    parser.add_argument("--name", "-n", required=True, help="视频名称（英文，用作目录名）")
+    parser.add_argument("--name", "-n", help="视频名称（英文，用作目录名，不填则读取 config.json）")
     parser.add_argument("--skip-root", action="store_true", help="不更新 Root.tsx")
     args = parser.parse_args()
 
     script_dir = Path(__file__).parent
     config = load_config(script_dir)
     project_root = Path(config.get("project_root", script_dir.parent))
-    pascal = to_pascal_case(args.name)
+    
+    name = args.name or config.get("package_name", "my_video")
+    pascal = to_pascal_case(name)
 
     input_path = Path(args.input)
     if not input_path.exists():
@@ -384,7 +386,7 @@ def main():
         return False
 
     # 创建输出目录
-    remotion_dir = project_root / "src" / "remotions" / args.name
+    remotion_dir = project_root / "src" / "remotions" / name
     scenes_dir = remotion_dir / "scenes"
     scenes_dir.mkdir(parents=True, exist_ok=True)
 
@@ -406,7 +408,7 @@ def main():
     # 生成场景文件
     print(f"\n🎬 生成场景代码 ({len(scenes)} 个场景)...")
     for i, scene in enumerate(scenes):
-        scene_code = generate_scene_tsx(i, scene, args.name, config)
+        scene_code = generate_scene_tsx(i, scene, name, config)
         scene_path = scenes_dir / f"Scene{i+1}.tsx"
         with open(scene_path, "w", encoding="utf-8") as f:
             f.write(scene_code)
@@ -419,7 +421,7 @@ def main():
     print(f"  ✅ index.ts")
 
     # 生成主 Composition 文件
-    comp_code = generate_composition_tsx(args.name, scenes, config)
+    comp_code = generate_composition_tsx(name, scenes, config)
     comp_path = remotion_dir / f"{pascal}.tsx"
     with open(comp_path, "w", encoding="utf-8") as f:
         f.write(comp_code)
@@ -429,7 +431,7 @@ def main():
     if not args.skip_root:
         root_path = project_root / "src" / "Root.tsx"
         if root_path.exists():
-            update_root_tsx(root_path, args.name, pascal, config)
+            update_root_tsx(root_path, name, pascal, config)
 
     print(f"\n✅ Remotion 代码生成完成!")
     print(f"   📂 {remotion_dir}")

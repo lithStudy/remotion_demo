@@ -34,12 +34,12 @@ def is_imagen_model(model: str) -> bool:
     """判断是否是 Imagen 模型（使用 generate_images API）"""
     return "imagen" in model.lower()
 
-def generate_image(client, model: str, prompt: str, output_path: Path, aspect_ratio: str = "3:4") -> bool:
+def generate_image(client, model: str, prompt: str, output_path: Path, aspect_ratio: str = "3:4", image_size: str = "1K") -> bool:
     """根据模型类型自动选择 API 生成图片"""
     if is_imagen_model(model):
         return _generate_with_imagen(client, model, prompt, output_path, aspect_ratio)
     else:
-        return _generate_with_gemini(client, model, prompt, output_path, aspect_ratio)
+        return _generate_with_gemini(client, model, prompt, output_path, aspect_ratio, image_size)
 
 def _generate_with_imagen(client, model: str, prompt: str, output_path: Path, aspect_ratio: str) -> bool:
     """使用 Imagen API (generate_images) 生成图片"""
@@ -63,15 +63,19 @@ def _generate_with_imagen(client, model: str, prompt: str, output_path: Path, as
         print(f"  ❌ Imagen API 失败: {e}")
         return False
 
-def _generate_with_gemini(client, model: str, prompt: str, output_path: Path, aspect_ratio: str = "3:4") -> bool:
+def _generate_with_gemini(client, model: str, prompt: str, output_path: Path, aspect_ratio: str = "3:4", image_size: str = "1K") -> bool:
     """使用 Gemini API (generate_content) 生成图片"""
     from google.genai import types
     try:
         response = client.models.generate_content(
             model=model,
-            contents=f"Generate an image with aspect ratio {aspect_ratio} (portrait): {prompt}",
+            contents=prompt,  # 无需在 prompt 凑比例，直接使用专门的配置
             config=types.GenerateContentConfig(
                 response_modalities=["IMAGE"],
+                image_config=types.ImageConfig(
+                    aspect_ratio=aspect_ratio,
+                    image_size=image_size
+                )
             ),
         )
         for part in response.candidates[0].content.parts:
@@ -79,6 +83,11 @@ def _generate_with_gemini(client, model: str, prompt: str, output_path: Path, as
                 with open(output_path, "wb") as f:
                     f.write(part.inline_data.data)
                 return True
+            # 新版 SDK 也支持这种更简洁的提取方式 (预防 fallback)
+            elif hasattr(part, "as_image") and callable(part.as_image):
+                if image := part.as_image():
+                    image.save(str(output_path))
+                    return True
         print(f"  ⚠️ Gemini 未返回图片")
         return False
     except Exception as e:
@@ -120,10 +129,11 @@ def main():
     imagen_model = config.get("imagen_model", "imagen-3.0-generate-002")
     image_style = config.get("image_style", "")
     aspect_ratio = config.get("image_aspect_ratio", "3:4")
+    image_size = config.get("image_size", "1K")  # 读取设定的分辨率
 
     print(f"🎨 开始生成场景配图...")
     print(f"   🤖 模型: {imagen_model}")
-    print(f"   📐 宽高比: {aspect_ratio}")
+    print(f"   📐 宽高比: {aspect_ratio} (Gemini 分辨率: {image_size})")
     print(f"   📂 输出: {output_dir}")
 
     success_count = 0
@@ -151,7 +161,7 @@ def main():
             print(f"  🖼️ [{item['order']}] {text_preview}")
             print(f"     Prompt: {image_prompt[:60]}...")
 
-            if generate_image(client, imagen_model, full_prompt, output_path, aspect_ratio):
+            if generate_image(client, imagen_model, full_prompt, output_path, aspect_ratio, image_size):
                 print(f"     ✅ 已保存: {output_path.name}")
                 success_count += 1
             else:

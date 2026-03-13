@@ -6,6 +6,8 @@ import { ConfirmationBias, ConfirmationBiasSchema, TOTAL_DURATION_CONFIRMATION_B
 import { ScienceIntro, ScienceIntroSchema, TOTAL_DURATION_SCIENCE_INTRO } from "./remotions/scienceIntro/ScienceIntro";
 import { Vocation, VocationSchema, TOTAL_DURATION_VOCATION } from "./remotions/vocation/Vocation";
 import { MyVideo, MyVideoSchema, TOTAL_DURATION_MY_VIDEO } from "./remotions/my_video/MyVideo";
+import { Statistic2, Statistic2Schema, TOTAL_DURATION_STATISTIC_2 } from "./remotions/statistic_2/Statistic2";
+import { Statistic1, Statistic1Schema, TOTAL_DURATION_STATISTIC_1 } from "./remotions/statistic_1/Statistic1";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -74,6 +76,30 @@ export const RemotionRoot: React.FC = () => {
         width={960}
         height={1280}
         schema={MyVideoSchema}
+        defaultProps={{}}
+      />
+    
+      {/* Statistic2 - 自动生成 */}
+      <Composition
+        id="Statistic2"
+        component={Statistic2}
+        durationInFrames={TOTAL_DURATION_STATISTIC_2}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={Statistic2Schema}
+        defaultProps={{}}
+      />
+    
+      {/* Statistic1 - 自动生成 */}
+      <Composition
+        id="Statistic1"
+        component={Statistic1}
+        durationInFrames={TOTAL_DURATION_STATISTIC_1}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={Statistic1Schema}
         defaultProps={{}}
       />
     </>

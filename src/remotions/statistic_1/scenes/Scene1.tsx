@@ -14,14 +14,13 @@ const audioMap = audioMapData as AudioMap;
 // 开场：引出话题
 const baseConfigs: AnimationConfig[] = [
     { name: "scene1_1_0", delayBefore: 8, delayAfter: 0, durationInFrames: 60, preName: null, audioId: "scene1_1_0" },
-    { name: "scene1_1_1", delayBefore: 3, delayAfter: 0, durationInFrames: 60, preName: "scene1_1_0", audioId: "scene1_1_1" },
-    { name: "scene1_2_0", delayBefore: 3, delayAfter: 0, durationInFrames: 60, preName: "scene1_1_1", audioId: "scene1_2_0" },
-    { name: "scene1_2_1", delayBefore: 3, delayAfter: 0, durationInFrames: 60, preName: "scene1_2_0", audioId: "scene1_2_1" },
-    { name: "scene1_3_0", delayBefore: 3, delayAfter: 0, durationInFrames: 60, preName: "scene1_2_1", audioId: "scene1_3_0" },
-    { name: "scene1_3_1", delayBefore: 3, delayAfter: 0, durationInFrames: 60, preName: "scene1_3_0", audioId: "scene1_3_1" },
-    { name: "scene1_3_2", delayBefore: 3, delayAfter: 0, durationInFrames: 60, preName: "scene1_3_1", audioId: "scene1_3_2" },
-    { name: "scene1_4_0", delayBefore: 3, delayAfter: 0, durationInFrames: 60, preName: "scene1_3_2", audioId: "scene1_4_0" },
-    { name: "scene1_4_1", delayBefore: 3, delayAfter: 20, durationInFrames: 60, preName: "scene1_4_0", audioId: "scene1_4_1" },
+    { name: "scene1_1_1", delayBefore: 0, delayAfter: 0, durationInFrames: 60, preName: "scene1_1_0", audioId: "scene1_1_1" },
+    { name: "scene1_2_0", delayBefore: 0, delayAfter: 0, durationInFrames: 60, preName: "scene1_1_1", audioId: "scene1_2_0" },
+    { name: "scene1_2_1", delayBefore: 0, delayAfter: 0, durationInFrames: 60, preName: "scene1_2_0", audioId: "scene1_2_1" },
+    { name: "scene1_3_0", delayBefore: 0, delayAfter: 0, durationInFrames: 60, preName: "scene1_2_1", audioId: "scene1_3_0" },
+    { name: "scene1_3_1", delayBefore: 0, delayAfter: 0, durationInFrames: 60, preName: "scene1_3_0", audioId: "scene1_3_1" },
+    { name: "scene1_4_0", delayBefore: 0, delayAfter: 0, durationInFrames: 60, preName: "scene1_3_1", audioId: "scene1_4_0" },
+    { name: "scene1_4_1", delayBefore: 0, delayAfter: 20, durationInFrames: 60, preName: "scene1_4_0", audioId: "scene1_4_1" },
 ];
 
 export const calculateScene1Duration = (): number => {
@@ -100,14 +99,14 @@ export const Scene1: React.FC = () => {
             {/* [1-0] 正文 */}
             <Sequence from={timings["scene1_1_0"].startTime} durationInFrames={timings["scene1_1_0"].durationInFrames}>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>刷小红书，感觉年轻人人均爱马仕</div>
+                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>刷小红书，感觉年轻人，人均爱马仕。</div>
                 </div>
             </Sequence>
 
             {/* [1-1] 正文 */}
             <Sequence from={timings["scene1_1_1"].startTime} durationInFrames={timings["scene1_1_1"].durationInFrames}>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>逛知乎，感觉应届生起步年薪百万</div>
+                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>逛知乎，感觉应届生起步年薪百万。</div>
                 </div>
             </Sequence>
 
@@ -128,21 +127,14 @@ export const Scene1: React.FC = () => {
             {/* [3-0] 正文 */}
             <Sequence from={timings["scene1_3_0"].startTime} durationInFrames={timings["scene1_3_0"].durationInFrames}>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>别焦虑</div>
+                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>别焦虑，</div>
                 </div>
             </Sequence>
 
             {/* [3-1] 正文 */}
             <Sequence from={timings["scene1_3_1"].startTime} durationInFrames={timings["scene1_3_1"].durationInFrames}>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>这可能不是你的问题，而是</div>
-                </div>
-            </Sequence>
-
-            {/* [3-2] 正文 */}
-            <Sequence from={timings["scene1_3_2"].startTime} durationInFrames={timings["scene1_3_2"].durationInFrames}>
-                <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>“样本偏差”在作祟</div>
+                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>这可能不是你的问题，而是-“样本偏差”-在作祟。</div>
                 </div>
             </Sequence>
 
@@ -156,63 +148,57 @@ export const Scene1: React.FC = () => {
             {/* [4-1] 正文 */}
             <Sequence from={timings["scene1_4_1"].startTime} durationInFrames={timings["scene1_4_1"].durationInFrames}>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>即：被调查的那拨人，真的能代表所有人吗</div>
+                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>即：被调查的那拨人，真的能代表所有人吗？</div>
                 </div>
             </Sequence>
             </div>
 
             {/* 音频 */}
 
-            {audioMap["scene1_1_0"] && (
-                <Sequence from={timings["scene1_1_0"].startTime} durationInFrames={timings["scene1_1_0"].durationInFrames}>
+            {audioMap["scene1_1_0"]?.isFirstInItem && (
+                <Sequence from={timings["scene1_1_0"].startTime}>
                     <Audio src={staticFile(audioMap["scene1_1_0"].file)} />
                 </Sequence>
             )}
 
-            {audioMap["scene1_1_1"] && (
-                <Sequence from={timings["scene1_1_1"].startTime} durationInFrames={timings["scene1_1_1"].durationInFrames}>
+            {audioMap["scene1_1_1"]?.isFirstInItem && (
+                <Sequence from={timings["scene1_1_1"].startTime}>
                     <Audio src={staticFile(audioMap["scene1_1_1"].file)} />
                 </Sequence>
             )}
 
-            {audioMap["scene1_2_0"] && (
-                <Sequence from={timings["scene1_2_0"].startTime} durationInFrames={timings["scene1_2_0"].durationInFrames}>
+            {audioMap["scene1_2_0"]?.isFirstInItem && (
+                <Sequence from={timings["scene1_2_0"].startTime}>
                     <Audio src={staticFile(audioMap["scene1_2_0"].file)} />
                 </Sequence>
             )}
 
-            {audioMap["scene1_2_1"] && (
-                <Sequence from={timings["scene1_2_1"].startTime} durationInFrames={timings["scene1_2_1"].durationInFrames}>
+            {audioMap["scene1_2_1"]?.isFirstInItem && (
+                <Sequence from={timings["scene1_2_1"].startTime}>
                     <Audio src={staticFile(audioMap["scene1_2_1"].file)} />
                 </Sequence>
             )}
 
-            {audioMap["scene1_3_0"] && (
-                <Sequence from={timings["scene1_3_0"].startTime} durationInFrames={timings["scene1_3_0"].durationInFrames}>
+            {audioMap["scene1_3_0"]?.isFirstInItem && (
+                <Sequence from={timings["scene1_3_0"].startTime}>
                     <Audio src={staticFile(audioMap["scene1_3_0"].file)} />
                 </Sequence>
             )}
 
-            {audioMap["scene1_3_1"] && (
-                <Sequence from={timings["scene1_3_1"].startTime} durationInFrames={timings["scene1_3_1"].durationInFrames}>
+            {audioMap["scene1_3_1"]?.isFirstInItem && (
+                <Sequence from={timings["scene1_3_1"].startTime}>
                     <Audio src={staticFile(audioMap["scene1_3_1"].file)} />
                 </Sequence>
             )}
 
-            {audioMap["scene1_3_2"] && (
-                <Sequence from={timings["scene1_3_2"].startTime} durationInFrames={timings["scene1_3_2"].durationInFrames}>
-                    <Audio src={staticFile(audioMap["scene1_3_2"].file)} />
-                </Sequence>
-            )}
-
-            {audioMap["scene1_4_0"] && (
-                <Sequence from={timings["scene1_4_0"].startTime} durationInFrames={timings["scene1_4_0"].durationInFrames}>
+            {audioMap["scene1_4_0"]?.isFirstInItem && (
+                <Sequence from={timings["scene1_4_0"].startTime}>
                     <Audio src={staticFile(audioMap["scene1_4_0"].file)} />
                 </Sequence>
             )}
 
-            {audioMap["scene1_4_1"] && (
-                <Sequence from={timings["scene1_4_1"].startTime} durationInFrames={timings["scene1_4_1"].durationInFrames}>
+            {audioMap["scene1_4_1"]?.isFirstInItem && (
+                <Sequence from={timings["scene1_4_1"].startTime}>
                     <Audio src={staticFile(audioMap["scene1_4_1"].file)} />
                 </Sequence>
             )}

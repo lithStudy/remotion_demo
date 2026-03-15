@@ -15,7 +15,7 @@ import { Scene7, calculateScene7Duration } from "./scenes/Scene7";
 export const Statistic1Schema = z.object({});
 
 const sceneConfigs = [
-    { name: "scene1", duration: calculateScene1Duration(), component: Scene1, label: "开场" },
+    { name: "scene1", duration: calculateScene1Duration(), component: Scene1, label: "开场：引出话题" },
     { name: "scene2", duration: calculateScene2Duration(), component: Scene2, label: "核心方法：观察漏斗" },
     { name: "scene3", duration: calculateScene3Duration(), component: Scene3, label: "统计陷阱一：自选择偏差" },
     { name: "scene4", duration: calculateScene4Duration(), component: Scene4, label: "统计陷阱二：幸存者偏差" },
@@ -32,12 +32,12 @@ export const TOTAL_DURATION_STATISTIC_1 =
 
 const ProgressBar: React.FC = () => {
     const frame = useCurrentFrame();
-
+    
     let currentStart = 0;
     const segments = sceneConfigs.map((c, i) => {
         const isLast = i === sceneConfigs.length - 1;
         const segmentDuration = isLast ? c.duration : c.duration - TRANSITION_DURATION;
-
+        
         const segment = { start: currentStart, duration: segmentDuration };
         currentStart += segmentDuration;
         return segment;
@@ -66,7 +66,7 @@ const ProgressBar: React.FC = () => {
                     );
                 })}
             </div>
-
+            
             <div style={{
                 fontSize: 32,
                 fontWeight: 700,

@@ -14,12 +14,13 @@ const audioMap = audioMapData as AudioMap;
 // 统计陷阱三：应答偏差
 const baseConfigs: AnimationConfig[] = [
     { name: "scene5_1_0", delayBefore: 8, delayAfter: 0, durationInFrames: 60, preName: null, audioId: "scene5_1_0" },
-    { name: "scene5_1_1", delayBefore: 3, delayAfter: 0, durationInFrames: 60, preName: "scene5_1_0", audioId: "scene5_1_1" },
-    { name: "scene5_1_2", delayBefore: 3, delayAfter: 0, durationInFrames: 60, preName: "scene5_1_1", audioId: "scene5_1_2" },
-    { name: "scene5_2_0", delayBefore: 3, delayAfter: 0, durationInFrames: 60, preName: "scene5_1_2", audioId: "scene5_2_0" },
-    { name: "scene5_2_1", delayBefore: 3, delayAfter: 0, durationInFrames: 60, preName: "scene5_2_0", audioId: "scene5_2_1" },
-    { name: "scene5_2_2", delayBefore: 3, delayAfter: 0, durationInFrames: 60, preName: "scene5_2_1", audioId: "scene5_2_2" },
-    { name: "scene5_3_0", delayBefore: 3, delayAfter: 20, durationInFrames: 60, preName: "scene5_2_2", audioId: "scene5_3_0" },
+    { name: "scene5_1_1", delayBefore: 0, delayAfter: 0, durationInFrames: 60, preName: "scene5_1_0", audioId: "scene5_1_1" },
+    { name: "scene5_1_2", delayBefore: 0, delayAfter: 0, durationInFrames: 60, preName: "scene5_1_1", audioId: "scene5_1_2" },
+    { name: "scene5_1_3", delayBefore: 0, delayAfter: 0, durationInFrames: 60, preName: "scene5_1_2", audioId: "scene5_1_3" },
+    { name: "scene5_2_0", delayBefore: 0, delayAfter: 0, durationInFrames: 60, preName: "scene5_1_3", audioId: "scene5_2_0" },
+    { name: "scene5_2_1", delayBefore: 0, delayAfter: 0, durationInFrames: 60, preName: "scene5_2_0", audioId: "scene5_2_1" },
+    { name: "scene5_2_2", delayBefore: 0, delayAfter: 0, durationInFrames: 60, preName: "scene5_2_1", audioId: "scene5_2_2" },
+    { name: "scene5_3_0", delayBefore: 0, delayAfter: 20, durationInFrames: 60, preName: "scene5_2_2", audioId: "scene5_3_0" },
 ];
 
 export const calculateScene5Duration = (): number => {
@@ -86,21 +87,28 @@ export const Scene5: React.FC = () => {
             {/* [1-0] 正文 */}
             <Sequence from={timings["scene5_1_0"].startTime} durationInFrames={timings["scene5_1_0"].durationInFrames}>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>再看个扎心的：</div>
+                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>第三个例子：</div>
                 </div>
             </Sequence>
 
             {/* [1-1] 正文 */}
             <Sequence from={timings["scene5_1_1"].startTime} durationInFrames={timings["scene5_1_1"].durationInFrames}>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>老师让学生实名填写教学质量调查表，结果收上来全是满分</div>
+                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>再看个扎心的：</div>
                 </div>
             </Sequence>
 
             {/* [1-2] 正文 */}
             <Sequence from={timings["scene5_1_2"].startTime} durationInFrames={timings["scene5_1_2"].durationInFrames}>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>老师高兴了，学生却无语了</div>
+                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>老师让学生实名填写教学质量调查表，结果收上来全是满分。</div>
+                </div>
+            </Sequence>
+
+            {/* [1-3] 正文 */}
+            <Sequence from={timings["scene5_1_3"].startTime} durationInFrames={timings["scene5_1_3"].durationInFrames}>
+                <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>老师高兴了，学生却无语了。</div>
                 </div>
             </Sequence>
 
@@ -114,65 +122,71 @@ export const Scene5: React.FC = () => {
             {/* [2-1] 正文 */}
             <Sequence from={timings["scene5_2_1"].startTime} durationInFrames={timings["scene5_2_1"].durationInFrames}>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>因为在“实名制”的压力下，真实的想法被压抑了</div>
+                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>因为在“实名制”的压力下，真实的想法被压抑了。</div>
                 </div>
             </Sequence>
 
             {/* [2-2] 正文 */}
             <Sequence from={timings["scene5_2_2"].startTime} durationInFrames={timings["scene5_2_2"].durationInFrames}>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>这就是“应答偏差”</div>
+                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>这就是“应答偏差”。</div>
                 </div>
             </Sequence>
 
             {/* [3-0] 正文 */}
             <Sequence from={timings["scene5_3_0"].startTime} durationInFrames={timings["scene5_3_0"].durationInFrames}>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>如果换成匿名调查，结果还会这么完美吗</div>
+                    <div style={{ width: "100%", fontSize: 40, fontWeight: 600, color: "rgba(255,255,255,0.95)", textAlign: "center" as const, lineHeight: 1.4 }}>如果换成匿名调查，结果还会这么完美吗？</div>
                 </div>
             </Sequence>
             </div>
 
             {/* 音频 */}
 
-            {audioMap["scene5_1_0"] && (
-                <Sequence from={timings["scene5_1_0"].startTime} durationInFrames={timings["scene5_1_0"].durationInFrames}>
+            {audioMap["scene5_1_0"]?.isFirstInItem && (
+                <Sequence from={timings["scene5_1_0"].startTime}>
                     <Audio src={staticFile(audioMap["scene5_1_0"].file)} />
                 </Sequence>
             )}
 
-            {audioMap["scene5_1_1"] && (
-                <Sequence from={timings["scene5_1_1"].startTime} durationInFrames={timings["scene5_1_1"].durationInFrames}>
+            {audioMap["scene5_1_1"]?.isFirstInItem && (
+                <Sequence from={timings["scene5_1_1"].startTime}>
                     <Audio src={staticFile(audioMap["scene5_1_1"].file)} />
                 </Sequence>
             )}
 
-            {audioMap["scene5_1_2"] && (
-                <Sequence from={timings["scene5_1_2"].startTime} durationInFrames={timings["scene5_1_2"].durationInFrames}>
+            {audioMap["scene5_1_2"]?.isFirstInItem && (
+                <Sequence from={timings["scene5_1_2"].startTime}>
                     <Audio src={staticFile(audioMap["scene5_1_2"].file)} />
                 </Sequence>
             )}
 
-            {audioMap["scene5_2_0"] && (
-                <Sequence from={timings["scene5_2_0"].startTime} durationInFrames={timings["scene5_2_0"].durationInFrames}>
+            {audioMap["scene5_1_3"]?.isFirstInItem && (
+                <Sequence from={timings["scene5_1_3"].startTime}>
+                    <Audio src={staticFile(audioMap["scene5_1_3"].file)} />
+                </Sequence>
+            )}
+
+            {audioMap["scene5_2_0"]?.isFirstInItem && (
+                <Sequence from={timings["scene5_2_0"].startTime}>
                     <Audio src={staticFile(audioMap["scene5_2_0"].file)} />
                 </Sequence>
             )}
 
-            {audioMap["scene5_2_1"] && (
-                <Sequence from={timings["scene5_2_1"].startTime} durationInFrames={timings["scene5_2_1"].durationInFrames}>
+            {audioMap["scene5_2_1"]?.isFirstInItem && (
+                <Sequence from={timings["scene5_2_1"].startTime}>
                     <Audio src={staticFile(audioMap["scene5_2_1"].file)} />
                 </Sequence>
             )}
 
-            {audioMap["scene5_2_2"] && (
-                <Sequence from={timings["scene5_2_2"].startTime} durationInFrames={timings["scene5_2_2"].durationInFrames}>
+            {audioMap["scene5_2_2"]?.isFirstInItem && (
+                <Sequence from={timings["scene5_2_2"].startTime}>
                     <Audio src={staticFile(audioMap["scene5_2_2"].file)} />
                 </Sequence>
             )}
 
-            {audioMap["scene5_3_0"] && (
-                <Sequence from={timings["scene5_3_0"].startTime} durationInFrames={timings["scene5_3_0"].durationInFrames}>
+            {audioMap["scene5_3_0"]?.isFirstInItem && (
+                <Sequence from={timings["scene5_3_0"].startTime}>
                     <Audio src={staticFile(audioMap["scene5_3_0"].file)} />
                 </Sequence>
             )}

@@ -168,6 +168,12 @@ export interface AudioMapEntry {
     subOrder?: number;
     type: string;
     text: string;
+    /** 句子在音频文件中的起始毫秒（段落级 TTS 时间戳） */
+    startMs?: number;
+    /** 句子在音频文件中的终止毫秒（段落级 TTS 时间戳） */
+    endMs?: number;
+    /** 是否为该 item 的第一句（仅首句播放 Audio 组件） */
+    isFirstInItem?: boolean;
 }
 
 /**

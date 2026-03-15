@@ -48,6 +48,9 @@ npm run dev
 1. 自行注册，免费的：https://zhuanlan.zhihu.com/p/49711377
 2. 直接使用 `generate_audio.py` 脚本，它会调用 Edge TTS 生成语音。
 
+音色选择：
+https://speech.microsoft.com/portal/b8c874e0a85c4e5b88749e780c00795e/voicegallery
+
 **操作步骤**:
 
 1.  **修改文案**: 编辑对应场景的 `scene-scripts.ts` 或配置文件。

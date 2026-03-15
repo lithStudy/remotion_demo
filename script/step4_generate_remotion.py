@@ -172,7 +172,10 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
             key = f'{scene_id}_{item["order"]}_{sub_idx}'
             
             pre = last_key
-            delay_before = 8 if (idx == 0 and sub_idx == 0) else 3
+            if idx == 0 and sub_idx == 0:
+                delay_before = 8
+            else:
+                delay_before = 0
             delay_after = 20 if (idx == len(readable) - 1 and sub_idx == len(texts) - 1) else 0
 
             config_entries.append(
@@ -191,8 +194,8 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
             </Sequence>''')
 
             audio_renders.append(f'''
-            {{audioMap["{key}"] && (
-                <Sequence from={{timings["{key}"].startTime}} durationInFrames={{timings["{key}"].durationInFrames}}>
+            {{audioMap["{key}"]?.isFirstInItem && (
+                <Sequence from={{timings["{key}"].startTime}}>
                     <Audio src={{staticFile(audioMap["{key}"].file)}} />
                 </Sequence>
             )}}''')

@@ -154,15 +154,7 @@ def main():
     # 分析文案
     result = analyze_with_gemini(text, config)
 
-    # 清理每句话末尾的标点，整理生成的内容
-    for scene in result.get('scenes', []):
-        for item in scene.get('items', []):
-            if 'text' in item:
-                new_text = []
-                for t in item['text']:
-                    t = re.sub(r'[，。！？,\.\!\?]+$', '', t)
-                    new_text.append(t)
-                item['text'] = new_text
+   
 
     # 保存结果
     output_dir = Path(args.output)

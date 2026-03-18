@@ -8,6 +8,9 @@ import { Vocation, VocationSchema, TOTAL_DURATION_VOCATION } from "./remotions/v
 import { MyVideo, MyVideoSchema, TOTAL_DURATION_MY_VIDEO } from "./remotions/my_video/MyVideo";
 import { Statistic2, Statistic2Schema, TOTAL_DURATION_STATISTIC_2 } from "./remotions/statistic_2/Statistic2";
 import { Statistic1, Statistic1Schema, TOTAL_DURATION_STATISTIC_1 } from "./remotions/statistic_1/Statistic1";
+import { StatisticTest1, StatisticTest1Schema, TOTAL_DURATION_STATISTIC_TEST_1 } from "./remotions/statistic_test_1/StatisticTest1";
+import { StatisticTest3, StatisticTest3Schema, TOTAL_DURATION_STATISTIC_TEST_3 } from "./remotions/statistic_test_3/StatisticTest3";
+import { StatisticTest5, StatisticTest5Schema, TOTAL_DURATION_STATISTIC_TEST_5 } from "./remotions/statistic_test_5/StatisticTest5";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -100,6 +103,42 @@ export const RemotionRoot: React.FC = () => {
         width={960}
         height={1280}
         schema={Statistic1Schema}
+        defaultProps={{}}
+      />
+    
+      {/* StatisticTest1 - 自动生成 */}
+      <Composition
+        id="StatisticTest1"
+        component={StatisticTest1}
+        durationInFrames={TOTAL_DURATION_STATISTIC_TEST_1}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={StatisticTest1Schema}
+        defaultProps={{}}
+      />
+    
+      {/* StatisticTest3 - 自动生成 */}
+      <Composition
+        id="StatisticTest3"
+        component={StatisticTest3}
+        durationInFrames={TOTAL_DURATION_STATISTIC_TEST_3}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={StatisticTest3Schema}
+        defaultProps={{}}
+      />
+    
+      {/* StatisticTest5 - 自动生成 */}
+      <Composition
+        id="StatisticTest5"
+        component={StatisticTest5}
+        durationInFrames={TOTAL_DURATION_STATISTIC_TEST_5}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={StatisticTest5Schema}
         defaultProps={{}}
       />
     </>

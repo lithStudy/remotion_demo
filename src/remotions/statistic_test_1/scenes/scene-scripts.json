@@ -1,6 +1,6 @@
 {
-  "topic": "相关性不等于因果关系",
-  "generatedAt": "2026-03-15T15:45:56.804766+00:00",
+  "topic": "相关性与因果关系：如何避免认知陷阱",
+  "generatedAt": "2024-03-16T04:00:00.000000+00:00",
   "fps": 30,
   "scenes": [
     {
@@ -11,92 +11,242 @@
           "order": 1,
           "type": "正文",
           "text": [
-            "冰淇淋卖得越火",
-            "溺水的人就越多"
+            "冰淇淋卖得越火，",
+            "溺水的人就越多。"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一张图表展示冰淇淋销量和溺水人数同时上升的趋势线。"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个冰淇淋摊位生意兴隆，旁边海滩上有人溺水的警示牌。",
+          "audioDuration": [
+            1.52,
+            1.52
+          ],
+          "durationInFrames": [
+            46,
+            46
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene1/scene1.mp3",
+            "/audio/statistic_test_1/scene1/scene1.mp3"
+          ]
         },
         {
           "order": 2,
           "type": "正文",
           "text": [
-            "你会觉得是冰淇淋有毒",
-            "还是觉得吃冰淇淋会导致抽筋",
-            "当然不是"
+            "难道是吃冰淇淋会导致溺水吗？"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation,一个人在海里吃冰淇淋，表情困惑，海面波涛汹涌，远处有人溺水。"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个卡通人物痛苦地捂着肚子，旁边是融化的冰淇淋。",
+          "audioDuration": [
+            2.661
+          ],
+          "durationInFrames": [
+            80
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene1/scene1.mp3"
+          ]
         },
         {
           "order": 3,
           "type": "正文",
           "text": [
-            "但这种离谱的逻辑",
-            "正在悄悄掏空你的钱包",
-            "甚至毁掉你的认知"
+            "当然不是。",
+            "真正的原因是天气热了，",
+            "吃冰淇淋和下水游泳的人都变多了。"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一只手拿着钱包，钱包正在慢慢变空，背景是扭曲变形的大脑。"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：晴朗夏日的海滩，很多人在游泳，也有很多人在吃冰淇淋。",
+          "audioDuration": [
+            0.95,
+            2.091,
+            3.041
+          ],
+          "durationInFrames": [
+            29,
+            63,
+            92
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene1/scene1.mp3",
+            "/audio/statistic_test_1/scene1/scene1.mp3",
+            "/audio/statistic_test_1/scene1/scene1.mp3"
+          ]
         },
         {
           "order": 4,
           "type": "正文",
           "text": [
-            "为什么",
-            "原因很简单",
-            "你掉进了统计学里最深、最隐蔽的坑：相关性不等于因果关系"
+            "但就是这种看似离谱的逻辑，",
+            "正在悄悄掏空你的钱包，",
+            "甚至毁掉你的认知。"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation,一个人掉进一个深不见底的坑里，坑壁上写着“相关性”三个字，远处是因果关系的标志。"
-        }
-      ]
-    },
-    {
-      "sceneId": "scene2",
-      "sceneName": "案例一：早起与成功",
-      "items": [
-        {
-          "order": 1,
-          "type": "正文",
-          "text": [
-            "你看，这种思维误区在生活中随处可见",
-            "有人告诉你，成功的CEO每天都凌晨四点起床"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个空钱包，上面有裂痕，旁边是扭曲的大脑。",
+          "audioDuration": [
+            2.471,
+            2.091,
+            1.71
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一群穿着西装的CEO站在高楼大厦前，背景是凌晨四点的天空。"
-        },
-        {
-          "order": 2,
-          "type": "正文",
-          "text": [
-            "于是你赶紧定下五个闹钟",
-            "强迫自己半夜爬起来坐在书桌前死磕"
+          "durationInFrames": [
+            75,
+            63,
+            52
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一个人设定了五个闹钟，凌晨四点挣扎着起床，面前堆满了书本。"
-        },
-        {
-          "order": 3,
-          "type": "正文",
-          "text": [
-            "结果呢",
-            "除了心脏早搏和白天哈欠连天",
-            "你离升职加薪依然遥遥无期"
-          ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一个人白天哈欠连天，捂着心脏，升职加薪的机会从身边飘过。"
-        },
-        {
-          "order": 4,
-          "type": "正文",
-          "text": [
-            "你以为早起是成功的因",
-            "其实早起只是这群人精力旺盛，或者工作多到做不完的果"
-          ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 因果关系箭头指向错误的方向，正确的箭头指向精力旺盛和工作量。"
+          "audioFile": [
+            "/audio/statistic_test_1/scene1/scene1.mp3",
+            "/audio/statistic_test_1/scene1/scene1.mp3",
+            "/audio/statistic_test_1/scene1/scene1.mp3"
+          ]
         },
         {
           "order": 5,
           "type": "正文",
           "text": [
-            "你把油门当成了发动机",
-            "车怎么可能跑得起来"
+            "这就是一个统计学里最深、最隐蔽的坑：",
+            "把“相关性”当成了“因果关系”。"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一个人把油门当成发动机，汽车无法启动。"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个人掉进深坑，坑底写着“相关性”，旁边是“因果关系”的指示牌。",
+          "audioDuration": [
+            3.421,
+            3.041
+          ],
+          "durationInFrames": [
+            103,
+            92
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene1/scene1.mp3",
+            "/audio/statistic_test_1/scene1/scene1.mp3"
+          ]
+        }
+      ]
+    },
+    {
+      "sceneId": "scene2",
+      "sceneName": "案例一：成功CEO与早起",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "这种思维误区，生活中简直随处可见。"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个迷宫，出口处写着“成功”，很多人在迷宫中乱撞。",
+          "audioDuration": [
+            3.099
+          ],
+          "durationInFrames": [
+            93
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene2/scene2.mp3"
+          ]
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": [
+            "比如有人告诉你，",
+            "成功的CEO每天都凌晨四点起床。"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个成功的CEO形象，闹钟显示凌晨四点。",
+          "audioDuration": [
+            1.458,
+            2.917
+          ],
+          "durationInFrames": [
+            44,
+            88
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene2/scene2.mp3",
+            "/audio/statistic_test_1/scene2/scene2.mp3"
+          ]
+        },
+        {
+          "order": 3,
+          "type": "正文",
+          "text": [
+            "于是你赶紧定五个闹钟，",
+            "强迫自己半夜爬起来死磕。"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个人挣扎着从床上爬起来，周围是五个闹钟。",
+          "audioDuration": [
+            2.005,
+            2.188
+          ],
+          "durationInFrames": [
+            61,
+            66
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene2/scene2.mp3",
+            "/audio/statistic_test_1/scene2/scene2.mp3"
+          ]
+        },
+        {
+          "order": 4,
+          "type": "正文",
+          "text": [
+            "结果呢？",
+            "除了白天哈欠连天、心脏早搏，",
+            "你离升职加薪依然遥遥无期。"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个疲惫的人打着哈欠，远处是升职加薪的希望，但遥不可及。",
+          "audioDuration": [
+            0.729,
+            2.552,
+            2.37
+          ],
+          "durationInFrames": [
+            22,
+            77,
+            72
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene2/scene2.mp3",
+            "/audio/statistic_test_1/scene2/scene2.mp3",
+            "/audio/statistic_test_1/scene2/scene2.mp3"
+          ]
+        },
+        {
+          "order": 5,
+          "type": "正文",
+          "text": [
+            "你以为“早起”是成功的“因”，",
+            "但其实，人家可能只是因为工作多到做不完，才被迫早起的“果”。"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：堆积如山的文件，一个人加班到深夜。",
+          "audioDuration": [
+            2.734,
+            5.469
+          ],
+          "durationInFrames": [
+            83,
+            165
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene2/scene2.mp3",
+            "/audio/statistic_test_1/scene2/scene2.mp3"
+          ]
+        },
+        {
+          "order": 6,
+          "type": "正文",
+          "text": [
+            "你把结果当成了原因，",
+            "怎么可能成功？"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个颠倒的因果关系箭头。",
+          "audioDuration": [
+            1.823,
+            1.276
+          ],
+          "durationInFrames": [
+            55,
+            39
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene2/scene2.mp3",
+            "/audio/statistic_test_1/scene2/scene2.mp3"
+          ]
         }
       ]
     },
@@ -108,135 +258,375 @@
           "order": 1,
           "type": "正文",
           "text": [
-            "我们把视线拉长，再看一个更残酷的例子",
-            "很多人看那些长寿老人天天喝白酒、抽旱烟",
-            "就觉得烟酒是长寿秘诀"
+            "再举个更扎心的例子。"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一群长寿老人喝着白酒，抽着旱烟，面带微笑。"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个箭头扎入一颗心脏。",
+          "audioDuration": [
+            1.911
+          ],
+          "durationInFrames": [
+            58
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene3/scene3.mp3"
+          ]
         },
         {
           "order": 2,
           "type": "正文",
           "text": [
-            "这在统计学上叫作幸存者偏差",
-            "那些因为抽烟喝酒身体垮掉的人",
-            "根本没机会活到那个年纪站在镜头前跟你说话"
+            "很多人看到村里的长寿老人天天抽旱烟、喝白酒，",
+            "就觉得烟酒是长寿秘诀。"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 很多倒下的人，只有少数人存活下来，站在聚光灯下。"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个长寿老人抽着旱烟，喝着白酒。",
+          "audioDuration": [
+            4.205,
+            2.103
+          ],
+          "durationInFrames": [
+            127,
+            64
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene3/scene3.mp3",
+            "/audio/statistic_test_1/scene3/scene3.mp3"
+          ]
         },
         {
           "order": 3,
           "type": "正文",
           "text": [
-            "你看到的只是偶然的相关",
-            "而不是必然的因果"
+            "这在统计学上叫“幸存者偏差”。"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 两条看似相关的线，实际上没有因果关系。"
-        }
-      ]
-    },
-    {
-      "sceneId": "scene4",
-      "sceneName": "逻辑错位与财富密码",
-      "items": [
-        {
-          "order": 1,
-          "type": "正文",
-          "text": [
-            "如果你分不清这两者的区别",
-            "你就会在相亲时",
-            "因为对方穿了一身名牌就觉得他事业有成"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：只有一部分人站在高处，其他人则消失不见，标注“幸存者偏差”。",
+          "audioDuration": [
+            2.867
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 相亲场景，一方穿着名牌西装，另一方眼神充满期待。"
-        },
-        {
-          "order": 2,
-          "type": "正文",
-          "text": [
-            "其实，名牌西装只是他为了掩盖负债而租来的道具"
+          "durationInFrames": [
+            87
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 名牌西装的标签上写着“出租”，背景是堆积如山的账单。"
-        },
-        {
-          "order": 3,
-          "type": "正文",
-          "text": [
-            "这种逻辑错位",
-            "正是所有割韭菜大师最核心的财富密码"
-          ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一个人拿着镰刀收割韭菜，脸上带着狡猾的笑容。"
+          "audioFile": [
+            "/audio/statistic_test_1/scene3/scene3.mp3"
+          ]
         },
         {
           "order": 4,
           "type": "正文",
           "text": [
-            "他们向你展示豪车、名表和所谓的方法论",
-            "暗示你只要照做就能买车"
+            "真相是，",
+            "那些因为抽烟喝酒早早把身体搞垮的人，",
+            "根本没机会活到八九十岁，站到你面前说话。"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 豪车、名表和成功学书籍摆放在一起，诱惑着人们。"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一些人因为抽烟喝酒而生病倒下。",
+          "audioDuration": [
+            0.765,
+            3.441,
+            3.823
+          ],
+          "durationInFrames": [
+            23,
+            104,
+            115
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene3/scene3.mp3",
+            "/audio/statistic_test_1/scene3/scene3.mp3",
+            "/audio/statistic_test_1/scene3/scene3.mp3"
+          ]
         },
         {
           "order": 5,
           "type": "正文",
           "text": [
-            "但真相往往是",
-            "因为你付了高额学费",
-            "他才买得起这辆豪车"
+            "你看到的只是偶然的“相关”，",
+            "根本不是必然的“因果”。"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一个人拿着学费，开着豪车扬长而去，留下被割的韭菜。"
-        },
-        {
-          "order": 6,
-          "type": "正文",
-          "text": [
-            "他把从你兜里掏钱的结果",
-            "伪装成了带你赚钱的原因"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：两个点之间只有虚线连接，代表相关性，没有箭头指向，代表不是因果。",
+          "audioDuration": [
+            2.676,
+            2.294
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一个人把掏空的钱包伪装成装满金钱的钱包。"
+          "durationInFrames": [
+            81,
+            69
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene3/scene3.mp3",
+            "/audio/statistic_test_1/scene3/scene3.mp3"
+          ]
         }
       ]
     },
     {
-      "sceneId": "scene5",
-      "sceneName": "大脑的懒惰与防骗",
+      "sceneId": "scene4",
+      "sceneName": "案例三：相亲与“割韭菜”",
       "items": [
         {
           "order": 1,
           "type": "正文",
           "text": [
-            "为什么这种骗局屡试不爽",
-            "因为人类的大脑太懒了"
+            "要是分不清这两者的区别，现实中可是要吃大亏的。"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一个卡通大脑躺在沙发上，不愿意思考。"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个人掉进陷阱，陷阱里有账单。",
+          "audioDuration": [
+            4.033
+          ],
+          "durationInFrames": [
+            121
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene4/scene4.mp3"
+          ]
         },
         {
           "order": 2,
           "type": "正文",
           "text": [
-            "我们天生就爱给所有混乱的事物找一个简单的理由",
-            "哪怕这个理由是瞎编的"
+            "比如相亲时，",
+            "看到对方穿一身名牌，就觉得他事业有成。"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一个人试图用一个简单的理由解释复杂的现象。"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：相亲场景，对方穿着名牌西装。",
+          "audioDuration": [
+            1.052,
+            3.331
+          ],
+          "durationInFrames": [
+            32,
+            100
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene4/scene4.mp3",
+            "/audio/statistic_test_1/scene4/scene4.mp3"
+          ]
         },
         {
           "order": 3,
           "type": "正文",
           "text": [
-            "记住，两件事在数据上同步增长",
-            "不代表它们互相决定",
-            "中间可能隔着一个你看不见的变量",
-            "或者干脆就是纯属巧合"
+            "其实，",
+            "那身西装可能只是他为了掩盖负债，",
+            "花两百块租来的道具。"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 两条平行增长的曲线，中间隔着一个问号。"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：名牌西装的标签上写着“租借”。",
+          "audioDuration": [
+            0.526,
+            2.805,
+            1.753
+          ],
+          "durationInFrames": [
+            16,
+            85,
+            53
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene4/scene4.mp3",
+            "/audio/statistic_test_1/scene4/scene4.mp3",
+            "/audio/statistic_test_1/scene4/scene4.mp3"
+          ]
         },
         {
           "order": 4,
           "type": "正文",
           "text": [
-            "在这个信息爆炸的时代",
-            "分不清因果，你不仅会变穷，还会变蠢"
+            "这种逻辑错位，",
+            "正是那些“割韭菜大师”最核心的财富密码。"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一个人被信息淹没，钱包空空，表情呆滞。"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个人拿着镰刀，收割韭菜。",
+          "audioDuration": [
+            1.227,
+            3.507
+          ],
+          "durationInFrames": [
+            37,
+            106
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene4/scene4.mp3",
+            "/audio/statistic_test_1/scene4/scene4.mp3"
+          ]
+        },
+        {
+          "order": 5,
+          "type": "正文",
+          "text": [
+            "他们天天在朋友圈晒豪车、名表，",
+            "暗示你只要买他的课，也能过上这种生活。"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：朋友圈截图，晒豪车、名表。",
+          "audioDuration": [
+            2.63,
+            3.331
+          ],
+          "durationInFrames": [
+            79,
+            100
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene4/scene4.mp3",
+            "/audio/statistic_test_1/scene4/scene4.mp3"
+          ]
+        },
+        {
+          "order": 6,
+          "type": "正文",
+          "text": [
+            "但真相往往是：",
+            "正因为你交了高昂的学费，他才买得起那辆豪车。"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：豪车停在一个写着“学费”的牌子旁边。",
+          "audioDuration": [
+            1.227,
+            3.857
+          ],
+          "durationInFrames": [
+            37,
+            116
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene4/scene4.mp3",
+            "/audio/statistic_test_1/scene4/scene4.mp3"
+          ]
+        },
+        {
+          "order": 7,
+          "type": "正文",
+          "text": [
+            "他把你被掏空钱包的“果”，",
+            "伪装成了带你赚钱的“因”。"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个箭头从空钱包指向豪车。",
+          "audioDuration": [
+            2.279,
+            2.279
+          ],
+          "durationInFrames": [
+            69,
+            69
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene4/scene4.mp3",
+            "/audio/statistic_test_1/scene4/scene4.mp3"
+          ]
+        }
+      ]
+    },
+    {
+      "sceneId": "scene5",
+      "sceneName": "原理与总结",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "为什么这种骗局屡试不爽？"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个大问号。",
+          "audioDuration": [
+            2.148
+          ],
+          "durationInFrames": [
+            65
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene5/scene5.mp3"
+          ]
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": [
+            "因为我们的大脑太懒了。"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个卡通大脑躺在沙发上。",
+          "audioDuration": [
+            1.969
+          ],
+          "durationInFrames": [
+            60
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene5/scene5.mp3"
+          ]
+        },
+        {
+          "order": 3,
+          "type": "正文",
+          "text": [
+            "人类天生就喜欢给复杂的事物找一个简单的理由，",
+            "哪怕这个理由根本站不住脚。"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个复杂的方程式，被简化成1+1=2。",
+          "audioDuration": [
+            3.937,
+            2.326
+          ],
+          "durationInFrames": [
+            119,
+            70
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene5/scene5.mp3",
+            "/audio/statistic_test_1/scene5/scene5.mp3"
+          ]
+        },
+        {
+          "order": 4,
+          "type": "正文",
+          "text": [
+            "记住，两件事同时发生，不代表它们互相决定。"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：两颗行星同时运行，但没有引力连接。",
+          "audioDuration": [
+            3.758
+          ],
+          "durationInFrames": [
+            113
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene5/scene5.mp3"
+          ]
+        },
+        {
+          "order": 5,
+          "type": "正文",
+          "text": [
+            "中间可能隔着一个你看不见的变量，",
+            "或者干脆就是纯属巧合。"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：两个事件之间有一个隐藏的盒子。",
+          "audioDuration": [
+            2.863,
+            1.969
+          ],
+          "durationInFrames": [
+            86,
+            60
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene5/scene5.mp3",
+            "/audio/statistic_test_1/scene5/scene5.mp3"
+          ]
+        },
+        {
+          "order": 6,
+          "type": "正文",
+          "text": [
+            "在这个信息爆炸的时代，分不清因果，",
+            "你不仅会变穷，还会被骗得团团转。"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个人被信息洪流淹没。",
+          "audioDuration": [
+            3.042,
+            2.863
+          ],
+          "durationInFrames": [
+            92,
+            86
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene5/scene5.mp3",
+            "/audio/statistic_test_1/scene5/scene5.mp3"
+          ]
         }
       ]
     },
@@ -248,29 +638,81 @@
           "order": 1,
           "type": "正文",
           "text": [
-            "最后，留一个思考题给你",
-            "如果一个城市的书店越多",
-            "统计发现那里的犯罪率反而越高"
+            "最后，留一个思考题给你。"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一张地图上，书店的标志和犯罪率的标志同时出现。"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个问号在灯泡中。",
+          "audioDuration": [
+            2.179
+          ],
+          "durationInFrames": [
+            66
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene6/scene6.mp3"
+          ]
         },
         {
           "order": 2,
           "type": "正文",
           "text": [
-            "你觉得是因为读书让人变坏了",
-            "还是背后藏着什么其他的真相"
+            "统计发现，",
+            "一个城市的书店越多，那里的犯罪率反而越高。"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 一个人在思考，头顶上出现书本和犯罪的符号，中间是一个问号。"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：书店林立的城市，犯罪率的统计图上升。",
+          "audioDuration": [
+            0.908,
+            3.813
+          ],
+          "durationInFrames": [
+            28,
+            115
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene6/scene6.mp3",
+            "/audio/statistic_test_1/scene6/scene6.mp3"
+          ]
         },
         {
           "order": 3,
           "type": "正文",
           "text": [
-            "把你的逻辑写在评论区",
-            "我们看看谁才是真正的认知高手"
+            "你觉得是因为读书让人变坏了，",
+            "还是背后藏着什么其他的真相？"
           ],
-          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation, 评论区，人们积极发表自己的看法。"
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：一个人拿着书，表情疑惑。",
+          "audioDuration": [
+            2.542,
+            2.542
+          ],
+          "durationInFrames": [
+            77,
+            77
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene6/scene6.mp3",
+            "/audio/statistic_test_1/scene6/scene6.mp3"
+          ]
+        },
+        {
+          "order": 4,
+          "type": "正文",
+          "text": [
+            "把你的答案写在评论区，",
+            "我们看看谁才是真正的认知高手。"
+          ],
+          "imagePrompt": "Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation. 画面：评论区图标。",
+          "audioDuration": [
+            1.997,
+            2.724
+          ],
+          "durationInFrames": [
+            60,
+            82
+          ],
+          "audioFile": [
+            "/audio/statistic_test_1/scene6/scene6.mp3",
+            "/audio/statistic_test_1/scene6/scene6.mp3"
+          ]
         }
       ]
     }

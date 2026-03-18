@@ -1,0 +1,489 @@
+{
+  "topic": "警惕数据陷阱：看穿比例与基数的真相",
+  "generatedAt": "2026-03-16T09:07:09.582126+00:00",
+  "fps": 30,
+  "scenes": [
+    {
+      "sceneId": "scene1",
+      "sceneName": "开场：数据恐慌",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "死亡率暴涨百分之五十。",
+            "听到这句话。",
+            "你是不是瞬间慌了。"
+          ],
+          "imagePrompt": "红色警报闪烁，图表向上火箭式增长，一个惊慌失措的人物剪影，背景是模糊的城市天际线。Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation",
+          "audioDuration": [
+            2.339,
+            1.276,
+            1.913
+          ],
+          "durationInFrames": [
+            71,
+            39,
+            58
+          ],
+          "audioFile": [
+            "/audio/statistic_test_5/scene1/scene1.mp3",
+            "/audio/statistic_test_5/scene1/scene1.mp3",
+            "/audio/statistic_test_5/scene1/scene1.mp3"
+          ]
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": [
+            "但真相可能是。",
+            "从两个人死到三个人。",
+            "就叫暴涨百分之五十。"
+          ],
+          "imagePrompt": "两个小人躺在地上，旁边标注数字“2”，然后三个小人躺在地上，旁边标注数字“3”。Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation",
+          "audioDuration": [
+            1.488,
+            2.126,
+            2.126
+          ],
+          "durationInFrames": [
+            45,
+            64,
+            64
+          ],
+          "audioFile": [
+            "/audio/statistic_test_5/scene1/scene1.mp3",
+            "/audio/statistic_test_5/scene1/scene1.mp3",
+            "/audio/statistic_test_5/scene1/scene1.mp3"
+          ]
+        }
+      ]
+    },
+    {
+      "sceneId": "scene2",
+      "sceneName": "基数的重要性：小基数的陷阱",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "很多人被吓住。",
+            "不是因为数据大。",
+            "是因为基数太小。"
+          ],
+          "imagePrompt": "一个迷宫，入口很大，出口很小，一个小人困在其中。Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation",
+          "audioDuration": [
+            1.377,
+            1.574,
+            1.574
+          ],
+          "durationInFrames": [
+            42,
+            48,
+            48
+          ],
+          "audioFile": [
+            "/audio/statistic_test_5/scene2/scene2.mp3",
+            "/audio/statistic_test_5/scene2/scene2.mp3",
+            "/audio/statistic_test_5/scene2/scene2.mp3"
+          ]
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": [
+            "你看这组数字。",
+            "一个村一年死两人。",
+            "第二年死三人。",
+            "增长百分之五十。",
+            "听着像灾难。",
+            "可现实只是多了一个人。"
+          ],
+          "imagePrompt": "一个宁静的村庄，房子很少，天空晴朗，远处是青山。一个墓碑上刻着“2”，另一个墓碑上刻着“3”。Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation",
+          "audioDuration": [
+            1.377,
+            1.771,
+            1.377,
+            1.574,
+            1.18,
+            2.164
+          ],
+          "durationInFrames": [
+            42,
+            54,
+            42,
+            48,
+            36,
+            65
+          ],
+          "audioFile": [
+            "/audio/statistic_test_5/scene2/scene2.mp3",
+            "/audio/statistic_test_5/scene2/scene2.mp3",
+            "/audio/statistic_test_5/scene2/scene2.mp3",
+            "/audio/statistic_test_5/scene2/scene2.mp3",
+            "/audio/statistic_test_5/scene2/scene2.mp3",
+            "/audio/statistic_test_5/scene2/scene2.mp3"
+          ]
+        }
+      ]
+    },
+    {
+      "sceneId": "scene3",
+      "sceneName": "比例的迷惑性：大基数的真相",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "可如果换一组。",
+            "一万人死一千。",
+            "变成一千一百。",
+            "只涨百分之十。",
+            "听着不吓人。",
+            "但多死了一百个。"
+          ],
+          "imagePrompt": "一万人密密麻麻地站在一起，其中一千人变成灰色，然后一千一百人变成灰色。Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation",
+          "audioDuration": [
+            1.425,
+            1.425,
+            1.425,
+            1.425,
+            1.222,
+            1.629
+          ],
+          "durationInFrames": [
+            43,
+            43,
+            43,
+            43,
+            37,
+            49
+          ],
+          "audioFile": [
+            "/audio/statistic_test_5/scene3/scene3.mp3",
+            "/audio/statistic_test_5/scene3/scene3.mp3",
+            "/audio/statistic_test_5/scene3/scene3.mp3",
+            "/audio/statistic_test_5/scene3/scene3.mp3",
+            "/audio/statistic_test_5/scene3/scene3.mp3",
+            "/audio/statistic_test_5/scene3/scene3.mp3"
+          ]
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": [
+            "这就是比例和基数。",
+            "专门收割不算账的人。"
+          ],
+          "imagePrompt": "一个带着算盘的人在收割韭菜，韭菜上标注着百分比符号。Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation",
+          "audioDuration": [
+            1.832,
+            2.036
+          ],
+          "durationInFrames": [
+            55,
+            62
+          ],
+          "audioFile": [
+            "/audio/statistic_test_5/scene3/scene3.mp3",
+            "/audio/statistic_test_5/scene3/scene3.mp3"
+          ]
+        }
+      ]
+    },
+    {
+      "sceneId": "scene4",
+      "sceneName": "比例与基数的比喻",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "说白了。",
+            "比例像调料。",
+            "基数才是主菜。"
+          ],
+          "imagePrompt": "一盘丰盛的菜肴，上面撒满了辣椒粉。比例的调料罐，主菜的肉块。Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation",
+          "audioDuration": [
+            0.862,
+            1.292,
+            1.508
+          ],
+          "durationInFrames": [
+            26,
+            39,
+            46
+          ],
+          "audioFile": [
+            "/audio/statistic_test_5/scene4/scene4.mp3",
+            "/audio/statistic_test_5/scene4/scene4.mp3",
+            "/audio/statistic_test_5/scene4/scene4.mp3"
+          ]
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": [
+            "有人给你拼命加辣。",
+            "你以为菜很猛。",
+            "其实只是辣椒多。",
+            "真正决定分量的。",
+            "是锅里有多少肉。"
+          ],
+          "imagePrompt": "一个厨师往锅里拼命地加辣椒粉，但是锅里的肉却很少。Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation",
+          "audioDuration": [
+            1.938,
+            1.508,
+            1.723,
+            1.723,
+            1.723
+          ],
+          "durationInFrames": [
+            59,
+            46,
+            52,
+            52,
+            52
+          ],
+          "audioFile": [
+            "/audio/statistic_test_5/scene4/scene4.mp3",
+            "/audio/statistic_test_5/scene4/scene4.mp3",
+            "/audio/statistic_test_5/scene4/scene4.mp3",
+            "/audio/statistic_test_5/scene4/scene4.mp3",
+            "/audio/statistic_test_5/scene4/scene4.mp3"
+          ]
+        }
+      ]
+    },
+    {
+      "sceneId": "scene5",
+      "sceneName": "广告中的陷阱",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "很多广告就靠这个。",
+            "降价百分之七十。",
+            "结果原价是十块。",
+            "省了七块。",
+            "宣传像省了七百。"
+          ],
+          "imagePrompt": "一个巨大的“70%OFF”标签，旁边标注原价10元，现价3元。Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation",
+          "audioDuration": [
+            1.801,
+            1.601,
+            1.601,
+            1.0,
+            1.601
+          ],
+          "durationInFrames": [
+            55,
+            49,
+            49,
+            30,
+            49
+          ],
+          "audioFile": [
+            "/audio/statistic_test_5/scene5/scene5.mp3",
+            "/audio/statistic_test_5/scene5/scene5.mp3",
+            "/audio/statistic_test_5/scene5/scene5.mp3",
+            "/audio/statistic_test_5/scene5/scene5.mp3",
+            "/audio/statistic_test_5/scene5/scene5.mp3"
+          ]
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": [
+            "还有投资收益翻倍。",
+            "从一百赚到两百。",
+            "听着神话。",
+            "但从一百万到两百万。",
+            "才叫真的翻倍。"
+          ],
+          "imagePrompt": "两个柱状图，一个从100涨到200，另一个从100万涨到200万。Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation",
+          "audioDuration": [
+            1.801,
+            1.601,
+            1.0,
+            2.001,
+            1.401
+          ],
+          "durationInFrames": [
+            55,
+            49,
+            30,
+            61,
+            43
+          ],
+          "audioFile": [
+            "/audio/statistic_test_5/scene5/scene5.mp3",
+            "/audio/statistic_test_5/scene5/scene5.mp3",
+            "/audio/statistic_test_5/scene5/scene5.mp3",
+            "/audio/statistic_test_5/scene5/scene5.mp3",
+            "/audio/statistic_test_5/scene5/scene5.mp3"
+          ]
+        }
+      ]
+    },
+    {
+      "sceneId": "scene6",
+      "sceneName": "新闻标题的套路",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "你再想想那些新闻标题。",
+            "风险增加三倍。",
+            "成功率提高一倍。",
+            "听着天翻地覆。",
+            "可只要基数够小。",
+            "什么都能吹成奇迹。",
+            "这不是数据问题。",
+            "是叙事套路。"
+          ],
+          "imagePrompt": "一个新闻标题写着“风险增加三倍”，背景是模糊的股市图表。 Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation",
+          "audioDuration": [
+            2.277,
+            1.449,
+            1.656,
+            1.449,
+            1.656,
+            1.863,
+            1.656,
+            1.242
+          ],
+          "durationInFrames": [
+            69,
+            44,
+            50,
+            44,
+            50,
+            56,
+            50,
+            38
+          ],
+          "audioFile": [
+            "/audio/statistic_test_5/scene6/scene6.mp3",
+            "/audio/statistic_test_5/scene6/scene6.mp3",
+            "/audio/statistic_test_5/scene6/scene6.mp3",
+            "/audio/statistic_test_5/scene6/scene6.mp3",
+            "/audio/statistic_test_5/scene6/scene6.mp3",
+            "/audio/statistic_test_5/scene6/scene6.mp3",
+            "/audio/statistic_test_5/scene6/scene6.mp3",
+            "/audio/statistic_test_5/scene6/scene6.mp3"
+          ]
+        }
+      ]
+    },
+    {
+      "sceneId": "scene7",
+      "sceneName": "总结：理性思考",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "真正会算账的人。",
+            "先看基数。",
+            "再看比例。",
+            "最后才看结论。",
+            "顺序一反。",
+            "你就成了被带节奏的人。"
+          ],
+          "imagePrompt": "一个理性思考的人，脑海中浮现着基数、比例、结论的公式。Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation",
+          "audioDuration": [
+            1.552,
+            0.97,
+            0.97,
+            1.358,
+            0.97,
+            2.135
+          ],
+          "durationInFrames": [
+            47,
+            30,
+            30,
+            41,
+            30,
+            65
+          ],
+          "audioFile": [
+            "/audio/statistic_test_5/scene7/scene7.mp3",
+            "/audio/statistic_test_5/scene7/scene7.mp3",
+            "/audio/statistic_test_5/scene7/scene7.mp3",
+            "/audio/statistic_test_5/scene7/scene7.mp3",
+            "/audio/statistic_test_5/scene7/scene7.mp3",
+            "/audio/statistic_test_5/scene7/scene7.mp3"
+          ]
+        }
+      ]
+    },
+    {
+      "sceneId": "scene8",
+      "sceneName": "结尾：保持警惕",
+      "items": [
+        {
+          "order": 1,
+          "type": "正文",
+          "text": [
+            "所以以后再看到。",
+            "暴涨。",
+            "暴跌。",
+            "翻倍。",
+            "腰斩。"
+          ],
+          "imagePrompt": "各种夸张的图表，向上和向下剧烈波动。Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation",
+          "audioDuration": [
+            1.698,
+            0.637,
+            0.637,
+            0.637,
+            0.637
+          ],
+          "durationInFrames": [
+            51,
+            20,
+            20,
+            20,
+            20
+          ],
+          "audioFile": [
+            "/audio/statistic_test_5/scene8/scene8.mp3",
+            "/audio/statistic_test_5/scene8/scene8.mp3",
+            "/audio/statistic_test_5/scene8/scene8.mp3",
+            "/audio/statistic_test_5/scene8/scene8.mp3",
+            "/audio/statistic_test_5/scene8/scene8.mp3"
+          ]
+        },
+        {
+          "order": 2,
+          "type": "正文",
+          "text": [
+            "先别激动。",
+            "先问一句。",
+            "原来到底是多少。"
+          ],
+          "imagePrompt": "一个问号，后面跟着一个算盘。Modern digital illustration, clean composition, vibrant colors, suitable for educational short video, no text in image, vertical portrait orientation",
+          "audioDuration": [
+            1.061,
+            1.061,
+            1.698
+          ],
+          "durationInFrames": [
+            32,
+            32,
+            51
+          ],
+          "audioFile": [
+            "/audio/statistic_test_5/scene8/scene8.mp3",
+            "/audio/statistic_test_5/scene8/scene8.mp3",
+            "/audio/statistic_test_5/scene8/scene8.mp3"
+          ]
+        }
+      ]
+    }
+  ]
+}

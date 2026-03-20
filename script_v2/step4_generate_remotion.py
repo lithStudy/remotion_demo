@@ -155,20 +155,14 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
     # 过滤可读条目
     readable = [it for it in items if "不读" not in it.get("note", "")]
 
-    # 生成 baseConfigs, texts, audios, imgs
     config_entries = []
-    text_renders = []
-    audio_renders = []
-    image_renders = []
-
     last_key = "null"
 
     for idx, item in enumerate(readable):
         texts = item.get("text", [])
         if isinstance(texts, str):
             texts = [texts]
-
-        for sub_idx, sub_text in enumerate(texts):
+        for sub_idx, _ in enumerate(texts):
             key = f'{scene_id}_{item["order"]}_{sub_idx}'
             
             pre = last_key
@@ -184,48 +178,132 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
                 f'preName: {pre}, audioId: "{key}" }}'
             )
             
-            style = _get_text_style(item["type"])
-            text_renders.append(f'''
-            {{/* [{item["order"]}-{sub_idx}] {item["type"]} */}}
-            <Sequence from={{timings["{key}"].startTime}} durationInFrames={{timings["{key}"].durationInFrames}}>
-                <div style={{{{ width: "100%", display: "flex", justifyContent: "center" }}}}>
-                    <div style={{{style}}}>{_escape_jsx(sub_text)}</div>
-                </div>
-            </Sequence>''')
-
-            audio_renders.append(f'''
-            {{audioMap["{key}"]?.isFirstInItem && (
-                <Sequence from={{timings["{key}"].startTime}}>
-                    <Audio src={{staticFile(audioMap["{key}"].file)}} />
-                </Sequence>
-            )}}''')
-
             last_key = f'"{key}"'
 
-        # image render: one image spans the duration of all its text parts
-        first_key = f'{scene_id}_{item["order"]}_0'
-        file_path = f"images/{name}/{scene_id}_{item['order']}.png"
-        image_renders.append(f'''
-            {{/* 配图 [{item["order"]}] */}}
-            <Sequence from={{timings["{first_key}"].startTime}}>
-                <Img
-                    src={{staticFile("{file_path}")}}
-                    style={{{{
-                        position: "absolute",
-                        width: "100%", height: "100%", objectFit: "cover",
-                        opacity: interpolate(frame, [timings["{first_key}"].startTime, timings["{first_key}"].startTime + 15], [0, 1], {{ extrapolateRight: "clamp", extrapolateLeft: "clamp" }}),
-                    }}}}
-                />
-            </Sequence>''')
-
     configs_str = ",\n".join(config_entries)
-    text_renders_str = "\n".join(text_renders)
-    audio_renders_str = "\n".join(audio_renders)
-    image_renders_str = "\n".join(image_renders)
-    bg = _get_background(scene_index)
+
+    layout_renders = []
+    subtitle_renders = []
+    anchor_renders = []
+    effect_renders = []
+    tts_audio_renders = []
+
+    for idx, item in enumerate(readable):
+        texts = item.get("text", [])
+        if isinstance(texts, str):
+            texts = [texts]
+        anchors = item.get("anchor")
+        if anchors is None:
+            anchors = [None] * len(texts)
+        elif not isinstance(anchors, list):
+            anchors = [anchors] if len(texts) else []
+        while len(anchors) < len(texts):
+            anchors.append(None)
+        anchors = anchors[: len(texts)]
+        audio_effects = item.get("audio_effect")
+        if audio_effects is None:
+            audio_effects = [None] * len(texts)
+        elif not isinstance(audio_effects, list):
+            audio_effects = [audio_effects] if len(texts) else []
+        while len(audio_effects) < len(texts):
+            audio_effects.append(None)
+        audio_effects = audio_effects[: len(texts)]
+
+        layout = item.get("layout", "CENTER_FOCUS") or "CENTER_FOCUS"
+        image_effect = item.get("image_effect", "breathe") or "breathe"
+        first_key = f'{scene_id}_{item["order"]}_0'
+        last_key_item = f'{scene_id}_{item["order"]}_{len(texts) - 1}'
+        file_path = f"images/{name}/{scene_id}_{item['order']}.png"
+        left_path = f"images/{name}/{scene_id}_{item['order']}_left.png"
+        right_path = f"images/{name}/{scene_id}_{item['order']}_right.png"
+        item_dur = f'timings["{last_key_item}"].startTime + timings["{last_key_item}"].durationInFrames - timings["{first_key}"].startTime'
+        left_label_esc = json.dumps(item.get("leftLabel") or "", ensure_ascii=False)
+        right_label_esc = json.dumps(item.get("rightLabel") or "", ensure_ascii=False)
+
+        # 读取锚点颜色和动画数组，补齐到与 texts 等长
+        anchor_colors = item.get("anchor_color") or []
+        if not isinstance(anchor_colors, list):
+            anchor_colors = [anchor_colors]
+        while len(anchor_colors) < len(texts):
+            anchor_colors.append(None)
+        anchor_colors = anchor_colors[: len(texts)]
+
+        anchor_anims = item.get("anchor_anim") or []
+        if not isinstance(anchor_anims, list):
+            anchor_anims = [anchor_anims]
+        while len(anchor_anims) < len(texts):
+            anchor_anims.append(None)
+        anchor_anims = anchor_anims[: len(texts)]
+
+        if layout == "ALERT_STYLE":
+            layout_renders.append(f'            <Sequence from={{timings["{first_key}"].startTime}} durationInFrames={{{item_dur}}}>\n                <BWAlertStyle imageSrc={{staticFile("{file_path}")}} enterEffect="{image_effect}" />\n            </Sequence>')
+        elif layout == "SPLIT_COMPARE":
+            layout_renders.append(
+                f'            <Sequence from={{timings["{first_key}"].startTime}} durationInFrames={{{item_dur}}}>\n'
+                f'                <BWSplitCompare leftSrc={{staticFile("{left_path}")}} rightSrc={{staticFile("{right_path}")}} leftLabel={{{left_label_esc}}} rightLabel={{{right_label_esc}}} />\n'
+                f'            </Sequence>'
+            )
+        elif layout == "STEP_LIST":
+            steps_esc = json.dumps(texts, ensure_ascii=False)
+            layout_renders.append(f'            <Sequence from={{timings["{first_key}"].startTime}} durationInFrames={{{item_dur}}}>\n                <BWStepList steps={{{steps_esc}}} startFrame={{0}} />\n            </Sequence>')
+        else:
+            layout_renders.append(f'            <Sequence from={{timings["{first_key}"].startTime}} durationInFrames={{{item_dur}}}>\n                <BWCenterFocus imageSrc={{staticFile("{file_path}")}} enterEffect="{image_effect}" />\n            </Sequence>')
+
+        for sub_idx, sub_text in enumerate(texts):
+            key = f'{scene_id}_{item["order"]}_{sub_idx}'
+            subtitle_renders.append(f'            <Sequence from={{timings["{key}"].startTime}} durationInFrames={{timings["{key}"].durationInFrames}}>\n                <BWSubtitle text={{{json.dumps(sub_text, ensure_ascii=False)}}} startFrame={{0}} />\n            </Sequence>')
+
+        for sub_idx, anchor in enumerate(anchors):
+            if anchor is None or anchor == "":
+                continue
+            key = f'{scene_id}_{item["order"]}_{sub_idx}'
+            nk = f'{scene_id}_{item["order"]}_{sub_idx + 1}' if sub_idx + 1 < len(texts) else None
+            dur = f'timings["{nk}"].startTime - timings["{key}"].startTime' if nk else f'timings["{last_key_item}"].startTime + timings["{last_key_item}"].durationInFrames - timings["{key}"].startTime'
+            anchor_color = anchor_colors[sub_idx] or "#111111"
+            anchor_anim = anchor_anims[sub_idx] or "spring"
+            parsed = parse_numeric_anchor(str(anchor))
+            if parsed:
+                pfx, val, sfx = parsed
+                anchor_renders.append(f'            <Sequence from={{timings["{key}"].startTime}} durationInFrames={{{dur}}}>\n                <BWCountUpAnchor prefix={{{json.dumps(pfx, ensure_ascii=False)}}} value={{{val}}} suffix={{{json.dumps(sfx, ensure_ascii=False)}}} enterFrame={{0}} countDuration={{25}} color="{anchor_color}" />\n            </Sequence>')
+            else:
+                anchor_renders.append(f'            <Sequence from={{timings["{key}"].startTime}} durationInFrames={{{dur}}}>\n                <BWAnchorWord anchor="{_escape_jsx(str(anchor))}" delay={{0}} color="{anchor_color}" animStyle="{anchor_anim}" />\n            </Sequence>')
+
+        for sub_idx, eff in enumerate(audio_effects):
+            if eff is None or eff == "":
+                continue
+            key = f'{scene_id}_{item["order"]}_{sub_idx}'
+            effect_renders.append(f'            <Sequence from={{timings["{key}"].startTime}}>\n                <Audio src={{staticFile("audio/effects/{eff}.mp3")}} volume={{0.6}} />\n            </Sequence>')
+
+        for sub_idx in range(len(texts)):
+            key = f'{scene_id}_{item["order"]}_{sub_idx}'
+            tts_audio_renders.append(f'            {{audioMap["{key}"]?.isFirstInItem && (\n                <Sequence from={{timings["{key}"].startTime}}>\n                    <Audio src={{staticFile(audioMap["{key}"].file)}} />\n                </Sequence>\n            )}}')
+
+    layout_str = "\n".join(layout_renders)
+    subtitle_str = "\n".join(subtitle_renders)
+    anchor_str = "\n".join(anchor_renders)
+    effect_str = "\n".join(effect_renders)
+    tts_str = "\n".join(tts_audio_renders)
+
+    # 按实际使用情况构建组件导入列表
+    used_components = ["BWSubtitle"]
+    layout_content = "\n".join(layout_renders)
+    anchor_content = "\n".join(anchor_renders)
+    if "BWCenterFocus" in layout_content:
+        used_components.append("BWCenterFocus")
+    if "BWAlertStyle" in layout_content:
+        used_components.append("BWAlertStyle")
+    if "BWSplitCompare" in layout_content:
+        used_components.append("BWSplitCompare")
+    if "BWStepList" in layout_content:
+        used_components.append("BWStepList")
+    if "BWAnchorWord" in anchor_content:
+        used_components.append("BWAnchorWord")
+    if "BWCountUpAnchor" in anchor_content:
+        used_components.append("BWCountUpAnchor")
+    components_import = ", ".join(used_components)
 
     return f'''import React, {{ useMemo }} from "react";
-import {{ AbsoluteFill, Sequence, Audio, staticFile, Img, useCurrentFrame, interpolate }} from "remotion";
+import {{ AbsoluteFill, Sequence, Audio, staticFile }} from "remotion";
 import {{
     AnimationConfig,
     calculateAnimationTimings,
@@ -233,6 +311,7 @@ import {{
     applyAudioDurations,
     type AudioMap,
 }} from "../../../utils";
+import {{ {components_import} }} from "../../../components";
 import audioMapData from "./audio-map.json";
 
 const audioMap = audioMapData as AudioMap;
@@ -247,31 +326,25 @@ export const calculateScene{n}Duration = (): number => {{
 }};
 
 export const Scene{n}: React.FC = () => {{
-    const frame = useCurrentFrame();
     const animConfigs = useMemo(() => applyAudioDurations(baseConfigs, audioMap, {fps}), []);
     const timings = useMemo(() => calculateAnimationTimings(animConfigs), [animConfigs]);
 
     return (
-        <AbsoluteFill style={{{{ background: "{bg}" }}}}>
-            {{/* 场景配图 (全屏轮播) */}}
-{image_renders_str}
+        <AbsoluteFill style={{{{ background: "#ffffff" }}}}>
+            {{/* 布局层 */}}
+{layout_str}
 
-            {{/* 底部暗色渐变，保证字幕可读 */}}
-            <div style={{{{
-                position: "absolute", bottom: 0, left: 0, right: 0, height: "45%",
-                background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%)",
-                pointerEvents: "none",
-            }}}} />
+            {{/* 字幕层 */}}
+{subtitle_str}
 
-            {{/* 字幕文本区域 */}}
-            <div style={{{{
-                position: "absolute", bottom: 150, left: 40, right: 40,
-            }}}}>
-{text_renders_str}
-            </div>
+            {{/* 锚点词层 */}}
+{anchor_str}
 
-            {{/* 音频 */}}
-{audio_renders_str}
+            {{/* 音效层 */}}
+{effect_str}
+
+            {{/* TTS 旁白 */}}
+{tts_str}
         </AbsoluteFill>
     );
 }};
@@ -279,6 +352,17 @@ export const Scene{n}: React.FC = () => {{
 
 def _escape_jsx(text: str) -> str:
     return text.replace("{", "{{").replace("}", "}}").replace('"', '\\"')
+
+
+def parse_numeric_anchor(anchor: str):
+    """检测 anchor 是否含数字，返回 (prefix, value, suffix) 或 None"""
+    if not anchor:
+        return None
+    m = re.search(r"(\d+(?:\.\d+)?)", anchor)
+    if not m:
+        return None
+    return (anchor[: m.start()], float(m.group(1)), anchor[m.end() :])
+
 
 def _get_text_style(item_type: str) -> str:
     styles = {

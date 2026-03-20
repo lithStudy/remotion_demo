@@ -58,7 +58,9 @@ def analyze_with_gemini(text: str, config: dict) -> dict:
 
 1. 将文案按内容逻辑拆解为 4-10 个场景（scene），每个场景包含若干连续的文案条目（item）,按照适合制作独立配图的维度拆分item,item尽可能的拆分的多一些,一个item不应该有超过5个text
 2. 场景结构：开场 → 内容场景 → 结尾
-3. **每个 item 都必须包含一个 `imagePrompt` 字段**，用中文描述该条文案对应的配图画面
+3. **每个 item 都必须包含一个 `imagePrompt` 字段**，用中文描述该条文案对应的配图画面。
+   - **除 SPLIT_COMPARE 外**：imagePrompt 为字符串，描述整张配图。
+   - **当 layout 为 "SPLIT_COMPARE" 时**：imagePrompt 必须为对象，包含 "left" 和 "right" 两个键，分别描述左侧画面（A方/对比前）和右侧画面（B方/对比后）；并可选的 "leftLabel"、"rightLabel" 作为左右侧显示的短标签（如 "方案A"、"方案B" 或数据项名称）。
 4. imagePrompt 要求：
    - 使用中文描述
    - 风格统一：{image_style}
@@ -66,6 +68,37 @@ def analyze_with_gemini(text: str, config: dict) -> dict:
    - 绝对不要包含任何长段的文字文案描述，只描述视觉画面和重点名词的标注如国家名、人名、地名、机构名等（文案将以字幕方式叠加显示）
    - 描述要具体、生动，适合AI图片生成
 5. **所有 item 的 type 统一为「正文」**，不要使用标题、副标题等类型
+
+6. **每个 item 必须包含以下字段**（与 BW 短视频视觉锚点与音效同步）：
+   - **anchor**：与 text 等长的数组。**宜少不宜多，每条 item 最多只标 1～2 个锚点**，其余位置一律填 null，避免观众注意力分散。
+     - 只选真正值得强调的：数字、关键专有名词、转折/冲击词（如 "60%"、"失业"、"陷阱"）
+     - 概念词（原文中不存在的抽象词，如 "失控"）可配合 ALERT_STYLE 使用
+   - **audio_effect**：与 anchor 等长的数组。仅在有 anchor 的对应位置填音效，无音效填 null。
+     - "impact_thud"：冲击音，配合转折/揭露/概念词
+     - "woosh"：过渡音，配合场景切换/对比
+     - "ping"：点击音，配合数字/结论
+   - **layout**：item 级单值，根据整体内容情绪选择其一：
+     - "CENTER_FOCUS"：中心大词+单图（默认，定义/事实类）
+     - "SPLIT_COMPARE"：左右对撞（数据对比/A-B对比）。此时 imagePrompt 必须为 {{ "left": "左侧画面描述", "right": "右侧画面描述" }}，可另加 "leftLabel"、"rightLabel" 短标签
+     - "STEP_LIST"：层级列表（步骤/推导）
+     - "ALERT_STYLE"：全屏反色/震动（揭露套路/重大转折）
+   - **image_effect**：图片入场动画，根据内容情绪选择：
+     - "breathe"：平静叙述、定义类内容（默认）
+     - "zoomIn"：重要数据、引人注目的事实
+     - "slideLeft"：顺序推进、因果关系
+     - "slideBottom"：揭晓、转折、冲击性结论
+     - "fadeIn"：收尾、总结、平缓过渡
+   - **anchor_color**：与 anchor 等长的数组，根据情绪/内容语义为每个锚点指定颜色，无锚点处填 null：
+     - "#E53E3E"：危险/负面/警告词（失业、陷阱、崩溃、骗局）
+     - "#FF8C00"：注意/质疑/反直觉词（财富密码、套路、陷阱）
+     - "#2B6CB0"：事实/数据/中性专有名词（百分比数字、相关性、研究）
+     - "#276749"：正面/结论/建议词（理性、正确、有效）
+     - "#805AD5"：认知/洞察/抽象概念词（幻觉、本质、规律）
+   - **anchor_anim**：与 anchor 等长的数组，为每个锚点指定动画样式，无锚点处填 null：
+     - "spring"：通用弹性入场（默认）
+     - "slideUp"：事实揭示、数据出现（配合 ping）
+     - "popIn"：高冲击词、转折词（配合 impact_thud）
+     - "highlight"：正面结论、关键建议
 
 ## 输出格式
 
@@ -82,20 +115,40 @@ def analyze_with_gemini(text: str, config: dict) -> dict:
         {{
           "order": 1,
           "type": "正文",
-          "text": [
-            "第一句短句，",
-            "拆分出来的第二短句，",
-            "这是第三短句。"
-          ],
+          "text": ["第一句短句，", "拆分出来的第二短句，", "这是第三短句。"],
+          "anchor": [null, "关键词", null],
+          "audio_effect": [null, "ping", null],
+          "anchor_color": [null, "#2B6CB0", null],
+          "anchor_anim": [null, "slideUp", null],
+          "image_effect": "breathe",
+          "layout": "CENTER_FOCUS",
           "imagePrompt": "该条文案对应的配图画面描述，不包含文字"
         }},
         {{
           "order": 2,
           "type": "正文",
-          "text": [
-            "这里也必须是原来形式拆分后的多段数组格式。"
-          ],
+          "text": ["这里也必须是原来形式拆分后的多段数组格式。"],
+          "anchor": ["冲击词"],
+          "audio_effect": ["impact_thud"],
+          "anchor_color": ["#E53E3E"],
+          "anchor_anim": ["popIn"],
+          "image_effect": "slideBottom",
+          "layout": "ALERT_STYLE",
           "imagePrompt": "该条文案对应的另一张配图画面描述"
+        }},
+        {{
+          "order": 3,
+          "type": "正文",
+          "text": ["数据对比的短句。"],
+          "anchor": [null],
+          "audio_effect": [null],
+          "anchor_color": [null],
+          "anchor_anim": [null],
+          "image_effect": "slideLeft",
+          "layout": "SPLIT_COMPARE",
+          "imagePrompt": {{ "left": "左侧画面描述（A方或对比前）", "right": "右侧画面描述（B方或对比后）" }},
+          "leftLabel": "A方",
+          "rightLabel": "B方"
         }}
       ]
     }}

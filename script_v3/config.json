@@ -1,0 +1,17 @@
+{
+    "package_name": "my_video",
+    "gemini_model": "gemini-2.0-flash",
+    "imagen_model_back": "gemini-3-pro-image-preview",
+    "imagen_model": "gemini-3.1-flash-image-preview",
+    "azure_service_region": "eastasia",
+    "azure_voice_name": "zh-CN-Xiaoxiao2:DragonHDFlashLatestNeural",
+    "speech_rate": "+15%",
+    "fps": 30,
+    "width": 960,
+    "height": 1280,
+    "image_aspect_ratio": "3:4",
+    "image_size": "1K",
+    "image_style": "Minimalist black and white vector illustration, flat design, symbolic icon style, bold high-contrast lines, isolated on white background",
+    "project_root": "d:/code/study/remotion_shortvideo",
+    "transition_duration_frames": 15
+}

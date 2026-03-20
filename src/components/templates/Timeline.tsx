@@ -1,0 +1,136 @@
+/**
+ * TIMELINE 模板：叙事连贯性，时间轴展示
+ */
+import React from "react";
+import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { BW_TEXT, type MultiImageItem, type TemplateBaseProps } from "./shared";
+import { TemplateContentRenderer } from "./TemplateContentRenderer";
+
+export const templateMeta = {
+	"name": "TIMELINE",
+	"componentExport": "BWTimeline",
+	"description":
+		"适用：历史演进、时间顺序、前后对比带明确时间轴。\n差异：无时间线的并列要点用 MULTI_IMAGE；操作步骤用 STEP_LIST。\n参数：images 2～3 项，position 常 left/right 以配合轴线。",
+	"psychology": "叙事连贯性",
+	"image_count": "2-3",
+	"param_schema": {
+		"images": { "type": "image_prompt_array", "required": true, "desc": "时间轴图片数组" },
+	},
+	"required_extra_params": [] as string[],
+	"example": {
+		"template": "TIMELINE",
+		"param": {
+			"images": [
+				{ "src": "1990年代电脑图标", "position": "left", "enterEffect": "slideLeft" },
+				{ "src": "2020年代手机图标", "position": "right", "enterEffect": "slideLeft" },
+			],
+			"content": ["过去需要一台电脑", "现在只需一部手机"],
+		},
+	},
+	"default_anchor_color": "#2B6CB0",
+	"default_anchor_anim": "slideUp",
+	"default_audio_effect": "woosh",
+} as const;
+
+const TIMELINE_X_BY_POS: Record<string, number> = {
+	left: 0.2,
+	center: 0.5,
+	right: 0.8,
+};
+
+export interface BWTimelineProps extends TemplateBaseProps {
+	images: MultiImageItem[];
+}
+
+export const BWTimeline: React.FC<BWTimelineProps> = ({
+	images,
+	content,
+	audioSrc,
+	children,
+	style,
+}) => {
+	const frame = useCurrentFrame();
+	const { fps } = useVideoConfig();
+	const lineProgress = interpolate(
+		spring({ frame, fps, config: { damping: 80, stiffness: 40 }, durationInFrames: 50 }),
+		[0, 1],
+		[0, 80],
+		{ extrapolateLeft: "clamp", extrapolateRight: "clamp" },
+	);
+	const timelineY = 45;
+
+	return (
+		<AbsoluteFill style={style}>
+			<div
+				style={{
+					position: "absolute",
+					left: "10%",
+					width: "80%",
+					top: `${timelineY}%`,
+					height: 6,
+					backgroundColor: "#e0e0e0",
+					borderRadius: 3,
+				}}
+			/>
+			<div
+				style={{
+					position: "absolute",
+					left: "10%",
+					width: `${lineProgress}%`,
+					top: `${timelineY}%`,
+					height: 6,
+					backgroundColor: BW_TEXT,
+					borderRadius: 3,
+				}}
+			/>
+			{images.map((img, i) => {
+				const xFrac = TIMELINE_X_BY_POS[img.position] ?? 0.5;
+				const localFrame = Math.max(0, frame - (img.startFrame ?? 0));
+				const nodeSpring = spring({
+					frame: localFrame,
+					fps,
+					config: { damping: 60, stiffness: 300 },
+					durationInFrames: 15,
+				});
+				const visible = frame >= (img.startFrame ?? 0);
+				const isAbove = i % 2 === 0;
+				const iconTop = isAbove ? "28%" : "52%";
+				return (
+					<React.Fragment key={i}>
+						<div
+							style={{
+								position: "absolute",
+								left: `${xFrac * 100}%`,
+								top: `${timelineY}%`,
+								transform: "translate(-50%, -50%)",
+								width: 24,
+								height: 24,
+								borderRadius: "50%",
+								backgroundColor: BW_TEXT,
+								border: "4px solid #fff",
+								boxShadow: "0 0 0 2px #111",
+								opacity: visible ? nodeSpring : 0,
+								zIndex: 2,
+							}}
+						/>
+						<Img
+							src={img.src}
+							style={{
+								position: "absolute",
+								left: `${xFrac * 100}%`,
+								top: iconTop,
+								transform: `translate(-50%, 0) scale(${visible ? nodeSpring : 0.5})`,
+								width: 140,
+								height: 140,
+								objectFit: "contain",
+								opacity: visible ? nodeSpring : 0,
+							}}
+						/>
+					</React.Fragment>
+				);
+			})}
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+			{children}
+		</AbsoluteFill>
+	);
+};

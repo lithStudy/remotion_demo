@@ -1,0 +1,477 @@
+{
+  "topic": "比例陷阱",
+  "scenes": [
+    {
+      "sceneId": 1,
+      "sceneName": "引出话题",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "揭露骗局",
+          "reasoning": "用反问句引出话题，揭示数据可能存在的欺骗性，吸引观众注意。",
+          "template": "ALERT",
+          "param": {
+            "imageSrc": "images/test/1_1.png",
+            "enterEffect": "slideBottom",
+            "content": [
+              {
+                "text": "你被大数据骗了。",
+                "startFrame": 0,
+                "durationFrames": 48,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 48
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/1/1.mp3",
+      "totalDurationFrames": 48
+    },
+    {
+      "sceneId": 2,
+      "sceneName": "质疑增长率",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "质疑与反思",
+          "reasoning": "提出质疑，引发观众思考增长率的真实含义。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/2_1.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "都在吹增长率？",
+                "startFrame": 0,
+                "durationFrames": 42,
+                "anchor": "增长率",
+                "anchorColor": "#FF8C00",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "全是忽悠。",
+                "startFrame": 41,
+                "durationFrames": 30,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 72
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/2/2.mp3",
+      "totalDurationFrames": 72
+    },
+    {
+      "sceneId": 3,
+      "sceneName": "举例说明",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "数据对比",
+          "reasoning": "通过具体的数字例子，展示不同基数下的增长率差异。",
+          "template": "STAT_COMPARE",
+          "param": {
+            "leftValue": 1,
+            "rightValue": 2,
+            "leftLabel": "初始",
+            "rightLabel": "增长后",
+            "leftSrc": "images/test/3_1_left.png",
+            "rightSrc": "images/test/3_1_right.png",
+            "content": [
+              {
+                "text": "看这组数。",
+                "startFrame": 0,
+                "durationFrames": 22,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "从 1 到 2，翻了一倍。",
+                "startFrame": 21,
+                "durationFrames": 57,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 79
+          }
+        },
+        {
+          "order": 2,
+          "narrativeType": "数据对比",
+          "reasoning": "通过具体的数字例子，展示不同基数下的增长率差异。",
+          "template": "STAT_COMPARE",
+          "param": {
+            "leftValue": 100,
+            "rightValue": 110,
+            "leftLabel": "初始",
+            "rightLabel": "增长后",
+            "leftSrc": "images/test/3_2_left.png",
+            "rightSrc": "images/test/3_2_right.png",
+            "content": [
+              {
+                "text": "从 100 到 110，才涨 10%。",
+                "startFrame": 0,
+                "durationFrames": 83,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 83
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/3/3.mp3",
+      "totalDurationFrames": 161
+    },
+    {
+      "sceneId": 4,
+      "sceneName": "强调比例陷阱",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "强调负面信息",
+          "reasoning": "对比不同的增长率，突出比例陷阱的迷惑性。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/4_1.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "100% 听着吓人。",
+                "startFrame": 0,
+                "durationFrames": 55,
+                "anchor": "100%",
+                "anchorColor": "#E53E3E",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "10% 看着寒碜。",
+                "startFrame": 54,
+                "durationFrames": 49,
+                "anchor": "10%",
+                "anchorColor": "#E53E3E",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "真相是：后面多了 9 块钱。",
+                "startFrame": 103,
+                "durationFrames": 76,
+                "anchor": "多了 9 块钱",
+                "anchorColor": "#2B6CB0",
+                "audioEffect": "ping"
+              }
+            ],
+            "totalDurationFrames": 180
+          }
+        },
+        {
+          "order": 2,
+          "narrativeType": "定义概念",
+          "reasoning": "给出“比例陷阱”的定义，使观众对这一概念有更清晰的认识。",
+          "template": "CONCEPT_CARD",
+          "param": {
+            "imageSrc": "images/test/4_2.png",
+            "conceptName": "比例陷阱",
+            "content": [
+              {
+                "text": "这就是“比例陷阱”。",
+                "startFrame": 0,
+                "durationFrames": 55,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 55
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/4/4.mp3",
+      "totalDurationFrames": 234
+    },
+    {
+      "sceneId": 5,
+      "sceneName": "解释比例陷阱",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "解释原因",
+          "reasoning": "解释小基数和大基数增长的差异，帮助观众理解比例陷阱产生的原因。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/5_1.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "小基数玩命涨，大基数微调。",
+                "startFrame": 0,
+                "durationFrames": 77,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "就像穷小子逆袭，很容易翻倍。",
+                "startFrame": 76,
+                "durationFrames": 83,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "首富资产翻倍，要掏空地球。",
+                "startFrame": 159,
+                "durationFrames": 77,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 237
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/5/5.mp3",
+      "totalDurationFrames": 237
+    },
+    {
+      "sceneId": 6,
+      "sceneName": "强调基数的重要性",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "强调重点",
+          "reasoning": "强调基数的重要性，指出没有基数比例毫无意义。",
+          "template": "TEXT_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "没基数，比例就是废纸。",
+                "startFrame": 0,
+                "durationFrames": 53,
+                "anchor": "没基数",
+                "anchorColor": "#E53E3E",
+                "audioEffect": "ping"
+              }
+            ],
+            "totalDurationFrames": 53
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/6/6.mp3",
+      "totalDurationFrames": 53
+    },
+    {
+      "sceneId": 7,
+      "sceneName": "引导用户看图",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "视觉引导",
+          "reasoning": "引导观众关注图表，强调查看原始数据而非百分比。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/7_1.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "看这个图。",
+                "startFrame": 0,
+                "durationFrames": 30,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "别看百分比。",
+                "startFrame": 29,
+                "durationFrames": 35,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "直接问：原数是多少？",
+                "startFrame": 63,
+                "durationFrames": 59,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 123
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/7/7.mp3",
+      "totalDurationFrames": 123
+    },
+    {
+      "sceneId": 8,
+      "sceneName": "模糊基数的危害",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "强调危害",
+          "reasoning": "强调基数模糊会导致结论不准确。",
+          "template": "TEXT_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "基数模糊。",
+                "startFrame": 0,
+                "durationFrames": 36,
+                "anchor": "基数模糊",
+                "anchorColor": "#E53E3E",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "结论必假。",
+                "startFrame": 35,
+                "durationFrames": 36,
+                "anchor": "结论必假",
+                "anchorColor": "#E53E3E",
+                "audioEffect": "ping"
+              }
+            ],
+            "totalDurationFrames": 71
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/8/8.mp3",
+      "totalDurationFrames": 71
+    },
+    {
+      "sceneId": 9,
+      "sceneName": "揭露行业乱象",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "揭露问题本质",
+          "reasoning": "用更犀利的语言点明只谈增幅不谈基数的行为本质。",
+          "template": "TEXT_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "只谈增幅不谈基数，那是耍流氓。",
+                "startFrame": 0,
+                "durationFrames": 74,
+                "anchor": "耍流氓",
+                "anchorColor": "#E53E3E",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 74
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/9/9.mp3",
+      "totalDurationFrames": 74
+    },
+    {
+      "sceneId": 10,
+      "sceneName": "用户选择",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "设置悬念",
+          "reasoning": "通过二选一的提问，引发观众的思考。",
+          "template": "SPLIT_COMPARE",
+          "param": {
+            "leftSrc": "images/test/10_1_left.png",
+            "rightSrc": "images/test/10_1_right.png",
+            "leftLabel": "月薪三千涨 50%",
+            "rightLabel": "月薪三万涨 5%",
+            "content": [
+              {
+                "text": "月薪三千涨 50%，和月薪三万涨 5%，你选哪个？",
+                "startFrame": 0,
+                "durationFrames": 142,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 142
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/10/10.mp3",
+      "totalDurationFrames": 142
+    },
+    {
+      "sceneId": 11,
+      "sceneName": "给出扎心结论",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "扎心反问",
+          "reasoning": "给出扎心结论，点醒选择错误的人。",
+          "template": "TEXT_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "很多人选了 50%。",
+                "startFrame": 0,
+                "durationFrames": 53,
+                "anchor": "50%",
+                "anchorColor": "#FF8C00",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "所以，活该你穷。",
+                "startFrame": 52,
+                "durationFrames": 42,
+                "anchor": "活该你穷",
+                "anchorColor": "#E53E3E",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 94
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/11/11.mp3",
+      "totalDurationFrames": 94
+    },
+    {
+      "sceneId": 12,
+      "sceneName": "引发思考",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "引发思考",
+          "reasoning": "以反问结尾，引发观众对数字的思考。",
+          "template": "CHAT_BUBBLE",
+          "param": {
+            "imageSrc": "images/test/12_1.png",
+            "content": [
+              {
+                "text": "你觉得，数字会撒谎吗？",
+                "startFrame": 0,
+                "durationFrames": 63,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 63
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/12/12.mp3",
+      "totalDurationFrames": 63
+    }
+  ],
+  "fps": 30
+}

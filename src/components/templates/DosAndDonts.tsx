@@ -1,0 +1,100 @@
+/**
+ * DOS_AND_DONTS 模板：损失厌恶，避坑对比
+ */
+import React from "react";
+import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import type { TemplateBaseProps } from "./shared";
+import { TemplateContentRenderer } from "./TemplateContentRenderer";
+
+export const templateMeta = {
+	"name": "DOS_AND_DONTS",
+	"componentExport": "BWDosAndDonts",
+	"description":
+		"适用：明确「别这样做 vs 应该这样做」的避坑；左右对错叙事。\n差异：两种中立方案并列、无对错标签用 SPLIT_COMPARE；代价/收益权衡用 SCALE_BALANCE。\n参数：dontLabel/doLabel 简短；与 leftSrc（错）/rightSrc（对）语义一致。",
+	"psychology": "损失厌恶",
+	"image_count": 2,
+	"param_schema": {
+		"leftSrc": { "type": "image_prompt", "required": true, "desc": "错误做法图片描述" },
+		"rightSrc": { "type": "image_prompt", "required": true, "desc": "正确做法图片描述" },
+		"dontLabel": { "type": "string", "required": true, "desc": "错误标签（如 ❌ 别这样）" },
+		"doLabel": { "type": "string", "required": true, "desc": "正确标签（如 ✅ 正确做法）" },
+	},
+	"required_extra_params": ["dontLabel", "doLabel"],
+	"example": {
+		"template": "DOS_AND_DONTS",
+		"param": {
+			"leftSrc": "盲目跟风的人简笔画图标",
+			"rightSrc": "理性分析图表的人简笔画图标",
+			"dontLabel": "❌ 别这样",
+			"doLabel": "✅ 正确做法",
+			"content": ["不要盲目跟风", "要做足功课再行动"],
+		},
+	},
+	"default_anchor_color": "#E53E3E",
+	"default_anchor_anim": "popIn",
+	"default_audio_effect": "impact_thud",
+} as const;
+
+export interface BWDosAndDontsProps extends TemplateBaseProps {
+	leftSrc?: string;
+	rightSrc?: string;
+	dontLabel?: string;
+	doLabel?: string;
+}
+
+export const BWDosAndDonts: React.FC<BWDosAndDontsProps> = ({
+	leftSrc,
+	rightSrc,
+	dontLabel = "❌ 错误",
+	doLabel = "✅ 正确",
+	content,
+	audioSrc,
+	children,
+	style,
+}) => {
+	const frame = useCurrentFrame();
+	const { fps, width, height } = useVideoConfig();
+	const half = width / 2;
+	const progressSafeArea = 40;
+	// 与 BWSubtitle 保持一致：底部约 10% 为字幕安全区，模板主内容不进入该区域。
+	const subtitleSafeArea = Math.max(48, Math.round(height * 0.1));
+
+	const leftSpring = spring({ frame, fps, config: { damping: 60, stiffness: 180 }, durationInFrames: 20 });
+	const rightSpring = spring({ frame: frame - 10, fps, config: { damping: 60, stiffness: 180 }, durationInFrames: 20 });
+	const leftX = interpolate(leftSpring, [0, 1], [-half, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+	const rightX = interpolate(rightSpring, [0, 1], [half, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+	return (
+		<AbsoluteFill style={style}>
+			<div
+				style={{
+					display: "flex",
+					width: "100%",
+					height: `calc(100% - ${progressSafeArea}px - ${subtitleSafeArea}px)`,
+					marginTop: progressSafeArea,
+				}}
+			>
+				<div style={{
+					flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+					gap: 24, transform: `translateX(${leftX}px)`, backgroundColor: "rgba(229, 62, 62, 0.05)", borderRight: "4px solid #E53E3E",
+				}}>
+					<div style={{ fontSize: 40, fontWeight: 900, color: "#E53E3E", textAlign: "center", padding: "0 16px", fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif' }}>
+						{dontLabel}
+					</div>
+					{leftSrc && <Img src={leftSrc} style={{ maxWidth: "55%", maxHeight: "38%", objectFit: "contain", opacity: 0.75 }} />}
+				</div>
+				<div style={{
+					flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+					gap: 24, transform: `translateX(${rightX}px)`, backgroundColor: "rgba(39, 103, 73, 0.05)",
+				}}>
+					<div style={{ fontSize: 40, fontWeight: 900, color: "#276749", textAlign: "center", padding: "0 16px", fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif' }}>
+						{doLabel}
+					</div>
+					{rightSrc && <Img src={rightSrc} style={{ maxWidth: "55%", maxHeight: "38%", objectFit: "contain" }} />}
+				</div>
+			</div>
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+			{children}
+		</AbsoluteFill>
+	);
+};

@@ -8,14 +8,6 @@ import { Scene1, calculateScene1Duration } from "./scenes/Scene1";
 import { Scene2, calculateScene2Duration } from "./scenes/Scene2";
 import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
 import { Scene4, calculateScene4Duration } from "./scenes/Scene4";
-import { Scene5, calculateScene5Duration } from "./scenes/Scene5";
-import { Scene6, calculateScene6Duration } from "./scenes/Scene6";
-import { Scene7, calculateScene7Duration } from "./scenes/Scene7";
-import { Scene8, calculateScene8Duration } from "./scenes/Scene8";
-import { Scene9, calculateScene9Duration } from "./scenes/Scene9";
-import { Scene10, calculateScene10Duration } from "./scenes/Scene10";
-import { Scene11, calculateScene11Duration } from "./scenes/Scene11";
-import { Scene12, calculateScene12Duration } from "./scenes/Scene12";
 
 export const TestSchema = z.object({});
 
@@ -23,18 +15,10 @@ const TRANSITION_DURATION = 15;
 const SCENE_END_PADDING = 20;
 
 const sceneConfigs = [
-    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引出话题" },
-    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "质疑增长率" },
-    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "举例说明" },
-    { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "强调比例陷阱" },
-    { name: "scene5", duration: calculateScene5Duration() + SCENE_END_PADDING, component: Scene5, label: "解释比例陷阱" },
-    { name: "scene6", duration: calculateScene6Duration() + SCENE_END_PADDING, component: Scene6, label: "强调基数的重要性" },
-    { name: "scene7", duration: calculateScene7Duration() + SCENE_END_PADDING, component: Scene7, label: "引导用户看图" },
-    { name: "scene8", duration: calculateScene8Duration() + SCENE_END_PADDING, component: Scene8, label: "模糊基数的危害" },
-    { name: "scene9", duration: calculateScene9Duration() + SCENE_END_PADDING, component: Scene9, label: "揭露行业乱象" },
-    { name: "scene10", duration: calculateScene10Duration() + SCENE_END_PADDING, component: Scene10, label: "用户选择" },
-    { name: "scene11", duration: calculateScene11Duration() + SCENE_END_PADDING, component: Scene11, label: "给出扎心结论" },
-    { name: "scene12", duration: calculateScene12Duration() + SCENE_END_PADDING, component: Scene12, label: "引发思考" },
+    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "痛点场景共鸣" },
+    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "幕后解密与共同受害者设定" },
+    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "概念降维与智力赋能" },
+    { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "防御锦囊与立意拔高" },
 ];
 
 export const TOTAL_DURATION_TEST =

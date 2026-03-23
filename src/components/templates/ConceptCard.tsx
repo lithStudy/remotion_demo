@@ -23,7 +23,7 @@ export const templateMeta = {
 		"param": {
 			"imageSrc": "过滤器/筛网简笔画图标",
 			"conceptName": "幸存者偏差",
-			"content": ["这就是经典的幸存者偏差"],
+			"content": [{ "text": "这就是经典的幸存者偏差" }],
 		},
 	},
 	"default_anchor_color": "#805AD5",

@@ -29,7 +29,7 @@ export const templateMeta = {
 			"leftLabel": "短期收益",
 			"rightLabel": "长期价值",
 			"tiltDirection": "right",
-			"content": ["短期收益很诱人", "但长期价值才是关键"],
+			"content": [{ "text": "短期收益很诱人" }, { "text": "但长期价值才是关键" }],
 		},
 	},
 	"default_anchor_color": "#FF8C00",

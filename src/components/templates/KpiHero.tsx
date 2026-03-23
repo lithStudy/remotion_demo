@@ -36,7 +36,7 @@ export const templateMeta = {
 			"prefix": "",
 			"suffix": "%",
 			"headline": "用户满意度",
-			"content": ["满意度同比大幅提升", "说明产品体验在变好"],
+			"content": [{ "text": "满意度同比大幅提升" }, { "text": "说明产品体验在变好" }],
 		},
 	},
 	"default_anchor_color": "#2B6CB0",

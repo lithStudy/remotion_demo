@@ -22,7 +22,7 @@ export const templateMeta = {
 		"template": "QUOTE_CITATION",
 		"param": {
 			"quoteSource": "《思考，快与慢》",
-			"content": ["人类倾向于从随机事件中寻找规律"],
+			"content": [{ "text": "人类倾向于从随机事件中寻找规律" }],
 		},
 	},
 	"default_anchor_color": "#276749",

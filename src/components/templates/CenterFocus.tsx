@@ -25,7 +25,7 @@ export const templateMeta = {
 		"param": {
 			"imageSrc": "上班族坐在电脑前的简笔画图标",
 			"enterEffect": "breathe",
-			"content": ["第一句原文", "第二句原文"],
+			"content": [{ "text": "这是一个核心观点" }, { "text": "第二句原文" }],
 		},
 	},
 	"default_anchor_color": "#2B6CB0",

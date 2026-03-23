@@ -21,7 +21,7 @@ export const templateMeta = {
 		"template": "CHAT_BUBBLE",
 		"param": {
 			"imageSrc": "困惑的人简笔画图标",
-			"content": ["成功了吗？"],
+			"content": [{ "text": "成功了吗？" }],
 		},
 	},
 	"default_anchor_color": "#FF8C00",

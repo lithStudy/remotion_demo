@@ -34,7 +34,7 @@ export const templateMeta = {
 				{ "src": "齿轮简笔画图标", "position": "top", "enterEffect": "fadeIn" },
 				{ "src": "钞票简笔画图标", "position": "bottom", "enterEffect": "slideBottom" },
 			],
-			"content": ["核心是自律", "核心是资源"],
+			"content": [{ "text": "核心是自律" }, { "text": "核心是资源" }],
 		},
 	},
 	"default_anchor_color": "#2B6CB0",

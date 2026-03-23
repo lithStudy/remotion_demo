@@ -9,7 +9,7 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
-import { BW_BG, BW_TEXT, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -31,7 +31,7 @@ export const templateMeta = {
 			"percent": 78,
 			"label": "项目完成度",
 			"subLabel": "截至本季度",
-			"content": ["已经完成近八成", "剩下部分集中攻坚"],
+			"content": [{ "text": "已经完成近八成" }, { "text": "剩下部分集中攻坚" }],
 		},
 	},
 	"default_anchor_color": "#2B6CB0",

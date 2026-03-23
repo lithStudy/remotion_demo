@@ -18,7 +18,7 @@ export interface BWImageBreathProps {
 	/** 入场效果，默认 breathe */
 	enterEffect?: ImageEnterEffect;
 	/** 内容数组，用于根据锚点计算图片下移避让 */
-	content?: (string | ContentItem)[];
+	content?: ContentItem[];
 	/** 图片容器样式覆盖 */
 	style?: React.CSSProperties;
 }

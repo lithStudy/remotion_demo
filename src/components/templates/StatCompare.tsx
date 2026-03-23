@@ -36,7 +36,7 @@ export const templateMeta = {
 			"rightValue": 68,
 			"leftLabel": "去年",
 			"rightLabel": "今年",
-			"content": ["今年明显好于去年", "增长来自结构优化"],
+			"content": [{ "text": "今年明显好于去年" }, { "text": "增长来自结构优化" }],
 		},
 	},
 	"default_anchor_color": "#276749",

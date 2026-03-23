@@ -195,9 +195,6 @@ def generate_ai_prompt_guide(image_style: str = "") -> str:
 	for name, tmpl in TEMPLATE_REGISTRY.items():
 		schema = tmpl.get("param_schema", {})
 		lines.append(f"### {name}\n")
-		desc = tmpl.get("description")
-		if isinstance(desc, str) and desc.strip():
-			lines.append(desc.strip() + "\n")
 		if not schema:
 			lines.append("仅需 `content` 数组。")
 			if tmpl.get("content_anchor_required") is True:

@@ -27,7 +27,7 @@ export const templateMeta = {
 			"rightSrc": "理性分析图表的人简笔画图标",
 			"dontLabel": "❌ 别这样",
 			"doLabel": "✅ 正确做法",
-			"content": ["不要盲目跟风", "要做足功课再行动"],
+			"content": [{ "text": "不要盲目跟风" }, { "text": "要做足功课再行动" }],
 		},
 	},
 	"default_anchor_color": "#E53E3E",

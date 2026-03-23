@@ -44,7 +44,7 @@ export const templateMeta = {
 				{ imageSrc: "转折警示配图", enterEffect: "slideBottom" },
 				{ imageSrc: "结论冲击配图", enterEffect: "slideBottom" },
 			],
-			content: ["看到规律就抓财富密码？", "那是幻觉。", "你在慢性自杀。"],
+			content: [{ "text": "看到规律就抓财富密码？" }, { "text": "那是幻觉。" }, { "text": "你在慢性自杀。" }],
 		},
 	},
 	default_anchor_color: "#2B6CB0",

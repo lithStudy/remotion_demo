@@ -176,23 +176,20 @@ def validate_and_normalize_scene_scripts(
 			if clen == 0:
 				warnings.append(f"[{scene_id}] item order={order} 模板 {tname} content 为空")
 
-			# 每条 content 必须带 anchor（templateMeta.content_anchor_required）
-			if tmpl.get("content_anchor_required") is True and isinstance(content, list):
+			# 每条 content 必须是对象
+			if isinstance(content, list):
 				for idx, ci in enumerate(content):
-					if isinstance(ci, str):
+					if not isinstance(ci, dict):
 						warnings.append(
-							f"[{scene_id}] item order={order} 模板 {tname} content[{idx}] 为纯字符串，"
-							f"本模板要求对象且含 anchor"
+							f"[{scene_id}] item order={order} 模板 {tname} content[{idx}] 类型错误，必须为对象格式"
 						)
-					elif isinstance(ci, dict):
-						an = ci.get("anchor")
-						if an is None or (isinstance(an, str) and not an.strip()):
-							warnings.append(
-								f"[{scene_id}] item order={order} 模板 {tname} content[{idx}] 缺少非空 anchor"
-							)
 					else:
-						warnings.append(
-							f"[{scene_id}] item order={order} 模板 {tname} content[{idx}] 类型无效，需对象+anchor"
-						)
+						# 如果模板规定必须带 anchor
+						if tmpl.get("content_anchor_required") is True:
+							an = ci.get("anchor")
+							if an is None or (isinstance(an, str) and not an.strip()):
+								warnings.append(
+									f"[{scene_id}] item order={order} 模板 {tname} content[{idx}] 缺少非空 anchor"
+								)
 
 	return data, warnings

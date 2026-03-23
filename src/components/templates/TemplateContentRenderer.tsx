@@ -45,25 +45,14 @@ const AnchorWordList: React.FC<{
 
 /** 将 content 数组标准化为 ContentItem[] */
 export function normalizeContent(
-	content?: (string | ContentItem)[],
+	content?: ContentItem[],
 ): ContentItem[] {
 	if (!content) return [];
-	return content.map((c) =>
-		typeof c === "string"
-			? {
-					text: c,
-					startFrame: 0,
-					durationFrames: 90,
-					anchor: null,
-					anchorColor: null,
-					audioEffect: null,
-				}
-			: c,
-	);
+	return content;
 }
 
 interface TemplateContentRendererProps {
-	content?: (string | ContentItem)[];
+	content?: ContentItem[];
 	audioSrc?: string;
 	hideAnchors?: boolean;
 	hideSubtitles?: boolean;

@@ -26,7 +26,7 @@ export const templateMeta = {
 		"param": {
 			"imageSrc": "倒计时炸弹的简笔画图标",
 			"enterEffect": "slideBottom",
-			"content": ["你在慢性自杀"],
+			"content": [{ "text": "不要在这里停车" }, { "text": "后果自负" }],
 		},
 	},
 	"default_anchor_color": "#E53E3E",

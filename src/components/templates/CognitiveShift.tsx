@@ -19,6 +19,8 @@ export const templateMeta = {
 		"butText": { "type": "string", "required": true, "desc": "真实认知（‘而是’后面的内容）" },
 		"notSrc": { "type": "image_prompt", "required": false, "desc": "被否认知的配图" },
 		"butSrc": { "type": "image_prompt", "required": false, "desc": "真实认知的配图" },
+		"notContentIndex": { "type": "number", "required": false, "desc": "指定触发‘不是’部分动画的字幕段索引（默认0）" },
+		"butContentIndex": { "type": "number", "required": false, "desc": "指定触发‘而是’部分动画及转折的字幕段索引（默认1）" },
 	},
 	"required_extra_params": ["notText", "butText"],
 	"example": {
@@ -28,7 +30,9 @@ export const templateMeta = {
 			"butText": "靠认知和选择",
 			"notSrc": "满地找金币的辛苦工人",
 			"butSrc": "站在高处看地图的思考者",
-			"content": ["你以为赚钱是靠勤奋吗？", "其实不是靠拼命，而是靠选择。"],
+			"notContentIndex": 0,
+			"butContentIndex": 1,
+			"content": [{ "text": "你以为赚钱是靠勤奋吗？" }, { "text": "其实不是靠拼命，而是靠选择。" }],
 		},
 	},
 	"default_anchor_color": "#E53E3E",
@@ -41,6 +45,8 @@ export interface BWCognitiveShiftProps extends TemplateBaseProps {
 	butText?: string;
 	notSrc?: string;
 	butSrc?: string;
+	notContentIndex?: number;
+	butContentIndex?: number;
 }
 
 export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
@@ -48,6 +54,8 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 	butText = "",
 	notSrc,
 	butSrc,
+	notContentIndex = 0,
+	butContentIndex = 1,
 	content,
 	audioSrc,
 	children,
@@ -56,13 +64,38 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
 
+	// 动态获取内容起始帧
+	let notStartFrame = 0;
+	let butStartFrame = 35; // 默认备用
+
+	if (content && content.length > 0) {
+		const getFrame = (idx: number, fallback: number) => {
+			if (idx >= 0 && idx < content.length) {
+				const item = content[idx];
+				return item.startFrame;
+			}
+			return fallback;
+		};
+		notStartFrame = getFrame(notContentIndex, 0);
+		butStartFrame = getFrame(butContentIndex, 35);
+
+		//移除content中的anchor
+		content?.forEach((item) => {
+			item.anchor = undefined;
+			item.anchorColor = undefined;
+			item.anchorAnim = undefined;
+			item.audioEffect = undefined;
+		});
+	}
+
 	// 动画时间轴：
-	// 0-15: Not 部分入场
-	// 20-30: Not 部分弱化（变灰、划线）
-	// 35-50: But 部分弹入
-	const notEnter = spring({ frame, fps, config: { damping: 60, stiffness: 180 }, durationInFrames: 15 });
-	const shiftProgress = spring({ frame: frame - 20, fps, config: { damping: 12, stiffness: 100 }, durationInFrames: 20 });
-	const butEnter = spring({ frame: frame - 35, fps, config: { damping: 10, stiffness: 150 }, durationInFrames: 20 });
+	// 入场：根据 notContentIndex 对应的帧数
+	// 弱化与转折：根据 butContentIndex 对应的帧数（弱化比转折略早一些）
+	const shiftStartFrame = Math.max(notStartFrame + 15, butStartFrame - 15);
+
+	const notEnter = spring({ frame: frame - notStartFrame, fps, config: { damping: 60, stiffness: 180 }, durationInFrames: 15 });
+	const shiftProgress = spring({ frame: frame - shiftStartFrame, fps, config: { damping: 12, stiffness: 100 }, durationInFrames: 20 });
+	const butEnter = spring({ frame: frame - butStartFrame, fps, config: { damping: 10, stiffness: 150 }, durationInFrames: 20 });
 
 	const strikeWidth = interpolate(shiftProgress, [0.2, 0.8], [0, 100], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 	const notOpacity = interpolate(shiftProgress, [0, 1], [1, 0.3]);
@@ -70,6 +103,8 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 
 	const butScale = interpolate(butEnter, [0, 1], [0.6, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 	const butY = interpolate(butEnter, [0, 1], [40, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+
 
 	return (
 		<AbsoluteFill style={{ ...style }}>
@@ -99,7 +134,7 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 				</div>
 
 				{/* 中间连接词：渐隐渐现，或者随着 But 一起出现 */}
-				{frame > 30 && (
+				{frame > shiftStartFrame && (
 					<div style={{ fontSize: 48, fontWeight: 900, color: "#E53E3E", margin: "10px 0", opacity: butEnter }}>
 						而是
 					</div>

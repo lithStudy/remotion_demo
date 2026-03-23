@@ -19,7 +19,7 @@ export const templateMeta = {
 	"example": {
 		"template": "STEP_LIST",
 		"param": {
-			"content": ["第一步做什么", "第二步做什么", "第三步做什么"],
+			"content": [{ "text": "第一步做什么" }, { "text": "第二步做什么" }, { "text": "第三步做什么" }],
 		},
 	},
 	"default_anchor_color": "#276749",

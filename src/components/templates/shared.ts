@@ -19,7 +19,7 @@ export function isValidImageSrc(src?: string): boolean {
 	const extensionPattern = /\.(png|jpg|jpeg|gif|webp|svg|bmp)(\?.*)?$/i;
 
 	// 如果符合 URL 协议或以 / 开头，或者看起来像是一个文件路径（包含后缀）
-	return urlPattern.test(src) || extensionPattern.test(src);
+	return urlPattern.test(src) && extensionPattern.test(src);
 }
 
 /** 
@@ -105,14 +105,13 @@ export const SINGLE_IMAGE_MAX_HEIGHT_RATIO = 0.4;
 export const SINGLE_IMAGE_ANCHOR_MIN_GAP_PX = 50;
 
 function getVisibleAnchorItems(
-	content: (string | ContentItem)[] | undefined,
+	content: ContentItem[] | undefined,
 	frame: number,
 ): ContentItem[] {
 	const items = content ?? [];
 	return items
 		.filter(
-			(c): c is ContentItem =>
-				typeof c === "object" && !!c.anchor && c.startFrame <= frame,
+			(c) => !!c.anchor && c.startFrame <= frame,
 		)
 		.sort((a, b) => a.startFrame - b.startFrame);
 }
@@ -150,7 +149,7 @@ export function getSingleImageAnchorAvoidanceShiftPx({
 	height,
 	minGapPx = SINGLE_IMAGE_ANCHOR_MIN_GAP_PX,
 }: {
-	content: (string | ContentItem)[] | undefined;
+	content: ContentItem[] | undefined;
 	frame: number;
 	height: number;
 	minGapPx?: number;
@@ -173,7 +172,7 @@ export function getSingleImageAnchorAvoidanceShiftAnimatedPx({
 	height,
 	minGapPx = SINGLE_IMAGE_ANCHOR_MIN_GAP_PX,
 }: {
-	content: (string | ContentItem)[] | undefined;
+	content: ContentItem[] | undefined;
 	frame: number;
 	fps: number;
 	height: number;
@@ -291,8 +290,8 @@ export interface ContentItem {
 
 /** 所有模板组件的公共 props */
 export interface TemplateBaseProps {
-	/** 文案内容数组（Step1 为字符串数组，Step3 后为 ContentItem 数组） */
-	content?: (string | ContentItem)[];
+	/** 文案内容数组（统一为 ContentItem 数组） */
+	content?: ContentItem[];
 	/** TTS 音频文件路径 */
 	audioSrc?: string;
 	/** 该 item 的总持续帧数 */

@@ -24,7 +24,7 @@ export const templateMeta = {
 				{ "src": "1990年代电脑图标", "position": "left", "enterEffect": "slideLeft" },
 				{ "src": "2020年代手机图标", "position": "right", "enterEffect": "slideLeft" },
 			],
-			"content": ["过去需要一台电脑", "现在只需一部手机"],
+			"content": [{ "text": "过去需要一台电脑" }, { "text": "现在只需一部手机" }],
 		},
 	},
 	"default_anchor_color": "#2B6CB0",

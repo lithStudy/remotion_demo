@@ -22,7 +22,7 @@ export const templateMeta = {
 	"example": {
 		"template": "TEXT_FOCUS",
 		"param": {
-			"content": ["这就是本质"],
+			"content": [{ "text": "这就是本质" }],
 		},
 	},
 	"default_anchor_color": "#ffffff",

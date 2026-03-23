@@ -1,7 +1,8 @@
 {
     "default_template": "CENTER_FOCUS",
     "package_name": "my_video",
-    "gemini_model": "gemini-2.0-flash",
+    "gemini_model_back": "gemini-2.0-flash",
+    "gemini_model": "gemini-2.5-flash",
     "imagen_model_back": "gemini-3-pro-image-preview",
     "imagen_model": "gemini-3.1-flash-image-preview",
     "azure_service_region": "eastasia",

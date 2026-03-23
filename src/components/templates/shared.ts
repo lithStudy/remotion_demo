@@ -4,6 +4,34 @@
  */
 import React from "react";
 import { interpolate, spring } from "remotion";
+import defaultImage from "./images/scene1_1.png";
+
+/** 默认图片地址 */
+export const DEFAULT_IMAGE = defaultImage;
+
+/** 
+ * 简单验证图片 src 是否为合法 URL 或本地路径/静态资源
+ */
+export function isValidImageSrc(src?: string): boolean {
+	if (!src || typeof src !== "string" || src.trim() === "") return false;
+	// 简单的正则表达式：匹配 http(s)://, data:image/, 或以 / 开头的路径，或包含常见图片后缀的字符串
+	const urlPattern = /^(https?:\/\/|data:image\/|\/|static:|[a-zA-Z]:\\)/i;
+	const extensionPattern = /\.(png|jpg|jpeg|gif|webp|svg|bmp)(\?.*)?$/i;
+
+	// 如果符合 URL 协议或以 / 开头，或者看起来像是一个文件路径（包含后缀）
+	return urlPattern.test(src) || extensionPattern.test(src);
+}
+
+/** 
+ * 获取安全的图片地址：如果 src 无效，则返回默认图片
+ */
+export function getSafeImageSrc(src?: string): string {
+	console.log("src", src);
+	if (isValidImageSrc(src)) {
+		return src!;
+	}
+	return DEFAULT_IMAGE;
+}
 
 /** 白底模板背景色 */
 export const BW_BG = "#ffffff";
@@ -255,6 +283,8 @@ export interface ContentItem {
 	anchor?: string | null;
 	/** 锚点颜色 */
 	anchorColor?: string | null;
+	/** 锚点动画样式 */
+	anchorAnim?: "spring" | "slideUp" | "popIn" | "highlight" | null;
 	/** 音效名称 */
 	audioEffect?: string | null;
 }

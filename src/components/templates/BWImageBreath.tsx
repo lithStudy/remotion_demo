@@ -5,6 +5,7 @@
 import React from "react";
 import { Img, useCurrentFrame, useVideoConfig } from "remotion";
 import {
+	getSafeImageSrc,
 	getSingleImageAnchorAvoidanceShiftAnimatedPx,
 	useImageEnterStyle,
 	type ContentItem,
@@ -39,9 +40,10 @@ export const BWImageBreath: React.FC<BWImageBreathProps> = ({
 		height,
 	});
 	const transform = `${enterTransform ?? "translate(-50%, -50%)"} translateY(${anchorAvoidanceShift}px)`;
+	const safeSrc = getSafeImageSrc(src);
 	return (
 		<Img
-			src={src}
+			src={safeSrc}
 			style={{
 				position: "absolute",
 				left: "50%",

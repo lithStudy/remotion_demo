@@ -8,6 +8,7 @@ import { Scene1, calculateScene1Duration } from "./scenes/Scene1";
 import { Scene2, calculateScene2Duration } from "./scenes/Scene2";
 import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
 import { Scene4, calculateScene4Duration } from "./scenes/Scene4";
+import { Scene5, calculateScene5Duration } from "./scenes/Scene5";
 
 export const TestSchema = z.object({});
 
@@ -15,10 +16,11 @@ const TRANSITION_DURATION = 15;
 const SCENE_END_PADDING = 20;
 
 const sceneConfigs = [
-    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "痛点场景共鸣" },
-    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "幕后解密与共同受害者设定" },
-    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "概念降维与智力赋能" },
-    { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "防御锦囊与立意拔高" },
+    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引出现象：网络环境令人血压升高" },
+    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "原因剖析：大脑Bug与算法囚笼" },
+    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "概念引入：确认偏误" },
+    { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "解决方案：防身武器" },
+    { name: "scene5", duration: calculateScene5Duration() + SCENE_END_PADDING, component: Scene5, label: "总结升华：智力觉醒" },
 ];
 
 export const TOTAL_DURATION_TEST =

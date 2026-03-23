@@ -3,8 +3,8 @@
  */
 import React from "react";
 import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { BW_TEXT, type TemplateBaseProps } from "./shared";
-import { TemplateContentRenderer } from "./TemplateContentRenderer";
+import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
+import { normalizeContent, TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
 	"name": "CONCEPT_CARD",
@@ -56,6 +56,12 @@ export const BWConceptCard: React.FC<BWConceptCardProps> = ({
 		extrapolateLeft: "clamp",
 		extrapolateRight: "clamp",
 	});
+	const normalizedContent = normalizeContent(content);
+	const contentWithoutAnchors = normalizedContent.map((c) => ({
+		...c,
+		anchor: null,
+	}));
+
 	return (
 		<AbsoluteFill style={style}>
 			<div
@@ -77,12 +83,10 @@ export const BWConceptCard: React.FC<BWConceptCardProps> = ({
 					minWidth: 360,
 				}}
 			>
-				{imageSrc && (
-					<Img
-						src={imageSrc}
-						style={{ width: 320, height: 320, objectFit: "contain" }}
-					/>
-				)}
+				<Img
+					src={getSafeImageSrc(imageSrc)}
+					style={{ width: 320, height: 320, objectFit: "contain" }}
+				/>
 				{conceptName && (
 					<div
 						style={{
@@ -98,7 +102,7 @@ export const BWConceptCard: React.FC<BWConceptCardProps> = ({
 					</div>
 				)}
 			</div>
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+			<TemplateContentRenderer content={contentWithoutAnchors} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

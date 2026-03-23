@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Step 1: 口播文案分析（模板驱动版 v2）
-将口播文案拆解为场景脚本JSON，AI 直接输出 template + param 格式。
+Step 1: 口播文案分析（模板驱动版 v2） -> 现在升级为 v3 分步拆解版
+将口播文案拆解为场景脚本JSON，AI 拆分为：第一步大场景、第二步镜面画面类型、第三步具体参数与字幕。
 模板指南由 template_registry 动态生成。
 
 用法：
@@ -13,6 +13,7 @@ import json
 import os
 import re
 import shutil
+import time
 from pathlib import Path
 
 from scene_script_validate import validate_and_normalize_scene_scripts
@@ -80,6 +81,7 @@ def _inject_preview_timings(scene_scripts: dict, fps: int, config: dict) -> None
                         "durationFrames": duration_frames,
                         "anchor": content_item.get("anchor"),
                         "anchorColor": content_item.get("anchorColor"),
+                        "anchorAnim": content_item.get("anchorAnim"),
                         "audioEffect": content_item.get("audioEffect"),
                     })
                 else:
@@ -89,6 +91,7 @@ def _inject_preview_timings(scene_scripts: dict, fps: int, config: dict) -> None
                         "durationFrames": duration_frames,
                         "anchor": None,
                         "anchorColor": None,
+                        "anchorAnim": None,
                         "audioEffect": None,
                     })
 
@@ -154,8 +157,25 @@ def _cleanup_related_resources(video_name: str, output_dir: Path, config: dict, 
 
 
 # ─────────────────────────────────────────────────────────────
-# Gemini 调用
+# Gemini 调用 - 分步处理
 # ─────────────────────────────────────────────────────────────
+
+def _generate_with_retry(client, model: str, prompt: str, retries: int = 3):
+    """带指数退避的 API 请求重试封装"""
+    for attempt in range(retries):
+        try:
+            return client.models.generate_content(
+                model=model,
+                contents=prompt,
+                config=_json_generate_config(),
+            )
+        except Exception as e:
+            if attempt < retries - 1:
+                print(f"   ⚠️ API请求异常 ({e})，2秒后进行第 {attempt + 1} 次重试...")
+                time.sleep(2 * (attempt + 1))
+            else:
+                raise
+
 
 def _gemini_fix_after_warnings(
     client,
@@ -166,33 +186,169 @@ def _gemini_fix_after_warnings(
     template_guide: str,
 ) -> dict:
     """校验告警后的单次修订调用；不得改写 content 内原文。"""
-    fix_prompt = f"""你是短视频脚本 JSON 修订助手。下面初稿已通过结构解析，但校验器报告了问题。
+    fix_prompt = f"""你是短视频脚本 JSON 修订助手。下面初稿已通过结构解析，但校验器报告了部分问题。
 
-## 口播原文（content 内 text 必须与此完全一致，禁止改写、缩句、换词）
+## 口播原文（保证不丢失）
 {text}
 
-## 校验告警（含未知模板回退、枚举纠正提示等，请对症修订）
+## 校验告警（请对症修订）
 {json.dumps(warnings, ensure_ascii=False, indent=2)}
 
 ## 当前 JSON 初稿
 {json.dumps(draft, ensure_ascii=False, indent=2)}
 
-## 模板注册说明（修订时仍须遵守）
+## 模板要求
 {template_guide}
 
-请输出**一份**修订后的完整 JSON：顶层含 `topic`、`scenes`（每 scene 含 `sceneId`、`sceneName`、`items`），每个 item 含 `order`、`narrativeType`、`reasoning`、`template`、`param`。不要包含 `fps` 字段（脚本会追加）。
-所有 `content` 中的原文必须与「口播原文」一致。仅输出 JSON，不要 markdown 代码块。"""
+请输出**一份**修订后的完整 JSON：顶层含 `topic`、`scenes`（每 scene 含 `sceneId`、`sceneName`、`items`），每个 item 含 `order`、`narrativeType`、`reasoning`、`template`、`param`。不要包含 `fps` 字段。
+所有 `content` 中的原文必须一致。仅输出 JSON，不要 markdown 代码块。"""
 
-    resp = client.models.generate_content(
-        model=model,
-        contents=fix_prompt,
-        config=_json_generate_config(),
-    )
+    resp = _generate_with_retry(client, model, fix_prompt)
     return _parse_json_from_response(resp.text)
 
 
+def _analyze_scenes(client, model: str, text: str) -> dict:
+    prompt = f"""你是专业短视频脚本策划师。请将以下口播文案拆解为大场景结构。
+
+## 口播文案
+{text}
+
+## 拆解法则
+场景（Scene）是顶级叙事单元。通常对应文案中的一个完整段落或核心论点。只有当“论证主题”、“叙事目标”或“情绪段位”发生根本性转变时，才能新建 scene。禁止频繁切分场景！
+完整覆盖与原文零修改法则：所有场景的 text 拼合起来，必须 100% 完整覆盖全文。必须使用原文原句，严禁修改、缩写或重新措辞。
+
+## 输出格式 (严格输出 JSON，不要 markdown 代码块)
+{{
+  "topic": "视频核心主题",
+  "scenes": [
+    {{
+      "sceneId": "scene_1",
+      "sceneName": "场景简短命名",
+      "text": "该场景包含的完整口播原文"
+    }}
+  ]
+}}"""
+    print("   [Step 1/3] 正在拆解场景 (Scenes)...")
+    resp = _generate_with_retry(client, model, prompt)
+    return _parse_json_from_response(resp.text)
+
+
+def _analyze_items_for_scene(client, model: str, scene: dict, template_guide: str) -> dict:
+    scene_text = scene.get("text", "")
+    prompt = f"""你是专业短视频脚本策划师兼剪辑师。请将以下单个场景的文案拆解为具体的镜头画面（Item）。
+
+## 场景文案（必须原封不动且完整包含在 items 的 text 中）
+{scene_text}
+
+## 拆解法则
+1. 镜头（Item）控制屏幕上出现的一张主画面。必须频繁切分！只要讲述的小话题发生了轻微变化（通常只有 1~2 句短语），就必须新建一个 item。严禁让同一个 item 停留太久讲述长篇大论！
+2. 完整覆盖与原文零修改法则：所有 item 的 text 拼合起来，必须 100% 完整无缝地覆盖【场景文案】。必须使用原文原句，严禁修改、缩写、换词。
+3. 模板选择策略：对每个 item 先归类叙事类型想清楚 reasoning，再选 template。严禁通篇滥用 CENTER_FOCUS，拒绝机械复读，每个 item 必须有独立的思考。这里只需要定性，具体参数留待下一步。
+
+{template_guide}
+
+## 输出格式 (严格输出 JSON，不要 markdown 代码块)
+{{
+  "items": [
+    {{
+      "order": 1,
+      "narrativeType": "叙事类型定性",
+      "reasoning": "结合当前文案语义，详细说明为何这样切分且选择此模板",
+      "template": "选定的模板名称（必须来自指南）",
+      "text": "分配给该镜头的完整口播原文片段"
+    }}
+  ]
+}}"""
+    try:
+        resp = _generate_with_retry(client, model, prompt)
+        res_json = _parse_json_from_response(resp.text)
+        scene["items"] = res_json.get("items", [])
+    except Exception as e:
+        print(f"   ❌ 解析 Scene {scene.get('sceneId')} 的 items 彻底失败: {e}")
+        scene["items"] = []
+    # 如果缺失 order，补齐
+    for idx, item in enumerate(scene.get("items", [])):
+        if "order" not in item:
+            item["order"] = idx + 1
+    return scene
+
+
+def _analyze_param_for_item(client, model: str, scene_text: str, item: dict, template_registry: dict) -> dict:
+    item_text = item.get("text", "")
+    template_name = item.get("template", "CENTER_FOCUS")
+    tmpl_info = template_registry.get(template_name, template_registry.get("CENTER_FOCUS", {}))
+    
+    schema_str = json.dumps(tmpl_info.get("param_schema", {}), ensure_ascii=False, indent=2)
+    example_str = json.dumps(tmpl_info.get("example", {}), ensure_ascii=False, indent=2)
+
+    prompt = f"""你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+{scene_text}
+
+## 🎯 待处理的目标文案（你只需要处理这个片段！必须原封不动且完整包含在 content 中）
+{item_text}
+
+## 选定模板及参数规范
+模板名称：{template_name}
+参数 Schema 说明：
+{schema_str}
+
+模板该项的示例供参考：
+{example_str}
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+## 拆解法则
+1. 字幕层（Text）：这是短视频的单行字幕：
+   - 根据语气停顿的标点符号（逗号、句号、感叹号、问号），强制切分成不同的text！   
+   - 每条 content 元素的 text 长度应该控制在 **20 个汉字内**（包含标点）。
+2. ⚠️ 极其重要的锚点克制与“高价值”原则（Anchor）：
+   - 【锚点的价值】：锚点词必须是“高价值且有用”的！它应该是让人一眼记住的**核心概念、情绪爆点或痛点名词**（如：“底层Bug”、“信息囚笼”、“确认偏误”、“诱饵”）。
+   - 【拒绝无效锚点】：❌ 绝不要提取平庸无奇的词或长短语作为锚点（如：“现实”、“隐蔽”、“保护”、“受害者”、“多刷半小时”、“可能错了”）。锚点词必须精简（通常2-4个字），且具备强烈的独立视觉/情绪冲击力。
+   - 【克制原则】：由于你是逐句处理的，极易产生“每句话都要有锚点”的错觉！如果不克制，满屏叮叮当当的高亮会产生极其严重的视觉疲劳和恶俗感。
+   - 请结合【段落上下文】冷静判断：当前文案真的是整个段落的**最高潮**或**核心反转**吗？
+   - 绝大部分（85%以上）的铺垫、举例、描述片段，**绝对、千万不要加锚点**（只返回文字，直接省略 anchor、anchorColor、audioEffect 这三个字段即可）！宁缺毋滥！！
+3. 锚点颜色与动画样式（再次重申：只有那 20% 的真正的金句才准用！）：
+   - 颜色仅限两种：
+     - "#EF4444" (警示/反转/负面/核心结论)。
+     - "#000000" (事实/专业术语/客观数据)。
+   - 动画样式 (anchorAnim) 选择：
+     - "spring": 默认弹性（适合一般性强调）。
+     - "slideUp": 向上滑入（适合正面结论、上升趋势、启发性观点）。
+     - "popIn": 突然弹出（适合震惊、警示、负面反转、强调痛点）。
+     - "highlight": 底部抹色（适合术语、背景事实、平淡但重要的名词）。
+   - 音效可选：impact_thud(低沉重击)、ping(清脆提示)、woosh(挥舞转场)。带锚点必须配音效。
+4. 完整覆盖与原文零修改法则：所有 content 内的 text 按顺序拼合起来，必须完全等于“待处理文案”。严禁缩写、改写或缩减字数！
+
+## 输出格式 (严格输出 JSON，不要 markdown 代码块)
+仅输出该 item 的参数对象 `param`，里面包含 `content` 数组和选定模板要求的其他参数（请根据 Schema 生成相应字段）。
+
+{{
+  "param": {{
+    // (如果模板要求图片等其他字段，在此生成，但需符合 Schema 返回纯内容)
+    "content": [
+      {{
+        "text": "完整原文片段（顺次无缝拼接，不能漏字）",
+        "anchor": "被高亮的关键词（不要就留空或不要此字段）",
+        "anchorColor": "#颜色",
+        "anchorAnim": "动画样式",
+        "audioEffect": "音效"
+      }}
+    ]
+  }}
+}}"""
+    try:
+        resp = _generate_with_retry(client, model, prompt)
+        res_json = _parse_json_from_response(resp.text)
+        item["param"] = res_json.get("param", {})
+    except Exception as e:
+        print(f"   ❌ 解析 Item {item.get('order')} ({template_name}) 的 param 彻底失败: {e}")
+        item["param"] = {"content": [{"text": item_text}]}
+    return item
+
+
 def analyze_with_gemini(text: str, config: dict) -> dict:
-    """调用 Gemini 分析文案，AI 直接输出 template + param 格式"""
     from google import genai
 
     api_key = os.environ.get("GEMINI_API_KEY", "")
@@ -203,83 +359,40 @@ def analyze_with_gemini(text: str, config: dict) -> dict:
     image_style = config.get("image_style", "简洁线条插画风格，无背景，无文字")
     fps = config.get("fps", 30)
 
-    # 动态生成模板指南
     template_guide = generate_ai_prompt_guide(image_style)
     model = config.get("gemini_model", "gemini-2.0-flash")
 
-    prompt = f"""你是专业短视频脚本策划师兼剪辑师。将以下口播文案拆解为短视频场景脚本。
-
-## 口播文案
-{text}
-
-## ⚠️ 结构定义与拆解法则（必须严格遵守）
-
-1. **【Scene】场景层 / 段落单元：**
-   - **定义**：顶级叙事单元。通常对应文案中的一个完整段落或核心论点。
-   - **切分标准**：只有当“论证主题”、“叙事目标”或“情绪段位”发生根本性转变（例如：从“痛点共鸣”转为“原因剖析”）时，才能新建 scene。禁止按句号机械地频繁切分 scene！
-
-2. **【Item】镜头层 / 视觉画面单元：**
-   - **定义**：隶属于 scene，控制当前屏幕上出现的一张主画面。
-   - **切分标准**：必须频繁切分！为了让视频视觉丰富，只要**讲述的动作、意象或小话题发生了轻微变化（通常只有 1~2 句短语）**，就必须立即新建一个 item，这样才能在视频中触发新图片的切换。`1 个 item = 1 个新画面`，严禁让同一个 item (画面) 停留太久讲述长篇大论！
-
-3. **【Text】字幕层 / 单行显示单元（即 `content` 数组内的元素）：**
-   - **定义**：隶属于 item，控制视频画面中逐行打出的字幕行。
-   - **切分标准**：由于手机竖屏空间极度有限，**每条 `text` 字数绝对不能超过 15~20 个字**！哪怕只是同一句话，只要是长句或者中间有标点符号停顿，就必须切断，变成同一个 `content` 数组下的多条独立的短 `text`。**严禁把大段文字全塞进一条 `text` 里！**
-
-4. **【Anchor】锚点层 / 突显与音效单元（附着于 Text 内）：**
-   - **定义**：从 `text` 原文中提炼出的关键短词（通常 2~6 个字），用于在视频中以特殊颜色高亮文字，并配合音效“叮”一声打出，增强冲击力。
-   - **使用标准**：锚点宁缺毋滥（宜少不宜多）。绝大多数普通的 `text` 直接写成单行字符串即可。只有当这句话包含了极其核心的“痛点词”、“概念词”或“大反转”时，才将该条 content 升级为对象格式，并在 `anchor` 字段标出这个词。
-   - **格式规范**：`{{"text": "完整原文", "anchor": "被高亮的关键词", "anchorColor": "#颜色", "audioEffect": "音效"}}`
-   - **锚点颜色（anchorColor）的心理暗示**：
-     * `"#E53E3E"`：危险 / 负面 / 警告 / 痛点词汇
-     * `"#FF8C00"`：注意 / 质疑 / 反直觉词汇
-     * `"#2B6CB0"`：事实 / 数据 / 中立专有名词
-     * `"#276749"`：正面 / 结论 / 鼓励 / 建议词汇
-     * `"#805AD5"`：认知 / 洞察 / 抽象深刻的概念词
-   - **音效（audioEffect）选取**：带锚点的语句必须配音效。`impact_thud`（低沉重击，适合痛点/结论/发人深省处），`ping`（清脆提示，适合新概念/顿悟），`woosh`（转场类挥舞声）。
-
-5. **完整覆盖与原文零修改法则：**
-   - 所有 item 里的 `text` 顺次拼合起来，必须 100% 完整无缝地覆盖该段落全部原文。
-   - 必须使用原文原句，严禁对原文做任何缩写、改写、换词或重新措辞！
-
-6. **图片纯视觉**：在 prompt 描述画面时，只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
-7. **先判叙事再选模板**：对每个 item 先归类叙事类型（单图叙述 / 双图并列 / 对错避坑 / 步骤 / 时间轴 / 多图并列 / 纯文字金句 / 引用 / 对话 / 术语卡 / 揭秘锚点 / 冲击收束），再去下文模板查表选型；实在无法定性时才用兜底默认模板 `CENTER_FOCUS`。
-8. **严禁滥用 CENTER_FOCUS**：`CENTER_FOCUS` 仅用于无明显结构化视觉语义（如平铺直叙）时的最后兜底；若文案中出现对比、对错、步骤、演进、数据、术语、引用、对话等语义信号，必须优先选择对应的专用模板。
-9. **输出可解释选型**：每个 item 必须包含 `narrativeType`（你的定性结果）和 `reasoning`（一句话说明为什么选这个模板），再给出选定的 `template` 以及严格匹配的 `param`。
-
-{template_guide}
-
-## 输出格式（严格输出 JSON，不要包含 markdown 代码块标记）
-
-顶层字段：`topic`、`scenes`（内含 `sceneId`、`sceneName`、`items`）。
-每个 item：`order`、`narrativeType`、`reasoning`、`template`（指南中模板名之一）、`param`（该模板对应字段 + `content`）。
-
-content 数组中：
-- 不需要锚点的条目直接写字符串
-- 需要锚点的条目写成对象：{{"text": "原文", "anchor": "关键词", "anchorColor": "#颜色", "audioEffect": "音效"}}
-
-**各模板字段形态见上文「各模板 item 示例」；`template` 与 `param` 须与所选模板一致。**"""
-
     print("\n" + "=" * 60)
-    print("📋 发送给 AI 的提示词")
-    print("=" * 60)
-    print(prompt)
+    print("🤖 正在调用 Gemini 分析文案（分层次处理 v3）...")
     print("=" * 60 + "\n")
-    print("🤖 正在调用 Gemini 分析文案（模板驱动 v2）...")
-    response = client.models.generate_content(
-        model=model,
-        contents=prompt,
-        config=_json_generate_config(),
-    )
 
-    response_text = response.text
+    # 第一步：拆解场景
+    result = _analyze_scenes(client, model, text)
+    scenes = result.get("scenes", [])
+    print(f"   ✅ [Step 1/3] 完成，拆解为 {len(scenes)} 个 Scene。")
 
-    try:
-        result = _parse_json_from_response(response_text)
-    except json.JSONDecodeError as e:
-        print("⚠️ JSON解析失败，尝试修复...")
-        print(f"原始输出前200字符: {response_text[:200]}")
-        raise ValueError(f"Gemini 返回的JSON格式无效: {e}") from e
+    # 第二步：分场景循环拆解 Item
+    print("   [Step 2/3] 正在循环拆解 Items...")
+    for scene in scenes:
+        _analyze_items_for_scene(client, model, scene, template_guide)
+    
+    total_items = sum(len(s.get("items", [])) for s in scenes)
+    print(f"   ✅ [Step 2/3] 完成，共拆解为 {total_items} 个 Item。")
+
+    # 第三步：分 Item 循环拆解 text 和锚定词
+    print("   [Step 3/3] 正在循环拆解 Text 与 Anchors...")
+    for scene in scenes:
+        scene_text_full = scene.get("text", "")
+        for item in scene.get("items", []):
+            _analyze_param_for_item(client, model, scene_text_full, item, TEMPLATE_REGISTRY)
+
+    print("   ✅ [Step 3/3] 完成。")
+
+    # 清理多余的用于传递的临时字段 (text)
+    for scene in scenes:
+        scene.pop("text", None)
+        for item in scene.get("items", []):
+            item.pop("text", None)
 
     # 添加 fps
     result["fps"] = fps
@@ -317,7 +430,7 @@ content 数组中：
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Step 1: 口播文案分析（模板驱动 v2）")
+    parser = argparse.ArgumentParser(description="Step 1: 口播文案分析（模板驱动 v3）")
     parser.add_argument("--input", "-i", required=True, help="口播文案文件路径")
     parser.add_argument("--output", "-o", required=True, help="输出目录路径")
     parser.add_argument("--name", "-n", help="视频名称（英文，不填则读取 config.json）")

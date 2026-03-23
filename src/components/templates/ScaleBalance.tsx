@@ -3,7 +3,7 @@
  */
 import React from "react";
 import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { BW_TEXT, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -85,14 +85,14 @@ export const BWScaleBalance: React.FC<BWScaleBalanceProps> = ({
 						<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
 							<div style={{ width: 3, height: 80, backgroundColor: BW_TEXT, flexShrink: 0 }} />
 							<div style={panStyle}>
-								{leftSrc && <Img src={leftSrc} style={{ width: "55%", height: "55%", objectFit: "contain" }} />}
+								<Img src={getSafeImageSrc(leftSrc)} style={{ width: "55%", height: "55%", objectFit: "contain" }} />
 								{leftLabel && <span style={{ fontSize: 22, fontWeight: 700, color: BW_TEXT, textAlign: "center", fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif' }}>{leftLabel}</span>}
 							</div>
 						</div>
 						<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
 							<div style={{ width: 3, height: 80, backgroundColor: BW_TEXT, flexShrink: 0 }} />
 							<div style={panStyle}>
-								{rightSrc && <Img src={rightSrc} style={{ width: "55%", height: "55%", objectFit: "contain" }} />}
+								<Img src={getSafeImageSrc(rightSrc)} style={{ width: "55%", height: "55%", objectFit: "contain" }} />
 								{rightLabel && <span style={{ fontSize: 22, fontWeight: 700, color: BW_TEXT, textAlign: "center", fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif' }}>{rightLabel}</span>}
 							</div>
 						</div>

@@ -4,7 +4,7 @@
  */
 import React from "react";
 import { AbsoluteFill, Img, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
-import { BW_TEXT, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -89,16 +89,14 @@ export const BWSplitCompare: React.FC<BWSplitCompareProps> = ({
 						transform: `translateX(${slideLeft}px)`,
 					}}
 				>
-					{leftSrc && (
-						<Img
-							src={leftSrc}
-							style={{
-								maxWidth: "80%",
-								maxHeight: "50%",
-								objectFit: "contain",
-							}}
-						/>
-					)}
+					<Img
+						src={getSafeImageSrc(leftSrc)}
+						style={{
+							maxWidth: "80%",
+							maxHeight: "50%",
+							objectFit: "contain",
+						}}
+					/>
 					{leftLabel && (
 						<span
 							style={{
@@ -122,16 +120,14 @@ export const BWSplitCompare: React.FC<BWSplitCompareProps> = ({
 						transform: `translateX(${slideRight}px)`,
 					}}
 				>
-					{rightSrc && (
-						<Img
-							src={rightSrc}
-							style={{
-								maxWidth: "80%",
-								maxHeight: "50%",
-								objectFit: "contain",
-							}}
-						/>
-					)}
+					<Img
+						src={getSafeImageSrc(rightSrc)}
+						style={{
+							maxWidth: "80%",
+							maxHeight: "50%",
+							objectFit: "contain",
+						}}
+					/>
 					{rightLabel && (
 						<span
 							style={{

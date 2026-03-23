@@ -3,7 +3,7 @@
  */
 import React from "react";
 import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import type { TemplateBaseProps } from "./shared";
+import { getSafeImageSrc, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -81,7 +81,7 @@ export const BWDosAndDonts: React.FC<BWDosAndDontsProps> = ({
 					<div style={{ fontSize: 40, fontWeight: 900, color: "#E53E3E", textAlign: "center", padding: "0 16px", fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif' }}>
 						{dontLabel}
 					</div>
-					{leftSrc && <Img src={leftSrc} style={{ maxWidth: "55%", maxHeight: "38%", objectFit: "contain", opacity: 0.75 }} />}
+					<Img src={getSafeImageSrc(leftSrc)} style={{ maxWidth: "55%", maxHeight: "38%", objectFit: "contain", opacity: 0.75 }} />
 				</div>
 				<div style={{
 					flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
@@ -90,7 +90,7 @@ export const BWDosAndDonts: React.FC<BWDosAndDontsProps> = ({
 					<div style={{ fontSize: 40, fontWeight: 900, color: "#276749", textAlign: "center", padding: "0 16px", fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif' }}>
 						{doLabel}
 					</div>
-					{rightSrc && <Img src={rightSrc} style={{ maxWidth: "55%", maxHeight: "38%", objectFit: "contain" }} />}
+					<Img src={getSafeImageSrc(rightSrc)} style={{ maxWidth: "55%", maxHeight: "38%", objectFit: "contain" }} />
 				</div>
 			</div>
 			<TemplateContentRenderer content={content} audioSrc={audioSrc} />

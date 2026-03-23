@@ -10,7 +10,7 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
-import { BW_BG, BW_TEXT, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -142,12 +142,10 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 					>
 						{leftShown}
 					</div>
-					{leftSrc ? (
-						<Img
-							src={leftSrc}
-							style={{ width: 72, height: 72, objectFit: "contain" }}
-						/>
-					) : null}
+					<Img
+						src={getSafeImageSrc(leftSrc)}
+						style={{ width: 72, height: 72, objectFit: "contain" }}
+					/>
 					<div
 						style={{
 							width: "100%",
@@ -203,12 +201,10 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 					>
 						{rightShown}
 					</div>
-					{rightSrc ? (
-						<Img
-							src={rightSrc}
-							style={{ width: 72, height: 72, objectFit: "contain" }}
-						/>
-					) : null}
+					<Img
+						src={getSafeImageSrc(rightSrc)}
+						style={{ width: 72, height: 72, objectFit: "contain" }}
+					/>
 					<div
 						style={{
 							width: "100%",

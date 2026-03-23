@@ -11,6 +11,7 @@ import {
 	useVideoConfig,
 } from "remotion";
 import {
+	getSafeImageSrc,
 	useImageEnterStyle,
 	type BeatStageItem,
 	type BeatStageTone,
@@ -159,7 +160,7 @@ const BeatSequenceImageSlot: React.FC<{
 	if (finalOpacity <= 0.001) return null;
 	return (
 		<Img
-			src={imageSrc}
+			src={getSafeImageSrc(imageSrc)}
 			style={{
 				position: "absolute",
 				left: `${left}%`,

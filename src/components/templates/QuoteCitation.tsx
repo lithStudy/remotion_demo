@@ -3,7 +3,7 @@
  */
 import React from "react";
 import { AbsoluteFill, Img, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { BW_TEXT, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -73,14 +73,12 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 				>
 					"
 				</div>
-				{imageSrc && (
-					<div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
-						<Img
-							src={imageSrc}
-							style={{ width: 160, height: 160, objectFit: "contain", opacity: 0.5 }}
-						/>
-					</div>
-				)}
+				<div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
+					<Img
+						src={getSafeImageSrc(imageSrc)}
+						style={{ width: 160, height: 160, objectFit: "contain", opacity: 0.5 }}
+					/>
+				</div>
 				{quoteSource && (
 					<div
 						style={{

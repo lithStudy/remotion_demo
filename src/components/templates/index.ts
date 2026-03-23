@@ -35,3 +35,5 @@ export { BWProgressRing } from "./ProgressRing";
 export type { BWProgressRingProps } from "./ProgressRing";
 export { BWBeatSequence } from "./BeatSequence";
 export type { BWBeatSequenceProps } from "./BeatSequence";
+export { BWCognitiveShift } from "./CognitiveShift";
+export type { BWCognitiveShiftProps } from "./CognitiveShift";

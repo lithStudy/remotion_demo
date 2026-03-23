@@ -5,8 +5,16 @@
 import React from "react";
 import { Img, useCurrentFrame, useVideoConfig } from "remotion";
 import { AbsoluteFill } from "remotion";
-import { useImageEnterStyle, type ImagePosition, type MultiImageItem, type TemplateBaseProps } from "./shared";
-import { TemplateContentRenderer } from "./TemplateContentRenderer";
+import {
+	getSafeImageSrc,
+	useImageEnterStyle,
+	type ImagePosition,
+	type MultiImageItem,
+	type TemplateBaseProps,
+	type ContentItem,
+} from "./shared";
+import { normalizeContent, TemplateContentRenderer } from "./TemplateContentRenderer";
+import { BWAnchorWord } from "../BWPrimitives";
 
 export const templateMeta = {
 	"name": "MULTI_IMAGE",
@@ -42,7 +50,15 @@ const POSITION_STYLES: Record<ImagePosition, React.CSSProperties> = {
 	bottom: { left: "50%", top: "72%", maxWidth: "70%", maxHeight: "35%" },
 };
 
-const MultiImageSlot: React.FC<{ item: MultiImageItem }> = ({ item }) => {
+const ANCHOR_LAYOUT: Record<ImagePosition, React.CSSProperties> = {
+	center: { left: 0, right: 0, top: "22%" },
+	left: { left: 0, right: "48%", top: "25%" },
+	right: { left: "48%", right: 0, top: "25%" },
+	top: { left: 0, right: 0, top: "16%" },
+	bottom: { left: 0, right: 0, top: "53%" },
+};
+
+const MultiImageSlot: React.FC<{ item: MultiImageItem; anchorItem?: ContentItem }> = ({ item, anchorItem }) => {
 	const frame = useCurrentFrame();
 	const { fps, width, height } = useVideoConfig();
 	const localFrame = frame - (item.startFrame ?? 0);
@@ -55,17 +71,29 @@ const MultiImageSlot: React.FC<{ item: MultiImageItem }> = ({ item }) => {
 	);
 	const visible = localFrame >= 0;
 	const posStyle = POSITION_STYLES[item.position] ?? POSITION_STYLES.center;
+	const anchorStyle = ANCHOR_LAYOUT[item.position] ?? ANCHOR_LAYOUT.center;
+
 	return (
-		<Img
-			src={item.src}
-			style={{
-				position: "absolute",
-				objectFit: "contain",
-				...posStyle,
-				...enterStyle,
-				opacity: visible ? (enterStyle.opacity ?? 1) : 0,
-			}}
-		/>
+		<>
+			<Img
+				src={getSafeImageSrc(item.src)}
+				style={{
+					position: "absolute",
+					objectFit: "contain",
+					...posStyle,
+					...enterStyle,
+					opacity: visible ? (enterStyle.opacity ?? 1) : 0,
+				}}
+			/>
+			{anchorItem && anchorItem.anchor && frame >= anchorItem.startFrame && (
+				<BWAnchorWord
+					anchor={anchorItem.anchor}
+					delay={anchorItem.startFrame}
+					color={anchorItem.anchorColor || undefined}
+					style={anchorStyle}
+				/>
+			)}
+		</>
 	);
 };
 
@@ -79,12 +107,22 @@ export const BWMultiImage: React.FC<BWMultiImageProps> = ({
 	audioSrc,
 	children,
 	style,
-}) => (
-	<AbsoluteFill style={style}>
-		{images.map((img, i) => (
-			<MultiImageSlot key={i} item={img} />
-		))}
-		<TemplateContentRenderer content={content} audioSrc={audioSrc} />
-		{children}
-	</AbsoluteFill>
-);
+}) => {
+	const normalizedContent = normalizeContent(content);
+	const anchorItems = normalizedContent.filter((c) => c.anchor);
+
+	const contentWithoutAnchors = normalizedContent.map((c) => ({
+		...c,
+		anchor: null,
+	}));
+
+	return (
+		<AbsoluteFill style={style}>
+			{images.map((img, i) => (
+				<MultiImageSlot key={i} item={img} anchorItem={anchorItems[i]} />
+			))}
+			<TemplateContentRenderer content={contentWithoutAnchors} audioSrc={audioSrc} />
+			{children}
+		</AbsoluteFill>
+	);
+};

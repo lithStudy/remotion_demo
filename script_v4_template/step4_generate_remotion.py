@@ -150,57 +150,6 @@ def _apply_preview_overrides(scenes: list, preview_image: str | None, mute_audio
                             img["src"] = preview_image
 
 
-def _looks_like_image_path(src: str) -> bool:
-    s = src.strip().lower()
-    if s.startswith(("http://", "https://", "data:image/")):
-        return True
-    return s.endswith((".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg"))
-
-
-def _public_image_exists(project_root: Path, src: str) -> bool:
-    s = src.strip()
-    if not s:
-        return False
-    if s.startswith(("http://", "https://", "data:image/")):
-        return True
-    public_path = project_root / "public" / s.lstrip("/")
-    return public_path.exists()
-
-
-def _apply_missing_image_fallback(
-    scenes: list,
-    project_root: Path,
-    fallback_image: str,
-) -> None:
-    """
-    当图片字段不存在或不是合法图片路径时，统一回退到默认图片。
-    适用于仅跑 step4（未生成配图）时的预览容错。
-    """
-    for scene in scenes:
-        for item in scene.get("items", []):
-            param = item.get("param")
-            if not isinstance(param, dict):
-                continue
-
-            for field in IMAGE_PARAM_FIELDS:
-                value = param.get(field)
-                if isinstance(value, str):
-                    if (not _looks_like_image_path(value)) or (
-                        not _public_image_exists(project_root, value)
-                    ):
-                        param[field] = fallback_image
-
-            images = param.get("images")
-            if isinstance(images, list):
-                for img in images:
-                    if not isinstance(img, dict):
-                        continue
-                    src = img.get("src")
-                    if isinstance(src, str):
-                        if (not _looks_like_image_path(src)) or (
-                            not _public_image_exists(project_root, src)
-                        ):
-                            img["src"] = fallback_image
 
 
 def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -> str:
@@ -529,11 +478,6 @@ def main():
         action="store_true",
         help="预览模式：忽略场景音频（不渲染 Audio）",
     )
-    parser.add_argument(
-        "--missing-image-fallback",
-        default="images/template/scene1_1.png",
-        help="图片缺失时使用的默认图片（public 目录相对路径）",
-    )
     args = parser.parse_args()
 
     script_dir = Path(__file__).parent
@@ -556,11 +500,6 @@ def main():
         print("❌ 无场景数据")
         return False
 
-    _apply_missing_image_fallback(
-        scenes=scenes,
-        project_root=project_root,
-        fallback_image=args.missing_image_fallback,
-    )
 
     if args.preview_image or args.mute_audio:
         _apply_preview_overrides(

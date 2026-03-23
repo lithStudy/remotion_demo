@@ -96,6 +96,8 @@ export {
 	BWStatCompare,
 	BWProgressRing,
 	BWBeatSequence,
+	BWCognitiveShift,
+	type BWCognitiveShiftProps,
 	type MultiImageItem,
 	type BeatStageItem,
 	type BeatStageTone,

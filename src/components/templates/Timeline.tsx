@@ -3,7 +3,7 @@
  */
 import React from "react";
 import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { BW_TEXT, type MultiImageItem, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, getSafeImageSrc, type MultiImageItem, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -114,7 +114,7 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 							}}
 						/>
 						<Img
-							src={img.src}
+							src={getSafeImageSrc(img.src)}
 							style={{
 								position: "absolute",
 								left: `${xFrac * 100}%`,

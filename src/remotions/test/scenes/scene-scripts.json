@@ -1,0 +1,1169 @@
+{
+  "topic": "互联网环境与确认偏误",
+  "scenes": [
+    {
+      "sceneId": 1,
+      "sceneName": "引出现象：网络环境令人血压升高",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "痛点共鸣",
+          "reasoning": "开篇抛出现象，用反问引起用户共鸣，快速抓住用户注意力。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/1_1.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "最近你有没有这种感觉：",
+                "startFrame": 0,
+                "durationFrames": 57,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "上网刷新闻、看评论区，",
+                "startFrame": 56,
+                "durationFrames": 57,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "血压能瞬间飙升？",
+                "startFrame": 112,
+                "durationFrames": 42,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 154
+          }
+        },
+        {
+          "order": 2,
+          "narrativeType": "痛点细化",
+          "reasoning": "继续细化描述令人血压升高的具体情境，突出矛盾和不合理之处。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/1_2.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "明明一个挺简单的事儿，",
+                "startFrame": 0,
+                "durationFrames": 57,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "评论区却吵成了一锅粥。",
+                "startFrame": 56,
+                "durationFrames": 57,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 113
+          }
+        },
+        {
+          "order": 3,
+          "narrativeType": "痛点递进",
+          "reasoning": "通过具体的对话场景，展现争论的无效和令人沮丧的感受。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/1_3.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "你拿证据跟他讲道理，",
+                "startFrame": 0,
+                "durationFrames": 52,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "他反手甩给你一个地摊文学链接；",
+                "startFrame": 51,
+                "durationFrames": 77,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 129
+          }
+        },
+        {
+          "order": 4,
+          "narrativeType": "痛点递进",
+          "reasoning": "继续通过具体场景，展现争论的无效和令人沮丧的感受，对方只看他想看的。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/1_4.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "你试图保持客观，",
+                "startFrame": 0,
+                "durationFrames": 42,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "结果发现对方只看他想看的，",
+                "startFrame": 41,
+                "durationFrames": 67,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "只听他想听的。",
+                "startFrame": 107,
+                "durationFrames": 36,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 144
+          }
+        },
+        {
+          "order": 5,
+          "narrativeType": "痛点高潮",
+          "reasoning": "将痛点推向高潮，描述无论如何自证都无法摆脱被歪曲的困境。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/1_5.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "最气人的是，",
+                "startFrame": 0,
+                "durationFrames": 31,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "你发现不管你怎么自证清白，",
+                "startFrame": 30,
+                "durationFrames": 67,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "对方总能从你的话里抠出几个字来",
+                "startFrame": 97,
+                "durationFrames": 83,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "证明你“屁股歪了”。",
+                "startFrame": 179,
+                "durationFrames": 52,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 231
+          }
+        },
+        {
+          "order": 6,
+          "narrativeType": "痛点总结",
+          "reasoning": "总结前述痛点，引发用户共鸣，并提出问题。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/1_6.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "这种“鸡同讲讲、秀才遇上兵”的无力感，",
+                "startFrame": 0,
+                "durationFrames": 98,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "是不是让你觉得现在的互联网环境简直没法待了？",
+                "startFrame": 97,
+                "durationFrames": 113,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 211
+          }
+        },
+        {
+          "order": 7,
+          "narrativeType": "痛点升华",
+          "reasoning": "将讨论的焦点从真相转移到输赢，揭示互联网讨论的本质。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/1_7.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "大家好像不再是为了真相在讨论，",
+                "startFrame": 0,
+                "durationFrames": 77,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "而是在为了“输赢”在搏命。",
+                "startFrame": 76,
+                "durationFrames": 67,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 144
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/1/1.mp3",
+      "totalDurationFrames": 1124
+    },
+    {
+      "sceneId": 2,
+      "sceneName": "原因剖析：大脑Bug与算法囚笼",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "原因铺垫",
+          "reasoning": "否定常见的归因，为后续提出新的解释做铺垫。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/2_1.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "其实，这事儿真不全怪咱们修养不够，",
+                "startFrame": 0,
+                "durationFrames": 82,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "更不能怪我们普通人爱钻牛角尖。",
+                "startFrame": 81,
+                "durationFrames": 73,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 154
+          }
+        },
+        {
+          "order": 2,
+          "narrativeType": "核心原因1：大脑Bug",
+          "reasoning": "提出核心原因之一：大脑存在隐蔽的“底层Bug”。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/2_2.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "咱们得认清一个现实：",
+                "startFrame": 0,
+                "durationFrames": 49,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "我们的大脑在进化过程中，",
+                "startFrame": 48,
+                "durationFrames": 58,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "保留了一个极其隐蔽的“底层Bug”。",
+                "startFrame": 105,
+                "durationFrames": 87,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 193
+          }
+        },
+        {
+          "order": 3,
+          "narrativeType": "核心原因2：算法利用",
+          "reasoning": "指出互联网算法精准地利用了这个Bug。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/2_3.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "而现在的互联网算法，",
+                "startFrame": 0,
+                "durationFrames": 49,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "正精准地利用这个Bug",
+                "startFrame": 48,
+                "durationFrames": 58,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "把我们关进信息囚笼。",
+                "startFrame": 105,
+                "durationFrames": 49,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 154
+          }
+        },
+        {
+          "order": 4,
+          "narrativeType": "算法如何作用",
+          "reasoning": "解释平台通过推送认同观点来延长用户停留时间。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/2_4.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "那些平台为了让你多刷半小时，",
+                "startFrame": 0,
+                "durationFrames": 68,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "会不断推送你认同的观点。",
+                "startFrame": 67,
+                "durationFrames": 58,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 125
+          }
+        },
+        {
+          "order": 5,
+          "narrativeType": "算法作用结果",
+          "reasoning": "描述长期被算法喂养的后果：视野狭窄，认知失真。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/2_5.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "久而久之，我们就像被喂食的宠物，",
+                "startFrame": 0,
+                "durationFrames": 77,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "眼中只剩下一片虚假的繁荣。",
+                "startFrame": 76,
+                "durationFrames": 63,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 140
+          }
+        },
+        {
+          "order": 6,
+          "narrativeType": "大脑本能反应",
+          "reasoning": "解释大脑会将不同声音视为生存威胁，从而进行排斥。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/2_6.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "所以，当我们遇到不同声音时，",
+                "startFrame": 0,
+                "durationFrames": 68,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "大脑会本能地把它当成一种“生存威胁”。",
+                "startFrame": 67,
+                "durationFrames": 92,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 159
+          }
+        },
+        {
+          "order": 7,
+          "narrativeType": "非真相排斥",
+          "reasoning": "强调我们并非拒绝真相，而是保护被算法塑造的“自我”。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/2_7.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "我们不是在拒绝真相，",
+                "startFrame": 0,
+                "durationFrames": 49,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "我们是在保护那个脆弱的、",
+                "startFrame": 48,
+                "durationFrames": 58,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "被算法喂养出来的“自我”。",
+                "startFrame": 105,
+                "durationFrames": 63,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 169
+          }
+        },
+        {
+          "order": 8,
+          "narrativeType": "受害者",
+          "reasoning": "总结，强调在这种机制下，每个人都是被操纵的受害者。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/2_8.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "在这种机制面前，",
+                "startFrame": 0,
+                "durationFrames": 39,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "我们每个人都是被操纵的受害者。",
+                "startFrame": 38,
+                "durationFrames": 73,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 111
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/2/2.mp3",
+      "totalDurationFrames": 1201
+    },
+    {
+      "sceneId": 3,
+      "sceneName": "概念引入：确认偏误",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "术语引入",
+          "reasoning": "引入心理学概念“确认偏误”，为后续分析提供理论基础。",
+          "template": "CONCEPT_CARD",
+          "param": {
+            "imageSrc": "images/test/3_1.png",
+            "conceptName": "确认偏误",
+            "content": [
+              {
+                "text": "在心理学上，这种现象有一个著名的核心概念，",
+                "startFrame": 0,
+                "durationFrames": 102,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "叫作**“确认偏误”**",
+                "startFrame": 101,
+                "durationFrames": 64,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "（Confirmation Bias）。",
+                "startFrame": 164,
+                "durationFrames": 97,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 262
+          }
+        },
+        {
+          "order": 2,
+          "narrativeType": "概念解释",
+          "reasoning": "用通俗易懂的语言解释确认偏误的含义。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/3_2.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "简单通俗地说，",
+                "startFrame": 0,
+                "durationFrames": 34,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "确认偏误就像是我们大脑自带的一副“有色滤镜”。",
+                "startFrame": 33,
+                "durationFrames": 112,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 146
+          }
+        },
+        {
+          "order": 3,
+          "narrativeType": "确认偏误功能1：自动美颜",
+          "reasoning": "解释确认偏误的第一个功能：自动美颜，选择性接收信息。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/3_3.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "当我们先入为主地相信一个观点时，",
+                "startFrame": 0,
+                "durationFrames": 78,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "我们的脑子会自动开启两个功能：",
+                "startFrame": 77,
+                "durationFrames": 73,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "**第一，是“自动美颜”**，",
+                "startFrame": 150,
+                "durationFrames": 73,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "凡是能证明我正确的信息，",
+                "startFrame": 222,
+                "durationFrames": 59,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "哪怕漏洞百出，我们也觉得是真理；",
+                "startFrame": 281,
+                "durationFrames": 78,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 359
+          }
+        },
+        {
+          "order": 4,
+          "narrativeType": "确认偏误功能2：一键拉黑",
+          "reasoning": "解释确认偏误的第二个功能：一键拉黑，屏蔽反对信息。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/3_4.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "**第二，是“一键拉黑”**，",
+                "startFrame": 0,
+                "durationFrames": 73,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "凡是反驳我们的证据，",
+                "startFrame": 72,
+                "durationFrames": 49,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "哪怕铁证如山，我们也觉得那是造谣。",
+                "startFrame": 121,
+                "durationFrames": 83,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 204
+          }
+        },
+        {
+          "order": 5,
+          "narrativeType": "举例说明",
+          "reasoning": "通过热恋中的姑娘的例子，生动形象地说明确认偏误。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/3_5.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "这就像是一个正在热恋中的姑娘，",
+                "startFrame": 0,
+                "durationFrames": 73,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "她觉得男朋友哪儿都好。",
+                "startFrame": 72,
+                "durationFrames": 54,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "男朋友迟到那是“有个性”，",
+                "startFrame": 126,
+                "durationFrames": 64,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "男朋友不洗澡那是“纯爷们”。",
+                "startFrame": 189,
+                "durationFrames": 68,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 257
+          }
+        },
+        {
+          "order": 6,
+          "narrativeType": "举例递进",
+          "reasoning": "继续用热恋的例子，强化确认偏误的作用。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/3_6.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "哪怕闺蜜拿出一叠男方劈腿的证据，",
+                "startFrame": 0,
+                "durationFrames": 78,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "她也能脑补出那是",
+                "startFrame": 77,
+                "durationFrames": 44,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "“坏女人在勾引我男人”。",
+                "startFrame": 121,
+                "durationFrames": 59,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 180
+          }
+        },
+        {
+          "order": 7,
+          "narrativeType": "总结强调",
+          "reasoning": "总结强调事实不重要，大脑只会寻找支持自己观点的证据。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/3_7.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "这时候，事实已经不重要了，",
+                "startFrame": 0,
+                "durationFrames": 64,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "大脑只会疯狂寻找能支持",
+                "startFrame": 63,
+                "durationFrames": 59,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "“我没看错人”的证据。",
+                "startFrame": 121,
+                "durationFrames": 54,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 175
+          }
+        },
+        {
+          "order": 8,
+          "narrativeType": "揭示本质",
+          "reasoning": "揭示互联网讨论的本质：一场证明自己是对的心理游戏。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/3_8.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "在互联网讨论中，",
+                "startFrame": 0,
+                "durationFrames": 39,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "很多人其实并不是在寻找真理，",
+                "startFrame": 38,
+                "durationFrames": 68,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "而是在玩一场名为",
+                "startFrame": 106,
+                "durationFrames": 44,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "“证明我是对的”的心理游戏。",
+                "startFrame": 150,
+                "durationFrames": 68,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 219
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/3/3.mp3",
+      "totalDurationFrames": 1799
+    },
+    {
+      "sceneId": 4,
+      "sceneName": "解决方案：防身武器",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "过渡",
+          "reasoning": "承上启下，引出解决方案。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/4_1.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "为了不让自己变成算法的傀儡，",
+                "startFrame": 0,
+                "durationFrames": 65,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "下次上网冲浪，",
+                "startFrame": 64,
+                "durationFrames": 33,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "我建议大家在心里备好这把“防身武器”：",
+                "startFrame": 97,
+                "durationFrames": 89,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 186
+          }
+        },
+        {
+          "order": 2,
+          "narrativeType": "方法1：反向搜索法",
+          "reasoning": "提出第一个方法：反向搜索法。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/4_2.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "反向搜索法：",
+                "startFrame": 0,
+                "durationFrames": 28,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "当你极其认同某个观点时，",
+                "startFrame": 27,
+                "durationFrames": 56,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "强迫自己去搜一下",
+                "startFrame": 83,
+                "durationFrames": 42,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "反对这个观点的理由。",
+                "startFrame": 125,
+                "durationFrames": 47,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 172
+          }
+        },
+        {
+          "order": 3,
+          "narrativeType": "方法2：警惕“爽感”",
+          "reasoning": "提出第二个方法：警惕“爽感”。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/4_3.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "警惕“爽感”：",
+                "startFrame": 0,
+                "durationFrames": 33,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "如果一段文字让你读完觉得",
+                "startFrame": 32,
+                "durationFrames": 61,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "“太解气了、说得太对了”，",
+                "startFrame": 92,
+                "durationFrames": 61,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "这时候一定要停下来。",
+                "startFrame": 153,
+                "durationFrames": 47,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 200
+          }
+        },
+        {
+          "order": 4,
+          "narrativeType": "爽感原因",
+          "reasoning": "解释为什么警惕爽感，揭示爽感背后的真相。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/4_4.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "因为能让你瞬间产生巨大爽感的东西，",
+                "startFrame": 0,
+                "durationFrames": 79,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "往往不是真相，",
+                "startFrame": 78,
+                "durationFrames": 33,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "而是针对你“确认偏误”定制的诱饵。",
+                "startFrame": 111,
+                "durationFrames": 79,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 191
+          }
+        },
+        {
+          "order": 5,
+          "narrativeType": "方法3：自我提问",
+          "reasoning": "提出第三个方法：自我提问。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/4_5.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "问自己一个问题：",
+                "startFrame": 0,
+                "durationFrames": 38,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "“如果我是错的，",
+                "startFrame": 37,
+                "durationFrames": 38,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "会有什么证据能说服我？”",
+                "startFrame": 74,
+                "durationFrames": 61,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 135
+          }
+        },
+        {
+          "order": 6,
+          "narrativeType": "陷入陷阱",
+          "reasoning": "给出判断标准：如果没有任何证据能说服你，说明已经掉入陷阱。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/4_6.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "如果你发现没有任何证据能说服你，",
+                "startFrame": 0,
+                "durationFrames": 75,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "那说明你已经掉进了偏见的陷阱。",
+                "startFrame": 74,
+                "durationFrames": 70,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 144
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/4/4.mp3",
+      "totalDurationFrames": 1025
+    },
+    {
+      "sceneId": 5,
+      "sceneName": "总结升华：智力觉醒",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "价值传递",
+          "reasoning": "强调承认错误不是软弱，而是一种智力觉醒。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/5_1.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "兄弟姐妹们，",
+                "startFrame": 0,
+                "durationFrames": 29,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "在这个套路满天飞的时代，",
+                "startFrame": 28,
+                "durationFrames": 57,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "承认自己“可能错了”并不是一种软弱，",
+                "startFrame": 84,
+                "durationFrames": 85,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "而是一个成年人最高级的智力觉醒。",
+                "startFrame": 169,
+                "durationFrames": 76,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 245
+          }
+        },
+        {
+          "order": 2,
+          "narrativeType": "行动号召",
+          "reasoning": "呼吁用户掌握大脑的主动权，不被偏见裹挟。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "images/test/5_2.png",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "做自己大脑的主人，",
+                "startFrame": 0,
+                "durationFrames": 43,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "不被偏见裹挟，",
+                "startFrame": 42,
+                "durationFrames": 33,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              },
+              {
+                "text": "我们才能真正看清这个复杂的世界。",
+                "startFrame": 75,
+                "durationFrames": 76,
+                "anchor": null,
+                "anchorColor": null,
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 151
+          }
+        }
+      ],
+      "audioSrc": "/audio/test/5/5.mp3",
+      "totalDurationFrames": 396
+    }
+  ],
+  "fps": 30
+}

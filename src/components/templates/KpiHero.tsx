@@ -10,7 +10,7 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
-import { BW_BG, BW_TEXT, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -115,7 +115,7 @@ export const BWKpiHero: React.FC<BWKpiHeroProps> = ({
 				style={{
 					position: "absolute",
 					left: 0,
-					right: imageSrc ? "28%" : 0,
+					right: getSafeImageSrc(imageSrc) ? "28%" : 0,
 					top: "42%",
 					transform: "translateY(-50%)",
 					display: "flex",
@@ -138,24 +138,22 @@ export const BWKpiHero: React.FC<BWKpiHeroProps> = ({
 				) : null}
 			</div>
 
-			{imageSrc ? (
-				<div
-					style={{
-						position: "absolute",
-						right: "6%",
-						top: "38%",
-						transform: "translateY(-50%)",
-						width: "22%",
-						maxWidth: 280,
-						opacity: blockOpacity,
-					}}
-				>
-					<Img
-						src={imageSrc}
-						style={{ width: "100%", objectFit: "contain" }}
-					/>
-				</div>
-			) : null}
+			<div
+				style={{
+					position: "absolute",
+					right: "6%",
+					top: "38%",
+					transform: "translateY(-50%)",
+					width: "22%",
+					maxWidth: 280,
+					opacity: blockOpacity,
+				}}
+			>
+				<Img
+					src={getSafeImageSrc(imageSrc)}
+					style={{ width: "100%", objectFit: "contain" }}
+				/>
+			</div>
 
 			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}

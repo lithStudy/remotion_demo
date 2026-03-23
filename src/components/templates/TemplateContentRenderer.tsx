@@ -10,7 +10,7 @@ import { BWSubtitle, BWAnchorWord } from "../BWPrimitives";
 
 /** 锚点词列表：按时间依次出现并保留，以列表形式展示 */
 const AnchorWordList: React.FC<{
-	items: Array<{ anchor: string; startFrame: number; anchorColor?: string | null }>;
+	items: Array<{ anchor: string; startFrame: number; anchorColor?: string | null; anchorAnim?: "spring" | "slideUp" | "popIn" | "highlight" | null }>;
 }> = ({ items }) => {
 	const frame = useCurrentFrame();
 	const visible = items.filter((item) => item.startFrame <= frame);
@@ -34,6 +34,7 @@ const AnchorWordList: React.FC<{
 						anchor={item.anchor}
 						delay={item.startFrame}
 						color={item.anchorColor || "#111111"}
+						animStyle={item.anchorAnim || "spring"}
 						style={{ position: "relative", top: 0 }}
 					/>
 				</div>
@@ -64,6 +65,8 @@ export function normalizeContent(
 interface TemplateContentRendererProps {
 	content?: (string | ContentItem)[];
 	audioSrc?: string;
+	hideAnchors?: boolean;
+	hideSubtitles?: boolean;
 }
 
 /**
@@ -72,13 +75,13 @@ interface TemplateContentRendererProps {
  */
 export const TemplateContentRenderer: React.FC<
 	TemplateContentRendererProps
-> = ({ content, audioSrc }) => {
+> = ({ content, audioSrc, hideAnchors, hideSubtitles }) => {
 	const items = normalizeContent(content);
 
 	return (
 		<>
 			{/* 字幕层 */}
-			{items.map((item, i) => (
+			{!hideSubtitles && items.map((item, i) => (
 				<Sequence
 					key={`sub-${i}`}
 					from={item.startFrame}
@@ -89,13 +92,14 @@ export const TemplateContentRenderer: React.FC<
 			))}
 
 			{/* 锚点词层：依次出现并保留为列表 */}
-			{(() => {
+			{!hideAnchors && (() => {
 				const anchorItems = items
 					.filter((item): item is ContentItem & { anchor: string } => !!item.anchor)
 					.map((item) => ({
 						anchor: item.anchor,
 						startFrame: item.startFrame,
 						anchorColor: item.anchorColor,
+						anchorAnim: (item as any).anchorAnim,
 					}));
 				if (anchorItems.length === 0) return null;
 				return <AnchorWordList items={anchorItems} />;

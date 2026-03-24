@@ -159,10 +159,11 @@ def get_image_fields(template_name: str) -> list:
 	return fields
 
 
-def generate_ai_prompt_guide(image_style: str = "") -> str:
+def generate_ai_prompt_guide(image_style: str = "", include_examples: bool = True) -> str:
 	"""
 	动态生成 AI 提示词中的模板选择指南。
-	含兜底策略、汇总表、各模板 description + param 说明、逐个 item 示例。
+	含兜底策略、汇总表、各模板 description + param 说明。
+	include_examples=True 时额外拼接逐个 item 示例。
 	"""
 	lines: list[str] = []
 	count = len(TEMPLATE_REGISTRY)
@@ -245,21 +246,22 @@ def generate_ai_prompt_guide(image_style: str = "") -> str:
 		lines.append("- 纯视觉内容，无文字、无标注")
 		lines.append("- 描述具体生动（如\"一个戴眼镜的白领简笔画图标\"）")
 
-	lines.append("\n## 各模板 item 示例（每个代码块仅为一个 item）\n")
-	lines.append(
-		"下列 JSON **不是**让你合并成一个 scene：每块只展示该模板的字段形态。实际撰稿时按口播拆多个 scene，`items` 内按需选用模板，**禁止**单 scene 堆砌全部模板。\n"
-	)
-	for tname in sorted(TEMPLATE_REGISTRY.keys()):
-		tmpl = TEMPLATE_REGISTRY[tname]
-		ex = tmpl.get("example")
-		if not isinstance(ex, dict):
-			continue
-		item = dict(ex)
-		item.setdefault("order", 1)
-		lines.append(f"### {tname}\n")
-		lines.append("```json")
-		lines.append(json.dumps(item, ensure_ascii=False, indent=2))
-		lines.append("```\n")
+	if include_examples:
+		lines.append("\n## 各模板 item 示例（每个代码块仅为一个 item）\n")
+		lines.append(
+			"下列 JSON **不是**让你合并成一个 scene：每块只展示该模板的字段形态。实际撰稿时按口播拆多个 scene，`items` 内按需选用模板，**禁止**单 scene 堆砌全部模板。\n"
+		)
+		for tname in sorted(TEMPLATE_REGISTRY.keys()):
+			tmpl = TEMPLATE_REGISTRY[tname]
+			ex = tmpl.get("example")
+			if not isinstance(ex, dict):
+				continue
+			item = dict(ex)
+			item.setdefault("order", 1)
+			lines.append(f"### {tname}\n")
+			lines.append("```json")
+			lines.append(json.dumps(item, ensure_ascii=False, indent=2))
+			lines.append("```\n")
 
 	return "\n".join(lines)
 

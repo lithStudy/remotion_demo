@@ -14,12 +14,34 @@ import os
 import re
 import shutil
 import time
+from datetime import datetime
 from pathlib import Path
 
 from scene_script_validate import validate_and_normalize_scene_scripts
 from template_registry import TEMPLATE_REGISTRY, generate_ai_prompt_guide
 
 _JSON_CFG = None
+_AI_LOG_PATH = None
+
+
+def _set_ai_log_path(output_dir: Path, video_name: str) -> None:
+    """初始化 AI 请求日志文件路径。"""
+    global _AI_LOG_PATH
+    log_dir = output_dir / "logs"
+    log_dir.mkdir(parents=True, exist_ok=True)
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    _AI_LOG_PATH = log_dir / f"{video_name}_step1_ai_{ts}.log"
+
+
+def _append_ai_log(block: str) -> None:
+    """追加写入 AI 日志。"""
+    if _AI_LOG_PATH is None:
+        return
+    _AI_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(_AI_LOG_PATH, "a", encoding="utf-8") as f:
+        f.write(block)
+        if not block.endswith("\n"):
+            f.write("\n")
 
 
 def _json_generate_config():
@@ -186,17 +208,62 @@ def _cleanup_related_resources(video_name: str, output_dir: Path, config: dict, 
 
 def _generate_with_retry(client, model: str, prompt: str, retries: int = 3):
     """带指数退避的 API 请求重试封装"""
+    request_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print("\n" + "=" * 40 + " AI PROMPT " + "=" * 40)
     print(prompt)
     print("=" * 91 + "\n")
+    _append_ai_log(
+        "\n".join(
+            [
+                "",
+                "=" * 40 + " REQUEST " + "=" * 40,
+                f"time: {request_at}",
+                f"model: {model}",
+                f"retries: {retries}",
+                "",
+                "[PROMPT]",
+                prompt,
+                "=" * 91,
+                "",
+            ]
+        )
+    )
     for attempt in range(retries):
         try:
-            return client.models.generate_content(
+            resp = client.models.generate_content(
                 model=model,
                 contents=prompt,
                 config=_json_generate_config(),
             )
+            response_text = getattr(resp, "text", "")
+            _append_ai_log(
+                "\n".join(
+                    [
+                        "-" * 40 + " RESPONSE " + "-" * 40,
+                        f"time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+                        f"attempt: {attempt + 1}/{retries}",
+                        "",
+                        "[OUTPUT]",
+                        str(response_text),
+                        "-" * 91,
+                        "",
+                    ]
+                )
+            )
+            return resp
         except Exception as e:
+            _append_ai_log(
+                "\n".join(
+                    [
+                        "-" * 40 + " ERROR " + "-" * 40,
+                        f"time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+                        f"attempt: {attempt + 1}/{retries}",
+                        f"error: {e}",
+                        "-" * 89,
+                        "",
+                    ]
+                )
+            )
             if attempt < retries - 1:
                 print(f"   ⚠️ API请求异常 ({e})，2秒后进行第 {attempt + 1} 次重试...")
                 time.sleep(2 * (attempt + 1))
@@ -270,7 +337,7 @@ def _analyze_items_for_scene(client, model: str, scene: dict, template_guide: st
 ## 拆解法则
 1. 镜头（Item）控制屏幕上出现的一张主画面。必须频繁切分！只要讲述的小话题发生了轻微变化（通常只有 1~2 句短语），就必须新建一个 item。严禁让同一个 item 停留太久讲述长篇大论！
 2. 完整覆盖与原文零修改法则：所有 item 的 text 拼合起来，必须 100% 完整无缝地覆盖【场景文案】。必须使用原文原句，严禁修改、缩写、换词。
-3. 模板选择策略：对每个 item 先归类叙事类型想清楚 reasoning，再选 template。严禁通篇滥用 CENTER_FOCUS，拒绝机械复读，每个 item 必须有独立的思考。这里只需要定性，具体参数留待下一步。
+3. 选择策略：对每个 item 先归类叙事类型想清楚 reasoning，再选 template。严禁通篇滥用 CENTER_FOCUS，拒绝机械复读，每个 item 必须有独立的思考。这里只需要定性，具体参数留待下一步。
 
 {template_guide}
 
@@ -326,7 +393,6 @@ def _analyze_param_for_item(client, model: str, scene_text: str, item: dict, tem
 
 注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
 
-## 拆解法则
 1. 字幕层（Text）：这是短视频的单行字幕：
    - ⚠️ 核心规则：必须根据语气停顿的标点符号（逗号、分号、句号、感叹号、问号），强制把一段话切分成多个字典对象放入 content 数组中！
    - 包含标点在内，每条 `content` 元素的单个 `text` 长度务必控制在 **20 个汉字内**，绝不能出现超长单行字幕！大段文字必须被切碎！
@@ -342,11 +408,17 @@ def _analyze_param_for_item(client, model: str, scene_text: str, item: dict, tem
      - "#000000" (事实/专业术语/客观数据)。
    - 动画样式 (anim) 选择：
      - "spring": 默认弹性（适合一般性强调）。
-     - "slideUp": 向上滑入（适合正面结论、上升趋势、启发性观点）。
+     - "slideUp": 向上升起（适合正面结论、上升趋势、启发性观点）。
      - "popIn": 突然弹出（适合震惊、警示、负面反转、强调痛点）。
      - "highlight": 底部抹色（适合术语、背景事实、平淡但重要的名词）。
-   - 音效可选：impact_thud(低沉重击)、ping(清脆提示)、woosh(挥舞转场)。带锚点建议配音效到对应 content 条目 audioEffect。
-4. 完整覆盖与原文零修改法则：所有 content 内的 text 按顺序拼合起来，必须完全等于“待处理文案”。严禁缩写、改写或缩减字数！
+   - 音音效可选：impact_thud(低沉重击)、ping(清脆提示)、woosh(挥舞转场)。带锚点建议配音效到对应 content 条目 audioEffect。
+4. ⚠️ 视觉标题与字幕的分离（极其重要）：
+   - 如果模板要求填充 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等**视觉标题**字段：
+     - **极简原则**：这些字段必须是极简的**关键词（2-6个汉字）**。它们是画面的视觉重点，不是台词！
+     - **严禁重复**：绝对禁止直接把台词原封不动地填入这些标题字段！
+     - **示例**：如果台词是“其实赚钱不是靠拼命，而是靠认知”，那么 `notText` 应为“靠拼命”，`butText` 应为“靠认知”。
+   - 字幕层（content）则必须完整包含【待处理的目标文案】的所有文字。
+5. 完整覆盖与原文零修改法则：所有 content 内的 text 按顺序拼合起来，必须完全等于“待处理文案”。严禁缩写、改写或缩减字数！
 
 ## 输出格式 (严格输出 JSON，不要 markdown 代码块)
 仅输出该 item 的参数对象 `param`，里面包含 `content` 数组、`anchors` 数组和选定模板要求的其他参数（请根据 Schema 生成相应字段）。
@@ -391,7 +463,8 @@ def analyze_with_gemini(text: str, config: dict) -> dict:
     image_style = config.get("image_style", "简洁线条插画风格，无背景，无文字")
     fps = config.get("fps", 30)
 
-    template_guide = generate_ai_prompt_guide(image_style)
+    # 模板选择阶段不提供示例，避免模型在 Step2 过拟合样例。
+    template_guide = generate_ai_prompt_guide(image_style, include_examples=False)
     model = config.get("gemini_model", "gemini-2.0-flash")
 
     print("\n" + "=" * 60)
@@ -416,6 +489,12 @@ def analyze_with_gemini(text: str, config: dict) -> dict:
     for scene in scenes:
         scene_text_full = scene.get("text", "")
         for item in scene.get("items", []):
+            # 💡 强制清理 Step 2 可能产生的冗余 AI 注入字段，确保 Step 3 参数纯净且不重复
+            allowed_keys = {"order", "narrativeType", "reasoning", "template", "text"}
+            redundant_keys = [k for k in item.keys() if k not in allowed_keys]
+            for rk in redundant_keys:
+                item.pop(rk)
+
             _analyze_param_for_item(client, model, scene_text_full, item, TEMPLATE_REGISTRY)
 
     print("   ✅ [Step 3/3] 完成。")
@@ -481,6 +560,7 @@ def main():
     output_dir = Path(args.output)
 
     _cleanup_related_resources(video_name, output_dir, config, script_dir)
+    _set_ai_log_path(output_dir, video_name)
 
     with open(input_path, "r", encoding="utf-8") as f:
         text = f.read().strip()
@@ -516,6 +596,8 @@ def main():
     print(f"   📝 文案条目: {total_items}")
     print(f"   🎨 模板分布: {template_counts}")
     print(f"   💾 保存到: {output_path}")
+    if _AI_LOG_PATH is not None:
+        print(f"   🧾 AI日志: {_AI_LOG_PATH}")
 
     return True
 

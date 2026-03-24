@@ -10,7 +10,7 @@ export const templateMeta = {
 	"name": "DOS_AND_DONTS",
 	"componentExport": "BWDosAndDonts",
 	"description":
-		"适用：明确「别这样做 vs 应该这样做」的避坑；左右对错叙事。\n差异：两种中立方案并列、无对错标签用 SPLIT_COMPARE；代价/收益权衡用 SCALE_BALANCE。\n参数：dontLabel/doLabel 简短；与 leftSrc（错）/rightSrc（对）语义一致。",
+		"适用：明确「别这样做 vs 应该这样做」的避坑；左右对错叙事。\n差异：两种中立方案并列、无对错标签用 SPLIT_COMPARE；代价/收益权衡用 SCALE_BALANCE。\n参数：dontLabel/doLabel 是极简的对错标签（如：❌ 别这样 vs ✅ 正确做法），严禁使用长句说明；与 leftSrc/rightSrc 语义一致。",
 	"psychology": "损失厌恶",
 	"image_count": 2,
 	"param_schema": {

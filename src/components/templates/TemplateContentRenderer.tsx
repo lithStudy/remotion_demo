@@ -67,6 +67,11 @@ export const TemplateContentRenderer: React.FC<
 	TemplateContentRendererProps
 > = ({ content, anchors, audioSrc, hideAnchors, hideSubtitles }) => {
 	const items = normalizeContent(content);
+	const sanitizeSubtitleText = (text: string) => {
+		const trimmed = text.replace(/[\s\u00A0\u3000]+$/g, "");
+		return trimmed.replace(/[，。,；、,;.]$/, "");
+	};
+	
 
 	return (
 		<>
@@ -77,7 +82,7 @@ export const TemplateContentRenderer: React.FC<
 					from={item.startFrame}
 					durationInFrames={item.durationFrames}
 				>
-					<BWSubtitle text={item.text} startFrame={0} durationFrames={1} />
+					<BWSubtitle text={sanitizeSubtitleText(item.text)} startFrame={0} durationFrames={1} />
 				</Sequence>
 			))}
 

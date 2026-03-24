@@ -4,10 +4,9 @@
  * 锚点词在正文中高亮，底部保留字幕，不渲染锚点词弹出层。
  */
 import React from "react";
-import { AbsoluteFill, Sequence, Audio, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { BWSubtitle } from "../BWPrimitives";
+import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import type { TemplateBaseProps } from "./shared";
-import { normalizeContent } from "./TemplateContentRenderer";
+import { normalizeContent, TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
 	"name": "TEXT_FOCUS",
@@ -137,28 +136,12 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 				}}
 			/> */}
 
-			{/* 底部字幕 */}
-			{items.map((item, i) => (
-				<Sequence key={`sub-${i}`} from={item.startFrame} durationInFrames={item.durationFrames}>
-					<BWSubtitle text={item.text} startFrame={0} />
-				</Sequence>
-			))}
-
-			{/* 仅播放音效，不渲染锚点词弹出层（文字本身已高亮锚点） */}
-			{items
-				.filter((item) => item.audioEffect)
-				.map((item, i) => (
-					<Sequence key={`sfx-${i}`} from={item.startFrame}>
-						<Audio src={staticFile(`audio/effects/${item.audioEffect}.mp3`)} volume={0.6} />
-					</Sequence>
-				))}
-
-			{/* TTS 音频 */}
-			{audioSrc && (
-				<Sequence>
-					<Audio src={audioSrc} />
-				</Sequence>
-			)}
+			<TemplateContentRenderer
+				content={content}
+				anchors={anchors}
+				audioSrc={audioSrc}
+				hideAnchors
+			/>
 
 			{children}
 		</AbsoluteFill>

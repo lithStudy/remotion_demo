@@ -327,27 +327,48 @@ def _analyze_scenes(client, model: str, text: str) -> dict:
     return _parse_json_from_response(resp.text)
 
 
-def _analyze_items_for_scene(client, model: str, scene: dict, template_guide: str) -> dict:
+def _analyze_items_for_scene(client, model: str, topic: str, scene: dict, template_guide: str) -> dict:
     scene_text = scene.get("text", "")
-    prompt = f"""你是专业短视频脚本策划师兼剪辑师。请将以下单个场景的文案拆解为具体的镜头画面（Item）。
+    scene_name = scene.get("sceneName", "未命名场景")
+    
+    prompt = f"""你是顶级短视频脚本策划专家与资深剪辑师。请根据视频主题与场景目标，将文案精准拆解为多个具有视觉冲击力的画面镜头（Item）。
 
-## 场景文案（必须原封不动且完整包含在 items 的 text 中）
+## 🎥 视频大背景
+- **核心主题**：{topic}
+- **当前场景**：{scene_name}
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
 {scene_text}
 
-## 拆解法则
-1. 镜头（Item）控制屏幕上出现的一张主画面。必须频繁切分！只要讲述的小话题发生了轻微变化（通常只有 1~2 句短语），就必须新建一个 item。严禁让同一个 item 停留太久讲述长篇大论！
-2. 完整覆盖与原文零修改法则：所有 item 的 text 拼合起来，必须 100% 完整无缝地覆盖【场景文案】。必须使用原文原句，严禁修改、缩写、换词。
-3. 选择策略：对每个 item 先归类叙事类型想清楚 reasoning，再选 template。严禁通篇滥用 CENTER_FOCUS，拒绝机械复读，每个 item 必须有独立的思考。这里只需要定性，具体参数留待下一步。
+## 🧩 镜头拆解与策略指南
+
+### 1. 拆解节奏与呼吸感（Heuristics）
+- **高频切分**：短视频核心是“变”。严禁一个镜头停留超过 4 秒。
+- **切分点建议**：
+    - 只要逻辑发生转折（比如：但、但是、其实、然而、却）或并列（比如：而且、且、不仅...还、此外）必须切分。
+    - 只要话题从叙述转向举例（比如：例如、比如、拿...来说），或从问题转向对策（比如：所以、于是、由此可见）必须切分。
+    - 单个镜头（Item）的文案长度建议控制在 **12-28 个字** 之间。
+
+### 2. 叙事类型分类 (Narrative Types)
+请在 reasoning 中按照“叙事角色 -> 视觉重心 -> 模板选型”的逻辑进行思考：
+- `HOOK`：引子。制造悬念、反直觉、抛出痛点。匹配模板：`ALERT`, `CENTER_FOCUS` (配强冲击力图片)。
+- `LOGIC`：推导。原理分析、因果论证、底层逻辑。匹配模板：`MAGNIFYING_GLASS`, `STAT_COMPARE`, `CONCEPT_CHIP`。
+- `CASE`：举证。具体场景、案例模拟、步骤演示。匹配模板：`MULTI_IMAGE`, `SPLIT_COMPARE`, `TIMELINE`。
+- `DATA`：量化。硬核指标、对比增长、价值点。匹配模板：`KPI_HERO`, `PROGRESS_RING` (针对占比)。
+- `CONCLUSION`：收束。核心金句、行动号召、价值升华。匹配模板：`ALERT`, `CENTER_FOCUS` (建议高对比度)。
+
+### 3. 文案覆盖协议（Zero-Modification）
+- **绝对要求**：所有 item 的 `text` 字段按 order 顺次拼接后，必须与【场景原文】**字符级一致**（包括所有标点符号）。
 
 {template_guide}
 
-## 输出格式 (严格输出 JSON，不要 markdown 代码块)
+## 🛠 输出格式 (严格 JSON，禁止包含 markdown 代码块)
 {{
   "items": [
     {{
       "order": 1,
-      "narrativeType": "叙事类型定性",
-      "reasoning": "结合当前文案语义，详细说明为何这样切分且选择此模板",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "reasoning": "1.识别语义重心 -> 2.确定视觉交互逻辑 -> 3.最终选型理由",
       "template": "选定的模板名称（必须来自指南）",
       "text": "分配给该镜头的完整口播原文片段"
     }}
@@ -478,8 +499,9 @@ def analyze_with_gemini(text: str, config: dict) -> dict:
 
     # 第二步：分场景循环拆解 Item
     print("   [Step 2/3] 正在循环拆解 Items...")
+    topic = result.get("topic", "未命名主题")
     for scene in scenes:
-        _analyze_items_for_scene(client, model, scene, template_guide)
+        _analyze_items_for_scene(client, model, topic, scene, template_guide)
     
     total_items = sum(len(s.get("items", [])) for s in scenes)
     print(f"   ✅ [Step 2/3] 完成，共拆解为 {total_items} 个 Item。")

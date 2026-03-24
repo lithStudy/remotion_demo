@@ -4,6 +4,7 @@ import { Test, TestSchema, TOTAL_DURATION_TEST } from "./remotions/test/Test";
 import { TemplateShowcase, TOTAL_DURATION_TEMPLATE_SHOWCASE } from "./remotions/templateShowcase/TemplateShowcase";
 import { Test1, Test1Schema, TOTAL_DURATION_TEST1 } from "./remotions/test1/Test1";
 import { Test2, Test2Schema, TOTAL_DURATION_TEST2 } from "./remotions/test2/Test2";
+import { Test3, Test3Schema, TOTAL_DURATION_TEST3 } from "./remotions/test3/Test3";
 
 
 // Each <Composition> is an entry in the sidebar!
@@ -58,6 +59,18 @@ export const RemotionRoot: React.FC = () => {
         width={960}
         height={1280}
         schema={Test2Schema}
+        defaultProps={{}}
+      />
+    
+      {/* Test3 - 自动生成 */}
+      <Composition
+        id="Test3"
+        component={Test3}
+        durationInFrames={TOTAL_DURATION_TEST3}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={Test3Schema}
         defaultProps={{}}
       />
     </>

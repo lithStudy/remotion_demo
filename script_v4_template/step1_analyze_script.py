@@ -79,9 +79,6 @@ def _inject_preview_timings(scene_scripts: dict, fps: int, config: dict) -> None
                         "text": text,
                         "startFrame": cursor,
                         "durationFrames": duration_frames,
-                        "anchor": content_item.get("anchor"),
-                        "anchorColor": content_item.get("anchorColor"),
-                        "anchorAnim": content_item.get("anchorAnim"),
                         "audioEffect": content_item.get("audioEffect"),
                     })
                 else:
@@ -89,15 +86,42 @@ def _inject_preview_timings(scene_scripts: dict, fps: int, config: dict) -> None
                         "text": text,
                         "startFrame": cursor,
                         "durationFrames": duration_frames,
-                        "anchor": None,
-                        "anchorColor": None,
-                        "anchorAnim": None,
                         "audioEffect": None,
                     })
 
                 cursor += duration_frames
 
             param["content"] = upgraded_content
+            anchors = param.get("anchors", [])
+            if not isinstance(anchors, list):
+                print(f"   ⚠️ item order={item.get('order', '?')} 的 anchors 非数组，已清空")
+                anchors = []
+            valid_anchors = []
+            for anchor_idx, anchor_item in enumerate(anchors):
+                if not isinstance(anchor_item, dict):
+                    print(
+                        f"   ⚠️ item order={item.get('order', '?')} anchors[{anchor_idx}] 非对象，已丢弃"
+                    )
+                    continue
+                anchor_text = str(anchor_item.get("text", "")).strip()
+                show_from = anchor_item.get("showFrom")
+                if not anchor_text:
+                    print(
+                        f"   ⚠️ item order={item.get('order', '?')} anchors[{anchor_idx}] 缺少 text，已丢弃"
+                    )
+                    continue
+                if not isinstance(show_from, int) or show_from < 0 or show_from >= len(upgraded_content):
+                    print(
+                        f"   ⚠️ item order={item.get('order', '?')} anchors[{anchor_idx}].showFrom 非法，已丢弃"
+                    )
+                    continue
+                valid_anchors.append({
+                    "text": anchor_text,
+                    "showFrom": show_from,
+                    "color": anchor_item.get("color"),
+                    "anim": anchor_item.get("anim"),
+                })
+            param["anchors"] = valid_anchors
             param["totalDurationFrames"] = max(cursor, min_frames)
 
 
@@ -162,7 +186,7 @@ def _cleanup_related_resources(video_name: str, output_dir: Path, config: dict, 
 
 def _generate_with_retry(client, model: str, prompt: str, retries: int = 3):
     """带指数退避的 API 请求重试封装"""
-    print(f"\n" + "=" * 40 + " AI PROMPT " + "=" * 40)
+    print("\n" + "=" * 40 + " AI PROMPT " + "=" * 40)
     print(prompt)
     print("=" * 91 + "\n")
     for attempt in range(retries):
@@ -311,21 +335,21 @@ def _analyze_param_for_item(client, model: str, scene_text: str, item: dict, tem
    - 【拒绝无效锚点】：❌ 绝不要提取平庸无奇的词作为锚点（如：“现实”、“隐蔽”、“保护”、“受害者”、“多刷半小时”、“可能错了”）。锚点词必须精简（通常2-4个字），且具备强烈的独立视觉/情绪冲击力。
    - 【克制原则】：由于你是逐句处理的，极易产生“每句话都要有锚点”的错觉！如果不克制，满屏叮叮当当的高亮会产生极其严重的视觉疲劳和恶俗感。
    - 请结合【段落上下文】冷静判断：当前文案真的是整个段落的**最高潮**或**核心反转**吗？如果不是，不需要填充锚点数据
-   - 绝大部分（85%以上）的铺垫、举例、描述片段，**绝对、千万不要加锚点**（只返回文字，直接让 anchor、anchorColor、audioEffect 这三个字段为空即可）！宁缺毋滥！！
+   - 绝大部分（85%以上）的铺垫、举例、描述片段，**绝对、千万不要加锚点**（anchors 返回空数组）！宁缺毋滥！！
 3. 锚点颜色与动画样式：
    - 颜色仅限两种：
      - "#EF4444" (警示/反转/负面/核心结论)。
      - "#000000" (事实/专业术语/客观数据)。
-   - 动画样式 (anchorAnim) 选择：
+   - 动画样式 (anim) 选择：
      - "spring": 默认弹性（适合一般性强调）。
      - "slideUp": 向上滑入（适合正面结论、上升趋势、启发性观点）。
      - "popIn": 突然弹出（适合震惊、警示、负面反转、强调痛点）。
      - "highlight": 底部抹色（适合术语、背景事实、平淡但重要的名词）。
-   - 音效可选：impact_thud(低沉重击)、ping(清脆提示)、woosh(挥舞转场)。带锚点必须配音效。
+   - 音效可选：impact_thud(低沉重击)、ping(清脆提示)、woosh(挥舞转场)。带锚点建议配音效到对应 content 条目 audioEffect。
 4. 完整覆盖与原文零修改法则：所有 content 内的 text 按顺序拼合起来，必须完全等于“待处理文案”。严禁缩写、改写或缩减字数！
 
 ## 输出格式 (严格输出 JSON，不要 markdown 代码块)
-仅输出该 item 的参数对象 `param`，里面包含 `content` 数组和选定模板要求的其他参数（请根据 Schema 生成相应字段）。
+仅输出该 item 的参数对象 `param`，里面包含 `content` 数组、`anchors` 数组和选定模板要求的其他参数（请根据 Schema 生成相应字段）。
 
 {{
   "param": {{
@@ -333,10 +357,15 @@ def _analyze_param_for_item(client, model: str, scene_text: str, item: dict, tem
     "content": [
       {{
         "text": "完整原文片段（顺次无缝拼接，不能漏字）",
-        "anchor": "被高亮的关键词（不要就留空或不要此字段）",
-        "anchorColor": "#颜色",
-        "anchorAnim": "动画样式",
         "audioEffect": "音效"
+      }}
+    ],
+    "anchors": [
+      {{
+        "text": "被高亮的关键词",
+        "showFrom": 0,
+        "color": "#颜色",
+        "anim": "动画样式"
       }}
     ]
   }}
@@ -347,7 +376,7 @@ def _analyze_param_for_item(client, model: str, scene_text: str, item: dict, tem
         item["param"] = res_json.get("param", {})
     except Exception as e:
         print(f"   ❌ 解析 Item {item.get('order')} ({template_name}) 的 param 彻底失败: {e}")
-        item["param"] = {"content": [{"text": item_text}]}
+        item["param"] = {"content": [{"text": item_text}], "anchors": []}
     return item
 
 

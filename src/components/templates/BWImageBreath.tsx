@@ -7,6 +7,7 @@ import { Img, useCurrentFrame, useVideoConfig } from "remotion";
 import {
 	getSafeImageSrc,
 	getSingleImageAnchorAvoidanceShiftAnimatedPx,
+	type AnchorItem,
 	useImageEnterStyle,
 	type ContentItem,
 	type ImageEnterEffect,
@@ -19,6 +20,8 @@ export interface BWImageBreathProps {
 	enterEffect?: ImageEnterEffect;
 	/** 内容数组，用于根据锚点计算图片下移避让 */
 	content?: ContentItem[];
+	/** 锚点数组（showFrom 关联 content 索引） */
+	anchors?: AnchorItem[];
 	/** 图片容器样式覆盖 */
 	style?: React.CSSProperties;
 }
@@ -27,6 +30,7 @@ export const BWImageBreath: React.FC<BWImageBreathProps> = ({
 	src,
 	enterEffect = "breathe",
 	content,
+	anchors,
 	style,
 }) => {
 	const frame = useCurrentFrame();
@@ -35,6 +39,7 @@ export const BWImageBreath: React.FC<BWImageBreathProps> = ({
 	const { transform: enterTransform, ...restEnterStyle } = enterStyle;
 	const anchorAvoidanceShift = getSingleImageAnchorAvoidanceShiftAnimatedPx({
 		content,
+		anchors,
 		frame,
 		fps,
 		height,

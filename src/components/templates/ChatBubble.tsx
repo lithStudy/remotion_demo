@@ -3,7 +3,7 @@
  */
 import React from "react";
 import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { BW_TEXT, getSafeImageSrc, type ContentItem, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
 import { normalizeContent, TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -36,6 +36,7 @@ export interface BWChatBubbleProps extends TemplateBaseProps {
 export const BWChatBubble: React.FC<BWChatBubbleProps> = ({
 	imageSrc,
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -45,7 +46,10 @@ export const BWChatBubble: React.FC<BWChatBubbleProps> = ({
 	const items = normalizeContent(content);
 
 	// 定位当前帧对应的 content 项
-	const activeItem = items.find((it: ContentItem) => frame >= it.startFrame && frame < it.startFrame + it.durationFrames) || items[0];
+	const activeIndex = items.findIndex((it) => frame >= it.startFrame && frame < it.startFrame + it.durationFrames);
+	const safeActiveIndex = activeIndex >= 0 ? activeIndex : 0;
+	const activeItem = items[safeActiveIndex];
+	const activeAnchor = (anchors ?? []).find((a) => a.showFrom === safeActiveIndex);
 
 	const avatarSpring = spring({ frame, fps, config: { damping: 60, stiffness: 200 }, durationInFrames: 20 });
 	const avatarX = interpolate(avatarSpring, [0, 1], [-300, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -54,7 +58,9 @@ export const BWChatBubble: React.FC<BWChatBubbleProps> = ({
 
 	const renderBubbleContent = () => {
 		if (!activeItem) return children;
-		const { text, anchor, anchorColor } = activeItem;
+		const text = activeItem.text;
+		const anchor = activeAnchor?.text;
+		const anchorColor = activeAnchor?.color;
 		if (!anchor || !text.includes(anchor)) return text;
 
 		const parts = text.split(anchor);
@@ -105,7 +111,7 @@ export const BWChatBubble: React.FC<BWChatBubbleProps> = ({
 					</span>
 				</div>
 			</div>
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} hideAnchors />
+			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} hideAnchors />
 		</AbsoluteFill>
 	);
 };

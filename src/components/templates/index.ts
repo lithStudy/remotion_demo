@@ -1,4 +1,4 @@
-export { BW_BG, BW_TEXT, useImageEnterStyle, type ImageEnterEffect, type ImagePosition, type MultiImageItem, type ContentItem, type TemplateBaseProps, type BeatStageItem, type BeatStageTone } from "./shared";
+export { BW_BG, BW_TEXT, useImageEnterStyle, type ImageEnterEffect, type ImagePosition, type MultiImageItem, type ContentItem, type AnchorItem, type TemplateBaseProps, type BeatStageItem, type BeatStageTone } from "./shared";
 export { BWImageBreath } from "./BWImageBreath";
 export type { BWImageBreathProps } from "./BWImageBreath";
 export { BWCenterFocus } from "./CenterFocus";

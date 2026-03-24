@@ -36,6 +36,7 @@ export const BWStepList: React.FC<BWStepListProps> = ({
 	steps,
 	startFrame = 0,
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -79,7 +80,7 @@ export const BWStepList: React.FC<BWStepListProps> = ({
 					staggerDelay={12}
 				/>
 			</div>
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

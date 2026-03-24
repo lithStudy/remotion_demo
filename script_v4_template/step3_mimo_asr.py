@@ -182,7 +182,7 @@ def match_and_upgrade_scene_script(asr_timestamps, scene_script_path, output_sce
                 new_info = {
                     "startFrame": start_frame,
                     "durationFrames": duration_frames,
-                    "anchor": None, "anchorColor": None, "audioEffect": None
+                    "audioEffect": None
                 }
                 if isinstance(c_item, str):
                     new_info["text"] = c_item

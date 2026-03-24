@@ -49,6 +49,7 @@ export const BWSplitCompare: React.FC<BWSplitCompareProps> = ({
 	leftSrc,
 	rightSrc,
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -157,7 +158,7 @@ export const BWSplitCompare: React.FC<BWSplitCompareProps> = ({
 					transform: `translate(-50%, -50%) scaleY(${lineProgress})`,
 				}}
 			/>
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} hideAnchors />
+			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} hideAnchors />
 			{children}
 		</AbsoluteFill>
 	);

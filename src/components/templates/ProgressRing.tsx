@@ -53,6 +53,7 @@ export const BWProgressRing: React.FC<BWProgressRingProps> = ({
 	label,
 	subLabel,
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -179,7 +180,7 @@ export const BWProgressRing: React.FC<BWProgressRingProps> = ({
 				) : null}
 			</div>
 
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

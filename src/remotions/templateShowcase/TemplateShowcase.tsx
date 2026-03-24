@@ -19,6 +19,7 @@ import {
 	BWStatCompare,
 	BWProgressRing,
 	BWBeatSequence,
+	BWCognitiveShift,
 	BWSubtitle,
 } from "../../components";
 
@@ -27,8 +28,8 @@ const SEGMENT_FRAMES = 75;
 const img = (path: string) => staticFile(path);
 
 /**
- * 全展示：templateMeta 覆盖的模板按 name 字母序，首项为 BWImageBreath（入场基元，无独立 template id）。
- * 新增模板时请在此处追加一项并维持顺序。
+ * 全展示：覆盖当前 templates 目录已导出的模板能力。
+ * 新增模板时请在此处追加一项，保证总时长自动更新。
  */
 const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 	{
@@ -64,27 +65,22 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 							text: "看到规律就等于财富密码？",
 							startFrame: 0,
 							durationFrames: 28,
-							anchor: "财富密码",
-							anchorColor: "#FF8C00",
 							audioEffect: "ping",
 						},
 						{
 							text: "那是幻觉。",
 							startFrame: 28,
 							durationFrames: 22,
-							anchor: null,
-							anchorColor: null,
 							audioEffect: null,
 						},
 						{
 							text: "持续误解就是慢性自杀。",
 							startFrame: 50,
 							durationFrames: 25,
-							anchor: null,
-							anchorColor: null,
 							audioEffect: null,
 						},
 					]}
+					anchors={[{ text: "财富密码", showFrom: 0, color: "#FF8C00", anim: "popIn" }]}
 				/>
 				<BWSubtitle position="top" text="BEAT_SEQUENCE · 节拍递进（一问一驳一锤）" startFrame={0} />
 			</>
@@ -121,6 +117,38 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 		),
 	},
 	{
+		key: "cognitive-shift",
+		content: (
+			<>
+				<BWCognitiveShift
+					notText="不是更努力就更快成功"
+					butText="而是更精准地做选择"
+					notSrc={img("images/template/scene5_1.png")}
+					butSrc={img("images/template/scene5_2.png")}
+					content={[
+						{
+							text: "你以为结果只取决于努力程度。",
+							startFrame: 0,
+							durationFrames: 32,
+							audioEffect: null,
+						},
+						{
+							text: "真正拉开差距的是认知和选择。",
+							startFrame: 32,
+							durationFrames: 43,
+							audioEffect: "impact_thud",
+						},
+					]}
+					anchors={[
+						{ text: "努力程度", showFrom: 0, color: "#D64545", anim: "popIn" },
+						{ text: "认知和选择", showFrom: 1, color: "#111111", anim: "highlight" },
+					]}
+				/>
+				<BWSubtitle position="top" text="COGNITIVE_SHIFT · 不是...而是..." startFrame={0} />
+			</>
+		),
+	},
+	{
 		key: "concept-card",
 		content: (
 			<>
@@ -152,7 +180,10 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 					suffix="%"
 					headline="用户满意度"
 					imageSrc={img("images/template/scene1_1.png")}
-					content={["满意度同比大幅提升", "说明产品体验在变好"]}
+					content={[
+						{ text: "满意度同比大幅提升", startFrame: 0, durationFrames: 36, audioEffect: null },
+						{ text: "说明产品体验在变好", startFrame: 36, durationFrames: 39, audioEffect: null },
+					]}
 				/>
 				<BWSubtitle position="top" text="KPI_HERO · 单指标大字报" startFrame={0} />
 			</>
@@ -168,11 +199,10 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 							text: "本质是供需失衡在起作用",
 							startFrame: 0,
 							durationFrames: 40,
-							anchor: "供需失衡",
-							anchorColor: "#111111",
 							audioEffect: null,
 						},
 					]}
+					anchors={[{ text: "供需失衡", showFrom: 0, color: "#111111", anim: "popIn" }]}
 				/>
 				<BWSubtitle position="top" text="MAGNIFYING_GLASS · 揭秘底层" startFrame={0} />
 			</>
@@ -200,7 +230,10 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 					percent={78}
 					label="项目完成度"
 					subLabel="截至本季度"
-					content={["已经完成近八成", "剩下部分集中攻坚"]}
+					content={[
+						{ text: "已经完成近八成", startFrame: 0, durationFrames: 36, audioEffect: null },
+						{ text: "剩下部分集中攻坚", startFrame: 36, durationFrames: 39, audioEffect: null },
+					]}
 				/>
 				<BWSubtitle position="top" text="PROGRESS_RING · 环形进度" startFrame={0} />
 			</>

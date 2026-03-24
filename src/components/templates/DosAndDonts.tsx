@@ -48,6 +48,7 @@ export const BWDosAndDonts: React.FC<BWDosAndDontsProps> = ({
 	dontLabel = "❌ 错误",
 	doLabel = "✅ 正确",
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -93,7 +94,7 @@ export const BWDosAndDonts: React.FC<BWDosAndDontsProps> = ({
 					<Img src={getSafeImageSrc(rightSrc)} style={{ maxWidth: "55%", maxHeight: "38%", objectFit: "contain" }} />
 				</div>
 			</div>
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

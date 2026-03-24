@@ -57,6 +57,7 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 	notContentIndex = 0,
 	butContentIndex = 1,
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -78,14 +79,6 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 		};
 		notStartFrame = getFrame(notContentIndex, 0);
 		butStartFrame = getFrame(butContentIndex, 35);
-
-		// //移除content中的anchor
-		// content?.forEach((item) => {
-		// 	item.anchor = undefined;
-		// 	item.anchorColor = undefined;
-		// 	item.anchorAnim = undefined;
-		// 	item.audioEffect = undefined;
-		// });
 	}
 
 	// 动画时间轴：
@@ -151,7 +144,7 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 				</div>
 			</div>
 
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} hideAnchors />
+			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} hideAnchors />
 			{children}
 		</AbsoluteFill>
 	);

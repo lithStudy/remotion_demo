@@ -5,12 +5,12 @@
  */
 import React from "react";
 import { Sequence, Audio, staticFile, useCurrentFrame } from "remotion";
-import type { ContentItem } from "./shared";
+import type { AnchorItem, ContentItem } from "./shared";
 import { BWSubtitle, BWAnchorWord } from "../BWPrimitives";
 
 /** 锚点词列表：按时间依次出现并保留，以列表形式展示 */
 const AnchorWordList: React.FC<{
-	items: Array<{ anchor: string; startFrame: number; anchorColor?: string | null; anchorAnim?: "spring" | "slideUp" | "popIn" | "highlight" | null }>;
+	items: Array<{ text: string; startFrame: number; color?: string | null; anim?: "spring" | "slideUp" | "popIn" | "highlight" | null }>;
 }> = ({ items }) => {
 	const frame = useCurrentFrame();
 	const visible = items.filter((item) => item.startFrame <= frame);
@@ -31,10 +31,10 @@ const AnchorWordList: React.FC<{
 			{visible.map((item, i) => (
 				<div key={i} style={{ minHeight: 64, display: "flex", alignItems: "center", justifyContent: "center" }}>
 					<BWAnchorWord
-						anchor={item.anchor}
+						anchor={item.text}
 						delay={item.startFrame}
-						color={item.anchorColor || "#111111"}
-						animStyle={item.anchorAnim || "spring"}
+						color={item.color || "#111111"}
+						animStyle={item.anim || "spring"}
 						style={{ position: "relative", top: 0 }}
 					/>
 				</div>
@@ -53,6 +53,7 @@ export function normalizeContent(
 
 interface TemplateContentRendererProps {
 	content?: ContentItem[];
+	anchors?: AnchorItem[];
 	audioSrc?: string;
 	hideAnchors?: boolean;
 	hideSubtitles?: boolean;
@@ -64,7 +65,7 @@ interface TemplateContentRendererProps {
  */
 export const TemplateContentRenderer: React.FC<
 	TemplateContentRendererProps
-> = ({ content, audioSrc, hideAnchors, hideSubtitles }) => {
+> = ({ content, anchors, audioSrc, hideAnchors, hideSubtitles }) => {
 	const items = normalizeContent(content);
 
 	return (
@@ -82,14 +83,16 @@ export const TemplateContentRenderer: React.FC<
 
 			{/* 锚点词层：依次出现并保留为列表 */}
 			{!hideAnchors && (() => {
-				const anchorItems = items
-					.filter((item): item is ContentItem & { anchor: string } => !!item.anchor)
-					.map((item) => ({
-						anchor: item.anchor,
-						startFrame: item.startFrame,
-						anchorColor: item.anchorColor,
-						anchorAnim: (item as any).anchorAnim,
-					}));
+				const anchorItems = (anchors ?? [])
+					.map((anchor) => ({
+						...anchor,
+						startFrame: items[anchor.showFrom]?.startFrame,
+					}))
+					.filter(
+						(item): item is AnchorItem & { startFrame: number } =>
+							typeof item.startFrame === "number",
+					)
+					.sort((a, b) => a.startFrame - b.startFrame);
 				if (anchorItems.length === 0) return null;
 				return <AnchorWordList items={anchorItems} />;
 			})()}

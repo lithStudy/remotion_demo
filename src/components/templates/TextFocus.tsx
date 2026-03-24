@@ -30,10 +30,11 @@ export const templateMeta = {
 	"default_audio_effect": "impact_thud",
 } as const;
 
-export interface BWTextFocusProps extends TemplateBaseProps { }
+export type BWTextFocusProps = TemplateBaseProps;
 
 export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 	content,
+	anchors,
 	audioSrc,
 	style,
 	children,
@@ -64,16 +65,16 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 	const items = normalizeContent(content);
 	const mainText = items.map((c) => c.text).join("");
 	// 遍历所有锚点，按各自颜色高亮
-	const highlightedText = items.reduce<React.ReactNode[]>(
-		(nodes, item) => {
-			if (!item.anchor) {
+	const highlightedText = (anchors ?? []).reduce<React.ReactNode[]>(
+		(nodes, anchor) => {
+			if (!anchor.text) {
 				return nodes;
 			}
 			return nodes.flatMap((node, nodeIdx) => {
 				if (typeof node !== "string") {
 					return [node];
 				}
-				const parts = node.split(item.anchor as string);
+				const parts = node.split(anchor.text);
 				if (parts.length === 1) {
 					return [node];
 				}
@@ -82,8 +83,8 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 					mappedParts.push(part);
 					if (i < parts.length - 1) {
 						mappedParts.push(
-							<span key={`anchor-${item.startFrame}-${nodeIdx}-${i}`} style={{ color: item.anchorColor || "#E53E3E" }}>
-								{item.anchor}
+							<span key={`anchor-${anchor.showFrom}-${nodeIdx}-${i}`} style={{ color: anchor.color || "#E53E3E" }}>
+								{anchor.text}
 							</span>,
 						);
 					}
@@ -154,7 +155,7 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 
 			{/* TTS 音频 */}
 			{audioSrc && (
-				<Sequence from={0}>
+				<Sequence>
 					<Audio src={audioSrc} />
 				</Sequence>
 			)}

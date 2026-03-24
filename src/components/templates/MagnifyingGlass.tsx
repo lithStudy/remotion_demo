@@ -14,7 +14,7 @@ export const templateMeta = {
 	"name": "MAGNIFYING_GLASS",
 	"componentExport": "BWMagnifyingGlass",
 	"description":
-		"适用：揭秘、拆穿表象、强调「真相/底层逻辑」。\n差异：本模板要求每条 content 为对象且含非空 anchor（见上方规则）；非揭秘句勿用。\n参数：anchor 对准要聚焦的关键词。",
+		"适用：揭秘、拆穿表象、强调「真相/底层逻辑」。\n差异：本模板要求 param.anchors 非空，且通过 showFrom 关联 content；非揭秘句勿用。\n参数：anchors.text 对准要聚焦的关键词。",
 	"psychology": "好奇心缺口",
 	"image_count": 0,
 	"param_schema": {},
@@ -23,14 +23,8 @@ export const templateMeta = {
 	"example": {
 		"template": "MAGNIFYING_GLASS",
 		"param": {
-			"content": [
-				{
-					"text": "真相是大多数人忽略了基础",
-					"anchor": "忽略了基础",
-					"anchorColor": "#111111",
-					"audioEffect": "ping",
-				},
-			],
+			"content": [{ "text": "真相是大多数人忽略了基础", "audioEffect": "ping" }],
+			"anchors": [{ "text": "忽略了基础", "showFrom": 0, "color": "#111111", "anim": "popIn" }],
 		},
 	},
 	"default_anchor_color": "#111111",
@@ -42,6 +36,7 @@ export type BWMagnifyingGlassProps = TemplateBaseProps;
 
 export const BWMagnifyingGlass: React.FC<TemplateBaseProps> = ({
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -52,6 +47,7 @@ export const BWMagnifyingGlass: React.FC<TemplateBaseProps> = ({
 	const scale = interpolate(enterSpring, [0, 1], [0.6, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 	const anchorAvoidanceShift = getSingleImageAnchorAvoidanceShiftAnimatedPx({
 		content,
+		anchors,
 		frame,
 		fps,
 		height,
@@ -126,7 +122,7 @@ export const BWMagnifyingGlass: React.FC<TemplateBaseProps> = ({
 				</svg>
 
 			</div>
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

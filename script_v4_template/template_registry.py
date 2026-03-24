@@ -177,7 +177,7 @@ def generate_ai_prompt_guide(image_style: str = "") -> str:
 	)
 	lines.append("- **`ALERT`** 仅用于强情绪、转折、冲击收束；禁止通篇堆砌。\n")
 	lines.append(
-		"- **`MAGNIFYING_GLASS`** 仅当该 item 的 `content` 可全部采用带 **非空 anchor** 的对象条目时使用；否则换其他模板。\n"
+		"- **`MAGNIFYING_GLASS`** 仅当该 item 可提供非空 `anchors`（通过 `showFrom` 关联 content 索引）时使用；否则换其他模板。\n"
 	)
 
 	lines.append("\n| 模板名 | 心理学原理 | 说明摘要 | 图片数量 | 额外必填参数 |")
@@ -199,7 +199,7 @@ def generate_ai_prompt_guide(image_style: str = "") -> str:
 			lines.append("仅需 `content` 数组。")
 			if tmpl.get("content_anchor_required") is True:
 				lines.append(
-					"- **必填**：每条 `content` 须为对象，且含非空 `anchor`（及建议的 `anchorColor`、`audioEffect`）。"
+					"- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based content 索引）。"
 				)
 			cmin = tmpl.get("content_min_items")
 			cmax = tmpl.get("content_max_items")
@@ -227,7 +227,7 @@ def generate_ai_prompt_guide(image_style: str = "") -> str:
 				lines.append(f"- `{field}` ({req}): {desc_f}")
 		if tmpl.get("content_anchor_required") is True:
 			lines.append(
-				"- **必填**：每条 `content` 须为对象，且含非空 `anchor`（及建议的 `anchorColor`、`audioEffect`）。"
+				"- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based content 索引）。"
 			)
 		cmin = tmpl.get("content_min_items")
 		cmax = tmpl.get("content_max_items")

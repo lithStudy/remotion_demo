@@ -39,6 +39,7 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 	imageSrc,
 	quoteSource = "",
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -96,7 +97,7 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 					</div>
 				)}
 			</div>
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

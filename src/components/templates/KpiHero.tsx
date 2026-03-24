@@ -64,6 +64,7 @@ export const BWKpiHero: React.FC<BWKpiHeroProps> = ({
 	imageSrc,
 	countDuration = 28,
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -155,7 +156,7 @@ export const BWKpiHero: React.FC<BWKpiHeroProps> = ({
 				/>
 			</div>
 
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

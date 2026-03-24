@@ -183,6 +183,7 @@ export interface BWBeatSequenceProps extends TemplateBaseProps {
 export const BWBeatSequence: React.FC<BWBeatSequenceProps> = ({
 	stages,
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -223,7 +224,7 @@ export const BWBeatSequence: React.FC<BWBeatSequenceProps> = ({
 					layoutProgress={layoutProgress}
 				/>
 			))}
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

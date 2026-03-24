@@ -77,7 +77,7 @@ def _get_mp3_duration_s(filepath: str) -> float:
 def extract_texts_from_content(content: list) -> list:
     """
     从 content 数组提取纯文本。
-    content 条目可以是字符串或对象（含 anchor 的 {text, anchor, ...}）。
+    content 条目可以是字符串或对象（{text, audioEffect, ...}）。
     返回纯文本列表。
     """
     texts = []
@@ -89,24 +89,6 @@ def extract_texts_from_content(content: list) -> list:
         else:
             texts.append(str(item))
     return texts
-
-
-def extract_anchor_info(content: list) -> list:
-    """
-    从 content 数组提取锚点信息。
-    返回列表，每项为 {anchor, anchorColor, audioEffect} 或 None。
-    """
-    result = []
-    for item in content:
-        if isinstance(item, dict) and item.get("anchor"):
-            result.append({
-                "anchor": item.get("anchor"),
-                "anchorColor": item.get("anchorColor"),
-                "audioEffect": item.get("audioEffect"),
-            })
-        else:
-            result.append(None)
-    return result
 
 
 # ─────────────────────────────────────────────────────────────
@@ -279,7 +261,7 @@ def upgrade_content_with_timing(
     base_ms: float = 0,
 ) -> list:
     """
-    将 content 数组（字符串或含 anchor 的对象）就地升级为
+    将 content 数组（字符串或对象）就地升级为
     完整的对象数组，注入 startFrame / durationFrames。
     startFrame 是相对于该 item 自身起点（而非整段场景音频起点）。
     """
@@ -297,8 +279,6 @@ def upgrade_content_with_timing(
                 "text": item,
                 "startFrame": start_frame,
                 "durationFrames": duration_frames,
-                "anchor": None,
-                "anchorColor": None,
                 "audioEffect": None,
             })
         elif isinstance(item, dict):
@@ -306,8 +286,6 @@ def upgrade_content_with_timing(
                 "text": item.get("text", ""),
                 "startFrame": start_frame,
                 "durationFrames": duration_frames,
-                "anchor": item.get("anchor"),
-                "anchorColor": item.get("anchorColor"),
                 "audioEffect": item.get("audioEffect"),
             })
 
@@ -434,8 +412,7 @@ def main():
                     text_preview = c.get("text", "")[:20]
                     sf = c.get("startFrame", 0)
                     df = c.get("durationFrames", 0)
-                    anchor_str = f" [anchor: {c['anchor']}]" if c.get("anchor") else ""
-                    print(f"       句{start_idx + ci}: F{sf}~F{sf+df} ({df}帧) {text_preview}{anchor_str}")
+                    print(f"       句{start_idx + ci}: F{sf}~F{sf+df} ({df}帧) {text_preview}")
 
             success += 1
         else:

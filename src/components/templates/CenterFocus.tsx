@@ -42,13 +42,14 @@ export const BWCenterFocus: React.FC<BWCenterFocusProps> = ({
 	imageSrc,
 	enterEffect = "breathe",
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
 }) => (
 	<AbsoluteFill style={style}>
-		<BWImageBreath src={imageSrc} enterEffect={enterEffect} content={content} />
-		<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+		<BWImageBreath src={imageSrc} enterEffect={enterEffect} content={content} anchors={anchors} />
+		<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
 		{children}
 	</AbsoluteFill>
 );

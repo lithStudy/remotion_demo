@@ -64,6 +64,7 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 	leftSrc,
 	rightSrc,
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -241,7 +242,7 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 				</div>
 			</div>
 
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

@@ -106,12 +106,19 @@ export const SINGLE_IMAGE_ANCHOR_MIN_GAP_PX = 50;
 
 function getVisibleAnchorItems(
 	content: ContentItem[] | undefined,
+	anchors: AnchorItem[] | undefined,
 	frame: number,
-): ContentItem[] {
-	const items = content ?? [];
-	return items
+): Array<AnchorItem & { startFrame: number }> {
+	const contentItems = content ?? [];
+	const anchorItems = anchors ?? [];
+	return anchorItems
+		.map((anchor) => ({
+			...anchor,
+			startFrame: contentItems[anchor.showFrom]?.startFrame,
+		}))
 		.filter(
-			(c) => !!c.anchor && c.startFrame <= frame,
+			(item): item is AnchorItem & { startFrame: number } =>
+				typeof item.startFrame === "number" && item.startFrame <= frame,
 		)
 		.sort((a, b) => a.startFrame - b.startFrame);
 }
@@ -145,16 +152,18 @@ function getSingleImageAnchorAvoidanceShiftByCount({
  */
 export function getSingleImageAnchorAvoidanceShiftPx({
 	content,
+	anchors,
 	frame,
 	height,
 	minGapPx = SINGLE_IMAGE_ANCHOR_MIN_GAP_PX,
 }: {
 	content: ContentItem[] | undefined;
+	anchors: AnchorItem[] | undefined;
 	frame: number;
 	height: number;
 	minGapPx?: number;
 }): number {
-	const visibleAnchorCount = getVisibleAnchorItems(content, frame).length;
+	const visibleAnchorCount = getVisibleAnchorItems(content, anchors, frame).length;
 	return getSingleImageAnchorAvoidanceShiftByCount({
 		visibleAnchorCount,
 		height,
@@ -167,18 +176,20 @@ export function getSingleImageAnchorAvoidanceShiftPx({
  */
 export function getSingleImageAnchorAvoidanceShiftAnimatedPx({
 	content,
+	anchors,
 	frame,
 	fps,
 	height,
 	minGapPx = SINGLE_IMAGE_ANCHOR_MIN_GAP_PX,
 }: {
 	content: ContentItem[] | undefined;
+	anchors: AnchorItem[] | undefined;
 	frame: number;
 	fps: number;
 	height: number;
 	minGapPx?: number;
 }): number {
-	const visibleAnchors = getVisibleAnchorItems(content, frame);
+	const visibleAnchors = getVisibleAnchorItems(content, anchors, frame);
 	if (visibleAnchors.length === 0) return 0;
 
 	let animatedShiftPx = 0;
@@ -280,20 +291,28 @@ export interface ContentItem {
 	startFrame: number;
 	/** 持续帧数 */
 	durationFrames: number;
-	/** 锚点关键词 */
-	anchor?: string | null;
-	/** 锚点颜色 */
-	anchorColor?: string | null;
-	/** 锚点动画样式 */
-	anchorAnim?: "spring" | "slideUp" | "popIn" | "highlight" | null;
 	/** 音效名称 */
 	audioEffect?: string | null;
+}
+
+/** item 级锚点数据：与 content 同级，通过 showFrom 绑定字幕索引 */
+export interface AnchorItem {
+	/** 锚点文本 */
+	text: string;
+	/** 锚点出现起点：关联 content 的索引（0-based） */
+	showFrom: number;
+	/** 锚点颜色 */
+	color?: string | null;
+	/** 锚点动画 */
+	anim?: "spring" | "slideUp" | "popIn" | "highlight" | null;
 }
 
 /** 所有模板组件的公共 props */
 export interface TemplateBaseProps {
 	/** 文案内容数组（统一为 ContentItem 数组） */
 	content?: ContentItem[];
+	/** 锚点数组（与 content 同级，showFrom 关联索引） */
+	anchors?: AnchorItem[];
 	/** TTS 音频文件路径 */
 	audioSrc?: string;
 	/** 该 item 的总持续帧数 */

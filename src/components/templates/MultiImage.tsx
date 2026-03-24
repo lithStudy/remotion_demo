@@ -72,6 +72,7 @@ export interface BWMultiImageProps extends TemplateBaseProps {
 export const BWMultiImage: React.FC<BWMultiImageProps> = ({
 	images,
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -79,7 +80,6 @@ export const BWMultiImage: React.FC<BWMultiImageProps> = ({
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
 	const normalizedContent = normalizeContent(content);
-	const anchorItems = normalizedContent.filter((c) => c.anchor);
 	const resolvedImages = images.map((img) => {
 		const textIndex = img.textIndex;
 		const hasValidTextIndex =
@@ -124,17 +124,12 @@ export const BWMultiImage: React.FC<BWMultiImageProps> = ({
 		durationInFrames: 22,
 	});
 
-	const contentWithoutAnchors = normalizedContent.map((c) => ({
-		...c,
-		anchor: null,
-	}));
-
 	return (
 		<AbsoluteFill style={style}>
 			{resolvedImages.map((img, i) => {
 				const order = orderByIndex.get(i);
 				const isVisible = order !== undefined;
-				const anchorItem = anchorItems[i];
+				const anchorItem = (anchors ?? []).find((a) => a.showFrom === i);
 
 				if (!isVisible || order === undefined) {
 					return null;
@@ -203,18 +198,19 @@ export const BWMultiImage: React.FC<BWMultiImageProps> = ({
 								transform: `translate(-50%, -50%) translateY(${translateY}px)`,
 							}}
 						/>
-						{anchorItem && anchorItem.anchor && frame >= anchorItem.startFrame && (
+						{anchorItem && frame >= (normalizedContent[anchorItem.showFrom]?.startFrame ?? Number.MAX_SAFE_INTEGER) && (
 							<BWAnchorWord
-								anchor={anchorItem.anchor}
-								delay={anchorItem.startFrame}
-								color={anchorItem.anchorColor || undefined}
+								anchor={anchorItem.text}
+								delay={normalizedContent[anchorItem.showFrom]?.startFrame ?? 0}
+								color={anchorItem.color || undefined}
+								animStyle={anchorItem.anim || "spring"}
 								style={{ left: `${left - 12}%`, right: `${100 - (left + 12)}%`, top: "24%" }}
 							/>
 						)}
 					</React.Fragment>
 				);
 			})}
-			<TemplateContentRenderer content={contentWithoutAnchors} audioSrc={audioSrc} />
+			<TemplateContentRenderer content={normalizedContent} anchors={anchors} audioSrc={audioSrc} hideAnchors />
 			{children}
 		</AbsoluteFill>
 	);

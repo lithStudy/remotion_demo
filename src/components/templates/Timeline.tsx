@@ -45,6 +45,7 @@ export interface BWTimelineProps extends TemplateBaseProps {
 export const BWTimeline: React.FC<BWTimelineProps> = ({
 	images,
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -129,7 +130,7 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 					</React.Fragment>
 				);
 			})}
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

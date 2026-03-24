@@ -183,13 +183,43 @@ def validate_and_normalize_scene_scripts(
 						warnings.append(
 							f"[{scene_id}] item order={order} 模板 {tname} content[{idx}] 类型错误，必须为对象格式"
 						)
-					else:
-						# 如果模板规定必须带 anchor
-						if tmpl.get("content_anchor_required") is True:
-							an = ci.get("anchor")
-							if an is None or (isinstance(an, str) and not an.strip()):
-								warnings.append(
-									f"[{scene_id}] item order={order} 模板 {tname} content[{idx}] 缺少非空 anchor"
-								)
+
+			anchors = param.get("anchors")
+			if anchors is None:
+				anchors = []
+				param["anchors"] = anchors
+			elif not isinstance(anchors, list):
+				warnings.append(
+					f"[{scene_id}] item order={order} 模板 {tname} anchors 非数组，已重置为空数组"
+				)
+				anchors = []
+				param["anchors"] = anchors
+
+			valid_anchors = []
+			for aidx, anchor in enumerate(anchors):
+				if not isinstance(anchor, dict):
+					warnings.append(
+						f"[{scene_id}] item order={order} 模板 {tname} anchors[{aidx}] 非对象，已丢弃"
+					)
+					continue
+				atext = anchor.get("text")
+				show_from = anchor.get("showFrom")
+				if not isinstance(atext, str) or not atext.strip():
+					warnings.append(
+						f"[{scene_id}] item order={order} 模板 {tname} anchors[{aidx}].text 为空，已丢弃"
+					)
+					continue
+				if not isinstance(show_from, int) or show_from < 0 or show_from >= clen:
+					warnings.append(
+						f"[{scene_id}] item order={order} 模板 {tname} anchors[{aidx}].showFrom={show_from!r} 非法，已丢弃"
+					)
+					continue
+				valid_anchors.append(anchor)
+			param["anchors"] = valid_anchors
+
+			if tmpl.get("content_anchor_required") is True and len(valid_anchors) == 0:
+				warnings.append(
+					f"[{scene_id}] item order={order} 模板 {tname} 要求非空 anchors，但当前为空"
+				)
 
 	return data, warnings

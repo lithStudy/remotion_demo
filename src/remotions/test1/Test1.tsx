@@ -15,10 +15,10 @@ const TRANSITION_DURATION = 15;
 const SCENE_END_PADDING = 20;
 
 const sceneConfigs = [
-    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "互联网争吵的无力感与情绪共鸣" },
-    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "揭示根源：大脑“底层Bug”与算法的利用" },
-    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "核心概念：确认偏误的解释与案例" },
-    { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "对抗偏误的“防身武器”与智力觉醒" },
+    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引出现象：互联网争论与血压飙升" },
+    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "揭示本质：算法操纵与信息囚笼" },
+    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "解释概念：确认偏误及其表现" },
+    { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "提供方法：对抗偏见的“防身武器”" },
 ];
 
 export const TOTAL_DURATION_TEST1 =

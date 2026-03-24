@@ -40,6 +40,7 @@ export const BWConceptCard: React.FC<BWConceptCardProps> = ({
 	imageSrc,
 	conceptName = "",
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -57,10 +58,6 @@ export const BWConceptCard: React.FC<BWConceptCardProps> = ({
 		extrapolateRight: "clamp",
 	});
 	const normalizedContent = normalizeContent(content);
-	const contentWithoutAnchors = normalizedContent.map((c) => ({
-		...c,
-		anchor: null,
-	}));
 
 	return (
 		<AbsoluteFill style={style}>
@@ -102,7 +99,7 @@ export const BWConceptCard: React.FC<BWConceptCardProps> = ({
 					</div>
 				)}
 			</div>
-			<TemplateContentRenderer content={contentWithoutAnchors} audioSrc={audioSrc} />
+			<TemplateContentRenderer content={normalizedContent} anchors={anchors} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

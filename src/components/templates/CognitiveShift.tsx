@@ -79,13 +79,13 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 		notStartFrame = getFrame(notContentIndex, 0);
 		butStartFrame = getFrame(butContentIndex, 35);
 
-		//移除content中的anchor
-		content?.forEach((item) => {
-			item.anchor = undefined;
-			item.anchorColor = undefined;
-			item.anchorAnim = undefined;
-			item.audioEffect = undefined;
-		});
+		// //移除content中的anchor
+		// content?.forEach((item) => {
+		// 	item.anchor = undefined;
+		// 	item.anchorColor = undefined;
+		// 	item.anchorAnim = undefined;
+		// 	item.audioEffect = undefined;
+		// });
 	}
 
 	// 动画时间轴：
@@ -120,7 +120,6 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 					marginBottom: 40,
 				}}>
 					<div style={{ position: "relative" }}>
-						<span style={{ fontSize: 32, fontWeight: 700, color: "#666", marginBottom: 8, display: "block", textAlign: "center" }}>不是</span>
 						<div style={{ fontSize: 56, fontWeight: 900, color: BW_TEXT, position: "relative" }}>
 							{notText}
 							{/* 删除线 */}
@@ -134,11 +133,7 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 				</div>
 
 				{/* 中间连接词：渐隐渐现，或者随着 But 一起出现 */}
-				{frame > shiftStartFrame && (
-					<div style={{ fontSize: 48, fontWeight: 900, color: "#E53E3E", margin: "10px 0", opacity: butEnter }}>
-						而是
-					</div>
-				)}
+
 
 				{/* "而是" 部分 */}
 				<div style={{
@@ -156,7 +151,7 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 				</div>
 			</div>
 
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} hideAnchors />
 			{children}
 		</AbsoluteFill>
 	);

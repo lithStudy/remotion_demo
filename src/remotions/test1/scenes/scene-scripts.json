@@ -85,14 +85,16 @@
           "param": {
             "images": [
               {
-                "src": "两人面对面坐着，一人摊开文件或图表，另一人做出倾听姿态的剪影",
-                "position": "left",
-                "enterEffect": "slideLeft"
+                "src": "两人面对面坐着，一人摊开文件或图表，另一人做出倾听姿态的剪影",                           
+                "textIndex":0
               },
               {
-                "src": "一张标题夸张的廉价报纸或传单，被一只手粗鲁地扔出，带有弧线运动轨迹的视觉效果",
-                "position": "right",
-                "enterEffect": "breathe"
+                "src": "一张标题夸张的廉价报纸或传单，被一只手粗鲁地扔出，带有弧线运动轨迹的视觉效果",                
+                "textIndex":1                
+              },
+              {
+                "src": "一张标题夸张的廉价报纸或传单，被一只手粗鲁地扔出，带有弧线运动轨迹的视觉效果",                
+                "textIndex":2                
               }
             ],
             "content": [
@@ -100,7 +102,7 @@
                 "text": "你拿证据跟他讲道理，",
                 "startFrame": 0,
                 "durationFrames": 30,
-                "anchor": null,
+                "anchor": "证据",
                 "anchorColor": null,
                 "anchorAnim": null,
                 "audioEffect": null
@@ -109,13 +111,22 @@
                 "text": "他反手甩给你一个地摊文学链接；",
                 "startFrame": 30,
                 "durationFrames": 33,
-                "anchor": null,
+                "anchor": "地摊文学",
+                "anchorColor": null,
+                "anchorAnim": null,
+                "audioEffect": null
+              },
+              {
+                "text": "他反手甩给你一个地摊文学链接；",
+                "startFrame": 63,
+                "durationFrames": 33,
+                "anchor": "链接",
                 "anchorColor": null,
                 "anchorAnim": null,
                 "audioEffect": null
               }
             ],
-            "totalDurationFrames": 63
+            "totalDurationFrames": 96
           }
         },
         {

@@ -105,7 +105,7 @@ export const BWChatBubble: React.FC<BWChatBubbleProps> = ({
 					</span>
 				</div>
 			</div>
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} hideAnchors hideSubtitles />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} hideAnchors />
 		</AbsoluteFill>
 	);
 };

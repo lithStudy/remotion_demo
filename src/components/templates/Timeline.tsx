@@ -84,7 +84,7 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 				}}
 			/>
 			{images.map((img, i) => {
-				const xFrac = TIMELINE_X_BY_POS[img.position] ?? 0.5;
+				const xFrac = img.position ? (TIMELINE_X_BY_POS[img.position] ?? 0.5) : 0.5;
 				const localFrame = Math.max(0, frame - (img.startFrame ?? 0));
 				const nodeSpring = spring({
 					frame: localFrame,

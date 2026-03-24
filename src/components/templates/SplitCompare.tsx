@@ -69,6 +69,8 @@ export const BWSplitCompare: React.FC<BWSplitCompareProps> = ({
 		extrapolateLeft: "clamp",
 		extrapolateRight: "clamp",
 	});
+
+
 	return (
 		<AbsoluteFill style={style}>
 			<div
@@ -155,7 +157,7 @@ export const BWSplitCompare: React.FC<BWSplitCompareProps> = ({
 					transform: `translate(-50%, -50%) scaleY(${lineProgress})`,
 				}}
 			/>
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} hideAnchors />
 			{children}
 		</AbsoluteFill>
 	);

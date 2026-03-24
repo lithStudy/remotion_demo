@@ -220,10 +220,12 @@ export type ImagePosition = "center" | "left" | "right" | "top" | "bottom";
 export interface MultiImageItem {
 	/** 图片地址 */
 	src: string;
-	/** 在画布中的位置 */
-	position: ImagePosition;
+	/** 可选：在画布中的位置（MULTI_IMAGE 已不依赖该参数） */
+	position?: ImagePosition;
 	/** 可选入场效果，默认 breathe */
 	enterEffect?: ImageEnterEffect;
+	/** 可选：关联 content 的序号，命中后以该条文本 startFrame 作为图片出现时机 */
+	textIndex?: number;
 	/** 可选：相对序列起始的延迟帧（时间轴按此错峰出现） */
 	startFrame?: number;
 }

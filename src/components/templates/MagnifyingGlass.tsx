@@ -68,11 +68,11 @@ export const BWMagnifyingGlass: React.FC<TemplateBaseProps> = ({
 				style={{
 					position: "absolute",
 					left: "50%",
-					top: "60%",
+					top: "50%",
 					transform: `translate(calc(-50% + ${driftX}px), calc(-50% + ${driftY + anchorAvoidanceShift}px)) scale(${scale})`,
 					opacity: enterSpring,
 					width: 190,
-					
+
 				}}
 			>
 				<svg
@@ -124,7 +124,7 @@ export const BWMagnifyingGlass: React.FC<TemplateBaseProps> = ({
 						fill="none"
 					/>
 				</svg>
-				
+
 			</div>
 			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}

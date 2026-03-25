@@ -6,7 +6,6 @@ import {
 	BWSplitCompare,
 	BWMultiImage,
 	BWStepList,
-	BWAlertStyle,
 	BWTextFocus,
 	BWConceptCard,
 	BWQuoteCitation,
@@ -14,7 +13,6 @@ import {
 	BWDosAndDonts,
 	BWMagnifyingGlass,
 	BWChatBubble,
-	BWScaleBalance,
 	BWKpiHero,
 	BWStatCompare,
 	BWProgressRing,
@@ -38,15 +36,6 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 			<>
 				<BWImageBreath src={img("images/template/scene1_1.png")} enterEffect="breathe" />
 				<BWSubtitle position="top" text="BWImageBreath · 单图入场基元（breathe）" startFrame={0} />
-			</>
-		),
-	},
-	{
-		key: "alert",
-		content: (
-			<>
-				<BWAlertStyle imageSrc={img("images/template/scene6_15.png")} enterEffect="slideBottom" />
-				<BWSubtitle position="top" text="ALERT · 重大转折/冲击结论" startFrame={0} />
 			</>
 		),
 	},
@@ -248,21 +237,6 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 					quoteSource="某研究 / 某名人"
 				/>
 				<BWSubtitle position="top" text="QUOTE_CITATION · 引用背书" startFrame={0} />
-			</>
-		),
-	},
-	{
-		key: "scale-balance",
-		content: (
-			<>
-				<BWScaleBalance
-					leftSrc={img("images/template/scene5_3.png")}
-					rightSrc={img("images/template/scene5_4.png")}
-					leftLabel="代价"
-					rightLabel="收益"
-					tiltDirection="right"
-				/>
-				<BWSubtitle position="top" text="SCALE_BALANCE · 代价 vs 收益" startFrame={0} />
 			</>
 		),
 	},

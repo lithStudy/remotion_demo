@@ -1,7 +1,7 @@
 /**
  * TEXT_FOCUS 模板：信噪比极致化，纯文字聚焦
  * 适用场景：全篇最核心金句，无需配图，白底大字 + 弹入动画。
- * 锚点词在正文中高亮，底部保留字幕，不渲染锚点词弹出层。
+ * 可选 coreSentence：口播 content 较长时，大屏仅展示一句精炼文案；锚点词在正文中高亮，底部保留字幕，不渲染锚点词弹出层。
  */
 import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
@@ -12,16 +12,25 @@ export const templateMeta = {
 	"name": "TEXT_FOCUS",
 	"componentExport": "BWTextFocus",
 	"description":
-		"适用：全片最强金句、结论暴击；0 图纯大字。\n差异：需要配图锚定用 CENTER_FOCUS；模拟读者吐槽口吻用 CHAT_BUBBLE。\n慎用：content 建议不超过 3 条以保持冲击。",
+		"适用：全片最强金句、结论暴击；0 图纯大字。\n差异：需要配图锚定用 CENTER_FOCUS；模拟读者吐槽口吻用 CHAT_BUBBLE。\n慎用：content 建议不超过 3 条以保持冲击；若口播/字幕必须保留长 content，可填 coreSentence 仅用于大屏一句展示。",
 	"content_max_items": 3,
 	"psychology": "信噪比极致化",
 	"image_count": 0,
-	"param_schema": {},
+	"param_schema": {
+		"coreSentence": {
+			"type": "string",
+			"required": false,
+			"desc": "精炼核心句（AI 生成）。若 content 过长，填此字段作为大屏居中主文案；未填时主文案仍为 content 全文拼接。字幕/音频仍以 content 为准。",
+		},
+		"anchors": { "type": "anchor_array", "required": false, "desc": "锚点数组，用于高亮正文中的子串，每项含 text、showFrom、color；使用 coreSentence 时锚点词须出现在 coreSentence 内" },
+	},
 	"required_extra_params": [] as string[],
 	"example": {
 		"template": "TEXT_FOCUS",
 		"param": {
-			"content": [{ "text": "这就是本质" }],
+			"content": [{ "text": "兄弟姐妹们，在这个套路满天飞的时代，承认自己“可能错了”并不是一种软弱" }],
+			"coreSentence": "承认自己“可能错了”并不是一种软弱",
+			"anchors": [{ "text": "可能错了", "showFrom": 0, "color": "red"}],
 		},
 	},
 	"default_anchor_color": "#ffffff",
@@ -29,10 +38,17 @@ export const templateMeta = {
 	"default_audio_effect": "impact_thud",
 } as const;
 
-export type BWTextFocusProps = TemplateBaseProps;
+export type BWTextFocusProps = TemplateBaseProps & {
+	/**
+	 * 精炼核心句（通常由 AI 生成）。若 content 过长、不适合整段作为大屏主标题，可只填此句作为居中展示；
+	 * 未设置时主标题仍为 content 各条 text 的拼接。
+	 */
+	coreSentence?: string;
+};
 
 export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 	content,
+	coreSentence,
 	anchors,
 	audioSrc,
 	style,
@@ -62,7 +78,11 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 		: 1;
 
 	const items = normalizeContent(content);
-	const mainText = items.map((c) => c.text).join("");
+	const trimmedCore = coreSentence?.trim();
+	const mainText =
+		trimmedCore && trimmedCore.length > 0
+			? trimmedCore
+			: items.map((c) => c.text).join("");
 	// 遍历所有锚点，按各自颜色高亮
 	const highlightedText = (anchors ?? []).reduce<React.ReactNode[]>(
 		(nodes, anchor) => {

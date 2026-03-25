@@ -67,13 +67,13 @@ export const BWMagnifyingGlass: React.FC<TemplateBaseProps> = ({
 					top: "50%",
 					transform: `translate(calc(-50% + ${driftX}px), calc(-50% + ${driftY + anchorAvoidanceShift}px)) scale(${scale})`,
 					opacity: enterSpring,
-					width: 190,
+					width: 250,
 
 				}}
 			>
 				<svg
-					width={190}
-					height={190}
+					width={250}
+					height={250}
 					viewBox="0 0 200 200"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg"

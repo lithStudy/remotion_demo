@@ -17,7 +17,6 @@ export const templateMeta = {
 	"param_schema": {
 		"notText": { "type": "string", "required": true, "desc": "被否认知（‘不是’后面的内容）" },
 		"butText": { "type": "string", "required": true, "desc": "真实认知（‘而是’后面的内容）" },
-		"notSrc": { "type": "image_prompt", "required": false, "desc": "被否认知的配图" },
 		"butSrc": { "type": "image_prompt", "required": false, "desc": "真实认知的配图" },
 		"notContentIndex": { "type": "number", "required": false, "desc": "指定触发‘不是’部分动画的字幕段索引（默认0）" },
 		"butContentIndex": { "type": "number", "required": false, "desc": "指定触发‘而是’部分动画及转折的字幕段索引（默认1）" },
@@ -28,7 +27,6 @@ export const templateMeta = {
 		"param": {
 			"notText": "靠勤奋拼命",
 			"butText": "靠认知和选择",
-			"notSrc": "满地找金币的辛苦工人",
 			"butSrc": "站在高处看地图的思考者",
 			"notContentIndex": 0,
 			"butContentIndex": 1,
@@ -43,7 +41,6 @@ export const templateMeta = {
 export interface BWCognitiveShiftProps extends TemplateBaseProps {
 	notText?: string;
 	butText?: string;
-	notSrc?: string;
 	butSrc?: string;
 	notContentIndex?: number;
 	butContentIndex?: number;
@@ -52,7 +49,6 @@ export interface BWCognitiveShiftProps extends TemplateBaseProps {
 export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 	notText = "",
 	butText = "",
-	notSrc,
 	butSrc,
 	notContentIndex = 0,
 	butContentIndex = 1,
@@ -117,12 +113,12 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 							{notText}
 							{/* 删除线 */}
 							<div style={{
-								position: "absolute", top: "55%", left: "-5%", width: `${strikeWidth + 10}%`, height: 8,
+								position: "absolute", top: "55%", left: "-5%", width: `${strikeWidth}%`, height: 8,
 								backgroundColor: "#E53E3E", borderRadius: 4, transform: "rotate(-2deg)",
 							}} />
 						</div>
 					</div>
-					<Img src={getSafeImageSrc(notSrc)} style={{ marginTop: 20, maxWidth: 200, height: 160, objectFit: "contain", opacity: 0.8 }} />
+					{/* <Img src={getSafeImageSrc(notSrc)} style={{ marginTop: 20, maxWidth: 200, height: 160, objectFit: "contain", opacity: 0.8 }} /> */}
 				</div>
 
 				{/* 中间连接词：渐隐渐现，或者随着 But 一起出现 */}

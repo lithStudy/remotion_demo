@@ -99,7 +99,7 @@ export const BWConceptCard: React.FC<BWConceptCardProps> = ({
 					</div>
 				)}
 			</div>
-			<TemplateContentRenderer content={normalizedContent} anchors={anchors} audioSrc={audioSrc} />
+			<TemplateContentRenderer content={normalizedContent} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

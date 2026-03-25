@@ -54,7 +54,11 @@ if _missing_export:
 
 # param 中图片相关的字段（需要 staticFile 包装）
 IMAGE_PARAM_FIELDS = {
-    "imageSrc", "leftSrc", "rightSrc",
+    "imageSrc",
+    "leftSrc",
+    "rightSrc",
+    "notSrc",
+    "butSrc",
 }
 
 

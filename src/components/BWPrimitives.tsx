@@ -151,7 +151,11 @@ export const BWSubtitle: React.FC<BWSubtitleProps> = ({
 			...style,
 		}}
 	>
-		<FadeInText delay={startFrame} duration={durationFrames}>
+		<FadeInText
+			delay={startFrame}
+			duration={durationFrames}
+			style={{ width: "100%", textAlign: "center" }}
+		>
 			<span
 				style={{
 					fontSize: 40,

@@ -28,6 +28,7 @@ export function isValidImageSrc(src?: string): boolean {
 export function getSafeImageSrc(src?: string): string {
 	console.log("src", src);
 	if (isValidImageSrc(src)) {
+		console.log('dddddddd:'+src)
 		return src!;
 	}
 	return DEFAULT_IMAGE;

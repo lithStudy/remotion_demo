@@ -182,12 +182,13 @@ def match_and_upgrade_scene_script(asr_timestamps, scene_script_path, output_sce
                 new_info = {
                     "startFrame": start_frame,
                     "durationFrames": duration_frames,
-                    "audioEffect": None
                 }
                 if isinstance(c_item, str):
                     new_info["text"] = c_item
                 elif isinstance(c_item, dict):
-                    new_info.update(c_item) 
+                    new_info["text"] = c_item.get("text", "")
+                else:
+                    new_info["text"] = str(c_item)
 
                 upgraded.append(new_info)
             

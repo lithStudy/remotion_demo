@@ -174,11 +174,17 @@ def generate_ai_prompt_guide(image_style: str = "", include_examples: bool = Tru
 		"- 为**每个 item** 先判断叙事类型，再选模板：单图叙述 / 双图并列 / 对错避坑 / 步骤清单 / 时间演进 / 多图并列 / 纯文字金句 / 引用出处 / 对话气泡 / 术语卡 / 揭秘锚点（放大镜）/ 冲击收束 / **数据 KPI 大字报（KPI_HERO）/ 双指标对比（STAT_COMPARE）/ 进度占比（PROGRESS_RING）**。\n"
 	)
 	lines.append(
-		"- **严禁通篇使用 `CENTER_FOCUS`**：仅在无明显结构化视觉语义时兜底；若存在对比/对错/步骤/时间/数据/进度/术语/引用/对话信号，必须优先选择对应专用模板。\n"
+		"- **严禁通篇使用 `CENTER_FOCUS`**：仅在**无 A/B 对仗、无结构化语义**时兜底。若口播出现**你方 vs 他方/对方**的行为对仗，或分号（；）两侧对立叙述，**必须优先 `SPLIT_COMPARE`**，不得用单图糊弄。\n"
 	)
 	lines.append("- **`ALERT`** 仅用于强情绪、转折、冲击收束；禁止通篇堆砌。\n")
 	lines.append(
 		"- **`MAGNIFYING_GLASS`** 仅当该 item 可提供非空 `anchors`（通过 `showFrom` 关联 content 索引）时使用；否则换其他模板。\n"
+	)
+	lines.append(
+		"- **`MULTI_IMAGE`**：仅当口播里有**明确排比或多分点列举**（2～4 个可区分的视觉主体）。单一比喻、混战、笼统「吵架/不同观点」用单图 `CENTER_FOCUS` 或 `ALERT`，禁止为多图而硬凑多张图。\n"
+	)
+	lines.append(
+		"- **`SPLIT_COMPARE`**：左右**两方行为/立场**对照（你讲道理 vs 他甩链接、你客观 vs 对方信息茧房）。与 `MULTI_IMAGE`（多要素平铺）区分：对仗用双分屏，排比用多图。\n"
 	)
 
 	lines.append("\n| 模板名 | 心理学原理 | 说明摘要 | 图片数量 | 额外必填参数 |")

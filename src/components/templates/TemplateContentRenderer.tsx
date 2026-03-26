@@ -102,17 +102,27 @@ export const TemplateContentRenderer: React.FC<
 				return <AnchorWordList items={anchorItems} />;
 			})()}
 
-			{/* 音效层 */}
-			{items
-				.filter((item) => item.audioEffect)
-				.map((item, i) => (
-					<Sequence key={`sfx-${i}`} from={item.startFrame}>
-						<Audio
-							src={staticFile(`audio/effects/${item.audioEffect}.mp3`)}
-							volume={0.6}
-						/>
-					</Sequence>
-				))}
+			{/* 音效层：与锚点绑定，时刻与锚点出现帧一致 */}
+			{!hideAnchors &&
+				(anchors ?? [])
+					.map((anchor) => {
+						const startFrame = items[anchor.showFrom]?.startFrame;
+						const name = anchor.audioEffect;
+						if (
+							typeof startFrame !== "number" ||
+							!name
+						) {
+							return null;
+						}
+						return (
+							<Sequence key={`sfx-${anchor.showFrom}-${anchor.text}`} from={startFrame-20}>
+								<Audio
+									src={staticFile(`audio/effects/${name}.wav`)}
+									volume={0.6}
+								/>
+							</Sequence>
+						);
+					})}
 
 			{/* TTS 音频 */}
 			{audioSrc && (

@@ -23,8 +23,16 @@ export const templateMeta = {
 	"example": {
 		"template": "MAGNIFYING_GLASS",
 		"param": {
-			"content": [{ "text": "真相是大多数人忽略了基础", "audioEffect": "ping" }],
-			"anchors": [{ "text": "忽略了基础", "showFrom": 0, "color": "#111111", "anim": "popIn" }],
+			"content": [{ "text": "真相是大多数人忽略了基础" }],
+			"anchors": [
+				{
+					"text": "忽略了基础",
+					"showFrom": 0,
+					"color": "#111111",
+					"anim": "popIn",
+					"audioEffect": "ping",
+				},
+			],
 		},
 	},
 	"default_anchor_color": "#111111",

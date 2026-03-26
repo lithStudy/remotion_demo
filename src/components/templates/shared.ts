@@ -292,8 +292,6 @@ export interface ContentItem {
 	startFrame: number;
 	/** 持续帧数 */
 	durationFrames: number;
-	/** 音效名称 */
-	audioEffect?: string | null;
 }
 
 /** item 级锚点数据：与 content 同级，通过 showFrom 绑定字幕索引 */
@@ -306,6 +304,8 @@ export interface AnchorItem {
 	color?: string | null;
 	/** 锚点动画 */
 	anim?: "spring" | "slideUp" | "popIn" | "highlight" | null;
+	/** 突出该锚点时的音效（与锚点出现时刻一致） */
+	audioEffect?: string | null;
 }
 
 /** 所有模板组件的公共 props */

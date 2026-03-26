@@ -101,14 +101,12 @@ def _inject_preview_timings(scene_scripts: dict, fps: int, config: dict) -> None
                         "text": text,
                         "startFrame": cursor,
                         "durationFrames": duration_frames,
-                        "audioEffect": content_item.get("audioEffect"),
                     })
                 else:
                     upgraded_content.append({
                         "text": text,
                         "startFrame": cursor,
                         "durationFrames": duration_frames,
-                        "audioEffect": None,
                     })
 
                 cursor += duration_frames
@@ -142,6 +140,7 @@ def _inject_preview_timings(scene_scripts: dict, fps: int, config: dict) -> None
                     "showFrom": show_from,
                     "color": anchor_item.get("color"),
                     "anim": anchor_item.get("anim"),
+                    "audioEffect": anchor_item.get("audioEffect"),
                 })
             param["anchors"] = valid_anchors
             param["totalDurationFrames"] = max(cursor, min_frames)
@@ -295,7 +294,7 @@ def _gemini_fix_after_warnings(
 {template_guide}
 
 请输出**一份**修订后的完整 JSON：顶层含 `topic`、`scenes`（每 scene 含 `sceneId`、`sceneName`、`items`），每个 item 含 `order`、`narrativeType`、`reasoning`、`template`、`param`。不要包含 `fps` 字段。
-所有 `content` 中的原文必须一致。仅输出 JSON，不要 markdown 代码块。"""
+所有 `content` 中的原文必须一致。`audioEffect` 只能出现在 `anchors` 条目上，不得出现在 `content`。仅输出 JSON，不要 markdown 代码块。"""
 
     resp = _generate_with_retry(client, model, fix_prompt)
     return _parse_json_from_response(resp.text)
@@ -351,11 +350,21 @@ def _analyze_items_for_scene(client, model: str, topic: str, scene: dict, templa
 
 ### 2. 叙事类型分类 (Narrative Types)
 请在 reasoning 中按照“叙事角色 -> 视觉重心 -> 模板选型”的逻辑进行思考：
-- `HOOK`：引子。制造悬念、反直觉、抛出痛点。匹配模板：`ALERT`, `CENTER_FOCUS` (配强冲击力图片)。
+- `HOOK`：引子。制造悬念、反直觉、抛出痛点。匹配模板：`CENTER_FOCUS` (配强冲击力图片)。
 - `LOGIC`：推导。原理分析、因果论证、底层逻辑。匹配模板：`MAGNIFYING_GLASS`, `STAT_COMPARE`, `CONCEPT_CHIP`。
-- `CASE`：举证。具体场景、案例模拟、步骤演示。匹配模板：`MULTI_IMAGE`, `SPLIT_COMPARE`, `TIMELINE`。
+- `CASE`：举证。具体场景、案例模拟、步骤演示。**若同一段落里出现「你/我/咱们」与「他/她/对方/有些人」的行为对仗，或分号（；）隔开的两段形成对立**（一方理性一方耍赖、一方客观一方选择性接收等），**必须优先 `SPLIT_COMPARE`**，禁止再用 `CENTER_FOCUS` 凑合。无对仗的单一画面、纯氛围描写用 `CENTER_FOCUS` 或 `ALERT`。步骤链、时间演进用 `TIMELINE`；显式多分点并列用 `MULTI_IMAGE`（见下条）。
 - `DATA`：量化。硬核指标、对比增长、价值点。匹配模板：`KPI_HERO`, `PROGRESS_RING` (针对占比)。
-- `CONCLUSION`：收束。核心金句、行动号召、价值升华。匹配模板：`ALERT`, `CENTER_FOCUS` (建议高对比度)。
+- `CONCLUSION`：收束。核心金句、行动号召、价值升华。匹配模板：`CENTER_FOCUS` (建议高对比度)。
+
+### 2.1 `MULTI_IMAGE` 选用规则（易误用，务必遵守）
+- **禁止**因「评论区很乱」「不同观点吵架」等**笼统比喻或混战画面**就选 `MULTI_IMAGE`；这类用**一张**图表现整体氛围即可（`CENTER_FOCUS`）。
+- **仅当**口播中存在**显式排比、分点列举、或 2～4 个可分别画成独立主体的要素**（如「一要…二要…」「A 怎样、B 又怎样」且各自成画）时才用 `MULTI_IMAGE`。
+- 单纯转折拆成两句字幕（如「简单…却…」）**不等于**需要多张并列图。
+
+### 2.2 `SPLIT_COMPARE` 优先（减少 `CENTER_FOCUS` 滥用）
+- **强信号**：一句/几句内交替出现「你…他…」「你…对方…」「我…他…」；或 **分号（；）** 前后各描述一方行为；或「讲道理 vs 甩链接」「保持客观 vs 只看想看的」等 **A 侧行为 vs B 侧行为**。
+- **选型**：上述情况**优先 `SPLIT_COMPARE`**（左右各一图 + `leftLabel`/`rightLabel` 短语），**不要**拆成多个 `CENTER_FOCUS`。
+- **反例**：仅「评论区吵成一锅粥」这类**无双方对仗的笼统场景**仍用单图 `CENTER_FOCUS`/`ALERT`，不用 `SPLIT_COMPARE`。
 
 ### 3. 文案覆盖协议（Zero-Modification）
 - **绝对要求**：所有 item 的 `text` 字段按 order 顺次拼接后，必须与【场景原文】**字符级一致**（包括所有标点符号）。
@@ -432,7 +441,7 @@ def _analyze_param_for_item(client, model: str, scene_text: str, item: dict, tem
      - "slideUp": 向上升起（适合正面结论、上升趋势、启发性观点）。
      - "popIn": 突然弹出（适合震惊、警示、负面反转、强调痛点）。
      - "highlight": 底部抹色（适合术语、背景事实、平淡但重要的名词）。
-   - 音音效可选：impact_thud(低沉重击)、ping(清脆提示)、woosh(挥舞转场)。带锚点建议配音效到对应 content 条目 audioEffect。
+   - 音效可选（仅绑在锚点上）：impact_thud(低沉重击)、ping(清脆提示)、woosh(挥舞转场)。若某锚点需要强调音，在该锚点对象上填 `audioEffect`；**不要**写在 content 条目里。
 4. ⚠️ 视觉标题与字幕的分离（极其重要）：
    - 如果模板要求填充 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等**视觉标题**字段：
      - **极简原则**：这些字段必须是极简的**关键词（2-6个汉字）**。它们是画面的视觉重点，不是台词！
@@ -449,8 +458,7 @@ def _analyze_param_for_item(client, model: str, scene_text: str, item: dict, tem
     // (如果模板要求图片等其他字段，在此生成，但需符合 Schema 返回纯内容)
     "content": [
       {{
-        "text": "完整原文片段（顺次无缝拼接，不能漏字）",
-        "audioEffect": "音效"
+        "text": "完整原文片段（顺次无缝拼接，不能漏字）"
       }}
     ],
     "anchors": [
@@ -458,7 +466,8 @@ def _analyze_param_for_item(client, model: str, scene_text: str, item: dict, tem
         "text": "被高亮的关键词",
         "showFrom": 0,
         "color": "#颜色",
-        "anim": "动画样式"
+        "anim": "动画样式",
+        "audioEffect": "可选：impact_thud / ping / woosh 或省略"
       }}
     ]
   }}

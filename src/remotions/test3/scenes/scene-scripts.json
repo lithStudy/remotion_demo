@@ -17,20 +17,17 @@
               {
                 "text": "最近你有没有这种感觉：",
                 "startFrame": 0,
-                "durationFrames": 56,
-                "audioEffect": "ping"
+                "durationFrames": 56
               },
               {
                 "text": "上网刷新闻、看评论区，",
                 "startFrame": 55,
-                "durationFrames": 56,
-                "audioEffect": "ping"
+                "durationFrames": 56
               },
               {
                 "text": "血压能瞬间飙升？",
                 "startFrame": 110,
-                "durationFrames": 41,
-                "audioEffect": "impact_thud"
+                "durationFrames": 41
               }
             ],
             "anchors": [
@@ -38,7 +35,8 @@
                 "text": "血压飙升",
                 "showFrom": 2,
                 "color": "#EF4444",
-                "anim": "popIn"
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
               }
             ],
             "totalDurationFrames": 151
@@ -56,14 +54,12 @@
               {
                 "text": "明明一个挺简单的事儿，",
                 "startFrame": 0,
-                "durationFrames": 56,
-                "audioEffect": "ping"
+                "durationFrames": 56
               },
               {
                 "text": "评论区却吵成了一锅粥。",
                 "startFrame": 55,
-                "durationFrames": 56,
-                "audioEffect": null
+                "durationFrames": 56
               }
             ],
             "anchors": [],
@@ -84,14 +80,12 @@
               {
                 "text": "你拿证据跟他讲道理，",
                 "startFrame": 0,
-                "durationFrames": 51,
-                "audioEffect": "ping"
+                "durationFrames": 51
               },
               {
                 "text": "他反手甩给你一个地摊文学链接；",
                 "startFrame": 50,
-                "durationFrames": 76,
-                "audioEffect": "impact_thud"
+                "durationFrames": 76
               }
             ],
             "anchors": [],
@@ -112,20 +106,17 @@
               {
                 "text": "你试图保持客观，",
                 "startFrame": 0,
-                "durationFrames": 41,
-                "audioEffect": "ping"
+                "durationFrames": 41
               },
               {
                 "text": "结果发现对方只看他想看的，",
                 "startFrame": 40,
-                "durationFrames": 66,
-                "audioEffect": "ping"
+                "durationFrames": 66
               },
               {
                 "text": "只听他想听的。",
                 "startFrame": 105,
-                "durationFrames": 36,
-                "audioEffect": null
+                "durationFrames": 36
               }
             ],
             "anchors": [],
@@ -144,20 +135,17 @@
               {
                 "text": "最气人的是，你发现不管你怎么自证清白，",
                 "startFrame": 0,
-                "durationFrames": 96,
-                "audioEffect": "ping"
+                "durationFrames": 96
               },
               {
                 "text": "对方总能从你的话里抠出几个字来证明你",
                 "startFrame": 95,
-                "durationFrames": 96,
-                "audioEffect": "ping"
+                "durationFrames": 96
               },
               {
                 "text": "“屁股歪了”。",
                 "startFrame": 190,
-                "durationFrames": 36,
-                "audioEffect": "impact_thud"
+                "durationFrames": 36
               }
             ],
             "anchors": [
@@ -165,7 +153,8 @@
                 "text": "屁股歪了",
                 "showFrom": 0,
                 "color": "#EF4444",
-                "anim": "popIn"
+                "anim": "popIn",
+                "audioEffect": "ping"
               }
             ],
             "totalDurationFrames": 227
@@ -183,14 +172,12 @@
               {
                 "text": "这种“鸡同鸭讲、秀才遇上兵”的无力感，",
                 "startFrame": 0,
-                "durationFrames": 96,
-                "audioEffect": "impact_thud"
+                "durationFrames": 96
               },
               {
                 "text": "是不是让你觉得现在的互联网环境简直没法待了？",
                 "startFrame": 95,
-                "durationFrames": 111,
-                "audioEffect": null
+                "durationFrames": 111
               }
             ],
             "anchors": [
@@ -198,7 +185,8 @@
                 "text": "无力感",
                 "showFrom": 0,
                 "color": "#EF4444",
-                "anim": "popIn"
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
               }
             ],
             "totalDurationFrames": 207
@@ -216,14 +204,12 @@
               {
                 "text": "大家好像不再是为了真相在讨论，",
                 "startFrame": 0,
-                "durationFrames": 76,
-                "audioEffect": "ping"
+                "durationFrames": 76
               },
               {
                 "text": "而是在为了“输赢”在搏命。",
                 "startFrame": 75,
-                "durationFrames": 66,
-                "audioEffect": null
+                "durationFrames": 66
               }
             ],
             "anchors": [],
@@ -250,14 +236,12 @@
               {
                 "text": "其实，这事儿真不全怪咱们修养不够，",
                 "startFrame": 0,
-                "durationFrames": 80,
-                "audioEffect": "ping"
+                "durationFrames": 80
               },
               {
                 "text": "更不能怪我们普通人爱钻牛角尖。",
                 "startFrame": 79,
-                "durationFrames": 70,
-                "audioEffect": null
+                "durationFrames": 70
               }
             ],
             "anchors": [],
@@ -276,14 +260,12 @@
               {
                 "text": "咱们得认清一个现实：我们的大脑在进化过程中，",
                 "startFrame": 0,
-                "durationFrames": 103,
-                "audioEffect": "ping"
+                "durationFrames": 103
               },
               {
                 "text": "保留了一个极其隐蔽的“底层Bug”，",
                 "startFrame": 102,
-                "durationFrames": 84,
-                "audioEffect": null
+                "durationFrames": 84
               }
             ],
             "anchors": [],
@@ -302,14 +284,12 @@
               {
                 "text": "而现在的互联网算法,",
                 "startFrame": 0,
-                "durationFrames": 47,
-                "audioEffect": "ping"
+                "durationFrames": 47
               },
               {
                 "text": "正精准地利用这个Bug把我们关进信息囚笼。",
                 "startFrame": 46,
-                "durationFrames": 98,
-                "audioEffect": null
+                "durationFrames": 98
               }
             ],
             "anchors": [],
@@ -328,20 +308,17 @@
               {
                 "text": "那些平台为了让你多刷半小时，",
                 "startFrame": 0,
-                "durationFrames": 66,
-                "audioEffect": "ping"
+                "durationFrames": 66
               },
               {
                 "text": "会不断推送你认同的观点。",
                 "startFrame": 65,
-                "durationFrames": 56,
-                "audioEffect": "ping"
+                "durationFrames": 56
               },
               {
                 "text": "久而久之，我们就像被喂食的宠物，",
                 "startFrame": 121,
-                "durationFrames": 75,
-                "audioEffect": null
+                "durationFrames": 75
               }
             ],
             "anchors": [
@@ -349,7 +326,8 @@
                 "text": "多刷半小时",
                 "showFrom": 0,
                 "color": "#EF4444",
-                "anim": "popIn"
+                "anim": "popIn",
+                "audioEffect": "ping"
               },
               {
                 "text": "喂食",
@@ -373,8 +351,7 @@
               {
                 "text": "眼中只剩下一片虚假的繁荣。",
                 "startFrame": 0,
-                "durationFrames": 61,
-                "audioEffect": null
+                "durationFrames": 61
               }
             ],
             "anchors": [],
@@ -393,14 +370,12 @@
               {
                 "text": "所以，当我们遇到不同声音时，",
                 "startFrame": 0,
-                "durationFrames": 66,
-                "audioEffect": "ping"
+                "durationFrames": 66
               },
               {
                 "text": "大脑会本能地把它当成一种“生存威胁”。",
                 "startFrame": 65,
-                "durationFrames": 89,
-                "audioEffect": null
+                "durationFrames": 89
               }
             ],
             "anchors": [
@@ -428,20 +403,17 @@
               {
                 "text": "我们不是在拒绝真相，",
                 "startFrame": 0,
-                "durationFrames": 47,
-                "audioEffect": "ping"
+                "durationFrames": 47
               },
               {
                 "text": "我们是在保护那个脆弱的、",
                 "startFrame": 46,
-                "durationFrames": 56,
-                "audioEffect": "ping"
+                "durationFrames": 56
               },
               {
                 "text": "被算法喂养出来的“自我”。",
                 "startFrame": 102,
-                "durationFrames": 61,
-                "audioEffect": null
+                "durationFrames": 61
               }
             ],
             "anchors": [],
@@ -458,21 +430,20 @@
               {
                 "text": "在这种机制面前，",
                 "startFrame": 0,
-                "durationFrames": 38,
-                "audioEffect": "ping"
+                "durationFrames": 38
               },
               {
                 "text": "我们每个人都是被操纵的受害者。",
                 "startFrame": 37,
-                "durationFrames": 70,
-                "audioEffect": null
+                "durationFrames": 70
               }
             ],
             "anchors": [
               {
                 "text": "受害者",
                 "showFrom": 0,
-                "color": "red"
+                "color": "red",
+                "audioEffect": "ping"
               }
             ],
             "totalDurationFrames": 108
@@ -498,20 +469,17 @@
               {
                 "text": "在心理学上，这种现象有一个著名的核心概念，",
                 "startFrame": 0,
-                "durationFrames": 94,
-                "audioEffect": "ping"
+                "durationFrames": 94
               },
               {
                 "text": "叫作",
                 "startFrame": 93,
-                "durationFrames": 14,
-                "audioEffect": "ping"
+                "durationFrames": 14
               },
               {
                 "text": "“确认偏误”（Confirmation Bias）。",
                 "startFrame": 106,
-                "durationFrames": 116,
-                "audioEffect": "ping"
+                "durationFrames": 116
               }
             ],
             "anchors": [],
@@ -528,14 +496,12 @@
               {
                 "text": "简单通俗地说，确认偏误就像是我们大脑自带的一副",
                 "startFrame": 0,
-                "durationFrames": 107,
-                "audioEffect": "ping"
+                "durationFrames": 107
               },
               {
                 "text": "“有色滤镜”。",
                 "startFrame": 106,
-                "durationFrames": 32,
-                "audioEffect": null
+                "durationFrames": 32
               }
             ],
             "anchors": [
@@ -543,7 +509,8 @@
                 "text": "确认偏误",
                 "showFrom": 0,
                 "color": "#EF4444",
-                "anim": "popIn"
+                "anim": "popIn",
+                "audioEffect": "ping"
               }
             ],
             "totalDurationFrames": 138
@@ -563,26 +530,22 @@
               {
                 "text": "当我们先入为主地相信一个观点时，",
                 "startFrame": 0,
-                "durationFrames": 72,
-                "audioEffect": "ping"
+                "durationFrames": 72
               },
               {
                 "text": "我们的脑子会自动开启两个功能：",
                 "startFrame": 71,
-                "durationFrames": 67,
-                "audioEffect": "ping"
+                "durationFrames": 67
               },
               {
                 "text": "第一，是“自动美颜”，",
                 "startFrame": 137,
-                "durationFrames": 49,
-                "audioEffect": null
+                "durationFrames": 49
               },
               {
                 "text": "",
                 "startFrame": 186,
-                "durationFrames": 1,
-                "audioEffect": null
+                "durationFrames": 1
               }
             ],
             "anchors": [],
@@ -601,20 +564,17 @@
               {
                 "text": "凡是能证明我正确的信息，",
                 "startFrame": 0,
-                "durationFrames": 54,
-                "audioEffect": "ping"
+                "durationFrames": 54
               },
               {
                 "text": "哪怕漏洞百出，",
                 "startFrame": 53,
-                "durationFrames": 32,
-                "audioEffect": "ping"
+                "durationFrames": 32
               },
               {
                 "text": "我们也觉得是真理；",
                 "startFrame": 84,
-                "durationFrames": 41,
-                "audioEffect": null
+                "durationFrames": 41
               }
             ],
             "anchors": [
@@ -642,8 +602,7 @@
               {
                 "text": "第二，是“一键拉黑”，",
                 "startFrame": 0,
-                "durationFrames": 49,
-                "audioEffect": "impact_thud"
+                "durationFrames": 49
               }
             ],
             "anchors": [],
@@ -662,20 +621,17 @@
               {
                 "text": "凡是反驳我们的证据，",
                 "startFrame": 0,
-                "durationFrames": 45,
-                "audioEffect": "ping"
+                "durationFrames": 45
               },
               {
                 "text": "哪怕铁证如山，",
                 "startFrame": 44,
-                "durationFrames": 32,
-                "audioEffect": "ping"
+                "durationFrames": 32
               },
               {
                 "text": "我们也觉得那是造谣。",
                 "startFrame": 75,
-                "durationFrames": 45,
-                "audioEffect": null
+                "durationFrames": 45
               }
             ],
             "anchors": [],
@@ -702,8 +658,7 @@
               {
                 "text": "这就像是一个正在热恋中的姑娘，她觉得男朋友哪儿都好。",
                 "startFrame": 0,
-                "durationFrames": 116,
-                "audioEffect": "ping"
+                "durationFrames": 116
               }
             ],
             "anchors": [],
@@ -722,8 +677,7 @@
               {
                 "text": "男朋友迟到那是“有个性”，",
                 "startFrame": 0,
-                "durationFrames": 58,
-                "audioEffect": null
+                "durationFrames": 58
               }
             ],
             "anchors": [],
@@ -742,14 +696,12 @@
               {
                 "text": "男朋友不洗澡那是",
                 "startFrame": 0,
-                "durationFrames": 41,
-                "audioEffect": "ping"
+                "durationFrames": 41
               },
               {
                 "text": "“纯爷们”。",
                 "startFrame": 40,
-                "durationFrames": 27,
-                "audioEffect": null
+                "durationFrames": 27
               }
             ],
             "anchors": [
@@ -777,14 +729,12 @@
               {
                 "text": "哪怕闺蜜拿出一叠男方劈腿的证据，",
                 "startFrame": 0,
-                "durationFrames": 72,
-                "audioEffect": "ping"
+                "durationFrames": 72
               },
               {
                 "text": "她也能脑补出那是“坏女人在勾引我男人”。",
                 "startFrame": 71,
-                "durationFrames": 89,
-                "audioEffect": null
+                "durationFrames": 89
               }
             ],
             "anchors": [],
@@ -803,20 +753,17 @@
               {
                 "text": "这时候，事实已经不重要了，",
                 "startFrame": 0,
-                "durationFrames": 58,
-                "audioEffect": "ping"
+                "durationFrames": 58
               },
               {
                 "text": "大脑只会疯狂寻找能支持",
                 "startFrame": 57,
-                "durationFrames": 54,
-                "audioEffect": "ping"
+                "durationFrames": 54
               },
               {
                 "text": "“我没看错人”的证据。",
                 "startFrame": 111,
-                "durationFrames": 49,
-                "audioEffect": null
+                "durationFrames": 49
               }
             ],
             "anchors": [
@@ -824,7 +771,8 @@
                 "text": "不重要",
                 "showFrom": 0,
                 "color": "#EF4444",
-                "anim": "popIn"
+                "anim": "popIn",
+                "audioEffect": "ping"
               }
             ],
             "totalDurationFrames": 161
@@ -844,26 +792,22 @@
               {
                 "text": "在互联网讨论中，",
                 "startFrame": 0,
-                "durationFrames": 36,
-                "audioEffect": "ping"
+                "durationFrames": 36
               },
               {
                 "text": "很多人其实并不是在寻找真理，",
                 "startFrame": 35,
-                "durationFrames": 63,
-                "audioEffect": "ping"
+                "durationFrames": 63
               },
               {
                 "text": "而是在玩一场名为“证明我是对的”",
                 "startFrame": 97,
-                "durationFrames": 76,
-                "audioEffect": "ping"
+                "durationFrames": 76
               },
               {
                 "text": "心理游戏。",
                 "startFrame": 173,
-                "durationFrames": 23,
-                "audioEffect": "ping"
+                "durationFrames": 23
               }
             ],
             "anchors": [],
@@ -890,20 +834,17 @@
               {
                 "text": "为了不让自己变成算法的傀儡，",
                 "startFrame": 0,
-                "durationFrames": 70,
-                "audioEffect": "ping"
+                "durationFrames": 70
               },
               {
                 "text": "下次上网冲浪，我建议大家在心里备好这把",
                 "startFrame": 69,
-                "durationFrames": 100,
-                "audioEffect": "ping"
+                "durationFrames": 100
               },
               {
                 "text": "“防身武器”：",
                 "startFrame": 168,
-                "durationFrames": 35,
-                "audioEffect": null
+                "durationFrames": 35
               }
             ],
             "anchors": [],
@@ -922,20 +863,17 @@
               {
                 "text": "反向搜索法：",
                 "startFrame": 0,
-                "durationFrames": 30,
-                "audioEffect": "ping"
+                "durationFrames": 30
               },
               {
                 "text": "当你极其认同某个观点时，",
                 "startFrame": 29,
-                "durationFrames": 60,
-                "audioEffect": "ping"
+                "durationFrames": 60
               },
               {
                 "text": "强迫自己去搜一下反对这个观点的理由。",
                 "startFrame": 89,
-                "durationFrames": 90,
-                "audioEffect": null
+                "durationFrames": 90
               }
             ],
             "anchors": [
@@ -943,7 +881,8 @@
                 "text": "反向搜索",
                 "showFrom": 0,
                 "color": "#EF4444",
-                "anim": "popIn"
+                "anim": "popIn",
+                "audioEffect": "ping"
               }
             ],
             "totalDurationFrames": 179
@@ -961,26 +900,22 @@
               {
                 "text": "警惕“爽感”：",
                 "startFrame": 0,
-                "durationFrames": 35,
-                "audioEffect": "ping"
+                "durationFrames": 35
               },
               {
                 "text": "如果一段文字让你读完觉得",
                 "startFrame": 34,
-                "durationFrames": 65,
-                "audioEffect": "ping"
+                "durationFrames": 65
               },
               {
                 "text": "“太解气了、说得太对了”，",
                 "startFrame": 99,
-                "durationFrames": 65,
-                "audioEffect": "ping"
+                "durationFrames": 65
               },
               {
                 "text": "这时候一定要停下来。",
                 "startFrame": 163,
-                "durationFrames": 50,
-                "audioEffect": null
+                "durationFrames": 50
               }
             ],
             "anchors": [
@@ -988,7 +923,8 @@
                 "text": "爽感",
                 "showFrom": 0,
                 "color": "#EF4444",
-                "anim": "popIn"
+                "anim": "popIn",
+                "audioEffect": "ping"
               }
             ],
             "totalDurationFrames": 214
@@ -1004,20 +940,17 @@
               {
                 "text": "因为能让你瞬间产生巨大爽感的东西，",
                 "startFrame": 0,
-                "durationFrames": 85,
-                "audioEffect": null
+                "durationFrames": 85
               },
               {
                 "text": "往往不是真相，",
                 "startFrame": 84,
-                "durationFrames": 35,
-                "audioEffect": null
+                "durationFrames": 35
               },
               {
                 "text": "而是针对你“确认偏误”定制的诱饵。",
                 "startFrame": 118,
-                "durationFrames": 85,
-                "audioEffect": "ping"
+                "durationFrames": 85
               }
             ],
             "anchors": [
@@ -1025,13 +958,15 @@
                 "text": "确认偏误",
                 "showFrom": 2,
                 "color": "#EF4444",
-                "anim": "popIn"
+                "anim": "popIn",
+                "audioEffect": "ping"
               },
               {
                 "text": "诱饵",
                 "showFrom": 2,
                 "color": "#EF4444",
-                "anim": "popIn"
+                "anim": "popIn",
+                "audioEffect": "ping"
               }
             ],
             "totalDurationFrames": 204
@@ -1049,20 +984,17 @@
               {
                 "text": "问自己一个问题：",
                 "startFrame": 0,
-                "durationFrames": 40,
-                "audioEffect": "ping"
+                "durationFrames": 40
               },
               {
                 "text": "“如果我是错的，",
                 "startFrame": 39,
-                "durationFrames": 40,
-                "audioEffect": "ping"
+                "durationFrames": 40
               },
               {
                 "text": "会有什么证据能说服我？”",
                 "startFrame": 79,
-                "durationFrames": 65,
-                "audioEffect": null
+                "durationFrames": 65
               }
             ],
             "anchors": [],
@@ -1083,14 +1015,12 @@
               {
                 "text": "如果你发现没有任何证据能说服你，",
                 "startFrame": 0,
-                "durationFrames": 80,
-                "audioEffect": "ping"
+                "durationFrames": 80
               },
               {
                 "text": "那说明你已经掉进了偏见的陷阱。",
                 "startFrame": 79,
-                "durationFrames": 75,
-                "audioEffect": null
+                "durationFrames": 75
               }
             ],
             "anchors": [],
@@ -1108,32 +1038,31 @@
               {
                 "text": "兄弟姐妹们，在这个套路满天飞的时代，",
                 "startFrame": 0,
-                "durationFrames": 90,
-                "audioEffect": "ping"
+                "durationFrames": 90
               },
               {
                 "text": "承认自己“可能错了”并不是一种软弱，",
                 "startFrame": 89,
-                "durationFrames": 90,
-                "audioEffect": "ping"
+                "durationFrames": 90
               },
               {
                 "text": "而是一个成年人最高级的智力觉醒。",
                 "startFrame": 178,
-                "durationFrames": 80,
-                "audioEffect": null
+                "durationFrames": 80
               }
             ],
             "anchors": [
               {
                 "text": "可能错了",
                 "showFrom": 0,
-                "color": "red"
+                "color": "red",
+                "audioEffect": "ping"
               },
               {
                 "text": "智力觉醒",
                 "showFrom": 0,
-                "color": "red"
+                "color": "red",
+                "audioEffect": "ping"
               }
             ],
             "totalDurationFrames": 258
@@ -1151,20 +1080,17 @@
               {
                 "text": "做自己大脑的主人，",
                 "startFrame": 0,
-                "durationFrames": 45,
-                "audioEffect": "ping"
+                "durationFrames": 45
               },
               {
                 "text": "不被偏见裹挟，",
                 "startFrame": 44,
-                "durationFrames": 35,
-                "audioEffect": "ping"
+                "durationFrames": 35
               },
               {
                 "text": "我们才能真正看清这个复杂的世界。",
                 "startFrame": 79,
-                "durationFrames": 80,
-                "audioEffect": null
+                "durationFrames": 80
               }
             ],
             "anchors": [
@@ -1172,7 +1098,8 @@
                 "text": "偏见",
                 "showFrom": 1,
                 "color": "#EF4444",
-                "anim": "popIn"
+                "anim": "popIn",
+                "audioEffect": "ping"
               }
             ],
             "totalDurationFrames": 159

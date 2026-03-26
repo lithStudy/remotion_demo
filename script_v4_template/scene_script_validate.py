@@ -19,6 +19,47 @@ _IMAGE_ENTER_EFFECTS = frozenset(
 	{"breathe", "slideLeft", "slideBottom", "zoomIn", "fadeIn"}
 )
 
+# 与 TemplateContentRenderer 使用的 public/audio/effects/{id}.wav 一致
+_ANCHOR_SFX_IDS = frozenset({"impact_thud", "ping", "woosh"})
+
+
+def migrate_content_audio_effect_to_anchors(data: dict) -> list[str]:
+	"""
+	将已废弃的 content[].audioEffect 迁到对应 showFrom 的 anchor.audioEffect，并从 content 中删除该字段。
+	无对应 anchor 的条目仅删除字段并告警。
+	"""
+	warnings: list[str] = []
+	for scene in data.get("scenes", []):
+		scene_id = scene.get("sceneId", "?")
+		for item in scene.get("items", []):
+			param = item.get("param")
+			if not isinstance(param, dict):
+				continue
+			content = param.get("content")
+			if not isinstance(content, list):
+				continue
+			anchors = param.get("anchors")
+			if not isinstance(anchors, list):
+				anchors = []
+				param["anchors"] = anchors
+			for i, ci in enumerate(content):
+				if not isinstance(ci, dict):
+					continue
+				ae = ci.pop("audioEffect", None)
+				if ae is None or ae == "":
+					continue
+				matched = False
+				for a in anchors:
+					if isinstance(a, dict) and a.get("showFrom") == i:
+						matched = True
+						if not a.get("audioEffect"):
+							a["audioEffect"] = ae
+				if not matched:
+					warnings.append(
+						f"[{scene_id}] item order={item.get('order', '?')} content[{i}] 有 audioEffect={ae!r} 但无对应 anchor，已丢弃"
+					)
+	return warnings
+
 
 def _parse_image_count_range(image_count: Any) -> tuple[int | None, int | None]:
 	"""返回 (min, max)，无法解析则 (None, None) 表示不检查。"""
@@ -96,6 +137,7 @@ def validate_and_normalize_scene_scripts(
 	就地修改 data 并返回 (data, warnings)。
 	"""
 	warnings: list[str] = []
+	warnings.extend(migrate_content_audio_effect_to_anchors(data))
 	if default_template not in registry:
 		default_template = "CENTER_FOCUS" if "CENTER_FOCUS" in registry else next(iter(registry.keys()))
 
@@ -214,6 +256,12 @@ def validate_and_normalize_scene_scripts(
 						f"[{scene_id}] item order={order} 模板 {tname} anchors[{aidx}].showFrom={show_from!r} 非法，已丢弃"
 					)
 					continue
+				ae = anchor.get("audioEffect")
+				if ae is not None and ae != "" and ae not in _ANCHOR_SFX_IDS:
+					warnings.append(
+						f"[{scene_id}] item order={order} 模板 {tname} anchors[{aidx}].audioEffect={ae!r} 非法，已清除"
+					)
+					anchor["audioEffect"] = None
 				valid_anchors.append(anchor)
 			param["anchors"] = valid_anchors
 

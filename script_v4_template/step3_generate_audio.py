@@ -77,7 +77,7 @@ def _get_mp3_duration_s(filepath: str) -> float:
 def extract_texts_from_content(content: list) -> list:
     """
     从 content 数组提取纯文本。
-    content 条目可以是字符串或对象（{text, audioEffect, ...}）。
+    content 条目可以是字符串或对象（{text, ...}）。
     返回纯文本列表。
     """
     texts = []
@@ -279,14 +279,12 @@ def upgrade_content_with_timing(
                 "text": item,
                 "startFrame": start_frame,
                 "durationFrames": duration_frames,
-                "audioEffect": None,
             })
         elif isinstance(item, dict):
             upgraded.append({
                 "text": item.get("text", ""),
                 "startFrame": start_frame,
                 "durationFrames": duration_frames,
-                "audioEffect": item.get("audioEffect"),
             })
 
     return upgraded

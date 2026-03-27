@@ -12,10 +12,11 @@ export const templateMeta = {
 	"name": "CENTER_FOCUS",
 	"componentExport": "BWCenterFocus",
 	"description":
-		"适用：默认叙事底盘；平缓讲事实、下定义、引入话题；单图居中。\n差异：强情绪/震惊句用 TEXT_FOCUS；专业术语卡用 CONCEPT_CARD；多要素同时出现用 MULTI_IMAGE。\n慎用：需要左右对比或步骤列表时请换 SPLIT_COMPARE / STEP_LIST 等。\n参数：enterEffect 默认 breathe。",
+		"适用：默认叙事底盘；平缓讲事实、下定义、引入话题；单图居中。\n差异：强情绪/震惊句用 TEXT_FOCUS；专业术语卡用 CONCEPT_CARD；多要素同时出现用 LIST_MULTI_GROUP。\n慎用：需要左右对比或步骤列表时请换 SPLIT_COMPARE / STEP_LIST 等。\n参数：enterEffect 默认 breathe。",
 	"psychology": "视觉中心稳定",
 	"image_count": 1,
 	"param_schema": {
+		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
 		"imageSrc": { "type": "image_prompt", "required": true, "desc": "主图描述" },
 		"enterEffect": { "type": "enum", "values": ["breathe", "slideLeft", "slideBottom", "zoomIn", "fadeIn"], "default": "breathe", "desc": "入场效果" },
 	},

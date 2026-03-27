@@ -294,6 +294,7 @@ def _gemini_fix_after_warnings(
 {template_guide}
 
 请输出**一份**修订后的完整 JSON：顶层含 `topic`、`scenes`（每 scene 含 `sceneId`、`sceneName`、`items`），每个 item 含 `order`、`narrativeType`、`reasoning`、`template`、`param`。不要包含 `fps` 字段。
+**硬性要求**：每个 item 的 `param.content` 必须存在且为**非空数组**，每项为 `{{"text": "..."}}`；`TEXT_FOCUS` 同样必须含 `content`，`coreSentence` 仅为额外大屏句，**不能**代替 `content`。
 所有 `content` 中的原文必须一致。`audioEffect` 只能出现在 `anchors` 条目上，不得出现在 `content`。仅输出 JSON，不要 markdown 代码块。"""
 
     resp = _generate_with_retry(client, model, fix_prompt)
@@ -341,30 +342,43 @@ def _analyze_items_for_scene(client, model: str, topic: str, scene: dict, templa
 
 ## 🧩 镜头拆解与策略指南
 
-### 1. 拆解节奏与呼吸感（Heuristics）
-- **高频切分**：短视频核心是“变”。严禁一个镜头停留超过 4 秒。
-- **切分点建议**：
-    - 只要逻辑发生转折（比如：但、但是、其实、然而、却）或并列（比如：而且、且、不仅...还、此外）必须切分。
-    - 只要话题从叙述转向举例（比如：例如、比如、拿...来说），或从问题转向对策（比如：所以、于是、由此可见）必须切分。
-    - 单个镜头（Item）的文案长度建议控制在 **12-28 个字** 之间。
+### 1. 语义单元优先，变化交给模板内部节拍（核心原则）
+- **Item 粒度**：每个 item 应对应一个**完整表达动作**或**完整论证单元**（一整句因果、一整段定义、一例完整比喻）。不要为了“多切几刀”而把一个连贯论点拆成边界别扭的多段。
+- **禁止机械切分**：不要仅因为**逗号停顿、冒号后半句、一般并列连接词**就新建 item；只有**叙事动作真的变了**（例如：下定义 → 换话题举例；说理 → 转向行动建议）才拆。
+- **时长与变化**：短视频需要“变”，但**优先用结构化模板在单个 item 内做多节拍**（如 `BEAT_SEQUENCE`、`LIST_MULTI_GROUP`、`STEP_LIST`），而不是把同一条逻辑链拆成多个连续 `CENTER_FOCUS`。单 item 口播过长时，再用 `Step3` 的 `content` 分行解决单行字幕长度即可。
+- **参考长度**：在语义完整前提下，单个 item 文案可略长（必要时 **30～80 字** 也可），**不要为了凑 12～28 字**而硬拆；短金句仍可做独立 item。
+
+### 1.1「总起句 + 分点列举」强制合并规则
+- 若出现 **总起句 + 冒号/句号 +「第一/第二/第三…」或「一要…二要…」** 等同一段内的讲解结构：**必须合并为同一个 item**，不要拆成“总起一个 item + 每一分点再各开一个 item”。
+- **模板选型**：并列机制、多要点各自成画 → 优先 `LIST_MULTI_GROUP` 或 `BEAT_SEQUENCE`（`stages` 与后续分段对应）；偏步骤/清单感、可无大图 → 可用 `STEP_LIST`。只有当每一分点**都很长且视觉重心完全不同**时，才拆成多个 item。
+- **反例**：「当我们…两个功能：**第一…第二…**」整段属于**同一论证单元**，禁止拆成三个 `CENTER_FOCUS`。
+
+### 1.2 避免 `CENTER_FOCUS` 连刷（不等于碎片化）
+- **低质量**：同一 scene 内连续 **2 个及以上** 语义相近的 `CENTER_FOCUS`（都在平铺说教、图都差不多）——应改为 `BEAT_SEQUENCE`、`TEXT_FOCUS`（短时金句/纯字）、`STEP_LIST`、`LIST_MULTI_GROUP`、或符合规则时的 `SPLIT_COMPARE`。
+- 只有模板**确实无法承载**该段语义时，才保留多个 `CENTER_FOCUS`。
+
+### 1.3 何时才新建 item（切分点）
+- **强切分**：话题从说理/定义转向**独立举例**（如「这就像…」「举个例子」）；从铺垫转向**对策/号召**（如「所以建议…」「下次你可以…」）；情绪段位或叙事目标**根本性**切换。
+- **弱信号**（单独**不**足以新建 item）：普通「而且、此外」；同一段内的逗号分句；同一机制下的「第一第二点」并列（见 1.1，应合并）。
 
 ### 2. 叙事类型分类 (Narrative Types)
 请在 reasoning 中按照“叙事角色 -> 视觉重心 -> 模板选型”的逻辑进行思考：
-- `HOOK`：引子。制造悬念、反直觉、抛出痛点。匹配模板：`CENTER_FOCUS` (配强冲击力图片)。
-- `LOGIC`：推导。原理分析、因果论证、底层逻辑。匹配模板：`MAGNIFYING_GLASS`, `STAT_COMPARE`, `CONCEPT_CHIP`。
-- `CASE`：举证。具体场景、案例模拟、步骤演示。**若同一段落里出现「你/我/咱们」与「他/她/对方/有些人」的行为对仗，或分号（；）隔开的两段形成对立**（一方理性一方耍赖、一方客观一方选择性接收等），**必须优先 `SPLIT_COMPARE`**，禁止再用 `CENTER_FOCUS` 凑合。无对仗的单一画面、纯氛围描写用 `CENTER_FOCUS` 或 `ALERT`。步骤链、时间演进用 `TIMELINE`；显式多分点并列用 `MULTI_IMAGE`（见下条）。
+- `HOOK`：引子。制造悬念、反直觉、抛出痛点。匹配模板：`CENTER_FOCUS` (配强冲击力图片) 或短时 `TEXT_FOCUS`。
+- `LOGIC`：推导。原理分析、因果论证、底层逻辑。匹配模板：`MAGNIFYING_GLASS`（需可配 anchors）、`STAT_COMPARE`、`CONCEPT_CHIP`；**同一段内多小节递进**用 `BEAT_SEQUENCE`；**机制分点列举**用 `LIST_MULTI_GROUP` 或 `STEP_LIST`。
+- `CASE`：举证。具体场景、案例模拟、步骤演示。**若同一段落里出现「你/我/咱们」与「他/她/对方/有些人」的行为对仗，或分号（；）隔开的两段形成对立**（一方理性一方耍赖、一方客观一方选择性接收等），**必须优先 `SPLIT_COMPARE`**，禁止再用 `CENTER_FOCUS` 凑合。无对仗的单一画面、纯氛围描写用 `CENTER_FOCUS` 或 `ALERT`。步骤链、时间演进用 `TIMELINE`；显式多分点并列用 `LIST_MULTI_GROUP`（见下条）。
 - `DATA`：量化。硬核指标、对比增长、价值点。匹配模板：`KPI_HERO`, `PROGRESS_RING` (针对占比)。
-- `CONCLUSION`：收束。核心金句、行动号召、价值升华。匹配模板：`CENTER_FOCUS` (建议高对比度)。
+- `CONCLUSION`：收束。核心金句、行动号召、价值升华。匹配模板：`CENTER_FOCUS` (建议高对比度) 或 `TEXT_FOCUS`。
 
-### 2.1 `MULTI_IMAGE` 选用规则（易误用，务必遵守）
-- **禁止**因「评论区很乱」「不同观点吵架」等**笼统比喻或混战画面**就选 `MULTI_IMAGE`；这类用**一张**图表现整体氛围即可（`CENTER_FOCUS`）。
-- **仅当**口播中存在**显式排比、分点列举、或 2～4 个可分别画成独立主体的要素**（如「一要…二要…」「A 怎样、B 又怎样」且各自成画）时才用 `MULTI_IMAGE`。
+### 2.1 `LIST_MULTI_GROUP` 选用规则（易误用，务必遵守）
+- **禁止**因「评论区很乱」「不同观点吵架」等**笼统比喻或混战画面**就选 `LIST_MULTI_GROUP`；这类用**一张**图表现整体氛围即可（`CENTER_FOCUS`）。
+- **优先场景**：口播中**显式排比、同一论证下的多分点**（2～4 个可分别画成独立主体的要素）。**优先用 `LIST_MULTI_GROUP` 把一个 item 内的并列点画全**，而不是为每个分点各生成一个独立 item。
 - 单纯转折拆成两句字幕（如「简单…却…」）**不等于**需要多张并列图。
 
 ### 2.2 `SPLIT_COMPARE` 优先（减少 `CENTER_FOCUS` 滥用）
 - **强信号**：一句/几句内交替出现「你…他…」「你…对方…」「我…他…」；或 **分号（；）** 前后各描述一方行为；或「讲道理 vs 甩链接」「保持客观 vs 只看想看的」等 **A 侧行为 vs B 侧行为**。
 - **选型**：上述情况**优先 `SPLIT_COMPARE`**（左右各一图 + `leftLabel`/`rightLabel` 短语），**不要**拆成多个 `CENTER_FOCUS`。
 - **反例**：仅「评论区吵成一锅粥」这类**无双方对仗的笼统场景**仍用单图 `CENTER_FOCUS`/`ALERT`，不用 `SPLIT_COMPARE`。
+- **与 1.1 区分**：`SPLIT_COMPARE` 用于**两方对立行为**；「第一第二」讲同一机制的两条功能**不是** SPLIT，用 `LIST_MULTI_GROUP`/`BEAT_SEQUENCE`/`STEP_LIST`。
 
 ### 3. 文案覆盖协议（Zero-Modification）
 - **绝对要求**：所有 item 的 `text` 字段按 order 顺次拼接后，必须与【场景原文】**字符级一致**（包括所有标点符号）。
@@ -395,6 +409,31 @@ def _analyze_items_for_scene(client, model: str, topic: str, scene: dict, templa
         if "order" not in item:
             item["order"] = idx + 1
     return scene
+
+
+def _ensure_item_param_has_content(item: dict) -> None:
+    """Step3 后兜底：模型可能漏掉 content（尤其 TEXT_FOCUS 的 schema 未列 content 时）。"""
+    param = item.get("param")
+    if not isinstance(param, dict):
+        item["param"] = {}
+        param = item["param"]
+    content = param.get("content")
+    has_nonempty = (
+        isinstance(content, list)
+        and any(
+            isinstance(ci, dict) and str(ci.get("text", "")).strip()
+            for ci in content
+        )
+    )
+    if has_nonempty:
+        return
+    t = item.get("text", "")
+    if isinstance(t, str) and t.strip():
+        param["content"] = [{"text": t.strip()}]
+        return
+    cs = param.get("coreSentence")
+    if isinstance(cs, str) and cs.strip():
+        param["content"] = [{"text": cs.strip()}]
 
 
 def _analyze_param_for_item(client, model: str, scene_text: str, item: dict, template_registry: dict) -> dict:
@@ -479,6 +518,7 @@ def _analyze_param_for_item(client, model: str, scene_text: str, item: dict, tem
     except Exception as e:
         print(f"   ❌ 解析 Item {item.get('order')} ({template_name}) 的 param 彻底失败: {e}")
         item["param"] = {"content": [{"text": item_text}], "anchors": []}
+    _ensure_item_param_has_content(item)
     return item
 
 

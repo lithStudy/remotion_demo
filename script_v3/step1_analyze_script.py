@@ -91,7 +91,7 @@ def analyze_with_gemini(text: str, config: dict) -> dict:
 item 级单值，根据 `images` 数组内容选择：
 - `"CENTER_FOCUS"`：单图居中（默认，定义/事实类）
 - `"SPLIT_COMPARE"`：左右分屏对比（数据对比/A-B 对比，此时 images 应含 left 和 right 各一张）
-- `"MULTI_IMAGE"`：多图错落展示（2 张以上且非左右对比时使用）
+- `"LIST_MULTI_GROUP"`：多图错落展示（2 张以上且非左右对比时使用）
 - `"STEP_LIST"`：层级列表（步骤/推导，可不配图）
 - `"ALERT_STYLE"`：全屏反色/震动（揭露套路/重大转折）
 
@@ -192,7 +192,7 @@ item 级单值，根据 `images` 数组内容选择：
         {{
           "order": 4,
           "type": "正文",
-          "layout": "MULTI_IMAGE",
+          "layout": "LIST_MULTI_GROUP",
           "images": [
             {{
               "prompt": "第一张图画面描述",

@@ -6,7 +6,7 @@
 import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import type { TemplateBaseProps } from "./shared";
-import { normalizeContent, TemplateContentRenderer } from "./TemplateContentRenderer";
+import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
 	"name": "TEXT_FOCUS",
@@ -17,10 +17,15 @@ export const templateMeta = {
 	"psychology": "信噪比极致化",
 	"image_count": 0,
 	"param_schema": {
+		"content": {
+			"type": "content_array",
+			"required": true,
+			"desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词；coreSentence 仅大屏标题，不可省略本字段",
+		},
 		"coreSentence": {
 			"type": "string",
-			"required": false,
-			"desc": "精炼核心句（AI 生成）。若 content 过长，填此字段作为大屏居中主文案；未填时主文案仍为 content 全文拼接。字幕/音频仍以 content 为准。",
+			"required": true,
+			"desc": "精炼核心句，不超过25个字",
 		},
 		"anchors": { "type": "anchor_array", "required": false, "desc": "锚点数组，用于高亮正文中的子串，每项含 text、showFrom、color；使用 coreSentence 时锚点词须出现在 coreSentence 内" },
 	},
@@ -77,12 +82,7 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 		? 1 + Math.sin((frame - 20) * 0.06) * 0.015
 		: 1;
 
-	const items = normalizeContent(content);
-	const trimmedCore = coreSentence?.trim();
-	const mainText =
-		trimmedCore && trimmedCore.length > 0
-			? trimmedCore
-			: items.map((c) => c.text).join("");
+	const mainText = coreSentence?.trim();
 	// 遍历所有锚点，按各自颜色高亮
 	const highlightedText = (anchors ?? []).reduce<React.ReactNode[]>(
 		(nodes, anchor) => {

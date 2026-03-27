@@ -3,48 +3,45 @@
   "scenes": [
     {
       "sceneId": "scene_1",
-      "sceneName": "引出现象：网络环境令人血压升高",
+      "sceneName": "引出现象：网络争论与无力感",
       "items": [
         {
           "order": 1,
           "narrativeType": "HOOK",
-          "reasoning": "抛出痛点，引发用户共鸣。使用中心聚焦模板，配以冲击力图片。",
+          "reasoning": "1. 引出痛点，制造悬念；\n2. 突出“你”的感觉，强调切身相关；\n3. 使用`CENTER_FOCUS`配以冲击力的图片。",
           "template": "CENTER_FOCUS",
           "param": {
-            "imageSrc": "一个人皱着眉头，疑惑地看着手机屏幕上的新闻和评论",
-            "enterEffect": "fadeIn",
+            "imageSrc": "一个人正在浏览手机新闻的场景",
+            "enterEffect": "breathe",
             "content": [
               {
-                "text": "最近你有没有这种感觉：上网刷新闻、",
+                "text": "最近你有没有这种感觉：",
                 "startFrame": 0,
-                "durationFrames": 37
+                "durationFrames": 30
               },
               {
-                "text": "看评论区，血压能瞬间飙升？",
-                "startFrame": 37,
+                "text": "上网刷新闻、看评论区，",
+                "startFrame": 30,
+                "durationFrames": 30
+              },
+              {
+                "text": "血压能瞬间飙升？",
+                "startFrame": 60,
                 "durationFrames": 30
               }
             ],
-            "anchors": [
-              {
-                "text": "血压飙升",
-                "showFrom": 1,
-                "color": "#EF4444",
-                "anim": "popIn",
-                "audioEffect": "impact_thud"
-              }
-            ],
-            "totalDurationFrames": 67
+            "anchors": [],
+            "totalDurationFrames": 90
           }
         },
         {
           "order": 2,
           "narrativeType": "CASE",
-          "reasoning": "描述评论区争吵现象，用单图表现整体氛围即可。",
+          "reasoning": "1. 描述评论区争吵的混乱场景；\n2. 使用一张图表现整体氛围即可；\n3. 使用`CENTER_FOCUS`。",
           "template": "CENTER_FOCUS",
           "param": {
-            "imageSrc": "一群人在网络评论区激烈争吵的场景",
-            "enterEffect": "slideLeft",
+            "imageSrc": "人们在网络论坛上激烈争论的场景",
+            "enterEffect": "fadeIn",
             "content": [
               {
                 "text": "明明一个挺简单的事儿，",
@@ -63,14 +60,14 @@
         },
         {
           "order": 3,
-          "narrativeType": "CASE",
-          "reasoning": "A侧：你讲道理，B侧：对方甩链接。明显的AB行为对比，使用分屏对比。",
+          "narrativeType": "SPLIT_COMPARE",
+          "reasoning": "1. 呈现讲道理 vs 甩链接的对比；\n2. 使用`SPLIT_COMPARE`模板，左右各一图，清晰展示两种行为。",
           "template": "SPLIT_COMPARE",
           "param": {
-            "leftSrc": "严谨的学术研究图标",
-            "rightSrc": "粗制滥造的报纸图标",
+            "leftSrc": "认真讲道理的人",
+            "rightSrc": "传播虚假信息的人",
             "leftLabel": "讲道理",
-            "rightLabel": "甩链接",
+            "rightLabel": "地摊文学",
             "content": [
               {
                 "text": "你拿证据跟他讲道理，",
@@ -84,20 +81,19 @@
               }
             ],
             "anchors": [],
-            "enterEffect": "slideLeft",
             "totalDurationFrames": 63
           }
         },
         {
           "order": 4,
-          "narrativeType": "CASE",
-          "reasoning": "A侧：你试图客观，B侧：对方只看想看的。明显的AB行为对比，使用分屏对比。",
+          "narrativeType": "SPLIT_COMPARE",
+          "reasoning": "1. 呈现保持客观 vs 只看想看的的对比；\n2. 使用`SPLIT_COMPARE`模板，左右各一图，清晰展示两种行为。",
           "template": "SPLIT_COMPARE",
           "param": {
-            "leftSrc": "个人主观视角",
-            "rightSrc": "客观全面视角",
-            "leftLabel": "只想看的",
-            "rightLabel": "所有信息",
+            "leftSrc": "人戴着眼罩看东西的场景",
+            "rightSrc": "人摘掉眼罩看到清晰世界的场景",
+            "leftLabel": "只看想看的",
+            "rightLabel": "全面客观",
             "content": [
               {
                 "text": "你试图保持客观，",
@@ -116,17 +112,16 @@
               }
             ],
             "anchors": [],
-            "enterEffect": "slideLeft",
             "totalDurationFrames": 90
           }
         },
         {
           "order": 5,
           "narrativeType": "CASE",
-          "reasoning": "描述对方的诡辩行为，用单图表现即可。",
+          "reasoning": "1. 描述对方抠字眼的行为；\n2. 使用`CENTER_FOCUS`，突出对方的诡辩行为。",
           "template": "CENTER_FOCUS",
           "param": {
-            "imageSrc": "一个人对着电脑屏幕生气，屏幕上显示着争吵的评论",
+            "imageSrc": "争吵的两个人，其中一人指责另一人",
             "enterEffect": "fadeIn",
             "content": [
               {
@@ -135,31 +130,34 @@
                 "durationFrames": 42
               },
               {
-                "text": "对方总能从你的话里抠出几个字来证明你",
+                "text": "对方总能从你的话里抠出几个字来证明你“屁股歪了”。",
                 "startFrame": 42,
-                "durationFrames": 40
-              },
-              {
-                "text": "“屁股歪了”。",
-                "startFrame": 82,
-                "durationFrames": 30
+                "durationFrames": 55
               }
             ],
-            "anchors": [],
-            "totalDurationFrames": 112
+            "anchors": [
+              {
+                "text": "屁股歪了",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 97
           }
         },
         {
           "order": 6,
           "narrativeType": "HOOK",
-          "reasoning": "总结现象，再次强调痛点。",
+          "reasoning": "1. 总结感受，再次强调痛点；\n2. 使用`CENTER_FOCUS`，引发共鸣。",
           "template": "CENTER_FOCUS",
           "param": {
-            "imageSrc": "一个人对着电脑屏幕，感到困惑和无奈",
-            "enterEffect": "fadeIn",
+            "imageSrc": "一个人对着一群人无奈摊手的简笔画",
+            "enterEffect": "slideLeft",
             "content": [
               {
-                "text": "这种“鸡同鸭讲、秀才遇上兵”的无力感，",
+                "text": "这种“鸡同鸭讲、秀才遇着兵”的无力感，",
                 "startFrame": 0,
                 "durationFrames": 42
               },
@@ -183,11 +181,11 @@
         },
         {
           "order": 7,
-          "narrativeType": "CASE",
-          "reasoning": "指出争论本质，突出输赢导向。",
+          "narrativeType": "HOOK",
+          "reasoning": "1. 指出现状，引人深思；\n2. 使用`CENTER_FOCUS`，突出问题本质。",
           "template": "CENTER_FOCUS",
           "param": {
-            "imageSrc": "争吵的两个人的简笔画",
+            "imageSrc": "一群人争论的简笔画",
             "enterEffect": "fadeIn",
             "content": [
               {
@@ -209,16 +207,16 @@
     },
     {
       "sceneId": "scene_2",
-      "sceneName": "剖析原因：算法与大脑Bug",
+      "sceneName": "揭示本质：算法与大脑Bug",
       "items": [
         {
           "order": 1,
-          "narrativeType": "HOOK",
-          "reasoning": "1. 制造悬念，引发用户思考。2. 使用中心聚焦模板，配上冲击力图片，吸引用户注意力。3. 选用CENTER_FOCUS模板。",
-          "template": "CENTER_FOCUS",
+          "narrativeType": "LOGIC",
+          "reasoning": "语义重心为转折递进关系，揭示导致信息茧房的深层原因。视觉上强调'不全怪'，递进至'利用Bug'。选择COGNITIVE_SHIFT，突出认知上的转变。",
+          "template": "COGNITIVE_SHIFT",
           "param": {
-            "imageSrc": "一个人坐在地上，双手抱头，感到困惑的简笔画",
-            "enterEffect": "breathe",
+            "notText": "修养不够",
+            "butText": "爱钻牛角尖",
             "content": [
               {
                 "text": "其实，这事儿真不全怪咱们修养不够，",
@@ -238,11 +236,9 @@
         {
           "order": 2,
           "narrativeType": "LOGIC",
-          "reasoning": "1. 话题转折，引出“认清现实”这个话题。2. 使用概念芯片模板，强调“底层Bug”这个核心概念。3. 选用CONCEPT_CARD模板。",
-          "template": "CONCEPT_CARD",
+          "reasoning": "进一步解释底层bug如何被利用，揭示算法的运作方式。用放大镜突出“算法”和“bug”。",
+          "template": "MAGNIFYING_GLASS",
           "param": {
-            "imageSrc": "大脑简笔画图标",
-            "conceptName": "底层Bug",
             "content": [
               {
                 "text": "咱们得认清一个现实：",
@@ -255,52 +251,53 @@
                 "durationFrames": 30
               },
               {
-                "text": "保留了一个极其隐蔽的",
+                "text": "保留了一个极其隐蔽的“",
                 "startFrame": 60,
                 "durationFrames": 30
               },
               {
-                "text": "“底层Bug”，",
+                "text": "底层Bug”，而现在的互",
                 "startFrame": 90,
                 "durationFrames": 30
+              },
+              {
+                "text": "联网算法，正精准地利用",
+                "startFrame": 120,
+                "durationFrames": 30
+              },
+              {
+                "text": "这个Bug把我们关进信息囚笼。",
+                "startFrame": 150,
+                "durationFrames": 33
               }
             ],
-            "anchors": [],
-            "totalDurationFrames": 120
+            "anchors": [
+              {
+                "text": "底层Bug",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "联网算法",
+                "showFrom": 4,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 183
           }
         },
         {
           "order": 3,
           "narrativeType": "LOGIC",
-          "reasoning": "1. 因果论证：算法利用大脑Bug。2. 放大镜效果，聚焦算法如何利用bug。3. 选用MAGNIFYING_GLASS模板。",
+          "reasoning": "揭示平台推送机制，用宠物喂食的比喻强调被动接受信息的状态。选择CENTER_FOCUS，用喂食宠物的图片来强化视觉冲击。",
           "template": "CENTER_FOCUS",
           "param": {
-            "imageSrc": "放大镜聚焦大脑漏洞",
-            "content": [
-              {
-                "text": "而现在的互联网算法，",
-                "startFrame": 0,
-                "durationFrames": 30
-              },
-              {
-                "text": "正精准地利用这个Bug把我们关进信息囚笼。",
-                "startFrame": 30,
-                "durationFrames": 46
-              }
-            ],
-            "anchors": [],
-            "enterEffect": "fadeIn",
-            "totalDurationFrames": 76
-          }
-        },
-        {
-          "order": 4,
-          "narrativeType": "CASE",
-          "reasoning": "1. 具体场景描述：平台推送认同观点。2. 中心聚焦模板，配合笼子的图片。3. 选用CENTER_FOCUS模板。",
-          "template": "CENTER_FOCUS",
-          "param": {
-            "imageSrc": "手机屏幕上不断向上推送短视频的动画",
-            "enterEffect": "slideLeft",
+            "imageSrc": "手机上推送短视频的界面",
+            "enterEffect": "breathe",
             "content": [
               {
                 "text": "那些平台为了让你多刷半小时，",
@@ -311,52 +308,38 @@
                 "text": "会不断推送你认同的观点。",
                 "startFrame": 31,
                 "durationFrames": 30
-              }
-            ],
-            "anchors": [
-              {
-                "text": "多刷半小时",
-                "showFrom": 0,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "ping"
-              }
-            ],
-            "totalDurationFrames": 61
-          }
-        },
-        {
-          "order": 5,
-          "narrativeType": "CASE",
-          "reasoning": "1. 案例模拟：被喂食的宠物。2. 中心聚焦模板，配合宠物被喂食的图片。3. 选用CENTER_FOCUS模板。",
-          "template": "CENTER_FOCUS",
-          "param": {
-            "imageSrc": "宠物被喂食的场景",
-            "enterEffect": "fadeIn",
-            "content": [
+              },
               {
                 "text": "久而久之，我们就像被喂食的宠物，",
-                "startFrame": 0,
+                "startFrame": 61,
                 "durationFrames": 35
               },
               {
                 "text": "眼中只剩下一片虚假的繁荣。",
-                "startFrame": 35,
+                "startFrame": 96,
                 "durationFrames": 30
               }
             ],
-            "anchors": [],
-            "totalDurationFrames": 65
+            "anchors": [
+              {
+                "text": "虚假的繁荣",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 126
           }
         },
         {
-          "order": 6,
+          "order": 4,
           "narrativeType": "LOGIC",
-          "reasoning": "1. 原理分析：大脑本能反应。2. 警示标志，提醒用户注意危险。3. 选用ALERT模板。",
+          "reasoning": "解释大脑的防御机制。用ALERT模板，红色背景和醒目的感叹号，突出'生存威胁'这一概念，强调大脑的本能反应。",
           "template": "CENTER_FOCUS",
           "param": {
-            "imageSrc": "大脑发出警报的卡通画面",
-            "enterEffect": "fadeIn",
+            "imageSrc": "大脑面对迎面而来的冲击波",
+            "enterEffect": "zoomIn",
             "content": [
               {
                 "text": "所以，当我们遇到不同声音时，",
@@ -374,11 +357,14 @@
           }
         },
         {
-          "order": 7,
+          "order": 5,
           "narrativeType": "LOGIC",
-          "reasoning": "1. 进一步解释大脑的保护机制。2. 放大镜效果，聚焦脆弱的自我。3. 选用MAGNIFYING_GLASS模板。",
-          "template": "MAGNIFYING_GLASS",
+          "reasoning": "揭示真相，我们保护的是被算法喂养的自我。用COGNITIVE_SHIFT，强调我们不是拒绝真相，而是保护自我。",
+          "template": "COGNITIVE_SHIFT",
           "param": {
+            "notText": "拒绝真相",
+            "butText": "保护自我",
+            "butSrc": "一个婴儿被包裹在算法代码中",
             "content": [
               {
                 "text": "我们不是在拒绝真相，",
@@ -398,24 +384,29 @@
             ],
             "anchors": [
               {
-                "text": "真相",
-                "showFrom": 0,
+                "text": "保护自我",
+                "showFrom": 1,
                 "color": "#EF4444",
                 "anim": "popIn",
-                "audioEffect": "ping"
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "算法喂养",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": null
               }
             ],
             "totalDurationFrames": 90
           }
         },
         {
-          "order": 8,
+          "order": 6,
           "narrativeType": "CONCLUSION",
-          "reasoning": "1. 总结：都是受害者。2. 中心聚焦，配合受害者形象的图片。3. 选用CENTER_FOCUS模板。",
-          "template": "CENTER_FOCUS",
+          "reasoning": "总结，强调每个人都是被操纵的受害者。选择TEXT_FOCUS，使用强烈的色彩对比，突出结论的冲击力。",
+          "template": "TEXT_FOCUS",
           "param": {
-            "imageSrc": "被绳子缠绕的人",
-            "enterEffect": "fadeIn",
             "content": [
               {
                 "text": "在这种机制面前，",
@@ -441,69 +432,115 @@
     },
     {
       "sceneId": "scene_3",
-      "sceneName": "解释概念：确认偏误",
+      "sceneName": "心理学概念：确认偏误的解释",
       "items": [
         {
           "order": 1,
           "narrativeType": "LOGIC",
-          "reasoning": "解释概念，提炼关键词，用术语卡片突出显示。叙事角色->心理学概念->CONCEPT_CARD",
+          "reasoning": "心理学概念引入，采用概念卡片形式，突出“确认偏误”这一核心概念。视觉上使用简洁的图标来辅助理解。",
           "template": "CONCEPT_CARD",
           "param": {
-            "imageSrc": "大脑简笔画，有色滤镜",
+            "imageSrc": "大脑中过滤器的卡通图",
             "conceptName": "确认偏误",
             "content": [
               {
-                "text": "在心理学上，这种现象有一个著名的核心概念，",
+                "text": "在心理学上，这种现象有一个",
                 "startFrame": 0,
-                "durationFrames": 46
+                "durationFrames": 30
               },
               {
-                "text": "叫作“确认偏误”（Confirmation Bias）。",
-                "startFrame": 46,
-                "durationFrames": 62
+                "text": "著名的核心概念，叫作",
+                "startFrame": 30,
+                "durationFrames": 30
+              },
+              {
+                "text": "“确认偏误”（Confirmation Bias）。",
+                "startFrame": 60,
+                "durationFrames": 57
               }
             ],
             "anchors": [],
-            "totalDurationFrames": 108
+            "totalDurationFrames": 117
           }
         },
         {
           "order": 2,
           "narrativeType": "LOGIC",
-          "reasoning": "解释确认偏误，用放大镜突出显示。叙事角色->解释概念->MAGNIFYING_GLASS",
+          "reasoning": "用比喻解释定义，将确认偏误比作“有色滤镜”。使用中心聚焦模板，配以滤镜的视觉意象。",
           "template": "CENTER_FOCUS",
           "param": {
-            "imageSrc": "大脑内部被滤镜覆盖的卡通画面",
+            "imageSrc": "大脑内部结构，有光线透过滤镜",
             "enterEffect": "breathe",
             "content": [
               {
-                "text": "简单通俗地说，",
+                "text": "简单通俗地说，确认偏误就像是我们大脑自带的一副“有色滤镜”。",
                 "startFrame": 0,
-                "durationFrames": 30
-              },
-              {
-                "text": "确认偏误就像是我们大脑自带的一副",
-                "startFrame": 30,
-                "durationFrames": 35
-              },
-              {
-                "text": "“有色滤镜”。",
-                "startFrame": 65,
-                "durationFrames": 30
+                "durationFrames": 66
               }
             ],
             "anchors": [],
-            "totalDurationFrames": 95
+            "totalDurationFrames": 66
           }
         },
         {
           "order": 3,
           "narrativeType": "LOGIC",
-          "reasoning": "解释确认偏误的第一个功能，用MAGNIFYING_GLASS突出显示。叙事角色->解释概念->MAGNIFYING_GLASS",
-          "template": "CENTER_FOCUS",
+          "reasoning": "将大脑的功能拆解为两个并列的点：自动美颜和一键拉黑。使用LIST_MULTI_GROUP模板，用两张图分别代表这两个功能。",
+          "template": "LIST_MULTI_GROUP",
           "param": {
-            "imageSrc": "大脑思考的卡通简笔画",
-            "enterEffect": "breathe",
+            "groups": [
+              {
+                "image": {
+                  "src": "一键拉黑的简笔画图标",
+                  "textIndex": 0
+                },
+                "anchor": {
+                  "text": "一键拉黑",
+                  "audioEffect": "impact_thud"
+                }
+              },
+              {
+                "image": {
+                  "src": "一键拉黑的简笔画图标",
+                  "textIndex": 1
+                },
+                "anchor": {
+                  "text": "一键拉黑",
+                  "audioEffect": "impact_thud"
+                }
+              },
+              {
+                "image": {
+                  "src": "自动美颜的简笔画图标",
+                  "textIndex": 2
+                },
+                "anchor": {
+                  "text": "自动美颜",
+                  "audioEffect": "ping"
+                }
+              },
+              {
+                "image": {
+                  "src": "一键拉黑的简笔画图标",
+                  "textIndex": 3
+                },
+                "anchor": {
+                  "text": "一键拉黑",
+                  "audioEffect": "impact_thud"
+                }
+              },
+              
+              {
+                "image": {
+                  "src": "一键拉黑的简笔画图标",
+                  "textIndex": 4
+                },
+                "anchor": {
+                  "text": "一键拉黑",
+                  "audioEffect": "impact_thud"
+                }
+              }
+            ],
             "content": [
               {
                 "text": "当我们先入为主地相信一个观点时，",
@@ -516,94 +553,57 @@
                 "durationFrames": 33
               },
               {
-                "text": "第一，是“自动美颜”，",
+                "text": "**第一，是“自动美颜”，**",
                 "startFrame": 68,
-                "durationFrames": 30
-              }
-            ],
-            "anchors": [],
-            "totalDurationFrames": 98
-          }
-        },
-        {
-          "order": 4,
-          "narrativeType": "LOGIC",
-          "reasoning": "解释确认偏误的第一个功能，用放MAGNIFYING_GLASS大镜突出显示。叙事角色->解释概念->MAGNIFYING_GLASS",
-          "template": "CENTER_FOCUS",
-          "param": {
-            "imageSrc": "放大镜寻找证据的卡通图",
-            "enterEffect": "fadeIn",
-            "content": [
+                "durationFrames": 33
+              },
               {
                 "text": "凡是能证明我正确的信息，",
-                "startFrame": 0,
+                "startFrame": 101,
                 "durationFrames": 30
               },
               {
                 "text": "哪怕漏洞百出，",
-                "startFrame": 30,
+                "startFrame": 131,
                 "durationFrames": 30
               },
               {
                 "text": "我们也觉得是真理；",
-                "startFrame": 60,
-                "durationFrames": 30
-              }
-            ],
-            "anchors": [],
-            "totalDurationFrames": 90
-          }
-        },
-        {
-          "order": 5,
-          "narrativeType": "LOGIC",
-          "reasoning": "解释确认偏误的第二个功能，用放MAGNIFYING_GLASS大镜突出显示。叙事角色->解释概念->MAGNIFYING_GLASS",
-          "template": "CENTER_FOCUS",
-          "param": {
-            "imageSrc": "戴着墨镜的人将另一个人从好友列表中移除的卡通场景",
-            "enterEffect": "slideLeft",
-            "content": [
-              {
-                "text": "第二，是“一键拉黑”，",
-                "startFrame": 0,
+                "startFrame": 161,
                 "durationFrames": 30
               },
               {
+                "text": "**第二，是“一键拉黑”，**",
+                "startFrame": 191,
+                "durationFrames": 33
+              },
+              {
                 "text": "凡是反驳我们的证据，",
-                "startFrame": 30,
+                "startFrame": 224,
                 "durationFrames": 30
               },
               {
                 "text": "哪怕铁证如山，",
-                "startFrame": 60,
+                "startFrame": 254,
                 "durationFrames": 30
               },
               {
                 "text": "我们也觉得那是造谣。",
-                "startFrame": 90,
+                "startFrame": 284,
                 "durationFrames": 30
               }
             ],
-            "anchors": [
-              {
-                "text": "一键拉黑",
-                "showFrom": 0,
-                "color": "#EF4444",
-                "anim": "popIn",
-                "audioEffect": "impact_thud"
-              }
-            ],
-            "totalDurationFrames": 120
+            "totalDurationFrames": 314
           }
         },
         {
-          "order": 6,
+          "order": 4,
           "narrativeType": "CASE",
-          "reasoning": "恋爱中姑娘的例子，纯CASE举例，用CENTER_FOCUS展示。叙事角色->恋爱场景->CENTER_FOCUS",
+          "reasoning": "通过一个热恋中姑娘的例子来进一步说明确认偏误。使用中心聚焦模板，突出恋爱中的状态。",
           "template": "CENTER_FOCUS",
           "param": {
-            "imageSrc": "一对情侣在公园里甜蜜约会的场景，背景是阳光明媚的风景",
-            "enterEffect": "fadeIn",
+            "imageSrc": "一对情侣甜蜜约会的场景，男生在说甜言蜜语",
+            "enterEffect": "breathe",
             "content": [
               {
                 "text": "这就像是一个正在热恋中的姑娘，",
@@ -614,43 +614,29 @@
                 "text": "她觉得男朋友哪儿都好。",
                 "startFrame": 33,
                 "durationFrames": 30
-              }
-            ],
-            "anchors": [],
-            "totalDurationFrames": 63
-          }
-        },
-        {
-          "order": 7,
-          "narrativeType": "CASE",
-          "reasoning": "恋爱中姑娘的例子，纯CASE举例，用CENTER_FOCUS展示。叙事角色->恋爱场景->CENTER_FOCUS",
-          "template": "CENTER_FOCUS",
-          "param": {
-            "imageSrc": "情侣约会迟到的卡通场景",
-            "enterEffect": "breathe",
-            "content": [
+              },
               {
                 "text": "男朋友迟到那是“有个性”，",
-                "startFrame": 0,
+                "startFrame": 63,
                 "durationFrames": 30
               },
               {
                 "text": "男朋友不洗澡那是“纯爷们”。",
-                "startFrame": 30,
+                "startFrame": 93,
                 "durationFrames": 31
               }
             ],
             "anchors": [],
-            "totalDurationFrames": 61
+            "totalDurationFrames": 124
           }
         },
         {
-          "order": 8,
+          "order": 5,
           "narrativeType": "CASE",
-          "reasoning": "恋爱中姑娘的例子，纯CASE举例，用CENTER_FOCUS展示。叙事角色->恋爱场景->CENTER_FOCUS",
+          "reasoning": "继续热恋姑娘的例子，闺蜜给出证据，但姑娘仍然脑补理由。使用中心聚焦模板，强调即使有证据，也会选择性相信。",
           "template": "CENTER_FOCUS",
           "param": {
-            "imageSrc": "闺蜜递给热恋中的女孩一叠照片，照片内容为男人和其他女人亲密",
+            "imageSrc": "闺蜜拿着一叠照片给一个女生看，女生捂着脸",
             "enterEffect": "breathe",
             "content": [
               {
@@ -669,12 +655,12 @@
           }
         },
         {
-          "order": 9,
-          "narrativeType": "CASE",
-          "reasoning": "CASE 总结，用CENTER_FOCUS展示。叙事角色->总结->CENTER_FOCUS",
+          "order": 6,
+          "narrativeType": "LOGIC",
+          "reasoning": "总结确认偏误的本质：大脑只会寻找支持自己观点的证据。使用中心聚焦模板，强调寻找证据这一行为。",
           "template": "CENTER_FOCUS",
           "param": {
-            "imageSrc": "一个人大脑的卡通图，内部有齿轮和线路运作",
+            "imageSrc": "混乱的大脑思考的抽象概念图",
             "enterEffect": "breathe",
             "content": [
               {
@@ -698,13 +684,11 @@
           }
         },
         {
-          "order": 10,
+          "order": 7,
           "narrativeType": "CONCLUSION",
-          "reasoning": "结论，用ALERT突出显示。叙事角色->结论->ALERT",
-          "template": "CENTER_FOCUS",
+          "reasoning": "点明互联网讨论的本质，很多人只是想证明自己是对的。使用TEXT_FOCUS，突出这句话的重要性。",
+          "template": "TEXT_FOCUS",
           "param": {
-            "imageSrc": "人们在网络论坛上激烈讨论的场景",
-            "enterEffect": "fadeIn",
             "content": [
               {
                 "text": "在互联网讨论中，",
@@ -735,15 +719,15 @@
     },
     {
       "sceneId": "scene_4",
-      "sceneName": "给出建议：防身武器",
+      "sceneName": "提供解决方案：防身武器",
       "items": [
         {
           "order": 1,
           "narrativeType": "HOOK",
-          "reasoning": "制造悬念，引出话题，采用中心聚焦模板，配以冲击力图片。",
+          "reasoning": "抛出问题，吸引用户注意。使用中心聚焦，配以具有警示意味的图片。",
           "template": "CENTER_FOCUS",
           "param": {
-            "imageSrc": "一个被线操控的木偶的特写",
+            "imageSrc": "一个人被许多算法代码包围的抽象概念图",
             "enterEffect": "breathe",
             "content": [
               {
@@ -764,7 +748,7 @@
             ],
             "anchors": [
               {
-                "text": "算法的傀儡",
+                "text": "算法",
                 "showFrom": 0,
                 "color": "#EF4444",
                 "anim": "popIn",
@@ -777,11 +761,47 @@
         {
           "order": 2,
           "narrativeType": "LOGIC",
-          "reasoning": "介绍具体方法，属于对策，采用中心聚焦模板。",
-          "template": "CENTER_FOCUS",
+          "reasoning": "提供具体的解决方案，并列展示。反向搜索法，警惕“爽感”，提问三个方面并列展示，使用多图模式。",
+          "template": "LIST_MULTI_GROUP",
           "param": {
-            "imageSrc": "一个人拿着放大镜在电脑屏幕上搜索的卡通形象",
-            "enterEffect": "slideLeft",
+            "groups": [
+              {
+                "image": {
+                  "src": "放大镜简笔画图标",
+                  "textIndex": 0
+                },
+                "anchor": {
+                  "text": "反向搜索法",
+                  "color": "#000000",
+                  "anim": "highlight",
+                  "audioEffect": "ping"
+                }
+              },
+              {
+                "image": {
+                  "src": "警钟简笔画图标",
+                  "textIndex": 2
+                },
+                "anchor": {
+                  "text": "警惕爽感",
+                  "color": "#EF4444",
+                  "anim": "popIn",
+                  "audioEffect": "impact_thud"
+                }
+              },
+              {
+                "image": {
+                  "src": "问号思考简笔画图标",
+                  "textIndex": 6
+                },
+                "anchor": {
+                  "text": "自我反问",
+                  "color": "#000000",
+                  "anim": "spring",
+                  "audioEffect": null
+                }
+              }
+            ],
             "content": [
               {
                 "text": "反向搜索法：当你极其认同某个观点时，",
@@ -792,149 +812,59 @@
                 "text": "强迫自己去搜一下反对这个观点的理由。",
                 "startFrame": 40,
                 "durationFrames": 40
-              }
-            ],
-            "anchors": [
-              {
-                "text": "反向搜索法",
-                "showFrom": 0,
-                "color": "#000000",
-                "anim": "highlight",
-                "audioEffect": null
-              }
-            ],
-            "totalDurationFrames": 80
-          }
-        },
-        {
-          "order": 3,
-          "narrativeType": "LOGIC",
-          "reasoning": "话题转折，提示警惕，采用中心聚焦模板，提高辨识度。",
-          "template": "CENTER_FOCUS",
-          "param": {
-            "imageSrc": "红色警示灯闪烁的动画",
-            "enterEffect": "zoomIn",
-            "content": [
-              {
-                "text": "警惕“爽感”：",
-                "startFrame": 0,
-                "durationFrames": 30
               },
               {
-                "text": "如果一段文字让你读完觉得",
-                "startFrame": 30,
-                "durationFrames": 30
+                "text": "警惕“爽感”：如果一段文字让你读完觉得“太解气了、",
+                "startFrame": 80,
+                "durationFrames": 55
               },
               {
-                "text": "“太解气了、说得太对了”，",
-                "startFrame": 60,
-                "durationFrames": 30
-              },
-              {
-                "text": "这时候一定要停下来。",
-                "startFrame": 90,
-                "durationFrames": 30
-              }
-            ],
-            "anchors": [],
-            "totalDurationFrames": 120
-          }
-        },
-        {
-          "order": 4,
-          "narrativeType": "LOGIC",
-          "reasoning": "解释原因，揭示本质，采用中心聚焦模板，强调真相。",
-          "template": "CENTER_FOCUS",
-          "param": {
-            "imageSrc": "大脑被许多丝线操控的抽象概念图",
-            "enterEffect": "fadeIn",
-            "content": [
-              {
-                "text": "因为能让你瞬间产生巨大爽感的东西，",
-                "startFrame": 0,
+                "text": "说得太对了”，这时候一定要停下来。",
+                "startFrame": 135,
                 "durationFrames": 37
               },
               {
-                "text": "往往不是真相，",
-                "startFrame": 37,
-                "durationFrames": 30
+                "text": "因为能让你瞬间产生巨大爽感的东西，往往不是真相，",
+                "startFrame": 172,
+                "durationFrames": 53
               },
               {
                 "text": "而是针对你“确认偏误”定制的诱饵。",
-                "startFrame": 67,
+                "startFrame": 225,
                 "durationFrames": 37
-              }
-            ],
-            "anchors": [],
-            "totalDurationFrames": 104
-          }
-        },
-        {
-          "order": 5,
-          "narrativeType": "LOGIC",
-          "reasoning": "引导思考，提出问题，采用中心聚焦模板，引发用户思考。",
-          "template": "CENTER_FOCUS",
-          "param": {
-            "imageSrc": "一个人思考的简笔画",
-            "enterEffect": "fadeIn",
-            "content": [
-              {
-                "text": "问自己一个问题：",
-                "startFrame": 0,
-                "durationFrames": 30
               },
               {
-                "text": "“如果我是错的，",
-                "startFrame": 30,
-                "durationFrames": 30
-              },
-              {
-                "text": "会有什么证据能说服我？”",
-                "startFrame": 60,
-                "durationFrames": 30
-              }
-            ],
-            "anchors": [],
-            "totalDurationFrames": 90
-          }
-        },
-        {
-          "order": 6,
-          "narrativeType": "CONCLUSION",
-          "reasoning": "得出结论，强调偏见，采用中心聚焦模板，警示意味。",
-          "template": "CENTER_FOCUS",
-          "param": {
-            "imageSrc": "一个人掉入深坑的示意图",
-            "enterEffect": "zoomIn",
-            "content": [
-              {
-                "text": "如果你发现没有任何证据能说服你，",
-                "startFrame": 0,
+                "text": "问自己一个问题：“如果我是错的，",
+                "startFrame": 262,
                 "durationFrames": 35
               },
               {
-                "text": "那说明你已经掉进了偏见的陷阱。",
-                "startFrame": 35,
-                "durationFrames": 33
+                "text": "会有什么证据能说服我？”",
+                "startFrame": 297,
+                "durationFrames": 30
+              },
+              {
+                "text": "如果你发现没有任何证据能说服你，那说明你已经掉进了偏见的陷阱。",
+                "startFrame": 327,
+                "durationFrames": 68
               }
             ],
-            "anchors": [],
-            "totalDurationFrames": 68
+            "totalDurationFrames": 395
           }
         }
       ]
     },
     {
       "sceneId": "scene_5",
-      "sceneName": "总结升华：保持清醒",
+      "sceneName": "总结与升华：智力觉醒",
       "items": [
         {
           "order": 1,
           "narrativeType": "CONCLUSION",
-          "reasoning": "1.总结收束，强调成年人的清醒认知。2.使用中心聚焦的模板，突出主题。3.选择CENTER_FOCUS，简单直接。",
+          "reasoning": "语义重心：总结与升华，强调智力觉醒；视觉交互：高对比度画面，突出关键信息；模板选型：CENTER_FOCUS，高对比度图片，聚焦主题。",
           "template": "CENTER_FOCUS",
           "param": {
-            "imageSrc": "人与人之间互相倾轧的抽象线条",
+            "imageSrc": "大脑思考的抽象概念图",
             "enterEffect": "breathe",
             "content": [
               {
@@ -946,39 +876,44 @@
                 "text": "承认自己“可能错了”并不是一种软弱，",
                 "startFrame": 40,
                 "durationFrames": 40
+              },
+              {
+                "text": "而是一个成年人最高级的智力觉醒。",
+                "startFrame": 80,
+                "durationFrames": 35
               }
             ],
             "anchors": [],
-            "totalDurationFrames": 80
+            "totalDurationFrames": 115
           }
         },
         {
           "order": 2,
           "narrativeType": "CONCLUSION",
-          "reasoning": "1.继续总结升华，强调智力觉醒。2.使用中心聚焦的模板，突出主题。3.选择CENTER_FOCUS，简单直接。",
+          "reasoning": "语义重心：行动号召，强调做自己大脑的主人；视觉交互：突出个人掌控感，不被裹挟；模板选型：CENTER_FOCUS，画面强调独立思考。",
           "template": "CENTER_FOCUS",
           "param": {
-            "imageSrc": "大脑发光的抽象图",
+            "imageSrc": "人脑发出光芒的抽象示意图",
             "enterEffect": "fadeIn",
             "content": [
               {
-                "text": "而是一个成年人最高级的智力觉醒。",
+                "text": "做自己大脑的主人，",
                 "startFrame": 0,
-                "durationFrames": 35
+                "durationFrames": 30
               },
               {
-                "text": "做自己大脑的主人，不被偏见裹挟，",
-                "startFrame": 35,
-                "durationFrames": 35
+                "text": "不被偏见裹挟，",
+                "startFrame": 30,
+                "durationFrames": 30
               },
               {
                 "text": "我们才能真正看清这个复杂的世界。",
-                "startFrame": 70,
+                "startFrame": 60,
                 "durationFrames": 35
               }
             ],
             "anchors": [],
-            "totalDurationFrames": 105
+            "totalDurationFrames": 95
           }
         }
       ]

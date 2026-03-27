@@ -20,6 +20,7 @@ export const templateMeta = {
 	"psychology": "目标梯度",
 	"image_count": 0,
 	"param_schema": {
+		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
 		"percent": { "type": "number", "required": true, "desc": "进度百分比 0–100" },
 		"label": { "type": "string", "required": true, "desc": "主标题（如「年度目标达成」）" },
 		"subLabel": { "type": "string", "required": false, "desc": "副标题或口径说明" },

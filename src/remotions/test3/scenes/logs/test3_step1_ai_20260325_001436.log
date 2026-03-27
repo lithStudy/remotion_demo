@@ -120,7 +120,7 @@ retries: 3
 请在 reasoning 中按照“叙事角色 -> 视觉重心 -> 模板选型”的逻辑进行思考：
 - `HOOK`：引子。制造悬念、反直觉、抛出痛点。匹配模板：`ALERT`, `CENTER_FOCUS` (配强冲击力图片)。
 - `LOGIC`：推导。原理分析、因果论证、底层逻辑。匹配模板：`MAGNIFYING_GLASS`, `STAT_COMPARE`, `CONCEPT_CHIP`。
-- `CASE`：举证。具体场景、案例模拟、步骤演示。匹配模板：`MULTI_IMAGE`, `SPLIT_COMPARE`, `TIMELINE`。
+- `CASE`：举证。具体场景、案例模拟、步骤演示。匹配模板：`LIST_MULTI_GROUP`, `SPLIT_COMPARE`, `TIMELINE`。
 - `DATA`：量化。硬核指标、对比增长、价值点。匹配模板：`KPI_HERO`, `PROGRESS_RING` (针对占比)。
 - `CONCLUSION`：收束。核心金句、行动号召、价值升华。匹配模板：`ALERT`, `CENTER_FOCUS` (建议高对比度)。
 
@@ -149,14 +149,14 @@ retries: 3
 | DOS_AND_DONTS | 损失厌恶 | 适用：明确「别这样做 vs 应该这样做」的避坑；左右对错叙事。 差异：两种中立方案并列、无对错标签用 SPLIT_COMPARE；代价/收益权衡用 SCALE_BALANCE… | 2 | dontLabel, doLabel |
 | KPI_HERO | 锚定效应 | 适用：口播强调一个核心数字、增长率、占比、排名；单指标「大字报」。 差异：两句并列指标对比用 STAT_COMPARE；完成度/进度感用 PROGRESS_RING；纯金句无… | 0-1 | value |
 | MAGNIFYING_GLASS | 好奇心缺口 | 适用：揭秘、拆穿表象、强调「真相/底层逻辑」。 差异：本模板要求 param.anchors 非空，且通过 showFrom 关联 content；非揭秘句勿用。 参数：an… | 0 | 无 |
-| MULTI_IMAGE | 多巴胺刺激 | 适用：排比句、多要素并列，2～4 张图同时呈现。 差异：有时间先后/演进线用 TIMELINE；有序可执行步骤（第一步…）用 STEP_LIST。 参数：images 每项含… | 2-4 | 无 |
+| LIST_MULTI_GROUP | 多巴胺刺激 | 适用：排比句、多要素并列，2～4 张图同时呈现。 差异：有时间先后/演进线用 TIMELINE；有序可执行步骤（第一步…）用 STEP_LIST。 参数：images 每项含… | 2-4 | 无 |
 | PROGRESS_RING | 目标梯度 | 适用：完成度、达成率、占比、进度结论；环形动效强化「走到哪一步」。 差异：单数字大字报用 KPI_HERO；两项对比用 STAT_COMPARE。 参数：percent 为 … | 0 | percent, label |
 | QUOTE_CITATION | 社会认同背书 | 适用：名言、著作、研究等引用体裁；可选一张配角图。 差异：非引用类普通叙述用 CENTER_FOCUS。 参数：quoteSource 写清出处；imageSrc 可省略。 | 0-1 | quoteSource |
 | SPLIT_COMPARE | 认知失调 | 适用：两种方案、两条路径、两个结果并列对比（中性对比，不强调对错标签）。 差异：明确错/对避坑用 DOS_AND_DONTS；权衡轻重与代价用 SCALE_BALANCE。 … | 2 | leftLabel, rightLabel |
 | STAT_COMPARE | 对比效应 | 适用：两项 KPI 并列对比（前后、A/B、涨跌）；条形高度反映相对大小。 差异：意象化代价/收益用 SCALE_BALANCE；左右场景图对比用 SPLIT_COMPARE… | 0-2 | leftValue, rightValue, leftLabel, rightLabel |
-| STEP_LIST | 降低认知负荷 | 适用：可执行步骤、操作流程、推导链条（第一步/第二步…），无配图。 差异：无步骤感的并列要点用 MULTI_IMAGE 或 CENTER_FOCUS。 参数：仅用 conte… | 0 | 无 |
+| STEP_LIST | 降低认知负荷 | 适用：可执行步骤、操作流程、推导链条（第一步/第二步…），无配图。 差异：无步骤感的并列要点用 LIST_MULTI_GROUP 或 CENTER_FOCUS。 参数：仅用 conte… | 0 | 无 |
 | TEXT_FOCUS | 信噪比极致化 | 适用：全片最强金句、结论暴击；0 图纯大字。 差异：需要配图锚定用 CENTER_FOCUS；模拟读者吐槽口吻用 CHAT_BUBBLE。 慎用：content 建议不超过 … | 0 | 无 |
-| TIMELINE | 叙事连贯性 | 适用：历史演进、时间顺序、前后对比带明确时间轴。 差异：无时间线的并列要点用 MULTI_IMAGE；操作步骤用 STEP_LIST。 参数：images 2～3 项，pos… | 2-3 | 无 |
+| TIMELINE | 叙事连贯性 | 适用：历史演进、时间顺序、前后对比带明确时间轴。 差异：无时间线的并列要点用 LIST_MULTI_GROUP；操作步骤用 STEP_LIST。 参数：images 2～3 项，pos… | 2-3 | 无 |
 
 ## 各模板说明与 param 字段
 
@@ -204,7 +204,7 @@ retries: 3
 仅需 `content` 数组。
 - **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based content 索引）。
 
-### MULTI_IMAGE
+### LIST_MULTI_GROUP
 
 - `images` (必填): 多张图片描述数组，每项含 src，可选 textIndex（关联 content 序号）（数组，每项含 src/position/enterEffect）
 
@@ -384,7 +384,7 @@ retries: 3
 请在 reasoning 中按照“叙事角色 -> 视觉重心 -> 模板选型”的逻辑进行思考：
 - `HOOK`：引子。制造悬念、反直觉、抛出痛点。匹配模板：`ALERT`, `CENTER_FOCUS` (配强冲击力图片)。
 - `LOGIC`：推导。原理分析、因果论证、底层逻辑。匹配模板：`MAGNIFYING_GLASS`, `STAT_COMPARE`, `CONCEPT_CHIP`。
-- `CASE`：举证。具体场景、案例模拟、步骤演示。匹配模板：`MULTI_IMAGE`, `SPLIT_COMPARE`, `TIMELINE`。
+- `CASE`：举证。具体场景、案例模拟、步骤演示。匹配模板：`LIST_MULTI_GROUP`, `SPLIT_COMPARE`, `TIMELINE`。
 - `DATA`：量化。硬核指标、对比增长、价值点。匹配模板：`KPI_HERO`, `PROGRESS_RING` (针对占比)。
 - `CONCLUSION`：收束。核心金句、行动号召、价值升华。匹配模板：`ALERT`, `CENTER_FOCUS` (建议高对比度)。
 
@@ -413,14 +413,14 @@ retries: 3
 | DOS_AND_DONTS | 损失厌恶 | 适用：明确「别这样做 vs 应该这样做」的避坑；左右对错叙事。 差异：两种中立方案并列、无对错标签用 SPLIT_COMPARE；代价/收益权衡用 SCALE_BALANCE… | 2 | dontLabel, doLabel |
 | KPI_HERO | 锚定效应 | 适用：口播强调一个核心数字、增长率、占比、排名；单指标「大字报」。 差异：两句并列指标对比用 STAT_COMPARE；完成度/进度感用 PROGRESS_RING；纯金句无… | 0-1 | value |
 | MAGNIFYING_GLASS | 好奇心缺口 | 适用：揭秘、拆穿表象、强调「真相/底层逻辑」。 差异：本模板要求 param.anchors 非空，且通过 showFrom 关联 content；非揭秘句勿用。 参数：an… | 0 | 无 |
-| MULTI_IMAGE | 多巴胺刺激 | 适用：排比句、多要素并列，2～4 张图同时呈现。 差异：有时间先后/演进线用 TIMELINE；有序可执行步骤（第一步…）用 STEP_LIST。 参数：images 每项含… | 2-4 | 无 |
+| LIST_MULTI_GROUP | 多巴胺刺激 | 适用：排比句、多要素并列，2～4 张图同时呈现。 差异：有时间先后/演进线用 TIMELINE；有序可执行步骤（第一步…）用 STEP_LIST。 参数：images 每项含… | 2-4 | 无 |
 | PROGRESS_RING | 目标梯度 | 适用：完成度、达成率、占比、进度结论；环形动效强化「走到哪一步」。 差异：单数字大字报用 KPI_HERO；两项对比用 STAT_COMPARE。 参数：percent 为 … | 0 | percent, label |
 | QUOTE_CITATION | 社会认同背书 | 适用：名言、著作、研究等引用体裁；可选一张配角图。 差异：非引用类普通叙述用 CENTER_FOCUS。 参数：quoteSource 写清出处；imageSrc 可省略。 | 0-1 | quoteSource |
 | SPLIT_COMPARE | 认知失调 | 适用：两种方案、两条路径、两个结果并列对比（中性对比，不强调对错标签）。 差异：明确错/对避坑用 DOS_AND_DONTS；权衡轻重与代价用 SCALE_BALANCE。 … | 2 | leftLabel, rightLabel |
 | STAT_COMPARE | 对比效应 | 适用：两项 KPI 并列对比（前后、A/B、涨跌）；条形高度反映相对大小。 差异：意象化代价/收益用 SCALE_BALANCE；左右场景图对比用 SPLIT_COMPARE… | 0-2 | leftValue, rightValue, leftLabel, rightLabel |
-| STEP_LIST | 降低认知负荷 | 适用：可执行步骤、操作流程、推导链条（第一步/第二步…），无配图。 差异：无步骤感的并列要点用 MULTI_IMAGE 或 CENTER_FOCUS。 参数：仅用 conte… | 0 | 无 |
+| STEP_LIST | 降低认知负荷 | 适用：可执行步骤、操作流程、推导链条（第一步/第二步…），无配图。 差异：无步骤感的并列要点用 LIST_MULTI_GROUP 或 CENTER_FOCUS。 参数：仅用 conte… | 0 | 无 |
 | TEXT_FOCUS | 信噪比极致化 | 适用：全片最强金句、结论暴击；0 图纯大字。 差异：需要配图锚定用 CENTER_FOCUS；模拟读者吐槽口吻用 CHAT_BUBBLE。 慎用：content 建议不超过 … | 0 | 无 |
-| TIMELINE | 叙事连贯性 | 适用：历史演进、时间顺序、前后对比带明确时间轴。 差异：无时间线的并列要点用 MULTI_IMAGE；操作步骤用 STEP_LIST。 参数：images 2～3 项，pos… | 2-3 | 无 |
+| TIMELINE | 叙事连贯性 | 适用：历史演进、时间顺序、前后对比带明确时间轴。 差异：无时间线的并列要点用 LIST_MULTI_GROUP；操作步骤用 STEP_LIST。 参数：images 2～3 项，pos… | 2-3 | 无 |
 
 ## 各模板说明与 param 字段
 
@@ -468,7 +468,7 @@ retries: 3
 仅需 `content` 数组。
 - **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based content 索引）。
 
-### MULTI_IMAGE
+### LIST_MULTI_GROUP
 
 - `images` (必填): 多张图片描述数组，每项含 src，可选 textIndex（关联 content 序号）（数组，每项含 src/position/enterEffect）
 
@@ -632,7 +632,7 @@ retries: 3
 请在 reasoning 中按照“叙事角色 -> 视觉重心 -> 模板选型”的逻辑进行思考：
 - `HOOK`：引子。制造悬念、反直觉、抛出痛点。匹配模板：`ALERT`, `CENTER_FOCUS` (配强冲击力图片)。
 - `LOGIC`：推导。原理分析、因果论证、底层逻辑。匹配模板：`MAGNIFYING_GLASS`, `STAT_COMPARE`, `CONCEPT_CHIP`。
-- `CASE`：举证。具体场景、案例模拟、步骤演示。匹配模板：`MULTI_IMAGE`, `SPLIT_COMPARE`, `TIMELINE`。
+- `CASE`：举证。具体场景、案例模拟、步骤演示。匹配模板：`LIST_MULTI_GROUP`, `SPLIT_COMPARE`, `TIMELINE`。
 - `DATA`：量化。硬核指标、对比增长、价值点。匹配模板：`KPI_HERO`, `PROGRESS_RING` (针对占比)。
 - `CONCLUSION`：收束。核心金句、行动号召、价值升华。匹配模板：`ALERT`, `CENTER_FOCUS` (建议高对比度)。
 
@@ -661,14 +661,14 @@ retries: 3
 | DOS_AND_DONTS | 损失厌恶 | 适用：明确「别这样做 vs 应该这样做」的避坑；左右对错叙事。 差异：两种中立方案并列、无对错标签用 SPLIT_COMPARE；代价/收益权衡用 SCALE_BALANCE… | 2 | dontLabel, doLabel |
 | KPI_HERO | 锚定效应 | 适用：口播强调一个核心数字、增长率、占比、排名；单指标「大字报」。 差异：两句并列指标对比用 STAT_COMPARE；完成度/进度感用 PROGRESS_RING；纯金句无… | 0-1 | value |
 | MAGNIFYING_GLASS | 好奇心缺口 | 适用：揭秘、拆穿表象、强调「真相/底层逻辑」。 差异：本模板要求 param.anchors 非空，且通过 showFrom 关联 content；非揭秘句勿用。 参数：an… | 0 | 无 |
-| MULTI_IMAGE | 多巴胺刺激 | 适用：排比句、多要素并列，2～4 张图同时呈现。 差异：有时间先后/演进线用 TIMELINE；有序可执行步骤（第一步…）用 STEP_LIST。 参数：images 每项含… | 2-4 | 无 |
+| LIST_MULTI_GROUP | 多巴胺刺激 | 适用：排比句、多要素并列，2～4 张图同时呈现。 差异：有时间先后/演进线用 TIMELINE；有序可执行步骤（第一步…）用 STEP_LIST。 参数：images 每项含… | 2-4 | 无 |
 | PROGRESS_RING | 目标梯度 | 适用：完成度、达成率、占比、进度结论；环形动效强化「走到哪一步」。 差异：单数字大字报用 KPI_HERO；两项对比用 STAT_COMPARE。 参数：percent 为 … | 0 | percent, label |
 | QUOTE_CITATION | 社会认同背书 | 适用：名言、著作、研究等引用体裁；可选一张配角图。 差异：非引用类普通叙述用 CENTER_FOCUS。 参数：quoteSource 写清出处；imageSrc 可省略。 | 0-1 | quoteSource |
 | SPLIT_COMPARE | 认知失调 | 适用：两种方案、两条路径、两个结果并列对比（中性对比，不强调对错标签）。 差异：明确错/对避坑用 DOS_AND_DONTS；权衡轻重与代价用 SCALE_BALANCE。 … | 2 | leftLabel, rightLabel |
 | STAT_COMPARE | 对比效应 | 适用：两项 KPI 并列对比（前后、A/B、涨跌）；条形高度反映相对大小。 差异：意象化代价/收益用 SCALE_BALANCE；左右场景图对比用 SPLIT_COMPARE… | 0-2 | leftValue, rightValue, leftLabel, rightLabel |
-| STEP_LIST | 降低认知负荷 | 适用：可执行步骤、操作流程、推导链条（第一步/第二步…），无配图。 差异：无步骤感的并列要点用 MULTI_IMAGE 或 CENTER_FOCUS。 参数：仅用 conte… | 0 | 无 |
+| STEP_LIST | 降低认知负荷 | 适用：可执行步骤、操作流程、推导链条（第一步/第二步…），无配图。 差异：无步骤感的并列要点用 LIST_MULTI_GROUP 或 CENTER_FOCUS。 参数：仅用 conte… | 0 | 无 |
 | TEXT_FOCUS | 信噪比极致化 | 适用：全片最强金句、结论暴击；0 图纯大字。 差异：需要配图锚定用 CENTER_FOCUS；模拟读者吐槽口吻用 CHAT_BUBBLE。 慎用：content 建议不超过 … | 0 | 无 |
-| TIMELINE | 叙事连贯性 | 适用：历史演进、时间顺序、前后对比带明确时间轴。 差异：无时间线的并列要点用 MULTI_IMAGE；操作步骤用 STEP_LIST。 参数：images 2～3 项，pos… | 2-3 | 无 |
+| TIMELINE | 叙事连贯性 | 适用：历史演进、时间顺序、前后对比带明确时间轴。 差异：无时间线的并列要点用 LIST_MULTI_GROUP；操作步骤用 STEP_LIST。 参数：images 2～3 项，pos… | 2-3 | 无 |
 
 ## 各模板说明与 param 字段
 
@@ -716,7 +716,7 @@ retries: 3
 仅需 `content` 数组。
 - **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based content 索引）。
 
-### MULTI_IMAGE
+### LIST_MULTI_GROUP
 
 - `images` (必填): 多张图片描述数组，每项含 src，可选 textIndex（关联 content 序号）（数组，每项含 src/position/enterEffect）
 
@@ -841,7 +841,7 @@ attempt: 1/3
       "order": 7,
       "narrativeType": "CASE",
       "reasoning": "引入案例 -> 热恋中的姑娘 -> 使用多图并列",
-      "template": "MULTI_IMAGE",
+      "template": "LIST_MULTI_GROUP",
       "text": "这就像是一个正在热恋中的姑娘，她觉得男朋友哪儿都好。",
       "images": [
         {
@@ -938,7 +938,7 @@ retries: 3
 请在 reasoning 中按照“叙事角色 -> 视觉重心 -> 模板选型”的逻辑进行思考：
 - `HOOK`：引子。制造悬念、反直觉、抛出痛点。匹配模板：`ALERT`, `CENTER_FOCUS` (配强冲击力图片)。
 - `LOGIC`：推导。原理分析、因果论证、底层逻辑。匹配模板：`MAGNIFYING_GLASS`, `STAT_COMPARE`, `CONCEPT_CHIP`。
-- `CASE`：举证。具体场景、案例模拟、步骤演示。匹配模板：`MULTI_IMAGE`, `SPLIT_COMPARE`, `TIMELINE`。
+- `CASE`：举证。具体场景、案例模拟、步骤演示。匹配模板：`LIST_MULTI_GROUP`, `SPLIT_COMPARE`, `TIMELINE`。
 - `DATA`：量化。硬核指标、对比增长、价值点。匹配模板：`KPI_HERO`, `PROGRESS_RING` (针对占比)。
 - `CONCLUSION`：收束。核心金句、行动号召、价值升华。匹配模板：`ALERT`, `CENTER_FOCUS` (建议高对比度)。
 
@@ -967,14 +967,14 @@ retries: 3
 | DOS_AND_DONTS | 损失厌恶 | 适用：明确「别这样做 vs 应该这样做」的避坑；左右对错叙事。 差异：两种中立方案并列、无对错标签用 SPLIT_COMPARE；代价/收益权衡用 SCALE_BALANCE… | 2 | dontLabel, doLabel |
 | KPI_HERO | 锚定效应 | 适用：口播强调一个核心数字、增长率、占比、排名；单指标「大字报」。 差异：两句并列指标对比用 STAT_COMPARE；完成度/进度感用 PROGRESS_RING；纯金句无… | 0-1 | value |
 | MAGNIFYING_GLASS | 好奇心缺口 | 适用：揭秘、拆穿表象、强调「真相/底层逻辑」。 差异：本模板要求 param.anchors 非空，且通过 showFrom 关联 content；非揭秘句勿用。 参数：an… | 0 | 无 |
-| MULTI_IMAGE | 多巴胺刺激 | 适用：排比句、多要素并列，2～4 张图同时呈现。 差异：有时间先后/演进线用 TIMELINE；有序可执行步骤（第一步…）用 STEP_LIST。 参数：images 每项含… | 2-4 | 无 |
+| LIST_MULTI_GROUP | 多巴胺刺激 | 适用：排比句、多要素并列，2～4 张图同时呈现。 差异：有时间先后/演进线用 TIMELINE；有序可执行步骤（第一步…）用 STEP_LIST。 参数：images 每项含… | 2-4 | 无 |
 | PROGRESS_RING | 目标梯度 | 适用：完成度、达成率、占比、进度结论；环形动效强化「走到哪一步」。 差异：单数字大字报用 KPI_HERO；两项对比用 STAT_COMPARE。 参数：percent 为 … | 0 | percent, label |
 | QUOTE_CITATION | 社会认同背书 | 适用：名言、著作、研究等引用体裁；可选一张配角图。 差异：非引用类普通叙述用 CENTER_FOCUS。 参数：quoteSource 写清出处；imageSrc 可省略。 | 0-1 | quoteSource |
 | SPLIT_COMPARE | 认知失调 | 适用：两种方案、两条路径、两个结果并列对比（中性对比，不强调对错标签）。 差异：明确错/对避坑用 DOS_AND_DONTS；权衡轻重与代价用 SCALE_BALANCE。 … | 2 | leftLabel, rightLabel |
 | STAT_COMPARE | 对比效应 | 适用：两项 KPI 并列对比（前后、A/B、涨跌）；条形高度反映相对大小。 差异：意象化代价/收益用 SCALE_BALANCE；左右场景图对比用 SPLIT_COMPARE… | 0-2 | leftValue, rightValue, leftLabel, rightLabel |
-| STEP_LIST | 降低认知负荷 | 适用：可执行步骤、操作流程、推导链条（第一步/第二步…），无配图。 差异：无步骤感的并列要点用 MULTI_IMAGE 或 CENTER_FOCUS。 参数：仅用 conte… | 0 | 无 |
+| STEP_LIST | 降低认知负荷 | 适用：可执行步骤、操作流程、推导链条（第一步/第二步…），无配图。 差异：无步骤感的并列要点用 LIST_MULTI_GROUP 或 CENTER_FOCUS。 参数：仅用 conte… | 0 | 无 |
 | TEXT_FOCUS | 信噪比极致化 | 适用：全片最强金句、结论暴击；0 图纯大字。 差异：需要配图锚定用 CENTER_FOCUS；模拟读者吐槽口吻用 CHAT_BUBBLE。 慎用：content 建议不超过 … | 0 | 无 |
-| TIMELINE | 叙事连贯性 | 适用：历史演进、时间顺序、前后对比带明确时间轴。 差异：无时间线的并列要点用 MULTI_IMAGE；操作步骤用 STEP_LIST。 参数：images 2～3 项，pos… | 2-3 | 无 |
+| TIMELINE | 叙事连贯性 | 适用：历史演进、时间顺序、前后对比带明确时间轴。 差异：无时间线的并列要点用 LIST_MULTI_GROUP；操作步骤用 STEP_LIST。 参数：images 2～3 项，pos… | 2-3 | 无 |
 
 ## 各模板说明与 param 字段
 
@@ -1022,7 +1022,7 @@ retries: 3
 仅需 `content` 数组。
 - **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based content 索引）。
 
-### MULTI_IMAGE
+### LIST_MULTI_GROUP
 
 - `images` (必填): 多张图片描述数组，每项含 src，可选 textIndex（关联 content 序号）（数组，每项含 src/position/enterEffect）
 
@@ -4185,7 +4185,7 @@ retries: 3
 这就像是一个正在热恋中的姑娘，她觉得男朋友哪儿都好。
 
 ## 选定模板及参数规范
-模板名称：MULTI_IMAGE
+模板名称：LIST_MULTI_GROUP
 参数 Schema 说明：
 {
   "images": {
@@ -4197,7 +4197,7 @@ retries: 3
 
 模板该项的示例供参考：
 {
-  "template": "MULTI_IMAGE",
+  "template": "LIST_MULTI_GROUP",
   "param": {
     "images": [
       {
@@ -6842,7 +6842,7 @@ retries: 3
           "order": 7,
           "narrativeType": "CASE",
           "reasoning": "引入案例 -> 热恋中的姑娘 -> 使用多图并列",
-          "template": "MULTI_IMAGE",
+          "template": "LIST_MULTI_GROUP",
           "param": {
             "content": [
               {
@@ -7268,14 +7268,14 @@ retries: 3
 | DOS_AND_DONTS | 损失厌恶 | 适用：明确「别这样做 vs 应该这样做」的避坑；左右对错叙事。 差异：两种中立方案并列、无对错标签用 SPLIT_COMPARE；代价/收益权衡用 SCALE_BALANCE… | 2 | dontLabel, doLabel |
 | KPI_HERO | 锚定效应 | 适用：口播强调一个核心数字、增长率、占比、排名；单指标「大字报」。 差异：两句并列指标对比用 STAT_COMPARE；完成度/进度感用 PROGRESS_RING；纯金句无… | 0-1 | value |
 | MAGNIFYING_GLASS | 好奇心缺口 | 适用：揭秘、拆穿表象、强调「真相/底层逻辑」。 差异：本模板要求 param.anchors 非空，且通过 showFrom 关联 content；非揭秘句勿用。 参数：an… | 0 | 无 |
-| MULTI_IMAGE | 多巴胺刺激 | 适用：排比句、多要素并列，2～4 张图同时呈现。 差异：有时间先后/演进线用 TIMELINE；有序可执行步骤（第一步…）用 STEP_LIST。 参数：images 每项含… | 2-4 | 无 |
+| LIST_MULTI_GROUP | 多巴胺刺激 | 适用：排比句、多要素并列，2～4 张图同时呈现。 差异：有时间先后/演进线用 TIMELINE；有序可执行步骤（第一步…）用 STEP_LIST。 参数：images 每项含… | 2-4 | 无 |
 | PROGRESS_RING | 目标梯度 | 适用：完成度、达成率、占比、进度结论；环形动效强化「走到哪一步」。 差异：单数字大字报用 KPI_HERO；两项对比用 STAT_COMPARE。 参数：percent 为 … | 0 | percent, label |
 | QUOTE_CITATION | 社会认同背书 | 适用：名言、著作、研究等引用体裁；可选一张配角图。 差异：非引用类普通叙述用 CENTER_FOCUS。 参数：quoteSource 写清出处；imageSrc 可省略。 | 0-1 | quoteSource |
 | SPLIT_COMPARE | 认知失调 | 适用：两种方案、两条路径、两个结果并列对比（中性对比，不强调对错标签）。 差异：明确错/对避坑用 DOS_AND_DONTS；权衡轻重与代价用 SCALE_BALANCE。 … | 2 | leftLabel, rightLabel |
 | STAT_COMPARE | 对比效应 | 适用：两项 KPI 并列对比（前后、A/B、涨跌）；条形高度反映相对大小。 差异：意象化代价/收益用 SCALE_BALANCE；左右场景图对比用 SPLIT_COMPARE… | 0-2 | leftValue, rightValue, leftLabel, rightLabel |
-| STEP_LIST | 降低认知负荷 | 适用：可执行步骤、操作流程、推导链条（第一步/第二步…），无配图。 差异：无步骤感的并列要点用 MULTI_IMAGE 或 CENTER_FOCUS。 参数：仅用 conte… | 0 | 无 |
+| STEP_LIST | 降低认知负荷 | 适用：可执行步骤、操作流程、推导链条（第一步/第二步…），无配图。 差异：无步骤感的并列要点用 LIST_MULTI_GROUP 或 CENTER_FOCUS。 参数：仅用 conte… | 0 | 无 |
 | TEXT_FOCUS | 信噪比极致化 | 适用：全片最强金句、结论暴击；0 图纯大字。 差异：需要配图锚定用 CENTER_FOCUS；模拟读者吐槽口吻用 CHAT_BUBBLE。 慎用：content 建议不超过 … | 0 | 无 |
-| TIMELINE | 叙事连贯性 | 适用：历史演进、时间顺序、前后对比带明确时间轴。 差异：无时间线的并列要点用 MULTI_IMAGE；操作步骤用 STEP_LIST。 参数：images 2～3 项，pos… | 2-3 | 无 |
+| TIMELINE | 叙事连贯性 | 适用：历史演进、时间顺序、前后对比带明确时间轴。 差异：无时间线的并列要点用 LIST_MULTI_GROUP；操作步骤用 STEP_LIST。 参数：images 2～3 项，pos… | 2-3 | 无 |
 
 ## 各模板说明与 param 字段
 
@@ -7323,7 +7323,7 @@ retries: 3
 仅需 `content` 数组。
 - **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based content 索引）。
 
-### MULTI_IMAGE
+### LIST_MULTI_GROUP
 
 - `images` (必填): 多张图片描述数组，每项含 src，可选 textIndex（关联 content 序号）（数组，每项含 src/position/enterEffect）
 
@@ -7916,7 +7916,7 @@ attempt: 1/3
           "order": 7,
           "narrativeType": "CASE",
           "reasoning": "引入案例 -> 热恋中的姑娘 -> 使用多图并列",
-          "template": "MULTI_IMAGE",
+          "template": "LIST_MULTI_GROUP",
           "param": {
             "images": [
               {

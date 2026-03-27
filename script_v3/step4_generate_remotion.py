@@ -262,15 +262,6 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
                 f'                <BWStepList steps={{{steps_esc}}} startFrame={{0}} />\n'
                 f'            </Sequence>'
             )
-        elif layout == "ALERT_STYLE":
-            img0 = images[0] if images else None
-            src_expr = f'staticFile("{img0["src_path"]}")' if img0 else '""'
-            eff = img0["effect"] if img0 else "breathe"
-            layout_renders.append(
-                f'            <Sequence from={{timings["{first_key}"].startTime}} durationInFrames={{{item_dur}}}>\n'
-                f'                <BWAlertStyle imageSrc={{{src_expr}}} enterEffect="{eff}" />\n'
-                f'            </Sequence>'
-            )
         elif layout == "SPLIT_COMPARE":
             left_img = next((im for im in images if im["position"] == "left"), images[0] if images else None)
             right_img = next((im for im in images if im["position"] == "right"), images[1] if len(images) > 1 else None)
@@ -281,7 +272,7 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
                 f'                <BWSplitCompare leftSrc={{{left_src}}} rightSrc={{{right_src}}} leftLabel={{{left_label_esc}}} rightLabel={{{right_label_esc}}} />\n'
                 f'            </Sequence>'
             )
-        elif layout == "MULTI_IMAGE" or len(images) > 1:
+        elif layout == "LIST_MULTI_GROUP" or len(images) > 1:
             # 将每张图的 sync_with_segment 转换为相对 first_key 的 startFrame 偏移表达式
             img_objects = []
             for im in images:
@@ -377,8 +368,6 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
     anchor_content = "\n".join(anchor_renders)
     if "BWCenterFocus" in layout_content:
         used_components.append("BWCenterFocus")
-    if "BWAlertStyle" in layout_content:
-        used_components.append("BWAlertStyle")
     if "BWSplitCompare" in layout_content:
         used_components.append("BWSplitCompare")
     if "BWStepList" in layout_content:

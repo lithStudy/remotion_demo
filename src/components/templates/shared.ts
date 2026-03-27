@@ -232,7 +232,7 @@ export type ImagePosition = "center" | "left" | "right" | "top" | "bottom";
 export interface MultiImageItem {
 	/** 图片地址 */
 	src: string;
-	/** 可选：在画布中的位置（MULTI_IMAGE 已不依赖该参数） */
+	/** 可选：在画布中的位置（LIST_MULTI_GROUP 已不依赖该参数） */
 	position?: ImagePosition;
 	/** 可选入场效果，默认 breathe */
 	enterEffect?: ImageEnterEffect;

@@ -10,10 +10,11 @@ export const templateMeta = {
 	"name": "TIMELINE",
 	"componentExport": "BWTimeline",
 	"description":
-		"适用：历史演进、时间顺序、前后对比带明确时间轴。\n差异：无时间线的并列要点用 MULTI_IMAGE；操作步骤用 STEP_LIST。\n参数：images 2～3 项，position 常 left/right 以配合轴线。",
+		"适用：历史演进、时间顺序、前后对比带明确时间轴。\n差异：无时间线的并列要点用 LIST_MULTI_GROUP；操作步骤用 STEP_LIST。\n参数：images 2～3 项，position 常 left/right 以配合轴线。",
 	"psychology": "叙事连贯性",
 	"image_count": "2-3",
 	"param_schema": {
+		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
 		"images": { "type": "image_prompt_array", "required": true, "desc": "时间轴图片数组" },
 	},
 	"required_extra_params": [] as string[],

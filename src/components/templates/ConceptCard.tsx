@@ -14,6 +14,7 @@ export const templateMeta = {
 	"psychology": "符号化锚定",
 	"image_count": 1,
 	"param_schema": {
+		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
 		"imageSrc": { "type": "image_prompt", "required": true, "desc": "概念图标描述" },
 		"conceptName": { "type": "string", "required": true, "desc": "概念名称" },
 	},

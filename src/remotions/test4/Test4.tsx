@@ -16,11 +16,11 @@ const TRANSITION_DURATION = 15;
 const SCENE_END_PADDING = 20;
 
 const sceneConfigs = [
-    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引出现象：网络环境令人血压升高" },
-    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "剖析原因：算法与大脑Bug" },
-    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "解释概念：确认偏误" },
-    { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "给出建议：防身武器" },
-    { name: "scene5", duration: calculateScene5Duration() + SCENE_END_PADDING, component: Scene5, label: "总结升华：保持清醒" },
+    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引出现象：网络争论与无力感" },
+    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "揭示本质：算法与大脑Bug" },
+    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "心理学概念：确认偏误的解释" },
+    { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "提供解决方案：防身武器" },
+    { name: "scene5", duration: calculateScene5Duration() + SCENE_END_PADDING, component: Scene5, label: "总结与升华：智力觉醒" },
 ];
 
 export const TOTAL_DURATION_TEST4 =

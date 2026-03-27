@@ -290,8 +290,6 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
     anchor_content = "\n".join(anchor_renders)
     if "BWCenterFocus" in layout_content:
         used_components.append("BWCenterFocus")
-    if "BWAlertStyle" in layout_content:
-        used_components.append("BWAlertStyle")
     if "BWSplitCompare" in layout_content:
         used_components.append("BWSplitCompare")
     if "BWStepList" in layout_content:

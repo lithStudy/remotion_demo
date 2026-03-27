@@ -21,6 +21,7 @@ export const templateMeta = {
 	"psychology": "对比效应",
 	"image_count": "0-2",
 	"param_schema": {
+		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
 		"leftValue": { "type": "number", "required": true, "desc": "左侧数值" },
 		"rightValue": { "type": "number", "required": true, "desc": "右侧数值" },
 		"leftLabel": { "type": "string", "required": true, "desc": "左侧标签" },

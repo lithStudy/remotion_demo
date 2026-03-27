@@ -24,6 +24,7 @@ interface BWAnchorWordProps {
 	delay?: number;
 	color?: string;
 	animStyle?: AnchorAnimStyle;
+	fontSize?: number;
 	style?: React.CSSProperties;
 }
 
@@ -32,6 +33,7 @@ export const BWAnchorWord: React.FC<BWAnchorWordProps> = ({
 	delay = 0,
 	color = BW_TEXT,
 	animStyle = "spring",
+	fontSize = 56,
 	style,
 }) => {
 	const frame = useCurrentFrame();
@@ -99,7 +101,7 @@ export const BWAnchorWord: React.FC<BWAnchorWordProps> = ({
 		>
 			<span
 				style={{
-					fontSize: 56,
+					fontSize,
 					fontWeight: 900,
 					color,
 					letterSpacing: "0.02em",

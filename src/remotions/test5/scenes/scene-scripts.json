@@ -1,0 +1,975 @@
+{
+  "topic": "警惕互联网环境中的确认偏误",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引出现象：网络环境的负面影响",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "HOOK",
+          "reasoning": "核心主题是警惕互联网环境中的确认偏误，当前场景是引出现象：网络环境的负面影响。使用HOOK引出问题，吸引用户。使用CENTER_FOCUS模板，配以视觉冲击力的图片，强化效果。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "一个人上网浏览新闻和评论的场景",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "最近你有没有这种感觉：",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "上网刷新闻、看评论区，",
+                "startFrame": 30,
+                "durationFrames": 30
+              },
+              {
+                "text": "血压能瞬间飙升？",
+                "startFrame": 60,
+                "durationFrames": 30
+              }
+            ],
+            "anchors": [],
+            "totalDurationFrames": 90
+          }
+        },
+        {
+          "order": 2,
+          "narrativeType": "CASE",
+          "reasoning": "描述评论区争吵的现象，展示网络环境的负面影响，属于具体案例。使用SPLIT_COMPARE展示讲道理和不讲道理两方对比，强化认知。",
+          "template": "SPLIT_COMPARE",
+          "param": {
+            "leftSrc": "争吵的评论区截图",
+            "rightSrc": "摆满书籍和论文的图书馆",
+            "leftLabel": "评论区",
+            "rightLabel": "讲道理",
+            "content": [
+              {
+                "text": "明明一个挺简单的事儿，",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "评论区却吵成了一锅粥。",
+                "startFrame": 30,
+                "durationFrames": 30
+              },
+              {
+                "text": "你拿证据跟他讲道理，",
+                "startFrame": 60,
+                "durationFrames": 30
+              },
+              {
+                "text": "他反手甩给你一个地摊文学链接；",
+                "startFrame": 90,
+                "durationFrames": 33
+              }
+            ],
+            "anchors": [],
+            "totalDurationFrames": 123
+          }
+        },
+        {
+          "order": 3,
+          "narrativeType": "CASE",
+          "reasoning": "描述评论区争吵的现象，展示网络环境的负面影响，属于具体案例。使用SPLIT_COMPARE展示客观和只看想看的两方对比，强化认知。",
+          "template": "SPLIT_COMPARE",
+          "param": {
+            "content": [
+              {
+                "text": "你试图保持客观，",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "结果发现对方只看他想看的，",
+                "startFrame": 30,
+                "durationFrames": 30
+              },
+              {
+                "text": "只听他想听的。",
+                "startFrame": 60,
+                "durationFrames": 30
+              }
+            ],
+            "leftSrc": "戴着有色眼镜的人",
+            "rightSrc": "捂着耳朵的人",
+            "leftLabel": "选择性观看",
+            "rightLabel": "选择性接收",
+            "anchors": [],
+            "totalDurationFrames": 90
+          }
+        },
+        {
+          "order": 4,
+          "narrativeType": "CASE",
+          "reasoning": "描述评论区争吵的现象，展示网络环境的负面影响，属于具体案例。使用SPLIT_COMPARE展示自证清白和抠字眼证明你歪了的两方对比，强化认知。",
+          "template": "SPLIT_COMPARE",
+          "param": {
+            "leftSrc": "理性辩论场景",
+            "rightSrc": "网络暴力场景",
+            "leftLabel": "理性讨论",
+            "rightLabel": "断章取义",
+            "content": [
+              {
+                "text": "最气人的是，",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "你发现不管你怎么自证清白，",
+                "startFrame": 30,
+                "durationFrames": 30
+              },
+              {
+                "text": "对方总能从你的话里",
+                "startFrame": 60,
+                "durationFrames": 30
+              },
+              {
+                "text": "抠出几个字来证明你",
+                "startFrame": 90,
+                "durationFrames": 30
+              },
+              {
+                "text": "“屁股歪了”。",
+                "startFrame": 120,
+                "durationFrames": 30
+              }
+            ],
+            "anchors": [],
+            "totalDurationFrames": 150
+          }
+        },
+        {
+          "order": 5,
+          "narrativeType": "HOOK",
+          "reasoning": "总结现象，引出无力感，再次强化痛点。使用CENTER_FOCUS模板，配以相关图片，强化共鸣。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "一个人对着电脑屏幕感到无奈和沮丧",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "这种“鸡同鸭讲、秀才遇上兵”的无力感，",
+                "startFrame": 0,
+                "durationFrames": 42
+              },
+              {
+                "text": "是不是让你觉得现在的互联网环境简直没法待了？",
+                "startFrame": 42,
+                "durationFrames": 48
+              }
+            ],
+            "anchors": [
+              {
+                "text": "无力感",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 90
+          }
+        },
+        {
+          "order": 6,
+          "narrativeType": "HOOK",
+          "reasoning": "点明现在互联网环境的问题，为了输赢而搏命，强化痛点。使用CENTER_FOCUS模板，配以相关图片，强化共鸣。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "一群人争吵的剪影",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "大家好像不再是为了真相在讨论，",
+                "startFrame": 0,
+                "durationFrames": 33
+              },
+              {
+                "text": "而是在为了“输赢”在搏命。",
+                "startFrame": 33,
+                "durationFrames": 30
+              }
+            ],
+            "anchors": [
+              {
+                "text": "真相",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": null
+              },
+              {
+                "text": "输赢",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 63
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析原因：算法与大脑的底层Bug",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "HOOK",
+          "reasoning": "1. 总起句，强调“不怪我们”的反常识观点；\n2. 使用单图，突出“不怪我们”这个结论，引发用户思考；\n3. 选择`CENTER_FOCUS`作为默认叙事底盘。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "一个戴着眼镜的人思考的简笔画",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "其实，这事儿真不全怪咱们修养不够，",
+                "startFrame": 0,
+                "durationFrames": 37
+              },
+              {
+                "text": "更不能怪我们普通人爱钻牛角尖。",
+                "startFrame": 37,
+                "durationFrames": 33
+              }
+            ],
+            "anchors": [],
+            "totalDurationFrames": 70
+          }
+        },
+        {
+          "order": 2,
+          "narrativeType": "LOGIC",
+          "reasoning": "1. 解释确认偏误的根本原因：大脑bug与算法利用；\n2. 通过“底层Bug”和“信息囚笼”的比喻，使用户更容易理解；\n3. 使用 `BEAT_SEQUENCE`，通过多个节拍展现大脑bug被利用的过程。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "大脑内部结构图，线路纵横交错",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "咱们得认清一个现实：",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "我们的大脑在进化过程中，",
+                "startFrame": 30,
+                "durationFrames": 30
+              },
+              {
+                "text": "保留了一个极其隐蔽的“底层Bug”，",
+                "startFrame": 60,
+                "durationFrames": 40
+              },
+              {
+                "text": "而现在的互联网算法，",
+                "startFrame": 100,
+                "durationFrames": 30
+              },
+              {
+                "text": "正精准地利用这个Bug",
+                "startFrame": 130,
+                "durationFrames": 30
+              },
+              {
+                "text": "把我们关进信息囚笼。",
+                "startFrame": 160,
+                "durationFrames": 30
+              }
+            ],
+            "anchors": [
+              {
+                "text": "底层Bug",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "信息囚笼",
+                "showFrom": 5,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 190
+          }
+        },
+        {
+          "order": 3,
+          "narrativeType": "LOGIC",
+          "reasoning": "1. 解释平台推送机制的本质：喂食宠物，虚假繁荣；\n2. 通过“喂食的宠物”的比喻，揭示用户被算法操控的现状；\n3. 选用`CENTER_FOCUS`，配上宠物被喂食的图片，强化视觉冲击。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "多个手机屏幕上显示不同信息的瀑布流",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "那些平台为了让你多刷半小时，",
+                "startFrame": 0,
+                "durationFrames": 31
+              },
+              {
+                "text": "会不断推送你认同的观点。",
+                "startFrame": 31,
+                "durationFrames": 30
+              },
+              {
+                "text": "久而久之，",
+                "startFrame": 61,
+                "durationFrames": 30
+              },
+              {
+                "text": "我们就像被喂食的宠物，",
+                "startFrame": 91,
+                "durationFrames": 30
+              },
+              {
+                "text": "眼中只剩下一片虚假的繁荣。",
+                "startFrame": 121,
+                "durationFrames": 30
+              }
+            ],
+            "anchors": [],
+            "totalDurationFrames": 151
+          }
+        },
+        {
+          "order": 4,
+          "narrativeType": "LOGIC",
+          "reasoning": "1. 阐述大脑面对不同声音时的本能反应：生存威胁，保护自我；\n2. 强调用户并非拒绝真相，而是保护被算法喂养的“自我”；\n3. 使用`CENTER_FOCUS`，配上大脑受到威胁的图片，生动形象。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "大脑思考不同音符的抽象概念图",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "所以，当我们遇到不同声音时，",
+                "startFrame": 0,
+                "durationFrames": 31
+              },
+              {
+                "text": "大脑会本能地把它当成一种“生存威胁”。",
+                "startFrame": 31,
+                "durationFrames": 42
+              },
+              {
+                "text": "我们不是在拒绝真相，",
+                "startFrame": 73,
+                "durationFrames": 30
+              },
+              {
+                "text": "我们是在保护那个脆弱的、",
+                "startFrame": 103,
+                "durationFrames": 30
+              },
+              {
+                "text": "被算法喂养出来的“自我”。",
+                "startFrame": 133,
+                "durationFrames": 30
+              }
+            ],
+            "anchors": [
+              {
+                "text": "生存威胁",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "自我",
+                "showFrom": 4,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 163
+          }
+        },
+        {
+          "order": 5,
+          "narrativeType": "CONCLUSION",
+          "reasoning": "1. 总结：强调我们每个人都是被操纵的受害者；\n2. 使用结论性语句，警示用户，引起反思；\n3. 选择`TEXT_FOCUS`，用醒目的文字再次强调结论。",
+          "template": "TEXT_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "在这种机制面前，",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "我们每个人都是被操纵的受害者。",
+                "startFrame": 30,
+                "durationFrames": 33
+              }
+            ],
+            "coreSentence": "我们每个人都是被操纵的受害者",
+            "anchors": [],
+            "totalDurationFrames": 63
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "解释概念：确认偏误的运作方式",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "LOGIC",
+          "reasoning": "定义概念，需要强调术语，使用概念卡片。",
+          "template": "CONCEPT_CARD",
+          "param": {
+            "content": [
+              {
+                "text": "在心理学上，",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "这种现象有一个著名的核心概念，",
+                "startFrame": 30,
+                "durationFrames": 33
+              },
+              {
+                "text": "叫作“确认偏误”。",
+                "startFrame": 63,
+                "durationFrames": 30
+              }
+            ],
+            "imageSrc": "大脑过滤信息的简笔画",
+            "conceptName": "确认偏误",
+            "anchors": [],
+            "totalDurationFrames": 93
+          }
+        },
+        {
+          "order": 2,
+          "narrativeType": "LOGIC",
+          "reasoning": "解释概念的运作方式，采用列表形式，分点说明。",
+          "template": "STEP_LIST",
+          "param": {
+            "content": [
+              {
+                "text": "简单通俗地说，",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "确认偏误就像是",
+                "startFrame": 30,
+                "durationFrames": 30
+              },
+              {
+                "text": "我们大脑自带的",
+                "startFrame": 60,
+                "durationFrames": 30
+              },
+              {
+                "text": "一副“有色滤镜”。",
+                "startFrame": 90,
+                "durationFrames": 30
+              },
+              {
+                "text": "当我们先入为主地",
+                "startFrame": 120,
+                "durationFrames": 30
+              },
+              {
+                "text": "相信一个观点时，",
+                "startFrame": 150,
+                "durationFrames": 30
+              },
+              {
+                "text": "我们的脑子会",
+                "startFrame": 180,
+                "durationFrames": 30
+              },
+              {
+                "text": "自动开启两个功能：",
+                "startFrame": 210,
+                "durationFrames": 30
+              },
+              {
+                "text": "第一，是“自动美颜”，",
+                "startFrame": 240,
+                "durationFrames": 30
+              },
+              {
+                "text": "凡是能证明我",
+                "startFrame": 270,
+                "durationFrames": 30
+              },
+              {
+                "text": "正确的信息，",
+                "startFrame": 300,
+                "durationFrames": 30
+              },
+              {
+                "text": "哪怕漏洞百出，",
+                "startFrame": 330,
+                "durationFrames": 30
+              },
+              {
+                "text": "我们也觉得是真理；",
+                "startFrame": 360,
+                "durationFrames": 30
+              },
+              {
+                "text": "第二，是“一键拉黑”，",
+                "startFrame": 390,
+                "durationFrames": 30
+              },
+              {
+                "text": "凡是反驳我们的证据，",
+                "startFrame": 420,
+                "durationFrames": 30
+              },
+              {
+                "text": "哪怕铁证如山，",
+                "startFrame": 450,
+                "durationFrames": 30
+              },
+              {
+                "text": "我们也觉得那是造谣。",
+                "startFrame": 480,
+                "durationFrames": 30
+              }
+            ],
+            "anchors": [
+              {
+                "text": "确认偏误",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 510
+          }
+        },
+        {
+          "order": 3,
+          "narrativeType": "CASE",
+          "reasoning": "通过热恋中的姑娘的例子，说明确认偏误的现象。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "热恋中的年轻女孩满脸幸福的看向男友",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "这就像是一个正在热恋中的姑娘，",
+                "startFrame": 0,
+                "durationFrames": 33
+              },
+              {
+                "text": "她觉得男朋友哪儿都好。",
+                "startFrame": 33,
+                "durationFrames": 30
+              },
+              {
+                "text": "男朋友迟到那是“有个性”，",
+                "startFrame": 63,
+                "durationFrames": 30
+              },
+              {
+                "text": "男朋友不洗澡那是“纯爷们”。",
+                "startFrame": 93,
+                "durationFrames": 31
+              },
+              {
+                "text": "哪怕闺蜜拿出一叠男方劈腿的证据，",
+                "startFrame": 124,
+                "durationFrames": 35
+              },
+              {
+                "text": "她也能脑补出那是“坏女人在勾引我男人”。",
+                "startFrame": 159,
+                "durationFrames": 44
+              }
+            ],
+            "anchors": [],
+            "totalDurationFrames": 203
+          }
+        },
+        {
+          "order": 4,
+          "narrativeType": "LOGIC",
+          "reasoning": "总结确认偏误的本质，说明人们寻找的是支持自己观点的证据。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "一个大脑正在进行思考的动画",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "这时候，事实已经不重要了，",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "大脑只会疯狂寻找能支持“我没看错人”的证据。",
+                "startFrame": 30,
+                "durationFrames": 48
+              },
+              {
+                "text": "在互联网讨论中，",
+                "startFrame": 78,
+                "durationFrames": 30
+              },
+              {
+                "text": "很多人其实并不是在寻找真理，",
+                "startFrame": 108,
+                "durationFrames": 31
+              },
+              {
+                "text": "而是在玩一场名为“证明我是对的”的心理游戏。",
+                "startFrame": 139,
+                "durationFrames": 48
+              }
+            ],
+            "anchors": [],
+            "totalDurationFrames": 187
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "提供方法：应对确认偏误的建议",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "CONCLUSION",
+          "reasoning": "总结性过渡，突出建议的重要性。使用简洁的画面和醒目的文字。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "拿着盾牌抵抗算法攻击的卡通人物",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "为了不让自己变成算法的傀儡，",
+                "startFrame": 0,
+                "durationFrames": 31
+              },
+              {
+                "text": "下次上网冲浪，",
+                "startFrame": 31,
+                "durationFrames": 30
+              },
+              {
+                "text": "我建议大家在心里备好这把“防身武器”：",
+                "startFrame": 61,
+                "durationFrames": 42
+              }
+            ],
+            "anchors": [],
+            "totalDurationFrames": 103
+          }
+        },
+        {
+          "order": 2,
+          "narrativeType": "LOGIC",
+          "reasoning": "分点列举应对确认偏误的方法，使用多图并列的模板，让每个方法都有对应的视觉呈现。",
+          "template": "LIST_MULTI_GROUP",
+          "param": {
+            "content": [
+              {
+                "text": "反向搜索法：当你极其认同某个观点时，",
+                "startFrame": 0,
+                "durationFrames": 40
+              },
+              {
+                "text": "强迫自己去搜一下反对这个观点的理由。",
+                "startFrame": 40,
+                "durationFrames": 40
+              }
+            ],
+            "groups": [
+              {
+                "image": {
+                  "src": "放大镜简笔画图标"
+                },
+                "anchor": {
+                  "text": "反向搜索",
+                  "color": "#000000",
+                  "anim": "highlight",
+                  "audioEffect": "ping"
+                }
+              }
+            ],
+            "images": [
+              {
+                "src": "放大镜简笔画图标"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "反向搜索",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": "ping"
+              }
+            ],
+            "totalDurationFrames": 80
+          }
+        },
+        {
+          "order": 3,
+          "narrativeType": "LOGIC",
+          "reasoning": "承接上文，继续列举方法。利用多图并列模板，形成视觉上的节奏感。",
+          "template": "LIST_MULTI_GROUP",
+          "param": {
+            "content": [
+              {
+                "text": "警惕“爽感”：",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "如果一段文字让你读完觉得“太解气了、说得太对了”，",
+                "startFrame": 30,
+                "durationFrames": 55
+              },
+              {
+                "text": "这时候一定要停下来。",
+                "startFrame": 85,
+                "durationFrames": 30
+              },
+              {
+                "text": "因为能让你瞬间产生巨大爽感的东西，",
+                "startFrame": 115,
+                "durationFrames": 37
+              },
+              {
+                "text": "往往不是真相，",
+                "startFrame": 152,
+                "durationFrames": 30
+              },
+              {
+                "text": "而是针对你“确认偏误”定制的诱饵。",
+                "startFrame": 182,
+                "durationFrames": 37
+              }
+            ],
+            "groups": [
+              {
+                "image": {
+                  "src": "警惕的表情图标"
+                },
+                "anchor": {
+                  "text": "爽感",
+                  "color": "#EF4444",
+                  "anim": "popIn",
+                  "audioEffect": "impact_thud"
+                }
+              },
+              {
+                "image": {
+                  "src": "停下的手势图标"
+                },
+                "anchor": {
+                  "text": "停下来",
+                  "color": "#EF4444",
+                  "anim": "spring"
+                }
+              },
+              {
+                "image": {
+                  "src": "钓鱼的图标"
+                },
+                "anchor": {
+                  "text": "诱饵",
+                  "color": "#EF4444",
+                  "anim": "popIn",
+                  "audioEffect": "impact_thud"
+                }
+              }
+            ],
+            "images": [
+              {
+                "src": "警惕的表情图标"
+              },
+              {
+                "src": "停下的手势图标"
+              },
+              {
+                "src": "钓鱼的图标"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "爽感",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "停下来",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              },
+              {
+                "text": "诱饵",
+                "showFrom": 5,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 219
+          }
+        },
+        {
+          "order": 4,
+          "narrativeType": "LOGIC",
+          "reasoning": "继续列举方法，保持视觉风格统一，延续上一个LIST_MULTI_GROUP的思路。",
+          "template": "LIST_MULTI_GROUP",
+          "param": {
+            "content": [
+              {
+                "text": "问自己一个问题：“如果我是错的，",
+                "startFrame": 0,
+                "durationFrames": 35
+              },
+              {
+                "text": "会有什么证据能说服我？”",
+                "startFrame": 35,
+                "durationFrames": 30
+              },
+              {
+                "text": "如果你发现没有任何证据能说服你，",
+                "startFrame": 65,
+                "durationFrames": 35
+              },
+              {
+                "text": "那说明你已经掉进了偏见的陷阱。",
+                "startFrame": 100,
+                "durationFrames": 33
+              }
+            ],
+            "groups": [
+              {
+                "image": {
+                  "src": "问号表情符号"
+                },
+                "anchor": {
+                  "text": "我是错的",
+                  "color": "#EF4444",
+                  "anim": "popIn",
+                  "audioEffect": "impact_thud"
+                }
+              },
+              {
+                "image": {
+                  "src": "证据放大镜图标"
+                },
+                "anchor": {
+                  "text": "说服",
+                  "color": "#000000",
+                  "anim": "spring"
+                }
+              },
+              {
+                "image": {
+                  "src": "陷阱简笔画图标"
+                },
+                "anchor": {
+                  "text": "偏见的陷阱",
+                  "color": "#EF4444",
+                  "anim": "popIn",
+                  "audioEffect": "impact_thud"
+                }
+              }
+            ],
+            "images": [
+              {
+                "src": "问号表情符号"
+              },
+              {
+                "src": "证据放大镜图标"
+              },
+              {
+                "src": "陷阱简笔画图标"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "我是错的",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "说服",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": null
+              },
+              {
+                "text": "偏见的陷阱",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 133
+          }
+        },
+        {
+          "order": 5,
+          "narrativeType": "CONCLUSION",
+          "reasoning": "总结升华，强调独立思考的重要性。用高对比度的画面来强调结论。",
+          "template": "TEXT_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "兄弟姐妹们，在这个套路满天飞的时代，承认自己“可能错了”并不是一种软弱，",
+                "startFrame": 0,
+                "durationFrames": 79
+              },
+              {
+                "text": "而是一个成年人最高级的智力觉醒。做自己大脑的主人，不被偏见裹挟，",
+                "startFrame": 79,
+                "durationFrames": 70
+              },
+              {
+                "text": "我们才能真正看清这个复杂的世界。",
+                "startFrame": 149,
+                "durationFrames": 35
+              }
+            ],
+            "coreSentence": "承认自己“可能错了”并不是一种软弱",
+            "anchors": [
+              {
+                "text": "可能错了",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 184
+          }
+        }
+      ]
+    }
+  ],
+  "fps": 30
+}

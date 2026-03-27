@@ -207,7 +207,7 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 						{ src: img("images/template/scene3_2.png"), position: "right" },
 					]}
 				/>
-				<BWSubtitle position="top" text="MULTI_IMAGE · 多要素并列" startFrame={0} />
+				<BWSubtitle position="top" text="LIST_MULTI_GROUP · 多要素并列" startFrame={0} />
 			</>
 		),
 	},

@@ -17,7 +17,9 @@ export const templateMeta = {
 		"适用：揭秘、拆穿表象、强调「真相/底层逻辑」。\n差异：本模板要求 param.anchors 非空，且通过 showFrom 关联 content；非揭秘句勿用。\n参数：anchors.text 对准要聚焦的关键词。",
 	"psychology": "好奇心缺口",
 	"image_count": 0,
-	"param_schema": {},
+	"param_schema": {
+		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
+	},
 	"content_anchor_required": true,
 	"required_extra_params": [] as string[],
 	"example": {

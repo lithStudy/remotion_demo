@@ -8,6 +8,10 @@ import { Test3, Test3Schema, TOTAL_DURATION_TEST3 } from "./remotions/test3/Test
 import { Test4, Test4Schema, TOTAL_DURATION_TEST4 } from "./remotions/test4/Test4";
 import { Test5, Test5Schema, TOTAL_DURATION_TEST5 } from "./remotions/test5/Test5";
 import { Test6, Test6Schema, TOTAL_DURATION_TEST6 } from "./remotions/test6/Test6";
+import { 可得性启发, 可得性启发Schema, TOTAL_DURATION_可得性启发 } from "./remotions/可得性启发/可得性启发";
+import { 可得性启发2, 可得性启发2Schema, TOTAL_DURATION_可得性启发2 } from "./remotions/可得性启发2/可得性启发2";
+import { 可得性启发1, 可得性启发1Schema, TOTAL_DURATION_可得性启发1 } from "./remotions/可得性启发1/可得性启发1";
+import { 可得性启发3, 可得性启发3Schema, TOTAL_DURATION_可得性启发3 } from "./remotions/可得性启发3/可得性启发3";
 
 
 // Each <Composition> is an entry in the sidebar!
@@ -110,6 +114,54 @@ export const RemotionRoot: React.FC = () => {
         width={960}
         height={1280}
         schema={Test6Schema}
+        defaultProps={{}}
+      />
+    
+      {/* 可得性启发 - 自动生成 */}
+      <Composition
+        id="可得性启发"
+        component={可得性启发}
+        durationInFrames={TOTAL_DURATION_可得性启发}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={可得性启发Schema}
+        defaultProps={{}}
+      />
+    
+      {/* 可得性启发2 - 自动生成 */}
+      <Composition
+        id="可得性启发2"
+        component={可得性启发2}
+        durationInFrames={TOTAL_DURATION_可得性启发2}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={可得性启发2Schema}
+        defaultProps={{}}
+      />
+    
+      {/* 可得性启发1 - 自动生成 */}
+      <Composition
+        id="可得性启发1"
+        component={可得性启发1}
+        durationInFrames={TOTAL_DURATION_可得性启发1}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={可得性启发1Schema}
+        defaultProps={{}}
+      />
+    
+      {/* 可得性启发3 - 自动生成 */}
+      <Composition
+        id="可得性启发3"
+        component={可得性启发3}
+        durationInFrames={TOTAL_DURATION_可得性启发3}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={可得性启发3Schema}
         defaultProps={{}}
       />
     </>

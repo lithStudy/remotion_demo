@@ -18,6 +18,7 @@ import {
 	BWProgressRing,
 	BWBeatSequence,
 	BWCognitiveShift,
+	BWMethodStack,
 	BWSubtitle,
 } from "../../components";
 
@@ -54,24 +55,43 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 							text: "看到规律就等于财富密码？",
 							startFrame: 0,
 							durationFrames: 28,
-							audioEffect: "ping",
 						},
 						{
 							text: "那是幻觉。",
 							startFrame: 28,
 							durationFrames: 22,
-							audioEffect: null,
 						},
 						{
 							text: "持续误解就是慢性自杀。",
 							startFrame: 50,
 							durationFrames: 25,
-							audioEffect: null,
 						},
 					]}
 					anchors={[{ text: "财富密码", showFrom: 0, color: "#FF8C00", anim: "popIn" }]}
 				/>
 				<BWSubtitle position="top" text="BEAT_SEQUENCE · 节拍递进（一问一驳一锤）" startFrame={0} />
+			</>
+		),
+	},
+	{
+		key: "method-stack",
+		content: (
+			<>
+				<BWMethodStack
+					title="警惕情绪画面"
+					imageSrc={img("images/template/scene1_1.png")}
+					notes={[
+						{ text: "先识别这是不是情绪刺激", showFrom: 1 },
+						{ text: "再判断它是否只是离奇个案", showFrom: 3 },
+					]}
+					content={[
+						{ text: "第一，警惕情绪画面。", startFrame: 0, durationFrames: 22 },
+						{ text: "先识别这是在煽动情绪。", startFrame: 22, durationFrames: 20 },
+						{ text: "别让极端画面直接接管判断。", startFrame: 42, durationFrames: 20 },
+						{ text: "再问它到底普遍，还是离奇。", startFrame: 62, durationFrames: 13 },
+					]}
+				/>
+				<BWSubtitle position="top" text="METHOD_STACK · 单标题解释展开" startFrame={0} />
 			</>
 		),
 	},
@@ -112,20 +132,17 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 				<BWCognitiveShift
 					notText="不是更努力就更快成功"
 					butText="而是更精准地做选择"
-					notSrc={img("images/template/scene5_1.png")}
 					butSrc={img("images/template/scene5_2.png")}
 					content={[
 						{
 							text: "你以为结果只取决于努力程度。",
 							startFrame: 0,
 							durationFrames: 32,
-							audioEffect: null,
 						},
 						{
 							text: "真正拉开差距的是认知和选择。",
 							startFrame: 32,
 							durationFrames: 43,
-							audioEffect: "impact_thud",
 						},
 					]}
 					anchors={[
@@ -170,8 +187,8 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 					headline="用户满意度"
 					imageSrc={img("images/template/scene1_1.png")}
 					content={[
-						{ text: "满意度同比大幅提升", startFrame: 0, durationFrames: 36, audioEffect: null },
-						{ text: "说明产品体验在变好", startFrame: 36, durationFrames: 39, audioEffect: null },
+						{ text: "满意度同比大幅提升", startFrame: 0, durationFrames: 36 },
+						{ text: "说明产品体验在变好", startFrame: 36, durationFrames: 39 },
 					]}
 				/>
 				<BWSubtitle position="top" text="KPI_HERO · 单指标大字报" startFrame={0} />
@@ -188,7 +205,6 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 							text: "本质是供需失衡在起作用",
 							startFrame: 0,
 							durationFrames: 40,
-							audioEffect: null,
 						},
 					]}
 					anchors={[{ text: "供需失衡", showFrom: 0, color: "#111111", anim: "popIn" }]}
@@ -220,8 +236,8 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 					label="项目完成度"
 					subLabel="截至本季度"
 					content={[
-						{ text: "已经完成近八成", startFrame: 0, durationFrames: 36, audioEffect: null },
-						{ text: "剩下部分集中攻坚", startFrame: 36, durationFrames: 39, audioEffect: null },
+						{ text: "已经完成近八成", startFrame: 0, durationFrames: 36 },
+						{ text: "剩下部分集中攻坚", startFrame: 36, durationFrames: 39 },
 					]}
 				/>
 				<BWSubtitle position="top" text="PROGRESS_RING · 环形进度" startFrame={0} />

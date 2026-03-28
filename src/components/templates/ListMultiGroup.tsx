@@ -18,14 +18,12 @@ export const templateMeta = {
 	"name": "LIST_MULTI_GROUP",
 	"componentExport": "BWMultiImage",
 	"description":
-		"适用：排比句、多要素并列，2～5 组图文同时呈现。\n差异：有时间先后/演进线用 TIMELINE；有序可执行步骤（第一步…）用 STEP_LIST。\n参数：推荐使用 groups（每组内同时包含 image 与 anchor），兼容旧结构 images+anchors。\n动画：首组图文居中并放大入场；每新增一组时，已出现组与新组一起平滑重排为纵向均分布局，图片与文字同步动态缩放、并保持同轴左图右文展示。",
+		"适用：当前 item 原文本身就明确包含 2～5 个并列分点/主体时使用，图文同时呈现。\n差异：有时间先后/演进线用 TIMELINE；有序可执行步骤（第一步…）用 STEP_LIST；若只是总起句/引导句（如“给你两个方法：”）而具体分点已拆到后续 item，禁止用本模板。\n参数：仅使用 groups；每组采用 textIndex + image + 可选 anchor 的结构，其中 textIndex 绑定 content 序号，image 只负责图片描述。\n动画：首组图文居中并放大入场；每新增一组时，已出现组与新组一起平滑重排为纵向均分布局，图片与文字同步动态缩放、并保持同轴左图右文展示。",
 	"psychology": "多巴胺刺激",
 	"image_count": "2-5",
 	"param_schema": {
 		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
-		"groups": { "type": "list_multi_group_group_array", "required": true, "desc": "推荐结构：每项包含 image 与 anchor。image 含 src，可选 textIndex/startFrame；anchor.text 必须是该组的高价值短语（可以是名词、短句，如'自动美颜'、'一键拉黑'、'核心是资源'），需具备独立表达意义，严禁填无语义的通用词或单字动词（如'开启'、'产生'、'自动'）；若该组无高价值短语则整体省略 anchor 字段" },
-		"images": { "type": "image_prompt_array", "required": true, "desc": "兼容旧结构：多张图片描述数组，每项含 src，可选 textIndex（关联 content 序号）" },
-		"anchors": { "type": "anchor_array", "required": true, "desc": "兼容旧结构：每组图片对应的锚点词数组，showFrom 绑定图片组索引（0..n-1）" },
+		"groups": { "type": "list_multi_group_group_array", "required": true, "desc": "唯一合法结构：每项包含 textIndex、image 与可选 anchor。组数必须与当前 item 原文里真实出现的并列分点数一致，严禁仅根据“两个/三个/若干个”标题脑补 group。textIndex 是该组绑定的 content 序号；image.src 填图片描述；anchor.text 必须是该组的高价值短语，若无高价值短语则整体省略 anchor" },
 	},
 	"required_extra_params": [] as string[],
 	"example": {
@@ -33,11 +31,13 @@ export const templateMeta = {
 		"param": {
 			"groups": [
 				{
-					"image": { "src": "齿轮简笔画图标", "textIndex": 0 },
+					"textIndex": 0,
+					"image": { "src": "齿轮简笔画图标" },
 					"anchor": { "text": "核心是自律", "audioEffect": "ping" }
 				},
 				{
-					"image": { "src": "钞票简笔画图标", "textIndex": 1 },
+					"textIndex": 1,
+					"image": { "src": "钞票简笔画图标" },
 					"anchor": { "text": "核心是资源", "audioEffect": "impact_thud" }
 				}
 			],
@@ -90,20 +90,16 @@ const getFixedLayout = (count: number, order: number): SlotLayout => {
 };
 
 export interface BWMultiImageProps extends TemplateBaseProps {
-	// 新结构：一组中同时包含 image 与 anchor
 	groups?: Array<{
+		textIndex?: number;
 		image: MultiImageItem;
 		anchor?: Omit<AnchorItem, "showFrom">;
 	}>;
-	// 兼容旧结构
-	images?: MultiImageItem[];
 }
 
 export const BWMultiImage: React.FC<BWMultiImageProps> = ({
 	groups,
-	images,
 	content,
-	anchors,
 	audioSrc,
 	children,
 	style,
@@ -111,27 +107,11 @@ export const BWMultiImage: React.FC<BWMultiImageProps> = ({
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
 	const normalizedContent = normalizeContent(content);
-	const normalizedGroups = (groups && groups.length > 0
-		? groups
-		: (images ?? []).map((img, index) => {
-			const matchedAnchor = (anchors ?? []).find((a) => a.showFrom === index);
-			return {
-				image: img,
-				anchor: matchedAnchor
-					? {
-						text: matchedAnchor.text,
-						color: matchedAnchor.color ?? undefined,
-						anim: matchedAnchor.anim ?? undefined,
-						audioEffect: matchedAnchor.audioEffect ?? undefined,
-					}
-					: undefined,
-			};
-		})
-	).slice(0, 5);
+	const normalizedGroups = (groups ?? []).slice(0, 5);
 
 	const resolvedGroups = normalizedGroups.map((group) => {
 		const img = group.image;
-		const textIndex = img.textIndex;
+		const textIndex = group.textIndex;
 		const hasValidTextIndex =
 			typeof textIndex === "number" &&
 			Number.isInteger(textIndex) &&
@@ -212,10 +192,6 @@ export const BWMultiImage: React.FC<BWMultiImageProps> = ({
 					extrapolateLeft: "clamp",
 					extrapolateRight: "clamp",
 				});
-				const anchorLeft = interpolate(transitionProgress, [0, 1], [fromLayout.anchorLeft, toLayout.anchorLeft], {
-					extrapolateLeft: "clamp",
-					extrapolateRight: "clamp",
-				});
 				const maxWidth = interpolate(transitionProgress, [0, 1], [fromLayout.imageMaxWidth, toLayout.imageMaxWidth], {
 					extrapolateLeft: "clamp",
 					extrapolateRight: "clamp",
@@ -289,7 +265,7 @@ export const BWMultiImage: React.FC<BWMultiImageProps> = ({
 					</React.Fragment>
 				);
 			})}
-			<TemplateContentRenderer content={normalizedContent} anchors={anchors} audioSrc={audioSrc} hideAnchors />
+			<TemplateContentRenderer content={normalizedContent} audioSrc={audioSrc} hideAnchors />
 			{children}
 		</AbsoluteFill>
 	);

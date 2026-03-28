@@ -33,3 +33,5 @@ export { BWBeatSequence } from "./BeatSequence";
 export type { BWBeatSequenceProps } from "./BeatSequence";
 export { BWCognitiveShift } from "./CognitiveShift";
 export type { BWCognitiveShiftProps } from "./CognitiveShift";
+export { BWMethodStack } from "./MethodStack";
+export type { BWMethodStackProps } from "./MethodStack";

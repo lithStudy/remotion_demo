@@ -11,7 +11,9 @@ export const templateMeta = {
 	"name": "STEP_LIST",
 	"componentExport": "BWStepList",
 	"description":
-		"适用：可执行步骤、操作流程、推导链条（第一步/第二步…），无配图。\n差异：无步骤感的并列要点用 LIST_MULTI_GROUP 或 CENTER_FOCUS。\n参数：仅用 content 多条字符串即可。",
+		"适用：可执行步骤、操作流程、短分点清单（第一步/第二步…），无配图，每个分点必须限制在10个字符以内。\n差异：若每条方法后还跟较长解释、追问或补充句，优先用 METHOD_STACK；无步骤感的并列要点用 LIST_MULTI_GROUP 或 CENTER_FOCUS。\n参数：仅用 content 多条字符串即可，建议保持短句清单感。",
+	"content_min_items": 2,
+	"content_max_items": 6,
 	"psychology": "降低认知负荷",
 	"image_count": 0,
 	"param_schema": {

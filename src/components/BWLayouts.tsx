@@ -95,6 +95,7 @@ export {
 	BWProgressRing,
 	BWBeatSequence,
 	BWCognitiveShift,
+	BWMethodStack,
 	type BWCognitiveShiftProps,
 	type MultiImageItem,
 	type BeatStageItem,

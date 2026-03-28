@@ -1,0 +1,759 @@
+{
+  "topic": "如何避免被媒体信息操控，保持理性思考",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引出恐慌情绪",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "HOOK",
+          "groupKey": "solo_1",
+          "reasoning": "决策树匹配路径 -> 未命中任何类型 -> 默认 -> CENTER_FOCUS",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "你是不是也有过这种感觉？",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "一提到坐飞机，心里就有点打鼓，",
+                "startFrame": 30,
+                "durationFrames": 33
+              },
+              {
+                "text": "脑子里下意识闪过坠机的新闻；",
+                "startFrame": 63,
+                "durationFrames": 31
+              }
+            ],
+            "imageSrc": "飞机在空中飞行的动画",
+            "enterEffect": "breathe",
+            "anchors": [],
+            "totalDurationFrames": 94
+          }
+        },
+        {
+          "order": 2,
+          "narrativeType": "CASE",
+          "groupKey": "solo_1",
+          "reasoning": "决策树匹配路径 -> 未命中任何类型 -> 默认 -> CENTER_FOCUS。本 item 意在引发负面情绪，用 ALERT 更合适。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "一刷短视频，感觉某些国家天天都在零元购、",
+                "startFrame": 0,
+                "durationFrames": 44
+              },
+              {
+                "text": "街头枪战，觉得这世界实在太危险了。",
+                "startFrame": 44,
+                "durationFrames": 37
+              }
+            ],
+            "imageSrc": "混乱的街头，人们四处逃散，远处有枪战",
+            "enterEffect": "breathe",
+            "anchors": [],
+            "totalDurationFrames": 81
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "分析恐慌来源",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "LOGIC",
+          "groupKey": "solo_1",
+          "reasoning": "决策树匹配路径 -> 未命中 -> Step8 -> 默认 -> CENTER_FOCUS -> 无连续性问题",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "产生这种强烈的恐慌感和焦虑感，",
+                "startFrame": 0,
+                "durationFrames": 33
+              },
+              {
+                "text": "真不能怪咱们胆小，",
+                "startFrame": 33,
+                "durationFrames": 30
+              },
+              {
+                "text": "更不是咱们缺乏常识。",
+                "startFrame": 63,
+                "durationFrames": 30
+              }
+            ],
+            "imageSrc": "人们感到焦虑和恐慌的画面",
+            "enterEffect": "breathe",
+            "anchors": [],
+            "totalDurationFrames": 93
+          }
+        },
+        {
+          "order": 2,
+          "narrativeType": "LOGIC",
+          "groupKey": "solo_2",
+          "reasoning": "决策树匹配路径 -> 未命中 -> Step8 -> 默认 -> CENTER_FOCUS -> 无连续性问题",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "要怪，就怪那些深谙流量密码的媒体算法，",
+                "startFrame": 0,
+                "durationFrames": 42
+              },
+              {
+                "text": "以及咱们人类大脑底层的出厂设置。",
+                "startFrame": 42,
+                "durationFrames": 35
+              }
+            ],
+            "imageSrc": "媒体算法运作的流程图",
+            "enterEffect": "breathe",
+            "anchors": [],
+            "totalDurationFrames": 77
+          }
+        },
+        {
+          "order": 3,
+          "narrativeType": "CASE",
+          "groupKey": "solo_3",
+          "reasoning": "决策树匹配路径 -> 未命中 -> Step8 -> 默认 -> CENTER_FOCUS -> 无连续性问题",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "你想啊，为了博眼球，",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "媒体永远只会放大报道极端事件，",
+                "startFrame": 30,
+                "durationFrames": 33
+              },
+              {
+                "text": "“安全到达”永远上不了热搜，",
+                "startFrame": 63,
+                "durationFrames": 31
+              },
+              {
+                "text": "“机毁人亡”才会全网推送。",
+                "startFrame": 94,
+                "durationFrames": 30
+              }
+            ],
+            "imageSrc": "电视台新闻节目演播室场景",
+            "enterEffect": "breathe",
+            "anchors": [],
+            "totalDurationFrames": 124
+          }
+        },
+        {
+          "order": 4,
+          "narrativeType": "LOGIC",
+          "groupKey": "solo_4",
+          "reasoning": "决策树匹配路径 -> 未命中 -> Step8 -> 默认 -> CENTER_FOCUS -> 无连续性问题",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "再加上现在的算法，",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "你越是害怕、",
+                "startFrame": 30,
+                "durationFrames": 30
+              },
+              {
+                "text": "越是愤怒多看了一眼，",
+                "startFrame": 60,
+                "durationFrames": 30
+              },
+              {
+                "text": "它就越是铺天盖地给你推。",
+                "startFrame": 90,
+                "durationFrames": 30
+              }
+            ],
+            "imageSrc": "算法推荐信息流的示意图",
+            "enterEffect": "breathe",
+            "anchors": [
+              {
+                "text": "算法",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": null
+              },
+              {
+                "text": "害怕",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              },
+              {
+                "text": "愤怒",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              },
+              {
+                "text": "铺天盖地",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 120
+          }
+        },
+        {
+          "order": 5,
+          "narrativeType": "CONCLUSION",
+          "groupKey": "solo_5",
+          "reasoning": "决策树匹配路径 -> 命中 Step5 -> 金句/核心结论/升华 -> TEXT_FOCUS -> 无连续性问题",
+          "template": "TEXT_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "这其实是一套把人性弱点研究到极致的注意力收割术，",
+                "startFrame": 0,
+                "durationFrames": 53
+              },
+              {
+                "text": "咱们普通人就是这样不知不觉被困在了一个人为制造的“信息恐怖屋”里。",
+                "startFrame": 53,
+                "durationFrames": 73
+              }
+            ],
+            "coreSentence": "普通人被困在人为制造的“信息恐怖屋”里",
+            "anchors": [
+              {
+                "text": "信息恐怖屋",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 126
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "心理学解释",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "LOGIC",
+          "groupKey": "solo_1",
+          "reasoning": "决策树匹配路径 -> 未命中任何条件 -> 默认选型 -> 使用 CENTER_FOCUS 作为叙事底盘。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "在心理学上，咱们这种容易被忽悠的现象，",
+                "startFrame": 0,
+                "durationFrames": 42
+              },
+              {
+                "text": "叫做“可得性启发”偏见。",
+                "startFrame": 42,
+                "durationFrames": 30
+              }
+            ],
+            "imageSrc": "心理学家在黑板上写字",
+            "enterEffect": "breathe",
+            "anchors": [
+              {
+                "text": "可得性启发",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 72
+          }
+        },
+        {
+          "order": 2,
+          "narrativeType": "LOGIC",
+          "groupKey": "solo_1",
+          "reasoning": "决策树匹配路径 -> 未命中任何条件 -> 默认选型 -> 与前一条同组，保持CENTER_FOCUS风格一致。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "说人话就是：",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "咱们的大脑其实特别偷懒，",
+                "startFrame": 30,
+                "durationFrames": 30
+              },
+              {
+                "text": "它在判断一件事常不常见时，",
+                "startFrame": 60,
+                "durationFrames": 30
+              },
+              {
+                "text": "完全取决于这件事在脑子里",
+                "startFrame": 90,
+                "durationFrames": 30
+              },
+              {
+                "text": "“好不好想起来”。",
+                "startFrame": 120,
+                "durationFrames": 30
+              }
+            ],
+            "imageSrc": "大脑正在思考的卡通图标",
+            "enterEffect": "breathe",
+            "anchors": [],
+            "totalDurationFrames": 150
+          }
+        },
+        {
+          "order": 3,
+          "narrativeType": "LOGIC",
+          "groupKey": "solo_2",
+          "reasoning": "决策树匹配路径 -> 未命中任何条件 -> 默认选型 -> 使用 CENTER_FOCUS 作为叙事底盘。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "因为你看过太多次耸人听闻的头条，",
+                "startFrame": 0,
+                "durationFrames": 35
+              },
+              {
+                "text": "极端画面深深印在了潜意识里。",
+                "startFrame": 35,
+                "durationFrames": 31
+              }
+            ],
+            "imageSrc": "用户盯着手机屏幕，出现多个耸人听闻的头条新闻",
+            "enterEffect": "breathe",
+            "anchors": [],
+            "totalDurationFrames": 66
+          }
+        },
+        {
+          "order": 4,
+          "narrativeType": "CASE",
+          "groupKey": "solo_2",
+          "reasoning": "决策树匹配路径 -> 未命中任何条件 -> 默认选型 -> 与前一条同组，保持CENTER_FOCUS风格一致。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "等你真要买机票时，",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "大脑一检索，",
+                "startFrame": 30,
+                "durationFrames": 30
+              },
+              {
+                "text": "瞬间跳出无数空难画面，",
+                "startFrame": 60,
+                "durationFrames": 30
+              },
+              {
+                "text": "它就疯狂报警提示危险。",
+                "startFrame": 90,
+                "durationFrames": 30
+              }
+            ],
+            "imageSrc": "大脑检索机票，跳出飞机坠毁画面的示意图",
+            "enterEffect": "breathe",
+            "anchors": [],
+            "totalDurationFrames": 120
+          }
+        },
+        {
+          "order": 5,
+          "narrativeType": "DATA",
+          "groupKey": "solo_3",
+          "reasoning": "决策树匹配路径 -> 命中 Step 1 -> 两组数据对比 -> 使用 STAT_COMPARE 进行数据对比。",
+          "template": "STAT_COMPARE",
+          "param": {
+            "content": [
+              {
+                "text": "但真实的数据是，",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "飞机出事的概率，",
+                "startFrame": 30,
+                "durationFrames": 30
+              },
+              {
+                "text": "远比你骑电动车被撞的概率低得多。",
+                "startFrame": 60,
+                "durationFrames": 35
+              }
+            ],
+            "leftValue": 1,
+            "rightValue": 1000000,
+            "leftLabel": "空难",
+            "rightLabel": "电动车",
+            "leftSrc": "an airplane falling from the sky, cartoon style, simple",
+            "rightSrc": "an electric bike being hit by a car, cartoon style, simple",
+            "anchors": [],
+            "totalDurationFrames": 95
+          }
+        },
+        {
+          "order": 6,
+          "narrativeType": "CONCLUSION",
+          "groupKey": "solo_4",
+          "reasoning": "决策树匹配路径 -> 命中 Step 5 -> 文本为明确金句 -> 使用 TEXT_FOCUS。",
+          "template": "TEXT_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "咱们必须认清一个残酷的真相：",
+                "startFrame": 0,
+                "durationFrames": 31
+              },
+              {
+                "text": "容易想起来，绝不等于很常见。",
+                "startFrame": 31,
+                "durationFrames": 31
+              }
+            ],
+            "coreSentence": "容易想起来，绝不等于很常见",
+            "anchors": [
+              {
+                "text": "残酷的真相",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 62
+          }
+        },
+        {
+          "order": 7,
+          "narrativeType": "LOGIC",
+          "groupKey": "solo_5",
+          "reasoning": "决策树匹配路径 -> 未命中任何条件 -> 默认选型 -> 使用 CENTER_FOCUS 作为叙事底盘。",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "大量冲突和血腥的极端事件场景",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "那些极端事件因为充满冲突和血腥，",
+                "startFrame": 0,
+                "durationFrames": 35
+              },
+              {
+                "text": "记忆点极强；",
+                "startFrame": 35,
+                "durationFrames": 30
+              },
+              {
+                "text": "而千万次平平无奇的安全起降，",
+                "startFrame": 65,
+                "durationFrames": 31
+              },
+              {
+                "text": "根本没资格进入你的记忆内存。",
+                "startFrame": 96,
+                "durationFrames": 31
+              }
+            ],
+            "anchors": [
+              {
+                "text": "极端事件",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "冲突",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              },
+              {
+                "text": "血腥",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              },
+              {
+                "text": "记忆点",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 127
+          }
+        },
+        {
+          "order": 8,
+          "narrativeType": "CONCLUSION",
+          "groupKey": "solo_6",
+          "reasoning": "决策树匹配路径 -> 命中 Step 5 -> 文本为明确金句 -> 使用 TEXT_FOCUS。",
+          "template": "TEXT_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "咱们的直觉，就这样被媒体",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "强行灌输的极端画面给劫持了。",
+                "startFrame": 30,
+                "durationFrames": 31
+              }
+            ],
+            "coreSentence": "直觉被媒体强行灌输的极端画面劫持",
+            "anchors": [
+              {
+                "text": "极端画面",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 61
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "提供防御方法",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "TRANSITION",
+          "groupKey": "solo_1",
+          "reasoning": "决策树匹配路径 -> 未命中 -> 默认 -> 使用 CENTER_FOCUS 作为默认模板",
+          "template": "CENTER_FOCUS",
+          "param": {
+            "imageSrc": "大脑内部齿轮运转的卡通图",
+            "enterEffect": "breathe",
+            "content": [
+              {
+                "text": "既然知道了大脑的这个Bug，",
+                "startFrame": 0,
+                "durationFrames": 31
+              },
+              {
+                "text": "咱们以后该怎么保护自己？",
+                "startFrame": 31,
+                "durationFrames": 30
+              },
+              {
+                "text": "给你两个极低门槛的防御锦囊：",
+                "startFrame": 61,
+                "durationFrames": 31
+              }
+            ],
+            "anchors": [
+              {
+                "text": "Bug",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 92
+          }
+        },
+        {
+          "order": 2,
+          "narrativeType": "LOGIC",
+          "groupKey": "weapon_1",
+          "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 2个防御方法，选择STEP_LIST -> 描述第一个方法，带有第一，警惕；分点叙述，选择 STEP_LIST",
+          "template": "STEP_LIST",
+          "param": {
+            "content": [
+              {
+                "text": "第一，警惕“情绪画面”。",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "下次再被某条新闻吓住",
+                "startFrame": 30,
+                "durationFrames": 30
+              },
+              {
+                "text": "或者气到的时候，",
+                "startFrame": 60,
+                "durationFrames": 30
+              },
+              {
+                "text": "在心里默问自己一句话：",
+                "startFrame": 90,
+                "durationFrames": 30
+              },
+              {
+                "text": "“这件事是因为普遍发生",
+                "startFrame": 120,
+                "durationFrames": 30
+              },
+              {
+                "text": "我才看到，还是因为它",
+                "startFrame": 150,
+                "durationFrames": 30
+              },
+              {
+                "text": "足够离奇才上了热搜？”",
+                "startFrame": 180,
+                "durationFrames": 30
+              }
+            ],
+            "anchors": [
+              {
+                "text": "情绪画面",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ],
+            "totalDurationFrames": 210
+          }
+        },
+        {
+          "order": 3,
+          "narrativeType": "LOGIC",
+          "groupKey": "weapon_2",
+          "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 2个防御方法，选择STEP_LIST -> 描述第二个方法，带有第二，用数据对抗直觉；分点叙述，选择 STEP_LIST",
+          "template": "STEP_LIST",
+          "param": {
+            "content": [
+              {
+                "text": "第二，用数据对抗直觉。",
+                "startFrame": 0,
+                "durationFrames": 30
+              },
+              {
+                "text": "当大脑告诉你“这很危险”时，",
+                "startFrame": 30,
+                "durationFrames": 31
+              },
+              {
+                "text": "随手搜一下真实的统计概率，",
+                "startFrame": 61,
+                "durationFrames": 30
+              },
+              {
+                "text": "让理性的数字接管情绪。",
+                "startFrame": 91,
+                "durationFrames": 30
+              }
+            ],
+            "anchors": [
+              {
+                "text": "数据",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": null
+              },
+              {
+                "text": "直觉",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              },
+              {
+                "text": "危险",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "统计概率",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 121
+          }
+        },
+        {
+          "order": 4,
+          "narrativeType": "CONCLUSION",
+          "groupKey": "solo_2",
+          "reasoning": "决策树匹配路径 -> 高情绪/冲击型 -> 命中 Step5 -> 总结全文，提升立意，作为结尾，TEXT_FOCUS -> 最终选型理由：结论性语句，适合使用 TEXT_FOCUS",
+          "template": "TEXT_FOCUS",
+          "param": {
+            "content": [
+              {
+                "text": "在这个满屏都是情绪诱导和流量套路的时代，",
+                "startFrame": 0,
+                "durationFrames": 44
+              },
+              {
+                "text": "学会把“眼见为实”升级为“数据为实”。",
+                "startFrame": 44,
+                "durationFrames": 42
+              },
+              {
+                "text": "做自己大脑的主人，不当流量的提线木偶，",
+                "startFrame": 86,
+                "durationFrames": 42
+              }
+            ],
+            "coreSentence": "学会把“眼见为实”升级为“数据为实”",
+            "anchors": [
+              {
+                "text": "数据为实",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ],
+            "totalDurationFrames": 128
+          }
+        }
+      ]
+    }
+  ],
+  "fps": 30
+}

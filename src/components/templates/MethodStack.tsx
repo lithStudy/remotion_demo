@@ -27,11 +27,6 @@ export const templateMeta = {
 	psychology: "聚焦解释",
 	image_count: 1,
 	param_schema: {
-		content: {
-			type: "content_array",
-			required: true,
-			desc: "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词",
-		},
 		title: {
 			type: "string",
 			required: true,
@@ -57,12 +52,6 @@ export const templateMeta = {
 			notes: [
 				{ text: "先识别这是情绪刺激", showFrom: 1 },
 				{ text: "再追问它是否只是离奇个案", showFrom: 3 },
-			],
-			content: [
-				{ text: "第一，警惕“情绪画面”。" },
-				{ text: "下次再被某条新闻吓住" },
-				{ text: "或者气到的时候，" },
-				{ text: "在心里默问自己一句话：" },
 			],
 		},
 	},

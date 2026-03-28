@@ -16,7 +16,6 @@ export const templateMeta = {
 	"psychology": "视觉中心稳定",
 	"image_count": 1,
 	"param_schema": {
-		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
 		"imageSrc": { "type": "image_prompt", "required": true, "desc": "主图描述" },
 		"enterEffect": { "type": "enum", "values": ["breathe", "slideLeft", "slideBottom", "zoomIn", "fadeIn"], "default": "breathe", "desc": "入场效果" },
 	},
@@ -26,7 +25,6 @@ export const templateMeta = {
 		"param": {
 			"imageSrc": "上班族坐在电脑前的简笔画图标",
 			"enterEffect": "breathe",
-			"content": [{ "text": "这是一个核心观点" }, { "text": "第二句原文" }],
 		},
 	},
 	"default_anchor_color": "#2B6CB0",

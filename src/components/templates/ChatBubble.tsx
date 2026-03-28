@@ -14,7 +14,6 @@ export const templateMeta = {
 	"psychology": "社会投射",
 	"image_count": 1,
 	"param_schema": {
-		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
 		"imageSrc": { "type": "image_prompt", "required": true, "desc": "人物图标描述" },
 	},
 	"required_extra_params": [] as string[],
@@ -22,7 +21,6 @@ export const templateMeta = {
 		"template": "CHAT_BUBBLE",
 		"param": {
 			"imageSrc": "困惑的人简笔画图标",
-			"content": [{ "text": "成功了吗？" }],
 		},
 	},
 	"default_anchor_color": "#FF8C00",

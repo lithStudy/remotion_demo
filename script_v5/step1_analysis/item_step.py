@@ -169,5 +169,9 @@ def analyze_items_for_scene(
         f"      Scene {scene_id}: 2B 模板匹配完成 → {[it.get('template', '?') for it in matched_items]}"
     )
 
+    from .content_split import split_text_to_content
+    for item in matched_items:
+        item["content"] = split_text_to_content(item.get("text", ""))
+
     scene["items"] = matched_items
     return scene

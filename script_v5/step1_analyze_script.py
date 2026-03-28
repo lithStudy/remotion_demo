@@ -312,6 +312,7 @@ def analyze_with_gemini(text: str, config: dict) -> dict:
                 "template",
                 "text",
                 "groupKey",
+                "content",
             }
             redundant_keys = [k for k in item.keys() if k not in allowed_keys]
             for rk in redundant_keys:
@@ -333,6 +334,7 @@ def analyze_with_gemini(text: str, config: dict) -> dict:
         scene.pop("text", None)
         for item in scene.get("items", []):
             item.pop("text", None)
+            item.pop("content", None)
 
     # 添加 fps
     result["fps"] = fps
@@ -359,6 +361,24 @@ def analyze_with_gemini(text: str, config: dict) -> dict:
                 append_ai_log=_append_ai_log,
             )
             fixed["fps"] = fps
+
+            # 强制从 result 中恢复 content，防止模型在 fix 阶段篡改
+            orig_contents = {}
+            for s in result.get("scenes", []):
+                sid = s.get("sceneId")
+                for it in s.get("items", []):
+                    order = it.get("order")
+                    orig_contents[(sid, order)] = it.get("param", {}).get("content", [])
+                    
+            for s in fixed.get("scenes", []):
+                sid = s.get("sceneId")
+                for it in s.get("items", []):
+                    order = it.get("order")
+                    if "param" not in it:
+                        it["param"] = {}
+                    if (sid, order) in orig_contents:
+                        it["param"]["content"] = orig_contents[(sid, order)]
+
             _, w2 = validate_and_normalize_scene_scripts(
                 fixed, TEMPLATE_REGISTRY, default_template=default_tmpl
             )

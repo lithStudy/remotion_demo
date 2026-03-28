@@ -13,7 +13,11 @@ __DRAFT__
 __TEMPLATE_GUIDE__
 
 请输出**一份**修订后的完整 JSON：顶层含 `topic`、`scenes`（每 scene 含 `sceneId`、`sceneName`、`items`），每个 item 含 `order`、`narrativeType`、`reasoning`、`template`、`param`。不要包含 `fps` 字段。
-**硬性要求**：仅修告警字段、不改原有 content 分句，每项为 `{"text": "..."}`；`TEXT_FOCUS` 同样必须含 `content`，`coreSentence` 仅为额外大屏句，**不能**代替 `content`。
-所有 `content` 中的原文必须一致。`audioEffect` 只能出现在 `anchors` 条目上，不得出现在 `content`。仅输出 JSON，不要 markdown 代码块。
+**硬性要求**：
+1. 仅修告警字段。
+2. **绝对不要在输出的 param 中包含 `content` 字段**，系统会自动保留原有的 `content`。
+3. 如果你需要修正 `anchors`，请严格参考 DRAFT 中的 `content` 数组，使用其 0-based 索引作为 `showFrom` 的值。
+4. `audioEffect` 只能出现在 `anchors` 条目上。
+5. `TEXT_FOCUS` 的 `coreSentence` 仅为额外大屏句，**不能**代替 `content`。
 
-
+仅输出 JSON，不要 markdown 代码块。

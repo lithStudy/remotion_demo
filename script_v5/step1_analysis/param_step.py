@@ -53,6 +53,7 @@ def analyze_param_for_item(
             hints.append(f"content 至多 {cmax} 条（超出会被校验器告警）")
         schema_str += f"\n\n// content 条数限制：{'；'.join(hints)}"
     example_str = json.dumps(tmpl_info.get("example", {}), ensure_ascii=False, indent=2)
+    content_str = json.dumps(item.get("content", []), ensure_ascii=False, indent=2)
 
     prompt_template = load_prompt("param_step.md")
     prompt = render_prompt(
@@ -63,15 +64,19 @@ def analyze_param_for_item(
             "TEMPLATE_NAME": template_name,
             "SCHEMA_STR": schema_str,
             "EXAMPLE_STR": example_str,
+            "CONTENT_STR": content_str,
         },
     )
     try:
         resp = generate_with_retry(client, model, prompt, append_ai_log=append_ai_log)
         res_json = parse_json_from_response(resp.text)
         item["param"] = res_json.get("param", {})
+        # 注入预拆分的 content
+        if "content" in item:
+            item["param"]["content"] = item["content"]
     except Exception as e:
         print(f"   ❌ 解析 Item {item.get('order')} ({template_name}) 的 param 彻底失败: {e}")
-        item["param"] = {"content": [{"text": item_text}], "anchors": []}
+        item["param"] = {"content": item.get("content", [{"text": item_text}]), "anchors": []}
 
     ensure_item_param_has_content(item)
     return item

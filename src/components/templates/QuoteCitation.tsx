@@ -14,7 +14,6 @@ export const templateMeta = {
 	"psychology": "社会认同背书",
 	"image_count": "0-1",
 	"param_schema": {
-		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
 		"imageSrc": { "type": "image_prompt", "required": false, "desc": "可选图片描述" },
 		"quoteSource": { "type": "string", "required": true, "desc": "引言来源" },
 	},
@@ -23,7 +22,6 @@ export const templateMeta = {
 		"template": "QUOTE_CITATION",
 		"param": {
 			"quoteSource": "《思考，快与慢》",
-			"content": [{ "text": "人类倾向于从随机事件中寻找规律" }],
 		},
 	},
 	"default_anchor_color": "#276749",

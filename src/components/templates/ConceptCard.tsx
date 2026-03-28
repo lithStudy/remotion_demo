@@ -14,7 +14,6 @@ export const templateMeta = {
 	"psychology": "符号化锚定",
 	"image_count": 1,
 	"param_schema": {
-		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
 		"imageSrc": { "type": "image_prompt", "required": true, "desc": "概念图标描述" },
 		"conceptName": { "type": "string", "required": true, "desc": "概念名称" },
 	},
@@ -24,7 +23,6 @@ export const templateMeta = {
 		"param": {
 			"imageSrc": "过滤器/筛网简笔画图标",
 			"conceptName": "幸存者偏差",
-			"content": [{ "text": "这就是经典的幸存者偏差" }],
 		},
 	},
 	"default_anchor_color": "#805AD5",

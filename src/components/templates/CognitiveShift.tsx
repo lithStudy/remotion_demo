@@ -15,7 +15,6 @@ export const templateMeta = {
 	"psychology": "认知翻转",
 	"image_count": 2,
 	"param_schema": {
-		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
 		"notText": { "type": "string", "required": true, "desc": "被否认知（‘不是’后面的内容）" },
 		"butText": { "type": "string", "required": true, "desc": "真实认知（‘而是’后面的内容）" },
 		"butSrc": { "type": "image_prompt", "required": false, "desc": "真实认知的配图" },
@@ -31,7 +30,6 @@ export const templateMeta = {
 			"butSrc": "站在高处看地图的思考者",
 			"notContentIndex": 0,
 			"butContentIndex": 1,
-			"content": [{ "text": "你以为赚钱是靠勤奋吗？" }, { "text": "其实不是靠拼命，而是靠选择。" }],
 		},
 	},
 	"default_anchor_color": "#E53E3E",

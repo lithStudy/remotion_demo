@@ -18,14 +18,12 @@ export const templateMeta = {
 	"psychology": "好奇心缺口",
 	"image_count": 0,
 	"param_schema": {
-		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
 	},
 	"content_anchor_required": true,
 	"required_extra_params": [] as string[],
 	"example": {
 		"template": "MAGNIFYING_GLASS",
 		"param": {
-			"content": [{ "text": "真相是大多数人忽略了基础" }],
 			"anchors": [
 				{
 					"text": "忽略了基础",

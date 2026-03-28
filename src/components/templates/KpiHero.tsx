@@ -21,7 +21,6 @@ export const templateMeta = {
 	"psychology": "锚定效应",
 	"image_count": "0-1",
 	"param_schema": {
-		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
 		"value": { "type": "number", "required": true, "desc": "展示的目标数字（整数滚动到该值）" },
 		"prefix": { "type": "string", "required": false, "desc": "数字前缀，如「¥」「+」" },
 		"suffix": { "type": "string", "required": false, "desc": "数字后缀，如「%」「万」" },
@@ -37,7 +36,6 @@ export const templateMeta = {
 			"prefix": "",
 			"suffix": "%",
 			"headline": "用户满意度",
-			"content": [{ "text": "满意度同比大幅提升" }, { "text": "说明产品体验在变好" }],
 		},
 	},
 	"default_anchor_color": "#2B6CB0",

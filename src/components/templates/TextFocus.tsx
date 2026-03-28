@@ -17,11 +17,6 @@ export const templateMeta = {
 	"psychology": "信噪比极致化",
 	"image_count": 0,
 	"param_schema": {
-		"content": {
-			"type": "content_array",
-			"required": true,
-			"desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词；coreSentence 仅大屏标题，不可省略本字段",
-		},
 		"coreSentence": {
 			"type": "string",
 			"required": true,
@@ -33,7 +28,6 @@ export const templateMeta = {
 	"example": {
 		"template": "TEXT_FOCUS",
 		"param": {
-			"content": [{ "text": "兄弟姐妹们，在这个套路满天飞的时代，承认自己“可能错了”并不是一种软弱" }],
 			"coreSentence": "承认自己“可能错了”并不是一种软弱",
 			"anchors": [{ "text": "可能错了", "showFrom": 0, "color": "red"}],
 		},

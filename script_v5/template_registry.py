@@ -182,7 +182,7 @@ def generate_ai_prompt_guide(image_style: str = "", include_examples: bool = Tru
 	)
 	lines.append("- **`ALERT`** 仅用于强情绪、转折、冲击收束；禁止通篇堆砌。\n")
 	lines.append(
-		"- **`BEAT_SEQUENCE`**：**同一 item、同一论证动作**内需要 2～4 个连续节拍（图随口播分段切换、情绪可 calm→alert）。用来避免为求变化而把连贯逻辑拆成多个零碎 item；`stages` 条数须与后续 `content` 条数一致。\n"
+		"- **`BEAT_SEQUENCE`**：**同一 item、同一论证动作**内需要 2～4 个连续节拍（图随口播分段切换、情绪可 calm→alert）。用来避免为求变化而把连贯逻辑拆成多个零碎 item；`stages` 条数须与后续台词分段数一致。\n"
 	)
 	lines.append(
 		"- **`STEP_LIST`**：仅用于**短步骤 / 短分点 / 强清单感**内容。若单个 item 是“方法标题/提醒标题 + 解释展开”，优先改用 **`METHOD_STACK`**；不要把解释型口播硬塞成纯清单。\n"
@@ -191,7 +191,7 @@ def generate_ai_prompt_guide(image_style: str = "", include_examples: bool = Tru
 		"- **`METHOD_STACK`**：适合**单个 item 内的一个方法/提醒/观点标题**，后面继续跟 2～4 句解释展开。用“标题 + 单图 + 解释条”承接一个完整叙事，不要拿它去跨 item 合并多个方法。\n"
 	)
 	lines.append(
-		"- **`MAGNIFYING_GLASS`** 仅当该 item 可提供非空 `anchors`（通过 `showFrom` 关联 content 索引）时使用；否则换其他模板。\n"
+		"- **`MAGNIFYING_GLASS`** 仅当该 item 可提供非空 `anchors`（通过 `showFrom` 关联台词索引）时使用；否则换其他模板。\n"
 	)
 	lines.append(
 		"- **`LIST_MULTI_GROUP`**：**同一论证下的多分点并列**（2～4 个可独立成画的主体），**优先用单 item + `LIST_MULTI_GROUP` 覆盖全部分点**，而不是每个分点各开一个 item。若当前 item 只是“给你两个方法：”这类总起句、真正分点已经拆到后续 item，**禁止**用 `LIST_MULTI_GROUP` 去脑补多组。该模板只输出 `groups`，每组使用 `textIndex + image + 可选 anchor`。禁止因「评论区混战」等笼统画面硬凑多图；单一比喻、无清晰分点仍用 `CENTER_FOCUS` 或 `ALERT`。\n"
@@ -216,19 +216,19 @@ def generate_ai_prompt_guide(image_style: str = "", include_examples: bool = Tru
 		schema = tmpl.get("param_schema", {})
 		lines.append(f"### {name}\n")
 		if not schema:
-			lines.append("仅需 `content` 数组。")
+			lines.append("无需额外参数。")
 			if tmpl.get("content_anchor_required") is True:
 				lines.append(
-					"- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based content 索引）。"
+					"- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based 台词分段索引）。"
 				)
 			cmin = tmpl.get("content_min_items")
 			cmax = tmpl.get("content_max_items")
 			if isinstance(cmin, int) or isinstance(cmax, int):
 				hint = []
 				if isinstance(cmin, int):
-					hint.append(f"content 至少 {cmin} 条")
+					hint.append(f"台词至少 {cmin} 段")
 				if isinstance(cmax, int):
-					hint.append(f"至多 {cmax} 条")
+					hint.append(f"至多 {cmax} 段")
 				lines.append(f"- *建议*：{'；'.join(hint)}。")
 			lines.append("")
 			continue
@@ -247,16 +247,16 @@ def generate_ai_prompt_guide(image_style: str = "", include_examples: bool = Tru
 				lines.append(f"- `{field}` ({req}): {desc_f}")
 		if tmpl.get("content_anchor_required") is True:
 			lines.append(
-				"- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based content 索引）。"
+				"- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based 台词分段索引）。"
 			)
 		cmin = tmpl.get("content_min_items")
 		cmax = tmpl.get("content_max_items")
 		if isinstance(cmin, int) or isinstance(cmax, int):
 			hint = []
 			if isinstance(cmin, int):
-				hint.append(f"content 至少 {cmin} 条")
+				hint.append(f"台词至少 {cmin} 段")
 			if isinstance(cmax, int):
-				hint.append(f"至多 {cmax} 条")
+				hint.append(f"至多 {cmax} 段")
 			lines.append(f"- *建议*：{'；'.join(hint)}。\n")
 		lines.append("")
 

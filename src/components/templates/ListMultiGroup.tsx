@@ -22,7 +22,6 @@ export const templateMeta = {
 	"psychology": "多巴胺刺激",
 	"image_count": "2-5",
 	"param_schema": {
-		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
 		"groups": { "type": "list_multi_group_group_array", "required": true, "desc": "唯一合法结构：每项包含 textIndex、image 与可选 anchor。组数必须与当前 item 原文里真实出现的并列分点数一致，严禁仅根据“两个/三个/若干个”标题脑补 group。textIndex 是该组绑定的 content 序号；image.src 填图片描述；anchor.text 必须是该组的高价值短语，若无高价值短语则整体省略 anchor" },
 	},
 	"required_extra_params": [] as string[],
@@ -41,7 +40,6 @@ export const templateMeta = {
 					"anchor": { "text": "核心是资源", "audioEffect": "impact_thud" }
 				}
 			],
-			"content": [{ "text": "怎么才能成功？" }, { "text": "成功的核心是自律" }, { "text": "成功的核心是资源" }],
 
 		},
 	},

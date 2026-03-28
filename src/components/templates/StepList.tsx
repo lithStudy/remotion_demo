@@ -17,13 +17,11 @@ export const templateMeta = {
 	"psychology": "降低认知负荷",
 	"image_count": 0,
 	"param_schema": {
-		"content": { "type": "content_array", "required": true, "desc": "口播字幕分段，对象数组每项含 text；须完整覆盖该 item 台词" },
 	},
 	"required_extra_params": [] as string[],
 	"example": {
 		"template": "STEP_LIST",
 		"param": {
-			"content": [{ "text": "第一步做什么" }, { "text": "第二步做什么" }, { "text": "第三步做什么" }],
 		},
 	},
 	"default_anchor_color": "#276749",

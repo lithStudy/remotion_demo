@@ -1,4 +1,4 @@
-/**
+﻿/**
  * TIMELINE 模板：叙事连贯性，时间轴展示
  */
 import React from "react";
@@ -6,30 +6,7 @@ import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig
 import { BW_TEXT, getSafeImageSrc, type MultiImageItem, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
-export const templateMeta = {
-	"name": "TIMELINE",
-	"componentExport": "BWTimeline",
-	"description":
-		"适用：历史演进、时间顺序、前后对比带明确时间轴。\n差异：无时间线的并列要点用 LIST_MULTI_GROUP；操作步骤用 STEP_LIST。\n参数：images 2～3 项，position 常 left/right 以配合轴线。",
-	"psychology": "叙事连贯性",
-	"image_count": "2-3",
-	"param_schema": {
-		"images": { "type": "image_prompt_array", "required": true, "desc": "时间轴图片数组" },
-	},
-	"required_extra_params": [] as string[],
-	"example": {
-		"template": "TIMELINE",
-		"param": {
-			"images": [
-				{ "src": "1990年代电脑图标", "position": "left", "enterEffect": "slideLeft" },
-				{ "src": "2020年代手机图标", "position": "right", "enterEffect": "slideLeft" },
-			],
-		},
-	},
-	"default_anchor_color": "#2B6CB0",
-	"default_anchor_anim": "slideUp",
-	"default_audio_effect": "woosh",
-} as const;
+export { timelineMeta as templateMeta } from "./template-definitions";
 
 const TIMELINE_X_BY_POS: Record<string, number> = {
 	left: 0.2,

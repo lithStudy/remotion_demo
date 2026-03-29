@@ -6,27 +6,8 @@ import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig
 import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
 import { normalizeContent, TemplateContentRenderer } from "./TemplateContentRenderer";
 
-export const templateMeta = {
-	"name": "CHAT_BUBBLE",
-	"componentExport": "BWChatBubble",
-	"description":
-		"适用：模拟用户/读者心声、弹窗式疑问、痛点自问。\n差异：纯金句大字无对话感用 TEXT_FOCUS；需配图但非气泡口径用 CENTER_FOCUS。\n参数：imageSrc 为人物/侧脸简笔图标；content 宜短。",
-	"psychology": "社会投射",
-	"image_count": 1,
-	"param_schema": {
-		"imageSrc": { "type": "image_prompt", "required": true, "desc": "人物图标描述" },
-	},
-	"required_extra_params": [] as string[],
-	"example": {
-		"template": "CHAT_BUBBLE",
-		"param": {
-			"imageSrc": "困惑的人简笔画图标",
-		},
-	},
-	"default_anchor_color": "#FF8C00",
-	"default_anchor_anim": "spring",
-	"default_audio_effect": "ping",
-} as const;
+import { chatBubbleMeta } from "./template-definitions";
+export { chatBubbleMeta as templateMeta } from "./template-definitions";
 
 export interface BWChatBubbleProps extends TemplateBaseProps {
 	imageSrc?: string;
@@ -63,7 +44,7 @@ export const BWChatBubble: React.FC<BWChatBubbleProps> = ({
 		if (!anchor || !text.includes(anchor)) return text;
 
 		const parts = text.split(anchor);
-		const highlightColor = anchorColor || templateMeta.default_anchor_color;
+		const highlightColor = anchorColor || chatBubbleMeta.defaultAnchorColor;
 		return (
 			<>
 				{parts[0]}

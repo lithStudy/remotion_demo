@@ -26,9 +26,7 @@ export function isValidImageSrc(src?: string): boolean {
  * 获取安全的图片地址：如果 src 无效，则返回默认图片
  */
 export function getSafeImageSrc(src?: string): string {
-	console.log("src", src);
 	if (isValidImageSrc(src)) {
-		console.log('dddddddd:'+src)
 		return src!;
 	}
 	return DEFAULT_IMAGE;
@@ -40,7 +38,7 @@ export const BW_BG = "#ffffff";
 export const BW_TEXT = "#111111";
 
 /** 图片入场效果：呼吸 | 左滑 | 下滑 | 放大 | 淡入 */
-export type ImageEnterEffect = "breathe" | "slideLeft" | "slideBottom" | "zoomIn" | "fadeIn";
+export type { ImageEnterEffect } from "./template-schema";
 
 /**
  * 根据效果类型计算图片入场样式（位移、缩放、透明度）
@@ -250,38 +248,6 @@ export interface BeatStageItem {
 	imageSrc: string;
 	enterEffect?: ImageEnterEffect;
 	tone?: BeatStageTone;
-}
-
-// ─────────────────────────────────────────────────────────────
-// 模板驱动架构：公共类型
-// ─────────────────────────────────────────────────────────────
-
-/** 模板自描述元数据：供 Python 脚本扫描生成提示词与图片字段，与 template_registry 约定一致 */
-export interface TemplateMeta {
-	name: string;
-	/** 适用场景、与相似模板差异、慎用、参数提示等均写入此单一字段 */
-	description: string;
-	psychology: string;
-	image_count: number | string;
-	componentExport?: string;
-	param_schema: Record<
-		string,
-		{
-			type: string;
-			required?: boolean;
-			desc: string;
-			values?: string[];
-			default?: string;
-		}
-	>;
-	required_extra_params: string[];
-	example: { template: string; param: Record<string, unknown> };
-	default_anchor_color: string;
-	default_anchor_anim: string;
-	default_audio_effect: string;
-	content_min_items?: number;
-	content_max_items?: number;
-	content_anchor_required?: boolean;
 }
 
 /** content 数组中每条内容项（Step3 升级后的对象格式） */

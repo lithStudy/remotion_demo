@@ -1,4 +1,4 @@
-/**
+﻿/**
  * LIST_MULTI_GROUP 模板：多巴胺刺激，多要素并列
  * 适用场景：排比句、多要素并列展示，支持 2～5 组纵向排布。
  */
@@ -14,39 +14,7 @@ import {
 import { normalizeContent, TemplateContentRenderer } from "./TemplateContentRenderer";
 import { BWAnchorWord } from "../BWPrimitives";
 
-export const templateMeta = {
-	"name": "LIST_MULTI_GROUP",
-	"componentExport": "BWMultiImage",
-	"description":
-		"适用：当前 item 原文本身就明确包含 2～5 个并列分点/主体时使用，图文同时呈现。\n差异：有时间先后/演进线用 TIMELINE；有序可执行步骤（第一步…）用 STEP_LIST；若只是总起句/引导句（如“给你两个方法：”）而具体分点已拆到后续 item，禁止用本模板。\n参数：仅使用 groups；每组采用 textIndex + image + 可选 anchor 的结构，其中 textIndex 绑定 content 序号，image 只负责图片描述。\n动画：首组图文居中并放大入场；每新增一组时，已出现组与新组一起平滑重排为纵向均分布局，图片与文字同步动态缩放、并保持同轴左图右文展示。",
-	"psychology": "多巴胺刺激",
-	"image_count": "2-5",
-	"param_schema": {
-		"groups": { "type": "list_multi_group_group_array", "required": true, "desc": "唯一合法结构：每项包含 textIndex、image 与可选 anchor。组数必须与当前 item 原文里真实出现的并列分点数一致，严禁仅根据“两个/三个/若干个”标题脑补 group。textIndex 是该组绑定的 content 序号；image.src 填图片描述；anchor.text 必须是该组的高价值短语，若无高价值短语则整体省略 anchor" },
-	},
-	"required_extra_params": [] as string[],
-	"example": {
-		"template": "LIST_MULTI_GROUP",
-		"param": {
-			"groups": [
-				{
-					"textIndex": 0,
-					"image": { "src": "齿轮简笔画图标" },
-					"anchor": { "text": "核心是自律", "audioEffect": "ping" }
-				},
-				{
-					"textIndex": 1,
-					"image": { "src": "钞票简笔画图标" },
-					"anchor": { "text": "核心是资源", "audioEffect": "impact_thud" }
-				}
-			],
-
-		},
-	},
-	"default_anchor_color": "#2B6CB0",
-	"default_anchor_anim": "spring",
-	"default_audio_effect": "ping",
-} as const;
+export { listMultiGroupMeta as templateMeta } from "./template-definitions";
 
 type SlotLayout = {
 	imageLeft: number;

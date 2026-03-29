@@ -1,4 +1,4 @@
-/**
+﻿/**
  * MAGNIFYING_GLASS 模板：好奇心缺口，揭秘感
  * 参数为「底层逻辑/真相」的文案精华，多条时在镜片内列表依次动画展示。
  */
@@ -10,35 +10,7 @@ import {
 } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
-export const templateMeta = {
-	"name": "MAGNIFYING_GLASS",
-	"componentExport": "BWMagnifyingGlass",
-	"description":
-		"适用：揭秘、拆穿表象、强调「真相/底层逻辑」。\n差异：本模板要求 param.anchors 非空，且通过 showFrom 关联 content；非揭秘句勿用。\n参数：anchors.text 对准要聚焦的关键词。",
-	"psychology": "好奇心缺口",
-	"image_count": 0,
-	"param_schema": {
-	},
-	"content_anchor_required": true,
-	"required_extra_params": [] as string[],
-	"example": {
-		"template": "MAGNIFYING_GLASS",
-		"param": {
-			"anchors": [
-				{
-					"text": "忽略了基础",
-					"showFrom": 0,
-					"color": "#111111",
-					"anim": "popIn",
-					"audioEffect": "ping",
-				},
-			],
-		},
-	},
-	"default_anchor_color": "#111111",
-	"default_anchor_anim": "popIn",
-	"default_audio_effect": "ping",
-} as const;
+export { magnifyingGlassMeta as templateMeta } from "./template-definitions";
 
 export type BWMagnifyingGlassProps = TemplateBaseProps;
 

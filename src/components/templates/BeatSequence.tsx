@@ -1,4 +1,4 @@
-/**
+﻿/**
  * BEAT_SEQUENCE：同一镜头内多节拍递进 — 首段偏 CENTER_FOCUS，后续可切 ALERT 式脉动；按 content 时间线换图。
  */
 import React from "react";
@@ -21,37 +21,7 @@ import {
 } from "./shared";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
 
-export const templateMeta = {
-	name: "BEAT_SEQUENCE",
-	componentExport: "BWBeatSequence",
-	description:
-		"适用：一问一驳一锤等同一镜头内情绪递进；多图按口播条切换，首段 calm、后续默认可 alert。\n差异：单段平缓叙述用 CENTER_FOCUS；单句暴击用 ALERT；本模板负责多段串联。\n慎用：stages 与 content 条数需一致；段落间若有空隙，画面保持上一张直至下一段切入（交叉淡化）。\n参数：stages[i].enterEffect / tone；tone 省略时首条 calm、其余 alert。",
-	psychology: "节拍递进",
-	image_count: "2-4",
-	param_schema: {
-		stages: {
-			type: "beat_stage_array",
-			required: true,
-			desc: "与 content 逐条对应：imageSrc、enterEffect、可选 tone（calm|alert）",
-		},
-	},
-	required_extra_params: [] as string[],
-	example: {
-		template: "BEAT_SEQUENCE",
-		param: {
-			stages: [
-				{ imageSrc: "问句配图简笔画", enterEffect: "breathe" },
-				{ imageSrc: "转折警示配图", enterEffect: "slideBottom" },
-				{ imageSrc: "结论冲击配图", enterEffect: "slideBottom" },
-			],
-		},
-	},
-	default_anchor_color: "#2B6CB0",
-	default_anchor_anim: "spring",
-	default_audio_effect: "ping",
-	content_min_items: 2,
-	content_max_items: 4,
-} as const;
+export { beatSequenceMeta as templateMeta } from "./template-definitions";
 
 function getActiveBeatIndex(items: ContentItem[], frame: number): number {
 	let idx = 0;

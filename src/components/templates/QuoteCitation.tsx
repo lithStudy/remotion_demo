@@ -1,4 +1,4 @@
-/**
+﻿/**
  * QUOTE_CITATION 模板：社会认同背书，引用展示
  */
 import React from "react";
@@ -6,28 +6,7 @@ import { AbsoluteFill, Img, spring, useCurrentFrame, useVideoConfig } from "remo
 import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
-export const templateMeta = {
-	"name": "QUOTE_CITATION",
-	"componentExport": "BWQuoteCitation",
-	"description":
-		"适用：名言、著作、研究等引用体裁；可选一张配角图。\n差异：非引用类普通叙述用 CENTER_FOCUS。\n参数：quoteSource 写清出处；imageSrc 可省略。",
-	"psychology": "社会认同背书",
-	"image_count": "0-1",
-	"param_schema": {
-		"imageSrc": { "type": "image_prompt", "required": false, "desc": "可选图片描述" },
-		"quoteSource": { "type": "string", "required": true, "desc": "引言来源" },
-	},
-	"required_extra_params": ["quoteSource"],
-	"example": {
-		"template": "QUOTE_CITATION",
-		"param": {
-			"quoteSource": "《思考，快与慢》",
-		},
-	},
-	"default_anchor_color": "#276749",
-	"default_anchor_anim": "highlight",
-	"default_audio_effect": "ping",
-} as const;
+export { quoteCitationMeta as templateMeta } from "./template-definitions";
 
 export interface BWQuoteCitationProps extends TemplateBaseProps {
 	imageSrc?: string;

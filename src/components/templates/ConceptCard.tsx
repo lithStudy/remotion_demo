@@ -1,4 +1,4 @@
-/**
+﻿/**
  * CONCEPT_CARD 模板：符号化锚定，专业术语闪卡
  */
 import React from "react";
@@ -6,29 +6,7 @@ import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig
 import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
 import { normalizeContent, TemplateContentRenderer } from "./TemplateContentRenderer";
 
-export const templateMeta = {
-	"name": "CONCEPT_CARD",
-	"componentExport": "BWConceptCard",
-	"description":
-		"适用：首次抛出专业名词、模型、核心概念；概念图标+侧栏概念名。\n差异：普通解释句、无闪卡式术语强调时用 CENTER_FOCUS。\n参数：conceptName 与口播术语一致；imageSrc 为概念隐喻图标。",
-	"psychology": "符号化锚定",
-	"image_count": 1,
-	"param_schema": {
-		"imageSrc": { "type": "image_prompt", "required": true, "desc": "概念图标描述" },
-		"conceptName": { "type": "string", "required": true, "desc": "概念名称" },
-	},
-	"required_extra_params": ["conceptName"],
-	"example": {
-		"template": "CONCEPT_CARD",
-		"param": {
-			"imageSrc": "过滤器/筛网简笔画图标",
-			"conceptName": "幸存者偏差",
-		},
-	},
-	"default_anchor_color": "#805AD5",
-	"default_anchor_anim": "slideUp",
-	"default_audio_effect": "ping",
-} as const;
+export { conceptCardMeta as templateMeta } from "./template-definitions";
 
 export interface BWConceptCardProps extends TemplateBaseProps {
 	imageSrc?: string;

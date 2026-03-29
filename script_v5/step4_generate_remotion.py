@@ -20,7 +20,7 @@ _SCRIPT_DIR = Path(__file__).resolve().parent
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
 
-from template_registry import TEMPLATE_REGISTRY, get_template_to_component_map
+from template_registry import TEMPLATE_REGISTRY, get_template_to_component_map, get_image_fields
 from utils import load_config
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -47,92 +47,126 @@ if _missing_export:
         f"{_COMPONENT_FALLBACK}: {_missing_export}"
     )
 
-# param 中图片相关的字段（需要 staticFile 包装）
-IMAGE_PARAM_FIELDS = {
-    "imageSrc",
-    "leftSrc",
-    "rightSrc",
-    "notSrc",
-    "butSrc",
-}
+def _get_image_field_sets(template_name: str) -> tuple[set[str], dict[str, str]]:
+    """
+    根据 registry 的 image_paths 解析出：
+      - top_fields: 直接在 param 顶层的图片字段名集合，如 {"imageSrc", "leftSrc"}
+      - array_fields: 数组图片字段 {array_key: field_suffix}
+        e.g. {"images": "src", "stages": "imageSrc", "groups": "image.src"}
+    """
+    top_fields: set[str] = set()
+    array_fields: dict[str, str] = {}
+    for path in get_image_fields(template_name):
+        if "[]" in path:
+            # 格式：array_key[].suffix  e.g. "stages[].imageSrc"、"groups[].image.src"
+            parts = path.split("[].", 1)
+            array_key = parts[0]
+            suffix = parts[1] if len(parts) > 1 else ""
+            array_fields[array_key] = suffix
+        else:
+            top_fields.add(path)
+    return top_fields, array_fields
 
 
 def _escape_jsx(text: str) -> str:
     return text.replace("{", "{{").replace("}", "}}").replace('"', '\\"')
 
 
-def _param_to_jsx_props(param: dict, name: str, scene_id: str, order: int) -> str:
+def _dict_to_jsx_obj(d: dict, image_suffix_keys: set[str] | None = None) -> str:
+    """
+    将一个普通 Python dict 序列化为 JSX 对象字面量字符串（内部键值对格式）。
+    image_suffix_keys: 其中哪些 key 的字符串值需要用 staticFile() 包装。
+    """
+    parts = []
+    for k, v in d.items():
+        if image_suffix_keys and k in image_suffix_keys and isinstance(v, str):
+            parts.append(f'{k}: staticFile("{_escape_jsx(v)}")')
+        elif k == "startFrame" and isinstance(v, (int, float)):
+            parts.append(f'{k}: {v}')
+        elif isinstance(v, str):
+            parts.append(f'{k}: "{_escape_jsx(v)}"')
+        elif isinstance(v, bool):
+            parts.append(f'{k}: {str(v).lower()}')
+        elif isinstance(v, (int, float)):
+            parts.append(f'{k}: {v}')
+        elif isinstance(v, dict):
+            parts.append(f'{k}: {_dict_to_jsx_obj(v, image_suffix_keys)}')
+        else:
+            parts.append(f'{k}: {json.dumps(v, ensure_ascii=False)}')
+    return "{ " + ", ".join(parts) + " }"
+
+
+def _set_nested_image(obj: dict, suffix_path: str, wrap: bool = True) -> dict:
+    """
+    返回 obj 的副本，将 suffix_path 指向的字段加上 staticFile()。
+    suffix_path 支持点号分隔，如 "image.src" → obj["image"]["src"]。
+    wrap=False 时替换为占位符（用于 preview 模式）。
+    """
+    result = dict(obj)
+    keys = suffix_path.split(".")
+    if len(keys) == 1:
+        v = result.get(keys[0], "")
+        result[keys[0]] = f'__STATIC_FILE__({v})' if wrap else v
+        return result
+    # 递归处理嵌套
+    sub = result.get(keys[0])
+    if isinstance(sub, dict):
+        result[keys[0]] = _set_nested_image(sub, ".".join(keys[1:]), wrap)
+    return result
+
+
+def _array_to_jsx(arr: list, suffix: str) -> str:
+    """
+    将含图片字段的数组序列化为 JSX。
+    suffix：数组每项内需要 staticFile() 包装的字段路径（如 "src"、"imageSrc"、"image.src"）。
+    """
+    item_parts = []
+    for item in arr:
+        if not isinstance(item, dict):
+            item_parts.append(json.dumps(item, ensure_ascii=False))
+            continue
+        # 判断 suffix 是否含嵌套路径
+        if "." in suffix:
+            top_key = suffix.split(".")[0]
+            sub_suffix = suffix.split(".", 1)[1]
+            new_item = dict(item)
+            sub = new_item.get(top_key)
+            if isinstance(sub, dict):
+                new_item[top_key] = _set_nested_image(sub, sub_suffix)
+            # 将整个 item 中的嵌套对象序列化
+            item_parts.append(_dict_to_jsx_obj(new_item))
+        else:
+            item_parts.append(_dict_to_jsx_obj(item, image_suffix_keys={suffix}))
+    return "[" + ", ".join(item_parts) + "]"
+
+
+def _param_to_jsx_props(param: dict, name: str, scene_id: str, order: int, template_name: str = "") -> str:
     """
     将 param 对象转换为 JSX props 字符串。
-    - 图片字段用 staticFile() 包装
-    - content 数组作为 JSON 传递
-    - images 数组中的 src 也用 staticFile() 包装
+    通过 registry 的 image_paths 动态识别哪些字段需要 staticFile() 包装。
     """
+    top_fields, array_fields = _get_image_field_sets(template_name) if template_name else (set(), {})
+
     props = []
     for key, value in param.items():
         if key == "content":
-            # content 数组直接作为 JSON 传递
             props.append(f'content={{{json.dumps(value, ensure_ascii=False)}}}')
         elif key == "audioSrc":
-            # audioSrc 已移到 scene 级别，不在 item props 中传递
             continue
         elif key == "totalDurationFrames":
             props.append(f'totalDurationFrames={{{value}}}')
-        elif key == "images" and isinstance(value, list):
-            # images 数组，需要包装 src
-            img_items = []
-            for img in value:
-                img_copy = dict(img)
-                src = img_copy.get("src", "")
-                img_copy["src"] = f'__STATIC_FILE__({src})'
-                img_items.append(img_copy)
-            # 手动构建 JSX 数组
-            img_jsx_parts = []
-            for img in value:
-                parts = []
-                for ik, iv in img.items():
-                    if ik == "src":
-                        parts.append(f'src: staticFile("{iv}")')
-                    elif ik == "startFrame":
-                        parts.append(f'startFrame: {iv}')
-                    elif isinstance(iv, str):
-                        parts.append(f'{ik}: "{_escape_jsx(iv)}"')
-                    else:
-                        parts.append(f'{ik}: {json.dumps(iv)}')
-                img_jsx_parts.append("{ " + ", ".join(parts) + " }")
-            props.append(f'images={{[{", ".join(img_jsx_parts)}]}}')
-        elif key == "stages" and isinstance(value, list):
-            # BEAT_SEQUENCE：每项含 imageSrc、可选 enterEffect/tone
-            stage_jsx_parts = []
-            for st in value:
-                if not isinstance(st, dict):
-                    continue
-                parts = []
-                for sk, sv in st.items():
-                    if sk == "imageSrc" and isinstance(sv, str):
-                        parts.append(f'imageSrc: staticFile("{_escape_jsx(sv)}")')
-                    elif sk == "enterEffect" and isinstance(sv, str):
-                        parts.append(f'{sk}: "{_escape_jsx(sv)}"')
-                    elif sk == "tone" and isinstance(sv, str):
-                        parts.append(f'{sk}: "{_escape_jsx(sv)}"')
-                    elif isinstance(sv, str):
-                        parts.append(f'{sk}: "{_escape_jsx(sv)}"')
-                    elif isinstance(sv, bool):
-                        parts.append(f'{sk}: {str(sv).lower()}')
-                    elif isinstance(sv, (int, float)):
-                        parts.append(f'{sk}: {sv}')
-                    else:
-                        parts.append(f'{sk}: {json.dumps(sv, ensure_ascii=False)}')
-                stage_jsx_parts.append("{ " + ", ".join(parts) + " }")
-            props.append(f'stages={{[{", ".join(stage_jsx_parts)}]}}')
-        elif key in IMAGE_PARAM_FIELDS:
+        elif key in array_fields and isinstance(value, list):
+            suffix = array_fields[key]
+            jsx_arr = _array_to_jsx(value, suffix)
+            props.append(f'{key}={{{jsx_arr}}}')
+        elif key in top_fields:
             if isinstance(value, str):
-                props.append(f'{key}={{staticFile("{value}")}}')
+                props.append(f'{key}={{staticFile("{_escape_jsx(value)}")}}')
             else:
                 props.append(f'{key}={{{json.dumps(value, ensure_ascii=False)}}}')
-        elif key == "tiltDirection":
+        elif key == "tiltDirection" and isinstance(value, str):
             props.append(f'{key}="{value}"')
-        elif key == "enterEffect":
+        elif key == "enterEffect" and isinstance(value, str):
             props.append(f'{key}="{value}"')
         elif isinstance(value, str):
             props.append(f'{key}={{{json.dumps(value, ensure_ascii=False)}}}')
@@ -144,6 +178,18 @@ def _param_to_jsx_props(param: dict, name: str, scene_id: str, order: int) -> st
             props.append(f'{key}={{{json.dumps(value, ensure_ascii=False)}}}')
 
     return " ".join(props)
+
+
+def _apply_nested_preview(obj: dict, suffix_path: str, preview_image: str) -> None:
+    """递归将 obj 内 suffix_path 指向的字段替换为 preview_image。"""
+    keys = suffix_path.split(".", 1)
+    if len(keys) == 1:
+        if keys[0] in obj and isinstance(obj[keys[0]], str):
+            obj[keys[0]] = preview_image
+    else:
+        sub = obj.get(keys[0])
+        if isinstance(sub, dict):
+            _apply_nested_preview(sub, keys[1], preview_image)
 
 
 def _apply_preview_overrides(scenes: list, preview_image: str | None, mute_audio: bool) -> None:
@@ -162,21 +208,19 @@ def _apply_preview_overrides(scenes: list, preview_image: str | None, mute_audio
                 continue
 
             if preview_image:
-                for field in IMAGE_PARAM_FIELDS:
+                template_name = item.get("template", "")
+                top_fields, array_fields = _get_image_field_sets(template_name)
+
+                for field in top_fields:
                     if field in param and isinstance(param[field], str):
                         param[field] = preview_image
 
-                images = param.get("images")
-                if isinstance(images, list):
-                    for img in images:
-                        if isinstance(img, dict) and "src" in img:
-                            img["src"] = preview_image
-
-                stages = param.get("stages")
-                if isinstance(stages, list):
-                    for st in stages:
-                        if isinstance(st, dict) and "imageSrc" in st:
-                            st["imageSrc"] = preview_image
+                for array_key, suffix in array_fields.items():
+                    arr = param.get(array_key)
+                    if isinstance(arr, list):
+                        for elem in arr:
+                            if isinstance(elem, dict):
+                                _apply_nested_preview(elem, suffix, preview_image)
 
 def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -> str:
     """生成单个场景文件"""
@@ -200,7 +244,7 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
         total_frames = param.get("totalDurationFrames", 90)
 
         # 生成 props
-        props_str = _param_to_jsx_props(param, name, scene_id, order)
+        props_str = _param_to_jsx_props(param, name, scene_id, order, template_name=template)
 
         item_renders.append({
             "component": component,

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * PROGRESS_RING 模板：进度闭环感，环形占比
  */
 import React from "react";
@@ -12,31 +12,7 @@ import {
 import { BW_TEXT, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
-export const templateMeta = {
-	"name": "PROGRESS_RING",
-	"componentExport": "BWProgressRing",
-	"description":
-		"适用：完成度、达成率、占比、进度结论；环形动效强化「走到哪一步」。\n差异：单数字大字报用 KPI_HERO；两项对比用 STAT_COMPARE。\n参数：percent 为 0–100；label 为主文案；subLabel 可写口径说明。",
-	"psychology": "目标梯度",
-	"image_count": 0,
-	"param_schema": {
-		"percent": { "type": "number", "required": true, "desc": "进度百分比 0–100" },
-		"label": { "type": "string", "required": true, "desc": "主标题（如「年度目标达成」）" },
-		"subLabel": { "type": "string", "required": false, "desc": "副标题或口径说明" },
-	},
-	"required_extra_params": ["percent", "label"],
-	"example": {
-		"template": "PROGRESS_RING",
-		"param": {
-			"percent": 78,
-			"label": "项目完成度",
-			"subLabel": "截至本季度",
-		},
-	},
-	"default_anchor_color": "#2B6CB0",
-	"default_anchor_anim": "spring",
-	"default_audio_effect": "ping",
-} as const;
+export { progressRingMeta as templateMeta } from "./template-definitions";
 
 export interface BWProgressRingProps extends TemplateBaseProps {
 	percent: number;

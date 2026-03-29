@@ -1,4 +1,6 @@
 export { BW_BG, BW_TEXT, useImageEnterStyle, type ImageEnterEffect, type ImagePosition, type MultiImageItem, type ContentItem, type AnchorItem, type TemplateBaseProps, type BeatStageItem, type BeatStageTone } from "./shared";
+export type { TemplateMeta, ParamSchema, SchemaNode } from "./template-schema";
+export { ALL_TEMPLATE_METAS, TEMPLATE_META_MAP } from "./template-definitions";
 export { BWImageBreath } from "./BWImageBreath";
 export type { BWImageBreathProps } from "./BWImageBreath";
 export { BWCenterFocus } from "./CenterFocus";

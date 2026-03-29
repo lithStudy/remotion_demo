@@ -1,4 +1,4 @@
-/**
+﻿/**
  * KPI_HERO 模板：锚定效应，单指标大字报 + 数字滚动
  */
 import React from "react";
@@ -13,35 +13,7 @@ import {
 import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
-export const templateMeta = {
-	"name": "KPI_HERO",
-	"componentExport": "BWKpiHero",
-	"description":
-		"适用：口播强调一个核心数字、增长率、占比、排名；单指标「大字报」。\n差异：两句并列指标对比用 STAT_COMPARE；完成度/进度感用 PROGRESS_RING；纯金句无数字用 TEXT_FOCUS。\n参数：value 为展示终值；prefix/suffix 宜短；headline 可一句标题；countDuration 控制数字滚动帧长。",
-	"psychology": "锚定效应",
-	"image_count": "0-1",
-	"param_schema": {
-		"value": { "type": "number", "required": true, "desc": "展示的目标数字（整数滚动到该值）" },
-		"prefix": { "type": "string", "required": false, "desc": "数字前缀，如「¥」「+」" },
-		"suffix": { "type": "string", "required": false, "desc": "数字后缀，如「%」「万」" },
-		"headline": { "type": "string", "required": false, "desc": "顶部短标题" },
-		"imageSrc": { "type": "image_prompt", "required": false, "desc": "可选配图（角落小图）" },
-		"countDuration": { "type": "number", "required": false, "desc": "数字从 0 滚到 value 的 spring 时长（帧），默认 28" },
-	},
-	"required_extra_params": ["value"],
-	"example": {
-		"template": "KPI_HERO",
-		"param": {
-			"value": 87,
-			"prefix": "",
-			"suffix": "%",
-			"headline": "用户满意度",
-		},
-	},
-	"default_anchor_color": "#2B6CB0",
-	"default_anchor_anim": "spring",
-	"default_audio_effect": "ping",
-} as const;
+export { kpiHeroMeta as templateMeta } from "./template-definitions";
 
 export interface BWKpiHeroProps extends TemplateBaseProps {
 	value: number;

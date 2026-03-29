@@ -1,4 +1,4 @@
-/**
+﻿/**
  * STAT_COMPARE 模板：对比效应，双指标并列 + 条形比例
  */
 import React from "react";
@@ -13,35 +13,7 @@ import {
 import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
-export const templateMeta = {
-	"name": "STAT_COMPARE",
-	"componentExport": "BWStatCompare",
-	"description":
-		"适用：两项 KPI 并列对比（前后、A/B、涨跌）；条形高度反映相对大小。\n差异：意象化代价/收益用 SCALE_BALANCE；左右场景图对比用 SPLIT_COMPARE；单数字强调用 KPI_HERO。\n参数：leftValue/rightValue 为非负整数；标签宜短。",
-	"psychology": "对比效应",
-	"image_count": "0-2",
-	"param_schema": {
-		"leftValue": { "type": "number", "required": true, "desc": "左侧数值" },
-		"rightValue": { "type": "number", "required": true, "desc": "右侧数值" },
-		"leftLabel": { "type": "string", "required": true, "desc": "左侧标签" },
-		"rightLabel": { "type": "string", "required": true, "desc": "右侧标签" },
-		"leftSrc": { "type": "image_prompt", "required": false, "desc": "左侧小图标" },
-		"rightSrc": { "type": "image_prompt", "required": false, "desc": "右侧小图标" },
-	},
-	"required_extra_params": ["leftValue", "rightValue", "leftLabel", "rightLabel"],
-	"example": {
-		"template": "STAT_COMPARE",
-		"param": {
-			"leftValue": 32,
-			"rightValue": 68,
-			"leftLabel": "去年",
-			"rightLabel": "今年",
-		},
-	},
-	"default_anchor_color": "#276749",
-	"default_anchor_anim": "spring",
-	"default_audio_effect": "woosh",
-} as const;
+export { statCompareMeta as templateMeta } from "./template-definitions";
 
 export interface BWStatCompareProps extends TemplateBaseProps {
 	leftValue: number;

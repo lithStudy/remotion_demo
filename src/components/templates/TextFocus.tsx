@@ -1,4 +1,4 @@
-/**
+﻿/**
  * TEXT_FOCUS 模板：信噪比极致化，纯文字聚焦
  * 适用场景：全篇最核心金句，无需配图，白底大字 + 弹入动画。
  * 可选 coreSentence：口播 content 较长时，大屏仅展示一句精炼文案；锚点词在正文中高亮，底部保留字幕，不渲染锚点词弹出层。
@@ -8,34 +8,7 @@ import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } fr
 import type { TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
-export const templateMeta = {
-	"name": "TEXT_FOCUS",
-	"componentExport": "BWTextFocus",
-	"description":
-		"适用：全片最强金句、结论暴击；0 图纯大字。\n差异：需要配图锚定用 CENTER_FOCUS；模拟读者吐槽口吻用 CHAT_BUBBLE。\n慎用：content 建议不超过 3 条以保持冲击；若口播/字幕必须保留长 content，可填 coreSentence 仅用于大屏一句展示。",
-	"content_max_items": 3,
-	"psychology": "信噪比极致化",
-	"image_count": 0,
-	"param_schema": {
-		"coreSentence": {
-			"type": "string",
-			"required": true,
-			"desc": "精炼核心句，不超过25个字",
-		},
-		"anchors": { "type": "anchor_array", "required": false, "desc": "锚点数组，用于高亮正文中的子串，每项含 text、showFrom、color；使用 coreSentence 时锚点词须出现在 coreSentence 内" },
-	},
-	"required_extra_params": [] as string[],
-	"example": {
-		"template": "TEXT_FOCUS",
-		"param": {
-			"coreSentence": "承认自己“可能错了”并不是一种软弱",
-			"anchors": [{ "text": "可能错了", "showFrom": 0, "color": "red"}],
-		},
-	},
-	"default_anchor_color": "#ffffff",
-	"default_anchor_anim": "popIn",
-	"default_audio_effect": "impact_thud",
-} as const;
+export { textFocusMeta as templateMeta } from "./template-definitions";
 
 export type BWTextFocusProps = TemplateBaseProps & {
 	/**

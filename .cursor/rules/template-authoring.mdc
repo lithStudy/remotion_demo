@@ -1,0 +1,148 @@
+---
+description: 模板新增/修改指南：schema 定义、注册表生成、Python 消费链路
+globs: src/components/templates/**
+alwaysApply: false
+---
+
+# 模板新增 / 修改指南
+
+## 架构概览
+
+```
+template-schema.ts          ← 节点类型定义 + 工具函数
+template-definitions.ts     ← 所有模板的 TemplateMeta 集中定义（唯一数据源）
+*.tsx                       ← 组件实现，仅 re-export templateMeta
+generate-registry.ts        ← 构建脚本：TS → template_registry.json
+script_v5/template_registry.json  ← Python 消费的稳定 JSON
+```
+
+**修改流程：改 `template-definitions.ts` → 重新生成 JSON → Python 自动生效。**
+
+---
+
+## 新增模板（6 步）
+
+### 1. 实现 TSX 组件
+
+在 `src/components/templates/` 创建 `MyTemplate.tsx`，仅导出组件和 re-export 元数据：
+
+```tsx
+export { myTemplateMeta as templateMeta } from "./template-definitions";
+
+export const BWMyTemplate: React.FC<MyTemplateProps> = (props) => { ... };
+```
+
+### 2. 在 `template-definitions.ts` 添加 TemplateMeta
+
+```ts
+import { strField, numField, enumField, arrField, objField, IMAGE_ENTER_EFFECTS } from "./template-schema";
+
+export const myTemplateMeta: TemplateMeta = {
+  name: "MY_TEMPLATE",               // 全大写下划线
+  componentExport: "BWMyTemplate",   // 与 TSX export 名一致
+  description: "...",
+  psychology: "...",
+  imageCount: 1,
+  paramSchema: {
+    imageSrc: strField({
+      required: true,
+      description: "主图描述（填写视觉提示词）",
+      tags: ["imagePrompt"],         // ← 图片字段必须打这个 tag
+    }),
+    enterEffect: enumField({
+      values: IMAGE_ENTER_EFFECTS,
+      defaultValue: "breathe",
+      description: "入场动效",
+    }),
+  },
+  defaultAnchorColor: "#2B6CB0",
+  defaultAnchorAnim: "spring",
+  defaultAudioEffect: "ping",
+  example: {
+    template: "MY_TEMPLATE",
+    param: { imageSrc: "一只橙色猫咪坐在窗边", enterEffect: "breathe" },
+  },
+};
+```
+
+### 3. 将 Meta 加入 `ALL_TEMPLATE_METAS` 数组
+
+```ts
+// template-definitions.ts 底部
+export const ALL_TEMPLATE_METAS: TemplateMeta[] = [
+  // ... 现有项 ...
+  myTemplateMeta,   // ← 追加
+];
+```
+
+### 4. 更新 `index.ts` 导出
+
+```ts
+export { myTemplateMeta } from "./template-definitions";
+```
+
+### 5. 重新生成注册表
+
+```bash
+npm run generate-registry
+```
+
+确认 `script_v5/template_registry.json` 中出现新模板条目。
+
+### 6. 将模板加入 Remotion Root
+
+在 `src/Root.tsx` 添加对应 `<Composition>`。
+
+---
+
+## 修改现有模板
+
+| 修改内容 | 只改这里 |
+|---|---|
+| 参数字段增删改 / 约束 / 描述 | `template-definitions.ts` 中对应 `TemplateMeta` |
+| 图片字段变动 | 修改 `tags: ["imagePrompt"]`，然后重新 `generate-registry` |
+| 组件渲染逻辑 | 对应 `.tsx` 文件 |
+| 公共类型 / 工具函数 | `template-schema.ts` |
+
+修改参数 schema 后，**务必重新运行 `npm run generate-registry`**，否则 Python 侧的 prompt 生成、图片提取、校验逻辑仍使用旧数据。
+
+---
+
+## Schema 节点速查
+
+```ts
+strField({ required, description, tags? })          // 字符串
+numField({ required, description, defaultValue? })  // 数字
+enumField({ values, defaultValue, description })    // 枚举
+objField({ description, fields: { ... } })          // 嵌套对象
+arrField({ description, item, minItems?, maxItems?, required }) // 数组
+```
+
+**图片字段必须加 `tags: ["imagePrompt"]`**，否则 Python 图片生成流程无法识别。
+
+数组中嵌套图片示例（如 `groups[].image.src`）：
+
+```ts
+groups: arrField({
+  item: objField({
+    fields: {
+      image: objField({
+        fields: {
+          src: strField({ tags: ["imagePrompt"], description: "图片描述" }),
+        },
+      }),
+    },
+  }),
+})
+```
+
+生成的 `image_paths` 会自动变为 `["groups[].image.src"]`，step2/step4 动态处理。
+
+---
+
+## 注意事项
+
+- `template-definitions.ts` **不得** import 任何 React 或图片资源（保持 Node.js 可运行）
+- `example.param` 中的图片字段填中文视觉提示词，不填实际路径
+- 组件 Props 类型定义在各 `.tsx` 文件内，与 `paramSchema` 保持同步
+- `name` 字段必须全局唯一，与 Python 侧的 `template` 字段值对应

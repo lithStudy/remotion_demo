@@ -20,7 +20,7 @@ try:
 except ImportError:
     Image = None
 
-from template_registry import get_image_fields, get_template
+from template_registry import get_image_fields, get_template, image_paths_to_tasks, apply_image_result
 from utils import load_config, load_env
 
 
@@ -120,21 +120,16 @@ def _generate_with_gemini(
 
 
 # ─────────────────────────────────────────────────────────────
-# 从 param 中收集图片提示词
+# 从 param 中收集图片提示词（新架构：基于 image_paths）
 # ─────────────────────────────────────────────────────────────
 
 def collect_image_tasks(scripts_data: dict, scene_filter: str = None) -> list:
     """
-    遍历所有 item，通过 template_registry 识别 param 中的图片字段，
+    遍历所有 item，通过 template_registry 的 image_paths 识别 param 中的图片字段，
     返回扁平化的图片任务列表。
 
-    每个任务: {
-        "scene_id": str,
-        "order": int,
-        "field_name": str,       # param 中的字段名
-        "prompt": str,           # 图片提示词
-        "array_index": int|None, # 如果是数组类型，是第几个
-    }
+    每个任务包含 image_paths_to_tasks() 返回的字段，并附加：
+      "position": str  —— 来自 image item 的 position 字段（若有），否则为 "center"
     """
     tasks = []
     for scene in scripts_data.get("scenes", []):
@@ -144,72 +139,69 @@ def collect_image_tasks(scripts_data: dict, scene_filter: str = None) -> list:
         for item in scene.get("items", []):
             template_name = item.get("template", "CENTER_FOCUS")
             param = item.get("param", {})
-            image_fields = get_image_fields(template_name)
-            tmpl = get_template(template_name)
-            schema = tmpl.get("param_schema", {})
-
-            for field_name in image_fields:
-                field_def = schema.get(field_name, {})
-                field_type = field_def.get("type", "image_prompt")
-                value = param.get(field_name)
-
-                if not value:
-                    continue
-
-                if field_type == "list_multi_group_group_array" and isinstance(value, list):
-                    for idx, group_item in enumerate(value):
-                        if not isinstance(group_item, dict):
-                            continue
-                        image_item = group_item.get("image")
-                        if not isinstance(image_item, dict):
-                            continue
-                        prompt = str(image_item.get("src", "")).strip()
-                        if prompt:
-                            tasks.append({
-                                "scene_id": scene_id,
-                                "order": item["order"],
-                                "field_name": field_name,
-                                "prompt": prompt,
-                                "array_index": idx,
-                                "position": image_item.get("position", "center"),
-                            })
-                elif field_type == "image_prompt_array" and isinstance(value, list):
-                    # 数组类型（LIST_MULTI_GROUP、TIMELINE 的 images）
-                    for idx, img_item in enumerate(value):
-                        prompt = img_item.get("src", "").strip() if isinstance(img_item, dict) else str(img_item).strip()
-                        if prompt:
-                            tasks.append({
-                                "scene_id": scene_id,
-                                "order": item["order"],
-                                "field_name": field_name,
-                                "prompt": prompt,
-                                "array_index": idx,
-                                "position": img_item.get("position", "center") if isinstance(img_item, dict) else "center",
-                            })
-                elif field_type == "image_prompt" and isinstance(value, str):
-                    prompt = value.strip()
-                    if prompt:
-                        tasks.append({
-                            "scene_id": scene_id,
-                            "order": item["order"],
-                            "field_name": field_name,
-                            "prompt": prompt,
-                            "array_index": None,
-                            "position": None,
-                        })
-
+            image_paths = get_image_fields(template_name)
+            item_tasks = image_paths_to_tasks(param, image_paths, scene_id, item.get("order", 0))
+            # 对数组项附加 position（主要用于 TIMELINE images[].position）
+            for t in item_tasks:
+                array_key = t.get("array_key")
+                array_index = t.get("array_index")
+                field_suffix = t.get("field_suffix")
+                if array_key is not None and array_index is not None:
+                    arr = param.get(array_key)
+                    if isinstance(arr, list) and array_index < len(arr):
+                        elem = arr[array_index]
+                        if isinstance(elem, dict):
+                            # position 优先来自该数组项本身，其次来自其上层（如 image 对象的父对象）
+                            pos = elem.get("position")
+                            if pos is None and isinstance(field_suffix, str) and "." in field_suffix:
+                                parent_key = field_suffix.split(".")[0]
+                                parent = elem.get(parent_key)
+                                if isinstance(parent, dict):
+                                    pos = parent.get("position")
+                            t["position"] = pos or "center"
+                        else:
+                            t["position"] = "center"
+                else:
+                    t["position"] = None
+            tasks.extend(item_tasks)
     return tasks
+
+
+def _task_key(task: dict) -> str:
+    """生成唯一的 task 标识键，用于 task_results 字典的查找与回写。"""
+    base = f"{task['scene_id']}_{task['order']}"
+    array_key = task.get("array_key")
+    array_index = task.get("array_index")
+    field_suffix = task.get("field_suffix")
+    resolved_path = task.get("resolved_path", "")
+
+    if array_key is not None and array_index is not None:
+        return f"{base}_{array_key}_{field_suffix or ''}_{array_index}"
+    return f"{base}_{resolved_path}"
 
 
 def get_output_filename(task: dict) -> str:
     """根据任务生成输出文件名"""
-    base = f"{task['scene_id']}_{task['order']}"
-    if task["array_index"] is not None:
-        pos = task.get("position", f"img{task['array_index']}")
-        return f"{base}_{pos}.png"
-    if task["field_name"] in ("leftSrc", "rightSrc"):
-        side = "left" if task["field_name"] == "leftSrc" else "right"
+    scene_id = task["scene_id"]
+    order = task["order"]
+    base = f"{scene_id}_{order}"
+    array_index = task.get("array_index")
+    resolved_path = task.get("resolved_path", "")
+    position = task.get("position")
+
+    if array_index is not None:
+        # 数组项图片：用 position 或索引生成唯一名
+        pos_or_idx = position if position and position != "center" else f"img{array_index}"
+        # TIMELINE images[]：用 position（left/right/center）
+        # BEAT_SEQUENCE stages[]：用 imageSrc 的数组索引
+        # LIST_MULTI_GROUP groups[]：用索引
+        return f"{base}_{pos_or_idx}.png"
+    # 简单字段：leftSrc/rightSrc → left/right，其余用字段名
+    if resolved_path in ("leftSrc", "rightSrc"):
+        side = "left" if resolved_path == "leftSrc" else "right"
         return f"{base}_{side}.png"
+    if resolved_path in ("butSrc",):
+        return f"{base}_but.png"
     return f"{base}.png"
 
 
@@ -219,36 +211,16 @@ def apply_image_paths(scripts_data: dict, task_results: dict):
     task_results: {task_key: relative_path}
     """
     for scene in scripts_data.get("scenes", []):
+        scene_id = scene["sceneId"]
         for item in scene.get("items", []):
             param = item.get("param", {})
             template_name = item.get("template", "CENTER_FOCUS")
-            image_fields = get_image_fields(template_name)
-            tmpl = get_template(template_name)
-            schema = tmpl.get("param_schema", {})
-
-            for field_name in image_fields:
-                field_def = schema.get(field_name, {})
-                field_type = field_def.get("type", "image_prompt")
-                value = param.get(field_name)
-                if not value:
-                    continue
-
-                if field_type == "list_multi_group_group_array" and isinstance(value, list):
-                    for idx, group_item in enumerate(value):
-                        key = f"{scene['sceneId']}_{item['order']}_{field_name}_{idx}"
-                        if key in task_results and isinstance(group_item, dict):
-                            image_item = group_item.get("image")
-                            if isinstance(image_item, dict):
-                                image_item["src"] = task_results[key]
-                elif field_type == "image_prompt_array" and isinstance(value, list):
-                    for idx, img_item in enumerate(value):
-                        key = f"{scene['sceneId']}_{item['order']}_{field_name}_{idx}"
-                        if key in task_results and isinstance(img_item, dict):
-                            img_item["src"] = task_results[key]
-                elif field_type == "image_prompt" and isinstance(value, str):
-                    key = f"{scene['sceneId']}_{item['order']}_{field_name}"
-                    if key in task_results:
-                        param[field_name] = task_results[key]
+            image_paths = get_image_fields(template_name)
+            item_tasks = image_paths_to_tasks(param, image_paths, scene_id, item.get("order", 0))
+            for task in item_tasks:
+                key = _task_key(task)
+                if key in task_results:
+                    apply_image_result(param, task, task_results[key])
 
 
 def main():
@@ -384,10 +356,7 @@ def main():
                 success_count += 1
 
                 # 记录结果供回写
-                if task["array_index"] is not None:
-                    key = f"{task['scene_id']}_{task['order']}_{task['field_name']}_{task['array_index']}"
-                else:
-                    key = f"{task['scene_id']}_{task['order']}_{task['field_name']}"
+                key = _task_key(task)
                 task_results[key] = f"{rel_prefix}/{out_name}"
 
         except Exception as e:

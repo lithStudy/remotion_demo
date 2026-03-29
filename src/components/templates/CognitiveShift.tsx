@@ -1,4 +1,4 @@
-/**
+﻿/**
  * COGNITIVE_SHIFT 模板：认知翻转（不是...而是...）
  * 适用场景：打破直觉，建立新认知。逻辑：直觉 -> 否定 -> 真理。
  */
@@ -7,35 +7,7 @@ import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig
 import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
-export const templateMeta = {
-	"name": "COGNITIVE_SHIFT",
-	"componentExport": "BWCognitiveShift",
-	"description":
-		"适用：强力认知翻转「不是...而是...」；打破直觉误区，揭示底层逻辑。\n视觉：A 部分（直觉）淡入后变灰并划线；B 部分（事实）随后高亮弹出。\n参数：notText（被否定的部分）、butText（建立的部分）必须是极简的对比关键词（如：靠勤奋 vs 靠认知），严禁使用完整长句；可配对应图片。",
-	"psychology": "认知翻转",
-	"image_count": 2,
-	"param_schema": {
-		"notText": { "type": "string", "required": true, "desc": "被否认知（‘不是’后面的内容）" },
-		"butText": { "type": "string", "required": true, "desc": "真实认知（‘而是’后面的内容）" },
-		"butSrc": { "type": "image_prompt", "required": false, "desc": "真实认知的配图" },
-		"notContentIndex": { "type": "number", "required": false, "desc": "指定触发‘不是’部分动画的字幕段索引（默认0）" },
-		"butContentIndex": { "type": "number", "required": false, "desc": "指定触发‘而是’部分动画及转折的字幕段索引（默认1）" },
-	},
-	"required_extra_params": ["notText", "butText"],
-	"example": {
-		"template": "COGNITIVE_SHIFT",
-		"param": {
-			"notText": "靠勤奋拼命",
-			"butText": "靠认知和选择",
-			"butSrc": "站在高处看地图的思考者",
-			"notContentIndex": 0,
-			"butContentIndex": 1,
-		},
-	},
-	"default_anchor_color": "#E53E3E",
-	"default_anchor_anim": "popIn",
-	"default_audio_effect": "impact_thud",
-} as const;
+export { cognitiveShiftMeta as templateMeta } from "./template-definitions";
 
 export interface BWCognitiveShiftProps extends TemplateBaseProps {
 	notText?: string;

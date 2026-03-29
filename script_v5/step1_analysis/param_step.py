@@ -1,5 +1,13 @@
 import json
+import sys
+from pathlib import Path
 
+# 确保 script_v5 在模块搜索路径中
+_SCRIPT_V5 = str(Path(__file__).resolve().parent.parent)
+if _SCRIPT_V5 not in sys.path:
+    sys.path.insert(0, _SCRIPT_V5)
+
+from template_registry import _format_schema_node  # noqa: E402
 from utils.gemini_utils import generate_with_retry, parse_json_from_response
 from .prompt_loader import load_prompt, render_prompt
 
@@ -41,7 +49,16 @@ def analyze_param_for_item(
     template_name = item.get("template", "CENTER_FOCUS")
     tmpl_info = template_registry.get(template_name, template_registry.get("CENTER_FOCUS", {}))
 
-    schema_str = json.dumps(tmpl_info.get("param_schema", {}), ensure_ascii=False, indent=2)
+    # 生成可读性更好的 schema 说明（替代原始 JSON dump）
+    schema = tmpl_info.get("param_schema", {})
+    if schema:
+        schema_lines: list[str] = []
+        for field, node in schema.items():
+            if isinstance(node, dict):
+                schema_lines.extend(_format_schema_node(field, node, indent=0))
+        schema_str = "\n".join(schema_lines)
+    else:
+        schema_str = "（无额外参数）"
     # 将 content 条数限制附加到 schema_str，让模型感知上下界
     cmin = tmpl_info.get("content_min_items")
     cmax = tmpl_info.get("content_max_items")

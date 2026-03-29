@@ -1,6 +1,6 @@
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:44:52
+time: 2026-03-29 21:40:34
 model: gemini-2.0-flash
 retries: 3
 
@@ -39,26 +39,26 @@ retries: 3
 
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:44:57
+time: 2026-03-29 21:40:38
 attempt: 1/3
 
 [OUTPUT]
 {
-  "topic": "如何对抗信息焦虑与恐慌",
+  "topic": "如何对抗信息茧房和情绪操控",
   "scenes": [
     {
       "sceneId": "scene_1",
-      "sceneName": "引出问题：恐慌与焦虑的来源",
+      "sceneName": "引出恐慌感和焦虑感",
       "text": "你是不是也有过这种感觉？一提到坐飞机，心里就有点打鼓，脑子里下意识闪过坠机的新闻；一刷短视频，感觉某些国家天天都在零元购、街头枪战，觉得这世界实在太危险了。\n\n产生这种强烈的恐慌感和焦虑感，真不能怪咱们胆小，更不是咱们缺乏常识。要怪，就怪那些深谙流量密码的媒体算法，以及咱们人类大脑底层的出厂设置。你想啊，为了博眼球，媒体永远只会放大报道极端事件，“安全到达”永远上不了热搜，“机毁人亡”才会全网推送。再加上现在的算法，你越是害怕、越是愤怒多看了一眼，它就越是铺天盖地给你推。这其实是一套把人性弱点研究到极致的注意力收割术，咱们普通人就是这样不知不觉被困在了一个人为制造的“信息恐怖屋”里。"
     },
     {
       "sceneId": "scene_2",
-      "sceneName": "心理学解释：可得性启发偏见",
+      "sceneName": "可得性启发偏见",
       "text": "在心理学上，咱们这种容易被忽悠的现象，叫做“可得性启发”偏见。说人话就是：咱们的大脑其实特别偷懒，它在判断一件事常不常见时，完全取决于这件事在脑子里“好不好想起来”。\n因为你看过太多次耸人听闻的头条，极端画面深深印在了潜意识里。等你真要买机票时，大脑一检索，瞬间跳出无数空难画面，它就疯狂报警提示危险。但真实的数据是，飞机出事的概率，远比你骑电动车被撞的概率低得多。咱们必须认清一个残酷的真相：容易想起来，绝不等于很常见。 那些极端事件因为充满冲突和血腥，记忆点极强；而千万次平平无奇的安全起降，根本没资格进入你的记忆内存。咱们的直觉，就这样被媒体强行灌输的极端画面给劫持了。"
     },
     {
       "sceneId": "scene_3",
-      "sceneName": "解决方案：防御锦囊",
+      "sceneName": "防御锦囊",
       "text": "既然知道了大脑的这个Bug，咱们以后该怎么保护自己？给你两个极低门槛的防御锦囊：\n第一，警惕“情绪画面”。下次再被某条新闻吓住或者气到的时候，在心里默问自己一句话：“这件事是因为普遍发生我才看到，还是因为它足够离奇才上了热搜？”\n第二，用数据对抗直觉。当大脑告诉你“这很危险”时，随手搜一下真实的统计概率，让理性的数字接管情绪。\n在这个满屏都是情绪诱导和流量套路的时代，学会把“眼见为实”升级为“数据为实”。做自己大脑的主人，不当流量的提线木偶，就是咱们最高级的自我保护。"
     }
   ]
@@ -66,7 +66,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:44:57
+time: 2026-03-29 21:40:38
 model: gemini-2.0-flash
 retries: 3
 
@@ -74,8 +74,8 @@ retries: 3
 你是专业短视频编导，擅长镜头节奏设计。请将场景文案按「观众注意力节奏」拆解为独立镜头（Item），**本阶段只决定在哪里切分，不涉及任何模板**。
 
 ## 🎥 视频大背景
-- **核心主题**：如何对抗信息焦虑与恐慌
-- **当前场景**：引出问题：恐慌与焦虑的来源
+- **核心主题**：如何对抗信息茧房和情绪操控
+- **当前场景**：引出恐慌感和焦虑感
 
 ## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
 你是不是也有过这种感觉？一提到坐飞机，心里就有点打鼓，脑子里下意识闪过坠机的新闻；一刷短视频，感觉某些国家天天都在零元购、街头枪战，觉得这世界实在太危险了。
@@ -121,7 +121,6 @@ retries: 3
 {
   "items": [
     {
-      "order": 1,
       "text": "分配给该镜头的完整口播原文片段（必须原封不动）",
       "narrativeRole": "hook | explain | example | contrast | data | conclude | transition",
       "visualFocus": "一句话描述该镜头的视觉重心（如：两人对话场景、数据图表、人物特写）",
@@ -135,78 +134,72 @@ retries: 3
 
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:02
+time: 2026-03-29 21:40:43
 attempt: 1/3
 
 [OUTPUT]
 {
   "items": [
     {
-      "order": 1,
       "text": "你是不是也有过这种感觉？一提到坐飞机，心里就有点打鼓，脑子里下意识闪过坠机的新闻；一刷短视频，感觉某些国家天天都在零元购、街头枪战，觉得这世界实在太危险了。",
       "narrativeRole": "hook",
-      "visualFocus": "提出常见生活场景，引发共鸣",
-      "emotionTone": "calm",
+      "visualFocus": "提问，结合飞机、枪战等画面引发共鸣",
+      "emotionTone": "rising",
       "splitSignal": "strong",
-      "estimatedSeconds": 11.8,
-      "reasoning": "开篇引出问题，适合作为第一个镜头 -> 字数53 > 50，但作为整体hook不宜拆分 -> 情绪平静，叙事角色为提出问题。"
+      "estimatedSeconds": 9.8,
+      "reasoning": "Strong -> 44 字 -> 抛出问题，制造焦虑感，引出话题。"
     },
     {
-      "order": 2,
       "text": "产生这种强烈的恐慌感和焦虑感，真不能怪咱们胆小，更不是咱们缺乏常识。",
       "narrativeRole": "explain",
-      "visualFocus": "对上一镜头的现象进行解释，否定常见原因",
+      "visualFocus": "人物面部特写，否定观众的自我怀疑",
       "emotionTone": "calm",
       "splitSignal": "strong",
-      "estimatedSeconds": 5.8,
-      "reasoning": "叙事角色转换为解释，与上一镜头的hook形成转折 -> 字数26 -> 情绪平静"
+      "estimatedSeconds": 6.0,
+      "reasoning": "Strong -> 27 字 -> 否定，转折，开始解释原因。"
     },
     {
-      "order": 3,
       "text": "要怪，就怪那些深谙流量密码的媒体算法，以及咱们人类大脑底层的出厂设置。",
       "narrativeRole": "explain",
-      "visualFocus": "给出恐慌与焦虑的根本原因：媒体算法与大脑设置",
+      "visualFocus": "算法、大脑等抽象概念的具象化展示",
       "emotionTone": "calm",
       "splitSignal": "medium",
-      "estimatedSeconds": 5.1,
-      "reasoning": "对上一镜头的否定进行递进，给出真正原因 -> 字数23 -> 情绪平静"
+      "estimatedSeconds": 6.4,
+      "reasoning": "Medium -> 29 字 -> 继续解释原因，矛头指向媒体算法和人类大脑。"
     },
     {
-      "order": 4,
       "text": "你想啊，为了博眼球，媒体永远只会放大报道极端事件，“安全到达”永远上不了热搜，“机毁人亡”才会全网推送。",
-      "narrativeRole": "explain",
-      "visualFocus": "解释媒体算法如何导致恐慌，通过对比突出极端事件的传播",
-      "emotionTone": "calm",
-      "splitSignal": "medium",
-      "estimatedSeconds": 10.0,
-      "reasoning": "对媒体算法原因进行具体解释 -> 字数45 -> 情绪平静"
+      "narrativeRole": "example",
+      "visualFocus": "极端事件的画面，如飞机失事",
+      "emotionTone": "rising",
+      "splitSignal": "strong",
+      "estimatedSeconds": 9.3,
+      "reasoning": "Strong -> 42 字 -> 举例说明媒体如何放大极端事件。"
     },
     {
-      "order": 5,
       "text": "再加上现在的算法，你越是害怕、越是愤怒多看了一眼，它就越是铺天盖地给你推。",
       "narrativeRole": "explain",
-      "visualFocus": "解释算法如何加剧信息焦虑，强调算法的推送机制",
-      "emotionTone": "calm",
+      "visualFocus": "算法推荐机制的动态演示",
+      "emotionTone": "rising",
       "splitSignal": "medium",
-      "estimatedSeconds": 8.0,
-      "reasoning": "继续解释媒体算法原因 -> 字数36 -> 情绪平静"
+      "estimatedSeconds": 7.8,
+      "reasoning": "Medium -> 35 字 -> 解释算法如何加剧恐慌和焦虑。"
     },
     {
-      "order": 6,
       "text": "这其实是一套把人性弱点研究到极致的注意力收割术，咱们普通人就是这样不知不觉被困在了一个人为制造的“信息恐怖屋”里。",
       "narrativeRole": "conclude",
-      "visualFocus": "总结，将信息焦虑比作人为制造的“信息恐怖屋”",
-      "emotionTone": "calm",
+      "visualFocus": "信息茧房的视觉化呈现，困境",
+      "emotionTone": "peak",
       "splitSignal": "strong",
-      "estimatedSeconds": 10.2,
-      "reasoning": "对整个场景进行总结，点明主题 -> 字数46 -> 叙事角色转换为结论"
+      "estimatedSeconds": 11.1,
+      "reasoning": "Strong -> 50 字 -> 总结，点明主题，情绪推向高潮。"
     }
   ]
 }
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:02
+time: 2026-03-29 21:40:43
 model: gemini-2.0-flash
 retries: 3
 
@@ -214,76 +207,64 @@ retries: 3
 你是动画模板选型专家。根据已完成分镜的 items 元数据，为每个 item 从可用模板中选择最佳匹配。
 
 ## 🎥 视频大背景
-- **核心主题**：如何对抗信息焦虑与恐慌
-- **当前场景**：引出问题：恐慌与焦虑的来源
+- **核心主题**：如何对抗信息茧房和情绪操控
+- **当前场景**：引出恐慌感和焦虑感
 
 ## 📋 已分镜的 Items
 [
   {
-    "order": 1,
     "text": "你是不是也有过这种感觉？一提到坐飞机，心里就有点打鼓，脑子里下意识闪过坠机的新闻；一刷短视频，感觉某些国家天天都在零元购、街头枪战，觉得这世界实在太危险了。",
     "narrativeRole": "hook",
-    "visualFocus": "提出常见生活场景，引发共鸣",
-    "emotionTone": "calm",
+    "visualFocus": "提问，结合飞机、枪战等画面引发共鸣",
+    "emotionTone": "rising",
     "splitSignal": "strong",
-    "estimatedSeconds": 11.8,
-    "reasoning": "开篇引出问题，适合作为第一个镜头 -> 字数53 > 50，但作为整体hook不宜拆分 -> 情绪平静，叙事角色为提出问题。",
-    "groupKey": "solo_1"
+    "estimatedSeconds": 9.8,
+    "reasoning": "Strong -> 44 字 -> 抛出问题，制造焦虑感，引出话题。"
   },
   {
-    "order": 2,
     "text": "产生这种强烈的恐慌感和焦虑感，真不能怪咱们胆小，更不是咱们缺乏常识。",
     "narrativeRole": "explain",
-    "visualFocus": "对上一镜头的现象进行解释，否定常见原因",
+    "visualFocus": "人物面部特写，否定观众的自我怀疑",
     "emotionTone": "calm",
     "splitSignal": "strong",
-    "estimatedSeconds": 5.8,
-    "reasoning": "叙事角色转换为解释，与上一镜头的hook形成转折 -> 字数26 -> 情绪平静",
-    "groupKey": "solo_2"
+    "estimatedSeconds": 6.0,
+    "reasoning": "Strong -> 27 字 -> 否定，转折，开始解释原因。"
   },
   {
-    "order": 3,
     "text": "要怪，就怪那些深谙流量密码的媒体算法，以及咱们人类大脑底层的出厂设置。",
     "narrativeRole": "explain",
-    "visualFocus": "给出恐慌与焦虑的根本原因：媒体算法与大脑设置",
+    "visualFocus": "算法、大脑等抽象概念的具象化展示",
     "emotionTone": "calm",
     "splitSignal": "medium",
-    "estimatedSeconds": 5.1,
-    "reasoning": "对上一镜头的否定进行递进，给出真正原因 -> 字数23 -> 情绪平静",
-    "groupKey": "solo_3"
+    "estimatedSeconds": 6.4,
+    "reasoning": "Medium -> 29 字 -> 继续解释原因，矛头指向媒体算法和人类大脑。"
   },
   {
-    "order": 4,
     "text": "你想啊，为了博眼球，媒体永远只会放大报道极端事件，“安全到达”永远上不了热搜，“机毁人亡”才会全网推送。",
-    "narrativeRole": "explain",
-    "visualFocus": "解释媒体算法如何导致恐慌，通过对比突出极端事件的传播",
-    "emotionTone": "calm",
-    "splitSignal": "medium",
-    "estimatedSeconds": 10.0,
-    "reasoning": "对媒体算法原因进行具体解释 -> 字数45 -> 情绪平静",
-    "groupKey": "solo_4"
+    "narrativeRole": "example",
+    "visualFocus": "极端事件的画面，如飞机失事",
+    "emotionTone": "rising",
+    "splitSignal": "strong",
+    "estimatedSeconds": 9.3,
+    "reasoning": "Strong -> 42 字 -> 举例说明媒体如何放大极端事件。"
   },
   {
-    "order": 5,
     "text": "再加上现在的算法，你越是害怕、越是愤怒多看了一眼，它就越是铺天盖地给你推。",
     "narrativeRole": "explain",
-    "visualFocus": "解释算法如何加剧信息焦虑，强调算法的推送机制",
-    "emotionTone": "calm",
+    "visualFocus": "算法推荐机制的动态演示",
+    "emotionTone": "rising",
     "splitSignal": "medium",
-    "estimatedSeconds": 8.0,
-    "reasoning": "继续解释媒体算法原因 -> 字数36 -> 情绪平静",
-    "groupKey": "solo_5"
+    "estimatedSeconds": 7.8,
+    "reasoning": "Medium -> 35 字 -> 解释算法如何加剧恐慌和焦虑。"
   },
   {
-    "order": 6,
     "text": "这其实是一套把人性弱点研究到极致的注意力收割术，咱们普通人就是这样不知不觉被困在了一个人为制造的“信息恐怖屋”里。",
     "narrativeRole": "conclude",
-    "visualFocus": "总结，将信息焦虑比作人为制造的“信息恐怖屋”",
-    "emotionTone": "calm",
+    "visualFocus": "信息茧房的视觉化呈现，困境",
+    "emotionTone": "peak",
     "splitSignal": "strong",
-    "estimatedSeconds": 10.2,
-    "reasoning": "对整个场景进行总结，点明主题 -> 字数46 -> 叙事角色转换为结论",
-    "groupKey": "solo_6"
+    "estimatedSeconds": 11.1,
+    "reasoning": "Strong -> 50 字 -> 总结，点明主题，情绪推向高潮。"
   }
 ]
 
@@ -297,13 +278,13 @@ retries: 3
 
 - **`ALERT`** 仅用于强情绪、转折、冲击收束；禁止通篇堆砌。
 
-- **`BEAT_SEQUENCE`**：**同一 item、同一论证动作**内需要 2～4 个连续节拍（图随口播分段切换、情绪可 calm→alert）。用来避免为求变化而把连贯逻辑拆成多个零碎 item；`stages` 条数须与后续 `content` 条数一致。
+- **`BEAT_SEQUENCE`**：**同一 item、同一论证动作**内需要 2～4 个连续节拍（图随口播分段切换、情绪可 calm→alert）。用来避免为求变化而把连贯逻辑拆成多个零碎 item；`stages` 条数须与后续台词分段数一致。
 
 - **`STEP_LIST`**：仅用于**短步骤 / 短分点 / 强清单感**内容。若单个 item 是“方法标题/提醒标题 + 解释展开”，优先改用 **`METHOD_STACK`**；不要把解释型口播硬塞成纯清单。
 
 - **`METHOD_STACK`**：适合**单个 item 内的一个方法/提醒/观点标题**，后面继续跟 2～4 句解释展开。用“标题 + 单图 + 解释条”承接一个完整叙事，不要拿它去跨 item 合并多个方法。
 
-- **`MAGNIFYING_GLASS`** 仅当该 item 可提供非空 `anchors`（通过 `showFrom` 关联 content 索引）时使用；否则换其他模板。
+- **`MAGNIFYING_GLASS`** 仅当该 item 可提供非空 `anchors`（通过 `showFrom` 关联台词索引）时使用；否则换其他模板。
 
 - **`LIST_MULTI_GROUP`**：**同一论证下的多分点并列**（2～4 个可独立成画的主体），**优先用单 item + `LIST_MULTI_GROUP` 覆盖全部分点**，而不是每个分点各开一个 item。若当前 item 只是“给你两个方法：”这类总起句、真正分点已经拆到后续 item，**禁止**用 `LIST_MULTI_GROUP` 去脑补多组。该模板只输出 `groups`，每组使用 `textIndex + image + 可选 anchor`。禁止因「评论区混战」等笼统画面硬凑多图；单一比喻、无清晰分点仍用 `CENTER_FOCUS` 或 `ALERT`。
 
@@ -374,8 +355,8 @@ retries: 3
 
 ### MAGNIFYING_GLASS
 
-仅需 `content` 数组。
-- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based content 索引）。
+无需额外参数。
+- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based 台词分段索引）。
 
 ### PROGRESS_RING
 
@@ -406,14 +387,14 @@ retries: 3
 
 ### STEP_LIST
 
-仅需 `content` 数组。
-- *建议*：content 至少 2 条；至多 6 条。
+无需额外参数。
+- *建议*：台词至少 2 段；至多 6 段。
 
 ### TEXT_FOCUS
 
 - `coreSentence` (必填): 精炼核心句，不超过25个字
 - `anchors` (可选): 锚点数组，用于高亮正文中的子串，每项含 text、showFrom、color；使用 coreSentence 时锚点词须出现在 coreSentence 内
-- *建议*：至多 3 条。
+- *建议*：至多 3 段。
 
 
 ### TIMELINE
@@ -481,7 +462,6 @@ retries: 3
 {
   "items": [
     {
-      "order": 1,
       "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
       "reasoning": "决策树匹配路径 -> 命中 Step___ -> 最终选型理由 -> 连续性检查结论",
       "template": "选定的模板名称（必须来自指南）",
@@ -492,52 +472,46 @@ retries: 3
 
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:08
+time: 2026-03-29 21:40:48
 attempt: 1/3
 
 [OUTPUT]
 {
   "items": [
     {
-      "order": 1,
       "narrativeType": "HOOK",
-      "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：首个镜头，无需检查连续性",
+      "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4/5/6/7 -> 默认 -> 选用 CENTER_FOCUS",
       "template": "CENTER_FOCUS",
       "text": "你是不是也有过这种感觉？一提到坐飞机，心里就有点打鼓，脑子里下意识闪过坠机的新闻；一刷短视频，感觉某些国家天天都在零元购、街头枪战，觉得这世界实在太危险了。"
     },
     {
-      "order": 2,
       "narrativeType": "LOGIC",
-      "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
+      "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4/5/6/7 -> 默认 -> 选用 CENTER_FOCUS",
       "template": "CENTER_FOCUS",
       "text": "产生这种强烈的恐慌感和焦虑感，真不能怪咱们胆小，更不是咱们缺乏常识。"
     },
     {
-      "order": 3,
       "narrativeType": "LOGIC",
-      "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
-      "template": "CENTER_FOCUS",
+      "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4 -> 解释专业概念 -> 选用 CONCEPT_CARD",
+      "template": "CONCEPT_CARD",
       "text": "要怪，就怪那些深谙流量密码的媒体算法，以及咱们人类大脑底层的出厂设置。"
     },
     {
-      "order": 4,
-      "narrativeType": "LOGIC",
-      "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
-      "template": "CENTER_FOCUS",
+      "narrativeType": "CASE",
+      "reasoning": "决策树匹配路径 -> 未命中 Step 1/3/4 -> Step 2: 媒体行为 vs 安全到达 对比 -> 选用 SPLIT_COMPARE",
+      "template": "SPLIT_COMPARE",
       "text": "你想啊，为了博眼球，媒体永远只会放大报道极端事件，“安全到达”永远上不了热搜，“机毁人亡”才会全网推送。"
     },
     {
-      "order": 5,
       "narrativeType": "LOGIC",
-      "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
+      "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4/5/6/7 -> 默认 -> 选用 CENTER_FOCUS",
       "template": "CENTER_FOCUS",
       "text": "再加上现在的算法，你越是害怕、越是愤怒多看了一眼，它就越是铺天盖地给你推。"
     },
     {
-      "order": 6,
       "narrativeType": "CONCLUSION",
-      "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
-      "template": "CENTER_FOCUS",
+      "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4 -> Step 5: 强结论/高冲击表达 -> 选用 TEXT_FOCUS",
+      "template": "TEXT_FOCUS",
       "text": "这其实是一套把人性弱点研究到极致的注意力收割术，咱们普通人就是这样不知不觉被困在了一个人为制造的“信息恐怖屋”里。"
     }
   ]
@@ -545,7 +519,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:08
+time: 2026-03-29 21:40:48
 model: gemini-2.0-flash
 retries: 3
 
@@ -553,8 +527,8 @@ retries: 3
 你是专业短视频编导，擅长镜头节奏设计。请将场景文案按「观众注意力节奏」拆解为独立镜头（Item），**本阶段只决定在哪里切分，不涉及任何模板**。
 
 ## 🎥 视频大背景
-- **核心主题**：如何对抗信息焦虑与恐慌
-- **当前场景**：心理学解释：可得性启发偏见
+- **核心主题**：如何对抗信息茧房和情绪操控
+- **当前场景**：可得性启发偏见
 
 ## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
 在心理学上，咱们这种容易被忽悠的现象，叫做“可得性启发”偏见。说人话就是：咱们的大脑其实特别偷懒，它在判断一件事常不常见时，完全取决于这件事在脑子里“好不好想起来”。
@@ -599,7 +573,6 @@ retries: 3
 {
   "items": [
     {
-      "order": 1,
       "text": "分配给该镜头的完整口播原文片段（必须原封不动）",
       "narrativeRole": "hook | explain | example | contrast | data | conclude | transition",
       "visualFocus": "一句话描述该镜头的视觉重心（如：两人对话场景、数据图表、人物特写）",
@@ -613,98 +586,90 @@ retries: 3
 
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:14
+time: 2026-03-29 21:40:55
 attempt: 1/3
 
 [OUTPUT]
 {
   "items": [
     {
-      "order": 1,
       "text": "在心理学上，咱们这种容易被忽悠的现象，叫做“可得性启发”偏见。",
       "narrativeRole": "explain",
-      "visualFocus": "心理学概念讲解",
+      "visualFocus": "心理学概念介绍",
       "emotionTone": "calm",
       "splitSignal": "strong",
-      "estimatedSeconds": 5.6,
-      "reasoning": "strong：定义解释，适合作为开场。字数25，预估5.6秒。引入新概念。"
+      "estimatedSeconds": 5.1,
+      "reasoning": "Strong: 场景开篇，介绍核心概念。字数适中（23字），叙事角色为定义解释，是新话题的开始。"
     },
     {
-      "order": 2,
       "text": "说人话就是：咱们的大脑其实特别偷懒，它在判断一件事常不常见时，完全取决于这件事在脑子里“好不好想起来”。",
       "narrativeRole": "explain",
-      "visualFocus": "大脑偷懒的形象化描述",
+      "visualFocus": "大脑工作原理示意",
       "emotionTone": "calm",
       "splitSignal": "medium",
-      "estimatedSeconds": 7.8,
-      "reasoning": "medium：对上一句的解释，但句子较长。字数35，预估7.8秒。继续解释概念。"
+      "estimatedSeconds": 8.0,
+      "reasoning": "Medium: 解释“可得性启发”偏见的具体表现。字数较多（36字），但仍然围绕同一个概念进行阐述，可以考虑合并。叙事角色未变。"
     },
     {
-      "order": 3,
       "text": "因为你看过太多次耸人听闻的头条，极端画面深深印在了潜意识里。",
       "narrativeRole": "example",
-      "visualFocus": "耸人听闻的头条画面",
+      "visualFocus": "耸人听闻的新闻头条画面",
       "emotionTone": "calm",
       "splitSignal": "strong",
       "estimatedSeconds": 5.3,
-      "reasoning": "strong：转为举例说明。字数24，预估5.3秒。叙事角色转换：从解释到举例。"
+      "reasoning": "Strong：叙事角色发生转变，从解释定义转为举例说明。视觉主体变化。字数适中（24字）。"
     },
     {
-      "order": 4,
       "text": "等你真要买机票时，大脑一检索，瞬间跳出无数空难画面，它就疯狂报警提示危险。",
       "narrativeRole": "example",
-      "visualFocus": "买机票时的心理活动",
+      "visualFocus": "购买机票时的心理活动模拟",
       "emotionTone": "rising",
       "splitSignal": "medium",
-      "estimatedSeconds": 7.3,
-      "reasoning": "medium：继续举例，但句子较长。字数33，预估7.3秒。延续举例，更具体场景。"
+      "estimatedSeconds": 6.9,
+      "reasoning": "Medium：继续围绕“可得性启发”举例说明。字数较多（31字），但视觉主体和叙事角色没有发生根本变化。"
     },
     {
-      "order": 5,
       "text": "但真实的数据是，飞机出事的概率，远比你骑电动车被撞的概率低得多。",
       "narrativeRole": "contrast",
-      "visualFocus": "飞机和电动车的对比数据",
+      "visualFocus": "飞机安全数据与事故数据对比",
       "emotionTone": "calm",
       "splitSignal": "strong",
-      "estimatedSeconds": 7.1,
-      "reasoning": "strong：用数据对比进行转折。字数32，预估7.1秒。叙事角色转换：举例到数据对比。"
+      "estimatedSeconds": 6.2,
+      "reasoning": "Strong：叙事角色转换为数据对比，对之前的例子进行反驳。视觉主体更换为数据图表。字数适中（28字）。"
     },
     {
-      "order": 6,
       "text": "咱们必须认清一个残酷的真相：容易想起来，绝不等于很常见。",
       "narrativeRole": "conclude",
-      "visualFocus": "残酷真相的揭示",
+      "visualFocus": "强调真相",
       "emotionTone": "resolving",
       "splitSignal": "strong",
-      "estimatedSeconds": 5.8,
-      "reasoning": "strong：结论，需要强调。字数26，预估5.8秒。叙事角色转换：数据对比到结论。"
+      "estimatedSeconds": 4.9,
+      "reasoning": "Strong: 过渡到结论，点明真相，情绪上有所转变。字数适中（22字）。"
     },
     {
-      "order": 7,
       "text": "那些极端事件因为充满冲突和血腥，记忆点极强；而千万次平平无奇的安全起降，根本没资格进入你的记忆内存。",
       "narrativeRole": "explain",
       "visualFocus": "极端事件与普通事件的对比",
       "emotionTone": "calm",
-      "splitSignal": "medium",
-      "estimatedSeconds": 10.9,
-      "reasoning": "medium：解释原因，句子较长。字数49，预估10.9秒。解释结论的原因。"
+      "splitSignal": "strong",
+      "estimatedSeconds": 10.4,
+      "reasoning": "Strong：解释原因，从极端事件与普通事件的对比角度进行说明。字数较多（47字），叙事内容完整，不宜拆分。视觉重心发生变化。"
     },
     {
-      "order": 8,
       "text": "咱们的直觉，就这样被媒体强行灌输的极端画面给劫持了。",
       "narrativeRole": "conclude",
       "visualFocus": "直觉被劫持的画面",
       "emotionTone": "resolving",
       "splitSignal": "strong",
       "estimatedSeconds": 6.2,
-      "reasoning": "strong：总结，点明主题。字数28，预估6.2秒。再次强调结论。"
+      "reasoning": "Strong: 总结，再次强调媒体的影响。字数适中（28字）。"
     }
   ]
 }
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:14
+time: 2026-03-29 21:40:55
 model: gemini-2.0-flash
 retries: 3
 
@@ -712,98 +677,82 @@ retries: 3
 你是动画模板选型专家。根据已完成分镜的 items 元数据，为每个 item 从可用模板中选择最佳匹配。
 
 ## 🎥 视频大背景
-- **核心主题**：如何对抗信息焦虑与恐慌
-- **当前场景**：心理学解释：可得性启发偏见
+- **核心主题**：如何对抗信息茧房和情绪操控
+- **当前场景**：可得性启发偏见
 
 ## 📋 已分镜的 Items
 [
   {
-    "order": 1,
     "text": "在心理学上，咱们这种容易被忽悠的现象，叫做“可得性启发”偏见。",
     "narrativeRole": "explain",
-    "visualFocus": "心理学概念讲解",
+    "visualFocus": "心理学概念介绍",
     "emotionTone": "calm",
     "splitSignal": "strong",
-    "estimatedSeconds": 5.6,
-    "reasoning": "strong：定义解释，适合作为开场。字数25，预估5.6秒。引入新概念。",
-    "groupKey": "solo_1"
+    "estimatedSeconds": 5.1,
+    "reasoning": "Strong: 场景开篇，介绍核心概念。字数适中（23字），叙事角色为定义解释，是新话题的开始。"
   },
   {
-    "order": 2,
     "text": "说人话就是：咱们的大脑其实特别偷懒，它在判断一件事常不常见时，完全取决于这件事在脑子里“好不好想起来”。",
     "narrativeRole": "explain",
-    "visualFocus": "大脑偷懒的形象化描述",
+    "visualFocus": "大脑工作原理示意",
     "emotionTone": "calm",
     "splitSignal": "medium",
-    "estimatedSeconds": 7.8,
-    "reasoning": "medium：对上一句的解释，但句子较长。字数35，预估7.8秒。继续解释概念。",
-    "groupKey": "solo_2"
+    "estimatedSeconds": 8.0,
+    "reasoning": "Medium: 解释“可得性启发”偏见的具体表现。字数较多（36字），但仍然围绕同一个概念进行阐述，可以考虑合并。叙事角色未变。"
   },
   {
-    "order": 3,
     "text": "因为你看过太多次耸人听闻的头条，极端画面深深印在了潜意识里。",
     "narrativeRole": "example",
-    "visualFocus": "耸人听闻的头条画面",
+    "visualFocus": "耸人听闻的新闻头条画面",
     "emotionTone": "calm",
     "splitSignal": "strong",
     "estimatedSeconds": 5.3,
-    "reasoning": "strong：转为举例说明。字数24，预估5.3秒。叙事角色转换：从解释到举例。",
-    "groupKey": "solo_3"
+    "reasoning": "Strong：叙事角色发生转变，从解释定义转为举例说明。视觉主体变化。字数适中（24字）。"
   },
   {
-    "order": 4,
     "text": "等你真要买机票时，大脑一检索，瞬间跳出无数空难画面，它就疯狂报警提示危险。",
     "narrativeRole": "example",
-    "visualFocus": "买机票时的心理活动",
+    "visualFocus": "购买机票时的心理活动模拟",
     "emotionTone": "rising",
     "splitSignal": "medium",
-    "estimatedSeconds": 7.3,
-    "reasoning": "medium：继续举例，但句子较长。字数33，预估7.3秒。延续举例，更具体场景。",
-    "groupKey": "solo_4"
+    "estimatedSeconds": 6.9,
+    "reasoning": "Medium：继续围绕“可得性启发”举例说明。字数较多（31字），但视觉主体和叙事角色没有发生根本变化。"
   },
   {
-    "order": 5,
     "text": "但真实的数据是，飞机出事的概率，远比你骑电动车被撞的概率低得多。",
     "narrativeRole": "contrast",
-    "visualFocus": "飞机和电动车的对比数据",
+    "visualFocus": "飞机安全数据与事故数据对比",
     "emotionTone": "calm",
     "splitSignal": "strong",
-    "estimatedSeconds": 7.1,
-    "reasoning": "strong：用数据对比进行转折。字数32，预估7.1秒。叙事角色转换：举例到数据对比。",
-    "groupKey": "solo_5"
+    "estimatedSeconds": 6.2,
+    "reasoning": "Strong：叙事角色转换为数据对比，对之前的例子进行反驳。视觉主体更换为数据图表。字数适中（28字）。"
   },
   {
-    "order": 6,
     "text": "咱们必须认清一个残酷的真相：容易想起来，绝不等于很常见。",
     "narrativeRole": "conclude",
-    "visualFocus": "残酷真相的揭示",
+    "visualFocus": "强调真相",
     "emotionTone": "resolving",
     "splitSignal": "strong",
-    "estimatedSeconds": 5.8,
-    "reasoning": "strong：结论，需要强调。字数26，预估5.8秒。叙事角色转换：数据对比到结论。",
-    "groupKey": "solo_6"
+    "estimatedSeconds": 4.9,
+    "reasoning": "Strong: 过渡到结论，点明真相，情绪上有所转变。字数适中（22字）。"
   },
   {
-    "order": 7,
     "text": "那些极端事件因为充满冲突和血腥，记忆点极强；而千万次平平无奇的安全起降，根本没资格进入你的记忆内存。",
     "narrativeRole": "explain",
     "visualFocus": "极端事件与普通事件的对比",
     "emotionTone": "calm",
-    "splitSignal": "medium",
-    "estimatedSeconds": 10.9,
-    "reasoning": "medium：解释原因，句子较长。字数49，预估10.9秒。解释结论的原因。",
-    "groupKey": "solo_7"
+    "splitSignal": "strong",
+    "estimatedSeconds": 10.4,
+    "reasoning": "Strong：解释原因，从极端事件与普通事件的对比角度进行说明。字数较多（47字），叙事内容完整，不宜拆分。视觉重心发生变化。"
   },
   {
-    "order": 8,
     "text": "咱们的直觉，就这样被媒体强行灌输的极端画面给劫持了。",
     "narrativeRole": "conclude",
     "visualFocus": "直觉被劫持的画面",
     "emotionTone": "resolving",
     "splitSignal": "strong",
     "estimatedSeconds": 6.2,
-    "reasoning": "strong：总结，点明主题。字数28，预估6.2秒。再次强调结论。",
-    "groupKey": "solo_8"
+    "reasoning": "Strong: 总结，再次强调媒体的影响。字数适中（28字）。"
   }
 ]
 
@@ -817,13 +766,13 @@ retries: 3
 
 - **`ALERT`** 仅用于强情绪、转折、冲击收束；禁止通篇堆砌。
 
-- **`BEAT_SEQUENCE`**：**同一 item、同一论证动作**内需要 2～4 个连续节拍（图随口播分段切换、情绪可 calm→alert）。用来避免为求变化而把连贯逻辑拆成多个零碎 item；`stages` 条数须与后续 `content` 条数一致。
+- **`BEAT_SEQUENCE`**：**同一 item、同一论证动作**内需要 2～4 个连续节拍（图随口播分段切换、情绪可 calm→alert）。用来避免为求变化而把连贯逻辑拆成多个零碎 item；`stages` 条数须与后续台词分段数一致。
 
 - **`STEP_LIST`**：仅用于**短步骤 / 短分点 / 强清单感**内容。若单个 item 是“方法标题/提醒标题 + 解释展开”，优先改用 **`METHOD_STACK`**；不要把解释型口播硬塞成纯清单。
 
 - **`METHOD_STACK`**：适合**单个 item 内的一个方法/提醒/观点标题**，后面继续跟 2～4 句解释展开。用“标题 + 单图 + 解释条”承接一个完整叙事，不要拿它去跨 item 合并多个方法。
 
-- **`MAGNIFYING_GLASS`** 仅当该 item 可提供非空 `anchors`（通过 `showFrom` 关联 content 索引）时使用；否则换其他模板。
+- **`MAGNIFYING_GLASS`** 仅当该 item 可提供非空 `anchors`（通过 `showFrom` 关联台词索引）时使用；否则换其他模板。
 
 - **`LIST_MULTI_GROUP`**：**同一论证下的多分点并列**（2～4 个可独立成画的主体），**优先用单 item + `LIST_MULTI_GROUP` 覆盖全部分点**，而不是每个分点各开一个 item。若当前 item 只是“给你两个方法：”这类总起句、真正分点已经拆到后续 item，**禁止**用 `LIST_MULTI_GROUP` 去脑补多组。该模板只输出 `groups`，每组使用 `textIndex + image + 可选 anchor`。禁止因「评论区混战」等笼统画面硬凑多图；单一比喻、无清晰分点仍用 `CENTER_FOCUS` 或 `ALERT`。
 
@@ -894,8 +843,8 @@ retries: 3
 
 ### MAGNIFYING_GLASS
 
-仅需 `content` 数组。
-- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based content 索引）。
+无需额外参数。
+- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based 台词分段索引）。
 
 ### PROGRESS_RING
 
@@ -926,14 +875,14 @@ retries: 3
 
 ### STEP_LIST
 
-仅需 `content` 数组。
-- *建议*：content 至少 2 条；至多 6 条。
+无需额外参数。
+- *建议*：台词至少 2 段；至多 6 段。
 
 ### TEXT_FOCUS
 
 - `coreSentence` (必填): 精炼核心句，不超过25个字
 - `anchors` (可选): 锚点数组，用于高亮正文中的子串，每项含 text、showFrom、color；使用 coreSentence 时锚点词须出现在 coreSentence 内
-- *建议*：至多 3 条。
+- *建议*：至多 3 段。
 
 
 ### TIMELINE
@@ -1001,7 +950,6 @@ retries: 3
 {
   "items": [
     {
-      "order": 1,
       "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
       "reasoning": "决策树匹配路径 -> 命中 Step___ -> 最终选型理由 -> 连续性检查结论",
       "template": "选定的模板名称（必须来自指南）",
@@ -1012,65 +960,57 @@ retries: 3
 
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:20
+time: 2026-03-29 21:40:59
 attempt: 1/3
 
 [OUTPUT]
 {
   "items": [
     {
-      "order": 1,
       "narrativeType": "LOGIC",
-      "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
-      "template": "CENTER_FOCUS",
+      "reasoning": "决策树匹配路径 -> 命中 Step4 -> 解释专业概念/术语 -> CONCEPT_CARD",
+      "template": "CONCEPT_CARD",
       "text": "在心理学上，咱们这种容易被忽悠的现象，叫做“可得性启发”偏见。"
     },
     {
-      "order": 2,
       "narrativeType": "LOGIC",
-      "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
+      "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
       "template": "CENTER_FOCUS",
       "text": "说人话就是：咱们的大脑其实特别偷懒，它在判断一件事常不常见时，完全取决于这件事在脑子里“好不好想起来”。"
     },
     {
-      "order": 3,
       "narrativeType": "CASE",
-      "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
+      "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
       "template": "CENTER_FOCUS",
       "text": "因为你看过太多次耸人听闻的头条，极端画面深深印在了潜意识里。"
     },
     {
-      "order": 4,
       "narrativeType": "CASE",
-      "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
+      "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
       "template": "CENTER_FOCUS",
       "text": "等你真要买机票时，大脑一检索，瞬间跳出无数空难画面，它就疯狂报警提示危险。"
     },
     {
-      "order": 5,
       "narrativeType": "DATA",
-      "reasoning": "决策树匹配路径 -> 命中 Step 1（数据型）-> 飞机出事的概率和骑电动车被撞的概率对比 -> STAT_COMPARE",
+      "reasoning": "决策树匹配路径 -> 命中 Step2 -> 数据对比 -> STAT_COMPARE",
       "template": "STAT_COMPARE",
       "text": "但真实的数据是，飞机出事的概率，远比你骑电动车被撞的概率低得多。"
     },
     {
-      "order": 6,
       "narrativeType": "CONCLUSION",
-      "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型 -> 命中高情绪/冲击型 -> 金句/核心结论 -> TEXT_FOCUS",
+      "reasoning": "决策树匹配路径 -> 命中 Step5 -> 核心结论/升华 -> TEXT_FOCUS",
       "template": "TEXT_FOCUS",
       "text": "咱们必须认清一个残酷的真相：容易想起来，绝不等于很常见。"
     },
     {
-      "order": 7,
       "narrativeType": "LOGIC",
-      "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
+      "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
       "template": "CENTER_FOCUS",
       "text": "那些极端事件因为充满冲突和血腥，记忆点极强；而千万次平平无奇的安全起降，根本没资格进入你的记忆内存。"
     },
     {
-      "order": 8,
       "narrativeType": "CONCLUSION",
-      "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型 -> 命中高情绪/冲击型 -> 冲击收束 -> TEXT_FOCUS",
+      "reasoning": "决策树匹配路径 -> 命中 Step5 -> 核心结论/升华 -> TEXT_FOCUS",
       "template": "TEXT_FOCUS",
       "text": "咱们的直觉，就这样被媒体强行灌输的极端画面给劫持了。"
     }
@@ -1079,7 +1019,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:20
+time: 2026-03-29 21:40:59
 model: gemini-2.0-flash
 retries: 3
 
@@ -1087,8 +1027,8 @@ retries: 3
 你是专业短视频编导，擅长镜头节奏设计。请将场景文案按「观众注意力节奏」拆解为独立镜头（Item），**本阶段只决定在哪里切分，不涉及任何模板**。
 
 ## 🎥 视频大背景
-- **核心主题**：如何对抗信息焦虑与恐慌
-- **当前场景**：解决方案：防御锦囊
+- **核心主题**：如何对抗信息茧房和情绪操控
+- **当前场景**：防御锦囊
 
 ## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
 既然知道了大脑的这个Bug，咱们以后该怎么保护自己？给你两个极低门槛的防御锦囊：
@@ -1135,7 +1075,6 @@ retries: 3
 {
   "items": [
     {
-      "order": 1,
       "text": "分配给该镜头的完整口播原文片段（必须原封不动）",
       "narrativeRole": "hook | explain | example | contrast | data | conclude | transition",
       "visualFocus": "一句话描述该镜头的视觉重心（如：两人对话场景、数据图表、人物特写）",
@@ -1149,98 +1088,72 @@ retries: 3
 
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:26
+time: 2026-03-29 21:41:05
 attempt: 1/3
 
 [OUTPUT]
 {
   "items": [
     {
-      "order": 1,
       "text": "既然知道了大脑的这个Bug，咱们以后该怎么保护自己？",
       "narrativeRole": "hook",
-      "visualFocus": "提出问题，引出解决方案",
+      "visualFocus": "疑问表情的人物近景",
       "emotionTone": "calm",
       "splitSignal": "strong",
-      "estimatedSeconds": 4.7,
-      "reasoning": "strong -> 21字/4.7秒 -> hook -> 场景开场，引出话题"
+      "estimatedSeconds": 5.3,
+      "reasoning": "开场提问，引出解决方案。字数适中。叙事角色从背景铺垫转为解决方案。与前文是话题的自然过渡。"
     },
     {
-      "order": 2,
       "text": "给你两个极低门槛的防御锦囊：",
       "narrativeRole": "transition",
-      "visualFocus": "展示两个锦囊",
+      "visualFocus": "展示两个锦囊的示意画面",
       "emotionTone": "calm",
       "splitSignal": "strong",
       "estimatedSeconds": 3.1,
-      "reasoning": "strong -> 14字/3.1秒 -> transition -> 从问题过渡到解决方案"
+      "reasoning": "过渡句，引出两个具体方法。字数较少，但叙事角色转为承上启下，画面视觉主体转为“锦囊”。"
     },
     {
-      "order": 3,
-      "text": "第一，警惕“情绪画面”。",
+      "text": "第一，警惕“情绪画面”。下次再被某条新闻吓住或者气到的时候，在心里默问自己一句话：“这件事是因为普遍发生我才看到，还是因为它足够离奇才上了热搜？”",
       "narrativeRole": "explain",
-      "visualFocus": "强调“情绪画面”",
+      "visualFocus": "新闻画面和人物情绪变化的快速剪辑",
       "emotionTone": "calm",
       "splitSignal": "strong",
-      "estimatedSeconds": 2.4,
-      "reasoning": "strong -> 11字/2.4秒 -> explain -> 提出第一个解决方案，独立性强，但字数过少，与下一句合并"
+      "estimatedSeconds": 12.4,
+      "reasoning": "第一个锦囊的内容，包含标题、解释和反思问题，叙事完整，不应拆分。字数较多，但内容紧密，不拆分。"
     },
     {
-      "order": 4,
-      "text": "下次再被某条新闻吓住或者气到的时候，在心里默问自己一句话：“这件事是因为普遍发生我才看到，还是因为它足够离奇才上了热搜？”",
+      "text": "第二，用数据对抗直觉。当大脑告诉你“这很危险”时，随手搜一下真实的统计概率，让理性的数字接管情绪。",
       "narrativeRole": "explain",
-      "visualFocus": "引导观众思考新闻的来源",
+      "visualFocus": "数据图表和大脑的对比画面",
       "emotionTone": "calm",
-      "splitSignal": "medium",
+      "splitSignal": "strong",
       "estimatedSeconds": 9.8,
-      "reasoning": "medium -> 44字/9.8秒 -> explain -> 解释第一个解决方案，字数较多但属于同一建议，可以考虑多节拍切换"
+      "reasoning": "第二个锦囊的内容，包含标题、解释和行动建议，叙事完整，不应拆分。与前一个锦囊之间是并列关系。"
     },
     {
-      "order": 5,
-      "text": "第二，用数据对抗直觉。",
-      "narrativeRole": "explain",
-      "visualFocus": "强调“数据”",
-      "emotionTone": "calm",
-      "splitSignal": "strong",
-      "estimatedSeconds": 2.9,
-      "reasoning": "strong -> 13字/2.9秒 -> explain -> 提出第二个解决方案，独立性强，字数略少，与下一句合并"
-    },
-    {
-      "order": 6,
-      "text": "当大脑告诉你“这很危险”时，随手搜一下真实的统计概率，让理性的数字接管情绪。",
-      "narrativeRole": "explain",
-      "visualFocus": "展示数据图表",
-      "emotionTone": "calm",
-      "splitSignal": "medium",
-      "estimatedSeconds": 8.0,
-      "reasoning": "medium -> 36字/8.0秒 -> explain -> 解释第二个解决方案，与上一句属于同一建议"
-    },
-    {
-      "order": 7,
       "text": "在这个满屏都是情绪诱导和流量套路的时代，学会把“眼见为实”升级为“数据为实”。",
       "narrativeRole": "conclude",
-      "visualFocus": "强调升级认知的重要性",
+      "visualFocus": "混乱的信息流和冷静的数据分析的对比",
       "emotionTone": "calm",
       "splitSignal": "strong",
-      "estimatedSeconds": 8.7,
-      "reasoning": "strong -> 39字/8.7秒 -> conclude -> 总结并提出更高阶的认知升级"
+      "estimatedSeconds": 7.8,
+      "reasoning": "总结强调，字数适中，与前后内容紧密关联，但视觉主体转为对信息时代现象的批判。"
     },
     {
-      "order": 8,
       "text": "做自己大脑的主人，不当流量的提线木偶，就是咱们最高级的自我保护。",
       "narrativeRole": "conclude",
-      "visualFocus": "呼吁自主思考",
-      "emotionTone": "calm",
-      "splitSignal": "strong",
-      "estimatedSeconds": 8.4,
-      "reasoning": "strong -> 38字/8.4秒 -> conclude -> 再次强调自主思考的重要性，作为结尾收束"
+      "visualFocus": "人物掌控大脑和摆脱提线木偶的画面",
+      "emotionTone": "resolving",
+      "splitSignal": "medium",
+      "estimatedSeconds": 6.2,
+      "reasoning": "结尾升华，点明主题。字数适中。叙事角色从说理转为行动号召/结论。与前文是递进关系。"
     }
   ]
 }
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:26
+time: 2026-03-29 21:41:05
 model: gemini-2.0-flash
 retries: 3
 
@@ -1248,98 +1161,64 @@ retries: 3
 你是动画模板选型专家。根据已完成分镜的 items 元数据，为每个 item 从可用模板中选择最佳匹配。
 
 ## 🎥 视频大背景
-- **核心主题**：如何对抗信息焦虑与恐慌
-- **当前场景**：解决方案：防御锦囊
+- **核心主题**：如何对抗信息茧房和情绪操控
+- **当前场景**：防御锦囊
 
 ## 📋 已分镜的 Items
 [
   {
-    "order": 1,
     "text": "既然知道了大脑的这个Bug，咱们以后该怎么保护自己？",
     "narrativeRole": "hook",
-    "visualFocus": "提出问题，引出解决方案",
+    "visualFocus": "疑问表情的人物近景",
     "emotionTone": "calm",
     "splitSignal": "strong",
-    "estimatedSeconds": 4.7,
-    "reasoning": "strong -> 21字/4.7秒 -> hook -> 场景开场，引出话题",
-    "groupKey": "solo_1"
+    "estimatedSeconds": 5.3,
+    "reasoning": "开场提问，引出解决方案。字数适中。叙事角色从背景铺垫转为解决方案。与前文是话题的自然过渡。"
   },
   {
-    "order": 2,
     "text": "给你两个极低门槛的防御锦囊：",
     "narrativeRole": "transition",
-    "visualFocus": "展示两个锦囊",
+    "visualFocus": "展示两个锦囊的示意画面",
     "emotionTone": "calm",
     "splitSignal": "strong",
     "estimatedSeconds": 3.1,
-    "reasoning": "strong -> 14字/3.1秒 -> transition -> 从问题过渡到解决方案",
-    "groupKey": "solo_2"
+    "reasoning": "过渡句，引出两个具体方法。字数较少，但叙事角色转为承上启下，画面视觉主体转为“锦囊”。"
   },
   {
-    "order": 3,
-    "text": "第一，警惕“情绪画面”。",
+    "text": "第一，警惕“情绪画面”。下次再被某条新闻吓住或者气到的时候，在心里默问自己一句话：“这件事是因为普遍发生我才看到，还是因为它足够离奇才上了热搜？”",
     "narrativeRole": "explain",
-    "visualFocus": "强调“情绪画面”",
+    "visualFocus": "新闻画面和人物情绪变化的快速剪辑",
     "emotionTone": "calm",
     "splitSignal": "strong",
-    "estimatedSeconds": 2.4,
-    "reasoning": "strong -> 11字/2.4秒 -> explain -> 提出第一个解决方案，独立性强，但字数过少，与下一句合并",
-    "groupKey": "solo_3"
+    "estimatedSeconds": 12.4,
+    "reasoning": "第一个锦囊的内容，包含标题、解释和反思问题，叙事完整，不应拆分。字数较多，但内容紧密，不拆分。"
   },
   {
-    "order": 4,
-    "text": "下次再被某条新闻吓住或者气到的时候，在心里默问自己一句话：“这件事是因为普遍发生我才看到，还是因为它足够离奇才上了热搜？”",
+    "text": "第二，用数据对抗直觉。当大脑告诉你“这很危险”时，随手搜一下真实的统计概率，让理性的数字接管情绪。",
     "narrativeRole": "explain",
-    "visualFocus": "引导观众思考新闻的来源",
+    "visualFocus": "数据图表和大脑的对比画面",
     "emotionTone": "calm",
-    "splitSignal": "medium",
+    "splitSignal": "strong",
     "estimatedSeconds": 9.8,
-    "reasoning": "medium -> 44字/9.8秒 -> explain -> 解释第一个解决方案，字数较多但属于同一建议，可以考虑多节拍切换",
-    "groupKey": "solo_4"
+    "reasoning": "第二个锦囊的内容，包含标题、解释和行动建议，叙事完整，不应拆分。与前一个锦囊之间是并列关系。"
   },
   {
-    "order": 5,
-    "text": "第二，用数据对抗直觉。",
-    "narrativeRole": "explain",
-    "visualFocus": "强调“数据”",
-    "emotionTone": "calm",
-    "splitSignal": "strong",
-    "estimatedSeconds": 2.9,
-    "reasoning": "strong -> 13字/2.9秒 -> explain -> 提出第二个解决方案，独立性强，字数略少，与下一句合并",
-    "groupKey": "solo_5"
-  },
-  {
-    "order": 6,
-    "text": "当大脑告诉你“这很危险”时，随手搜一下真实的统计概率，让理性的数字接管情绪。",
-    "narrativeRole": "explain",
-    "visualFocus": "展示数据图表",
-    "emotionTone": "calm",
-    "splitSignal": "medium",
-    "estimatedSeconds": 8.0,
-    "reasoning": "medium -> 36字/8.0秒 -> explain -> 解释第二个解决方案，与上一句属于同一建议",
-    "groupKey": "solo_6"
-  },
-  {
-    "order": 7,
     "text": "在这个满屏都是情绪诱导和流量套路的时代，学会把“眼见为实”升级为“数据为实”。",
     "narrativeRole": "conclude",
-    "visualFocus": "强调升级认知的重要性",
+    "visualFocus": "混乱的信息流和冷静的数据分析的对比",
     "emotionTone": "calm",
     "splitSignal": "strong",
-    "estimatedSeconds": 8.7,
-    "reasoning": "strong -> 39字/8.7秒 -> conclude -> 总结并提出更高阶的认知升级",
-    "groupKey": "solo_7"
+    "estimatedSeconds": 7.8,
+    "reasoning": "总结强调，字数适中，与前后内容紧密关联，但视觉主体转为对信息时代现象的批判。"
   },
   {
-    "order": 8,
     "text": "做自己大脑的主人，不当流量的提线木偶，就是咱们最高级的自我保护。",
     "narrativeRole": "conclude",
-    "visualFocus": "呼吁自主思考",
-    "emotionTone": "calm",
-    "splitSignal": "strong",
-    "estimatedSeconds": 8.4,
-    "reasoning": "strong -> 38字/8.4秒 -> conclude -> 再次强调自主思考的重要性，作为结尾收束",
-    "groupKey": "solo_8"
+    "visualFocus": "人物掌控大脑和摆脱提线木偶的画面",
+    "emotionTone": "resolving",
+    "splitSignal": "medium",
+    "estimatedSeconds": 6.2,
+    "reasoning": "结尾升华，点明主题。字数适中。叙事角色从说理转为行动号召/结论。与前文是递进关系。"
   }
 ]
 
@@ -1353,13 +1232,13 @@ retries: 3
 
 - **`ALERT`** 仅用于强情绪、转折、冲击收束；禁止通篇堆砌。
 
-- **`BEAT_SEQUENCE`**：**同一 item、同一论证动作**内需要 2～4 个连续节拍（图随口播分段切换、情绪可 calm→alert）。用来避免为求变化而把连贯逻辑拆成多个零碎 item；`stages` 条数须与后续 `content` 条数一致。
+- **`BEAT_SEQUENCE`**：**同一 item、同一论证动作**内需要 2～4 个连续节拍（图随口播分段切换、情绪可 calm→alert）。用来避免为求变化而把连贯逻辑拆成多个零碎 item；`stages` 条数须与后续台词分段数一致。
 
 - **`STEP_LIST`**：仅用于**短步骤 / 短分点 / 强清单感**内容。若单个 item 是“方法标题/提醒标题 + 解释展开”，优先改用 **`METHOD_STACK`**；不要把解释型口播硬塞成纯清单。
 
 - **`METHOD_STACK`**：适合**单个 item 内的一个方法/提醒/观点标题**，后面继续跟 2～4 句解释展开。用“标题 + 单图 + 解释条”承接一个完整叙事，不要拿它去跨 item 合并多个方法。
 
-- **`MAGNIFYING_GLASS`** 仅当该 item 可提供非空 `anchors`（通过 `showFrom` 关联 content 索引）时使用；否则换其他模板。
+- **`MAGNIFYING_GLASS`** 仅当该 item 可提供非空 `anchors`（通过 `showFrom` 关联台词索引）时使用；否则换其他模板。
 
 - **`LIST_MULTI_GROUP`**：**同一论证下的多分点并列**（2～4 个可独立成画的主体），**优先用单 item + `LIST_MULTI_GROUP` 覆盖全部分点**，而不是每个分点各开一个 item。若当前 item 只是“给你两个方法：”这类总起句、真正分点已经拆到后续 item，**禁止**用 `LIST_MULTI_GROUP` 去脑补多组。该模板只输出 `groups`，每组使用 `textIndex + image + 可选 anchor`。禁止因「评论区混战」等笼统画面硬凑多图；单一比喻、无清晰分点仍用 `CENTER_FOCUS` 或 `ALERT`。
 
@@ -1430,8 +1309,8 @@ retries: 3
 
 ### MAGNIFYING_GLASS
 
-仅需 `content` 数组。
-- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based content 索引）。
+无需额外参数。
+- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based 台词分段索引）。
 
 ### PROGRESS_RING
 
@@ -1462,14 +1341,14 @@ retries: 3
 
 ### STEP_LIST
 
-仅需 `content` 数组。
-- *建议*：content 至少 2 条；至多 6 条。
+无需额外参数。
+- *建议*：台词至少 2 段；至多 6 段。
 
 ### TEXT_FOCUS
 
 - `coreSentence` (必填): 精炼核心句，不超过25个字
 - `anchors` (可选): 锚点数组，用于高亮正文中的子串，每项含 text、showFrom、color；使用 coreSentence 时锚点词须出现在 coreSentence 内
-- *建议*：至多 3 条。
+- *建议*：至多 3 段。
 
 
 ### TIMELINE
@@ -1537,7 +1416,6 @@ retries: 3
 {
   "items": [
     {
-      "order": 1,
       "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
       "reasoning": "决策树匹配路径 -> 命中 Step___ -> 最终选型理由 -> 连续性检查结论",
       "template": "选定的模板名称（必须来自指南）",
@@ -1548,65 +1426,45 @@ retries: 3
 
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:33
+time: 2026-03-29 21:41:09
 attempt: 1/3
 
 [OUTPUT]
 {
   "items": [
     {
-      "order": 1,
       "narrativeType": "HOOK",
-      "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：无连续相同模板",
+      "reasoning": "决策树匹配路径 -> visualFocus为疑问表情 -> 默认 -> 命中 Step 8 -> 默认CENTER_FOCUS",
       "template": "CENTER_FOCUS",
       "text": "既然知道了大脑的这个Bug，咱们以后该怎么保护自己？"
     },
     {
-      "order": 2,
       "narrativeType": "TRANSITION",
-      "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：避免连续 CENTER_FOCUS",
-      "template": "TEXT_FOCUS",
+      "reasoning": "决策树匹配路径 -> 过渡句 -> 默认 -> 命中 Step 8 -> 默认CENTER_FOCUS",
+      "template": "CENTER_FOCUS",
       "text": "给你两个极低门槛的防御锦囊："
     },
     {
-      "order": 3,
       "narrativeType": "LOGIC",
-      "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK, 但这里只有一句，与下一句合并",
+      "reasoning": "决策树匹配路径 -> 包含标题、解释和反思问题，叙事完整 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 命中 Step 3 -> METHOD_STACK",
       "template": "CENTER_FOCUS",
-      "text": "第一，警惕“情绪画面”。"
+      "text": "第一，警惕“情绪画面”。下次再被某条新闻吓住或者气到的时候，在心里默问自己一句话：“这件事是因为普遍发生我才看到，还是因为它足够离奇才上了热搜？”"
     },
     {
-      "order": 4,
       "narrativeType": "LOGIC",
-      "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK -> 连续性检查：无连续相同模板",
-      "template": "METHOD_STACK",
-      "text": "下次再被某条新闻吓住或者气到的时候，在心里默问自己一句话：“这件事是因为普遍发生我才看到，还是因为它足够离奇才上了热搜？”"
-    },
-    {
-      "order": 5,
-      "narrativeType": "LOGIC",
-      "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK，与下一句合并",
+      "reasoning": "决策树匹配路径 -> 包含标题、解释和行动建议，叙事完整 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 命中 Step 3 -> METHOD_STACK",
       "template": "CENTER_FOCUS",
-      "text": "第二，用数据对抗直觉。"
+      "text": "第二，用数据对抗直觉。当大脑告诉你“这很危险”时，随手搜一下真实的统计概率，让理性的数字接管情绪。"
     },
     {
-      "order": 6,
-      "narrativeType": "LOGIC",
-      "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK -> 连续性检查：无连续相同模板",
-      "template": "METHOD_STACK",
-      "text": "当大脑告诉你“这很危险”时，随手搜一下真实的统计概率，让理性的数字接管情绪。"
-    },
-    {
-      "order": 7,
       "narrativeType": "CONCLUSION",
-      "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：无连续相同模板",
+      "reasoning": "决策树匹配路径 -> 总结强调 -> 默认 -> 命中 Step 8 -> 默认CENTER_FOCUS",
       "template": "CENTER_FOCUS",
       "text": "在这个满屏都是情绪诱导和流量套路的时代，学会把“眼见为实”升级为“数据为实”。"
     },
     {
-      "order": 8,
       "narrativeType": "CONCLUSION",
-      "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：无连续相同模板",
+      "reasoning": "决策树匹配路径 -> 结尾升华，点明主题。-> 金句/核心结论/升华 -> 命中 Step 5 -> TEXT_FOCUS",
       "template": "TEXT_FOCUS",
       "text": "做自己大脑的主人，不当流量的提线木偶，就是咱们最高级的自我保护。"
     }
@@ -1615,7 +1473,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:33
+time: 2026-03-29 21:41:09
 model: gemini-2.0-flash
 retries: 3
 
@@ -1733,7 +1591,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:35
+time: 2026-03-29 21:41:11
 attempt: 1/3
 
 [OUTPUT]
@@ -1746,8 +1604,7 @@ attempt: 1/3
           "感觉"
         ],
         "color": "#EF4444",
-        "anim": "popIn",
-        "audioEffect": "impact_thud"
+        "anim": "popIn"
       },
       {
         "showFrom": 3,
@@ -1755,26 +1612,24 @@ attempt: 1/3
           "坠机"
         ],
         "color": "#EF4444",
-        "anim": "popIn",
-        "audioEffect": "impact_thud"
+        "anim": "popIn"
       },
       {
-        "showFrom": 6,
+        "showFrom": 5,
         "keywords": [
-          "街头枪战"
+          "零元购",
+          "枪战"
         ],
         "color": "#EF4444",
-        "anim": "popIn",
-        "audioEffect": "impact_thud"
+        "anim": "popIn"
       },
       {
         "showFrom": 7,
         "keywords": [
-          "危险"
+          "太危险"
         ],
         "color": "#EF4444",
-        "anim": "popIn",
-        "audioEffect": "impact_thud"
+        "anim": "popIn"
       }
     ]
   }
@@ -1782,7 +1637,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:35
+time: 2026-03-29 21:41:11
 model: gemini-2.0-flash
 retries: 3
 
@@ -1885,7 +1740,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:37
+time: 2026-03-29 21:41:13
 attempt: 1/3
 
 [OUTPUT]
@@ -1912,7 +1767,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:37
+time: 2026-03-29 21:41:13
 model: gemini-2.0-flash
 retries: 3
 
@@ -1928,34 +1783,27 @@ retries: 3
 要怪，就怪那些深谙流量密码的媒体算法，以及咱们人类大脑底层的出厂设置。
 
 ## 选定模板及参数规范
-模板名称：CENTER_FOCUS
+模板名称：CONCEPT_CARD
 参数 Schema 说明：
 {
   "imageSrc": {
     "type": "image_prompt",
     "required": true,
-    "desc": "主图描述"
+    "desc": "概念图标描述"
   },
-  "enterEffect": {
-    "type": "enum",
-    "values": [
-      "breathe",
-      "slideLeft",
-      "slideBottom",
-      "zoomIn",
-      "fadeIn"
-    ],
-    "default": "breathe",
-    "desc": "入场效果"
+  "conceptName": {
+    "type": "string",
+    "required": true,
+    "desc": "概念名称"
   }
 }
 
 模板该项的示例供参考：
 {
-  "template": "CENTER_FOCUS",
+  "template": "CONCEPT_CARD",
   "param": {
-    "imageSrc": "上班族坐在电脑前的简笔画图标",
-    "enterEffect": "breathe"
+    "imageSrc": "过滤器/筛网简笔画图标",
+    "conceptName": "幸存者偏差"
   }
 }
 
@@ -2015,7 +1863,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:39
+time: 2026-03-29 21:41:15
 attempt: 1/3
 
 [OUTPUT]
@@ -2024,16 +1872,17 @@ attempt: 1/3
     "anchors": [
       {
         "showFrom": 1,
-        "words": "流量密码",
         "color": "#EF4444",
         "anim": "popIn",
+        "word": "流量密码",
         "audioEffect": "impact_thud"
       },
       {
         "showFrom": 2,
-        "words": "出厂设置",
-        "color": "#000000",
-        "anim": "highlight"
+        "color": "#EF4444",
+        "anim": "popIn",
+        "word": "出厂设置",
+        "audioEffect": "impact_thud"
       }
     ]
   }
@@ -2041,7 +1890,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:39
+time: 2026-03-29 21:41:15
 model: gemini-2.0-flash
 retries: 3
 
@@ -2057,34 +1906,39 @@ retries: 3
 你想啊，为了博眼球，媒体永远只会放大报道极端事件，“安全到达”永远上不了热搜，“机毁人亡”才会全网推送。
 
 ## 选定模板及参数规范
-模板名称：CENTER_FOCUS
+模板名称：SPLIT_COMPARE
 参数 Schema 说明：
 {
-  "imageSrc": {
+  "leftSrc": {
     "type": "image_prompt",
     "required": true,
-    "desc": "主图描述"
+    "desc": "左侧图片描述"
   },
-  "enterEffect": {
-    "type": "enum",
-    "values": [
-      "breathe",
-      "slideLeft",
-      "slideBottom",
-      "zoomIn",
-      "fadeIn"
-    ],
-    "default": "breathe",
-    "desc": "入场效果"
+  "rightSrc": {
+    "type": "image_prompt",
+    "required": true,
+    "desc": "右侧图片描述"
+  },
+  "leftLabel": {
+    "type": "string",
+    "required": true,
+    "desc": "左侧标签"
+  },
+  "rightLabel": {
+    "type": "string",
+    "required": true,
+    "desc": "右侧标签"
   }
 }
 
 模板该项的示例供参考：
 {
-  "template": "CENTER_FOCUS",
+  "template": "SPLIT_COMPARE",
   "param": {
-    "imageSrc": "上班族坐在电脑前的简笔画图标",
-    "enterEffect": "breathe"
+    "leftSrc": "传统低效工作图标",
+    "rightSrc": "高效数字工具图标",
+    "leftLabel": "旧方法",
+    "rightLabel": "新方法"
   }
 }
 
@@ -2150,7 +2004,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:41
+time: 2026-03-29 21:41:16
 attempt: 1/3
 
 [OUTPUT]
@@ -2161,22 +2015,13 @@ attempt: 1/3
         "showFrom": 2,
         "color": "#EF4444",
         "anim": "popIn",
-        "word": "极端事件",
-        "audioEffect": "impact_thud"
-      },
-      {
-        "showFrom": 3,
-        "color": "#EF4444",
-        "anim": "popIn",
-        "word": "安全到达",
-        "audioEffect": "impact_thud"
+        "word": "极端事件"
       },
       {
         "showFrom": 4,
         "color": "#EF4444",
         "anim": "popIn",
-        "word": "机毁人亡",
-        "audioEffect": "impact_thud"
+        "word": "全网推送"
       }
     ]
   }
@@ -2184,7 +2029,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:41
+time: 2026-03-29 21:41:16
 model: gemini-2.0-flash
 retries: 3
 
@@ -2290,7 +2135,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:42
+time: 2026-03-29 21:41:18
 attempt: 1/3
 
 [OUTPUT]
@@ -2298,22 +2143,18 @@ attempt: 1/3
   "param": {
     "anchors": [
       {
-        "showFrom": 1,
-        "keywords": [
-          "害怕",
-          "愤怒"
-        ],
+        "contentIndex": 1,
+        "word": "害怕",
         "color": "#EF4444",
         "anim": "popIn",
         "audioEffect": "impact_thud"
       },
       {
-        "showFrom": 3,
-        "keywords": [
-          "铺天盖地"
-        ],
+        "contentIndex": 3,
+        "word": "铺天盖地",
         "color": "#EF4444",
-        "anim": "spring"
+        "anim": "popIn",
+        "audioEffect": "impact_thud"
       }
     ]
   }
@@ -2321,7 +2162,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:42
+time: 2026-03-29 21:41:18
 model: gemini-2.0-flash
 retries: 3
 
@@ -2337,34 +2178,35 @@ retries: 3
 这其实是一套把人性弱点研究到极致的注意力收割术，咱们普通人就是这样不知不觉被困在了一个人为制造的“信息恐怖屋”里。
 
 ## 选定模板及参数规范
-模板名称：CENTER_FOCUS
+模板名称：TEXT_FOCUS
 参数 Schema 说明：
 {
-  "imageSrc": {
-    "type": "image_prompt",
+  "coreSentence": {
+    "type": "string",
     "required": true,
-    "desc": "主图描述"
+    "desc": "精炼核心句，不超过25个字"
   },
-  "enterEffect": {
-    "type": "enum",
-    "values": [
-      "breathe",
-      "slideLeft",
-      "slideBottom",
-      "zoomIn",
-      "fadeIn"
-    ],
-    "default": "breathe",
-    "desc": "入场效果"
+  "anchors": {
+    "type": "anchor_array",
+    "required": false,
+    "desc": "锚点数组，用于高亮正文中的子串，每项含 text、showFrom、color；使用 coreSentence 时锚点词须出现在 coreSentence 内"
   }
 }
 
+// content 条数限制：content 至多 3 条（超出会被校验器告警）
+
 模板该项的示例供参考：
 {
-  "template": "CENTER_FOCUS",
+  "template": "TEXT_FOCUS",
   "param": {
-    "imageSrc": "上班族坐在电脑前的简笔画图标",
-    "enterEffect": "breathe"
+    "coreSentence": "承认自己“可能错了”并不是一种软弱",
+    "anchors": [
+      {
+        "text": "可能错了",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
   }
 }
 
@@ -2427,25 +2269,18 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:44
+time: 2026-03-29 21:41:19
 attempt: 1/3
 
 [OUTPUT]
 {
   "param": {
+    "coreSentence": "普通人如何逃离“信息恐怖屋”？",
     "anchors": [
       {
-        "keyword": "注意力收割术",
-        "color": "#000000",
-        "anim": "highlight",
-        "showFrom": 0
-      },
-      {
-        "keyword": "信息恐怖屋",
-        "color": "#EF4444",
-        "anim": "popIn",
-        "audioEffect": "impact_thud",
-        "showFrom": 3
+        "text": "信息恐怖屋",
+        "showFrom": 3,
+        "color": "#EF4444"
       }
     ]
   }
@@ -2453,7 +2288,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:44
+time: 2026-03-29 21:41:19
 model: gemini-2.0-flash
 retries: 3
 
@@ -2468,34 +2303,27 @@ retries: 3
 在心理学上，咱们这种容易被忽悠的现象，叫做“可得性启发”偏见。
 
 ## 选定模板及参数规范
-模板名称：CENTER_FOCUS
+模板名称：CONCEPT_CARD
 参数 Schema 说明：
 {
   "imageSrc": {
     "type": "image_prompt",
     "required": true,
-    "desc": "主图描述"
+    "desc": "概念图标描述"
   },
-  "enterEffect": {
-    "type": "enum",
-    "values": [
-      "breathe",
-      "slideLeft",
-      "slideBottom",
-      "zoomIn",
-      "fadeIn"
-    ],
-    "default": "breathe",
-    "desc": "入场效果"
+  "conceptName": {
+    "type": "string",
+    "required": true,
+    "desc": "概念名称"
   }
 }
 
 模板该项的示例供参考：
 {
-  "template": "CENTER_FOCUS",
+  "template": "CONCEPT_CARD",
   "param": {
-    "imageSrc": "上班族坐在电脑前的简笔画图标",
-    "enterEffect": "breathe"
+    "imageSrc": "过滤器/筛网简笔画图标",
+    "conceptName": "幸存者偏差"
   }
 }
 
@@ -2555,7 +2383,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:45
+time: 2026-03-29 21:41:20
 attempt: 1/3
 
 [OUTPUT]
@@ -2564,9 +2392,10 @@ attempt: 1/3
     "anchors": [
       {
         "contentIndex": 2,
-        "text": "可得性启发",
         "color": "#000000",
-        "anim": "highlight"
+        "anim": "highlight",
+        "text": "可得性启发",
+        "audioEffect": "ping"
       }
     ]
   }
@@ -2574,7 +2403,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:45
+time: 2026-03-29 21:41:20
 model: gemini-2.0-flash
 retries: 3
 
@@ -2679,7 +2508,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:47
+time: 2026-03-29 21:41:22
 attempt: 1/3
 
 [OUTPUT]
@@ -2688,14 +2517,14 @@ attempt: 1/3
     "anchors": [
       {
         "showFrom": 0,
-        "content": "偷懒",
+        "words": "偷懒",
         "color": "#EF4444",
         "anim": "popIn",
         "audioEffect": "impact_thud"
       },
       {
         "showFrom": 2,
-        "content": "好不好想起来",
+        "words": "好不好想起来",
         "color": "#EF4444",
         "anim": "popIn",
         "audioEffect": "impact_thud"
@@ -2706,7 +2535,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:47
+time: 2026-03-29 21:41:22
 model: gemini-2.0-flash
 retries: 3
 
@@ -2805,7 +2634,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:48
+time: 2026-03-29 21:41:24
 attempt: 1/3
 
 [OUTPUT]
@@ -2813,13 +2642,14 @@ attempt: 1/3
   "param": {
     "anchors": [
       {
-        "keyword": "耸人听闻",
+        "word": "头条",
         "color": "#EF4444",
         "anim": "popIn",
-        "showFrom": 0
+        "showFrom": 0,
+        "audioEffect": "impact_thud"
       },
       {
-        "keyword": "潜意识",
+        "word": "潜意识",
         "color": "#000000",
         "anim": "highlight",
         "showFrom": 1
@@ -2830,7 +2660,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:48
+time: 2026-03-29 21:41:24
 model: gemini-2.0-flash
 retries: 3
 
@@ -2935,7 +2765,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:50
+time: 2026-03-29 21:41:25
 attempt: 1/3
 
 [OUTPUT]
@@ -2956,14 +2786,13 @@ attempt: 1/3
         "anim": "popIn",
         "audioEffect": "impact_thud"
       }
-    ],
-    "imageSrc": "飞机坠毁的灾难现场"
+    ]
   }
 }
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:50
+time: 2026-03-29 21:41:25
 model: gemini-2.0-flash
 retries: 3
 
@@ -3080,7 +2909,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:52
+time: 2026-03-29 21:41:27
 attempt: 1/3
 
 [OUTPUT]
@@ -3088,16 +2917,18 @@ attempt: 1/3
   "param": {
     "anchors": [
       {
-        "keyword": "飞机出事",
+        "keyword": "飞机",
         "color": "#EF4444",
         "anim": "popIn",
-        "showFrom": 1
+        "showFrom": 1,
+        "audioEffect": "impact_thud"
       },
       {
         "keyword": "电动车",
-        "color": "#000000",
-        "anim": "highlight",
-        "showFrom": 2
+        "color": "#EF4444",
+        "anim": "popIn",
+        "showFrom": 2,
+        "audioEffect": "impact_thud"
       }
     ]
   }
@@ -3105,7 +2936,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:52
+time: 2026-03-29 21:41:27
 model: gemini-2.0-flash
 retries: 3
 
@@ -3205,16 +3036,16 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:53
+time: 2026-03-29 21:41:28
 attempt: 1/3
 
 [OUTPUT]
 {
   "param": {
-    "coreSentence": "认清一个残酷真相：容易想起，不等于常见。",
+    "coreSentence": "认清真相：容易想起，不等于很常见",
     "anchors": [
       {
-        "text": "残酷真相",
+        "text": "真相",
         "showFrom": 0,
         "color": "#EF4444"
       }
@@ -3224,7 +3055,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:53
+time: 2026-03-29 21:41:28
 model: gemini-2.0-flash
 retries: 3
 
@@ -3329,7 +3160,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:55
+time: 2026-03-29 21:41:30
 attempt: 1/3
 
 [OUTPUT]
@@ -3346,8 +3177,9 @@ attempt: 1/3
       {
         "showFrom": 3,
         "words": "记忆内存",
-        "color": "#000000",
-        "anim": "highlight"
+        "color": "#EF4444",
+        "anim": "popIn",
+        "audioEffect": "impact_thud"
       }
     ]
   }
@@ -3355,7 +3187,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:55
+time: 2026-03-29 21:41:30
 model: gemini-2.0-flash
 retries: 3
 
@@ -3455,7 +3287,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:56
+time: 2026-03-29 21:41:30
 attempt: 1/3
 
 [OUTPUT]
@@ -3467,7 +3299,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:56
+time: 2026-03-29 21:41:30
 model: gemini-2.0-flash
 retries: 3
 
@@ -3568,7 +3400,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:57
+time: 2026-03-29 21:41:32
 attempt: 1/3
 
 [OUTPUT]
@@ -3580,7 +3412,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:57
+time: 2026-03-29 21:41:32
 model: gemini-2.0-flash
 retries: 3
 
@@ -3597,35 +3429,34 @@ retries: 3
 给你两个极低门槛的防御锦囊：
 
 ## 选定模板及参数规范
-模板名称：TEXT_FOCUS
+模板名称：CENTER_FOCUS
 参数 Schema 说明：
 {
-  "coreSentence": {
-    "type": "string",
+  "imageSrc": {
+    "type": "image_prompt",
     "required": true,
-    "desc": "精炼核心句，不超过25个字"
+    "desc": "主图描述"
   },
-  "anchors": {
-    "type": "anchor_array",
-    "required": false,
-    "desc": "锚点数组，用于高亮正文中的子串，每项含 text、showFrom、color；使用 coreSentence 时锚点词须出现在 coreSentence 内"
+  "enterEffect": {
+    "type": "enum",
+    "values": [
+      "breathe",
+      "slideLeft",
+      "slideBottom",
+      "zoomIn",
+      "fadeIn"
+    ],
+    "default": "breathe",
+    "desc": "入场效果"
   }
 }
 
-// content 条数限制：content 至多 3 条（超出会被校验器告警）
-
 模板该项的示例供参考：
 {
-  "template": "TEXT_FOCUS",
+  "template": "CENTER_FOCUS",
   "param": {
-    "coreSentence": "承认自己“可能错了”并不是一种软弱",
-    "anchors": [
-      {
-        "text": "可能错了",
-        "showFrom": 0,
-        "color": "red"
-      }
-    ]
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "breathe"
   }
 }
 
@@ -3679,7 +3510,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:45:58
+time: 2026-03-29 21:41:33
 attempt: 1/3
 
 [OUTPUT]
@@ -3691,7 +3522,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:45:58
+time: 2026-03-29 21:41:33
 model: gemini-2.0-flash
 retries: 3
 
@@ -3705,7 +3536,7 @@ retries: 3
 在这个满屏都是情绪诱导和流量套路的时代，学会把“眼见为实”升级为“数据为实”。做自己大脑的主人，不当流量的提线木偶，就是咱们最高级的自我保护。
 
 ## 🎯 待处理的目标文案（你只需要处理这个片段！必须原封不动且完整包含在 content 中）
-第一，警惕“情绪画面”。
+第一，警惕“情绪画面”。下次再被某条新闻吓住或者气到的时候，在心里默问自己一句话：“这件事是因为普遍发生我才看到，还是因为它足够离奇才上了热搜？”
 
 ## 选定模板及参数规范
 模板名称：CENTER_FOCUS
@@ -3749,122 +3580,7 @@ retries: 3
   },
   {
     "text": "警惕“情绪画面”。"
-  }
-]
-   - 你的任务：仅根据上方 content 的 **0-based 索引**，生成 anchors 及模板专属参数（imageSrc / conceptName 等）。
-2. ⚠️ 极其重要的锚点克制与“高价值”原则（Anchor）：
-   - 【锚点的价值】：锚点词必须是“高价值且有用”的！它应该是让人一眼记住的**核心概念、情绪爆点或痛点名词**（如：“底层Bug”、“信息囚笼”、“确认偏误”、“诱饵”）。
-   - 【拒绝无效锚点】：❌ 绝不要提取平庸无奇的词作为锚点（如：“现实”、“隐蔽”、“保护”、“受害者”、“多刷半小时”、“可能错了”）。锚点词必须精简（通常2-4个字），且具备强烈的独立视觉/情绪冲击力。
-   - 【克制原则】：由于你是逐句处理的，极易产生“每句话都要有锚点”的错觉！如果不克制，满屏叮叮当当的高亮会产生极其严重的视觉疲劳和恶俗感。
-   - 请结合【段落上下文】冷静判断：当前文案真的是整个段落的**最高潮**或**核心反转**吗？如果不是，不需要填充锚点数据
-   - 绝大部分（85%以上）的铺垫、举例、描述片段，**绝对、千万不要加锚点**（anchors 返回空数组）！宁缺毋滥！！
-   - 对于 `LIST_MULTI_GROUP`：锚点只写进 `groups[].anchor`，不要生成顶层 `anchors`
-3. 锚点颜色与动画样式：
-   - 颜色仅限两种：
-     - "#EF4444" (警示/反转/负面/核心结论)。
-     - "#000000" (事实/专业术语/客观数据)。
-   - 动画样式 (anim) 选择：
-     - "spring": 默认弹性（适合一般性强调）。
-     - "slideUp": 向上升起（适合正面结论、上升趋势、启发性观点）。
-     - "popIn": 突然弹出（适合震惊、警示、负面反转、强调痛点）。
-     - "highlight": 底部抹色（适合术语、背景事实、平淡但重要的名词）。
-   - 音效可选（仅绑在锚点上）：impact_thud(低沉重击)、ping(清脆提示)、woosh(挥舞转场)。若某锚点需要强调音，在该锚点对象上填 `audioEffect`；**不要**写在 content 条目里。
-4. ⚠️ 视觉标题与字幕的分离（极其重要）：
-   - 如果模板要求填充 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等**视觉标题**字段：
-     - **极简原则**：这些字段必须是极简的**关键词（2-6个汉字）**。它们是画面的视觉重点，不是台词！
-     - **严禁重复**：绝对禁止直接把台词原封不动地填入这些标题字段！
-     - **示例**：如果台词是“其实赚钱不是靠拼命，而是靠认知”，那么 `notText` 应为“靠拼命”，`butText` 应为“靠认知”。
-   - 字幕层（content）则必须完整包含【待处理的目标文案】的所有文字。
-
-## 输出格式 (严格输出 JSON，不要 markdown 代码块)
-仅输出该 item 的参数对象 `param`，里面包含选定模板要求的其他参数；只有在 Schema 或规则明确需要锚点时，才生成锚点字段。注意：不要输出 content 字段，它会被系统自动注入。
-
-{
-  "param": {
-    "anchors": []
-  }
-}
-
-⚠️ `anchors[].showFrom` 是 **content 数组的 0-based 下标**（不是帧数！）。
-- 合法范围：0 ~ (content 条数 - 1)。例如 content 有 3 条，showFrom 只能是 0、1 或 2。
-- 绝不能填超过 content 条数的数字（如 content 有 2 条，showFrom=5 是非法的，会被校验器丢弃）。
-
-补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
-===========================================================================================
----------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:46:00
-attempt: 1/3
-
-[OUTPUT]
-{
-  "param": {
-    "anchors": [
-      {
-        "showFrom": 1,
-        "color": "#EF4444",
-        "anim": "popIn",
-        "word": "情绪画面",
-        "audioEffect": "impact_thud"
-      }
-    ]
-  }
-}
--------------------------------------------------------------------------------------------
-
-======================================== REQUEST ========================================
-time: 2026-03-28 23:46:00
-model: gemini-2.0-flash
-retries: 3
-
-[PROMPT]
-你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
-
-## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
-既然知道了大脑的这个Bug，咱们以后该怎么保护自己？给你两个极低门槛的防御锦囊：
-第一，警惕“情绪画面”。下次再被某条新闻吓住或者气到的时候，在心里默问自己一句话：“这件事是因为普遍发生我才看到，还是因为它足够离奇才上了热搜？”
-第二，用数据对抗直觉。当大脑告诉你“这很危险”时，随手搜一下真实的统计概率，让理性的数字接管情绪。
-在这个满屏都是情绪诱导和流量套路的时代，学会把“眼见为实”升级为“数据为实”。做自己大脑的主人，不当流量的提线木偶，就是咱们最高级的自我保护。
-
-## 🎯 待处理的目标文案（你只需要处理这个片段！必须原封不动且完整包含在 content 中）
-下次再被某条新闻吓住或者气到的时候，在心里默问自己一句话：“这件事是因为普遍发生我才看到，还是因为它足够离奇才上了热搜？”
-
-## 选定模板及参数规范
-模板名称：METHOD_STACK
-参数 Schema 说明：
-{
-  "imageSrc": {
-    "type": "image_prompt",
-    "required": true,
-    "desc": "主图描述"
   },
-  "enterEffect": {
-    "type": "enum",
-    "values": [
-      "breathe",
-      "slideLeft",
-      "slideBottom",
-      "zoomIn",
-      "fadeIn"
-    ],
-    "default": "breathe",
-    "desc": "入场效果"
-  }
-}
-
-模板该项的示例供参考：
-{
-  "template": "CENTER_FOCUS",
-  "param": {
-    "imageSrc": "上班族坐在电脑前的简笔画图标",
-    "enterEffect": "breathe"
-  }
-}
-
-注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
-
-1. 字幕层（Text）：这是短视频的单行字幕：
-   - `content` 已预先按标点拆分，条目如下（**只读，不要修改**）：
-     [
   {
     "text": "下次再被某条新闻吓住或者气到的时候，"
   },
@@ -3922,7 +3638,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:46:01
+time: 2026-03-29 21:41:34
 attempt: 1/3
 
 [OUTPUT]
@@ -3930,11 +3646,10 @@ attempt: 1/3
   "param": {
     "anchors": [
       {
-        "keyword": "热搜",
+        "showFrom": 1,
         "color": "#EF4444",
         "anim": "popIn",
-        "showFrom": 3,
-        "audioEffect": "impact_thud"
+        "word": "情绪画面"
       }
     ]
   }
@@ -3942,7 +3657,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:46:01
+time: 2026-03-29 21:41:34
 model: gemini-2.0-flash
 retries: 3
 
@@ -3956,7 +3671,7 @@ retries: 3
 在这个满屏都是情绪诱导和流量套路的时代，学会把“眼见为实”升级为“数据为实”。做自己大脑的主人，不当流量的提线木偶，就是咱们最高级的自我保护。
 
 ## 🎯 待处理的目标文案（你只需要处理这个片段！必须原封不动且完整包含在 content 中）
-第二，用数据对抗直觉。
+第二，用数据对抗直觉。当大脑告诉你“这很危险”时，随手搜一下真实的统计概率，让理性的数字接管情绪。
 
 ## 选定模板及参数规范
 模板名称：CENTER_FOCUS
@@ -4000,122 +3715,7 @@ retries: 3
   },
   {
     "text": "用数据对抗直觉。"
-  }
-]
-   - 你的任务：仅根据上方 content 的 **0-based 索引**，生成 anchors 及模板专属参数（imageSrc / conceptName 等）。
-2. ⚠️ 极其重要的锚点克制与“高价值”原则（Anchor）：
-   - 【锚点的价值】：锚点词必须是“高价值且有用”的！它应该是让人一眼记住的**核心概念、情绪爆点或痛点名词**（如：“底层Bug”、“信息囚笼”、“确认偏误”、“诱饵”）。
-   - 【拒绝无效锚点】：❌ 绝不要提取平庸无奇的词作为锚点（如：“现实”、“隐蔽”、“保护”、“受害者”、“多刷半小时”、“可能错了”）。锚点词必须精简（通常2-4个字），且具备强烈的独立视觉/情绪冲击力。
-   - 【克制原则】：由于你是逐句处理的，极易产生“每句话都要有锚点”的错觉！如果不克制，满屏叮叮当当的高亮会产生极其严重的视觉疲劳和恶俗感。
-   - 请结合【段落上下文】冷静判断：当前文案真的是整个段落的**最高潮**或**核心反转**吗？如果不是，不需要填充锚点数据
-   - 绝大部分（85%以上）的铺垫、举例、描述片段，**绝对、千万不要加锚点**（anchors 返回空数组）！宁缺毋滥！！
-   - 对于 `LIST_MULTI_GROUP`：锚点只写进 `groups[].anchor`，不要生成顶层 `anchors`
-3. 锚点颜色与动画样式：
-   - 颜色仅限两种：
-     - "#EF4444" (警示/反转/负面/核心结论)。
-     - "#000000" (事实/专业术语/客观数据)。
-   - 动画样式 (anim) 选择：
-     - "spring": 默认弹性（适合一般性强调）。
-     - "slideUp": 向上升起（适合正面结论、上升趋势、启发性观点）。
-     - "popIn": 突然弹出（适合震惊、警示、负面反转、强调痛点）。
-     - "highlight": 底部抹色（适合术语、背景事实、平淡但重要的名词）。
-   - 音效可选（仅绑在锚点上）：impact_thud(低沉重击)、ping(清脆提示)、woosh(挥舞转场)。若某锚点需要强调音，在该锚点对象上填 `audioEffect`；**不要**写在 content 条目里。
-4. ⚠️ 视觉标题与字幕的分离（极其重要）：
-   - 如果模板要求填充 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等**视觉标题**字段：
-     - **极简原则**：这些字段必须是极简的**关键词（2-6个汉字）**。它们是画面的视觉重点，不是台词！
-     - **严禁重复**：绝对禁止直接把台词原封不动地填入这些标题字段！
-     - **示例**：如果台词是“其实赚钱不是靠拼命，而是靠认知”，那么 `notText` 应为“靠拼命”，`butText` 应为“靠认知”。
-   - 字幕层（content）则必须完整包含【待处理的目标文案】的所有文字。
-
-## 输出格式 (严格输出 JSON，不要 markdown 代码块)
-仅输出该 item 的参数对象 `param`，里面包含选定模板要求的其他参数；只有在 Schema 或规则明确需要锚点时，才生成锚点字段。注意：不要输出 content 字段，它会被系统自动注入。
-
-{
-  "param": {
-    "anchors": []
-  }
-}
-
-⚠️ `anchors[].showFrom` 是 **content 数组的 0-based 下标**（不是帧数！）。
-- 合法范围：0 ~ (content 条数 - 1)。例如 content 有 3 条，showFrom 只能是 0、1 或 2。
-- 绝不能填超过 content 条数的数字（如 content 有 2 条，showFrom=5 是非法的，会被校验器丢弃）。
-
-补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
-===========================================================================================
----------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:46:03
-attempt: 1/3
-
-[OUTPUT]
-{
-  "param": {
-    "anchors": [
-      {
-        "showFrom": 1,
-        "color": "#EF4444",
-        "anim": "popIn",
-        "word": "数据对抗",
-        "audioEffect": "impact_thud"
-      }
-    ]
-  }
-}
--------------------------------------------------------------------------------------------
-
-======================================== REQUEST ========================================
-time: 2026-03-28 23:46:03
-model: gemini-2.0-flash
-retries: 3
-
-[PROMPT]
-你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
-
-## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
-既然知道了大脑的这个Bug，咱们以后该怎么保护自己？给你两个极低门槛的防御锦囊：
-第一，警惕“情绪画面”。下次再被某条新闻吓住或者气到的时候，在心里默问自己一句话：“这件事是因为普遍发生我才看到，还是因为它足够离奇才上了热搜？”
-第二，用数据对抗直觉。当大脑告诉你“这很危险”时，随手搜一下真实的统计概率，让理性的数字接管情绪。
-在这个满屏都是情绪诱导和流量套路的时代，学会把“眼见为实”升级为“数据为实”。做自己大脑的主人，不当流量的提线木偶，就是咱们最高级的自我保护。
-
-## 🎯 待处理的目标文案（你只需要处理这个片段！必须原封不动且完整包含在 content 中）
-当大脑告诉你“这很危险”时，随手搜一下真实的统计概率，让理性的数字接管情绪。
-
-## 选定模板及参数规范
-模板名称：METHOD_STACK
-参数 Schema 说明：
-{
-  "imageSrc": {
-    "type": "image_prompt",
-    "required": true,
-    "desc": "主图描述"
   },
-  "enterEffect": {
-    "type": "enum",
-    "values": [
-      "breathe",
-      "slideLeft",
-      "slideBottom",
-      "zoomIn",
-      "fadeIn"
-    ],
-    "default": "breathe",
-    "desc": "入场效果"
-  }
-}
-
-模板该项的示例供参考：
-{
-  "template": "CENTER_FOCUS",
-  "param": {
-    "imageSrc": "上班族坐在电脑前的简笔画图标",
-    "enterEffect": "breathe"
-  }
-}
-
-注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
-
-1. 字幕层（Text）：这是短视频的单行字幕：
-   - `content` 已预先按标点拆分，条目如下（**只读，不要修改**）：
-     [
   {
     "text": "当大脑告诉你“这很危险”时，"
   },
@@ -4167,7 +3767,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:46:05
+time: 2026-03-29 21:41:36
 attempt: 1/3
 
 [OUTPUT]
@@ -4175,23 +3775,24 @@ attempt: 1/3
   "param": {
     "anchors": [
       {
-        "showFrom": 0,
-        "value": "很危险",
+        "showFrom": 1,
         "color": "#EF4444",
         "anim": "popIn",
+        "word": "数据对抗",
         "audioEffect": "impact_thud"
       },
       {
-        "showFrom": 1,
-        "value": "统计概率",
-        "color": "#000000",
-        "anim": "highlight"
+        "showFrom": 2,
+        "color": "#EF4444",
+        "anim": "popIn",
+        "word": "这很危险",
+        "audioEffect": "impact_thud"
       },
       {
-        "showFrom": 2,
-        "value": "理性",
+        "showFrom": 4,
         "color": "#000000",
-        "anim": "slideUp"
+        "anim": "highlight",
+        "word": "数字"
       }
     ]
   }
@@ -4199,7 +3800,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:46:05
+time: 2026-03-29 21:41:36
 model: gemini-2.0-flash
 retries: 3
 
@@ -4300,7 +3901,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:46:07
+time: 2026-03-29 21:41:37
 attempt: 1/3
 
 [OUTPUT]
@@ -4325,7 +3926,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:46:07
+time: 2026-03-29 21:41:37
 model: gemini-2.0-flash
 retries: 3
 
@@ -4430,7 +4031,7 @@ retries: 3
 补充：`LIST_MULTI_GROUP` 只使用 `groups`；其中 `groups[].anchor` 不需要 `showFrom`，`groups[].textIndex` 才是与 `content` 的绑定字段。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:46:07
+time: 2026-03-29 21:41:38
 attempt: 1/3
 
 [OUTPUT]
@@ -4442,7 +4043,7 @@ attempt: 1/3
 -------------------------------------------------------------------------------------------
 
 ======================================== REQUEST ========================================
-time: 2026-03-28 23:46:07
+time: 2026-03-29 21:41:38
 model: gemini-2.0-flash
 retries: 3
 
@@ -4472,27 +4073,30 @@ retries: 3
   "[scene_1] item order=2 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
   "[scene_1] item order=2 模板 CENTER_FOCUS anchors[0].text 为空，已丢弃",
   "[scene_1] item order=2 模板 CENTER_FOCUS anchors[1].text 为空，已丢弃",
-  "[scene_1] item order=3 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
-  "[scene_1] item order=3 模板 CENTER_FOCUS anchors[0].text 为空，已丢弃",
-  "[scene_1] item order=3 模板 CENTER_FOCUS anchors[1].text 为空，已丢弃",
-  "[scene_1] item order=4 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
-  "[scene_1] item order=4 模板 CENTER_FOCUS anchors[0].text 为空，已丢弃",
-  "[scene_1] item order=4 模板 CENTER_FOCUS anchors[1].text 为空，已丢弃",
-  "[scene_1] item order=4 模板 CENTER_FOCUS anchors[2].text 为空，已丢弃",
+  "[scene_1] item order=3 模板 CONCEPT_CARD 必填字段 `imageSrc` 为空",
+  "[scene_1] item order=3 模板 CONCEPT_CARD 必填字段 `conceptName` 为空",
+  "[scene_1] item order=3 模板 CONCEPT_CARD anchors[0].text 为空，已丢弃",
+  "[scene_1] item order=3 模板 CONCEPT_CARD anchors[1].text 为空，已丢弃",
+  "[scene_1] item order=4 模板 SPLIT_COMPARE 必填字段 `leftSrc` 为空",
+  "[scene_1] item order=4 模板 SPLIT_COMPARE 必填字段 `rightSrc` 为空",
+  "[scene_1] item order=4 模板 SPLIT_COMPARE 必填字段 `leftLabel` 为空",
+  "[scene_1] item order=4 模板 SPLIT_COMPARE 必填字段 `rightLabel` 为空",
+  "[scene_1] item order=4 模板 SPLIT_COMPARE anchors[0].text 为空，已丢弃",
+  "[scene_1] item order=4 模板 SPLIT_COMPARE anchors[1].text 为空，已丢弃",
   "[scene_1] item order=5 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
   "[scene_1] item order=5 模板 CENTER_FOCUS anchors[0].text 为空，已丢弃",
   "[scene_1] item order=5 模板 CENTER_FOCUS anchors[1].text 为空，已丢弃",
-  "[scene_1] item order=6 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
-  "[scene_1] item order=6 模板 CENTER_FOCUS anchors[0].text 为空，已丢弃",
-  "[scene_1] item order=6 模板 CENTER_FOCUS anchors[1].text 为空，已丢弃",
-  "[scene_2] item order=1 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
-  "[scene_2] item order=1 模板 CENTER_FOCUS anchors[0].showFrom=None 非法，已丢弃",
+  "[scene_1] item order=6 模板 TEXT_FOCUS content 条数 4 多于 content_max_items=3",
+  "[scene_2] item order=1 模板 CONCEPT_CARD 必填字段 `imageSrc` 为空",
+  "[scene_2] item order=1 模板 CONCEPT_CARD 必填字段 `conceptName` 为空",
+  "[scene_2] item order=1 模板 CONCEPT_CARD anchors[0].showFrom=None 非法，已丢弃",
   "[scene_2] item order=2 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
   "[scene_2] item order=2 模板 CENTER_FOCUS anchors[0].text 为空，已丢弃",
   "[scene_2] item order=2 模板 CENTER_FOCUS anchors[1].text 为空，已丢弃",
   "[scene_2] item order=3 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
   "[scene_2] item order=3 模板 CENTER_FOCUS anchors[0].text 为空，已丢弃",
   "[scene_2] item order=3 模板 CENTER_FOCUS anchors[1].text 为空，已丢弃",
+  "[scene_2] item order=4 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
   "[scene_2] item order=4 模板 CENTER_FOCUS anchors[0].text 为空，已丢弃",
   "[scene_2] item order=4 模板 CENTER_FOCUS anchors[1].text 为空，已丢弃",
   "[scene_2] item order=5 模板 STAT_COMPARE 必填字段 `leftLabel` 为空",
@@ -4504,39 +4108,32 @@ retries: 3
   "[scene_2] item order=7 模板 CENTER_FOCUS anchors[1].text 为空，已丢弃",
   "[scene_2] item order=8 模板 TEXT_FOCUS 必填字段 `coreSentence` 为空",
   "[scene_3] item order=1 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
-  "[scene_3] item order=2 模板 TEXT_FOCUS 必填字段 `coreSentence` 为空",
+  "[scene_3] item order=2 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
   "[scene_3] item order=3 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
   "[scene_3] item order=3 模板 CENTER_FOCUS anchors[0].text 为空，已丢弃",
-  "[scene_3] item order=4 未知模板 'METHOD_STACK'，已回退为 CENTER_FOCUS",
   "[scene_3] item order=4 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
   "[scene_3] item order=4 模板 CENTER_FOCUS anchors[0].text 为空，已丢弃",
+  "[scene_3] item order=4 模板 CENTER_FOCUS anchors[1].text 为空，已丢弃",
+  "[scene_3] item order=4 模板 CENTER_FOCUS anchors[2].text 为空，已丢弃",
   "[scene_3] item order=5 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
-  "[scene_3] item order=5 模板 CENTER_FOCUS anchors[0].text 为空，已丢弃",
-  "[scene_3] item order=6 未知模板 'METHOD_STACK'，已回退为 CENTER_FOCUS",
-  "[scene_3] item order=6 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
-  "[scene_3] item order=6 模板 CENTER_FOCUS anchors[0].text 为空，已丢弃",
-  "[scene_3] item order=6 模板 CENTER_FOCUS anchors[1].text 为空，已丢弃",
-  "[scene_3] item order=6 模板 CENTER_FOCUS anchors[2].text 为空，已丢弃",
-  "[scene_3] item order=7 模板 CENTER_FOCUS 必填字段 `imageSrc` 为空",
-  "[scene_3] item order=7 模板 CENTER_FOCUS anchors[0].showFrom=None 非法，已丢弃",
-  "[scene_3] item order=7 模板 CENTER_FOCUS anchors[1].showFrom=None 非法，已丢弃",
-  "[scene_3] item order=8 模板 TEXT_FOCUS 必填字段 `coreSentence` 为空"
+  "[scene_3] item order=5 模板 CENTER_FOCUS anchors[0].showFrom=None 非法，已丢弃",
+  "[scene_3] item order=5 模板 CENTER_FOCUS anchors[1].showFrom=None 非法，已丢弃",
+  "[scene_3] item order=6 模板 TEXT_FOCUS 必填字段 `coreSentence` 为空"
 ]
 
 ## 当前 JSON 初稿
 {
-  "topic": "如何对抗信息焦虑与恐慌",
+  "topic": "如何对抗信息茧房和情绪操控",
   "scenes": [
     {
       "sceneId": "scene_1",
-      "sceneName": "引出问题：恐慌与焦虑的来源",
+      "sceneName": "引出恐慌感和焦虑感",
       "items": [
         {
-          "order": 1,
           "narrativeType": "HOOK",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：首个镜头，无需检查连续性",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4/5/6/7 -> 默认 -> 选用 CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_1",
+          "order": 1,
           "param": {
             "anchors": [],
             "content": [
@@ -4568,11 +4165,10 @@ retries: 3
           }
         },
         {
-          "order": 2,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4/5/6/7 -> 默认 -> 选用 CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_2",
+          "order": 2,
           "param": {
             "anchors": [],
             "content": [
@@ -4589,11 +4185,10 @@ retries: 3
           }
         },
         {
-          "order": 3,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_3",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4 -> 解释专业概念 -> 选用 CONCEPT_CARD",
+          "template": "CONCEPT_CARD",
+          "order": 3,
           "param": {
             "anchors": [],
             "content": [
@@ -4610,11 +4205,10 @@ retries: 3
           }
         },
         {
+          "narrativeType": "CASE",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/3/4 -> Step 2: 媒体行为 vs 安全到达 对比 -> 选用 SPLIT_COMPARE",
+          "template": "SPLIT_COMPARE",
           "order": 4,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_4",
           "param": {
             "anchors": [],
             "content": [
@@ -4637,11 +4231,10 @@ retries: 3
           }
         },
         {
-          "order": 5,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4/5/6/7 -> 默认 -> 选用 CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_5",
+          "order": 5,
           "param": {
             "anchors": [],
             "content": [
@@ -4661,13 +4254,19 @@ retries: 3
           }
         },
         {
-          "order": 6,
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_6",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4 -> Step 5: 强结论/高冲击表达 -> 选用 TEXT_FOCUS",
+          "template": "TEXT_FOCUS",
+          "order": 6,
           "param": {
-            "anchors": [],
+            "coreSentence": "普通人如何逃离“信息恐怖屋”？",
+            "anchors": [
+              {
+                "text": "信息恐怖屋",
+                "showFrom": 3,
+                "color": "#EF4444"
+              }
+            ],
             "content": [
               {
                 "text": "这其实是一套把人性弱点研究到极致的注意力"
@@ -4688,14 +4287,13 @@ retries: 3
     },
     {
       "sceneId": "scene_2",
-      "sceneName": "心理学解释：可得性启发偏见",
+      "sceneName": "可得性启发偏见",
       "items": [
         {
-          "order": 1,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_1",
+          "reasoning": "决策树匹配路径 -> 命中 Step4 -> 解释专业概念/术语 -> CONCEPT_CARD",
+          "template": "CONCEPT_CARD",
+          "order": 1,
           "param": {
             "anchors": [],
             "content": [
@@ -4712,11 +4310,10 @@ retries: 3
           }
         },
         {
-          "order": 2,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
+          "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_2",
+          "order": 2,
           "param": {
             "anchors": [],
             "content": [
@@ -4736,11 +4333,10 @@ retries: 3
           }
         },
         {
-          "order": 3,
           "narrativeType": "CASE",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
+          "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_3",
+          "order": 3,
           "param": {
             "anchors": [],
             "content": [
@@ -4754,14 +4350,12 @@ retries: 3
           }
         },
         {
-          "order": 4,
           "narrativeType": "CASE",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
+          "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_4",
+          "order": 4,
           "param": {
             "anchors": [],
-            "imageSrc": "飞机坠毁的灾难现场",
             "content": [
               {
                 "text": "等你真要买机票时，"
@@ -4779,11 +4373,10 @@ retries: 3
           }
         },
         {
-          "order": 5,
           "narrativeType": "DATA",
-          "reasoning": "决策树匹配路径 -> 命中 Step 1（数据型）-> 飞机出事的概率和骑电动车被撞的概率对比 -> STAT_COMPARE",
+          "reasoning": "决策树匹配路径 -> 命中 Step2 -> 数据对比 -> STAT_COMPARE",
           "template": "STAT_COMPARE",
-          "groupKey": "solo_5",
+          "order": 5,
           "param": {
             "anchors": [],
             "content": [
@@ -4800,16 +4393,15 @@ retries: 3
           }
         },
         {
-          "order": 6,
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型 -> 命中高情绪/冲击型 -> 金句/核心结论 -> TEXT_FOCUS",
+          "reasoning": "决策树匹配路径 -> 命中 Step5 -> 核心结论/升华 -> TEXT_FOCUS",
           "template": "TEXT_FOCUS",
-          "groupKey": "solo_6",
+          "order": 6,
           "param": {
-            "coreSentence": "认清一个残酷真相：容易想起，不等于常见。",
+            "coreSentence": "认清真相：容易想起，不等于很常见",
             "anchors": [
               {
-                "text": "残酷真相",
+                "text": "真相",
                 "showFrom": 0,
                 "color": "#EF4444"
               }
@@ -4825,11 +4417,10 @@ retries: 3
           }
         },
         {
-          "order": 7,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
+          "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_7",
+          "order": 7,
           "param": {
             "anchors": [],
             "content": [
@@ -4849,11 +4440,10 @@ retries: 3
           }
         },
         {
-          "order": 8,
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型 -> 命中高情绪/冲击型 -> 冲击收束 -> TEXT_FOCUS",
+          "reasoning": "决策树匹配路径 -> 命中 Step5 -> 核心结论/升华 -> TEXT_FOCUS",
           "template": "TEXT_FOCUS",
-          "groupKey": "solo_8",
+          "order": 8,
           "param": {
             "anchors": [],
             "content": [
@@ -4870,14 +4460,13 @@ retries: 3
     },
     {
       "sceneId": "scene_3",
-      "sceneName": "解决方案：防御锦囊",
+      "sceneName": "防御锦囊",
       "items": [
         {
-          "order": 1,
           "narrativeType": "HOOK",
-          "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：无连续相同模板",
+          "reasoning": "决策树匹配路径 -> visualFocus为疑问表情 -> 默认 -> 命中 Step 8 -> 默认CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_1",
+          "order": 1,
           "param": {
             "anchors": [],
             "content": [
@@ -4891,11 +4480,10 @@ retries: 3
           }
         },
         {
-          "order": 2,
           "narrativeType": "TRANSITION",
-          "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：避免连续 CENTER_FOCUS",
-          "template": "TEXT_FOCUS",
-          "groupKey": "solo_2",
+          "reasoning": "决策树匹配路径 -> 过渡句 -> 默认 -> 命中 Step 8 -> 默认CENTER_FOCUS",
+          "template": "CENTER_FOCUS",
+          "order": 2,
           "param": {
             "anchors": [],
             "content": [
@@ -4906,11 +4494,10 @@ retries: 3
           }
         },
         {
-          "order": 3,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK, 但这里只有一句，与下一句合并",
+          "reasoning": "决策树匹配路径 -> 包含标题、解释和反思问题，叙事完整 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 命中 Step 3 -> METHOD_STACK",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_3",
+          "order": 3,
           "param": {
             "anchors": [],
             "content": [
@@ -4919,19 +4506,7 @@ retries: 3
               },
               {
                 "text": "警惕“情绪画面”。"
-              }
-            ]
-          }
-        },
-        {
-          "order": 4,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK -> 连续性检查：无连续相同模板",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_4",
-          "param": {
-            "anchors": [],
-            "content": [
+              },
               {
                 "text": "下次再被某条新闻吓住或者气到的时候，"
               },
@@ -4951,11 +4526,10 @@ retries: 3
           }
         },
         {
-          "order": 5,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK，与下一句合并",
+          "reasoning": "决策树匹配路径 -> 包含标题、解释和行动建议，叙事完整 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 命中 Step 3 -> METHOD_STACK",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_5",
+          "order": 4,
           "param": {
             "anchors": [],
             "content": [
@@ -4964,19 +4538,7 @@ retries: 3
               },
               {
                 "text": "用数据对抗直觉。"
-              }
-            ]
-          }
-        },
-        {
-          "order": 6,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK -> 连续性检查：无连续相同模板",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_6",
-          "param": {
-            "anchors": [],
-            "content": [
+              },
               {
                 "text": "当大脑告诉你“这很危险”时，"
               },
@@ -4990,11 +4552,10 @@ retries: 3
           }
         },
         {
-          "order": 7,
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：无连续相同模板",
+          "reasoning": "决策树匹配路径 -> 总结强调 -> 默认 -> 命中 Step 8 -> 默认CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_7",
+          "order": 5,
           "param": {
             "anchors": [],
             "content": [
@@ -5008,11 +4569,10 @@ retries: 3
           }
         },
         {
-          "order": 8,
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：无连续相同模板",
+          "reasoning": "决策树匹配路径 -> 结尾升华，点明主题。-> 金句/核心结论/升华 -> 命中 Step 5 -> TEXT_FOCUS",
           "template": "TEXT_FOCUS",
-          "groupKey": "solo_8",
+          "order": 6,
           "param": {
             "anchors": [],
             "content": [
@@ -5045,13 +4605,13 @@ retries: 3
 
 - **`ALERT`** 仅用于强情绪、转折、冲击收束；禁止通篇堆砌。
 
-- **`BEAT_SEQUENCE`**：**同一 item、同一论证动作**内需要 2～4 个连续节拍（图随口播分段切换、情绪可 calm→alert）。用来避免为求变化而把连贯逻辑拆成多个零碎 item；`stages` 条数须与后续 `content` 条数一致。
+- **`BEAT_SEQUENCE`**：**同一 item、同一论证动作**内需要 2～4 个连续节拍（图随口播分段切换、情绪可 calm→alert）。用来避免为求变化而把连贯逻辑拆成多个零碎 item；`stages` 条数须与后续台词分段数一致。
 
 - **`STEP_LIST`**：仅用于**短步骤 / 短分点 / 强清单感**内容。若单个 item 是“方法标题/提醒标题 + 解释展开”，优先改用 **`METHOD_STACK`**；不要把解释型口播硬塞成纯清单。
 
 - **`METHOD_STACK`**：适合**单个 item 内的一个方法/提醒/观点标题**，后面继续跟 2～4 句解释展开。用“标题 + 单图 + 解释条”承接一个完整叙事，不要拿它去跨 item 合并多个方法。
 
-- **`MAGNIFYING_GLASS`** 仅当该 item 可提供非空 `anchors`（通过 `showFrom` 关联 content 索引）时使用；否则换其他模板。
+- **`MAGNIFYING_GLASS`** 仅当该 item 可提供非空 `anchors`（通过 `showFrom` 关联台词索引）时使用；否则换其他模板。
 
 - **`LIST_MULTI_GROUP`**：**同一论证下的多分点并列**（2～4 个可独立成画的主体），**优先用单 item + `LIST_MULTI_GROUP` 覆盖全部分点**，而不是每个分点各开一个 item。若当前 item 只是“给你两个方法：”这类总起句、真正分点已经拆到后续 item，**禁止**用 `LIST_MULTI_GROUP` 去脑补多组。该模板只输出 `groups`，每组使用 `textIndex + image + 可选 anchor`。禁止因「评论区混战」等笼统画面硬凑多图；单一比喻、无清晰分点仍用 `CENTER_FOCUS` 或 `ALERT`。
 
@@ -5122,8 +4682,8 @@ retries: 3
 
 ### MAGNIFYING_GLASS
 
-仅需 `content` 数组。
-- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based content 索引）。
+无需额外参数。
+- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based 台词分段索引）。
 
 ### PROGRESS_RING
 
@@ -5154,14 +4714,14 @@ retries: 3
 
 ### STEP_LIST
 
-仅需 `content` 数组。
-- *建议*：content 至少 2 条；至多 6 条。
+无需额外参数。
+- *建议*：台词至少 2 段；至多 6 段。
 
 ### TEXT_FOCUS
 
 - `coreSentence` (必填): 精炼核心句，不超过25个字
 - `anchors` (可选): 锚点数组，用于高亮正文中的子串，每项含 text、showFrom、color；使用 coreSentence 时锚点词须出现在 coreSentence 内
-- *建议*：至多 3 条。
+- *建议*：至多 3 段。
 
 
 ### TIMELINE
@@ -5185,147 +4745,147 @@ retries: 3
 仅输出 JSON，不要 markdown 代码块。
 ===========================================================================================
 ---------------------------------------- RESPONSE ----------------------------------------
-time: 2026-03-28 23:46:22
+time: 2026-03-29 21:41:52
 attempt: 1/3
 
 [OUTPUT]
 {
-  "topic": "如何对抗信息焦虑与恐慌",
+  "topic": "如何对抗信息茧房和情绪操控",
   "scenes": [
     {
       "sceneId": "scene_1",
-      "sceneName": "引出问题：恐慌与焦虑的来源",
+      "sceneName": "引出恐慌感和焦虑感",
       "items": [
         {
-          "order": 1,
           "narrativeType": "HOOK",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：首个镜头，无需检查连续性",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4/5/6/7 -> 默认 -> 选用 CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_1",
+          "order": 1,
           "param": {
-            "imageSrc": "一个焦虑的人盯着手机屏幕，背景是飞机坠毁和街头枪战的画面"
+            "imageSrc": "一个害怕坐飞机的人的简笔画图标"
           }
         },
         {
+          "narrativeType": "LOGIC",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4/5/6/7 -> 默认 -> 选用 CENTER_FOCUS",
+          "template": "CENTER_FOCUS",
           "order": 2,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_2",
           "param": {
-            "imageSrc": "一个双手抱头，表示无奈的人物简笔画"
+            "imageSrc": "一个表示思考中的人的简笔画图标"
           }
         },
         {
+          "narrativeType": "LOGIC",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4 -> 解释专业概念 -> 选用 CONCEPT_CARD",
+          "template": "CONCEPT_CARD",
           "order": 3,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_3",
           "param": {
-            "imageSrc": "一个齿轮代表的算法和一个人脑的简笔画"
+            "imageSrc": "一个深谙流量密码的媒体算法的简笔画图标",
+            "conceptName": "流量密码"
           }
         },
         {
+          "narrativeType": "CASE",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/3/4 -> Step 2: 媒体行为 vs 安全到达 对比 -> 选用 SPLIT_COMPARE",
+          "template": "SPLIT_COMPARE",
           "order": 4,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_4",
           "param": {
-            "imageSrc": "一个眼睛放大的简笔画，表示媒体的放大镜效果"
+            "leftSrc": "媒体放大报道极端事件的简笔画图标",
+            "rightSrc": "安全到达的飞机简笔画图标",
+            "leftLabel": "极端事件",
+            "rightLabel": "安全到达"
           }
         },
         {
+          "narrativeType": "LOGIC",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4/5/6/7 -> 默认 -> 选用 CENTER_FOCUS",
+          "template": "CENTER_FOCUS",
           "order": 5,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_5",
           "param": {
-            "imageSrc": "一个手指点击屏幕的简笔画，表示算法推荐"
+            "imageSrc": "算法推荐的简笔画图标"
           }
         },
         {
-          "order": 6,
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_6",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4 -> Step 5: 强结论/高冲击表达 -> 选用 TEXT_FOCUS",
+          "template": "TEXT_FOCUS",
+          "order": 6,
           "param": {
-            "imageSrc": "一个被困在房子里的简笔画小人，表示信息茧房"
+            "coreSentence": "普通人如何逃离“信息恐怖屋”？",
+            "anchors": [
+              {
+                "text": "信息恐怖屋",
+                "showFrom": 3,
+                "color": "#EF4444"
+              }
+            ]
           }
         }
       ]
     },
     {
       "sceneId": "scene_2",
-      "sceneName": "心理学解释：可得性启发偏见",
+      "sceneName": "可得性启发偏见",
       "items": [
         {
+          "narrativeType": "LOGIC",
+          "reasoning": "决策树匹配路径 -> 命中 Step4 -> 解释专业概念/术语 -> CONCEPT_CARD",
+          "template": "CONCEPT_CARD",
           "order": 1,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_1",
           "param": {
-            "imageSrc": "一个大脑的简笔画，旁边写着心理学"
+            "imageSrc": "一个大脑正在进行可得性启发的简笔画图标",
+            "conceptName": "可得性启发偏见"
           }
         },
         {
+          "narrativeType": "LOGIC",
+          "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
+          "template": "CENTER_FOCUS",
           "order": 2,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_2",
           "param": {
-            "imageSrc": "一个大脑偷懒的简笔画"
+            "imageSrc": "一个偷懒的大脑的简笔画图标"
           }
         },
         {
+          "narrativeType": "CASE",
+          "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
+          "template": "CENTER_FOCUS",
           "order": 3,
-          "narrativeType": "CASE",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_3",
           "param": {
-            "imageSrc": "一个眼睛盯着耸人听闻的头条的简笔画"
+            "imageSrc": "耸人听闻的头条新闻的简笔画图标"
           }
         },
         {
+          "narrativeType": "CASE",
+          "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
+          "template": "CENTER_FOCUS",
           "order": 4,
-          "narrativeType": "CASE",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_4",
           "param": {
-            "imageSrc": "飞机坠毁的灾难现场"
+            "imageSrc": "大脑中闪现空难画面的简笔画图标"
           }
         },
         {
-          "order": 5,
           "narrativeType": "DATA",
-          "reasoning": "决策树匹配路径 -> 命中 Step 1（数据型）-> 飞机出事的概率和骑电动车被撞的概率对比 -> STAT_COMPARE",
+          "reasoning": "决策树匹配路径 -> 命中 Step2 -> 数据对比 -> STAT_COMPARE",
           "template": "STAT_COMPARE",
-          "groupKey": "solo_5",
+          "order": 5,
           "param": {
-            "leftLabel": "飞机",
-            "rightLabel": "电动车",
             "leftValue": 1,
-            "rightValue": 100
+            "rightValue": 1000000,
+            "leftLabel": "飞机出事概率",
+            "rightLabel": "骑电动车被撞概率"
           }
         },
         {
-          "order": 6,
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型 -> 命中高情绪/冲击型 -> 金句/核心结论 -> TEXT_FOCUS",
+          "reasoning": "决策树匹配路径 -> 命中 Step5 -> 核心结论/升华 -> TEXT_FOCUS",
           "template": "TEXT_FOCUS",
-          "groupKey": "solo_6",
+          "order": 6,
           "param": {
-            "coreSentence": "认清一个残酷真相：容易想起，不等于常见。",
+            "coreSentence": "认清真相：容易想起，不等于很常见",
             "anchors": [
               {
-                "text": "残酷真相",
+                "text": "真相",
                 "showFrom": 0,
                 "color": "#EF4444"
               }
@@ -5333,104 +4893,84 @@ attempt: 1/3
           }
         },
         {
-          "order": 7,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
+          "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_7",
+          "order": 7,
           "param": {
-            "imageSrc": "充满冲突和血腥的简笔画和安全起降的简笔画"
+            "imageSrc": "极端事件和安全起降对比的简笔画图标"
           }
         },
         {
-          "order": 8,
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型 -> 命中高情绪/冲击型 -> 冲击收束 -> TEXT_FOCUS",
+          "reasoning": "决策树匹配路径 -> 命中 Step5 -> 核心结论/升华 -> TEXT_FOCUS",
           "template": "TEXT_FOCUS",
-          "groupKey": "solo_8",
-          "param": {}
+          "order": 8,
+          "param": {
+            "coreSentence": "直觉被媒体劫持",
+            "anchors": []
+          }
         }
       ]
     },
     {
       "sceneId": "scene_3",
-      "sceneName": "解决方案：防御锦囊",
+      "sceneName": "防御锦囊",
       "items": [
         {
-          "order": 1,
           "narrativeType": "HOOK",
-          "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：无连续相同模板",
+          "reasoning": "决策树匹配路径 -> visualFocus为疑问表情 -> 默认 -> 命中 Step 8 -> 默认CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_1",
+          "order": 1,
           "param": {
-            "imageSrc": "一个问号的简笔画"
+            "imageSrc": "一个问号的简笔画图标"
           }
         },
         {
-          "order": 2,
           "narrativeType": "TRANSITION",
-          "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：避免连续 CENTER_FOCUS",
-          "template": "TEXT_FOCUS",
-          "groupKey": "solo_2",
-          "param": {}
+          "reasoning": "决策树匹配路径 -> 过渡句 -> 默认 -> 命中 Step 8 -> 默认CENTER_FOCUS",
+          "template": "CENTER_FOCUS",
+          "order": 2,
+          "param": {
+            "imageSrc": "一个礼物盒子的简笔画图标"
+          }
         },
         {
+          "narrativeType": "LOGIC",
+          "reasoning": "决策树匹配路径 -> 包含标题、解释和反思问题，叙事完整 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 命中 Step 3 -> METHOD_STACK",
+          "template": "CENTER_FOCUS",
           "order": 3,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK, 但这里只有一句，与下一句合并",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_3",
           "param": {
-            "imageSrc": "一个警惕的眼睛的简笔画"
+            "imageSrc": "警惕情绪画面的简笔画图标"
           }
         },
         {
+          "narrativeType": "LOGIC",
+          "reasoning": "决策树匹配路径 -> 包含标题、解释和行动建议，叙事完整 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 命中 Step 3 -> METHOD_STACK",
+          "template": "CENTER_FOCUS",
           "order": 4,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK -> 连续性检查：无连续相同模板",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_4",
           "param": {
-            "imageSrc": "一个大脑思考的简笔画"
+            "imageSrc": "用数据对抗直觉的简笔画图标"
           }
         },
         {
+          "narrativeType": "CONCLUSION",
+          "reasoning": "决策树匹配路径 -> 总结强调 -> 默认 -> 命中 Step 8 -> 默认CENTER_FOCUS",
+          "template": "CENTER_FOCUS",
           "order": 5,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK，与下一句合并",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_5",
           "param": {
-            "imageSrc": "一个天平，一边是数据，一边是直觉的简笔画"
+            "imageSrc": "眼见为实升级为数据为实的简笔画图标"
           }
         },
         {
-          "order": 6,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK -> 连续性检查：无连续相同模板",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_6",
-          "param": {
-            "imageSrc": "一个放大镜搜索统计概率的简笔画"
-          }
-        },
-        {
-          "order": 7,
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：无连续相同模板",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_7",
-          "param": {
-            "imageSrc": "一只眼睛看着屏幕，屏幕上是情绪诱导和流量套路的简笔画"
-          }
-        },
-        {
-          "order": 8,
-          "narrativeType": "CONCLUSION",
-          "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：无连续相同模板",
+          "reasoning": "决策树匹配路径 -> 结尾升华，点明主题。-> 金句/核心结论/升华 -> 命中 Step 5 -> TEXT_FOCUS",
           "template": "TEXT_FOCUS",
-          "groupKey": "solo_8",
-          "param": {}
+          "order": 6,
+          "param": {
+            "coreSentence": "做自己大脑的主人",
+            "anchors": []
+          }
         }
       ]
     }

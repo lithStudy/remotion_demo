@@ -10,10 +10,8 @@ Step 1: 口播文案分析（模板驱动 v3）
 
 import argparse
 import json
-import os
 import re
 import shutil
-from datetime import datetime
 from pathlib import Path
 
 from scene_script_validate import validate_and_normalize_scene_scripts
@@ -24,9 +22,12 @@ from step1_analysis import (
     gemini_fix_after_warnings,
 )
 from template_registry import TEMPLATE_REGISTRY, generate_ai_prompt_guide
+from utils import AiLogger, load_config, load_env
 
-_AI_LOG_PATH = None
 
+# ─────────────────────────────────────────────────────────────
+# 质量指标收集
+# ─────────────────────────────────────────────────────────────
 
 def _looks_like_list_intro_without_points(text: str, next_text: str | None = None) -> bool:
     normalized = str(text or "").strip()
@@ -98,128 +99,12 @@ def _collect_template_quality_metrics(scenes: list[dict]) -> dict:
     }
 
 
-def _set_ai_log_path(output_dir: Path, video_name: str) -> None:
-    """初始化 AI 请求日志文件路径。"""
-    global _AI_LOG_PATH
-    log_dir = output_dir / "logs"
-    log_dir.mkdir(parents=True, exist_ok=True)
-    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    _AI_LOG_PATH = log_dir / f"{video_name}_step1_ai_{ts}.log"
-
-
-def _append_ai_log(block: str) -> None:
-    """追加写入 AI 日志。"""
-    if _AI_LOG_PATH is None:
-        return
-    _AI_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with open(_AI_LOG_PATH, "a", encoding="utf-8") as f:
-        f.write(block)
-        if not block.endswith("\n"):
-            f.write("\n")
-
-
-def _extract_content_text(content_item) -> str:
-    if isinstance(content_item, str):
-        return content_item
-    if isinstance(content_item, dict):
-        return str(content_item.get("text", ""))
-    return str(content_item)
-
-
-def _inject_preview_timings(scene_scripts: dict, fps: int, config: dict) -> None:
-    """
-    为 Step1 结果注入默认时间轴，避免无音频预览时字幕重叠。
-    Step3 会在生成真实音频后覆盖这些字段。
-    """
-    min_frames = int(config.get("preview_min_duration_frames", max(1, fps)))
-    frames_per_char = float(config.get("preview_frames_per_char", 2.2))
-
-    for scene in scene_scripts.get("scenes", []):
-        for item in scene.get("items", []):
-            param = item.get("param", {})
-            if not isinstance(param, dict):
-                continue
-
-            content = param.get("content", [])
-            if not isinstance(content, list) or not content:
-                continue
-
-            upgraded_content = []
-            cursor = 0
-            for content_item in content:
-                text = _extract_content_text(content_item)
-                text_len = max(1, len(text.strip()))
-                duration_frames = max(min_frames, int(round(text_len * frames_per_char)))
-                upgraded_content.append(
-                    {
-                        "text": text,
-                        "startFrame": cursor,
-                        "durationFrames": duration_frames,
-                    }
-                )
-                cursor += duration_frames
-
-            param["content"] = upgraded_content
-            anchors = param.get("anchors", [])
-            if not isinstance(anchors, list):
-                print(f"   ⚠️ item order={item.get('order', '?')} 的 anchors 非数组，已清空")
-                anchors = []
-
-            valid_anchors = []
-            for anchor_idx, anchor_item in enumerate(anchors):
-                if not isinstance(anchor_item, dict):
-                    print(
-                        f"   ⚠️ item order={item.get('order', '?')} anchors[{anchor_idx}] 非对象，已丢弃"
-                    )
-                    continue
-                anchor_text = str(anchor_item.get("text", "")).strip()
-                show_from = anchor_item.get("showFrom")
-                if not anchor_text:
-                    print(
-                        f"   ⚠️ item order={item.get('order', '?')} anchors[{anchor_idx}] 缺少 text，已丢弃"
-                    )
-                    continue
-                if not isinstance(show_from, int) or show_from < 0 or show_from >= len(upgraded_content):
-                    print(
-                        f"   ⚠️ item order={item.get('order', '?')} anchors[{anchor_idx}].showFrom 非法，已丢弃"
-                    )
-                    continue
-                valid_anchors.append(
-                    {
-                        "text": anchor_text,
-                        "showFrom": show_from,
-                        "color": anchor_item.get("color"),
-                        "anim": anchor_item.get("anim"),
-                        "audioEffect": anchor_item.get("audioEffect"),
-                    }
-                )
-            param["anchors"] = valid_anchors
-            param["totalDurationFrames"] = max(cursor, min_frames)
-
-
-def load_env(script_dir: Path):
-    """加载 .env 文件"""
-    env_path = script_dir / ".env"
-    if env_path.exists():
-        with open(env_path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith("#") and "=" in line:
-                    key, value = line.split("=", 1)
-                    os.environ[key.strip()] = value.strip()
-
-
-def load_config(script_dir: Path) -> dict:
-    """加载配置"""
-    config_path = script_dir / "config.json"
-    with open(config_path, "r", encoding="utf-8") as f:
-        return json.load(f)
-
+# ─────────────────────────────────────────────────────────────
+# 清理 / 资源管理
+# ─────────────────────────────────────────────────────────────
 
 def _cleanup_related_resources(video_name: str, output_dir: Path, config: dict, script_dir: Path) -> None:
-    """
-    Step1 执行前清理与当前视频相关的历史产物，避免旧资源干扰新生成结果。
-    """
+    """Step1 执行前清理与当前视频相关的历史产物，避免旧资源干扰新生成结果。"""
     project_root = Path(config.get("project_root", script_dir.parent))
     scenes_dir = project_root / "src" / "remotions" / video_name / "scenes"
     images_dir = project_root / "public" / "images" / video_name
@@ -247,36 +132,108 @@ def _cleanup_related_resources(video_name: str, output_dir: Path, config: dict, 
         print("   ℹ️ 未发现可清理的历史资源")
 
 
-def analyze_with_gemini(text: str, config: dict) -> dict:
-    from google import genai
+# ─────────────────────────────────────────────────────────────
+# 预览时间轴注入
+# ─────────────────────────────────────────────────────────────
 
-    api_key = os.environ.get("GEMINI_API_KEY", "")
-    if not api_key:
-        raise ValueError("未设置 GEMINI_API_KEY，请在 .env 中配置")
+def _sanitize_anchors(param: dict, content_len: int, item_order) -> list[dict]:
+    """校验并清洗 param.anchors，丢弃非法条目，返回有效列表。"""
+    anchors = param.get("anchors", [])
+    if not isinstance(anchors, list):
+        print(f"   ⚠️ item order={item_order} 的 anchors 非数组，已清空")
+        return []
 
-    client = genai.Client(api_key=api_key)
-    image_style = config.get("image_style", "简洁线条插画风格，无背景，无文字")
-    fps = config.get("fps", 30)
+    valid = []
+    for idx, anchor_item in enumerate(anchors):
+        if not isinstance(anchor_item, dict):
+            print(f"   ⚠️ item order={item_order} anchors[{idx}] 非对象，已丢弃")
+            continue
+        anchor_text = str(anchor_item.get("text", "")).strip()
+        show_from = anchor_item.get("showFrom")
+        if not anchor_text:
+            print(f"   ⚠️ item order={item_order} anchors[{idx}] 缺少 text，已丢弃")
+            continue
+        if not isinstance(show_from, int) or show_from < 0 or show_from >= content_len:
+            print(f"   ⚠️ item order={item_order} anchors[{idx}].showFrom 非法，已丢弃")
+            continue
+        valid.append({
+            "text": anchor_text,
+            "showFrom": show_from,
+            "color": anchor_item.get("color"),
+            "anim": anchor_item.get("anim"),
+            "audioEffect": anchor_item.get("audioEffect"),
+        })
+    return valid
 
-    # 模板选择阶段不提供示例，避免模型在 Step2 过拟合样例。
-    template_guide = generate_ai_prompt_guide(image_style, include_examples=False)
-    model = config.get("gemini_model", "gemini-2.0-flash")
 
-    print("\n" + "=" * 60)
-    print("🤖 正在调用 Gemini 分析文案（分层次处理 v3）...")
-    print("=" * 60 + "\n")
+def _inject_preview_timings(scene_scripts: dict, fps: int, config: dict) -> None:
+    """
+    为 Step1 结果注入默认时间轴，避免无音频预览时字幕重叠。
+    Step3 会在生成真实音频后覆盖这些字段。
+    """
+    from utils import extract_content_text
 
-    # 第一步：拆解场景
-    result = analyze_scenes(client, model, text, append_ai_log=_append_ai_log)
+    min_frames = int(config.get("preview_min_duration_frames", max(1, fps)))
+    frames_per_char = float(config.get("preview_frames_per_char", 2.2))
+
+    for scene in scene_scripts.get("scenes", []):
+        for item in scene.get("items", []):
+            param = item.get("param", {})
+            if not isinstance(param, dict):
+                continue
+
+            content = param.get("content", [])
+            if not isinstance(content, list) or not content:
+                continue
+
+            upgraded_content = []
+            cursor = 0
+            for content_item in content:
+                text = extract_content_text(content_item)
+                text_len = max(1, len(text.strip()))
+                duration_frames = max(min_frames, int(round(text_len * frames_per_char)))
+                upgraded_content.append(
+                    {
+                        "text": text,
+                        "startFrame": cursor,
+                        "durationFrames": duration_frames,
+                    }
+                )
+                cursor += duration_frames
+
+            param["content"] = upgraded_content
+            param["anchors"] = _sanitize_anchors(param, len(upgraded_content), item.get("order", "?"))
+            param["totalDurationFrames"] = max(cursor, min_frames)
+
+
+# ─────────────────────────────────────────────────────────────
+# AI 分析管线（拆分为职责单一的子函数）
+# ─────────────────────────────────────────────────────────────
+
+def _run_ai_analysis_pipeline(
+    client,
+    model: str,
+    text: str,
+    template_guide: str,
+    ai_logger: AiLogger | None,
+) -> dict:
+    """
+    纯 AI 编排：依次执行场景拆分、Item 分镜+模板匹配、Item 参数细化三个阶段。
+    返回带有 scenes / topic 等字段的原始结果字典。
+    """
+    append_log = ai_logger.append if ai_logger else None
+
+    # 阶段 1：场景拆分
+    result = analyze_scenes(client, model, text, append_ai_log=append_log)
     scenes = result.get("scenes", [])
     print(f"   ✅ [Step 1/3] 完成，拆解为 {len(scenes)} 个 Scene。")
 
-    # 第二步：分场景两阶段拆解 Item（2A 纯分镜 → 2B 模板匹配）
+    # 阶段 2：两阶段 Item 分析（2A 分镜 + 2B 模板匹配）
     print("   [Step 2/3] 正在两阶段拆解 Items（2A 分镜 + 2B 模板匹配）...")
     topic = result.get("topic", "未命名主题")
     for scene in scenes:
         analyze_items_for_scene(
-            client, model, topic, scene, template_guide, append_ai_log=_append_ai_log
+            client, model, topic, scene, template_guide, append_ai_log=append_log
         )
 
     total_items = sum(len(s.get("items", [])) for s in scenes)
@@ -295,27 +252,18 @@ def analyze_with_gemini(text: str, config: dict) -> dict:
         )
     if quality_metrics["suspicious_list_multi_group_items"]:
         print(
-            "   ⚠️ [Step 2 质量告警] 存在疑似“总起句误判为 LIST_MULTI_GROUP”的 item: "
+            "   ⚠️ [Step 2 质量告警] 存在疑似总起句误判为 LIST_MULTI_GROUP的 item: "
             f"{quality_metrics['suspicious_list_multi_group_items']}"
         )
 
-    # 第三步：分 Item 循环拆解 text 和锚定词
+    # 阶段 3：逐 Item 参数细化
     print("   [Step 3/3] 正在循环拆解 Text 与 Anchors...")
     for scene in scenes:
         scene_text_full = scene.get("text", "")
         for item in scene.get("items", []):
-            # 💡 强制清理 Step 2 可能产生的冗余 AI 注入字段，确保 Step 3 参数纯净且不重复
-            allowed_keys = {
-                "order",
-                "narrativeType",
-                "reasoning",
-                "template",
-                "text",
-                "groupKey",
-                "content",
-            }
-            redundant_keys = [k for k in item.keys() if k not in allowed_keys]
-            for rk in redundant_keys:
+            # 清除 Step2 可能产生的冗余 AI 注入字段，确保 Step3 参数纯净
+            allowed_keys = {"order", "narrativeType", "reasoning", "template", "text", "groupKey", "content"}
+            for rk in [k for k in list(item.keys()) if k not in allowed_keys]:
                 item.pop(rk)
 
             analyze_param_for_item(
@@ -324,22 +272,38 @@ def analyze_with_gemini(text: str, config: dict) -> dict:
                 scene_text_full,
                 item,
                 TEMPLATE_REGISTRY,
-                append_ai_log=_append_ai_log,
+                append_ai_log=append_log,
             )
 
     print("   ✅ [Step 3/3] 完成。")
+    return result
 
-    # 清理多余的用于传递的临时字段 (text)
-    for scene in scenes:
+
+def _cleanup_intermediate_fields(result: dict) -> None:
+    """清理 AI 管线中用于跨步骤传递的临时字段（text、content）。"""
+    for scene in result.get("scenes", []):
         scene.pop("text", None)
         for item in scene.get("items", []):
             item.pop("text", None)
             item.pop("content", None)
 
-    # 添加 fps
-    result["fps"] = fps
 
+def _validate_and_auto_fix(
+    result: dict,
+    client,
+    model: str,
+    text: str,
+    template_guide: str,
+    config: dict,
+    ai_logger: AiLogger | None,
+) -> dict:
+    """
+    对 AI 结果执行校验；若存在告警且配置允许，则调用模型自动修订一次。
+    返回最终（可能已修订）的结果字典。
+    """
+    append_log = ai_logger.append if ai_logger else None
     default_tmpl = config.get("default_template", "CENTER_FOCUS")
+
     _, v_warnings = validate_and_normalize_scene_scripts(
         result, TEMPLATE_REGISTRY, default_template=default_tmpl
     )
@@ -348,52 +312,84 @@ def analyze_with_gemini(text: str, config: dict) -> dict:
         for w in v_warnings:
             print(f"   {w}")
 
-    if v_warnings and config.get("step1_retry_on_validate_warnings", True):
-        print("\n🔄 根据校验告警尝试自动修订（最多 1 次）…")
-        try:
-            fixed = gemini_fix_after_warnings(
-                client,
-                model,
-                text,
-                result,
-                v_warnings,
-                template_guide,
-                append_ai_log=_append_ai_log,
-            )
-            fixed["fps"] = fps
+    if not v_warnings or not config.get("step1_retry_on_validate_warnings", True):
+        return result
 
-            # 强制从 result 中恢复 content，防止模型在 fix 阶段篡改
-            orig_contents = {}
-            for s in result.get("scenes", []):
-                sid = s.get("sceneId")
-                for it in s.get("items", []):
-                    order = it.get("order")
-                    orig_contents[(sid, order)] = it.get("param", {}).get("content", [])
-                    
-            for s in fixed.get("scenes", []):
-                sid = s.get("sceneId")
-                for it in s.get("items", []):
-                    order = it.get("order")
-                    if "param" not in it:
-                        it["param"] = {}
-                    if (sid, order) in orig_contents:
-                        it["param"]["content"] = orig_contents[(sid, order)]
+    print("\n🔄 根据校验告警尝试自动修订（最多 1 次）…")
+    try:
+        # 记录原始 content，防止模型在修订阶段篡改
+        orig_contents: dict[tuple, list] = {}
+        for s in result.get("scenes", []):
+            sid = s.get("sceneId")
+            for it in s.get("items", []):
+                orig_contents[(sid, it.get("order"))] = it.get("param", {}).get("content", [])
 
-            _, w2 = validate_and_normalize_scene_scripts(
-                fixed, TEMPLATE_REGISTRY, default_template=default_tmpl
-            )
-            if w2:
-                print("⚠️ 修订后仍有告警：")
-                for w in w2:
-                    print(f"   {w}")
-            else:
-                print("✅ 修订后校验无告警。")
-            result = fixed
-        except (ValueError, json.JSONDecodeError) as ex:
-            print(f"⚠️ 自动修订失败，保留初稿：{ex}")
+        fixed = gemini_fix_after_warnings(
+            client, model, text, result, v_warnings, template_guide, append_ai_log=append_log
+        )
+        fixed["fps"] = result.get("fps")
+
+        # 恢复 content
+        for s in fixed.get("scenes", []):
+            sid = s.get("sceneId")
+            for it in s.get("items", []):
+                key = (sid, it.get("order"))
+                if "param" not in it:
+                    it["param"] = {}
+                if key in orig_contents:
+                    it["param"]["content"] = orig_contents[key]
+
+        _, w2 = validate_and_normalize_scene_scripts(
+            fixed, TEMPLATE_REGISTRY, default_template=default_tmpl
+        )
+        if w2:
+            print("⚠️ 修订后仍有告警：")
+            for w in w2:
+                print(f"   {w}")
+        else:
+            print("✅ 修订后校验无告警。")
+        return fixed
+
+    except (ValueError, json.JSONDecodeError) as ex:
+        print(f"⚠️ 自动修订失败，保留初稿：{ex}")
+        return result
+
+
+def analyze_with_gemini(text: str, config: dict, ai_logger: AiLogger | None) -> dict:
+    """
+    调用 Gemini 对口播文案进行完整分析，返回场景脚本字典。
+    编排 _run_ai_analysis_pipeline → _cleanup_intermediate_fields → _validate_and_auto_fix。
+    """
+    import os
+    from google import genai
+
+    api_key = os.environ.get("GEMINI_API_KEY", "")
+    if not api_key:
+        raise ValueError("未设置 GEMINI_API_KEY，请在 .env 中配置")
+
+    client = genai.Client(api_key=api_key)
+    model = config.get("gemini_model", "gemini-2.0-flash")
+    fps = config.get("fps", 30)
+    image_style = config.get("image_style", "简洁线条插画风格，无背景，无文字")
+
+    # 模板选择阶段不提供示例，避免模型在 Step2 过拟合样例
+    template_guide = generate_ai_prompt_guide(image_style, include_examples=False)
+
+    print("\n" + "=" * 60)
+    print("🤖 正在调用 Gemini 分析文案（分层次处理 v3）...")
+    print("=" * 60 + "\n")
+
+    result = _run_ai_analysis_pipeline(client, model, text, template_guide, ai_logger)
+    _cleanup_intermediate_fields(result)
+    result["fps"] = fps
+    result = _validate_and_auto_fix(result, client, model, text, template_guide, config, ai_logger)
 
     return result
 
+
+# ─────────────────────────────────────────────────────────────
+# 主入口
+# ─────────────────────────────────────────────────────────────
 
 def main():
     parser = argparse.ArgumentParser(description="Step 1: 口播文案分析（模板驱动 v3）")
@@ -415,7 +411,8 @@ def main():
     output_dir = Path(args.output)
 
     _cleanup_related_resources(video_name, output_dir, config, script_dir)
-    _set_ai_log_path(output_dir, video_name)
+
+    ai_logger = AiLogger(output_dir, video_name)
 
     with open(input_path, "r", encoding="utf-8") as f:
         text = f.read().strip()
@@ -426,7 +423,7 @@ def main():
 
     print(f"📄 读取文案: {len(text)} 字符")
 
-    result = analyze_with_gemini(text, config)
+    result = analyze_with_gemini(text, config, ai_logger)
     _inject_preview_timings(result, config.get("fps", 30), config)
 
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -438,7 +435,7 @@ def main():
     # 统计信息
     scenes = result.get("scenes", [])
     total_items = sum(len(s.get("items", [])) for s in scenes)
-    template_counts = {}
+    template_counts: dict[str, int] = {}
     for s in scenes:
         for it in s.get("items", []):
             t = it.get("template", "?")
@@ -451,8 +448,7 @@ def main():
     print(f"   📝 文案条目: {total_items}")
     print(f"   🎨 模板分布: {template_counts}")
     print(f"   💾 保存到: {output_path}")
-    if _AI_LOG_PATH is not None:
-        print(f"   🧾 AI日志: {_AI_LOG_PATH}")
+    print(f"   🧾 AI日志: {ai_logger.path}")
 
     return True
 

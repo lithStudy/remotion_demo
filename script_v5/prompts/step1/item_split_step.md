@@ -46,7 +46,6 @@ __SCENE_TEXT__
 {
   "items": [
     {
-      "order": 1,
       "text": "分配给该镜头的完整口播原文片段（必须原封不动）",
       "narrativeRole": "hook | explain | example | contrast | data | conclude | transition",
       "visualFocus": "一句话描述该镜头的视觉重心（如：两人对话场景、数据图表、人物特写）",

@@ -27,22 +27,7 @@ try:
 except ImportError:
     MP3 = None
 
-
-def load_env(script_dir: Path):
-    env_path = script_dir / ".env"
-    if env_path.exists():
-        with open(env_path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith("#") and "=" in line:
-                    key, value = line.split("=", 1)
-                    os.environ[key.strip()] = value.strip()
-
-
-def load_config(script_dir: Path) -> dict:
-    config_path = script_dir / "config.json"
-    with open(config_path, "r", encoding="utf-8") as f:
-        return json.load(f)
+from utils import extract_content_text, load_config, load_env
 
 
 _PUNCT_TAIL = re.compile(r'[，。！？、；：…—,\.\!\?\;\:\-"\'」）\)】》]$')
@@ -70,25 +55,9 @@ def _get_mp3_duration_s(filepath: str) -> float:
     return file_size * 8 / 128_000
 
 
-# ─────────────────────────────────────────────────────────────
-# 从 param.content 提取文本
-# ─────────────────────────────────────────────────────────────
-
 def extract_texts_from_content(content: list) -> list:
-    """
-    从 content 数组提取纯文本。
-    content 条目可以是字符串或对象（{text, ...}）。
-    返回纯文本列表。
-    """
-    texts = []
-    for item in content:
-        if isinstance(item, str):
-            texts.append(item)
-        elif isinstance(item, dict):
-            texts.append(item.get("text", ""))
-        else:
-            texts.append(str(item))
-    return texts
+    """从 content 数组提取纯文本列表。"""
+    return [extract_content_text(item) for item in content]
 
 
 # ─────────────────────────────────────────────────────────────

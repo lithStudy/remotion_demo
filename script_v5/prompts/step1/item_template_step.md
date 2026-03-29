@@ -64,7 +64,6 @@ __TEMPLATE_GUIDE__
 {
   "items": [
     {
-      "order": 1,
       "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
       "reasoning": "决策树匹配路径 -> 命中 Step___ -> 最终选型理由 -> 连续性检查结论",
       "template": "选定的模板名称（必须来自指南）",

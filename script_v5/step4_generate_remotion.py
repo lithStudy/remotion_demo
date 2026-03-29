@@ -21,17 +21,12 @@ if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
 
 from template_registry import TEMPLATE_REGISTRY, get_template_to_component_map
+from utils import load_config
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
-
-
-def load_config(script_dir: Path) -> dict:
-    config_path = script_dir / "config.json"
-    with open(config_path, "r", encoding="utf-8") as f:
-        return json.load(f)
 
 
 def to_pascal_case(name: str) -> str:

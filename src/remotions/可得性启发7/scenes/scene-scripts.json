@@ -1,18 +1,17 @@
 {
-  "topic": "如何对抗信息焦虑与恐慌",
+  "topic": "如何对抗信息茧房和情绪操控",
   "scenes": [
     {
       "sceneId": "scene_1",
-      "sceneName": "引出问题：恐慌与焦虑的来源",
+      "sceneName": "引出恐慌感和焦虑感",
       "items": [
         {
-          "order": 1,
           "narrativeType": "HOOK",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：首个镜头，无需检查连续性",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4/5/6/7 -> 默认 -> 选用 CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_1",
+          "order": 1,
           "param": {
-            "imageSrc": "一个焦虑的人盯着手机屏幕，背景是飞机坠毁和街头枪战的画面",
+            "imageSrc": "一个害怕坐飞机的人的简笔画图标",
             "content": [
               {
                 "text": "你是不是也有过这种感觉？",
@@ -60,13 +59,12 @@
           }
         },
         {
-          "order": 2,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4/5/6/7 -> 默认 -> 选用 CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_2",
+          "order": 2,
           "param": {
-            "imageSrc": "一个双手抱头，表示无奈的人物简笔画",
+            "imageSrc": "一个表示思考中的人的简笔画图标",
             "content": [
               {
                 "text": "产生这种强烈的恐慌感和焦虑感，",
@@ -89,13 +87,13 @@
           }
         },
         {
-          "order": 3,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_3",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4 -> 解释专业概念 -> 选用 CONCEPT_CARD",
+          "template": "CONCEPT_CARD",
+          "order": 3,
           "param": {
-            "imageSrc": "一个齿轮代表的算法和一个人脑的简笔画",
+            "imageSrc": "一个深谙流量密码的媒体算法的简笔画图标",
+            "conceptName": "流量密码",
             "content": [
               {
                 "text": "要怪，",
@@ -118,13 +116,15 @@
           }
         },
         {
+          "narrativeType": "CASE",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/3/4 -> Step 2: 媒体行为 vs 安全到达 对比 -> 选用 SPLIT_COMPARE",
+          "template": "SPLIT_COMPARE",
           "order": 4,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_4",
           "param": {
-            "imageSrc": "一个眼睛放大的简笔画，表示媒体的放大镜效果",
+            "leftSrc": "媒体放大报道极端事件的简笔画图标",
+            "rightSrc": "安全到达的飞机简笔画图标",
+            "leftLabel": "极端事件",
+            "rightLabel": "安全到达",
             "content": [
               {
                 "text": "你想啊，",
@@ -157,13 +157,12 @@
           }
         },
         {
-          "order": 5,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4/5/6/7 -> 默认 -> 选用 CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_5",
+          "order": 5,
           "param": {
-            "imageSrc": "一个手指点击屏幕的简笔画，表示算法推荐",
+            "imageSrc": "算法推荐的简笔画图标",
             "content": [
               {
                 "text": "再加上现在的算法，",
@@ -191,13 +190,21 @@
           }
         },
         {
-          "order": 6,
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树匹配路径 -> 未命中任何特定类型 -> 默认选择 -> 连续性检查：前一个CENTER_FOCUS，这里可以保持，因为是平缓过渡",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_6",
+          "reasoning": "决策树匹配路径 -> 未命中 Step 1/2/3/4 -> Step 5: 强结论/高冲击表达 -> 选用 TEXT_FOCUS",
+          "template": "TEXT_FOCUS",
+          "order": 6,
           "param": {
-            "imageSrc": "一个被困在房子里的简笔画小人，表示信息茧房",
+            "coreSentence": "普通人如何逃离“信息恐怖屋”？",
+            "anchors": [
+              {
+                "text": "信息恐怖屋",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": null,
+                "audioEffect": null
+              }
+            ],
             "content": [
               {
                 "text": "这其实是一套把人性弱点研究到极致的注意力",
@@ -220,7 +227,6 @@
                 "durationFrames": 30
               }
             ],
-            "anchors": [],
             "totalDurationFrames": 148
           }
         }
@@ -228,16 +234,16 @@
     },
     {
       "sceneId": "scene_2",
-      "sceneName": "心理学解释：可得性启发偏见",
+      "sceneName": "可得性启发偏见",
       "items": [
         {
-          "order": 1,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_1",
+          "reasoning": "决策树匹配路径 -> 命中 Step4 -> 解释专业概念/术语 -> CONCEPT_CARD",
+          "template": "CONCEPT_CARD",
+          "order": 1,
           "param": {
-            "imageSrc": "一个大脑的简笔画，旁边写着心理学",
+            "imageSrc": "一个大脑正在进行可得性启发的简笔画图标",
+            "conceptName": "可得性启发偏见",
             "content": [
               {
                 "text": "在心理学上，",
@@ -260,13 +266,12 @@
           }
         },
         {
-          "order": 2,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
+          "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_2",
+          "order": 2,
           "param": {
-            "imageSrc": "一个大脑偷懒的简笔画",
+            "imageSrc": "一个偷懒的大脑的简笔画图标",
             "content": [
               {
                 "text": "说人话就是：咱们的大脑其实特别偷懒，",
@@ -294,13 +299,12 @@
           }
         },
         {
-          "order": 3,
           "narrativeType": "CASE",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
+          "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_3",
+          "order": 3,
           "param": {
-            "imageSrc": "一个眼睛盯着耸人听闻的头条的简笔画",
+            "imageSrc": "耸人听闻的头条新闻的简笔画图标",
             "content": [
               {
                 "text": "因为你看过太多次耸人听闻的头条，",
@@ -318,13 +322,12 @@
           }
         },
         {
-          "order": 4,
           "narrativeType": "CASE",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
+          "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_4",
+          "order": 4,
           "param": {
-            "imageSrc": "飞机坠毁的灾难现场",
+            "imageSrc": "大脑中闪现空难画面的简笔画图标",
             "content": [
               {
                 "text": "等你真要买机票时，",
@@ -352,16 +355,15 @@
           }
         },
         {
-          "order": 5,
           "narrativeType": "DATA",
-          "reasoning": "决策树匹配路径 -> 命中 Step 1（数据型）-> 飞机出事的概率和骑电动车被撞的概率对比 -> STAT_COMPARE",
+          "reasoning": "决策树匹配路径 -> 命中 Step2 -> 数据对比 -> STAT_COMPARE",
           "template": "STAT_COMPARE",
-          "groupKey": "solo_5",
+          "order": 5,
           "param": {
-            "leftLabel": "飞机",
-            "rightLabel": "电动车",
             "leftValue": 1,
-            "rightValue": 100,
+            "rightValue": 1000000,
+            "leftLabel": "飞机出事概率",
+            "rightLabel": "骑电动车被撞概率",
             "content": [
               {
                 "text": "但真实的数据是，",
@@ -384,16 +386,15 @@
           }
         },
         {
-          "order": 6,
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型 -> 命中高情绪/冲击型 -> 金句/核心结论 -> TEXT_FOCUS",
+          "reasoning": "决策树匹配路径 -> 命中 Step5 -> 核心结论/升华 -> TEXT_FOCUS",
           "template": "TEXT_FOCUS",
-          "groupKey": "solo_6",
+          "order": 6,
           "param": {
-            "coreSentence": "认清一个残酷真相：容易想起，不等于常见。",
+            "coreSentence": "认清真相：容易想起，不等于很常见",
             "anchors": [
               {
-                "text": "残酷真相",
+                "text": "真相",
                 "showFrom": 0,
                 "color": "#EF4444",
                 "anim": null,
@@ -416,13 +417,12 @@
           }
         },
         {
-          "order": 7,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型，高情绪/冲击型，对话/场景模拟型，时间演进型 -> 默认 -> CENTER_FOCUS",
+          "reasoning": "决策树匹配路径 -> 命中 Step8 -> 默认叙事底盘 -> CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_7",
+          "order": 7,
           "param": {
-            "imageSrc": "充满冲突和血腥的简笔画和安全起降的简笔画",
+            "imageSrc": "极端事件和安全起降对比的简笔画图标",
             "content": [
               {
                 "text": "那些极端事件因为充满冲突和血腥，",
@@ -450,12 +450,13 @@
           }
         },
         {
-          "order": 8,
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树匹配路径 -> 未命中数据型，对立型，结构化多分点型，引用/术语型 -> 命中高情绪/冲击型 -> 冲击收束 -> TEXT_FOCUS",
+          "reasoning": "决策树匹配路径 -> 命中 Step5 -> 核心结论/升华 -> TEXT_FOCUS",
           "template": "TEXT_FOCUS",
-          "groupKey": "solo_8",
+          "order": 8,
           "param": {
+            "coreSentence": "直觉被媒体劫持",
+            "anchors": [],
             "content": [
               {
                 "text": "咱们的直觉，",
@@ -468,7 +469,6 @@
                 "durationFrames": 44
               }
             ],
-            "anchors": [],
             "totalDurationFrames": 74
           }
         }
@@ -476,16 +476,15 @@
     },
     {
       "sceneId": "scene_3",
-      "sceneName": "解决方案：防御锦囊",
+      "sceneName": "防御锦囊",
       "items": [
         {
-          "order": 1,
           "narrativeType": "HOOK",
-          "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：无连续相同模板",
+          "reasoning": "决策树匹配路径 -> visualFocus为疑问表情 -> 默认 -> 命中 Step 8 -> 默认CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_1",
+          "order": 1,
           "param": {
-            "imageSrc": "一个问号的简笔画",
+            "imageSrc": "一个问号的简笔画图标",
             "content": [
               {
                 "text": "既然知道了大脑的这个Bug，",
@@ -503,12 +502,12 @@
           }
         },
         {
-          "order": 2,
           "narrativeType": "TRANSITION",
-          "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：避免连续 CENTER_FOCUS",
-          "template": "TEXT_FOCUS",
-          "groupKey": "solo_2",
+          "reasoning": "决策树匹配路径 -> 过渡句 -> 默认 -> 命中 Step 8 -> 默认CENTER_FOCUS",
+          "template": "CENTER_FOCUS",
+          "order": 2,
           "param": {
+            "imageSrc": "一个礼物盒子的简笔画图标",
             "content": [
               {
                 "text": "给你两个极低门槛的防御锦囊：",
@@ -521,13 +520,12 @@
           }
         },
         {
-          "order": 3,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK, 但这里只有一句，与下一句合并",
+          "reasoning": "决策树匹配路径 -> 包含标题、解释和反思问题，叙事完整 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 命中 Step 3 -> METHOD_STACK",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_3",
+          "order": 3,
           "param": {
-            "imageSrc": "一个警惕的眼睛的简笔画",
+            "imageSrc": "警惕情绪画面的简笔画图标",
             "content": [
               {
                 "text": "第一，",
@@ -538,59 +536,44 @@
                 "text": "警惕“情绪画面”。",
                 "startFrame": 30,
                 "durationFrames": 30
-              }
-            ],
-            "anchors": [],
-            "totalDurationFrames": 60
-          }
-        },
-        {
-          "order": 4,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK -> 连续性检查：无连续相同模板",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_4",
-          "param": {
-            "imageSrc": "一个大脑思考的简笔画",
-            "content": [
+              },
               {
                 "text": "下次再被某条新闻吓住或者气到的时候，",
-                "startFrame": 0,
+                "startFrame": 60,
                 "durationFrames": 40
               },
               {
                 "text": "在心里默问自己一句话：“这件事是因为普遍",
-                "startFrame": 40,
+                "startFrame": 100,
                 "durationFrames": 44
               },
               {
                 "text": "发生我才看到，",
-                "startFrame": 84,
+                "startFrame": 144,
                 "durationFrames": 30
               },
               {
                 "text": "还是因为它足够离奇才上了热搜？",
-                "startFrame": 114,
+                "startFrame": 174,
                 "durationFrames": 33
               },
               {
                 "text": "”",
-                "startFrame": 147,
+                "startFrame": 207,
                 "durationFrames": 30
               }
             ],
             "anchors": [],
-            "totalDurationFrames": 177
+            "totalDurationFrames": 237
           }
         },
         {
-          "order": 5,
           "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK，与下一句合并",
+          "reasoning": "决策树匹配路径 -> 包含标题、解释和行动建议，叙事完整 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 命中 Step 3 -> METHOD_STACK",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_5",
+          "order": 4,
           "param": {
-            "imageSrc": "一个天平，一边是数据，一边是直觉的简笔画",
+            "imageSrc": "用数据对抗直觉的简笔画图标",
             "content": [
               {
                 "text": "第二，",
@@ -601,49 +584,34 @@
                 "text": "用数据对抗直觉。",
                 "startFrame": 30,
                 "durationFrames": 30
-              }
-            ],
-            "anchors": [],
-            "totalDurationFrames": 60
-          }
-        },
-        {
-          "order": 6,
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树匹配路径 -> 结构化多分点型 -> 命中 Step3 -> 单个建议/提醒/方法标题后跟 2~4 句解释展开 -> 优先METHOD_STACK -> 连续性检查：无连续相同模板",
-          "template": "CENTER_FOCUS",
-          "groupKey": "solo_6",
-          "param": {
-            "imageSrc": "一个放大镜搜索统计概率的简笔画",
-            "content": [
+              },
               {
                 "text": "当大脑告诉你“这很危险”时，",
-                "startFrame": 0,
+                "startFrame": 60,
                 "durationFrames": 31
               },
               {
                 "text": "随手搜一下真实的统计概率，",
-                "startFrame": 31,
+                "startFrame": 91,
                 "durationFrames": 30
               },
               {
                 "text": "让理性的数字接管情绪。",
-                "startFrame": 61,
+                "startFrame": 121,
                 "durationFrames": 30
               }
             ],
             "anchors": [],
-            "totalDurationFrames": 91
+            "totalDurationFrames": 151
           }
         },
         {
-          "order": 7,
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：无连续相同模板",
+          "reasoning": "决策树匹配路径 -> 总结强调 -> 默认 -> 命中 Step 8 -> 默认CENTER_FOCUS",
           "template": "CENTER_FOCUS",
-          "groupKey": "solo_7",
+          "order": 5,
           "param": {
-            "imageSrc": "一只眼睛看着屏幕，屏幕上是情绪诱导和流量套路的简笔画",
+            "imageSrc": "眼见为实升级为数据为实的简笔画图标",
             "content": [
               {
                 "text": "在这个满屏都是情绪诱导和流量套路的时代，",
@@ -661,12 +629,13 @@
           }
         },
         {
-          "order": 8,
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树匹配路径 -> 默认情况 -> 命中 Step8 -> 默认选择 -> 连续性检查：无连续相同模板",
+          "reasoning": "决策树匹配路径 -> 结尾升华，点明主题。-> 金句/核心结论/升华 -> 命中 Step 5 -> TEXT_FOCUS",
           "template": "TEXT_FOCUS",
-          "groupKey": "solo_8",
+          "order": 6,
           "param": {
+            "coreSentence": "做自己大脑的主人",
+            "anchors": [],
             "content": [
               {
                 "text": "做自己大脑的主人，",
@@ -684,7 +653,6 @@
                 "durationFrames": 30
               }
             ],
-            "anchors": [],
             "totalDurationFrames": 90
           }
         }

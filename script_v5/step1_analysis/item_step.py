@@ -1,38 +1,11 @@
 import json
 
-from .gemini_utils import generate_with_retry, parse_json_from_response
+from utils.gemini_utils import generate_with_retry, parse_json_from_response
 from .prompt_loader import load_prompt, render_prompt
-
+from utils import split_text_to_content
 
 def _default_group_key(order: int) -> str:
     return f"solo_{order}"
-
-
-def _normalize_split_group_keys(items: list[dict]) -> None:
-    for idx, item in enumerate(items):
-        order = item.get("order", idx + 1)
-        gk = item.get("groupKey")
-        if not isinstance(gk, str) or not gk.strip():
-            item["groupKey"] = _default_group_key(int(order))
-
-
-def _inject_group_keys_from_split(
-    matched_items: list[dict], split_items: list[dict]
-) -> None:
-    split_group_by_order: dict[int, str] = {}
-    for idx, s_item in enumerate(split_items):
-        order = int(s_item.get("order", idx + 1))
-        gk = s_item.get("groupKey")
-        split_group_by_order[order] = (
-            gk if isinstance(gk, str) and gk.strip() else _default_group_key(order)
-        )
-
-    for idx, m_item in enumerate(matched_items):
-        order = int(m_item.get("order", idx + 1))
-        gk = m_item.get("groupKey")
-        if isinstance(gk, str) and gk.strip():
-            continue
-        m_item["groupKey"] = split_group_by_order.get(order, _default_group_key(order))
 
 
 def _split_scene_into_items(
@@ -47,7 +20,9 @@ def _split_scene_into_items(
     只决定在哪里切分，输出含 narrativeRole / visualFocus / emotionTone / estimatedSeconds 等元数据。
     不涉及任何模板选型。
     """
-    scene_text = scene.get("text", "")
+    if "text" not in scene or not scene["text"].strip():
+        raise ValueError("scene['text'] 不能为空")
+    scene_text = scene["text"]
     scene_name = scene.get("sceneName", "未命名场景")
 
     prompt_template = load_prompt("item_split_step.md")
@@ -59,30 +34,11 @@ def _split_scene_into_items(
             "SCENE_TEXT": scene_text,
         },
     )
-    try:
-        resp = generate_with_retry(client, model, prompt, append_ai_log=append_ai_log)
-        res_json = parse_json_from_response(resp.text)
-        items = res_json.get("items", [])
-    except Exception as e:
-        print(f"   ❌ Scene {scene.get('sceneId')} 分镜阶段失败: {e}，回退为单 item")
-        items = [
-            {
-                "order": 1,
-                "text": scene_text,
-                "narrativeRole": "explain",
-                "visualFocus": "场景内容",
-                "emotionTone": "calm",
-                "splitSignal": "strong",
-                "estimatedSeconds": round(len(scene_text) / 4.5, 1),
-                "reasoning": "分镜失败，回退为单 item",
-            }
-        ]
-
-    # 确保 order 字段存在
-    for idx, item in enumerate(items):
-        if "order" not in item:
-            item["order"] = idx + 1
-    _normalize_split_group_keys(items)
+    resp = generate_with_retry(client, model, prompt, append_ai_log=append_ai_log)
+    res_json = parse_json_from_response(resp.text)
+    items = res_json.get("items", [])
+    if not items:
+        raise RuntimeError(f"❌ Scene {scene.get('sceneId')} 分镜阶段失败，未能生成有效 items。")
 
     return items
 
@@ -112,28 +68,11 @@ def _assign_templates_to_items(
             "TEMPLATE_GUIDE": template_guide,
         },
     )
-    try:
-        resp = generate_with_retry(client, model, prompt, append_ai_log=append_ai_log)
-        res_json = parse_json_from_response(resp.text)
-        matched_items = res_json.get("items", [])
-    except Exception as e:
-        print(f"   ❌ Scene {scene.get('sceneId')} 模板匹配阶段失败: {e}，回退为 CENTER_FOCUS")
-        matched_items = [
-            {
-                "order": item.get("order", idx + 1),
-                "narrativeType": "LOGIC",
-                "reasoning": "模板匹配失败，回退为 CENTER_FOCUS",
-                "template": "CENTER_FOCUS",
-                "text": item.get("text", ""),
-            }
-            for idx, item in enumerate(split_items)
-        ]
-
-    # 确保 order 字段存在
-    for idx, item in enumerate(matched_items):
-        if "order" not in item:
-            item["order"] = idx + 1
-    _inject_group_keys_from_split(matched_items, split_items)
+    resp = generate_with_retry(client, model, prompt, append_ai_log=append_ai_log)
+    res_json = parse_json_from_response(resp.text)
+    matched_items = res_json.get("items", [])
+    if not matched_items:
+        raise RuntimeError(f"❌ Scene {scene.get('sceneId')} 模板匹配阶段失败，未能生成有效 items，阻止继续。")
 
     return matched_items
 
@@ -169,9 +108,10 @@ def analyze_items_for_scene(
         f"      Scene {scene_id}: 2B 模板匹配完成 → {[it.get('template', '?') for it in matched_items]}"
     )
 
-    from .content_split import split_text_to_content
-    for item in matched_items:
+    # 拆分字幕长度，并设置序号
+    for idx, item in enumerate(matched_items):
         item["content"] = split_text_to_content(item.get("text", ""))
+        item["order"] = idx + 1
 
     scene["items"] = matched_items
     return scene

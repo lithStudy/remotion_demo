@@ -21,24 +21,7 @@ except ImportError:
     Image = None
 
 from template_registry import get_image_fields, get_template
-
-
-def load_env(script_dir: Path):
-    """加载 .env 文件"""
-    env_path = script_dir / ".env"
-    if env_path.exists():
-        with open(env_path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith("#") and "=" in line:
-                    key, value = line.split("=", 1)
-                    os.environ[key.strip()] = value.strip()
-
-
-def load_config(script_dir: Path) -> dict:
-    config_path = script_dir / "config.json"
-    with open(config_path, "r", encoding="utf-8") as f:
-        return json.load(f)
+from utils import load_config, load_env
 
 
 def remove_white_background(img: "Image.Image", threshold: int = 240) -> "Image.Image":

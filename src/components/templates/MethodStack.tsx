@@ -12,7 +12,7 @@ import {
 	useVideoConfig,
 } from "remotion";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
-import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 
 type MethodNoteItem = {
 	text: string;
@@ -20,46 +20,53 @@ type MethodNoteItem = {
 };
 
 export const templateMeta = {
-	name: "METHOD_STACK",
-	componentExport: "BWMethodStack",
-	description:
+	"name": "METHOD_STACK",
+	"componentExport": "BWMethodStack",
+	"description":
 		"适用：单个 item 内是‘方法/提醒/观点标题 + 解释展开’，例如一句方法名后继续补 2～4 句说明。\n差异：多个独立步骤/并列分点用 STEP_LIST 或 LIST_MULTI_GROUP；多方法不要为了套模板强行合并到同一 item。\n参数：title 为视觉标题，imageSrc 为单张主图，notes 为按讲解顺序出现的解释短语。",
-	psychology: "聚焦解释",
-	image_count: 1,
-	param_schema: {
-		title: {
-			type: "string",
-			required: true,
-			desc: "该 item 的方法名/提醒标题/观点标题，建议 4~12 个字",
+	"psychology": "聚焦解释",
+	"image_count": 1,
+	"param_schema": {
+		"type": "object",
+		"properties": {
+			"title": {
+				"type": "string",
+				"description": "该 item 的方法名/提醒标题/观点标题，建议 4~12 个字",
+			},
+			"imageSrc": {
+				"type": "string",
+				"format": "image_prompt",
+				"description": "单张主图描述，用于承接这个方法或观点",
+			},
+			"notes": {
+				"type": "array",
+				"description":
+					"解释短语数组；每项含 text 与 showFrom，showFrom 绑定 content 索引，适合提炼当前叙事的解释重点",
+				"items": {
+					"type": "object",
+					"required": ["text", "showFrom"],
+					"properties": {
+						"text": { "type": "string", "description": "解释短语" },
+						"showFrom": { "type": "integer", "description": "绑定 content 的索引（0-based）" },
+					},
+				},
+			},
 		},
-		imageSrc: {
-			type: "image_prompt",
-			required: true,
-			desc: "单张主图描述，用于承接这个方法或观点",
-		},
-		notes: {
-			type: "method_note_array",
-			required: false,
-			desc: "解释短语数组；每项含 text 与 showFrom，showFrom 绑定 content 索引，适合提炼当前叙事的解释重点",
-		},
+		"required": ["title", "imageSrc"],
 	},
-	required_extra_params: ["title"],
-	example: {
-		template: "METHOD_STACK",
-		param: {
-			title: "警惕情绪画面",
-			imageSrc: "被耸动新闻画面包围、神情紧张的人物简笔画",
-			notes: [
-				{ text: "先识别这是情绪刺激", showFrom: 1 },
-				{ text: "再追问它是否只是离奇个案", showFrom: 3 },
+	"example": {
+		"template": "METHOD_STACK",
+		"param": {
+			"title": "警惕情绪画面",
+			"imageSrc": "被耸动新闻画面包围、神情紧张的人物简笔画",
+			"notes": [
+				{ "text": "先识别这是情绪刺激", "showFrom": 1 },
+				{ "text": "再追问它是否只是离奇个案", "showFrom": 3 },
 			],
 		},
 	},
-	default_anchor_color: "#111111",
-	default_anchor_anim: "highlight",
-	default_audio_effect: "ping",
-	content_min_items: 2,
-	content_max_items: 5,
+	"content_min_items": 2,
+	"content_max_items": 5,
 } as const;
 
 const getNoteStartFrame = (
@@ -69,7 +76,7 @@ const getNoteStartFrame = (
 	return content[note.showFrom]?.startFrame ?? 0;
 };
 
-export interface BWMethodStackProps extends TemplateBaseProps {
+export interface BWMethodStackProps extends TemplateBaseProps, TemplateAnchorsProps {
 	title: string;
 	imageSrc: string;
 	notes?: MethodNoteItem[];

@@ -256,6 +256,29 @@ export interface BeatStageItem {
 // 模板驱动架构：公共类型
 // ─────────────────────────────────────────────────────────────
 
+/** JSON Schema 风格子集：与 script_v5/param_schema_tools.py 约定一致 */
+export type ParamSchemaType =
+	| "string"
+	| "number"
+	| "integer"
+	| "boolean"
+	| "array"
+	| "object";
+
+export type ParamSchema = {
+	type: ParamSchemaType;
+	description?: string;
+	/** 出图流水线：此类 string 视为图片提示词 */
+	format?: "image_prompt";
+	enum?: string[];
+	default?: unknown;
+	properties?: Record<string, ParamSchema>;
+	required?: string[];
+	items?: ParamSchema;
+	minItems?: number;
+	maxItems?: number;
+};
+
 /** 模板自描述元数据：供 Python 脚本扫描生成提示词与图片字段，与 template_registry 约定一致 */
 export interface TemplateMeta {
 	name: string;
@@ -264,21 +287,9 @@ export interface TemplateMeta {
 	psychology: string;
 	image_count: number | string;
 	componentExport?: string;
-	param_schema: Record<
-		string,
-		{
-			type: string;
-			required?: boolean;
-			desc: string;
-			values?: string[];
-			default?: string;
-		}
-	>;
-	required_extra_params: string[];
+	/** 根节点须为 type: "object"；必填字段列在 required 中 */
+	param_schema: ParamSchema;
 	example: { template: string; param: Record<string, unknown> };
-	default_anchor_color: string;
-	default_anchor_anim: string;
-	default_audio_effect: string;
 	content_min_items?: number;
 	content_max_items?: number;
 	content_anchor_required?: boolean;
@@ -308,12 +319,15 @@ export interface AnchorItem {
 	audioEffect?: string | null;
 }
 
+/** 顶层 param 锚点（与 content 同级）；仅使用字幕旁锚点/TemplateContentRenderer 的模板应组合此接口 */
+export interface TemplateAnchorsProps {
+	anchors?: AnchorItem[];
+}
+
 /** 所有模板组件的公共 props */
 export interface TemplateBaseProps {
 	/** 文案内容数组（统一为 ContentItem 数组） */
 	content?: ContentItem[];
-	/** 锚点数组（与 content 同级，showFrom 关联索引） */
-	anchors?: AnchorItem[];
 	/** TTS 音频文件路径 */
 	audioSrc?: string;
 	/** 该 item 的总持续帧数 */

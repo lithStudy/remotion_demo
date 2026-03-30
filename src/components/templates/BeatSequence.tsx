@@ -17,40 +17,65 @@ import {
 	type BeatStageTone,
 	type ContentItem,
 	type ImageEnterEffect,
+	type TemplateAnchorsProps,
 	type TemplateBaseProps,
 } from "./shared";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
 
 export const templateMeta = {
-	name: "BEAT_SEQUENCE",
-	componentExport: "BWBeatSequence",
-	description:
+	"name": "BEAT_SEQUENCE",
+	"componentExport": "BWBeatSequence",
+	"description":
 		"适用：一问一驳一锤等同一镜头内情绪递进；多图按口播条切换，首段 calm、后续默认可 alert。\n差异：单段平缓叙述用 CENTER_FOCUS；单句暴击用 ALERT；本模板负责多段串联。\n慎用：stages 与 content 条数需一致；段落间若有空隙，画面保持上一张直至下一段切入（交叉淡化）。\n参数：stages[i].enterEffect / tone；tone 省略时首条 calm、其余 alert。",
-	psychology: "节拍递进",
-	image_count: "2-4",
-	param_schema: {
-		stages: {
-			type: "beat_stage_array",
-			required: true,
-			desc: "与 content 逐条对应：imageSrc、enterEffect、可选 tone（calm|alert）",
+	"psychology": "节拍递进",
+	"image_count": "2-4",
+	"param_schema": {
+		"type": "object",
+		"properties": {
+			"stages": {
+				"type": "array",
+				"minItems": 2,
+				"maxItems": 4,
+				"description":
+					"与 content 逐条对应：每节拍一条；imageSrc、enterEffect、可选 tone（calm|alert）",
+				"items": {
+					"type": "object",
+					"required": ["imageSrc"],
+					"properties": {
+						"imageSrc": {
+							"type": "string",
+							"format": "image_prompt",
+							"description": "该节拍配图提示词",
+						},
+						"enterEffect": {
+							"type": "string",
+							"enum": ["breathe", "slideLeft", "slideBottom", "zoomIn", "fadeIn"],
+							"default": "breathe",
+							"description": "入场效果",
+						},
+						"tone": {
+							"type": "string",
+							"enum": ["calm", "alert"],
+							"description": "首条可 calm，其余默认可 alert",
+						},
+					},
+				},
+			},
 		},
+		"required": ["stages"],
 	},
-	required_extra_params: [] as string[],
-	example: {
-		template: "BEAT_SEQUENCE",
-		param: {
-			stages: [
-				{ imageSrc: "问句配图简笔画", enterEffect: "breathe" },
-				{ imageSrc: "转折警示配图", enterEffect: "slideBottom" },
-				{ imageSrc: "结论冲击配图", enterEffect: "slideBottom" },
+	"example": {
+		"template": "BEAT_SEQUENCE",
+		"param": {
+			"stages": [
+				{ "imageSrc": "问句配图简笔画", "enterEffect": "breathe" },
+				{ "imageSrc": "转折警示配图", "enterEffect": "slideBottom" },
+				{ "imageSrc": "结论冲击配图", "enterEffect": "slideBottom" },
 			],
 		},
 	},
-	default_anchor_color: "#2B6CB0",
-	default_anchor_anim: "spring",
-	default_audio_effect: "ping",
-	content_min_items: 2,
-	content_max_items: 4,
+	"content_min_items": 2,
+	"content_max_items": 4,
 } as const;
 
 function getActiveBeatIndex(items: ContentItem[], frame: number): number {
@@ -175,7 +200,7 @@ const BeatSequenceImageSlot: React.FC<{
 	);
 };
 
-export interface BWBeatSequenceProps extends TemplateBaseProps {
+export interface BWBeatSequenceProps extends TemplateBaseProps, TemplateAnchorsProps {
 	stages: BeatStageItem[];
 }
 

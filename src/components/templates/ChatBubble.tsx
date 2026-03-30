@@ -3,7 +3,7 @@
  */
 import React from "react";
 import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 import { normalizeContent, TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -14,21 +14,25 @@ export const templateMeta = {
 	"psychology": "社会投射",
 	"image_count": 1,
 	"param_schema": {
-		"imageSrc": { "type": "image_prompt", "required": true, "desc": "人物图标描述" },
+		"type": "object",
+		"properties": {
+			"imageSrc": {
+				"type": "string",
+				"format": "image_prompt",
+				"description": "人物图标描述",
+			},
+		},
+		"required": ["imageSrc"],
 	},
-	"required_extra_params": [] as string[],
 	"example": {
 		"template": "CHAT_BUBBLE",
 		"param": {
 			"imageSrc": "困惑的人简笔画图标",
 		},
 	},
-	"default_anchor_color": "#FF8C00",
-	"default_anchor_anim": "spring",
-	"default_audio_effect": "ping",
 } as const;
 
-export interface BWChatBubbleProps extends TemplateBaseProps {
+export interface BWChatBubbleProps extends TemplateBaseProps, TemplateAnchorsProps {
 	imageSrc?: string;
 }
 
@@ -63,7 +67,7 @@ export const BWChatBubble: React.FC<BWChatBubbleProps> = ({
 		if (!anchor || !text.includes(anchor)) return text;
 
 		const parts = text.split(anchor);
-		const highlightColor = anchorColor || templateMeta.default_anchor_color;
+		const highlightColor = anchorColor || "#FF8C00";
 		return (
 			<>
 				{parts[0]}

@@ -22,9 +22,66 @@ export const templateMeta = {
 	"psychology": "多巴胺刺激",
 	"image_count": "2-5",
 	"param_schema": {
-		"groups": { "type": "list_multi_group_group_array", "required": true, "desc": "唯一合法结构：每项包含 textIndex、image 与可选 anchor。组数必须与当前 item 原文里真实出现的并列分点数一致，严禁仅根据“两个/三个/若干个”标题脑补 group。textIndex 是该组绑定的 content 序号；image.src 填图片描述；anchor.text 必须是该组的高价值短语，若无高价值短语则整体省略 anchor" },
+		"type": "object",
+		"properties": {
+			"groups": {
+				"type": "array",
+				"minItems": 2,
+				"maxItems": 5,
+				"description": "唯一合法结构：每项含 textIndex、image、可选 anchor；组数须与原文并列分点一致，禁止脑补。textIndex 绑定 content 序号；image.src 为配图提示词；无高价值短语则省略 anchor",
+				"items": {
+					"type": "object",
+					"required": ["textIndex", "image"],
+					"properties": {
+						"textIndex": {
+							"type": "integer",
+							"description": "该组绑定的 content 序号（0-based）",
+						},
+						"image": {
+							"type": "object",
+							"required": ["src"],
+							"properties": {
+								"src": {
+									"type": "string",
+									"format": "image_prompt",
+									"description": "该组配图提示词",
+								},
+								"position": {
+									"type": "string",
+									"enum": ["center", "left", "right", "top", "bottom"],
+									"description": "可选，布局已弱化该字段",
+								},
+								"enterEffect": {
+									"type": "string",
+									"enum": ["breathe", "slideLeft", "slideBottom", "zoomIn", "fadeIn"],
+									"default": "breathe",
+								},
+								"textIndex": { "type": "integer" },
+								"startFrame": { "type": "integer" },
+							},
+						},
+						"anchor": {
+							"type": "object",
+							"required": ["text"],
+							"properties": {
+								"text": { "type": "string", "description": "该组高价值短语" },
+								"color": { "type": "string" },
+								"anim": {
+									"type": "string",
+									"enum": ["spring", "slideUp", "popIn", "highlight"],
+								},
+								"audioEffect": {
+									"type": "string",
+									"enum": ["impact_thud", "ping", "woosh"],
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		"required": ["groups"],
 	},
-	"required_extra_params": [] as string[],
 	"example": {
 		"template": "LIST_MULTI_GROUP",
 		"param": {
@@ -43,9 +100,6 @@ export const templateMeta = {
 
 		},
 	},
-	"default_anchor_color": "#2B6CB0",
-	"default_anchor_anim": "spring",
-	"default_audio_effect": "ping",
 } as const;
 
 type SlotLayout = {

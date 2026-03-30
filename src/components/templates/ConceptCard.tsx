@@ -3,7 +3,7 @@
  */
 import React from "react";
 import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 import { normalizeContent, TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -14,10 +14,17 @@ export const templateMeta = {
 	"psychology": "符号化锚定",
 	"image_count": 1,
 	"param_schema": {
-		"imageSrc": { "type": "image_prompt", "required": true, "desc": "概念图标描述" },
-		"conceptName": { "type": "string", "required": true, "desc": "概念名称" },
+		"type": "object",
+		"properties": {
+			"imageSrc": {
+				"type": "string",
+				"format": "image_prompt",
+				"description": "概念图标描述",
+			},
+			"conceptName": { "type": "string", "description": "概念名称" },
+		},
+		"required": ["imageSrc", "conceptName"],
 	},
-	"required_extra_params": ["conceptName"],
 	"example": {
 		"template": "CONCEPT_CARD",
 		"param": {
@@ -25,12 +32,9 @@ export const templateMeta = {
 			"conceptName": "幸存者偏差",
 		},
 	},
-	"default_anchor_color": "#805AD5",
-	"default_anchor_anim": "slideUp",
-	"default_audio_effect": "ping",
 } as const;
 
-export interface BWConceptCardProps extends TemplateBaseProps {
+export interface BWConceptCardProps extends TemplateBaseProps, TemplateAnchorsProps {
 	imageSrc?: string;
 	conceptName?: string;
 }

@@ -9,7 +9,7 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
-import { BW_TEXT, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -20,11 +20,14 @@ export const templateMeta = {
 	"psychology": "目标梯度",
 	"image_count": 0,
 	"param_schema": {
-		"percent": { "type": "number", "required": true, "desc": "进度百分比 0–100" },
-		"label": { "type": "string", "required": true, "desc": "主标题（如「年度目标达成」）" },
-		"subLabel": { "type": "string", "required": false, "desc": "副标题或口径说明" },
+		"type": "object",
+		"properties": {
+			"percent": { "type": "integer", "description": "进度百分比 0–100" },
+			"label": { "type": "string", "description": "主标题（如「年度目标达成」）" },
+			"subLabel": { "type": "string", "description": "副标题或口径说明" },
+		},
+		"required": ["percent", "label"],
 	},
-	"required_extra_params": ["percent", "label"],
 	"example": {
 		"template": "PROGRESS_RING",
 		"param": {
@@ -33,12 +36,9 @@ export const templateMeta = {
 			"subLabel": "截至本季度",
 		},
 	},
-	"default_anchor_color": "#2B6CB0",
-	"default_anchor_anim": "spring",
-	"default_audio_effect": "ping",
 } as const;
 
-export interface BWProgressRingProps extends TemplateBaseProps {
+export interface BWProgressRingProps extends TemplateBaseProps, TemplateAnchorsProps {
 	percent: number;
 	label: string;
 	subLabel?: string;

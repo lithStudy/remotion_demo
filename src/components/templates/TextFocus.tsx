@@ -5,7 +5,7 @@
  */
 import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import type { TemplateBaseProps } from "./shared";
+import type { TemplateAnchorsProps, TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -17,14 +17,36 @@ export const templateMeta = {
 	"psychology": "信噪比极致化",
 	"image_count": 0,
 	"param_schema": {
-		"coreSentence": {
-			"type": "string",
-			"required": true,
-			"desc": "精炼核心句，不超过25个字",
+		"type": "object",
+		"properties": {
+			"coreSentence": {
+				"type": "string",
+				"description": "精炼核心句，不超过25个字",
+			},
+			"anchors": {
+				"type": "array",
+				"description": "用于高亮正文子串；使用 coreSentence 时锚点词须出现在 coreSentence 内",
+				"items": {
+					"type": "object",
+					"required": ["text", "showFrom"],
+					"properties": {
+						"text": { "type": "string", "description": "要高亮的子串" },
+						"showFrom": { "type": "integer", "description": "绑定 content 索引（0-based）" },
+						"color": { "type": "string" },
+						"anim": {
+							"type": "string",
+							"enum": ["spring", "slideUp", "popIn", "highlight"],
+						},
+						"audioEffect": {
+							"type": "string",
+							"enum": ["impact_thud", "ping", "woosh"],
+						},
+					},
+				},
+			},
 		},
-		"anchors": { "type": "anchor_array", "required": false, "desc": "锚点数组，用于高亮正文中的子串，每项含 text、showFrom、color；使用 coreSentence 时锚点词须出现在 coreSentence 内" },
+		"required": ["coreSentence"],
 	},
-	"required_extra_params": [] as string[],
 	"example": {
 		"template": "TEXT_FOCUS",
 		"param": {
@@ -32,12 +54,9 @@ export const templateMeta = {
 			"anchors": [{ "text": "可能错了", "showFrom": 0, "color": "red"}],
 		},
 	},
-	"default_anchor_color": "#ffffff",
-	"default_anchor_anim": "popIn",
-	"default_audio_effect": "impact_thud",
 } as const;
 
-export type BWTextFocusProps = TemplateBaseProps & {
+export type BWTextFocusProps = TemplateBaseProps & TemplateAnchorsProps & {
 	/**
 	 * 精炼核心句（通常由 AI 生成）。若 content 过长、不适合整段作为大屏主标题，可只填此句作为居中展示；
 	 * 未设置时主标题仍为 content 各条 text 的拼接。

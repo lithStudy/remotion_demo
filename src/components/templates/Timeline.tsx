@@ -3,7 +3,13 @@
  */
 import React from "react";
 import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { BW_TEXT, getSafeImageSrc, type MultiImageItem, type TemplateBaseProps } from "./shared";
+import {
+	BW_TEXT,
+	getSafeImageSrc,
+	type MultiImageItem,
+	type TemplateAnchorsProps,
+	type TemplateBaseProps,
+} from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -14,9 +20,39 @@ export const templateMeta = {
 	"psychology": "叙事连贯性",
 	"image_count": "2-3",
 	"param_schema": {
-		"images": { "type": "image_prompt_array", "required": true, "desc": "时间轴图片数组" },
+		"type": "object",
+		"properties": {
+			"images": {
+				"type": "array",
+				"minItems": 2,
+				"maxItems": 3,
+				"description": "时间轴图片数组；position 常用 left/right 配合轴线",
+				"items": {
+					"type": "object",
+					"required": ["src"],
+					"properties": {
+						"src": {
+							"type": "string",
+							"format": "image_prompt",
+							"description": "该节点配图提示词",
+						},
+						"position": {
+							"type": "string",
+							"enum": ["center", "left", "right", "top", "bottom"],
+						},
+						"enterEffect": {
+							"type": "string",
+							"enum": ["breathe", "slideLeft", "slideBottom", "zoomIn", "fadeIn"],
+							"default": "breathe",
+						},
+						"textIndex": { "type": "integer" },
+						"startFrame": { "type": "integer" },
+					},
+				},
+			},
+		},
+		"required": ["images"],
 	},
-	"required_extra_params": [] as string[],
 	"example": {
 		"template": "TIMELINE",
 		"param": {
@@ -26,9 +62,6 @@ export const templateMeta = {
 			],
 		},
 	},
-	"default_anchor_color": "#2B6CB0",
-	"default_anchor_anim": "slideUp",
-	"default_audio_effect": "woosh",
 } as const;
 
 const TIMELINE_X_BY_POS: Record<string, number> = {
@@ -37,7 +70,7 @@ const TIMELINE_X_BY_POS: Record<string, number> = {
 	right: 0.8,
 };
 
-export interface BWTimelineProps extends TemplateBaseProps {
+export interface BWTimelineProps extends TemplateBaseProps, TemplateAnchorsProps {
 	images: MultiImageItem[];
 }
 

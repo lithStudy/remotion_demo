@@ -4,7 +4,7 @@
  */
 import React from "react";
 import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -15,13 +15,26 @@ export const templateMeta = {
 	"psychology": "认知翻转",
 	"image_count": 2,
 	"param_schema": {
-		"notText": { "type": "string", "required": true, "desc": "被否认知（‘不是’后面的内容）" },
-		"butText": { "type": "string", "required": true, "desc": "真实认知（‘而是’后面的内容）" },
-		"butSrc": { "type": "image_prompt", "required": false, "desc": "真实认知的配图" },
-		"notContentIndex": { "type": "number", "required": false, "desc": "指定触发‘不是’部分动画的字幕段索引（默认0）" },
-		"butContentIndex": { "type": "number", "required": false, "desc": "指定触发‘而是’部分动画及转折的字幕段索引（默认1）" },
+		"type": "object",
+		"properties": {
+			"notText": { "type": "string", "description": "被否认知（‘不是’后面的内容）" },
+			"butText": { "type": "string", "description": "真实认知（‘而是’后面的内容）" },
+			"butSrc": {
+				"type": "string",
+				"format": "image_prompt",
+				"description": "真实认知的配图",
+			},
+			"notContentIndex": {
+				"type": "integer",
+				"description": "触发「不是」动画的字幕段索引（默认 0）",
+			},
+			"butContentIndex": {
+				"type": "integer",
+				"description": "触发「而是」动画的字幕段索引（默认 1）",
+			},
+		},
+		"required": ["notText", "butText"],
 	},
-	"required_extra_params": ["notText", "butText"],
 	"example": {
 		"template": "COGNITIVE_SHIFT",
 		"param": {
@@ -32,12 +45,9 @@ export const templateMeta = {
 			"butContentIndex": 1,
 		},
 	},
-	"default_anchor_color": "#E53E3E",
-	"default_anchor_anim": "popIn",
-	"default_audio_effect": "impact_thud",
 } as const;
 
-export interface BWCognitiveShiftProps extends TemplateBaseProps {
+export interface BWCognitiveShiftProps extends TemplateBaseProps, TemplateAnchorsProps {
 	notText?: string;
 	butText?: string;
 	butSrc?: string;

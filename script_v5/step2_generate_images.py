@@ -20,7 +20,8 @@ try:
 except ImportError:
     Image = None
 
-from template_registry import get_image_fields, get_template
+from param_schema_tools import apply_image_task_results, iter_image_prompt_tasks
+from template_registry import get_template
 from utils import load_config, load_env
 
 
@@ -125,16 +126,8 @@ def _generate_with_gemini(
 
 def collect_image_tasks(scripts_data: dict, scene_filter: str = None) -> list:
     """
-    遍历所有 item，通过 template_registry 识别 param 中的图片字段，
-    返回扁平化的图片任务列表。
-
-    每个任务: {
-        "scene_id": str,
-        "order": int,
-        "field_name": str,       # param 中的字段名
-        "prompt": str,           # 图片提示词
-        "array_index": int|None, # 如果是数组类型，是第几个
-    }
+    按模板 param_schema 递归收集 format=image_prompt 的叶子，生成扁平任务列表。
+    字段与历史兼容：field_name、array_index、position、prompt、task_key。
     """
     tasks = []
     for scene in scripts_data.get("scenes", []):
@@ -144,60 +137,24 @@ def collect_image_tasks(scripts_data: dict, scene_filter: str = None) -> list:
         for item in scene.get("items", []):
             template_name = item.get("template", "CENTER_FOCUS")
             param = item.get("param", {})
-            image_fields = get_image_fields(template_name)
             tmpl = get_template(template_name)
-            schema = tmpl.get("param_schema", {})
-
-            for field_name in image_fields:
-                field_def = schema.get(field_name, {})
-                field_type = field_def.get("type", "image_prompt")
-                value = param.get(field_name)
-
-                if not value:
-                    continue
-
-                if field_type == "list_multi_group_group_array" and isinstance(value, list):
-                    for idx, group_item in enumerate(value):
-                        if not isinstance(group_item, dict):
-                            continue
-                        image_item = group_item.get("image")
-                        if not isinstance(image_item, dict):
-                            continue
-                        prompt = str(image_item.get("src", "")).strip()
-                        if prompt:
-                            tasks.append({
-                                "scene_id": scene_id,
-                                "order": item["order"],
-                                "field_name": field_name,
-                                "prompt": prompt,
-                                "array_index": idx,
-                                "position": image_item.get("position", "center"),
-                            })
-                elif field_type == "image_prompt_array" and isinstance(value, list):
-                    # 数组类型（LIST_MULTI_GROUP、TIMELINE 的 images）
-                    for idx, img_item in enumerate(value):
-                        prompt = img_item.get("src", "").strip() if isinstance(img_item, dict) else str(img_item).strip()
-                        if prompt:
-                            tasks.append({
-                                "scene_id": scene_id,
-                                "order": item["order"],
-                                "field_name": field_name,
-                                "prompt": prompt,
-                                "array_index": idx,
-                                "position": img_item.get("position", "center") if isinstance(img_item, dict) else "center",
-                            })
-                elif field_type == "image_prompt" and isinstance(value, str):
-                    prompt = value.strip()
-                    if prompt:
-                        tasks.append({
-                            "scene_id": scene_id,
-                            "order": item["order"],
-                            "field_name": field_name,
-                            "prompt": prompt,
-                            "array_index": None,
-                            "position": None,
-                        })
-
+            schema = tmpl.get("param_schema") or {}
+            sub = iter_image_prompt_tasks(
+                param if isinstance(param, dict) else {},
+                schema if isinstance(schema, dict) else {},
+                scene_id=scene_id,
+                order=item["order"],
+            )
+            for t in sub:
+                tasks.append({
+                    "scene_id": t["scene_id"],
+                    "order": t["order"],
+                    "field_name": t["field_name"],
+                    "prompt": t["prompt"],
+                    "array_index": t["array_index"],
+                    "position": t["position"],
+                    "task_key": t["task_key"],
+                })
     return tasks
 
 
@@ -221,34 +178,18 @@ def apply_image_paths(scripts_data: dict, task_results: dict):
     for scene in scripts_data.get("scenes", []):
         for item in scene.get("items", []):
             param = item.get("param", {})
+            if not isinstance(param, dict):
+                continue
             template_name = item.get("template", "CENTER_FOCUS")
-            image_fields = get_image_fields(template_name)
             tmpl = get_template(template_name)
-            schema = tmpl.get("param_schema", {})
-
-            for field_name in image_fields:
-                field_def = schema.get(field_name, {})
-                field_type = field_def.get("type", "image_prompt")
-                value = param.get(field_name)
-                if not value:
-                    continue
-
-                if field_type == "list_multi_group_group_array" and isinstance(value, list):
-                    for idx, group_item in enumerate(value):
-                        key = f"{scene['sceneId']}_{item['order']}_{field_name}_{idx}"
-                        if key in task_results and isinstance(group_item, dict):
-                            image_item = group_item.get("image")
-                            if isinstance(image_item, dict):
-                                image_item["src"] = task_results[key]
-                elif field_type == "image_prompt_array" and isinstance(value, list):
-                    for idx, img_item in enumerate(value):
-                        key = f"{scene['sceneId']}_{item['order']}_{field_name}_{idx}"
-                        if key in task_results and isinstance(img_item, dict):
-                            img_item["src"] = task_results[key]
-                elif field_type == "image_prompt" and isinstance(value, str):
-                    key = f"{scene['sceneId']}_{item['order']}_{field_name}"
-                    if key in task_results:
-                        param[field_name] = task_results[key]
+            schema = tmpl.get("param_schema") or {}
+            apply_image_task_results(
+                param,
+                schema if isinstance(schema, dict) else {},
+                task_results,
+                scene_id=scene["sceneId"],
+                order=item["order"],
+            )
 
 
 def main():
@@ -383,12 +324,7 @@ def main():
                 print(f"     ✅ {out_name}")
                 success_count += 1
 
-                # 记录结果供回写
-                if task["array_index"] is not None:
-                    key = f"{task['scene_id']}_{task['order']}_{task['field_name']}_{task['array_index']}"
-                else:
-                    key = f"{task['scene_id']}_{task['order']}_{task['field_name']}"
-                task_results[key] = f"{rel_prefix}/{out_name}"
+                task_results[task["task_key"]] = f"{rel_prefix}/{out_name}"
 
         except Exception as e:
             print(f"     ❌ 裁剪/去背失败: {e}")

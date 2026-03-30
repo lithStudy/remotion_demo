@@ -10,6 +10,8 @@ import json
 import re
 from pathlib import Path
 
+from param_schema_tools import required_keys_from_template, schema_to_markdown_lines
+
 
 def _find_brace_match(content: str, start: int) -> int:
 	"""从 start 位置（应为 '{'）起，找到匹配的 '}'，忽略字符串内的花括号。返回 '}' 的下标。"""
@@ -110,7 +112,6 @@ def _build_registry() -> dict:
 			continue
 		# 与旧版一致：注册表 value 不含 "name"，仅用 key 表示模板名
 		entry = {k: v for k, v in meta.items() if k != "name"}
-		# param_schema 内 required 已为 bool（json 解析后）
 		registry[name] = entry
 
 	return registry
@@ -141,26 +142,6 @@ def get_all_templates() -> dict:
 def get_template(name: str) -> dict:
 	"""查询单个模板，不存在则返回 CENTER_FOCUS"""
 	return TEMPLATE_REGISTRY.get(name, TEMPLATE_REGISTRY.get("CENTER_FOCUS", {}))
-
-
-def get_image_fields(template_name: str) -> list:
-	"""
-	返回指定模板 param 中属于图片提示词的字段名列表。
-	例如 CENTER_FOCUS → ["imageSrc"]
-         SPLIT_COMPARE → ["leftSrc", "rightSrc"]
-         LIST_MULTI_GROUP → ["groups"]（数组类型，需要特殊处理）
-	"""
-	tmpl = get_template(template_name)
-	schema = tmpl.get("param_schema", {})
-	fields = []
-	for field_name, field_def in schema.items():
-		if field_def.get("type") in (
-			"image_prompt",
-			"image_prompt_array",
-			"list_multi_group_group_array",
-		):
-			fields.append(field_name)
-	return fields
 
 
 def generate_ai_prompt_guide(image_style: str = "", include_examples: bool = True) -> str:
@@ -203,7 +184,7 @@ def generate_ai_prompt_guide(image_style: str = "", include_examples: bool = Tru
 	lines.append("\n| 模板名 | 心理学原理 | 说明摘要 | 图片数量 | 额外必填参数 |")
 	lines.append("|--------|-----------|----------|---------|-------------|")
 	for name, tmpl in TEMPLATE_REGISTRY.items():
-		extra = ", ".join(tmpl.get("required_extra_params", [])) or "无"
+		extra = ", ".join(required_keys_from_template(tmpl)) or "无"
 		psych = tmpl.get("psychology") or "—"
 		desc_cell = _description_table_cell(tmpl.get("description"))
 		img_c = tmpl.get("image_count", "—")
@@ -213,10 +194,11 @@ def generate_ai_prompt_guide(image_style: str = "", include_examples: bool = Tru
 
 	lines.append("\n## 各模板说明与 param 字段\n")
 	for name, tmpl in TEMPLATE_REGISTRY.items():
-		schema = tmpl.get("param_schema", {})
+		schema = tmpl.get("param_schema") or {}
 		lines.append(f"### {name}\n")
-		if not schema:
-			lines.append("无需额外参数。")
+		props = schema.get("properties") if isinstance(schema, dict) else None
+		if not props:
+			lines.append("无需额外参数（或仅 content/anchors）。")
 			if tmpl.get("content_anchor_required") is True:
 				lines.append(
 					"- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based 台词分段索引）。"
@@ -232,19 +214,7 @@ def generate_ai_prompt_guide(image_style: str = "", include_examples: bool = Tru
 				lines.append(f"- *建议*：{'；'.join(hint)}。")
 			lines.append("")
 			continue
-		for field, fdef in schema.items():
-			req = "必填" if fdef.get("required") else "可选"
-			desc_f = fdef.get("desc", "")
-			if fdef.get("type") == "enum":
-				vals = "/".join(fdef.get("values", []))
-				default = fdef.get("default", "")
-				lines.append(f"- `{field}` ({req}): {desc_f}，可选值: {vals}，默认: {default}")
-			elif fdef.get("type") == "image_prompt":
-				lines.append(f"- `{field}` ({req}): {desc_f}（填写图片视觉描述）")
-			elif fdef.get("type") == "image_prompt_array":
-				lines.append(f"- `{field}` ({req}): {desc_f}（数组，每项含 src/position/enterEffect）")
-			else:
-				lines.append(f"- `{field}` ({req}): {desc_f}")
+		lines.extend(schema_to_markdown_lines(schema, indent=0))
 		if tmpl.get("content_anchor_required") is True:
 			lines.append(
 				"- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based 台词分段索引）。"

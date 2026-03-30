@@ -276,7 +276,7 @@ Step3 生成真实 TTS 后会覆盖这些时间与场景级时长。
 - 模板名合法性 → 回退 `default_template` 并告警；
 - `param_schema` 中 enum 非法值钳制；
 - `content` 缺失时用 `item.text` / `coreSentence` 回填并告警；
-- `image_prompt_array` 与 `image_count`、锚点音效 ID、旧版 `content[].audioEffect` 迁移等。
+- `image_prompt_array` 与 `image_count`、锚点音效 ID 合法值校验等。
 
 具体规则以源码注释与实现为准。
 

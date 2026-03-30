@@ -4,7 +4,7 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { StaggeredList } from "../TextAnimations";
-import { BW_TEXT, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -17,19 +17,18 @@ export const templateMeta = {
 	"psychology": "降低认知负荷",
 	"image_count": 0,
 	"param_schema": {
+		"type": "object",
+		"properties": {},
+		"required": [],
 	},
-	"required_extra_params": [] as string[],
 	"example": {
 		"template": "STEP_LIST",
 		"param": {
 		},
 	},
-	"default_anchor_color": "#276749",
-	"default_anchor_anim": "slideUp",
-	"default_audio_effect": "ping",
 } as const;
 
-export interface BWStepListProps extends TemplateBaseProps {
+export interface BWStepListProps extends TemplateBaseProps, TemplateAnchorsProps {
 	steps?: string[];
 	startFrame?: number;
 }

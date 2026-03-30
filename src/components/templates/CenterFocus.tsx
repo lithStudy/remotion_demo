@@ -3,7 +3,7 @@
  */
 import React from "react";
 import { AbsoluteFill } from "remotion";
-import type { TemplateBaseProps } from "./shared";
+import type { TemplateAnchorsProps, TemplateBaseProps } from "./shared";
 import { BWImageBreath } from "./BWImageBreath";
 import type { ImageEnterEffect } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
@@ -16,10 +16,22 @@ export const templateMeta = {
 	"psychology": "视觉中心稳定",
 	"image_count": 1,
 	"param_schema": {
-		"imageSrc": { "type": "image_prompt", "required": true, "desc": "主图描述" },
-		"enterEffect": { "type": "enum", "values": ["breathe", "slideLeft", "slideBottom", "zoomIn", "fadeIn"], "default": "breathe", "desc": "入场效果" },
+		"type": "object",
+		"properties": {
+			"imageSrc": {
+				"type": "string",
+				"format": "image_prompt",
+				"description": "主图描述",
+			},
+			"enterEffect": {
+				"type": "string",
+				"enum": ["breathe", "slideLeft", "slideBottom", "zoomIn", "fadeIn"],
+				"default": "breathe",
+				"description": "入场效果",
+			},
+		},
+		"required": ["imageSrc"],
 	},
-	"required_extra_params": [] as string[],
 	"example": {
 		"template": "CENTER_FOCUS",
 		"param": {
@@ -27,12 +39,9 @@ export const templateMeta = {
 			"enterEffect": "breathe",
 		},
 	},
-	"default_anchor_color": "#2B6CB0",
-	"default_anchor_anim": "spring",
-	"default_audio_effect": "ping",
 } as const;
 
-export interface BWCenterFocusProps extends TemplateBaseProps {
+export interface BWCenterFocusProps extends TemplateBaseProps, TemplateAnchorsProps {
 	imageSrc: string;
 	enterEffect?: ImageEnterEffect;
 }

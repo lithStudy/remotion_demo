@@ -6,6 +6,7 @@ import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import {
 	getSingleImageAnchorAvoidanceShiftAnimatedPx,
+	type TemplateAnchorsProps,
 	type TemplateBaseProps,
 } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
@@ -18,9 +19,11 @@ export const templateMeta = {
 	"psychology": "好奇心缺口",
 	"image_count": 0,
 	"param_schema": {
+		"type": "object",
+		"properties": {},
+		"required": [],
 	},
 	"content_anchor_required": true,
-	"required_extra_params": [] as string[],
 	"example": {
 		"template": "MAGNIFYING_GLASS",
 		"param": {
@@ -35,14 +38,11 @@ export const templateMeta = {
 			],
 		},
 	},
-	"default_anchor_color": "#111111",
-	"default_anchor_anim": "popIn",
-	"default_audio_effect": "ping",
 } as const;
 
-export type BWMagnifyingGlassProps = TemplateBaseProps;
+export type BWMagnifyingGlassProps = TemplateBaseProps & TemplateAnchorsProps;
 
-export const BWMagnifyingGlass: React.FC<TemplateBaseProps> = ({
+export const BWMagnifyingGlass: React.FC<BWMagnifyingGlassProps> = ({
 	content,
 	anchors,
 	audioSrc,

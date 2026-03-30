@@ -3,7 +3,7 @@
  */
 import React from "react";
 import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { getSafeImageSrc, type TemplateBaseProps } from "./shared";
+import { getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -14,12 +14,23 @@ export const templateMeta = {
 	"psychology": "损失厌恶",
 	"image_count": 2,
 	"param_schema": {
-		"leftSrc": { "type": "image_prompt", "required": true, "desc": "错误做法图片描述" },
-		"rightSrc": { "type": "image_prompt", "required": true, "desc": "正确做法图片描述" },
-		"dontLabel": { "type": "string", "required": true, "desc": "错误标签（如 ❌ 别这样）" },
-		"doLabel": { "type": "string", "required": true, "desc": "正确标签（如 ✅ 正确做法）" },
+		"type": "object",
+		"properties": {
+			"leftSrc": {
+				"type": "string",
+				"format": "image_prompt",
+				"description": "错误做法图片描述",
+			},
+			"rightSrc": {
+				"type": "string",
+				"format": "image_prompt",
+				"description": "正确做法图片描述",
+			},
+			"dontLabel": { "type": "string", "description": "错误标签（如 ❌ 别这样）" },
+			"doLabel": { "type": "string", "description": "正确标签（如 ✅ 正确做法）" },
+		},
+		"required": ["leftSrc", "rightSrc", "dontLabel", "doLabel"],
 	},
-	"required_extra_params": ["dontLabel", "doLabel"],
 	"example": {
 		"template": "DOS_AND_DONTS",
 		"param": {
@@ -29,12 +40,9 @@ export const templateMeta = {
 			"doLabel": "✅ 正确做法",
 		},
 	},
-	"default_anchor_color": "#E53E3E",
-	"default_anchor_anim": "popIn",
-	"default_audio_effect": "impact_thud",
 } as const;
 
-export interface BWDosAndDontsProps extends TemplateBaseProps {
+export interface BWDosAndDontsProps extends TemplateBaseProps, TemplateAnchorsProps {
 	leftSrc?: string;
 	rightSrc?: string;
 	dontLabel?: string;

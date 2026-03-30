@@ -10,7 +10,7 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
-import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -21,14 +21,24 @@ export const templateMeta = {
 	"psychology": "锚定效应",
 	"image_count": "0-1",
 	"param_schema": {
-		"value": { "type": "number", "required": true, "desc": "展示的目标数字（整数滚动到该值）" },
-		"prefix": { "type": "string", "required": false, "desc": "数字前缀，如「¥」「+」" },
-		"suffix": { "type": "string", "required": false, "desc": "数字后缀，如「%」「万」" },
-		"headline": { "type": "string", "required": false, "desc": "顶部短标题" },
-		"imageSrc": { "type": "image_prompt", "required": false, "desc": "可选配图（角落小图）" },
-		"countDuration": { "type": "number", "required": false, "desc": "数字从 0 滚到 value 的 spring 时长（帧），默认 28" },
+		"type": "object",
+		"properties": {
+			"value": { "type": "integer", "description": "展示的目标数字（整数滚动到该值）" },
+			"prefix": { "type": "string", "description": "数字前缀，如「¥」「+」" },
+			"suffix": { "type": "string", "description": "数字后缀，如「%」「万」" },
+			"headline": { "type": "string", "description": "顶部短标题" },
+			"imageSrc": {
+				"type": "string",
+				"format": "image_prompt",
+				"description": "可选配图（角落小图）",
+			},
+			"countDuration": {
+				"type": "integer",
+				"description": "数字从 0 滚到 value 的 spring 时长（帧），默认 28",
+			},
+		},
+		"required": ["value"],
 	},
-	"required_extra_params": ["value"],
 	"example": {
 		"template": "KPI_HERO",
 		"param": {
@@ -38,12 +48,9 @@ export const templateMeta = {
 			"headline": "用户满意度",
 		},
 	},
-	"default_anchor_color": "#2B6CB0",
-	"default_anchor_anim": "spring",
-	"default_audio_effect": "ping",
 } as const;
 
-export interface BWKpiHeroProps extends TemplateBaseProps {
+export interface BWKpiHeroProps extends TemplateBaseProps, TemplateAnchorsProps {
 	value: number;
 	prefix?: string;
 	suffix?: string;

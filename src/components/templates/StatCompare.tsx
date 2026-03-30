@@ -10,7 +10,7 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
-import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -21,14 +21,25 @@ export const templateMeta = {
 	"psychology": "对比效应",
 	"image_count": "0-2",
 	"param_schema": {
-		"leftValue": { "type": "number", "required": true, "desc": "左侧数值" },
-		"rightValue": { "type": "number", "required": true, "desc": "右侧数值" },
-		"leftLabel": { "type": "string", "required": true, "desc": "左侧标签" },
-		"rightLabel": { "type": "string", "required": true, "desc": "右侧标签" },
-		"leftSrc": { "type": "image_prompt", "required": false, "desc": "左侧小图标" },
-		"rightSrc": { "type": "image_prompt", "required": false, "desc": "右侧小图标" },
+		"type": "object",
+		"properties": {
+			"leftValue": { "type": "integer", "description": "左侧数值（非负整数）" },
+			"rightValue": { "type": "integer", "description": "右侧数值（非负整数）" },
+			"leftLabel": { "type": "string", "description": "左侧标签" },
+			"rightLabel": { "type": "string", "description": "右侧标签" },
+			"leftSrc": {
+				"type": "string",
+				"format": "image_prompt",
+				"description": "左侧小图标",
+			},
+			"rightSrc": {
+				"type": "string",
+				"format": "image_prompt",
+				"description": "右侧小图标",
+			},
+		},
+		"required": ["leftValue", "rightValue", "leftLabel", "rightLabel"],
 	},
-	"required_extra_params": ["leftValue", "rightValue", "leftLabel", "rightLabel"],
 	"example": {
 		"template": "STAT_COMPARE",
 		"param": {
@@ -38,12 +49,9 @@ export const templateMeta = {
 			"rightLabel": "今年",
 		},
 	},
-	"default_anchor_color": "#276749",
-	"default_anchor_anim": "spring",
-	"default_audio_effect": "woosh",
 } as const;
 
-export interface BWStatCompareProps extends TemplateBaseProps {
+export interface BWStatCompareProps extends TemplateBaseProps, TemplateAnchorsProps {
 	leftValue: number;
 	rightValue: number;
 	leftLabel?: string;

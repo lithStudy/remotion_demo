@@ -101,5 +101,6 @@ export {
 	type BeatStageItem,
 	type BeatStageTone,
 	type ContentItem,
+	type TemplateAnchorsProps,
 	type TemplateBaseProps,
 } from "./templates";

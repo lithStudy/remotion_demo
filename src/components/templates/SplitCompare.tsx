@@ -4,7 +4,7 @@
  */
 import React from "react";
 import { AbsoluteFill, Img, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
-import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -15,12 +15,23 @@ export const templateMeta = {
 	"psychology": "认知失调",
 	"image_count": 2,
 	"param_schema": {
-		"leftSrc": { "type": "image_prompt", "required": true, "desc": "左侧图片描述" },
-		"rightSrc": { "type": "image_prompt", "required": true, "desc": "右侧图片描述" },
-		"leftLabel": { "type": "string", "required": true, "desc": "左侧标签" },
-		"rightLabel": { "type": "string", "required": true, "desc": "右侧标签" },
+		"type": "object",
+		"properties": {
+			"leftSrc": {
+				"type": "string",
+				"format": "image_prompt",
+				"description": "左侧图片描述",
+			},
+			"rightSrc": {
+				"type": "string",
+				"format": "image_prompt",
+				"description": "右侧图片描述",
+			},
+			"leftLabel": { "type": "string", "description": "左侧标签（2～6 字为宜）" },
+			"rightLabel": { "type": "string", "description": "右侧标签（2～6 字为宜）" },
+		},
+		"required": ["leftSrc", "rightSrc", "leftLabel", "rightLabel"],
 	},
-	"required_extra_params": ["leftLabel", "rightLabel"],
 	"example": {
 		"template": "SPLIT_COMPARE",
 		"param": {
@@ -30,12 +41,9 @@ export const templateMeta = {
 			"rightLabel": "新方法",
 		},
 	},
-	"default_anchor_color": "#2B6CB0",
-	"default_anchor_anim": "slideUp",
-	"default_audio_effect": "woosh",
 } as const;
 
-export interface BWSplitCompareProps extends TemplateBaseProps {
+export interface BWSplitCompareProps extends TemplateBaseProps, TemplateAnchorsProps {
 	leftLabel?: string;
 	rightLabel?: string;
 	leftSrc?: string;

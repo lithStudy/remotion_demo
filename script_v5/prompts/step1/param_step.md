@@ -8,9 +8,10 @@ __SCENE_TEXT__
 
 
 
-## 🎯 待处理的目标文案（这是数组结构，生成模板参数时会用到与之对齐的下标，如 `showFrom`、`textIndex`）
+## 🎯 待处理的目标文案
 
-__ITEM_TEXT__
+这是数组结构，生成模板参数时会format为content_index的字段将会用到与之对齐的**0-based 索引**
+
 __CONTENT_STR__
 
 
@@ -23,7 +24,6 @@ __CONTENT_STR__
 __SCHEMA_STR__
 
 
-
 模板该项的示例供参考：
 
 __EXAMPLE_STR__
@@ -33,18 +33,8 @@ __EXAMPLE_STR__
 注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
 
 
-
-1. 字幕层（Text）：这是短视频的单行字幕：
-
-   - `content` 已预先按标点拆分，条目如下（**只读，不要修改**）：
-
-     
-
-   - 你的任务：仅根据上方 content 的 **0-based 索引**，生成模板参数；**与 content 对齐的整型下标在 SCHEMA 中以 `format: "content_index"` 标明**（与 `format: "image_prompt"` 同为扩展约定），字段名可能是 `showFrom`、`textIndex`、`notContentIndex` 等，以 SCHEMA 为准。
-
-
-
-2. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
 
    - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
 
@@ -54,7 +44,7 @@ __EXAMPLE_STR__
 
 
 
-3. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
 
    - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
 

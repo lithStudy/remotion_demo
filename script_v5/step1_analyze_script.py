@@ -12,6 +12,7 @@ import argparse
 import json
 import re
 import shutil
+import sys
 from pathlib import Path
 
 from scene_script_validate import validate_and_normalize_scene_scripts
@@ -23,6 +24,12 @@ from step1_analysis import (
 )
 from template_registry import TEMPLATE_REGISTRY, generate_ai_prompt_guide
 from utils import AiLogger, load_config, load_env
+from validation_errors import ScriptValidationError
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 
 # ─────────────────────────────────────────────────────────────
@@ -315,8 +322,14 @@ def _validate_and_auto_fix(
         for w in v_warnings:
             print(f"   {w}")
 
-    if not v_warnings or not config.get("step1_retry_on_validate_warnings", True):
+    retry_enabled = config.get("step1_retry_on_validate_warnings", True)
+    if not v_warnings:
         return result
+    if not retry_enabled:
+        raise ScriptValidationError(
+            "脚本校验存在告警且已禁用自动修订（严格模式：直接失败）",
+            path="scene-scripts",
+        )
 
     print("\n🔄 根据校验告警尝试自动修订（最多 1 次）…")
     try:
@@ -345,16 +358,23 @@ def _validate_and_auto_fix(
             fixed, TEMPLATE_REGISTRY, default_template=default_tmpl
         )
         if w2:
-            print("⚠️ 修订后仍有告警：")
+            print("❌ 修订后仍有告警（严格模式：停止）：")
             for w in w2:
                 print(f"   {w}")
+            raise ScriptValidationError(
+                "自动修订后仍存在校验告警（严格模式：直接失败）",
+                path="scene-scripts",
+            )
         else:
             print("✅ 修订后校验无告警。")
         return fixed
 
     except (ValueError, json.JSONDecodeError) as ex:
-        print(f"⚠️ 自动修订失败，保留初稿：{ex}")
-        return result
+        raise ScriptValidationError(f"自动修订失败（JSON解析/格式错误）: {ex}", path="step1.auto_fix")
+    except ScriptValidationError:
+        raise
+    except Exception as ex:
+        raise ScriptValidationError(f"自动修订失败: {ex}", path="step1.auto_fix")
 
 
 def analyze_with_gemini(text: str, config: dict, ai_logger: AiLogger | None) -> dict:
@@ -456,5 +476,9 @@ def main():
 
 
 if __name__ == "__main__":
-    success = main()
-    exit(0 if success else 1)
+    try:
+        success = main()
+        exit(0 if success else 1)
+    except ScriptValidationError as e:
+        print(f"\n❌ 校验失败: {e}")
+        exit(1)

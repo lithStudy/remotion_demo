@@ -2,11 +2,11 @@ import json
 
 from utils.gemini_utils import generate_with_retry, parse_json_from_response
 from .prompt_loader import load_prompt, render_prompt
-
+from validation_errors import ScriptValidationError
 
 
 def ensure_item_has_content(item: dict) -> None:
-    """兜底：保证 item.content 至少有一条有效口播（程序切句或 item.text / coreSentence）。"""
+    """严格校验：要求 item.content 至少有一条有效口播。"""
     content = item.get("content")
     has_nonempty = (
         isinstance(content, list)
@@ -17,15 +17,12 @@ def ensure_item_has_content(item: dict) -> None:
     )
     if has_nonempty:
         return
-    t = item.get("text", "")
-    if isinstance(t, str) and t.strip():
-        item["content"] = [{"text": t.strip()}]
-        return
-    param = item.get("param")
-    if isinstance(param, dict):
-        cs = param.get("coreSentence")
-        if isinstance(cs, str) and cs.strip():
-            item["content"] = [{"text": cs.strip()}]
+    raise ScriptValidationError(
+        "item.content 缺失或无有效 text（严格模式：不兜底回填）",
+        order=item.get("order"),
+        template=item.get("template"),
+        path="item.content",
+    )
 
 
 def analyze_param_for_item(
@@ -52,7 +49,14 @@ def analyze_param_for_item(
             hints.append(f"口播分句至多 {cmax} 条（超出会被校验器告警）")
         schema_str += f"\n\n// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：{'；'.join(hints)}"
     example_str = json.dumps(tmpl_info.get("example", {}), ensure_ascii=False, indent=2)
-    content_str = json.dumps(item.get("content", []), ensure_ascii=False, indent=2)
+    # 为提示词提供稳定的索引字段：CONTENT_STR 内每条口播都带 index
+    content_indexed = []
+    for idx, ci in enumerate(item.get("content", []) or []):
+        if isinstance(ci, dict):
+            content_indexed.append({"index": idx, **ci})
+        else:
+            content_indexed.append({"index": idx, "value": ci})
+    content_str = json.dumps(content_indexed, ensure_ascii=False, indent=2)
 
     prompt_template = load_prompt("param_step.md")
     prompt = render_prompt(
@@ -70,10 +74,23 @@ def analyze_param_for_item(
         resp = generate_with_retry(client, model, prompt, append_ai_log=append_ai_log)
         res_json = parse_json_from_response(resp.text)
         raw_param = res_json.get("param", {})
-        item["param"] = raw_param if isinstance(raw_param, dict) else {}
+        if not isinstance(raw_param, dict):
+            raise ScriptValidationError(
+                "LLM 返回的 param 非对象",
+                order=item.get("order"),
+                template=template_name,
+                path="item.param",
+            )
+        item["param"] = raw_param
     except Exception as e:
-        print(f"   ❌ 解析 Item {item.get('order')} ({template_name}) 的 param 彻底失败: {e}")
-        item["param"] = {"anchors": []}
+        if isinstance(e, ScriptValidationError):
+            raise
+        raise ScriptValidationError(
+            f"解析 Item param 失败: {e}",
+            order=item.get("order"),
+            template=template_name,
+            path="item.param",
+        )
 
     ensure_item_has_content(item)
     return item

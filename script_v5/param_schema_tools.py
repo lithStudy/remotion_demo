@@ -14,9 +14,6 @@ _IMAGE_ENTER_EFFECTS = frozenset(
 	{"breathe", "slideLeft", "slideBottom", "zoomIn", "fadeIn"}
 )
 
-# 与 scene_script_validate 中锚点音效一致，合法的锚点音效集合
-_ANCHOR_SFX_IDS = frozenset({"impact_thud", "ping", "woosh"})
-
 # item.content 的 0-based 下标（与 templateMeta 中 integer format 一致；校验时传入 len(item.content)）
 CONTENT_INDEX_FORMAT = "content_index"
 
@@ -117,17 +114,14 @@ def _normalize_string_enum(
 	warn: Callable[[str], None],
 	path_s: str,
 ) -> Any:
-	"""字符串枚举归一化：不合法则取默认enum[0]，并警告。"""
+	"""字符串枚举校验：不合法则告警（不做自动回退改写）。"""
 	enum = schema.get("enum")
 	if not enum or not isinstance(enum, list):
 		return val
-	default = schema.get("default")
-	if default is None and enum:
-		default = enum[0]
 	if val in enum:
 		return val
-	warn(f"`{path_s}` 值 {val!r} 非法，已改为 {default!r}")
-	return default
+	warn(f"`{path_s}` 值 {val!r} 非法，期望为 {enum!r}")
+	return val
 
 
 def _validate_and_normalize_value(
@@ -152,20 +146,13 @@ def _validate_and_normalize_value(
 			return
 		# 枚举归一化
 		if schema.get("enum"):
-			parent, last = _parent_and_key(param_root, path)
-			if parent is None:
-				return
-			nv = _normalize_string_enum(val, schema, warn, path_s)
-			_set_parent_key(parent, last, nv)
+			_normalize_string_enum(val, schema, warn, path_s)
 		return
 
 	if st == "integer":
 		if val is not None and not isinstance(val, int):
-			if isinstance(val, float) and val == int(val):
-				_parent_set(param_root, path, int(val))
-			else:
-				warn(f"`{path_s}` 期望 integer")
-				return
+			warn(f"`{path_s}` 期望 integer")
+			return
 		if schema.get("format") == CONTENT_INDEX_FORMAT:
 			cur = get_at_path(param_root, path)
 			if isinstance(cur, int):
@@ -213,11 +200,6 @@ def _validate_and_normalize_value(
 			if key not in val:
 				continue
 			_validate_and_normalize_value(val[key], sub, ctx=ctx, path=[*path, key])
-		# 特殊处理：audioEffect限定合法值，否则清空
-		ae = val.get("audioEffect")
-		if ae not in (None, "") and ae not in _ANCHOR_SFX_IDS:
-			warn(f"`{path_s}.audioEffect`={ae!r} 非法，已清除")
-			val["audioEffect"] = None
 		return
 
 	warn(f"`{path_s}` 未知 schema.type={st!r}")
@@ -280,7 +262,6 @@ def validate_param_with_schema(
 	}
 	props = schema.get("properties") or {}
 	req = schema.get("required") or []
-	path0: list[str | int] = []
 	for rk in req:
 		if rk not in param or _is_empty_value(param.get(rk), props.get(rk, {})):
 			warn(f"必填字段 `{rk}` 缺失或为空")
@@ -298,7 +279,7 @@ def _normalize_image_enter_effects_in_param(
 	warn: Callable[[str], None],
 ) -> None:
 	"""
-	遍历param与schema对齐的object，若存在enterEffect字符串字段且非法则改为合法默认（breathe）。
+	遍历param与schema对齐的object，若存在 enterEffect 字符串字段且非法则告警（不做自动改写）。
 	"""
 	def walk_obj(pobj: dict, sobj: dict, pfx: str) -> None:
 		"""递归遍历以schema为准的对象树，处理嵌套enterEffect"""
@@ -330,21 +311,6 @@ def _normalize_image_enter_effects_in_param(
 		elif sub.get("type") == "object" and isinstance(v, dict):
 			walk_obj(v, sub, top)
 
-	# 兜底：无论schema，任意dict的enterEffect都检查合法性，不合法置为breathe
-	def deep_fix(obj: Any, pfx: str) -> None:
-		if isinstance(obj, dict):
-			ef = obj.get("enterEffect")
-			if ef is not None and ef not in _IMAGE_ENTER_EFFECTS:
-				warn(f"`{pfx}.enterEffect` 值 {ef!r} 非法，已改为 breathe")
-				obj["enterEffect"] = "breathe"
-			for ck, cv in obj.items():
-				deep_fix(cv, f"{pfx}.{ck}" if pfx else str(ck))
-		elif isinstance(obj, list):
-			for i, el in enumerate(obj):
-				deep_fix(el, f"{pfx}[{i}]")
-
-	deep_fix(param, "")
-
 
 def schema_to_markdown_lines(
 	schema: dict,
@@ -370,7 +336,7 @@ def schema_to_markdown_lines(
 		mi, ma = schema.get("minItems"), schema.get("maxItems")
 		bounds = ""
 		if isinstance(mi, int) or isinstance(ma, int):
-			bounds = f"（长度"
+			bounds = "（长度"
 			if isinstance(mi, int):
 				bounds += f" ≥{mi}"
 			if isinstance(ma, int):

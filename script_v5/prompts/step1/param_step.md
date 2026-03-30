@@ -28,7 +28,6 @@ __SCHEMA_STR__
 __EXAMPLE_STR__
 
 
-
 注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
 
 

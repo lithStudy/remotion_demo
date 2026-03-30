@@ -18,7 +18,7 @@ export const templateMeta = {
 	"name": "LIST_MULTI_GROUP",
 	"componentExport": "BWMultiImage",
 	"description":
-		"适用：当前 item 原文本身就明确包含 2～5 个并列分点/主体时使用，图文同时呈现。\n差异：有时间先后/演进线用 TIMELINE；有序可执行步骤（第一步…）用 STEP_LIST；若只是总起句/引导句（如“给你两个方法：”）而具体分点已拆到后续 item，禁止用本模板。\n参数：仅使用 groups；每组采用 textIndex + image + 可选 anchor 的结构，其中 textIndex 绑定 content 序号，image 只负责图片描述。\n动画：首组图文居中并放大入场；每新增一组时，已出现组与新组一起平滑重排为纵向均分布局，图片与文字同步动态缩放、并保持同轴左图右文展示。",
+		"适用：当前 item 原文本身就明确包含 2～5 个并列分点/并列例子时使用，图文同时呈现。\n差异：有时间先后/演进线用 TIMELINE；有序可执行步骤（第一步…）用 STEP_LIST；若只是总起句/引导句（如“给你两个方法：”）而具体分点已拆到后续 item，禁止用本模板。\n参数：仅使用 groups；组数=叙事并列主体数（非 content 行数）。每组 textIndex 为该主体在 content 中的起始下标；同一体内多行 content 共用同一 textIndex；各组须分段覆盖至最后一条 content。\n动画：首组图文居中并放大入场；每新增一组时，已出现组与新组一起平滑重排为纵向均分布局，图片与文字同步动态缩放、并保持同轴左图右文展示。",
 	"psychology": "多巴胺刺激",
 	"image_count": "2-5",
 	"param_schema": {
@@ -28,7 +28,7 @@ export const templateMeta = {
 				"type": "array",
 				"minItems": 2,
 				"maxItems": 5,
-				"description": "唯一合法结构：每项含 textIndex、image、可选 anchor；组数须与原文并列分点一致，禁止脑补。textIndex 为 content 下标（0-based，非帧数），合法范围 0～(content 条数-1)；勿使用顶层 anchors。image.src 为配图提示词；无高价值短语则省略 anchor",
+				"description": "唯一合法结构：每项含 textIndex、image、可选 anchor；组数 2～5，须与口播并列分点/并列例子一致（分点或例子的概括）。textIndex 为该并列主体在 content 中的起始下标（0-based，非帧数），合法范围 0～(content 条数-1)；同一体内多行共用起始 textIndex；各组 textIndex 升序须分段覆盖至最后一条 content。勿使用顶层 anchors。image.src 为配图提示词；无高价值短语则省略 anchor",
 				"items": {
 					"type": "object",
 					"required": ["textIndex", "image"],
@@ -83,15 +83,16 @@ export const templateMeta = {
 	},
 	"example": {
 		"template": "LIST_MULTI_GROUP",
+		"content":["成功是有前提的","成功的核心是自律", "成功的核心是资源","只有两者搭配才能获得成功"],
 		"param": {
 			"groups": [
 				{
-					"textIndex": 0,
+					"textIndex": 1,
 					"image": { "src": "齿轮简笔画图标" },
 					"anchor": { "text": "核心是自律", "audioEffect": "ping" }
 				},
 				{
-					"textIndex": 1,
+					"textIndex": 2,
 					"image": { "src": "钞票简笔画图标" },
 					"anchor": { "text": "核心是资源", "audioEffect": "impact_thud" }
 				}

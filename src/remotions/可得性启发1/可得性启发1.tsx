@@ -7,7 +7,6 @@ import { fade } from "@remotion/transitions/fade";
 import { Scene1, calculateScene1Duration } from "./scenes/Scene1";
 import { Scene2, calculateScene2Duration } from "./scenes/Scene2";
 import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
-import { Scene4, calculateScene4Duration } from "./scenes/Scene4";
 
 export const 可得性启发1Schema = z.object({});
 
@@ -15,10 +14,9 @@ const TRANSITION_DURATION = 15;
 const SCENE_END_PADDING = 20;
 
 const sceneConfigs = [
-    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引出问题：常见的恐慌与焦虑" },
-    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "分析原因：媒体算法与大脑机制" },
-    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "心理学解释：可得性启发偏见" },
-    { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "解决方案：防御锦囊" },
+    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引出恐慌与焦虑" },
+    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "可得性启发偏见" },
+    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "防御锦囊" },
 ];
 
 export const TOTAL_DURATION_可得性启发1 =

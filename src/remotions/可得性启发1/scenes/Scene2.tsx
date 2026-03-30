@@ -1,9 +1,9 @@
 import React from "react";
 import { AbsoluteFill, Sequence, Audio, staticFile } from "remotion";
-import { BWCenterFocus, BWTextFocus } from "../../../components";
+import { BWCenterFocus, BWMagnifyingGlass, BWStatCompare, BWTextFocus } from "../../../components";
 
-// 分析原因：媒体算法与大脑机制
-const SCENE_DURATION = 93 + 100 + 154 + 120 + 148;
+// 可得性启发偏见
+const SCENE_DURATION = 226 + 66 + 120 + 95 + 91 + 127 + 74;
 
 export const calculateScene2Duration = (): number => {
     return SCENE_DURATION;
@@ -12,20 +12,26 @@ export const calculateScene2Duration = (): number => {
 export const Scene2: React.FC = () => {
     return (
         <AbsoluteFill>
-            <Sequence from={0} durationInFrames={93}>
-                <BWCenterFocus content={[{"text": "产生这种强烈的恐慌感和焦虑感，", "startFrame": 0, "durationFrames": 33}, {"text": "真不能怪咱们胆小，", "startFrame": 33, "durationFrames": 30}, {"text": "更不是咱们缺乏常识。", "startFrame": 63, "durationFrames": 30}]} totalDurationFrames={93} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="breathe" anchors={[]} />
+            <Sequence from={0} durationInFrames={226}>
+                <BWMagnifyingGlass content={[{"text": "在心理学上，", "startFrame": 0, "durationFrames": 30}, {"text": "咱们这种容易被忽悠的现象，", "startFrame": 30, "durationFrames": 30}, {"text": "叫做“可得性启发”偏见。", "startFrame": 60, "durationFrames": 30}, {"text": "说人话就是：", "startFrame": 90, "durationFrames": 30}, {"text": "咱们的大脑其实特别偷懒，", "startFrame": 120, "durationFrames": 30}, {"text": "它在判断一件事常不常见时，", "startFrame": 150, "durationFrames": 30}, {"text": "完全取决于这件事在脑子里“好不好想起来”。", "startFrame": 180, "durationFrames": 46}]} totalDurationFrames={226} anchors={[{"text": "可得性启发", "showFrom": 2, "color": "#EF4444", "anim": "popIn", "audioEffect": "ping"}, {"text": "特别偷懒", "showFrom": 4, "color": "#000000", "anim": "spring", "audioEffect": "woosh"}]} />
             </Sequence>
-            <Sequence from={93} durationInFrames={100}>
-                <BWCenterFocus content={[{"text": "要怪，", "startFrame": 0, "durationFrames": 30}, {"text": "就怪那些深谙流量密码的媒体算法，", "startFrame": 30, "durationFrames": 35}, {"text": "以及咱们人类大脑底层的出厂设置。", "startFrame": 65, "durationFrames": 35}]} totalDurationFrames={100} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="slideBottom" anchors={[]} />
+            <Sequence from={226} durationInFrames={66}>
+                <BWCenterFocus content={[{"text": "因为你看过太多次耸人听闻的头条，", "startFrame": 0, "durationFrames": 35}, {"text": "极端画面深深印在了潜意识里。", "startFrame": 35, "durationFrames": 31}]} totalDurationFrames={66} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="zoomIn" anchors={[]} />
             </Sequence>
-            <Sequence from={193} durationInFrames={154}>
-                <BWCenterFocus content={[{"text": "你想啊，", "startFrame": 0, "durationFrames": 30}, {"text": "为了博眼球，", "startFrame": 30, "durationFrames": 30}, {"text": "媒体永远只会放大报道极端事件，", "startFrame": 60, "durationFrames": 33}, {"text": "“安全到达”永远上不了热搜，", "startFrame": 93, "durationFrames": 31}, {"text": "“机毁人亡”才会全网推送。", "startFrame": 124, "durationFrames": 30}]} totalDurationFrames={154} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="breathe" anchors={[]} />
+            <Sequence from={292} durationInFrames={120}>
+                <BWCenterFocus content={[{"text": "等你真要买机票时，", "startFrame": 0, "durationFrames": 30}, {"text": "大脑一检索，", "startFrame": 30, "durationFrames": 30}, {"text": "瞬间跳出无数空难画面，", "startFrame": 60, "durationFrames": 30}, {"text": "它就疯狂报警提示危险。", "startFrame": 90, "durationFrames": 30}]} totalDurationFrames={120} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="zoomIn" anchors={[]} />
             </Sequence>
-            <Sequence from={347} durationInFrames={120}>
-                <BWCenterFocus content={[{"text": "再加上现在的算法，", "startFrame": 0, "durationFrames": 30}, {"text": "你越是害怕、", "startFrame": 30, "durationFrames": 30}, {"text": "越是愤怒多看了一眼，", "startFrame": 60, "durationFrames": 30}, {"text": "它就越是铺天盖地给你推。", "startFrame": 90, "durationFrames": 30}]} totalDurationFrames={120} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="slideBottom" anchors={[]} />
+            <Sequence from={412} durationInFrames={95}>
+                <BWStatCompare content={[{"text": "但真实的数据是，", "startFrame": 0, "durationFrames": 30}, {"text": "飞机出事的概率，", "startFrame": 30, "durationFrames": 30}, {"text": "远比你骑电动车被撞的概率低得多。", "startFrame": 60, "durationFrames": 35}]} totalDurationFrames={95} leftValue={1} rightValue={100000} leftLabel={"飞机"} rightLabel={"电动车"} leftSrc={staticFile("images/template/scene1_1.png")} rightSrc={staticFile("images/template/scene1_1.png")} anchors={[]} />
             </Sequence>
-            <Sequence from={467} durationInFrames={148}>
-                <BWTextFocus content={[{"text": "这其实是一套把人性弱点研究到极致的注意力", "startFrame": 0, "durationFrames": 44}, {"text": "收割术，", "startFrame": 44, "durationFrames": 30}, {"text": "咱们普通人就是这样不知不觉被困在了一个人", "startFrame": 74, "durationFrames": 44}, {"text": "为制造的“信息恐怖屋”里。", "startFrame": 118, "durationFrames": 30}]} totalDurationFrames={148} coreSentence={"普通人被困在“信息恐怖屋”里"} anchors={[{"text": "注意力收割术", "showFrom": 0, "color": "#000000", "anim": "spring", "audioEffect": "impact_thud"}, {"text": "信息恐怖屋", "showFrom": 3, "color": "#EF4444", "anim": "highlight", "audioEffect": "ping"}]} />
+            <Sequence from={507} durationInFrames={91}>
+                <BWTextFocus content={[{"text": "咱们必须认清一个残酷的真相：", "startFrame": 0, "durationFrames": 31}, {"text": "容易想起来，", "startFrame": 31, "durationFrames": 30}, {"text": "绝不等于很常见。", "startFrame": 61, "durationFrames": 30}]} totalDurationFrames={91} coreSentence={"认清残酷真相：别被轻易忽悠"} anchors={[{"text": "残酷真相", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud"}, {"text": "容易想起来", "showFrom": 1, "color": null, "anim": "highlight", "audioEffect": null}, {"text": "绝不等于很常见", "showFrom": 2, "color": "#EF4444", "anim": null, "audioEffect": null}]} />
+            </Sequence>
+            <Sequence from={598} durationInFrames={127}>
+                <BWCenterFocus content={[{"text": "那些极端事件因为充满冲突和血腥，", "startFrame": 0, "durationFrames": 35}, {"text": "记忆点极强；", "startFrame": 35, "durationFrames": 30}, {"text": "而千万次平平无奇的安全起降，", "startFrame": 65, "durationFrames": 31}, {"text": "根本没资格进入你的记忆内存。", "startFrame": 96, "durationFrames": 31}]} totalDurationFrames={127} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="fadeIn" anchors={[]} />
+            </Sequence>
+            <Sequence from={725} durationInFrames={74}>
+                <BWCenterFocus content={[{"text": "咱们的直觉，", "startFrame": 0, "durationFrames": 30}, {"text": "就这样被媒体强行灌输的极端画面给劫持了。", "startFrame": 30, "durationFrames": 44}]} totalDurationFrames={74} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="fadeIn" anchors={[]} />
             </Sequence>
 
         </AbsoluteFill>

@@ -30,6 +30,30 @@ def load_config(script_dir: Path) -> dict:
         return json.load(f)
 
 
+# 遇到下列字符时结束当前片段（字符保留在片段末尾）
+_SPLIT_PUNCTUATIONS: frozenset[str] = frozenset("，,。！？!?;；…、：:—")
+
+# 若某片段去掉空白后仅由这些「收尾」符号组成，则并入上一片段（避免单独的 `”` 等）
+_CLOSING_ONLY_CHARS: frozenset[str] = frozenset(
+    "\u201d\u2019"  # ” ’
+    "\u300d\u300f"  # 」 』
+    "\uff09)\uff3d]\uff5d}\u3011"  # 全角/ASCII 右括号、右方括号、右花括号、右白角括号
+)
+
+
+def _merge_closing_only_segments(parts: list[str]) -> list[str]:
+    if len(parts) <= 1:
+        return parts
+    out: list[str] = [parts[0]]
+    for seg in parts[1:]:
+        core = seg.strip()
+        if core and all(c in _CLOSING_ONLY_CHARS for c in core):
+            out[-1] = out[-1] + seg
+        else:
+            out.append(seg)
+    return out
+
+
 def extract_content_text(content_item) -> str:
     """
     从单条 content 条目中提取纯文本。
@@ -44,39 +68,26 @@ def extract_content_text(content_item) -> str:
 
 def split_text_to_content(text: str) -> list[dict]:
     """
-    按标点拆分文本，保留标点在片段末尾。
-    每个片段长度不超过 20。如果超过，则按字数强制截断。
+    仅按标点拆分文本，标点在片段末尾；不按字数截断。
     保证所有片段拼合后等于原文本。
     """
     if not text:
         return []
 
-    punctuations = set("，,。！？!?;；…、")
-
-    segments = []
+    segments: list[str] = []
     current_segment = ""
 
     for char in text:
         current_segment += char
-        if char in punctuations:
+        if char in _SPLIT_PUNCTUATIONS:
             segments.append(current_segment)
             current_segment = ""
 
     if current_segment:
         segments.append(current_segment)
 
-    # 处理超长截断（>20个字符）
-    max_len = 20
-    final_segments = []
+    final_segments = _merge_closing_only_segments([s for s in segments if s])
 
-    for seg in segments:
-        while len(seg) > max_len:
-            final_segments.append(seg[:max_len])
-            seg = seg[max_len:]
-        if seg:
-            final_segments.append(seg)
-
-    # 组装为 [{"text": "..."}] 格式
     content = [{"text": s} for s in final_segments if s]
 
     # 零丢失验证

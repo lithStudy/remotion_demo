@@ -45,7 +45,7 @@ export const templateMeta = {
 							"enum": ["breathe", "slideLeft", "slideBottom", "zoomIn", "fadeIn"],
 							"default": "breathe",
 						},
-						"textIndex": { "type": "integer" },
+						"textIndex": { "type": "integer", "format": "content_index" },
 						"startFrame": { "type": "integer" },
 					},
 				},

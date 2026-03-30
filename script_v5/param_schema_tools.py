@@ -17,6 +17,9 @@ _IMAGE_ENTER_EFFECTS = frozenset(
 # 与 scene_script_validate 中锚点音效一致，合法的锚点音效集合
 _ANCHOR_SFX_IDS = frozenset({"impact_thud", "ping", "woosh"})
 
+# param.content 的 0-based 下标（与 templateMeta 中 integer format 一致）
+CONTENT_INDEX_FORMAT = "content_index"
+
 
 def _parse_image_count_range(image_count: Any) -> tuple[int | None, int | None]:
 	"""解析图片数量范围，返回最小值和最大值（或None）。支持单值、区间字符串等多种输入"""
@@ -157,12 +160,18 @@ def _validate_and_normalize_value(
 		return
 
 	if st == "integer":
-		# 可以容忍 float 且值等于整数，自动转型，否则警告
 		if val is not None and not isinstance(val, int):
 			if isinstance(val, float) and val == int(val):
 				_parent_set(param_root, path, int(val))
 			else:
 				warn(f"`{path_s}` 期望 integer")
+				return
+		if schema.get("format") == CONTENT_INDEX_FORMAT:
+			cur = get_at_path(param_root, path)
+			if isinstance(cur, int):
+				clen = ctx.get("content_len") or 0
+				if clen > 0 and (cur < 0 or cur >= clen):
+					warn(f"`{path_s}`={cur!r} 超出 content 索引范围 [0,{clen})")
 		return
 
 	if st == "number":
@@ -204,13 +213,6 @@ def _validate_and_normalize_value(
 			if key not in val:
 				continue
 			_validate_and_normalize_value(val[key], sub, ctx=ctx, path=[*path, key])
-		# 特殊处理：textIndex和showFrom索引与内容长度校验
-		clen = ctx.get("content_len") or 0
-		for idx_key in ("textIndex", "showFrom"):
-			if idx_key in val and isinstance(val.get(idx_key), int):
-				iv = val[idx_key]
-				if clen > 0 and (iv < 0 or iv >= clen):
-					warn(f"`{path_s}.{idx_key}`={iv!r} 超出 content 索引范围 [0,{clen})")
 		# 特殊处理：audioEffect限定合法值，否则清空
 		ae = val.get("audioEffect")
 		if ae not in (None, "") and ae not in _ANCHOR_SFX_IDS:
@@ -381,6 +383,8 @@ def schema_to_markdown_lines(
 	extra = []
 	if schema.get("format") == "image_prompt":
 		extra.append("图片提示词")
+	if schema.get("format") == CONTENT_INDEX_FORMAT:
+		extra.append("content 下标 0-based")
 	if schema.get("enum"):
 		extra.append("可选值: " + "/".join(str(x) for x in schema["enum"]))
 	if schema.get("default") is not None:
@@ -409,6 +413,8 @@ def _field_lines(name: str, schema: dict, req_label: str, indent: int) -> list[s
 	parts = [head]
 	if st == "string" and schema.get("format") == "image_prompt":
 		parts.append("［图片提示词］")
+	if st == "integer" and schema.get("format") == CONTENT_INDEX_FORMAT:
+		parts.append("［content 下标］")
 	if desc:
 		parts.append(desc)
 	if schema.get("enum"):

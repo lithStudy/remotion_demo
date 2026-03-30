@@ -25,13 +25,17 @@ export const templateMeta = {
 			},
 			"anchors": {
 				"type": "array",
-				"description": "用于高亮正文子串；使用 coreSentence 时锚点词须出现在 coreSentence 内",
+				"description": "可选；用于高亮正文子串。使用 coreSentence 时锚点词须出现在 coreSentence 内。showFrom 须落在当前 content 条数范围内",
 				"items": {
 					"type": "object",
 					"required": ["text", "showFrom"],
 					"properties": {
 						"text": { "type": "string", "description": "要高亮的子串" },
-						"showFrom": { "type": "integer", "description": "绑定 content 索引（0-based）" },
+						"showFrom": {
+							"type": "integer",
+							"format": "content_index",
+							"description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃",
+						},
 						"color": { "type": "string" },
 						"anim": {
 							"type": "string",

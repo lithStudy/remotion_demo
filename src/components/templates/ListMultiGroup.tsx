@@ -28,14 +28,15 @@ export const templateMeta = {
 				"type": "array",
 				"minItems": 2,
 				"maxItems": 5,
-				"description": "唯一合法结构：每项含 textIndex、image、可选 anchor；组数须与原文并列分点一致，禁止脑补。textIndex 绑定 content 序号；image.src 为配图提示词；无高价值短语则省略 anchor",
+				"description": "唯一合法结构：每项含 textIndex、image、可选 anchor；组数须与原文并列分点一致，禁止脑补。textIndex 为 content 下标（0-based，非帧数），合法范围 0～(content 条数-1)；勿使用顶层 anchors。image.src 为配图提示词；无高价值短语则省略 anchor",
 				"items": {
 					"type": "object",
 					"required": ["textIndex", "image"],
 					"properties": {
 						"textIndex": {
 							"type": "integer",
-							"description": "该组绑定的 content 序号（0-based）",
+							"format": "content_index",
+							"description": "该组绑定的 content 下标（0-based），非帧数；须在 0～(content 条数-1) 内",
 						},
 						"image": {
 							"type": "object",
@@ -55,9 +56,7 @@ export const templateMeta = {
 									"type": "string",
 									"enum": ["breathe", "slideLeft", "slideBottom", "zoomIn", "fadeIn"],
 									"default": "breathe",
-								},
-								"textIndex": { "type": "integer" },
-								"startFrame": { "type": "integer" },
+								}
 							},
 						},
 						"anchor": {

@@ -20,8 +20,35 @@ export const templateMeta = {
 	"image_count": 0,
 	"param_schema": {
 		"type": "object",
-		"properties": {},
-		"required": [],
+		"properties": {
+			"anchors": {
+				"type": "array",
+				"minItems": 1,
+				"description": "必填且非空；每项通过 showFrom 对齐 content 分句，不要用顶层其它字段代替 anchors",
+				"items": {
+					"type": "object",
+					"required": ["text", "showFrom"],
+					"properties": {
+						"text": { "type": "string", "description": "要聚焦的关键词/短语" },
+						"showFrom": {
+							"type": "integer",
+							"format": "content_index",
+							"description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃",
+						},
+						"color": { "type": "string" },
+						"anim": {
+							"type": "string",
+							"enum": ["spring", "slideUp", "popIn", "highlight"],
+						},
+						"audioEffect": {
+							"type": "string",
+							"enum": ["impact_thud", "ping", "woosh"],
+						},
+					},
+				},
+			},
+		},
+		"required": ["anchors"],
 	},
 	"content_anchor_required": true,
 	"example": {

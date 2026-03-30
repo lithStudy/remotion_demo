@@ -41,13 +41,17 @@ export const templateMeta = {
 			"notes": {
 				"type": "array",
 				"description":
-					"解释短语数组；每项含 text 与 showFrom，showFrom 绑定 content 索引，适合提炼当前叙事的解释重点",
+					"可选；解释短语数组。每项含 text 与 showFrom；showFrom 为 content 下标（0-based，非帧数），须在 0～(content 条数-1) 内",
 				"items": {
 					"type": "object",
 					"required": ["text", "showFrom"],
 					"properties": {
 						"text": { "type": "string", "description": "解释短语" },
-						"showFrom": { "type": "integer", "description": "绑定 content 的索引（0-based）" },
+						"showFrom": {
+							"type": "integer",
+							"format": "content_index",
+							"description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃",
+						},
 					},
 				},
 			},

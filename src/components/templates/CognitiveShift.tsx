@@ -26,10 +26,12 @@ export const templateMeta = {
 			},
 			"notContentIndex": {
 				"type": "integer",
+				"format": "content_index",
 				"description": "触发「不是」动画的字幕段索引（默认 0）",
 			},
 			"butContentIndex": {
 				"type": "integer",
+				"format": "content_index",
 				"description": "触发「而是」动画的字幕段索引（默认 1）",
 			},
 		},

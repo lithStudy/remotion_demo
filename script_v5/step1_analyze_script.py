@@ -69,8 +69,7 @@ def _collect_template_quality_metrics(scenes: list[dict]) -> dict:
                         )
                 continue
             total_step_list += 1
-            param = item.get("param", {})
-            content = param.get("content", []) if isinstance(param, dict) else []
+            content = item.get("content", [])
             if isinstance(content, list) and len(content) <= 1:
                 single_point_step_list += 1
 
@@ -180,9 +179,10 @@ def _inject_preview_timings(scene_scripts: dict, fps: int, config: dict) -> None
         for item in scene.get("items", []):
             param = item.get("param", {})
             if not isinstance(param, dict):
-                continue
+                item["param"] = {}
+                param = item["param"]
 
-            content = param.get("content", [])
+            content = item.get("content", [])
             if not isinstance(content, list) or not content:
                 continue
 
@@ -201,9 +201,9 @@ def _inject_preview_timings(scene_scripts: dict, fps: int, config: dict) -> None
                 )
                 cursor += duration_frames
 
-            param["content"] = upgraded_content
+            item["content"] = upgraded_content
             param["anchors"] = _sanitize_anchors(param, len(upgraded_content), item.get("order", "?"))
-            param["totalDurationFrames"] = max(cursor, min_frames)
+            item["totalDurationFrames"] = max(cursor, min_frames)
 
 
 # ─────────────────────────────────────────────────────────────
@@ -280,12 +280,15 @@ def _run_ai_analysis_pipeline(
 
 
 def _cleanup_intermediate_fields(result: dict) -> None:
-    """清理 AI 管线中用于跨步骤传递的临时字段（text、content）。"""
+    """清理场景级原文与 item 上的临时 text；口播保留在 item.content。"""
     for scene in result.get("scenes", []):
         scene.pop("text", None)
         for item in scene.get("items", []):
             item.pop("text", None)
-            item.pop("content", None)
+            param = item.get("param")
+            if isinstance(param, dict):
+                param.pop("content", None)
+                param.pop("totalDurationFrames", None)
 
 
 def _validate_and_auto_fix(
@@ -317,27 +320,26 @@ def _validate_and_auto_fix(
 
     print("\n🔄 根据校验告警尝试自动修订（最多 1 次）…")
     try:
-        # 记录原始 content，防止模型在修订阶段篡改
+        # 记录原始口播分句，防止模型在修订阶段篡改
         orig_contents: dict[tuple, list] = {}
         for s in result.get("scenes", []):
             sid = s.get("sceneId")
             for it in s.get("items", []):
-                orig_contents[(sid, it.get("order"))] = it.get("param", {}).get("content", [])
+                oc = it.get("content", [])
+                orig_contents[(sid, it.get("order"))] = list(oc) if isinstance(oc, list) else []
 
         fixed = gemini_fix_after_warnings(
             client, model, text, result, v_warnings, template_guide, append_ai_log=append_log
         )
         fixed["fps"] = result.get("fps")
 
-        # 恢复 content
+        # 恢复 item.content
         for s in fixed.get("scenes", []):
             sid = s.get("sceneId")
             for it in s.get("items", []):
                 key = (sid, it.get("order"))
-                if "param" not in it:
-                    it["param"] = {}
                 if key in orig_contents:
-                    it["param"]["content"] = orig_contents[key]
+                    it["content"] = orig_contents[key]
 
         _, w2 = validate_and_normalize_scene_scripts(
             fixed, TEMPLATE_REGISTRY, default_template=default_tmpl

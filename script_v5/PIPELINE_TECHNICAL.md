@@ -115,7 +115,7 @@ Prompt 文件位于 `prompts/step1/*.md`，占位符为 `__KEY__`，由 `prompt_
 
 - 对每条 `matched_items`：`item["content"] = split_text_to_content(item["text"])`。
 - 规则：按中英文标点切句，标点留在段末；单段最长 **20 字**，超出硬切；拼回应等于原文，否则打印 warning。
-- 随后 **`scene["items"] = matched_items`**。该 `content` 在阶段 C 会**强制写回** `param.content`，口播分句以程序为准。
+- 随后 **`scene["items"] = matched_items`**。口播分句始终保留在 **`item.content`**，阶段 C **不会**将其写入 `param`。
 
 **控制台**：打印每场景 2A 镜头数、2B 模板列表；并调用 **`_collect_template_quality_metrics`**（见 5.8）。
 
@@ -130,9 +130,8 @@ Prompt 文件位于 `prompts/step1/*.md`，占位符为 `__KEY__`，由 `prompt_
    - **`param_schema`**（来自 `TEMPLATE_REGISTRY` 的 JSON）；若模板声明 `content_min_items` / `content_max_items`，以注释形式追加到 schema 字符串，提示条数边界
    - 模板 **`example`**
    - **`CONTENT_STR`**：阶段 B 已生成的 `item["content"]`
-3. 解析返回的 **`param`** 赋给 `item["param"]`，再**强制** `item["param"]["content"] = item["content"]` —— **不让模型改口播分句列表**。
-4. **异常**：解析失败则 `param = { content: item["content"] 或单句 text, anchors: [] }`。
-5. **`ensure_item_param_has_content`**：`param.content` 仍无有效文本时，用 `item.text` 或 `param.coreSentence` 填一条。
+3. 解析返回的 **`param`** 赋给 `item["param"]`；若模型误返回 `content` / `totalDurationFrames`，会**剔除**（归属 item 层）。
+4. **异常**：解析失败则 `param = { "anchors": [] }`，**`ensure_item_has_content`** 仍保证 `item.content` 可用（`item.text` / `coreSentence` 兜底）。
 
 ### 5.4 Gemini 共用工具（`step1_analysis/gemini_utils.py`）
 
@@ -142,21 +141,21 @@ Prompt 文件位于 `prompts/step1/*.md`，占位符为 `__KEY__`，由 `prompt_
 ### 5.5 `_cleanup_intermediate_fields`
 
 - 从每个 **scene** 删除 `text`。
-- 从每个 **item** 删除 `text`、`content`。  
-口播与分句仅保留在 **`item.param.content`**。
+- 从每个 **item** 删除 `text`；**保留** `item.content`。
+- 从 **`item.param` 中删除**误留的 `content`、`totalDurationFrames`（若存在）。
 
 ### 5.6 `_validate_and_auto_fix`
 
 1. **`validate_and_normalize_scene_scripts`**（`scene_script_validate.py`）：按 `TEMPLATE_REGISTRY` 归一化并收集 **warnings**（未知模板回退、enum 钳制、`content` 回填、`images` 与 `image_count` 等）。
 2. 有告警则打印；若 **`step1_retry_on_validate_warnings`** 为 `false`，直接返回当前 `result`。
 3. 若为 `true`：调用 **`fix_step.gemini_fix_after_warnings`**（**`fix_after_warnings.md`**），传入原文、告警列表、当前草稿、`TEMPLATE_GUIDE`，做一次结构修订。
-4. **锁定 `content`**：修订前按 `(sceneId, order)` 备份 `param.content`，修订后逐条写回，避免修订阶段改口播字句。
+4. **锁定 `content`**：修订前按 `(sceneId, order)` 备份 **`item.content`**，修订后写回；`param` 可由模型修订。
 5. 对修订结果再校验；打印修订后是否仍有告警。修订失败（如 JSON 解析错误）则保留初稿。
 
 ### 5.7 `_inject_preview_timings`（Step3 前的假时间轴）
 
-- 使用 `utils.extract_content_text` 取每条文案长度，按 **`preview_frames_per_char`**、**`preview_min_duration_frames`** 计算每条 `startFrame` / `durationFrames`，累加得 **`param.totalDurationFrames`**。
-- **`_sanitize_anchors`**：校验 `param.anchors` 的 `text`、`showFrom`（须在 `content` 条数范围内），非法项丢弃。
+- 使用 `utils.extract_content_text` 取 **`item.content`** 每条文案长度，按 **`preview_frames_per_char`**、**`preview_min_duration_frames`** 计算每条 `startFrame` / `durationFrames`，累加得 **`item.totalDurationFrames`**。
+- **`_sanitize_anchors`**：校验 `param.anchors` 的 `showFrom`（须在 **`len(item.content)`** 范围内），非法项丢弃。
 
 Step3 生成真实 TTS 后会覆盖这些时间与场景级时长。
 
@@ -175,8 +174,8 @@ Step3 生成真实 TTS 后会覆盖这些时间与场景级时长。
 口播全文
   → [A] scene_step：场景 JSON + scene.text 对齐回原文
   → 每场景 [B] 2A 分镜 → 2B 选模板 → content_split 生成 item.content
-  → 每 item [C] AI 填 param，且 param.content 强制等于程序拆分结果
-  → 删除 scene.text / item.text / item.content
+  → 每 item [C] AI 填 param（不含 content）；item.content 为程序切句结果
+  → 删除 scene.text / item.text；保留 item.content
   → 写入 fps → 校验（±1 次修订且锁 content）→ 注入预览帧/anchors
   → scene-scripts.json + AI 日志
 ```
@@ -229,7 +228,7 @@ Step3 生成真实 TTS 后会覆盖这些时间与场景级时长。
 
 - 用全局 boundaries 切片得到该 item 的句子区间；
 - `upgrade_content_with_timing` 将每条 `content` 升级为带 `text`、`startFrame`、`durationFrames` 的对象（**帧坐标相对本 item 的 Sequence 起点**）；
-- 写入 `param.totalDurationFrames`（由该 item 首末句时间换算）。
+- 写入 **`item.totalDurationFrames`**（由该 item 首末句时间换算）。
 
 同时写入 **`scene.totalDurationFrames`**（整段 MP3 时长 × fps 向上取整）。
 
@@ -247,8 +246,8 @@ Step3 生成真实 TTS 后会覆盖这些时间与场景级时长。
 
 ### 8.2 单场景 TSX（`generate_scene_tsx`）
 
-- 每个 item 映射为 `Sequence`，`durationInFrames` 取自 `param.totalDurationFrames`。
-- 组件名来自 `TEMPLATE_TO_COMPONENT`；`param` 经 `_param_to_jsx_props` 转为 JSX props：图片类字段包 `staticFile()`，`content` 用 JSON 注入，`audioSrc` 不在 item 上输出（音频在场景级）。
+- 每个 item 映射为 `Sequence`，`durationInFrames` 取自 **`item.totalDurationFrames`**。
+- 组件名来自 `TEMPLATE_TO_COMPONENT`；**`content`** 与 **`totalDurationFrames`** 来自 item；其余字段由 `param` 经 `_param_to_jsx_props` 生成；图片类字段包 `staticFile()`；`audioSrc` 不在 item 上输出（音频在场景级）。
 - 场景根上若存在 `audioSrc`，渲染一层 `<Audio src={staticFile(...)} />`。
 
 ### 8.3 主 Composition（`generate_composition_tsx`）
@@ -275,7 +274,7 @@ Step3 生成真实 TTS 后会覆盖这些时间与场景级时长。
 
 - 模板名合法性 → 回退 `default_template` 并告警；
 - `param_schema` 中 enum 非法值钳制；
-- `content` 缺失时用 `item.text` / `coreSentence` 回填并告警；
+- **`item.content`** 缺失时用 `item.text` / `param.coreSentence` 回填并告警；
 - `image_prompt_array` 与 `image_count`、锚点音效 ID 合法值校验等。
 
 具体规则以源码注释与实现为准。

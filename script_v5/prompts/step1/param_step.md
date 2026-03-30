@@ -54,4 +54,4 @@ __EXAMPLE_STR__
 
 ## 输出格式（严格 JSON，不要 markdown 代码块）
 
-仅输出根对象，形如 `{ "param": { ... } }`
+仅输出根对象，形如 `{ "param": { ... } }`。**`param` 内不得包含 `content` 或 `totalDurationFrames`**（口播与时间轴由系统在 `item` 上维护）；`CONTENT_STR` 仅供对齐锚点下标与理解语境。

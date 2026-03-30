@@ -12,11 +12,12 @@ __DRAFT__
 ## 模板要求
 __TEMPLATE_GUIDE__
 
-请输出**一份**修订后的完整 JSON：顶层含 `topic`、`scenes`（每 scene 含 `sceneId`、`sceneName`、`items`），每个 item 含 `order`、`narrativeType`、`reasoning`、`template`、`param`。不要包含 `fps` 字段。
+请输出**一份**修订后的完整 JSON：顶层含 `topic`、`scenes`（每 scene 含 `sceneId`、`sceneName`、`items`）。每个 item 含 `order`、`narrativeType`、`reasoning`、`template`、**`content`**（口播分句，**须与 DRAFT 对应项逐字一致**）、`param`。不要包含 `fps` 字段。
+
 **硬性要求**：
-1. 仅修告警字段。
-2. **绝对不要在输出的 param 中包含 `content` 字段**，系统会自动保留原有的 `content`。
-3. 如果你需要修正 `anchors`，请严格参考 DRAFT 中的 `content` 数组，使用其 0-based 索引作为 `showFrom` 的值。
+1. 仅修告警相关字段；**不要改动任何 `content` 条目中的 `text`**。
+2. **`param` 内禁止出现 `content` 或 `totalDurationFrames`**（二者只属于 item 顶层）。
+3. 修正 `anchors` 时，`showFrom` 对应该 item 的 **`content` 数组** 的 0-based 合法下标。
 4. `audioEffect` 只能出现在 `anchors` 条目上。
 5. `TEXT_FOCUS` 的 `coreSentence` 仅为额外大屏句，**不能**代替 `content`。
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
 Step 3: Azure TTS 语音生成（模板驱动版）
-从 scene-scripts.json 读取 param.content，生成 TTS 音频，
-将 content 从字符串数组就地升级为对象数组（含时间戳），
-并注入 param.audioSrc 和 param.totalDurationFrames。
+从 scene-scripts.json 读取 item.content，生成 TTS 音频，
+将 content 就地升级为含时间戳的对象数组，
+并注入 scene.audioSrc、scene.totalDurationFrames 与各 item.totalDurationFrames。
 
 用法：
   python step3_generate_audio.py --input scene-scripts.json --output public/audio/video_name
@@ -313,8 +313,7 @@ def main():
         item_ranges = []  # (item_index, start_idx, count)
 
         for item_idx, item in enumerate(scene.get("items", [])):
-            param = item.get("param", {})
-            content = param.get("content", [])
+            content = item.get("content", [])
             texts = extract_texts_from_content(content)
 
             if not texts:
@@ -353,8 +352,7 @@ def main():
             # 为每个 item 注入时间戳
             for item_idx, start_idx, count in item_ranges:
                 item = scene["items"][item_idx]
-                param = item.get("param", {})
-                content = param.get("content", [])
+                content = item.get("content", [])
 
                 # 提取该 item 对应的 boundaries
                 item_boundaries = boundaries[start_idx: start_idx + count]
@@ -362,20 +360,17 @@ def main():
                 # 该 item 的基准时间（第一条 content 的起始毫秒）
                 base_ms = item_boundaries[0]["startMs"] if item_boundaries else 0
 
-                # 就地升级 content — startFrame 是 item 相对的
-                param["content"] = upgrade_content_with_timing(
+                item["content"] = upgrade_content_with_timing(
                     content, item_boundaries, fps, base_ms
                 )
 
-                # 计算该 item 的总帧数
                 if item_boundaries:
                     first_start_ms = item_boundaries[0]["startMs"]
                     last_end_ms = item_boundaries[-1]["endMs"]
                     total_frames = math.ceil((last_end_ms - first_start_ms) / 1000 * fps)
-                    param["totalDurationFrames"] = total_frames
+                    item["totalDurationFrames"] = total_frames
 
-                # 打印时间戳详情
-                for ci, c in enumerate(param["content"]):
+                for ci, c in enumerate(item["content"]):
                     text_preview = c.get("text", "")[:20]
                     sf = c.get("startFrame", 0)
                     df = c.get("durationFrames", 0)

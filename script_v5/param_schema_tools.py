@@ -17,7 +17,7 @@ _IMAGE_ENTER_EFFECTS = frozenset(
 # 与 scene_script_validate 中锚点音效一致，合法的锚点音效集合
 _ANCHOR_SFX_IDS = frozenset({"impact_thud", "ping", "woosh"})
 
-# param.content 的 0-based 下标（与 templateMeta 中 integer format 一致）
+# item.content 的 0-based 下标（与 templateMeta 中 integer format 一致；校验时传入 len(item.content)）
 CONTENT_INDEX_FORMAT = "content_index"
 
 

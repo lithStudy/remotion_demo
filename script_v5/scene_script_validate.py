@@ -5,8 +5,8 @@
 - 未知 template → 回退到 config.default_template（默认 CENTER_FOCUS）并记录 warning
 - param 按 param_schema（JSON Schema 子集）递归校验与 enum 钳制（param_schema_tools）
 - 必填字段缺失或空字符串 → warning（不强行填占位，避免污染原文）
-- content 缺失或全无有效 text → 优先用 item.text，其次 coreSentence 回填单条字幕并 warning
-- content 条数与 content_min_items / content_max_items（若模板 meta 有）→ warning
+- item.content 缺失或全无有效 text → 优先用 item.text，其次 param.coreSentence 回填单条字幕并 warning
+- content 条数与 content_min_items / content_max_items（若模板 meta 有）→ 针对 item.content 告警
 """
 
 from __future__ import annotations
@@ -26,15 +26,14 @@ def _content_len(content: Any) -> int:
 
 
 def _normalize_missing_content(
-	param: dict,
 	item: dict,
 	scene_id: str,
 	order: Any,
 	tname: str,
 	warnings: list[str],
 ) -> None:
-	"""content 缺失或全无有效 text 时，用 item.text 或 coreSentence 回填一条字幕。"""
-	content = param.get("content")
+	"""item.content 缺失或全无有效 text 时，用 item.text 或 param.coreSentence 回填一条字幕。"""
+	content = item.get("content")
 	has_nonempty = (
 		isinstance(content, list)
 		and any(
@@ -49,15 +48,17 @@ def _normalize_missing_content(
 	if isinstance(it, str) and it.strip():
 		fallback = it.strip()
 	else:
-		cs = param.get("coreSentence")
-		if isinstance(cs, str) and cs.strip():
-			fallback = cs.strip()
+		param = item.get("param")
+		if isinstance(param, dict):
+			cs = param.get("coreSentence")
+			if isinstance(cs, str) and cs.strip():
+				fallback = cs.strip()
 	if fallback is None:
 		return
 	warnings.append(
 		f"[{scene_id}] item order={order} 模板 {tname} content 缺失或无效，已用兜底填充为单条字幕"
 	)
-	param["content"] = [{"text": fallback}]
+	item["content"] = [{"text": fallback}]
 
 
 def validate_and_normalize_scene_scripts(
@@ -97,14 +98,18 @@ def validate_and_normalize_scene_scripts(
 				item["param"] = {}
 				param = item["param"]
 
+			# 口播与时长的唯一权威在 item 上；若模型误写入 param 则剔除
+			param.pop("content", None)
+			param.pop("totalDurationFrames", None)
+
 			schema = tmpl.get("param_schema") or {}
 
-			_normalize_missing_content(param, item, scene_id, order, tname, warnings)
+			_normalize_missing_content(item, scene_id, order, tname, warnings)
 
 			def _schema_warn(msg: str) -> None:
 				warnings.append(f"[{scene_id}] item order={order} 模板 {tname} {msg}")
 
-			content = param.get("content")
+			content = item.get("content")
 			clen_pre = _content_len(content)
 			validate_param_with_schema(
 				param,
@@ -116,7 +121,7 @@ def validate_and_normalize_scene_scripts(
 			# content 条数（可选）
 			cmin = tmpl.get("content_min_items")
 			cmax = tmpl.get("content_max_items")
-			content = param.get("content")
+			content = item.get("content")
 			clen = _content_len(content)
 			if isinstance(cmin, int) and clen < cmin:
 				warnings.append(
@@ -127,11 +132,9 @@ def validate_and_normalize_scene_scripts(
 					f"[{scene_id}] item order={order} 模板 {tname} content 条数 {clen} 多于 content_max_items={cmax}"
 				)
 
-			# 非空 content 建议（兜底后仍为空才告警）
 			if clen == 0:
 				warnings.append(f"[{scene_id}] item order={order} 模板 {tname} content 为空且无法兜底")
 
-			# 每条 content 必须是对象
 			if isinstance(content, list):
 				for idx, ci in enumerate(content):
 					if not isinstance(ci, dict):

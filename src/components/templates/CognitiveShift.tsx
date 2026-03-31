@@ -11,7 +11,7 @@ export const templateMeta = {
 	"name": "COGNITIVE_SHIFT",
 	"componentExport": "BWCognitiveShift",
 	"description":
-		"适用：强力认知翻转「不是...而是...」；打破直觉误区，揭示底层逻辑。\n视觉：A 部分（直觉）淡入后变灰并划线；B 部分（事实）随后高亮弹出。\n参数：notText（被否定的部分）、butText（建立的部分）必须是极简的对比关键词（如：靠勤奋 vs 靠认知），严禁使用完整长句；可配对应图片。",
+		"适用：强对立翻转「不是...而是...」；用于纠偏、立场重述、定位差异化、观点辩论等场景的核心对句。\n视觉：A 部分（旧说法/常见误解）淡入后变灰并划线；B 部分（新结论/主张）随后高亮弹出。\n参数：notText（被否定的部分）、butText（建立的部分）必须是极简的对比关键词（如：堆功能 vs 抓体验），严禁使用完整长句；可配对应图片。",
 	"psychology": "认知翻转",
 	"image_count": 2,
 	"param_schema": {

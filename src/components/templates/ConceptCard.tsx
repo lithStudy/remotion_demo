@@ -10,7 +10,7 @@ export const templateMeta = {
 	"name": "CONCEPT_CARD",
 	"componentExport": "BWConceptCard",
 	"description":
-		"适用：首次抛出专业名词、模型、核心概念；概念图标+侧栏概念名。\n差异：普通解释句、无闪卡式术语强调时用 CENTER_FOCUS。\n参数：conceptName 与口播术语一致；imageSrc 为概念隐喻图标。",
+		"适用：对“命名/标签化”的新名词（专业术语、概念、产品名、品牌关键词、功能名等）进行解释；用图标 + 大字把词钉在观众脑海里。\n差异：普通解释句、并不需要“闪卡式命名强调”时用 CENTER_FOCUS。\n参数：conceptName 与口播中的名词一致；imageSrc 为概念/名词的隐喻图标。",
 	"psychology": "符号化锚定",
 	"image_count": 1,
 	"param_schema": {

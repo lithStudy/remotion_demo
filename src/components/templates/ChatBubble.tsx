@@ -10,7 +10,7 @@ export const templateMeta = {
 	"name": "CHAT_BUBBLE",
 	"componentExport": "BWChatBubble",
 	"description":
-		"适用：显式对话/弹幕/评论体（如“我：…你：…”、“网友：…”）的角色化心声。\n不适用：仅“你是不是也…”这类单句发问但整体仍是平铺叙述时（此时优先 CENTER_FOCUS）。\n差异：纯金句大字无对话感用 TEXT_FOCUS；需配图但非气泡口径用 CENTER_FOCUS。\n参数：imageSrc 为人物/侧脸简笔图标；可选 anchors 用于高亮气泡内的关键词。",
+		"适用：显式对话/弹幕/评论体/群聊体/角色化吐槽（如“我：…你：…”、“网友：…”、“评论：…”、“有人说：…”）的口吻表达，适合做共鸣痛点、用户反馈、反对意见、现场对话等。\n不适用：仅“你是不是也…”这类单句发问但整体仍是平铺叙述时（此时优先 CENTER_FOCUS）。\n差异：纯金句大字无对话感用 TEXT_FOCUS；需配图但非气泡口径用 CENTER_FOCUS。\n参数：imageSrc 为人物/侧脸简笔图标；可选 anchors 用于高亮气泡内的关键词。",
 	"psychology": "社会投射",
 	"image_count": 1,
 	"param_schema": {

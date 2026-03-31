@@ -10,7 +10,7 @@ export const templateMeta = {
 	"name": "QUOTE_CITATION",
 	"componentExport": "BWQuoteCitation",
 	"description":
-		"适用：名言、著作、研究等引用体裁；可选一张配角图。\n差异：非引用类普通叙述用 CENTER_FOCUS。\n参数：quoteSource 写清出处；imageSrc 可省略。",
+		"适用：任何“引用/摘录/证言/背书”体裁（名言、著作、研究结论、媒体引用、用户评价、客户证言、公告摘录等）；可选一张配角图。\n差异：非引用类普通叙述用 CENTER_FOCUS。\n参数：quoteSource 写清出处（来源/角色/机构）；imageSrc 可省略。",
 	"psychology": "社会认同背书",
 	"image_count": "0-1",
 	"param_schema": {

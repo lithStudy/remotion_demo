@@ -17,8 +17,8 @@ export const templateMeta = {
 	"param_schema": {
 		"type": "object",
 		"properties": {
-			"notText": { "type": "string", "description": "被否认知（‘不是’后面的内容）" },
-			"butText": { "type": "string", "description": "真实认知（‘而是’后面的内容）" },
+			"notText": { "type": "string", "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，" },
+			"butText": { "type": "string", "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字" },
 			"butSrc": {
 				"type": "string",
 				"format": "image_prompt",
@@ -39,6 +39,7 @@ export const templateMeta = {
 	},
 	"example": {
 		"template": "COGNITIVE_SHIFT",
+		"content":["我们都不应该靠勤奋拼命","我们都应该是靠认知和选择","这样我才能成功"],
 		"param": {
 			"notText": "靠勤奋拼命",
 			"butText": "靠认知和选择",

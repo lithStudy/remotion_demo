@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
 Step 3: Azure TTS 语音生成（模板驱动版）
-从 scene-scripts.json 读取 item.content，生成 TTS 音频，
-将 content 就地升级为含时间戳的对象数组，
-并注入 scene.audioSrc、scene.totalDurationFrames 与各 item.totalDurationFrames。
+从 scene-scripts.json 读取 param.content，生成 TTS 音频，
+将 content 从字符串数组就地升级为对象数组（含时间戳），
+并注入 param.audioSrc 和 param.totalDurationFrames。
 
 用法：
   python step3_generate_audio.py --input scene-scripts.json --output public/audio/video_name
@@ -27,7 +27,22 @@ try:
 except ImportError:
     MP3 = None
 
-from utils import extract_content_text, load_config, load_env
+
+def load_env(script_dir: Path):
+    env_path = script_dir / ".env"
+    if env_path.exists():
+        with open(env_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, value = line.split("=", 1)
+                    os.environ[key.strip()] = value.strip()
+
+
+def load_config(script_dir: Path) -> dict:
+    config_path = script_dir / "config.json"
+    with open(config_path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 _PUNCT_TAIL = re.compile(r'[，。！？、；：…—,\.\!\?\;\:\-"\'」）\)】》]$')
@@ -55,9 +70,25 @@ def _get_mp3_duration_s(filepath: str) -> float:
     return file_size * 8 / 128_000
 
 
+# ─────────────────────────────────────────────────────────────
+# 从 param.content 提取文本
+# ─────────────────────────────────────────────────────────────
+
 def extract_texts_from_content(content: list) -> list:
-    """从 content 数组提取纯文本列表。"""
-    return [extract_content_text(item) for item in content]
+    """
+    从 content 数组提取纯文本。
+    content 条目可以是字符串或对象（{text, ...}）。
+    返回纯文本列表。
+    """
+    texts = []
+    for item in content:
+        if isinstance(item, str):
+            texts.append(item)
+        elif isinstance(item, dict):
+            texts.append(item.get("text", ""))
+        else:
+            texts.append(str(item))
+    return texts
 
 
 # ─────────────────────────────────────────────────────────────
@@ -313,7 +344,8 @@ def main():
         item_ranges = []  # (item_index, start_idx, count)
 
         for item_idx, item in enumerate(scene.get("items", [])):
-            content = item.get("content", [])
+            param = item.get("param", {})
+            content = param.get("content", [])
             texts = extract_texts_from_content(content)
 
             if not texts:
@@ -352,7 +384,8 @@ def main():
             # 为每个 item 注入时间戳
             for item_idx, start_idx, count in item_ranges:
                 item = scene["items"][item_idx]
-                content = item.get("content", [])
+                param = item.get("param", {})
+                content = param.get("content", [])
 
                 # 提取该 item 对应的 boundaries
                 item_boundaries = boundaries[start_idx: start_idx + count]
@@ -360,17 +393,20 @@ def main():
                 # 该 item 的基准时间（第一条 content 的起始毫秒）
                 base_ms = item_boundaries[0]["startMs"] if item_boundaries else 0
 
-                item["content"] = upgrade_content_with_timing(
+                # 就地升级 content — startFrame 是 item 相对的
+                param["content"] = upgrade_content_with_timing(
                     content, item_boundaries, fps, base_ms
                 )
 
+                # 计算该 item 的总帧数
                 if item_boundaries:
                     first_start_ms = item_boundaries[0]["startMs"]
                     last_end_ms = item_boundaries[-1]["endMs"]
                     total_frames = math.ceil((last_end_ms - first_start_ms) / 1000 * fps)
-                    item["totalDurationFrames"] = total_frames
+                    param["totalDurationFrames"] = total_frames
 
-                for ci, c in enumerate(item["content"]):
+                # 打印时间戳详情
+                for ci, c in enumerate(param["content"]):
                     text_preview = c.get("text", "")[:20]
                     sf = c.get("startFrame", 0)
                     df = c.get("durationFrames", 0)

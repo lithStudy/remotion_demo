@@ -1,0 +1,4086 @@
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:12
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是专业短视频脚本策划师。请将以下口播文案拆解为大场景结构。
+
+## 口播文案
+你明明没有去过美国，但提起美国你就会觉得美国很乱、人民很苦。你有没有这样的瞬间？就比如刚刷到一条关于西雅图流浪汉或者芝加哥枪击案的短视频，你下意识地就会在评论区敲下一句：“这地方真不是人待的，还是家里安全。”
+
+你不是那种盲目排外的愤青，也不是缺乏判断力的键盘侠，你只是太善良、太容易感同身受了。你明明是出于对平静生活的珍惜和对混乱的本能恐惧，可你的认知坐标系，却在不知不觉中被算法和流量悄悄置换了。
+
+这种先入为主的偏见真不能全怪我们，因为我们的大脑在几万年的进化中，留下了一个致命的底层Bug。
+
+你要知道，现在的短视频算法和媒体博主，比你想象中更懂人性。他们深知，比起平淡的日常，血淋淋的镜头和极端的冲突才是个流量抓手。容易上当、情绪失控，其实是人类大脑的生存本能。我们被拉入了一个精心设计的“幸存者偏差”陷阱：媒体只负责喂养那些最离奇、最刺激的碎片，而我们的大脑则会自动接管剩下的逻辑，完成一次以偏概全的误判。
+
+在心理学上，这其实叫作**“可得性启发”**。
+
+听起来挺学术，说白了，你的大脑就是一个“偷懒的搜索工具”。当我们要判断一件事发生的概率有多大、到底重不重要时，大脑懒得去翻枯燥的统计年鉴，它只会问自己一个问题：“这件事我能不能立刻想起来？”如果某个画面、某种恐惧能让你瞬间在大脑里“秒回”，你的直觉就会粗暴地告诉你：这事儿太常见了，世界就是这个样子的。
+
+这就像你家窗户上贴了一张印着老虎的贴纸，你往外看，就觉得满大街都是老虎。其实，不是老虎变多了，而是这张贴纸离你的眼睛最近，最容易被你看见。你以为你看到了全世界，其实你只是看到了被喂到嘴边的那一小块“信息残渣”。
+
+在这个信息过载、真相碎片化的时代，我准备了三个极其简单的防御锦囊，下次再遇到这种“认知冲击”，请在心里默问自己：
+
+第一，正因为这件事是“新闻”，所以它在现实中大概率是极少数的个案吗？
+第二，我的这个观点，是来自大样本的统计数据，还是仅仅来自昨天刷到的那段高赞视频？
+第三，如果我换一个关键词搜索，是不是能看到完全相反的一面？
+
+在这个充满套路的时代，别让几分钟的短视频定义了你对几万公里外世界的全部想象。保持怀疑，保持理性，做自己大脑的主人，就是我们普通人最高级的自我保护。
+
+## 拆解法则
+场景（Scene）是顶级叙事单元。通常对应文案中的一个完整段落或核心论点。只有当“论证主题”、“叙事目标”或“情绪段位”发生根本性转变时，才能新建 scene。禁止频繁切分场景！
+完整覆盖与原文零修改法则：所有场景的 text 拼合起来，必须 100% 完整覆盖全文。必须使用原文原句，严禁修改、缩写或重新措辞。
+换行保留法则：原文中的换行符（段落分隔）必须在 `text` 字段中用 `\n` 保留，不得将多个换行段落压缩为一行。原文有几个自然段落，`text` 中就应有对应的 `\n` 分隔。
+
+## 输出格式 (严格输出 JSON，不要 markdown 代码块)
+{
+  "topic": "视频核心主题",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "场景简短命名",
+      "text": "该场景包含的完整口播原文"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:18
+attempt: 1/3
+
+[OUTPUT]
+{
+  "topic": "短视频算法与认知偏差",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "先入为主的偏见",
+      "text": "你明明没有去过美国，但提起美国你就会觉得美国很乱、人民很苦。你有没有这样的瞬间？就比如刚刷到一条关于西雅图流浪汉或者芝加哥枪击案的短视频，你下意识地就会在评论区敲下一句：“这地方真不是人待的，还是家里安全。”\n\n你不是那种盲目排外的愤青，也不是缺乏判断力的键盘侠，你只是太善良、太容易感同身受了。你明明是出于对平静生活的珍惜和对混乱的本能恐惧，可你的认知坐标系，却在不知不觉中被算法和流量悄悄置换了。"
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "底层Bug与流量陷阱",
+      "text": "这种先入为主的偏见真不能全怪我们，因为我们的大脑在几万年的进化中，留下了一个致命的底层Bug。\n\n你要知道，现在的短视频算法和媒体博主，比你想象中更懂人性。他们深知，比起平淡的日常，血淋淋的镜头和极端的冲突才是个流量抓手。容易上当、情绪失控，其实是人类大脑的生存本能。我们被拉入了一个精心设计的“幸存者偏差”陷阱：媒体只负责喂养那些最离奇、最刺激的碎片，而我们的大脑则会自动接管剩下的逻辑，完成一次以偏概全的误判。"
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "可得性启发",
+      "text": "在心理学上，这其实叫作**“可得性启发”**。\n\n听起来挺学术，说白了，你的大脑就是一个“偷懒的搜索工具”。当我们要判断一件事发生的概率有多大、到底重不重要时，大脑懒得去翻枯燥的统计年鉴，它只会问自己一个问题：“这件事我能不能立刻想起来？”如果某个画面、某种恐惧能让你瞬间在大脑里“秒回”，你的直觉就会粗暴地告诉你：这事儿太常见了，世界就是这个样子的。\n\n这就像你家窗户上贴了一张印着老虎的贴纸，你往外看，就觉得满大街都是老虎。其实，不是老虎变多了，而是这张贴纸离你的眼睛最近，最容易被你看见。你以为你看到了全世界，其实你只是看到了被喂到嘴边的那一小块“信息残渣”。"
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "防御锦囊",
+      "text": "在这个信息过载、真相碎片化的时代，我准备了三个极其简单的防御锦囊，下次再遇到这种“认知冲击”，请在心里默问自己：\n\n第一，正因为这件事是“新闻”，所以它在现实中大概率是极少数的个案吗？\n第二，我的这个观点，是来自大样本的统计数据，还是仅仅来自昨天刷到的那段高赞视频？\n第三，如果我换一个关键词搜索，是不是能看到完全相反的一面？"
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "总结与呼吁",
+      "text": "在这个充满套路的时代，别让几分钟的短视频定义了你对几万公里外世界的全部想象。保持怀疑，保持理性，做自己大脑的主人，就是我们普通人最高级的自我保护。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:18
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：短视频算法与认知偏差
+- **当前场景**：先入为主的偏见
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+你明明没有去过美国，但提起美国你就会觉得美国很乱、人民很苦。你有没有这样的瞬间？就比如刚刷到一条关于西雅图流浪汉或者芝加哥枪击案的短视频，你下意识地就会在评论区敲下一句：“这地方真不是人待的，还是家里安全。”
+
+你不是那种盲目排外的愤青，也不是缺乏判断力的键盘侠，你只是太善良、太容易感同身受了。你明明是出于对平静生活的珍惜和对混乱的本能恐惧，可你的认知坐标系，却在不知不觉中被算法和流量悄悄置换了。
+
+## 可用模板（共 17 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CENTER_FOCUS, CHAT_BUBBLE, COGNITIVE_SHIFT, CONCEPT_CARD, DOS_AND_DONTS, KPI_HERO, LIST_MULTI_GROUP, MAGNIFYING_GLASS, METHOD_STACK, PROGRESS_RING, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **时长合理**：正常语速约 4~5 字/秒；单 item 理想 12~40 字（约 3~8 秒）。为了避免视觉疲劳，长于 50 字通常应拆分。
+5. 完全依据item中的text的结构逐个选择模板
+
+---
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文本身就明确展开 2～5 个并列分点/并列例子 → `LIST_MULTI_GROUP`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；或铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:21
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "你明明没有去过美国，但提起美国你就会觉得美国很乱、人民很苦。你有没有这样的瞬间？",
+      "narrativeType": "HOOK",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "平缓叙述，引出话题，使用默认模板。"
+    },
+    {
+      "text": "就比如刚刷到一条关于西雅图流浪汉或者芝加哥枪击案的短视频，你下意识地就会在评论区敲下一句：“这地方真不是人待的，还是家里安全。”",
+      "narrativeType": "CASE",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "举例说明，描述一个具体的场景，使用默认模板。"
+    },
+    {
+      "text": "你不是那种盲目排外的愤青，也不是缺乏判断力的键盘侠，你只是太善良、太容易感同身受了。",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "使用“不是…而是…”结构，属于认知偏差的纠正，选择COGNITIVE_SHIFT模板。"
+    },
+    {
+      "text": "你明明是出于对平静生活的珍惜和对混乱的本能恐惧，可你的认知坐标系，却在不知不觉中被算法和流量悄悄置换了。",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "使用“不是…而是…”结构（虽然不明显），更偏向于对认知转变的描述，选择COGNITIVE_SHIFT模板。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:21
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：短视频算法与认知偏差
+- **当前场景**：底层Bug与流量陷阱
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+这种先入为主的偏见真不能全怪我们，因为我们的大脑在几万年的进化中，留下了一个致命的底层Bug。
+
+你要知道，现在的短视频算法和媒体博主，比你想象中更懂人性。他们深知，比起平淡的日常，血淋淋的镜头和极端的冲突才是个流量抓手。容易上当、情绪失控，其实是人类大脑的生存本能。我们被拉入了一个精心设计的“幸存者偏差”陷阱：媒体只负责喂养那些最离奇、最刺激的碎片，而我们的大脑则会自动接管剩下的逻辑，完成一次以偏概全的误判。
+
+## 可用模板（共 17 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CENTER_FOCUS, CHAT_BUBBLE, COGNITIVE_SHIFT, CONCEPT_CARD, DOS_AND_DONTS, KPI_HERO, LIST_MULTI_GROUP, MAGNIFYING_GLASS, METHOD_STACK, PROGRESS_RING, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **时长合理**：正常语速约 4~5 字/秒；单 item 理想 12~40 字（约 3~8 秒）。为了避免视觉疲劳，长于 50 字通常应拆分。
+5. 完全依据item中的text的结构逐个选择模板
+
+---
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文本身就明确展开 2～5 个并列分点/并列例子 → `LIST_MULTI_GROUP`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；或铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:26
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "这种先入为主的偏见真不能全怪我们，因为我们的大脑在几万年的进化中，留下了一个致命的底层Bug。",
+      "narrativeType": "LOGIC",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "平缓叙述，单图即可，无特殊结构，大脑bug是核心观点，适合用居中强调。"
+    },
+    {
+      "text": "你要知道，现在的短视频算法和媒体博主，比你想象中更懂人性。",
+      "narrativeType": "LOGIC",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "平缓叙述，单图即可，无特殊结构，作为铺垫过度句。"
+    },
+    {
+      "text": "他们深知，比起平淡的日常，血淋淋的镜头和极端的冲突才是个流量抓手。",
+      "narrativeType": "LOGIC",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "平缓叙述，单图即可，无特殊结构，流量抓手可考虑用放大镜，但此处更偏向陈述事实"
+    },
+    {
+      "text": "容易上当、情绪失控，其实是人类大脑的生存本能。",
+      "narrativeType": "LOGIC",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "平缓叙述，单图即可，无特殊结构，总结上文，承上启下。"
+    },
+    {
+      "text": "我们被拉入了一个精心设计的“幸存者偏差”陷阱：媒体只负责喂养那些最离奇、最刺激的碎片，而我们的大脑则会自动接管剩下的逻辑，完成一次以偏概全的误判。",
+      "narrativeType": "LOGIC",
+      "template": "CONCEPT_CARD",
+      "expressionTag": "concept",
+      "confidence": "high",
+      "reasoning": "解释“幸存者偏差”这个概念，并解释媒体和大脑在其中的作用，适合用概念卡片。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:26
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：短视频算法与认知偏差
+- **当前场景**：可得性启发
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+在心理学上，这其实叫作**“可得性启发”**。
+
+听起来挺学术，说白了，你的大脑就是一个“偷懒的搜索工具”。当我们要判断一件事发生的概率有多大、到底重不重要时，大脑懒得去翻枯燥的统计年鉴，它只会问自己一个问题：“这件事我能不能立刻想起来？”如果某个画面、某种恐惧能让你瞬间在大脑里“秒回”，你的直觉就会粗暴地告诉你：这事儿太常见了，世界就是这个样子的。
+
+这就像你家窗户上贴了一张印着老虎的贴纸，你往外看，就觉得满大街都是老虎。其实，不是老虎变多了，而是这张贴纸离你的眼睛最近，最容易被你看见。你以为你看到了全世界，其实你只是看到了被喂到嘴边的那一小块“信息残渣”。
+
+## 可用模板（共 17 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CENTER_FOCUS, CHAT_BUBBLE, COGNITIVE_SHIFT, CONCEPT_CARD, DOS_AND_DONTS, KPI_HERO, LIST_MULTI_GROUP, MAGNIFYING_GLASS, METHOD_STACK, PROGRESS_RING, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **时长合理**：正常语速约 4~5 字/秒；单 item 理想 12~40 字（约 3~8 秒）。为了避免视觉疲劳，长于 50 字通常应拆分。
+5. 完全依据item中的text的结构逐个选择模板
+
+---
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文本身就明确展开 2～5 个并列分点/并列例子 → `LIST_MULTI_GROUP`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；或铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:29
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "在心理学上，这其实叫作**“可得性启发”**。",
+      "narrativeType": "LOGIC",
+      "template": "CONCEPT_CARD",
+      "expressionTag": "concept",
+      "confidence": "high",
+      "reasoning": "对“可得性启发”这个心理学概念进行命名解释 → 适合用 `CONCEPT_CARD`。"
+    },
+    {
+      "text": "听起来挺学术，说白了，你的大脑就是一个“偷懒的搜索工具”。当我们要判断一件事发生的概率有多大、到底重不重要时，大脑懒得去翻枯燥的统计年鉴，它只会问自己一个问题：“这件事我能不能立刻想起来？”如果某个画面、某种恐惧能让你瞬间在大脑里“秒回”，你的直觉就会粗暴地告诉你：这事儿太常见了，世界就是这个样子的。",
+      "narrativeType": "LOGIC",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "平缓叙述“可得性启发”的具体表现，解释大脑如何偷懒 → 适合用 `CENTER_FOCUS`。"
+    },
+    {
+      "text": "这就像你家窗户上贴了一张印着老虎的贴纸，你往外看，就觉得满大街都是老虎。其实，不是老虎变多了，而是这张贴纸离你的眼睛最近，最容易被你看见。",
+      "narrativeType": "CASE",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "用“贴老虎贴纸”的比喻，引出“不是…而是…”的认知偏差 → 适合 `COGNITIVE_SHIFT`。"
+    },
+    {
+      "text": "你以为你看到了全世界，其实你只是看到了被喂到嘴边的那一小块“信息残渣”。",
+      "narrativeType": "CONCLUSION",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "进一步点明“你以为…其实…”的认知偏差 → 适合 `COGNITIVE_SHIFT`。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:29
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：短视频算法与认知偏差
+- **当前场景**：防御锦囊
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+在这个信息过载、真相碎片化的时代，我准备了三个极其简单的防御锦囊，下次再遇到这种“认知冲击”，请在心里默问自己：
+
+第一，正因为这件事是“新闻”，所以它在现实中大概率是极少数的个案吗？
+第二，我的这个观点，是来自大样本的统计数据，还是仅仅来自昨天刷到的那段高赞视频？
+第三，如果我换一个关键词搜索，是不是能看到完全相反的一面？
+
+## 可用模板（共 17 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CENTER_FOCUS, CHAT_BUBBLE, COGNITIVE_SHIFT, CONCEPT_CARD, DOS_AND_DONTS, KPI_HERO, LIST_MULTI_GROUP, MAGNIFYING_GLASS, METHOD_STACK, PROGRESS_RING, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **时长合理**：正常语速约 4~5 字/秒；单 item 理想 12~40 字（约 3~8 秒）。为了避免视觉疲劳，长于 50 字通常应拆分。
+5. 完全依据item中的text的结构逐个选择模板
+
+---
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文本身就明确展开 2～5 个并列分点/并列例子 → `LIST_MULTI_GROUP`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；或铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:33
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "在这个信息过载、真相碎片化的时代，我准备了三个极其简单的防御锦囊，下次再遇到这种“认知冲击”，请在心里默问自己：",
+      "narrativeType": "HOOK",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "铺垫介绍，整体平缓叙述，适合用单图居中展示。"
+    },
+    {
+      "text": "第一，正因为这件事是“新闻”，所以它在现实中大概率是极少数的个案吗？",
+      "narrativeType": "LOGIC",
+      "template": "METHOD_STACK",
+      "expressionTag": "method",
+      "confidence": "high",
+      "reasoning": "提出一个问题，作为防御方法，适合用 METHOD_STACK 展示。问题本身是核心，后面的解释是展开。"
+    },
+    {
+      "text": "第二，我的这个观点，是来自大样本的统计数据，还是仅仅来自昨天刷到的那段高赞视频？",
+      "narrativeType": "LOGIC",
+      "template": "METHOD_STACK",
+      "expressionTag": "method",
+      "confidence": "high",
+      "reasoning": "提出一个问题，作为防御方法，适合用 METHOD_STACK 展示。问题本身是核心，后面的解释是展开。"
+    },
+    {
+      "text": "第三，如果我换一个关键词搜索，是不是能看到完全相反的一面？",
+      "narrativeType": "LOGIC",
+      "template": "METHOD_STACK",
+      "expressionTag": "method",
+      "confidence": "high",
+      "reasoning": "提出一个问题，作为防御方法，适合用 METHOD_STACK 展示。问题本身是核心，后面的解释是展开。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:33
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：短视频算法与认知偏差
+- **当前场景**：总结与呼吁
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+在这个充满套路的时代，别让几分钟的短视频定义了你对几万公里外世界的全部想象。保持怀疑，保持理性，做自己大脑的主人，就是我们普通人最高级的自我保护。
+
+## 可用模板（共 17 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CENTER_FOCUS, CHAT_BUBBLE, COGNITIVE_SHIFT, CONCEPT_CARD, DOS_AND_DONTS, KPI_HERO, LIST_MULTI_GROUP, MAGNIFYING_GLASS, METHOD_STACK, PROGRESS_RING, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **时长合理**：正常语速约 4~5 字/秒；单 item 理想 12~40 字（约 3~8 秒）。为了避免视觉疲劳，长于 50 字通常应拆分。
+5. 完全依据item中的text的结构逐个选择模板
+
+---
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文本身就明确展开 2～5 个并列分点/并列例子 → `LIST_MULTI_GROUP`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；或铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:35
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "在这个充满套路的时代，别让几分钟的短视频定义了你对几万公里外世界的全部想象。",
+      "narrativeType": "CONCLUSION",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "平缓叙述，表达一种现象，可视为铺垫，用单图即可。"
+    },
+    {
+      "text": "保持怀疑，保持理性，做自己大脑的主人，",
+      "narrativeType": "CONCLUSION",
+      "template": "LIST_MULTI_GROUP",
+      "expressionTag": "list",
+      "confidence": "high",
+      "reasoning": "并列的三个建议，适合用多分点清单呈现。"
+    },
+    {
+      "text": "就是我们普通人最高级的自我保护。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "全片结尾的总结性金句，适合用高亮文本强调。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:35
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你明明没有去过美国，但提起美国你就会觉得美国很乱、人民很苦。你有没有这样的瞬间？就比如刚刷到一条关于西雅图流浪汉或者芝加哥枪击案的短视频，你下意识地就会在评论区敲下一句：“这地方真不是人待的，还是家里安全。”
+
+你不是那种盲目排外的愤青，也不是缺乏判断力的键盘侠，你只是太善良、太容易感同身受了。你明明是出于对平静生活的珍惜和对混乱的本能恐惧，可你的认知坐标系，却在不知不觉中被算法和流量悄悄置换了。
+
+
+## 🎯 待处理的目标文案
+你明明没有去过美国，但提起美国你就会觉得美国很乱、人民很苦。你有没有这样的瞬间？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "你明明没有去过美国，"
+  },
+  {
+    "index": 1,
+    "text": "但提起美国你就会觉得美国很乱、"
+  },
+  {
+    "index": 2,
+    "text": "人民很苦。"
+  },
+  {
+    "index": 3,
+    "text": "你有没有这样的瞬间？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "breathe",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn",
+        "fadeIn"
+      ],
+      "default": "breathe",
+      "description": "入场效果"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "breathe",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:37
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "一个人疑惑地看着远方，思考的表情",
+    "enterEffect": "breathe",
+    "anchors": [
+      {
+        "text": "美国",
+        "showFrom": 0,
+        "color": "#EF4444",
+        "anim": "spring",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:37
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你明明没有去过美国，但提起美国你就会觉得美国很乱、人民很苦。你有没有这样的瞬间？就比如刚刷到一条关于西雅图流浪汉或者芝加哥枪击案的短视频，你下意识地就会在评论区敲下一句：“这地方真不是人待的，还是家里安全。”
+
+你不是那种盲目排外的愤青，也不是缺乏判断力的键盘侠，你只是太善良、太容易感同身受了。你明明是出于对平静生活的珍惜和对混乱的本能恐惧，可你的认知坐标系，却在不知不觉中被算法和流量悄悄置换了。
+
+
+## 🎯 待处理的目标文案
+就比如刚刷到一条关于西雅图流浪汉或者芝加哥枪击案的短视频，你下意识地就会在评论区敲下一句：“这地方真不是人待的，还是家里安全。”
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "就比如刚刷到一条关于西雅图流浪汉或者芝加哥枪击案的短视频，"
+  },
+  {
+    "index": 1,
+    "text": "你下意识地就会在评论区敲下一句："
+  },
+  {
+    "index": 2,
+    "text": "“这地方真不是人待的，"
+  },
+  {
+    "index": 3,
+    "text": "还是家里安全。”"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "breathe",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn",
+        "fadeIn"
+      ],
+      "default": "breathe",
+      "description": "入场效果"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "breathe",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:39
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "城市街景，远处有高楼大厦，近处有行人",
+    "enterEffect": "slideBottom",
+    "anchors": [
+      {
+        "text": "西雅图",
+        "showFrom": 0,
+        "color": "#EF4444",
+        "anim": "highlight",
+        "audioEffect": "ping"
+      },
+      {
+        "text": "芝加哥",
+        "showFrom": 0,
+        "color": "#EF4444",
+        "anim": "highlight",
+        "audioEffect": "ping"
+      },
+      {
+        "text": "安全",
+        "showFrom": 3,
+        "color": "#000000",
+        "anim": "spring",
+        "audioEffect": "woosh"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:39
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你明明没有去过美国，但提起美国你就会觉得美国很乱、人民很苦。你有没有这样的瞬间？就比如刚刷到一条关于西雅图流浪汉或者芝加哥枪击案的短视频，你下意识地就会在评论区敲下一句：“这地方真不是人待的，还是家里安全。”
+
+你不是那种盲目排外的愤青，也不是缺乏判断力的键盘侠，你只是太善良、太容易感同身受了。你明明是出于对平静生活的珍惜和对混乱的本能恐惧，可你的认知坐标系，却在不知不觉中被算法和流量悄悄置换了。
+
+
+## 🎯 待处理的目标文案
+你不是那种盲目排外的愤青，也不是缺乏判断力的键盘侠，你只是太善良、太容易感同身受了。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "你不是那种盲目排外的愤青，"
+  },
+  {
+    "index": 1,
+    "text": "也不是缺乏判断力的键盘侠，"
+  },
+  {
+    "index": 2,
+    "text": "你只是太善良、"
+  },
+  {
+    "index": 3,
+    "text": "太容易感同身受了。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:40
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "盲目排外的愤青",
+    "butText": "太善良、太容易感同身受",
+    "butSrc": "一个富有同情心的人张开双臂拥抱世界",
+    "notContentIndex": 0,
+    "butContentIndex": 2
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:40
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你明明没有去过美国，但提起美国你就会觉得美国很乱、人民很苦。你有没有这样的瞬间？就比如刚刷到一条关于西雅图流浪汉或者芝加哥枪击案的短视频，你下意识地就会在评论区敲下一句：“这地方真不是人待的，还是家里安全。”
+
+你不是那种盲目排外的愤青，也不是缺乏判断力的键盘侠，你只是太善良、太容易感同身受了。你明明是出于对平静生活的珍惜和对混乱的本能恐惧，可你的认知坐标系，却在不知不觉中被算法和流量悄悄置换了。
+
+
+## 🎯 待处理的目标文案
+你明明是出于对平静生活的珍惜和对混乱的本能恐惧，可你的认知坐标系，却在不知不觉中被算法和流量悄悄置换了。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "你明明是出于对平静生活的珍惜和对混乱的本能恐惧，"
+  },
+  {
+    "index": 1,
+    "text": "可你的认知坐标系，"
+  },
+  {
+    "index": 2,
+    "text": "却在不知不觉中被算法和流量悄悄置换了。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:41
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "对平静生活的珍惜和对混乱的本能恐惧",
+    "butText": "被算法和流量悄悄置换",
+    "butSrc": "信息茧房",
+    "notContentIndex": 0,
+    "butContentIndex": 2
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:41
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这种先入为主的偏见真不能全怪我们，因为我们的大脑在几万年的进化中，留下了一个致命的底层Bug。
+
+你要知道，现在的短视频算法和媒体博主，比你想象中更懂人性。他们深知，比起平淡的日常，血淋淋的镜头和极端的冲突才是个流量抓手。容易上当、情绪失控，其实是人类大脑的生存本能。我们被拉入了一个精心设计的“幸存者偏差”陷阱：媒体只负责喂养那些最离奇、最刺激的碎片，而我们的大脑则会自动接管剩下的逻辑，完成一次以偏概全的误判。
+
+
+## 🎯 待处理的目标文案
+这种先入为主的偏见真不能全怪我们，因为我们的大脑在几万年的进化中，留下了一个致命的底层Bug。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "这种先入为主的偏见真不能全怪我们，"
+  },
+  {
+    "index": 1,
+    "text": "因为我们的大脑在几万年的进化中，"
+  },
+  {
+    "index": 2,
+    "text": "留下了一个致命的底层Bug。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "breathe",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn",
+        "fadeIn"
+      ],
+      "default": "breathe",
+      "description": "入场效果"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "breathe",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:43
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "一个大脑被各种信息碎片包围的抽象概念图",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "先入为主",
+        "showFrom": 0,
+        "color": "#EF4444",
+        "anim": "spring",
+        "audioEffect": "ping"
+      },
+      {
+        "text": "底层Bug",
+        "showFrom": 2,
+        "color": "#EF4444",
+        "anim": "spring",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:43
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这种先入为主的偏见真不能全怪我们，因为我们的大脑在几万年的进化中，留下了一个致命的底层Bug。
+
+你要知道，现在的短视频算法和媒体博主，比你想象中更懂人性。他们深知，比起平淡的日常，血淋淋的镜头和极端的冲突才是个流量抓手。容易上当、情绪失控，其实是人类大脑的生存本能。我们被拉入了一个精心设计的“幸存者偏差”陷阱：媒体只负责喂养那些最离奇、最刺激的碎片，而我们的大脑则会自动接管剩下的逻辑，完成一次以偏概全的误判。
+
+
+## 🎯 待处理的目标文案
+你要知道，现在的短视频算法和媒体博主，比你想象中更懂人性。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "你要知道，"
+  },
+  {
+    "index": 1,
+    "text": "现在的短视频算法和媒体博主，"
+  },
+  {
+    "index": 2,
+    "text": "比你想象中更懂人性。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "breathe",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn",
+        "fadeIn"
+      ],
+      "default": "breathe",
+      "description": "入场效果"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "breathe",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:44
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "短视频APP界面，算法推荐内容",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "短视频算法",
+        "showFrom": 1,
+        "color": "#000000",
+        "anim": "popIn",
+        "audioEffect": "ping"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:44
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这种先入为主的偏见真不能全怪我们，因为我们的大脑在几万年的进化中，留下了一个致命的底层Bug。
+
+你要知道，现在的短视频算法和媒体博主，比你想象中更懂人性。他们深知，比起平淡的日常，血淋淋的镜头和极端的冲突才是个流量抓手。容易上当、情绪失控，其实是人类大脑的生存本能。我们被拉入了一个精心设计的“幸存者偏差”陷阱：媒体只负责喂养那些最离奇、最刺激的碎片，而我们的大脑则会自动接管剩下的逻辑，完成一次以偏概全的误判。
+
+
+## 🎯 待处理的目标文案
+他们深知，比起平淡的日常，血淋淋的镜头和极端的冲突才是个流量抓手。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "他们深知，"
+  },
+  {
+    "index": 1,
+    "text": "比起平淡的日常，"
+  },
+  {
+    "index": 2,
+    "text": "血淋淋的镜头和极端的冲突才是个流量抓手。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "breathe",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn",
+        "fadeIn"
+      ],
+      "default": "breathe",
+      "description": "入场效果"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "breathe",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:46
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "一个漏斗，大量流量涌入",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "流量抓手",
+        "showFrom": 2,
+        "color": "#EF4444",
+        "anim": "spring",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:46
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这种先入为主的偏见真不能全怪我们，因为我们的大脑在几万年的进化中，留下了一个致命的底层Bug。
+
+你要知道，现在的短视频算法和媒体博主，比你想象中更懂人性。他们深知，比起平淡的日常，血淋淋的镜头和极端的冲突才是个流量抓手。容易上当、情绪失控，其实是人类大脑的生存本能。我们被拉入了一个精心设计的“幸存者偏差”陷阱：媒体只负责喂养那些最离奇、最刺激的碎片，而我们的大脑则会自动接管剩下的逻辑，完成一次以偏概全的误判。
+
+
+## 🎯 待处理的目标文案
+容易上当、情绪失控，其实是人类大脑的生存本能。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "容易上当、"
+  },
+  {
+    "index": 1,
+    "text": "情绪失控，"
+  },
+  {
+    "index": 2,
+    "text": "其实是人类大脑的生存本能。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "breathe",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn",
+        "fadeIn"
+      ],
+      "default": "breathe",
+      "description": "入场效果"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "breathe",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:48
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "大脑思考的卡通图案",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "生存本能",
+        "showFrom": 2,
+        "color": "#EF4444",
+        "anim": "highlight",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:48
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这种先入为主的偏见真不能全怪我们，因为我们的大脑在几万年的进化中，留下了一个致命的底层Bug。
+
+你要知道，现在的短视频算法和媒体博主，比你想象中更懂人性。他们深知，比起平淡的日常，血淋淋的镜头和极端的冲突才是个流量抓手。容易上当、情绪失控，其实是人类大脑的生存本能。我们被拉入了一个精心设计的“幸存者偏差”陷阱：媒体只负责喂养那些最离奇、最刺激的碎片，而我们的大脑则会自动接管剩下的逻辑，完成一次以偏概全的误判。
+
+
+## 🎯 待处理的目标文案
+我们被拉入了一个精心设计的“幸存者偏差”陷阱：媒体只负责喂养那些最离奇、最刺激的碎片，而我们的大脑则会自动接管剩下的逻辑，完成一次以偏概全的误判。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "我们被拉入了一个精心设计的“幸存者偏差”陷阱："
+  },
+  {
+    "index": 1,
+    "text": "媒体只负责喂养那些最离奇、"
+  },
+  {
+    "index": 2,
+    "text": "最刺激的碎片，"
+  },
+  {
+    "index": 3,
+    "text": "而我们的大脑则会自动接管剩下的逻辑，"
+  },
+  {
+    "index": 4,
+    "text": "完成一次以偏概全的误判。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CONCEPT_CARD
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "概念图标描述"
+    },
+    "conceptName": {
+      "type": "string",
+      "description": "概念名称"
+    }
+  },
+  "required": [
+    "imageSrc",
+    "conceptName"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CONCEPT_CARD",
+  "param": {
+    "imageSrc": "过滤器/筛网简笔画图标",
+    "conceptName": "幸存者偏差"
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- ERROR ----------------------------------------
+time: 2026-03-31 22:19:48
+attempt: 1/3
+error: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.', 'status': 'RESOURCE_EXHAUSTED'}}
+-----------------------------------------------------------------------------------------
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:52
+attempt: 2/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "聚光灯打在人群中的少数人身上",
+    "conceptName": "幸存者偏差"
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:52
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+在心理学上，这其实叫作**“可得性启发”**。
+
+听起来挺学术，说白了，你的大脑就是一个“偷懒的搜索工具”。当我们要判断一件事发生的概率有多大、到底重不重要时，大脑懒得去翻枯燥的统计年鉴，它只会问自己一个问题：“这件事我能不能立刻想起来？”如果某个画面、某种恐惧能让你瞬间在大脑里“秒回”，你的直觉就会粗暴地告诉你：这事儿太常见了，世界就是这个样子的。
+
+这就像你家窗户上贴了一张印着老虎的贴纸，你往外看，就觉得满大街都是老虎。其实，不是老虎变多了，而是这张贴纸离你的眼睛最近，最容易被你看见。你以为你看到了全世界，其实你只是看到了被喂到嘴边的那一小块“信息残渣”。
+
+
+## 🎯 待处理的目标文案
+在心理学上，这其实叫作**“可得性启发”**。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "在心理学上，"
+  },
+  {
+    "index": 1,
+    "text": "这其实叫作**“可得性启发”**。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CONCEPT_CARD
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "概念图标描述"
+    },
+    "conceptName": {
+      "type": "string",
+      "description": "概念名称"
+    }
+  },
+  "required": [
+    "imageSrc",
+    "conceptName"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CONCEPT_CARD",
+  "param": {
+    "imageSrc": "过滤器/筛网简笔画图标",
+    "conceptName": "幸存者偏差"
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:53
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "大脑结构简笔画",
+    "conceptName": "可得性启发"
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:53
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+在心理学上，这其实叫作**“可得性启发”**。
+
+听起来挺学术，说白了，你的大脑就是一个“偷懒的搜索工具”。当我们要判断一件事发生的概率有多大、到底重不重要时，大脑懒得去翻枯燥的统计年鉴，它只会问自己一个问题：“这件事我能不能立刻想起来？”如果某个画面、某种恐惧能让你瞬间在大脑里“秒回”，你的直觉就会粗暴地告诉你：这事儿太常见了，世界就是这个样子的。
+
+这就像你家窗户上贴了一张印着老虎的贴纸，你往外看，就觉得满大街都是老虎。其实，不是老虎变多了，而是这张贴纸离你的眼睛最近，最容易被你看见。你以为你看到了全世界，其实你只是看到了被喂到嘴边的那一小块“信息残渣”。
+
+
+## 🎯 待处理的目标文案
+听起来挺学术，说白了，你的大脑就是一个“偷懒的搜索工具”。当我们要判断一件事发生的概率有多大、到底重不重要时，大脑懒得去翻枯燥的统计年鉴，它只会问自己一个问题：“这件事我能不能立刻想起来？”如果某个画面、某种恐惧能让你瞬间在大脑里“秒回”，你的直觉就会粗暴地告诉你：这事儿太常见了，世界就是这个样子的。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "听起来挺学术，"
+  },
+  {
+    "index": 1,
+    "text": "说白了，"
+  },
+  {
+    "index": 2,
+    "text": "你的大脑就是一个“偷懒的搜索工具”。"
+  },
+  {
+    "index": 3,
+    "text": "当我们要判断一件事发生的概率有多大、"
+  },
+  {
+    "index": 4,
+    "text": "到底重不重要时，"
+  },
+  {
+    "index": 5,
+    "text": "大脑懒得去翻枯燥的统计年鉴，"
+  },
+  {
+    "index": 6,
+    "text": "它只会问自己一个问题："
+  },
+  {
+    "index": 7,
+    "text": "“这件事我能不能立刻想起来？"
+  },
+  {
+    "index": 8,
+    "text": "”如果某个画面、"
+  },
+  {
+    "index": 9,
+    "text": "某种恐惧能让你瞬间在大脑里“秒回”，"
+  },
+  {
+    "index": 10,
+    "text": "你的直觉就会粗暴地告诉你："
+  },
+  {
+    "index": 11,
+    "text": "这事儿太常见了，"
+  },
+  {
+    "index": 12,
+    "text": "世界就是这个样子的。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "breathe",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn",
+        "fadeIn"
+      ],
+      "default": "breathe",
+      "description": "入场效果"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "breathe",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:55
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "大脑思考运作的示意图",
+    "enterEffect": "breathe",
+    "anchors": [
+      {
+        "text": "搜索工具",
+        "showFrom": 2,
+        "color": "#EF4444",
+        "anim": "spring",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:55
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+在心理学上，这其实叫作**“可得性启发”**。
+
+听起来挺学术，说白了，你的大脑就是一个“偷懒的搜索工具”。当我们要判断一件事发生的概率有多大、到底重不重要时，大脑懒得去翻枯燥的统计年鉴，它只会问自己一个问题：“这件事我能不能立刻想起来？”如果某个画面、某种恐惧能让你瞬间在大脑里“秒回”，你的直觉就会粗暴地告诉你：这事儿太常见了，世界就是这个样子的。
+
+这就像你家窗户上贴了一张印着老虎的贴纸，你往外看，就觉得满大街都是老虎。其实，不是老虎变多了，而是这张贴纸离你的眼睛最近，最容易被你看见。你以为你看到了全世界，其实你只是看到了被喂到嘴边的那一小块“信息残渣”。
+
+
+## 🎯 待处理的目标文案
+这就像你家窗户上贴了一张印着老虎的贴纸，你往外看，就觉得满大街都是老虎。其实，不是老虎变多了，而是这张贴纸离你的眼睛最近，最容易被你看见。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "这就像你家窗户上贴了一张印着老虎的贴纸，"
+  },
+  {
+    "index": 1,
+    "text": "你往外看，"
+  },
+  {
+    "index": 2,
+    "text": "就觉得满大街都是老虎。"
+  },
+  {
+    "index": 3,
+    "text": "其实，"
+  },
+  {
+    "index": 4,
+    "text": "不是老虎变多了，"
+  },
+  {
+    "index": 5,
+    "text": "而是这张贴纸离你的眼睛最近，"
+  },
+  {
+    "index": 6,
+    "text": "最容易被你看见。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:56
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "老虎变多了",
+    "butText": "这张贴纸离你的眼睛最近",
+    "butSrc": "窗户上贴着老虎贴纸的场景",
+    "notContentIndex": 4,
+    "butContentIndex": 5
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:56
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+在心理学上，这其实叫作**“可得性启发”**。
+
+听起来挺学术，说白了，你的大脑就是一个“偷懒的搜索工具”。当我们要判断一件事发生的概率有多大、到底重不重要时，大脑懒得去翻枯燥的统计年鉴，它只会问自己一个问题：“这件事我能不能立刻想起来？”如果某个画面、某种恐惧能让你瞬间在大脑里“秒回”，你的直觉就会粗暴地告诉你：这事儿太常见了，世界就是这个样子的。
+
+这就像你家窗户上贴了一张印着老虎的贴纸，你往外看，就觉得满大街都是老虎。其实，不是老虎变多了，而是这张贴纸离你的眼睛最近，最容易被你看见。你以为你看到了全世界，其实你只是看到了被喂到嘴边的那一小块“信息残渣”。
+
+
+## 🎯 待处理的目标文案
+你以为你看到了全世界，其实你只是看到了被喂到嘴边的那一小块“信息残渣”。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "你以为你看到了全世界，"
+  },
+  {
+    "index": 1,
+    "text": "其实你只是看到了被喂到嘴边的那一小块“信息残渣”。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:57
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "看到了全世界",
+    "butText": "看到了被喂到嘴边的那一小块“信息残渣”",
+    "butSrc": "堆满食物残渣的餐桌",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:57
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+在这个信息过载、真相碎片化的时代，我准备了三个极其简单的防御锦囊，下次再遇到这种“认知冲击”，请在心里默问自己：
+
+第一，正因为这件事是“新闻”，所以它在现实中大概率是极少数的个案吗？
+第二，我的这个观点，是来自大样本的统计数据，还是仅仅来自昨天刷到的那段高赞视频？
+第三，如果我换一个关键词搜索，是不是能看到完全相反的一面？
+
+
+## 🎯 待处理的目标文案
+在这个信息过载、真相碎片化的时代，我准备了三个极其简单的防御锦囊，下次再遇到这种“认知冲击”，请在心里默问自己：
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "在这个信息过载、"
+  },
+  {
+    "index": 1,
+    "text": "真相碎片化的时代，"
+  },
+  {
+    "index": 2,
+    "text": "我准备了三个极其简单的防御锦囊，"
+  },
+  {
+    "index": 3,
+    "text": "下次再遇到这种“认知冲击”，"
+  },
+  {
+    "index": 4,
+    "text": "请在心里默问自己："
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "breathe",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn",
+        "fadeIn"
+      ],
+      "default": "breathe",
+      "description": "入场效果"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "breathe",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:19:59
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "信息碎片化时代的数字洪流",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "信息过载",
+        "showFrom": 0,
+        "color": "#EF4444",
+        "anim": "spring",
+        "audioEffect": "impact_thud"
+      },
+      {
+        "text": "认知冲击",
+        "showFrom": 3,
+        "color": "#EF4444",
+        "anim": "spring",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:19:59
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+在这个信息过载、真相碎片化的时代，我准备了三个极其简单的防御锦囊，下次再遇到这种“认知冲击”，请在心里默问自己：
+
+第一，正因为这件事是“新闻”，所以它在现实中大概率是极少数的个案吗？
+第二，我的这个观点，是来自大样本的统计数据，还是仅仅来自昨天刷到的那段高赞视频？
+第三，如果我换一个关键词搜索，是不是能看到完全相反的一面？
+
+
+## 🎯 待处理的目标文案
+第一，正因为这件事是“新闻”，所以它在现实中大概率是极少数的个案吗？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "第一，"
+  },
+  {
+    "index": 1,
+    "text": "正因为这件事是“新闻”，"
+  },
+  {
+    "index": 2,
+    "text": "所以它在现实中大概率是极少数的个案吗？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：METHOD_STACK
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "该 item 的方法名/提醒标题/观点标题，建议 4~12 个字"
+    },
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "单张主图描述，用于承接这个方法或观点"
+    },
+    "notes": {
+      "type": "array",
+      "description": "可选；解释短语数组。每项含 text 与 showFrom；showFrom 为 content 下标（0-based，非帧数），须在 0～(content 条数-1) 内",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "解释短语"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "title",
+    "imageSrc"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 5 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "METHOD_STACK",
+  "param": {
+    "title": "警惕情绪画面",
+    "imageSrc": "被耸动新闻画面包围、神情紧张的人物简笔画",
+    "notes": [
+      {
+        "text": "先识别这是情绪刺激",
+        "showFrom": 1
+      },
+      {
+        "text": "再追问它是否只是离奇个案",
+        "showFrom": 3
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:20:01
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "title": "新闻个案陷阱",
+    "imageSrc": "很多人围着一个放大的报纸新闻标题七嘴八舌讨论的场景，标题内容模糊",
+    "notes": [
+      {
+        "text": "新闻不等于普遍",
+        "showFrom": 1
+      },
+      {
+        "text": "多数是极少数的个案",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:20:01
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+在这个信息过载、真相碎片化的时代，我准备了三个极其简单的防御锦囊，下次再遇到这种“认知冲击”，请在心里默问自己：
+
+第一，正因为这件事是“新闻”，所以它在现实中大概率是极少数的个案吗？
+第二，我的这个观点，是来自大样本的统计数据，还是仅仅来自昨天刷到的那段高赞视频？
+第三，如果我换一个关键词搜索，是不是能看到完全相反的一面？
+
+
+## 🎯 待处理的目标文案
+第二，我的这个观点，是来自大样本的统计数据，还是仅仅来自昨天刷到的那段高赞视频？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "第二，"
+  },
+  {
+    "index": 1,
+    "text": "我的这个观点，"
+  },
+  {
+    "index": 2,
+    "text": "是来自大样本的统计数据，"
+  },
+  {
+    "index": 3,
+    "text": "还是仅仅来自昨天刷到的那段高赞视频？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：METHOD_STACK
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "该 item 的方法名/提醒标题/观点标题，建议 4~12 个字"
+    },
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "单张主图描述，用于承接这个方法或观点"
+    },
+    "notes": {
+      "type": "array",
+      "description": "可选；解释短语数组。每项含 text 与 showFrom；showFrom 为 content 下标（0-based，非帧数），须在 0～(content 条数-1) 内",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "解释短语"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "title",
+    "imageSrc"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 5 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "METHOD_STACK",
+  "param": {
+    "title": "警惕情绪画面",
+    "imageSrc": "被耸动新闻画面包围、神情紧张的人物简笔画",
+    "notes": [
+      {
+        "text": "先识别这是情绪刺激",
+        "showFrom": 1
+      },
+      {
+        "text": "再追问它是否只是离奇个案",
+        "showFrom": 3
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:20:02
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "title": "反思信息来源",
+    "imageSrc": "一个放大镜，指向手机屏幕上显示的统计图表和短视频缩略图",
+    "notes": [
+      {
+        "text": "数据or个例？",
+        "showFrom": 1
+      },
+      {
+        "text": "统计数据 vs 高赞视频",
+        "showFrom": 2
+      },
+      {
+        "text": "来源要可靠",
+        "showFrom": 3
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:20:02
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+在这个信息过载、真相碎片化的时代，我准备了三个极其简单的防御锦囊，下次再遇到这种“认知冲击”，请在心里默问自己：
+
+第一，正因为这件事是“新闻”，所以它在现实中大概率是极少数的个案吗？
+第二，我的这个观点，是来自大样本的统计数据，还是仅仅来自昨天刷到的那段高赞视频？
+第三，如果我换一个关键词搜索，是不是能看到完全相反的一面？
+
+
+## 🎯 待处理的目标文案
+第三，如果我换一个关键词搜索，是不是能看到完全相反的一面？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "第三，"
+  },
+  {
+    "index": 1,
+    "text": "如果我换一个关键词搜索，"
+  },
+  {
+    "index": 2,
+    "text": "是不是能看到完全相反的一面？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：METHOD_STACK
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "该 item 的方法名/提醒标题/观点标题，建议 4~12 个字"
+    },
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "单张主图描述，用于承接这个方法或观点"
+    },
+    "notes": {
+      "type": "array",
+      "description": "可选；解释短语数组。每项含 text 与 showFrom；showFrom 为 content 下标（0-based，非帧数），须在 0～(content 条数-1) 内",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "解释短语"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "title",
+    "imageSrc"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 5 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "METHOD_STACK",
+  "param": {
+    "title": "警惕情绪画面",
+    "imageSrc": "被耸动新闻画面包围、神情紧张的人物简笔画",
+    "notes": [
+      {
+        "text": "先识别这是情绪刺激",
+        "showFrom": 1
+      },
+      {
+        "text": "再追问它是否只是离奇个案",
+        "showFrom": 3
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:20:04
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "title": "反向搜索验证",
+    "imageSrc": "用放大镜在搜索引擎上查找不同关键词，出现不同结果的对比",
+    "notes": [
+      {
+        "text": "尝试不同关键词",
+        "showFrom": 1
+      },
+      {
+        "text": "看到不同侧面",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:20:04
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+在这个充满套路的时代，别让几分钟的短视频定义了你对几万公里外世界的全部想象。保持怀疑，保持理性，做自己大脑的主人，就是我们普通人最高级的自我保护。
+
+
+## 🎯 待处理的目标文案
+在这个充满套路的时代，别让几分钟的短视频定义了你对几万公里外世界的全部想象。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "在这个充满套路的时代，"
+  },
+  {
+    "index": 1,
+    "text": "别让几分钟的短视频定义了你对几万公里外世界的全部想象。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "breathe",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn",
+        "fadeIn"
+      ],
+      "default": "breathe",
+      "description": "入场效果"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "breathe",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:20:06
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "熙熙攘攘的城市街道，人们戴着面具",
+    "enterEffect": "slideBottom",
+    "anchors": [
+      {
+        "text": "套路",
+        "showFrom": 0,
+        "color": "#EF4444",
+        "anim": "spring",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:20:06
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+在这个充满套路的时代，别让几分钟的短视频定义了你对几万公里外世界的全部想象。保持怀疑，保持理性，做自己大脑的主人，就是我们普通人最高级的自我保护。
+
+
+## 🎯 待处理的目标文案
+保持怀疑，保持理性，做自己大脑的主人，
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "保持怀疑，"
+  },
+  {
+    "index": 1,
+    "text": "保持理性，"
+  },
+  {
+    "index": 2,
+    "text": "做自己大脑的主人，"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：LIST_MULTI_GROUP
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "groups": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 5,
+      "description": "唯一合法结构：每项含 textIndex、image、可选 anchor；组数 2～5，须与口播并列分点/并列例子一致（分点或例子的概括）。textIndex 为该并列主体在 content 中的起始下标（0-based，非帧数），合法范围 0～(content 条数-1)；同一体内多行共用起始 textIndex；各组 textIndex 升序须分段覆盖至最后一条 content。勿使用顶层 anchors。image.src 为配图提示词；无高价值短语则省略 anchor",
+      "items": {
+        "type": "object",
+        "required": [
+          "textIndex",
+          "image"
+        ],
+        "properties": {
+          "textIndex": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该组绑定的 content 下标（0-based），非帧数；须在 0～(content 条数-1) 内"
+          },
+          "image": {
+            "type": "object",
+            "required": [
+              "src"
+            ],
+            "properties": {
+              "src": {
+                "type": "string",
+                "format": "image_prompt",
+                "description": "该组配图提示词"
+              },
+              "position": {
+                "type": "string",
+                "enum": [
+                  "center",
+                  "left",
+                  "right",
+                  "top",
+                  "bottom"
+                ],
+                "description": "可选，布局已弱化该字段"
+              },
+              "enterEffect": {
+                "type": "string",
+                "enum": [
+                  "breathe",
+                  "slideLeft",
+                  "slideBottom",
+                  "zoomIn",
+                  "fadeIn"
+                ],
+                "default": "breathe"
+              }
+            }
+          },
+          "anchor": {
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该组高价值短语"
+              },
+              "color": {
+                "type": "string"
+              },
+              "anim": {
+                "type": "string",
+                "enum": [
+                  "spring",
+                  "slideUp",
+                  "popIn",
+                  "highlight"
+                ]
+              },
+              "audioEffect": {
+                "type": "string",
+                "enum": [
+                  "impact_thud",
+                  "ping",
+                  "woosh"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "groups"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "LIST_MULTI_GROUP",
+  "content": [
+    "成功是有前提的",
+    "成功的核心是自律",
+    "成功的核心是资源",
+    "只有两者搭配才能获得成功"
+  ],
+  "param": {
+    "groups": [
+      {
+        "textIndex": 1,
+        "image": {
+          "src": "齿轮简笔画图标"
+        },
+        "anchor": {
+          "text": "核心是自律",
+          "audioEffect": "ping"
+        }
+      },
+      {
+        "textIndex": 2,
+        "image": {
+          "src": "钞票简笔画图标"
+        },
+        "anchor": {
+          "text": "核心是资源",
+          "audioEffect": "impact_thud"
+        }
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:20:08
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "groups": [
+      {
+        "textIndex": 0,
+        "image": {
+          "src": "问号简笔画"
+        },
+        "anchor": {
+          "text": "保持怀疑",
+          "audioEffect": "ping"
+        }
+      },
+      {
+        "textIndex": 1,
+        "image": {
+          "src": "大脑简笔画"
+        },
+        "anchor": {
+          "text": "保持理性",
+          "audioEffect": "ping"
+        }
+      },
+      {
+        "textIndex": 2,
+        "image": {
+          "src": "皇冠简笔画"
+        },
+        "anchor": {
+          "text": "大脑的主人",
+          "audioEffect": "impact_thud"
+        }
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-03-31 22:20:08
+model: gemini-2.0-flash
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+在这个充满套路的时代，别让几分钟的短视频定义了你对几万公里外世界的全部想象。保持怀疑，保持理性，做自己大脑的主人，就是我们普通人最高级的自我保护。
+
+
+## 🎯 待处理的目标文案
+就是我们普通人最高级的自我保护。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "就是我们普通人最高级的自我保护。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "string",
+      "description": "精炼核心句，不超过25个字"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于高亮正文子串。使用 coreSentence 时锚点词须出现在 coreSentence 内。showFrom 须落在当前 content 条数范围内",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要高亮的子串"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": "承认自己“可能错了”并不是一种软弱",
+    "anchors": [
+      {
+        "text": "可能错了",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+
+   - 只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
+
+
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- ERROR ----------------------------------------
+time: 2026-03-31 22:20:09
+attempt: 1/3
+error: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.', 'status': 'RESOURCE_EXHAUSTED'}}
+-----------------------------------------------------------------------------------------
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-03-31 22:20:12
+attempt: 2/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": "普通人最高级的自我保护"
+  }
+}
+-------------------------------------------------------------------------------------------

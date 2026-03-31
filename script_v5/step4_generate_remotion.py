@@ -2,7 +2,7 @@
 """
 Step 4: Remotion 动画代码生成（模板驱动版）
 根据 scene-scripts.json（含音频时长）生成 Remotion 动画 TSX 代码。
-每个 item 的 `content`、`totalDurationFrames` 与 `param`（模板字段）共同传给对应组件。
+每个 item 的 param 直接传递给对应模板组件。
 
 用法：
   python step4_generate_remotion.py --input scene-scripts.json --name video_name
@@ -21,12 +21,17 @@ if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
 
 from template_registry import TEMPLATE_REGISTRY, get_template_to_component_map
-from utils import load_config
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
+
+def load_config(script_dir: Path) -> dict:
+    config_path = script_dir / "config.json"
+    with open(config_path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 def to_pascal_case(name: str) -> str:
@@ -63,17 +68,21 @@ def _escape_jsx(text: str) -> str:
 
 def _param_to_jsx_props(param: dict, name: str, scene_id: str, order: int) -> str:
     """
-    将 param 对象转换为 JSX props 字符串（不含 item 层级的 content / totalDurationFrames）。
+    将 param 对象转换为 JSX props 字符串。
     - 图片字段用 staticFile() 包装
+    - content 数组作为 JSON 传递
     - images 数组中的 src 也用 staticFile() 包装
     """
     props = []
     for key, value in param.items():
-        if key in ("content", "totalDurationFrames"):
-            continue
+        if key == "content":
+            # content 数组直接作为 JSON 传递
+            props.append(f'content={{{json.dumps(value, ensure_ascii=False)}}}')
         elif key == "audioSrc":
             # audioSrc 已移到 scene 级别，不在 item props 中传递
             continue
+        elif key == "totalDurationFrames":
+            props.append(f'totalDurationFrames={{{value}}}')
         elif key == "images" and isinstance(value, list):
             # images 数组，需要包装 src
             img_items = []
@@ -192,11 +201,11 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
         component = TEMPLATE_TO_COMPONENT.get(template, _COMPONENT_FALLBACK)
         used_components.add(component)
 
-        total_frames = item.get("totalDurationFrames", 90)
-        content = item.get("content", [])
-        content_prop = f"content={{{json.dumps(content, ensure_ascii=False)}}}"
-        duration_prop = f"totalDurationFrames={{{total_frames}}}"
-        props_str = f"{content_prop} {duration_prop} {_param_to_jsx_props(param, name, scene_id, order)}".strip()
+        # 计算 totalDurationFrames
+        total_frames = param.get("totalDurationFrames", 90)
+
+        # 生成 props
+        props_str = _param_to_jsx_props(param, name, scene_id, order)
 
         item_renders.append({
             "component": component,

@@ -1,6 +1,6 @@
 import json
 
-from utils.gemini_utils import generate_with_retry, parse_json_from_response
+from .gemini_utils import generate_with_retry, parse_json_from_response
 from .prompt_loader import load_prompt, render_prompt
 
 
@@ -13,7 +13,7 @@ def gemini_fix_after_warnings(
     template_guide: str,
     append_ai_log=None,
 ) -> dict:
-    """校验告警后的单次修订调用；不得改写 item.content 内原文。"""
+    """校验告警后的单次修订调用；不得改写 content 内原文。"""
     prompt_template = load_prompt("fix_after_warnings.md")
     fix_prompt = render_prompt(
         prompt_template,

@@ -65,6 +65,18 @@ def _strip_ts_assertions(s: str) -> str:
 	return re.sub(r"\s+as\s+[\w\[\]]+", "", s)
 
 
+def _description_table_cell(description: object, max_len: int = 88) -> str:
+	"""汇总表「说明摘要」列：单行、限长，避免 markdown 表格断行。"""
+	if description is None:
+		return "—"
+	text = " ".join(str(description).replace("\n", " ").split())
+	if not text:
+		return "—"
+	if len(text) > max_len:
+		return text[: max_len - 1] + "…"
+	return text
+
+
 def _build_registry() -> dict:
 	"""扫描 src/components/templates/*.tsx 中的 export const templateMeta，构建注册表。"""
 	script_dir = Path(__file__).resolve().parent
@@ -98,6 +110,7 @@ def _build_registry() -> dict:
 			continue
 		# 与旧版一致：注册表 value 不含 "name"，仅用 key 表示模板名
 		entry = {k: v for k, v in meta.items() if k != "name"}
+		# param_schema 内 required 已为 bool（json 解析后）
 		registry[name] = entry
 
 	return registry
@@ -130,33 +143,133 @@ def get_template(name: str) -> dict:
 	return TEMPLATE_REGISTRY.get(name, TEMPLATE_REGISTRY.get("CENTER_FOCUS", {}))
 
 
+def get_image_fields(template_name: str) -> list:
+	"""
+	返回指定模板 param 中属于图片提示词的字段名列表。
+	例如 CENTER_FOCUS → ["imageSrc"]
+         SPLIT_COMPARE → ["leftSrc", "rightSrc"]
+         LIST_MULTI_GROUP → ["groups"]（数组类型，需要特殊处理）
+	"""
+	tmpl = get_template(template_name)
+	schema = tmpl.get("param_schema", {})
+	fields = []
+	for field_name, field_def in schema.items():
+		if field_def.get("type") in (
+			"image_prompt",
+			"image_prompt_array",
+			"list_multi_group_group_array",
+		):
+			fields.append(field_name)
+	return fields
+
+
 def generate_ai_prompt_guide(image_style: str = "", include_examples: bool = True) -> str:
 	"""
-	动态生成 AI 提示词中与「模板」相关的短片段。
-
-	include_examples=False（Step2B 模板选型 / 校验修订）：仅输出**可用模板名列表**，
-	不注入参数字典、汇总表、兜底长文，避免与主提示词决策树重复并节省 Token。
-
-	include_examples=True：在上面的基础上追加各模板的 item JSON 示例（调试或 CLI）。
+	动态生成 AI 提示词中的模板选择指南。
+	含兜底策略、汇总表、各模板 description + param 说明。
+	include_examples=True 时额外拼接逐个 item 示例。
 	"""
-	names = sorted(TEMPLATE_REGISTRY.keys())
-	count = len(names)
-	lines: list[str] = [
-		f"## 可用模板（共 {count} 个：`template` 必须且仅能从中选一个）",
-		"",
-		", ".join(names),
-		"",
-		"选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。",
-	]
+	lines: list[str] = []
+	count = len(TEMPLATE_REGISTRY)
+	lines.append(f"## 模板选择指南（必须从以下 {count} 个中选一个）\n")
+
+	lines.append("## 模板选型兜底策略\n")
+	lines.append(
+		"- 为**每个 item** 先判断叙事类型，再选模板：单图叙述 / 双图并列 / 对错避坑 / 步骤清单 / **方法卡片** / 时间演进 / 多图并列 / 纯文字金句 / 引用出处 / 对话气泡 / 术语卡 / 揭秘锚点（放大镜）/ 冲击收束 / **数据 KPI 大字报（KPI_HERO）/ 双指标对比（STAT_COMPARE）/ 进度占比（PROGRESS_RING）**。\n"
+	)
+	lines.append(
+		"- **严禁通篇使用 `CENTER_FOCUS`**：仅在**无 A/B 对仗、无结构化语义**时兜底。若口播出现**你方 vs 他方/对方**的行为对仗，或分号（；）两侧对立叙述，**必须优先 `SPLIT_COMPARE`**，不得用单图糊弄。\n"
+	)
+	lines.append("- **`ALERT`** 仅用于强情绪、转折、冲击收束；禁止通篇堆砌。\n")
+	lines.append(
+		"- **`BEAT_SEQUENCE`**：**同一 item、同一论证动作**内需要 2～4 个连续节拍（图随口播分段切换、情绪可 calm→alert）。用来避免为求变化而把连贯逻辑拆成多个零碎 item；`stages` 条数须与后续 `content` 条数一致。\n"
+	)
+	lines.append(
+		"- **`STEP_LIST`**：仅用于**短步骤 / 短分点 / 强清单感**内容。若单个 item 是“方法标题/提醒标题 + 解释展开”，优先改用 **`METHOD_STACK`**；不要把解释型口播硬塞成纯清单。\n"
+	)
+	lines.append(
+		"- **`METHOD_STACK`**：适合**单个 item 内的一个方法/提醒/观点标题**，后面继续跟 2～4 句解释展开。用“标题 + 单图 + 解释条”承接一个完整叙事，不要拿它去跨 item 合并多个方法。\n"
+	)
+	lines.append(
+		"- **`MAGNIFYING_GLASS`** 仅当该 item 可提供非空 `anchors`（通过 `showFrom` 关联 content 索引）时使用；否则换其他模板。\n"
+	)
+	lines.append(
+		"- **`LIST_MULTI_GROUP`**：**同一论证下的多分点并列**（2～4 个可独立成画的主体），**优先用单 item + `LIST_MULTI_GROUP` 覆盖全部分点**，而不是每个分点各开一个 item。若当前 item 只是“给你两个方法：”这类总起句、真正分点已经拆到后续 item，**禁止**用 `LIST_MULTI_GROUP` 去脑补多组。该模板只输出 `groups`，每组使用 `textIndex + image + 可选 anchor`。禁止因「评论区混战」等笼统画面硬凑多图；单一比喻、无清晰分点仍用 `CENTER_FOCUS` 或 `ALERT`。\n"
+	)
+	lines.append(
+		"- **`SPLIT_COMPARE`**：左右**两方行为/立场**对照（你讲道理 vs 他甩链接、你客观 vs 对方信息茧房）。与 `LIST_MULTI_GROUP`（同机制下多分点平铺）区分：**对仗用双分屏，同一机制下的「第一第二」用多图/节拍模板而非 SPLIT**。\n"
+	)
+
+	lines.append("\n| 模板名 | 心理学原理 | 说明摘要 | 图片数量 | 额外必填参数 |")
+	lines.append("|--------|-----------|----------|---------|-------------|")
+	for name, tmpl in TEMPLATE_REGISTRY.items():
+		extra = ", ".join(tmpl.get("required_extra_params", [])) or "无"
+		psych = tmpl.get("psychology") or "—"
+		desc_cell = _description_table_cell(tmpl.get("description"))
+		img_c = tmpl.get("image_count", "—")
+		lines.append(
+			f"| {name} | {psych} | {desc_cell} | {img_c} | {extra} |"
+		)
+
+	lines.append("\n## 各模板说明与 param 字段\n")
+	for name, tmpl in TEMPLATE_REGISTRY.items():
+		schema = tmpl.get("param_schema", {})
+		lines.append(f"### {name}\n")
+		if not schema:
+			lines.append("仅需 `content` 数组。")
+			if tmpl.get("content_anchor_required") is True:
+				lines.append(
+					"- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based content 索引）。"
+				)
+			cmin = tmpl.get("content_min_items")
+			cmax = tmpl.get("content_max_items")
+			if isinstance(cmin, int) or isinstance(cmax, int):
+				hint = []
+				if isinstance(cmin, int):
+					hint.append(f"content 至少 {cmin} 条")
+				if isinstance(cmax, int):
+					hint.append(f"至多 {cmax} 条")
+				lines.append(f"- *建议*：{'；'.join(hint)}。")
+			lines.append("")
+			continue
+		for field, fdef in schema.items():
+			req = "必填" if fdef.get("required") else "可选"
+			desc_f = fdef.get("desc", "")
+			if fdef.get("type") == "enum":
+				vals = "/".join(fdef.get("values", []))
+				default = fdef.get("default", "")
+				lines.append(f"- `{field}` ({req}): {desc_f}，可选值: {vals}，默认: {default}")
+			elif fdef.get("type") == "image_prompt":
+				lines.append(f"- `{field}` ({req}): {desc_f}（填写图片视觉描述）")
+			elif fdef.get("type") == "image_prompt_array":
+				lines.append(f"- `{field}` ({req}): {desc_f}（数组，每项含 src/position/enterEffect）")
+			else:
+				lines.append(f"- `{field}` ({req}): {desc_f}")
+		if tmpl.get("content_anchor_required") is True:
+			lines.append(
+				"- **必填**：`param.anchors` 需非空；每项必须包含 `text` 与合法 `showFrom`（0-based content 索引）。"
+			)
+		cmin = tmpl.get("content_min_items")
+		cmax = tmpl.get("content_max_items")
+		if isinstance(cmin, int) or isinstance(cmax, int):
+			hint = []
+			if isinstance(cmin, int):
+				hint.append(f"content 至少 {cmin} 条")
+			if isinstance(cmax, int):
+				hint.append(f"至多 {cmax} 条")
+			lines.append(f"- *建议*：{'；'.join(hint)}。\n")
+		lines.append("")
+
+	if image_style:
+		lines.append(f"\n## 图片描述要求\n- 图片风格：{image_style}")
+		lines.append("- 纯视觉内容，无文字、无标注")
+		lines.append("- 描述具体生动（如\"一个戴眼镜的白领简笔画图标\"）")
 
 	if include_examples:
-		lines.extend([
-			"",
-			"## 各模板 item 示例（每个代码块仅为一个 item）",
-			"",
-			"下列 JSON **不是**让你合并成一个 scene：每块只展示该模板的字段形态。实际撰稿时按口播拆多个 scene，`items` 内按需选用模板，**禁止**单 scene 堆砌全部模板。",
-			"",
-		])
+		lines.append("\n## 各模板 item 示例（每个代码块仅为一个 item）\n")
+		lines.append(
+			"下列 JSON **不是**让你合并成一个 scene：每块只展示该模板的字段形态。实际撰稿时按口播拆多个 scene，`items` 内按需选用模板，**禁止**单 scene 堆砌全部模板。\n"
+		)
 		for tname in sorted(TEMPLATE_REGISTRY.keys()):
 			tmpl = TEMPLATE_REGISTRY[tname]
 			ex = tmpl.get("example")
@@ -164,22 +277,12 @@ def generate_ai_prompt_guide(image_style: str = "", include_examples: bool = Tru
 				continue
 			item = dict(ex)
 			item.setdefault("order", 1)
-			lines.append(f"### {tname}")
+			lines.append(f"### {tname}\n")
 			lines.append("```json")
 			lines.append(json.dumps(item, ensure_ascii=False, indent=2))
-			lines.append("```")
-			lines.append("")
+			lines.append("```\n")
 
-	if image_style and include_examples:
-		lines.extend([
-			"",
-			"## 图片描述要求（生成 image 类字段时参考）",
-			f"- 图片风格：{image_style}",
-			"- 纯视觉内容，无文字、无标注",
-			"- 描述具体生动（如\"一个戴眼镜的白领简笔画图标\"）",
-		])
-
-	return "\n".join(lines).strip()
+	return "\n".join(lines)
 
 
 if __name__ == "__main__":

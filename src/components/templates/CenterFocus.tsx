@@ -32,7 +32,7 @@ export const templateMeta = {
 			"anchors": {
 				"type": "array",
 				"description":
-					"可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内",
+					"可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
 				"items": {
 					"type": "object",
 					"required": ["text", "showFrom"],

@@ -4,6 +4,7 @@ import { TemplateShowcase, TOTAL_DURATION_TEMPLATE_SHOWCASE } from "./remotions/
 import { 可得性启发1, 可得性启发1Schema, TOTAL_DURATION_可得性启发1 } from "./remotions/可得性启发1/可得性启发1";
 import { 可得性启发2, 可得性启发2Schema, TOTAL_DURATION_可得性启发2 } from "./remotions/可得性启发2/可得性启发2";
 import { 可得性启发3, 可得性启发3Schema, TOTAL_DURATION_可得性启发3 } from "./remotions/可得性启发3/可得性启发3";
+import { 可得性启发串联, 可得性启发串联Schema, TOTAL_DURATION_可得性启发_串联 } from "./remotions/可得性启发_串联/可得性启发串联";
 
 
 // Each <Composition> is an entry in the sidebar!
@@ -57,6 +58,18 @@ export const RemotionRoot: React.FC = () => {
         width={960}
         height={1280}
         schema={可得性启发3Schema}
+        defaultProps={{}}
+      />
+    
+      {/* 可得性启发串联 - 自动生成 */}
+      <Composition
+        id="可得性启发串联"
+        component={可得性启发串联}
+        durationInFrames={TOTAL_DURATION_可得性启发_串联}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={可得性启发串联Schema}
         defaultProps={{}}
       />
     </>

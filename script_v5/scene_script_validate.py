@@ -15,6 +15,28 @@ from typing import Any
 
 from param_schema_tools import validate_param_with_schema
 
+_ADVISORY_PREFIX = "[ADVISORY]"
+
+
+def _as_content_text(content: Any) -> str:
+	"""将 item.content 归一为拼接后的纯文本，用于语义一致性检查。"""
+	if not isinstance(content, list):
+		return ""
+	parts: list[str] = []
+	for ci in content:
+		if isinstance(ci, dict):
+			parts.append(str(ci.get("text", "")))
+		elif isinstance(ci, str):
+			parts.append(ci)
+		else:
+			parts.append(str(ci))
+	return "".join(parts)
+
+
+def _is_directional_upgrade_text(text: str) -> bool:
+	# 方向性/纠偏/升级表达：更像 COGNITIVE_SHIFT / DOS_AND_DONTS，而非中立 SPLIT_COMPARE
+	return any(token in text for token in ("升级为", "而不是", "不再", "别再", "应该", "关键在于", "真正重要的是"))
+
 def _content_len(content: Any) -> int:
 	if not isinstance(content, list):
 		return 0
@@ -121,5 +143,24 @@ def validate_and_normalize_scene_scripts(
 				content_len=clen_pre,
 				warn=_schema_warn,
 			)
+
+			# ─────────────────────────────────────────────────────────
+			# 语义一致性告警（非强制，不阻断；用于驱动自动修订/人工复核）
+			# ─────────────────────────────────────────────────────────
+			content_text = _as_content_text(item.get("content"))
+
+			if tname == "CONCEPT_CARD":
+				concept_name = param.get("conceptName")
+				if isinstance(concept_name, str) and concept_name.strip():
+					cn = concept_name.strip()
+					if content_text and cn not in content_text:
+						warnings.append(
+							f"{_ADVISORY_PREFIX}[{scene_id}] item order={order} 模板 CONCEPT_CARD 的 conceptName={cn!r} 未出现在口播中，可能概念不一致（建议改为口播中真实出现的术语/产品名/概念名）"
+						)
+
+			if tname == "SPLIT_COMPARE" and content_text and _is_directional_upgrade_text(content_text):
+				warnings.append(
+					f"{_ADVISORY_PREFIX}[{scene_id}] item order={order} 模板 SPLIT_COMPARE 但口播是升级/纠偏导向，可能更适合 COGNITIVE_SHIFT 或 DOS_AND_DONTS（建议复核）"
+				)
 
 	return data, warnings

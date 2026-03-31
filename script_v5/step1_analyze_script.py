@@ -317,6 +317,8 @@ def _validate_and_auto_fix(
     _, v_warnings = validate_and_normalize_scene_scripts(
         result, TEMPLATE_REGISTRY, default_template=default_tmpl
     )
+    advisory = [w for w in v_warnings if isinstance(w, str) and w.startswith("[ADVISORY]")]
+    hard = [w for w in v_warnings if not (isinstance(w, str) and w.startswith("[ADVISORY]"))]
     if v_warnings:
         print("\n⚠️ 脚本校验与归一化（请人工复核）：")
         for w in v_warnings:
@@ -325,7 +327,11 @@ def _validate_and_auto_fix(
     retry_enabled = config.get("step1_retry_on_validate_warnings", True)
     if not v_warnings:
         return result
-    if not retry_enabled:
+    # 仅 advisory 告警时，不应阻断流程；是否自动修订由 retry_enabled 决定
+    if not hard and not retry_enabled:
+        return result
+    # 存在 hard 告警且禁用自动修订：严格失败
+    if hard and not retry_enabled:
         raise ScriptValidationError(
             "脚本校验存在告警且已禁用自动修订（严格模式：直接失败）",
             path="scene-scripts",
@@ -357,7 +363,9 @@ def _validate_and_auto_fix(
         _, w2 = validate_and_normalize_scene_scripts(
             fixed, TEMPLATE_REGISTRY, default_template=default_tmpl
         )
-        if w2:
+        advisory2 = [w for w in w2 if isinstance(w, str) and w.startswith("[ADVISORY]")]
+        hard2 = [w for w in w2 if not (isinstance(w, str) and w.startswith("[ADVISORY]"))]
+        if hard2:
             print("❌ 修订后仍有告警（严格模式：停止）：")
             for w in w2:
                 print(f"   {w}")
@@ -365,6 +373,10 @@ def _validate_and_auto_fix(
                 "自动修订后仍存在校验告警（严格模式：直接失败）",
                 path="scene-scripts",
             )
+        if advisory2:
+            print("✅ 修订后硬性校验通过；仍有语义建议告警（不阻断）：")
+            for w in advisory2:
+                print(f"   {w}")
         else:
             print("✅ 修订后校验无告警。")
         return fixed

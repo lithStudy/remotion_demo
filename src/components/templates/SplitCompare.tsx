@@ -11,7 +11,7 @@ export const templateMeta = {
 	"name": "SPLIT_COMPARE",
 	"componentExport": "BWSplitCompare",
 	"description":
-		"适用：两种方案、两条路径、两方行为对照；口播里常见「你/我…他/对方…  不是/而是..」对仗或分号（；）两侧对立叙述。\n差异：明确错/对避坑用 DOS_AND_DONTS；权衡轻重与代价用 SCALE_BALANCE；多要素平铺列举用 LIST_MULTI_GROUP。\n参数：leftLabel/rightLabel 为 2～6 字短语，与左右图语义一致。",
+		"适用：两种方案、两条路径、两方行为对照；口播里常见「你/我…他/对方…」对仗或分号（；）两侧对立叙述。\n差异：明确错/对避坑用 DOS_AND_DONTS；纯数据双指标对比用 STAT_COMPARE；多要素平铺列举用 LIST_MULTI_GROUP。\n参数：leftLabel/rightLabel 为 2～6 字短语，与左右图语义一致。",
 	"psychology": "认知失调",
 	"image_count": 2,
 	"param_schema": {

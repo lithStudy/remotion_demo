@@ -49,5 +49,5 @@ __EXAMPLE_STR__
 
 
 ## 输出格式（严格 JSON，不要 markdown 代码块）
-补全的当前模板的param：
+补全当前模板的param,非数组：
 { "param": { ... } }

@@ -1,13 +1,13 @@
 {
-  "topic": "如何对抗信息焦虑与恐慌",
+  "topic": "对抗信息茧房，保护自我认知",
   "scenes": [
     {
       "sceneId": "scene_1",
-      "sceneName": "引出问题：恐慌与焦虑的来源",
+      "sceneName": "引出恐慌情绪",
       "items": [
         {
           "narrativeType": "HOOK",
-          "reasoning": "决策树：Step 6 -> Step 8；自检：无明显结构化语义，作为开场共鸣，选择CENTER_FOCUS。",
+          "reasoning": "决策树：Step 6 -> Step 8；自检：开场渲染情绪，无结构化信息，`CENTER_FOCUS`。",
           "template": "CENTER_FOCUS",
           "content": [
             {
@@ -53,7 +53,7 @@
           ],
           "order": 1,
           "param": {
-            "imageSrc": "人们在不同场景下感到焦虑的抽象概念图",
+            "imageSrc": "人们感到焦虑和不安的画面",
             "enterEffect": "breathe",
             "anchors": []
           },
@@ -78,48 +78,34 @@
               "text": "更不是咱们缺乏常识。",
               "startFrame": 63,
               "durationFrames": 30
-            }
-          ],
-          "order": 2,
-          "param": {
-            "imageSrc": "一个人感到焦虑和恐慌的场景",
-            "enterEffect": "fadeIn",
-            "anchors": []
-          },
-          "totalDurationFrames": 93
-        },
-        {
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树：Step 8；自检：平缓叙述，单图即可，无特殊结构。",
-          "template": "CENTER_FOCUS",
-          "content": [
+            },
             {
               "text": "要怪，",
-              "startFrame": 0,
+              "startFrame": 93,
               "durationFrames": 30
             },
             {
               "text": "就怪那些深谙流量密码的媒体算法，",
-              "startFrame": 30,
+              "startFrame": 123,
               "durationFrames": 35
             },
             {
               "text": "以及咱们人类大脑底层的出厂设置。",
-              "startFrame": 65,
+              "startFrame": 158,
               "durationFrames": 35
             }
           ],
-          "order": 3,
+          "order": 2,
           "param": {
-            "imageSrc": "媒体算法运作的抽象概念图",
+            "imageSrc": "焦虑的人们感到恐慌",
             "enterEffect": "breathe",
             "anchors": []
           },
-          "totalDurationFrames": 100
+          "totalDurationFrames": 193
         },
         {
-          "narrativeType": "CASE",
-          "reasoning": "决策树：Step 8；自检：平缓叙述，举例说明，单图即可，无特殊结构。",
+          "narrativeType": "LOGIC",
+          "reasoning": "决策树：Step 8；自检：平缓叙述，单图即可，无特殊结构。",
           "template": "CENTER_FOCUS",
           "content": [
             {
@@ -148,10 +134,10 @@
               "durationFrames": 30
             }
           ],
-          "order": 4,
+          "order": 3,
           "param": {
-            "imageSrc": "媒体记者在发布新闻的速写",
-            "enterEffect": "slideBottom",
+            "imageSrc": "媒体记者正在拍摄的场景",
+            "enterEffect": "breathe",
             "anchors": []
           },
           "totalDurationFrames": 154
@@ -182,17 +168,17 @@
               "durationFrames": 30
             }
           ],
-          "order": 5,
+          "order": 4,
           "param": {
-            "imageSrc": "算法推送短视频的动画",
-            "enterEffect": "zoomIn",
+            "imageSrc": "社交媒体算法运作的示意图",
+            "enterEffect": "slideBottom",
             "anchors": []
           },
           "totalDurationFrames": 120
         },
         {
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树：Step 8；自检：总结陈述，单图即可，无特殊结构。",
+          "reasoning": "决策树：Step 8；自检：平缓叙述，单图即可，无特殊结构。",
           "template": "CENTER_FOCUS",
           "content": [
             {
@@ -206,9 +192,9 @@
               "durationFrames": 73
             }
           ],
-          "order": 6,
+          "order": 5,
           "param": {
-            "imageSrc": "监控摄像头拍摄的房屋内部",
+            "imageSrc": "一个被困在玻璃罩里的人的简笔画",
             "enterEffect": "breathe",
             "anchors": []
           },
@@ -218,11 +204,11 @@
     },
     {
       "sceneId": "scene_2",
-      "sceneName": "解释原因：可得性启发偏见",
+      "sceneName": "解释可得性启发偏见",
       "items": [
         {
           "narrativeType": "LOGIC",
-          "reasoning": "决策树：Step 4 -> 解释专业术语/模型名 -> `CONCEPT_CARD`；自检：符合概念解释。",
+          "reasoning": "决策树：Step 4 -> 解释专业术语/模型名 -> CONCEPT_CARD；自检：无连续CENTER_FOCUS",
           "template": "CONCEPT_CARD",
           "content": [
             {
@@ -243,7 +229,7 @@
           ],
           "order": 1,
           "param": {
-            "imageSrc": "大脑被绳索捆绑简笔画图标",
+            "imageSrc": "大脑思考简笔画图标",
             "conceptName": "可得性启发",
             "anchors": []
           },
@@ -251,8 +237,8 @@
         },
         {
           "narrativeType": "LOGIC",
-          "reasoning": "决策树：Step 4 -> 揭秘、拆穿、强调真相/底层逻辑 -> `MAGNIFYING_GLASS`；自检：存在揭示性落点句「完全取决于这件事在脑子里“好不好想起来”」，锚点为「好不好想起来」。",
-          "template": "MAGNIFYING_GLASS",
+          "reasoning": "决策树：Step 8 -> 平缓叙述，单图即可 -> CENTER_FOCUS；自检：无连续CENTER_FOCUS",
+          "template": "CENTER_FOCUS",
           "content": [
             {
               "text": "说人话就是：",
@@ -277,28 +263,15 @@
           ],
           "order": 2,
           "param": {
-            "anchors": [
-              {
-                "text": "特别偷懒",
-                "showFrom": 1,
-                "color": "#EF4444",
-                "anim": "popIn",
-                "audioEffect": "ping"
-              },
-              {
-                "text": "好不好想起来",
-                "showFrom": 3,
-                "color": "#000000",
-                "anim": "highlight",
-                "audioEffect": "woosh"
-              }
-            ]
+            "imageSrc": "一个卡通大脑躺在吊床上，旁边有饮料和遮阳伞，表示大脑很懒惰",
+            "enterEffect": "breathe",
+            "anchors": []
           },
           "totalDurationFrames": 136
         },
         {
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树：Step 8 -> 平缓叙述、单图即可 -> `CENTER_FOCUS`；自检：无特殊结构，适合单图。",
+          "narrativeType": "CASE",
+          "reasoning": "决策树：Step 8 -> 平缓叙述，单图即可 -> CENTER_FOCUS；自检：无连续CENTER_FOCUS",
           "template": "CENTER_FOCUS",
           "content": [
             {
@@ -314,7 +287,7 @@
           ],
           "order": 3,
           "param": {
-            "imageSrc": "无数耸人听闻的头条新闻图片和极端画面",
+            "imageSrc": "无数耸人听闻的媒体头条堆积如山",
             "enterEffect": "fadeIn",
             "anchors": []
           },
@@ -322,7 +295,7 @@
         },
         {
           "narrativeType": "CASE",
-          "reasoning": "决策树：Step 8 -> 平缓叙述、单图即可 -> `CENTER_FOCUS`；自检：举例说明，适合单图。",
+          "reasoning": "决策树：Step 8 -> 平缓叙述，单图即可 -> CENTER_FOCUS；自检：无连续CENTER_FOCUS",
           "template": "CENTER_FOCUS",
           "content": [
             {
@@ -348,7 +321,7 @@
           ],
           "order": 4,
           "param": {
-            "imageSrc": "飞机失事坠毁的画面",
+            "imageSrc": "飞机失事的简笔画图标，浓烟滚滚",
             "enterEffect": "fadeIn",
             "anchors": []
           },
@@ -356,7 +329,7 @@
         },
         {
           "narrativeType": "DATA",
-          "reasoning": "决策树：Step 1 -> 两项指标同框对比 -> `STAT_COMPARE`；自检：飞机出事概率 vs 电动车被撞概率。",
+          "reasoning": "决策树：Step 1 -> 两项指标同框对比 -> STAT_COMPARE; 自检：远比可抽象为两个非负整数含义",
           "template": "STAT_COMPARE",
           "content": [
             {
@@ -380,17 +353,17 @@
             "leftValue": 1,
             "rightValue": 1000000,
             "leftLabel": "飞机出事概率",
-            "rightLabel": "骑电动车被撞概率",
-            "leftSrc": "airplane taking off",
-            "rightSrc": "person riding scooter on city street",
+            "rightLabel": "骑车被撞概率",
+            "leftSrc": "Airplane taking off with a smooth flight",
+            "rightSrc": "Motorcycle crashing on the street",
             "anchors": []
           },
           "totalDurationFrames": 95
         },
         {
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树：Step 4 -> 揭秘、拆穿、强调真相/底层逻辑 -> `MAGNIFYING_GLASS`；自检：存在揭示性落点句「容易想起来，绝不等于很常见」，锚点为「容易想起来，绝不等于很常见」。",
-          "template": "MAGNIFYING_GLASS",
+          "reasoning": "决策树：Step 5 -> 强认知翻转 -> COGNITIVE_SHIFT；自检：无连续CENTER_FOCUS",
+          "template": "COGNITIVE_SHIFT",
           "content": [
             {
               "text": "咱们必须认清一个残酷的真相：",
@@ -410,28 +383,18 @@
           ],
           "order": 6,
           "param": {
-            "anchors": [
-              {
-                "text": "残酷的真相",
-                "showFrom": 0,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
-              },
-              {
-                "text": "绝不等于很常见",
-                "showFrom": 2,
-                "color": "#000000",
-                "anim": "popIn",
-                "audioEffect": "ping"
-              }
-            ]
+            "notText": "容易想起来",
+            "butText": "很常见",
+            "butSrc": "人群中少数人的高频出现",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
           },
           "totalDurationFrames": 91
         },
         {
           "narrativeType": "LOGIC",
-          "reasoning": "决策树：Step 8 -> 平缓叙述、单图即可 -> `CENTER_FOCUS`；自检：解释原因，适合单图。",
+          "reasoning": "决策树：Step 8 -> 平缓叙述，单图即可 -> CENTER_FOCUS；自检：无连续CENTER_FOCUS",
           "template": "CENTER_FOCUS",
           "content": [
             {
@@ -457,15 +420,15 @@
           ],
           "order": 7,
           "param": {
-            "imageSrc": "充满冲突的暴力画面",
-            "enterEffect": "fadeIn",
+            "imageSrc": "一堆文件和数据图标，以及一个醒目的红色感叹号",
+            "enterEffect": "zoomIn",
             "anchors": []
           },
           "totalDurationFrames": 127
         },
         {
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树：Step 8 -> 平缓叙述、单图即可 -> `CENTER_FOCUS`；自检：总结，适合单图。",
+          "reasoning": "决策树：Step 8 -> 平缓叙述，单图即可 -> CENTER_FOCUS；自检：无连续CENTER_FOCUS",
           "template": "CENTER_FOCUS",
           "content": [
             {
@@ -481,7 +444,7 @@
           ],
           "order": 8,
           "param": {
-            "imageSrc": "媒体播放新闻画面的场景",
+            "imageSrc": "媒体屏幕上播放着各种耸人听闻的极端新闻画面",
             "enterEffect": "fadeIn",
             "anchors": []
           },
@@ -491,12 +454,12 @@
     },
     {
       "sceneId": "scene_3",
-      "sceneName": "给出解决方案：防御锦囊",
+      "sceneName": "提供防御方法",
       "items": [
         {
           "narrativeType": "TRANSITION",
-          "reasoning": "决策树：Step 3 -> METHOD_STACK；本句是过渡句，给出防御锦囊的标题，后面会有解释展开。",
-          "template": "METHOD_STACK",
+          "reasoning": "决策树：Step 8 -> 默认；自检：平缓叙述，单图即可。",
+          "template": "CENTER_FOCUS",
           "content": [
             {
               "text": "既然知道了大脑的这个Bug，",
@@ -507,38 +470,50 @@
               "text": "咱们以后该怎么保护自己？",
               "startFrame": 31,
               "durationFrames": 30
-            },
-            {
-              "text": "给你两个极低门槛的防御锦囊：",
-              "startFrame": 61,
-              "durationFrames": 31
             }
           ],
           "order": 1,
           "param": {
-            "title": "保护大脑",
-            "imageSrc": "大脑被防护罩保护，免受外界信息侵扰的卡通图",
-            "notes": [
+            "imageSrc": "一个大脑出现bug的卡通形象",
+            "enterEffect": "zoomIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 61
+        },
+        {
+          "narrativeType": "EXPLAIN",
+          "reasoning": "决策树：Step 3 -> 结构化多分点；自检：两个防御方法，符合2～4个可独立成画的并列主体。",
+          "template": "LIST_MULTI_GROUP",
+          "content": [
+            {
+              "text": "给你两个极低门槛的防御锦囊：",
+              "startFrame": 0,
+              "durationFrames": 31
+            }
+          ],
+          "order": 2,
+          "param": {
+            "groups": [
               {
-                "text": "了解大脑Bug",
-                "showFrom": 0
+                "textIndex": 0,
+                "image": {
+                  "src": "锦囊妙计"
+                }
               },
               {
-                "text": "学会保护自己",
-                "showFrom": 1
-              },
-              {
-                "text": "防御小技巧",
-                "showFrom": 2
+                "textIndex": 0,
+                "image": {
+                  "src": "防御盾牌"
+                }
               }
             ],
             "anchors": []
           },
-          "totalDurationFrames": 92
+          "totalDurationFrames": 31
         },
         {
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树：Step 3 -> METHOD_STACK；本句给出第一个方法标题和后续的解释。",
+          "narrativeType": "EXPLAIN",
+          "reasoning": "决策树：Step 3 -> 一个方法标题 + 解释展开；自检：符合一个观点标题+2～4句解释展开的模式。",
           "template": "METHOD_STACK",
           "content": [
             {
@@ -572,7 +547,7 @@
               "durationFrames": 35
             }
           ],
-          "order": 2,
+          "order": 3,
           "param": {
             "title": "警惕情绪画面",
             "imageSrc": "被耸动新闻画面包围、神情紧张的人物简笔画",
@@ -591,8 +566,8 @@
           "totalDurationFrames": 200
         },
         {
-          "narrativeType": "LOGIC",
-          "reasoning": "决策树：Step 3 -> METHOD_STACK；本句给出第二个方法标题和后续的解释。",
+          "narrativeType": "EXPLAIN",
+          "reasoning": "决策树：Step 3 -> 一个方法标题 + 解释展开；自检：符合一个观点标题+2～4句解释展开的模式。",
           "template": "METHOD_STACK",
           "content": [
             {
@@ -621,18 +596,18 @@
               "durationFrames": 30
             }
           ],
-          "order": 3,
+          "order": 4,
           "param": {
             "title": "数据对抗直觉",
-            "imageSrc": "一个人理性地分析统计图表的简笔画",
+            "imageSrc": "一个人正在查看统计图表的简笔画",
             "notes": [
               {
-                "text": "危险与否，让数字说话",
-                "showFrom": 2
+                "text": "搜一下真实统计概率",
+                "showFrom": 3
               },
               {
-                "text": "搜一下真实概率",
-                "showFrom": 3
+                "text": "让数字接管情绪",
+                "showFrom": 4
               }
             ],
             "anchors": []
@@ -641,7 +616,7 @@
         },
         {
           "narrativeType": "CONCLUSION",
-          "reasoning": "决策树：Step 5 -> TEXT_FOCUS；本句是总结性结论，有较强的情绪和金句感。",
+          "reasoning": "决策树：Step 5 -> 金句；自检：结论句，强调数据的重要性。",
           "template": "TEXT_FOCUS",
           "content": [
             {
@@ -653,24 +628,9 @@
               "text": "学会把“眼见为实”升级为“数据为实”。",
               "startFrame": 44,
               "durationFrames": 42
-            },
-            {
-              "text": "做自己大脑的主人，",
-              "startFrame": 86,
-              "durationFrames": 30
-            },
-            {
-              "text": "不当流量的提线木偶，",
-              "startFrame": 116,
-              "durationFrames": 30
-            },
-            {
-              "text": "就是咱们最高级的自我保护。",
-              "startFrame": 146,
-              "durationFrames": 30
             }
           ],
-          "order": 4,
+          "order": 5,
           "param": {
             "coreSentence": "把“眼见为实”升级为“数据为实”",
             "anchors": [
@@ -678,19 +638,48 @@
                 "text": "眼见为实",
                 "showFrom": 1,
                 "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
+                "anim": "highlight",
+                "audioEffect": "woosh"
               },
               {
                 "text": "数据为实",
                 "showFrom": 1,
                 "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
+                "anim": "highlight",
+                "audioEffect": null
               }
             ]
           },
-          "totalDurationFrames": 176
+          "totalDurationFrames": 86
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "reasoning": "决策树：Step 8 -> 默认；自检：平缓叙述，单图即可。",
+          "template": "CENTER_FOCUS",
+          "content": [
+            {
+              "text": "做自己大脑的主人，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "不当流量的提线木偶，",
+              "startFrame": 30,
+              "durationFrames": 30
+            },
+            {
+              "text": "就是咱们最高级的自我保护。",
+              "startFrame": 60,
+              "durationFrames": 30
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "提线木偶的剪影",
+            "enterEffect": "zoomIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 90
         }
       ]
     }

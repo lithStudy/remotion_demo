@@ -153,29 +153,34 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 			<div
 				style={{
 					position: "absolute",
-					left: "8%",
-					right: "8%",
-					top: "30%",
-					bottom: "20%",
+					left: "7%",
+					right: "7%",
+					top: "28%",
+					bottom: "18%",
 					display: "flex",
-					alignItems: "center",
-					justifyContent: "space-between",
-					gap: 32,
+					flexDirection: "column",
+					alignItems: "stretch",
+					justifyContent: "flex-start",
+					gap: 24,
 				}}
 			>
+				{/* 图片在上，尺寸收小为辅 */}
 				<div
 					style={{
-						flex: "0 0 42%",
-						height: "100%",
-						borderRadius: 32,
+						flex: "0 0 auto",
+						alignSelf: "center",
+						width: "clamp(160px, 22vw, 260px)",
+						maxHeight: "min(32vh, 320px)",
+						aspectRatio: "4 / 3",
+						borderRadius: 20,
 						backgroundColor: "#F8FAFC",
-						border: "3px solid #E5E7EB",
-						boxShadow: "0 16px 42px rgba(17, 24, 39, 0.08)",
+						border: "2px solid #E5E7EB",
+						boxShadow: "0 10px 28px rgba(17, 24, 39, 0.06)",
 						display: "flex",
 						alignItems: "center",
 						justifyContent: "center",
 						overflow: "hidden",
-						transform: `translateY(${interpolate(imageEnter, [0, 1], [28, 0], {
+						transform: `translateY(${interpolate(imageEnter, [0, 1], [20, 0], {
 							extrapolateLeft: "clamp",
 							extrapolateRight: "clamp",
 						})}px)`,
@@ -185,19 +190,22 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 					<Img
 						src={getSafeImageSrc(imageSrc)}
 						style={{
-							maxWidth: "78%",
-							maxHeight: "78%",
+							maxWidth: "72%",
+							maxHeight: "72%",
 							objectFit: "contain",
 						}}
 					/>
 				</div>
 
+				{/* 文字在下为主，占满宽度 */}
 				<div
 					style={{
-						flex: "1 1 auto",
+						flex: "1 1 0",
+						minHeight: 0,
+						minWidth: 0,
 						display: "flex",
 						flexDirection: "column",
-						gap: 18,
+						gap: 22,
 					}}
 				>
 					{visibleNotes.map((note, index) => {
@@ -215,34 +223,26 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 							<div
 								key={`${note.text}-${index}`}
 								style={{
-									padding: "18px 22px",
-									borderRadius: 22,
+									padding: "22px 28px",
+									borderRadius: 20,
 									backgroundColor: "#FFFFFF",
 									border: "2px solid #E5E7EB",
-									boxShadow: "0 10px 28px rgba(17, 24, 39, 0.06)",
+									boxShadow: "0 12px 36px rgba(17, 24, 39, 0.07)",
 									opacity: noteEnter,
-									transform: `translateX(${interpolate(noteEnter, [0, 1], [32, 0], {
+									transform: `translateY(${interpolate(noteEnter, [0, 1], [20, 0], {
 										extrapolateLeft: "clamp",
 										extrapolateRight: "clamp",
 									})}px)`,
 								}}
 							>
+								
 								<div
 									style={{
-										fontSize: 18,
-										fontWeight: 700,
-										color: "#B91C1C",
-										marginBottom: 6,
-									}}
-								>
-									解释 {index + 1}
-								</div>
-								<div
-									style={{
-										fontSize: 28,
-										fontWeight: 700,
-										lineHeight: 1.4,
+										fontSize: 34,
+										fontWeight: 800,
+										lineHeight: 1.45,
 										color: "#1F2937",
+										textAlign: "center",
 									}}
 								>
 									{note.text}

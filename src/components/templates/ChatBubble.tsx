@@ -10,7 +10,7 @@ export const templateMeta = {
 	"name": "CHAT_BUBBLE",
 	"componentExport": "BWChatBubble",
 	"description":
-		"适用：模拟用户/读者心声、弹窗式疑问、痛点自问。\n差异：纯金句大字无对话感用 TEXT_FOCUS；需配图但非气泡口径用 CENTER_FOCUS。\n参数：imageSrc 为人物/侧脸简笔图标；content 宜短。",
+		"适用：显式对话/弹幕/评论体（如“我：…你：…”、“网友：…”）的角色化心声。\n不适用：仅“你是不是也…”这类单句发问但整体仍是平铺叙述时（此时优先 CENTER_FOCUS）。\n差异：纯金句大字无对话感用 TEXT_FOCUS；需配图但非气泡口径用 CENTER_FOCUS。\n参数：imageSrc 为人物/侧脸简笔图标；可选 anchors 用于高亮气泡内的关键词。",
 	"psychology": "社会投射",
 	"image_count": 1,
 	"param_schema": {
@@ -19,7 +19,32 @@ export const templateMeta = {
 			"imageSrc": {
 				"type": "string",
 				"format": "image_prompt",
-				"description": "人物图标描述",
+				"description": "人物图标描述（用于承载对话/弹幕的“说话者”形象）",
+			},
+			"anchors": {
+				"type": "array",
+				"description": "可选；用于高亮气泡内容子串。showFrom 须落在当前 content 条数范围内",
+				"items": {
+					"type": "object",
+					"required": ["text", "showFrom"],
+					"properties": {
+						"text": { "type": "string", "description": "要高亮的关键词/短语（必须是气泡内容的子串）" },
+						"showFrom": {
+							"type": "integer",
+							"format": "content_index",
+							"description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃",
+						},
+						"color": { "type": "string" },
+						"anim": {
+							"type": "string",
+							"enum": ["spring", "slideUp", "popIn", "highlight"],
+						},
+						"audioEffect": {
+							"type": "string",
+							"enum": ["impact_thud", "ping", "woosh"],
+						},
+					},
+				},
 			},
 		},
 		"required": ["imageSrc"],
@@ -28,6 +53,9 @@ export const templateMeta = {
 		"template": "CHAT_BUBBLE",
 		"param": {
 			"imageSrc": "困惑的人简笔画图标",
+			"anchors": [
+				{ "text": "太危险", "showFrom": 0, "color": "#FF8C00", "anim": "popIn", "audioEffect": "ping" },
+			],
 		},
 	},
 } as const;

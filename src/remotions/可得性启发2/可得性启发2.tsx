@@ -8,18 +8,18 @@ import { Scene1, calculateScene1Duration } from "./scenes/Scene1";
 import { Scene2, calculateScene2Duration } from "./scenes/Scene2";
 import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
 
-export const 可得性启发1Schema = z.object({});
+export const 可得性启发2Schema = z.object({});
 
 const TRANSITION_DURATION = 15;
 const SCENE_END_PADDING = 20;
 
 const sceneConfigs = [
-    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引出问题：恐慌与焦虑的来源" },
-    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "解释原因：可得性启发偏见" },
-    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "给出解决方案：防御锦囊" },
+    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引出恐慌情绪" },
+    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "解释可得性启发偏见" },
+    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "提供防御方法" },
 ];
 
-export const TOTAL_DURATION_可得性启发1 =
+export const TOTAL_DURATION_可得性启发2 =
     sceneConfigs.reduce((total, c) => total + c.duration, 0) -
     (sceneConfigs.length - 1) * TRANSITION_DURATION;
 
@@ -95,7 +95,7 @@ const ProgressBar: React.FC = () => {
     );
 };
 
-export const 可得性启发1: React.FC<z.infer<typeof 可得性启发1Schema>> = () => {
+export const 可得性启发2: React.FC<z.infer<typeof 可得性启发2Schema>> = () => {
     const frame = useCurrentFrame();
     const bgShiftX = interpolate(frame % 240, [0, 120, 240], [-4, 4, -4], {
         extrapolateLeft: "clamp",

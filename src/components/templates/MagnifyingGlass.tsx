@@ -15,7 +15,7 @@ export const templateMeta = {
 	"name": "MAGNIFYING_GLASS",
 	"componentExport": "BWMagnifyingGlass",
 	"description":
-		"适用：揭秘、拆穿表象、强调「真相/底层逻辑」。\n差异：本模板要求 param.anchors 非空，且通过 showFrom 关联 content；非揭秘句勿用。\n参数：anchors.text 对准要聚焦的关键词。",
+		"适用：揭秘、拆穿表象、强调「真相/底层逻辑」，且口播中存在明确的揭示性落点句（如“底层逻辑是…”）。\n差异：本模板要求 param.anchors 非空，且通过 showFrom 关联 content；非揭秘句勿用；不要用它打包多个机制+多个例子。\n参数：anchors.text 对准要聚焦的关键词（建议 1～2 个高价值锚点）。",
 	"psychology": "好奇心缺口",
 	"image_count": 0,
 	"param_schema": {
@@ -24,7 +24,8 @@ export const templateMeta = {
 			"anchors": {
 				"type": "array",
 				"minItems": 1,
-				"description": "必填且非空；每项通过 showFrom 对齐 content 分句，不要用顶层其它字段代替 anchors",
+				"maxItems": 3,
+				"description": "必填且非空（建议 1～2 个高价值锚点）；每项通过 showFrom 对齐 content 分句。锚点应落在“揭示性落点句”或其核心关键词上，不要把整段说明塞满锚点",
 				"items": {
 					"type": "object",
 					"required": ["text", "showFrom"],

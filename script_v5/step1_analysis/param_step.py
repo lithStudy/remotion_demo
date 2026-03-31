@@ -70,9 +70,29 @@ def analyze_param_for_item(
             "CONTENT_STR": content_str,
         },
     )
+    def _normalize_param_root(parsed):
+        """LLM 偶发输出 JSON 数组或单元素包一层，统一成含 param 的 dict。"""
+        if isinstance(parsed, dict):
+            return parsed
+        if isinstance(parsed, list):
+            if len(parsed) == 1 and isinstance(parsed[0], dict):
+                return parsed[0]
+            for el in parsed:
+                if isinstance(el, dict) and "param" in el:
+                    return el
+        return None
+
     try:
         resp = generate_with_retry(client, model, prompt, append_ai_log=append_ai_log)
         res_json = parse_json_from_response(resp.text)
+        res_json = _normalize_param_root(res_json)
+        if not isinstance(res_json, dict):
+            raise ScriptValidationError(
+                "LLM 返回的根节点非对象（expected { \"param\": ... }）",
+                order=item.get("order"),
+                template=template_name,
+                path="item.param",
+            )
         raw_param = res_json.get("param", {})
         if not isinstance(raw_param, dict):
             raise ScriptValidationError(

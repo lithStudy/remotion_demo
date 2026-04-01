@@ -6,6 +6,7 @@ import React from "react";
 import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { BW_TEXT, getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
+import { FirefliesBackdrop } from "./FirefliesBackdrop";
 
 export const templateMeta = {
 	"name": "COGNITIVE_SHIFT",
@@ -98,6 +99,14 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 	const shiftProgress = spring({ frame: frame - shiftStartFrame, fps, config: { damping: 12, stiffness: 100 }, durationInFrames: 20 });
 	const butEnter = spring({ frame: frame - butStartFrame, fps, config: { damping: 10, stiffness: 150 }, durationInFrames: 20 });
 
+	const firefliesOpacity =
+		notStartFrame <= 0
+			? 0
+			: interpolate(frame, [0, notStartFrame, notStartFrame + 15], [1, 1, 0], {
+					extrapolateLeft: "clamp",
+					extrapolateRight: "clamp",
+				});
+
 	const strikeWidth = interpolate(shiftProgress, [0.2, 0.8], [0, 100], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 	const notOpacity = interpolate(shiftProgress, [0, 1], [1, 0.3]);
 	const notScale = interpolate(shiftProgress, [0, 1], [1, 0.85]);
@@ -109,6 +118,7 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 
 	return (
 		<AbsoluteFill style={{ ...style }}>
+			<FirefliesBackdrop opacity={firefliesOpacity} seed={`COGNITIVE_SHIFT-${notStartFrame}`} />
 			<div style={{
 				display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
 				height: "85%", // 留出底部字幕空间

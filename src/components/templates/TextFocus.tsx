@@ -96,6 +96,21 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 		: 1;
 
 	const mainText = coreSentence?.trim();
+	const headlineForSizing =
+		mainText ||
+		(content ?? []).map((item) => item.text).join("").trim();
+	const charCount = Math.max(1, [...headlineForSizing].length);
+	// 根据标题字符数动态调整字号——标题字符数越多，字号越小
+	const titleFontSize = interpolate(
+		charCount,            // 字符数
+		[6, 12, 18, 26, 36],  // 不同字符长度的区间
+		[88, 76, 62, 52, 42], // 对应区间字号（单位：px），字符越多字号越小
+		{
+			extrapolateLeft: "clamp",   // 小于最小区间时，字号不会进一步变大
+			extrapolateRight: "clamp",  // 超过最大区间时，字号不会进一步变小
+		},
+	);
+
 	// 按顺序在 coreSentence 上叠加大字高亮
 	const highlightedText = (coreSentenceAnchors ?? []).reduce<React.ReactNode[]>(
 		(nodes, item, anchorIdx) => {
@@ -148,7 +163,7 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 					transformOrigin: "center center",
 					padding: "0 60px",
 					textAlign: "center",
-					fontSize: 72,
+					fontSize: titleFontSize,
 					fontWeight: 900,
 					color: "#111111",
 					lineHeight: 1.3,

@@ -13,6 +13,7 @@ import {
 } from "./shared";
 import { normalizeContent, TemplateContentRenderer } from "./TemplateContentRenderer";
 import { BWAnchorWord } from "../BWPrimitives";
+import { FirefliesBackdrop } from "./FirefliesBackdrop";
 
 export const templateMeta = {
 	"name": "LIST_MULTI_GROUP",
@@ -187,6 +188,10 @@ export const BWMultiImage: React.FC<BWMultiImageProps> = ({
 		index,
 		startFrame: group.image.startFrame ?? 0,
 	}));
+	const earliestStartFrame =
+		imageStates.length === 0
+			? 0
+			: imageStates.reduce((min, s) => Math.min(min, s.startFrame), imageStates[0]!.startFrame);
 	const visibleStates = imageStates
 		.filter((state) => frame >= state.startFrame)
 		.sort((a, b) => {
@@ -211,8 +216,17 @@ export const BWMultiImage: React.FC<BWMultiImageProps> = ({
 
 	const prevReflowStates = visibleStates.filter((s) => s.startFrame < latestVisibleStartFrame);
 
+	const firefliesOpacity =
+		visibleCount > 0 || earliestStartFrame <= 0
+			? 0
+			: interpolate(frame, [0, earliestStartFrame, earliestStartFrame + 15], [1, 1, 0], {
+					extrapolateLeft: "clamp",
+					extrapolateRight: "clamp",
+				});
+
 	return (
 		<AbsoluteFill style={style}>
+			<FirefliesBackdrop opacity={firefliesOpacity} seed={`LIST_MULTI_GROUP-${earliestStartFrame}`} />
 			{resolvedGroups.map((group, i) => {
 				const order = orderByIndex.get(i);
 				const isVisible = order !== undefined;

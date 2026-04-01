@@ -21,6 +21,7 @@ import {
 	type TemplateBaseProps,
 } from "./shared";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
+import { FirefliesBackdrop } from "./FirefliesBackdrop";
 
 export const templateMeta = {
 	"name": "BEAT_SEQUENCE",
@@ -229,6 +230,15 @@ export const BWBeatSequence: React.FC<BWBeatSequenceProps> = ({
 	const breatheScale = 1 + Math.sin(frame * 0.075) * 0.02;
 	const rootScale = tone === "alert" ? breatheScale : 1;
 
+	const firstStartFrame = items[0]?.startFrame ?? 0;
+	const firefliesOpacity =
+		firstStartFrame <= 0
+			? 0
+			: interpolate(frame, [0, firstStartFrame, firstStartFrame + 15], [1, 1, 0], {
+					extrapolateLeft: "clamp",
+					extrapolateRight: "clamp",
+				});
+
 	return (
 		<AbsoluteFill
 			style={{
@@ -237,6 +247,7 @@ export const BWBeatSequence: React.FC<BWBeatSequenceProps> = ({
 				...style,
 			}}
 		>
+			<FirefliesBackdrop opacity={firefliesOpacity} seed={`BEAT_SEQUENCE-${firstStartFrame}`} />
 			{Array.from({ length: visibleCount }, (_, i) => (
 				<BeatSequenceImageSlot
 					key={i}

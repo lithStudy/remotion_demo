@@ -13,32 +13,32 @@
             {
               "text": "明明昨天还咳得撕心裂肺，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 52
             },
             {
               "text": "今天喝了那碗苦得要命的汤药，",
-              "startFrame": 30,
-              "durationFrames": 31
+              "startFrame": 51,
+              "durationFrames": 63
             },
             {
               "text": "症状竟然真减轻了。",
-              "startFrame": 61,
-              "durationFrames": 30
+              "startFrame": 113,
+              "durationFrames": 59
             },
             {
               "text": "于是我们赶紧发个朋友圈，",
-              "startFrame": 91,
-              "durationFrames": 30
+              "startFrame": 172,
+              "durationFrames": 45
             },
             {
               "text": "感慨一句老祖宗的东西就是神！",
-              "startFrame": 121,
-              "durationFrames": 31
+              "startFrame": 217,
+              "durationFrames": 79
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一个病人咳嗽的画面",
+            "imageSrc": "images/双盲实验/scene_1_1.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -57,7 +57,7 @@
               }
             ]
           },
-          "totalDurationFrames": 152
+          "totalDurationFrames": 296
         },
         {
           "narrativeType": "LOGIC",
@@ -67,27 +67,27 @@
             {
               "text": "但很多时候，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 39
             },
             {
               "text": "你可能是掉进了一个温柔的陷阱：",
-              "startFrame": 30,
-              "durationFrames": 33
+              "startFrame": 38,
+              "durationFrames": 65
             },
             {
               "text": "我们习惯于把好转的功劳，",
-              "startFrame": 63,
-              "durationFrames": 30
+              "startFrame": 102,
+              "durationFrames": 70
             },
             {
               "text": "全部归结于那碗刚刚喝下的水，",
-              "startFrame": 93,
-              "durationFrames": 31
+              "startFrame": 172,
+              "durationFrames": 74
             }
           ],
           "order": 2,
           "param": {
-            "imageSrc": "温柔却危险的陷阱意象：柔软的丝绸般的网，轻轻包裹住一个人的脚踝，黑白极简风",
+            "imageSrc": "images/双盲实验/scene_1_2.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -99,7 +99,7 @@
               }
             ]
           },
-          "totalDurationFrames": 124
+          "totalDurationFrames": 246
         },
         {
           "narrativeType": "LOGIC",
@@ -109,39 +109,39 @@
             {
               "text": "却忽略了一个最扎心的事实——",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 67
             },
             {
               "text": "即便你这一天只是躺平、",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 66,
+              "durationFrames": 50
             },
             {
               "text": "喝白开水，",
-              "startFrame": 60,
-              "durationFrames": 30
+              "startFrame": 115,
+              "durationFrames": 26
             },
             {
               "text": "甚至什么都不做，",
-              "startFrame": 90,
-              "durationFrames": 30
+              "startFrame": 140,
+              "durationFrames": 41
             },
             {
               "text": "你的身体本就会开启那套演化了数百万年的自我修复程序。",
-              "startFrame": 120,
-              "durationFrames": 57
+              "startFrame": 181,
+              "durationFrames": 122
             }
           ],
           "order": 3,
           "param": {
             "notText": "药效",
             "butText": "自我修复",
-            "butSrc": "细胞自我修复的微观场景",
+            "butSrc": "images/双盲实验/scene_1_3.png",
             "notContentIndex": 0,
             "butContentIndex": 4,
             "anchors": []
           },
-          "totalDurationFrames": 207
+          "totalDurationFrames": 303
         },
         {
           "narrativeType": "LOGIC",
@@ -151,39 +151,39 @@
             {
               "text": "我们普通人之所以经常被各种神药、",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 77
             },
             {
               "text": "偏方或者所谓的大师收割，",
-              "startFrame": 35,
-              "durationFrames": 30
+              "startFrame": 76,
+              "durationFrames": 67
             },
             {
               "text": "真的不是因为我们不够聪明，",
-              "startFrame": 65,
-              "durationFrames": 30
+              "startFrame": 142,
+              "durationFrames": 56
             },
             {
               "text": "而是因为我们的大脑天生就有一个底层Bug：",
-              "startFrame": 95,
-              "durationFrames": 46
+              "startFrame": 198,
+              "durationFrames": 88
             },
             {
               "text": "极度渴望给结果找一个立竿见影的因果关系。",
-              "startFrame": 141,
-              "durationFrames": 44
+              "startFrame": 285,
+              "durationFrames": 91
             }
           ],
           "order": 4,
           "param": {
             "notText": "不够聪明",
             "butText": "底层Bug",
-            "butSrc": "电路板上的故障代码",
+            "butSrc": "images/双盲实验/scene_1_4.png",
             "notContentIndex": 0,
             "butContentIndex": 3,
             "anchors": []
           },
-          "totalDurationFrames": 185
+          "totalDurationFrames": 377
         },
         {
           "narrativeType": "LOGIC",
@@ -193,22 +193,22 @@
             {
               "text": "算法正是利用了这种认知本能，",
               "startFrame": 0,
-              "durationFrames": 31
+              "durationFrames": 69
             },
             {
               "text": "每天在信息茧房里给我们投喂无数个我吃了这个药、",
-              "startFrame": 31,
-              "durationFrames": 51
+              "startFrame": 68,
+              "durationFrames": 110
             },
             {
               "text": "身体变好了的孤例。",
-              "startFrame": 82,
-              "durationFrames": 30
+              "startFrame": 177,
+              "durationFrames": 51
             }
           ],
           "order": 5,
           "param": {
-            "imageSrc": "大脑思考的抽象概念图",
+            "imageSrc": "images/双盲实验/scene_1_5.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -227,7 +227,7 @@
               }
             ]
           },
-          "totalDurationFrames": 112
+          "totalDurationFrames": 228
         },
         {
           "narrativeType": "CONCLUSION",
@@ -237,17 +237,17 @@
             {
               "text": "在这种单向的叙事围猎下，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 58
             },
             {
               "text": "我们很难察觉，",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 57,
+              "durationFrames": 41
             },
             {
               "text": "自己其实正处于一种智力上的盲区。",
-              "startFrame": 60,
-              "durationFrames": 35
+              "startFrame": 98,
+              "durationFrames": 79
             }
           ],
           "order": 6,
@@ -260,9 +260,11 @@
               }
             ]
           },
-          "totalDurationFrames": 95
+          "totalDurationFrames": 177
         }
-      ]
+      ],
+      "audioSrc": "/audio/双盲实验/scene_1/scene_1.mp3",
+      "totalDurationFrames": 1627
     },
     {
       "sceneId": "scene_2",
@@ -276,31 +278,31 @@
             {
               "text": "在科学方法论上，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 38
             },
             {
               "text": "要拆解这种迷思，",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 37,
+              "durationFrames": 45
             },
             {
               "text": "其实只需要一个硬核概念，",
-              "startFrame": 60,
-              "durationFrames": 30
+              "startFrame": 81,
+              "durationFrames": 70
             },
             {
               "text": "叫作对照组。",
-              "startFrame": 90,
-              "durationFrames": 30
+              "startFrame": 151,
+              "durationFrames": 27
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "对比两个小组的简笔画图标",
+            "imageSrc": "images/双盲实验/scene_2_1.png",
             "enterEffect": "breathe",
             "anchors": []
           },
-          "totalDurationFrames": 120
+          "totalDurationFrames": 178
         },
         {
           "narrativeType": "LOGIC",
@@ -310,32 +312,32 @@
             {
               "text": "简单来说，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 26
             },
             {
               "text": "如果没有对照组，",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 25,
+              "durationFrames": 35
             },
             {
               "text": "你永远无法证明是你的干预有效，",
               "startFrame": 60,
-              "durationFrames": 33
+              "durationFrames": 66
             },
             {
               "text": "还是因为你命大或者身体好。",
-              "startFrame": 93,
-              "durationFrames": 30
+              "startFrame": 125,
+              "durationFrames": 70
             }
           ],
           "order": 2,
           "param": {
-            "leftSrc": "一名研究者举着写有“有效”的牌子，旁边是药瓶/干预符号与向上箭头，背景是模糊的实验记录，信息图风格",
-            "rightSrc": "一个人头顶写着“运气好/命大”的小光环或四叶草符号，旁边是随机骰子与问号，背景是同样的结果但缺少因果证据，信息图风格",
+            "leftSrc": "images/双盲实验/scene_2_2_left.png",
+            "rightSrc": "images/双盲实验/scene_2_2_right.png",
             "dontLabel": "干预有效",
             "doLabel": "命足够大"
           },
-          "totalDurationFrames": 123
+          "totalDurationFrames": 196
         },
         {
           "narrativeType": "LOGIC",
@@ -345,26 +347,26 @@
             {
               "text": "在心理学和传播学里，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 44
             },
             {
               "text": "这通常涉及一个著名的心理暗示，",
-              "startFrame": 30,
-              "durationFrames": 33
+              "startFrame": 43,
+              "durationFrames": 59
             },
             {
               "text": "叫作安慰剂效应。",
-              "startFrame": 63,
-              "durationFrames": 30
+              "startFrame": 102,
+              "durationFrames": 48
             }
           ],
           "order": 3,
           "param": {
-            "imageSrc": "大脑简笔画图标",
+            "imageSrc": "images/双盲实验/scene_2_3.png",
             "conceptName": "安慰剂效应",
             "anchors": []
           },
-          "totalDurationFrames": 93
+          "totalDurationFrames": 151
         },
         {
           "narrativeType": "CASE",
@@ -374,27 +376,27 @@
             {
               "text": "就像小时候妈妈在伤口上吹的那口气，",
               "startFrame": 0,
-              "durationFrames": 37
+              "durationFrames": 74
             },
             {
               "text": "气本身不治病，",
-              "startFrame": 37,
-              "durationFrames": 30
+              "startFrame": 73,
+              "durationFrames": 36
             },
             {
               "text": "但你的大脑觉得它治病，",
-              "startFrame": 67,
-              "durationFrames": 30
+              "startFrame": 109,
+              "durationFrames": 50
             },
             {
               "text": "于是分泌了内啡肽帮你止痛。",
-              "startFrame": 97,
-              "durationFrames": 30
+              "startFrame": 158,
+              "durationFrames": 76
             }
           ],
           "order": 4,
           "param": {
-            "imageSrc": "妈妈温柔地对着孩子受伤的手指吹气的温馨画面",
+            "imageSrc": "images/双盲实验/scene_2_4.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -406,7 +408,7 @@
               }
             ]
           },
-          "totalDurationFrames": 127
+          "totalDurationFrames": 234
         },
         {
           "narrativeType": "LOGIC",
@@ -416,21 +418,21 @@
             {
               "text": "为了彻底排除这种干扰，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 52
             },
             {
               "text": "科学家发明了一种叫作双盲实验的武器。",
-              "startFrame": 30,
-              "durationFrames": 40
+              "startFrame": 51,
+              "durationFrames": 101
             }
           ],
           "order": 5,
           "param": {
-            "imageSrc": "科学实验仪器简笔画图标",
+            "imageSrc": "images/双盲实验/scene_2_5.png",
             "conceptName": "双盲实验",
             "anchors": []
           },
-          "totalDurationFrames": 70
+          "totalDurationFrames": 152
         },
         {
           "narrativeType": "LOGIC",
@@ -440,41 +442,21 @@
             {
               "text": "意思就是，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 26
             },
             {
               "text": "实验的人和被试的人，",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 25,
+              "durationFrames": 51
             },
             {
               "text": "谁都不知道手里拿的是真药还是糖片。",
-              "startFrame": 60,
-              "durationFrames": 37
+              "startFrame": 75,
+              "durationFrames": 78
             }
           ],
           "order": 6,
-          "param": {
-            "imageSrc": "医生给病人做双盲实验的示意图",
-            "enterEffect": "fadeIn",
-            "anchors": [
-              {
-                "text": "双盲实验",
-                "showFrom": 1,
-                "color": "#000000",
-                "anim": "popIn",
-                "audioEffect": "ping"
-              },
-              {
-                "text": "安慰剂",
-                "showFrom": 2,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
-              }
-            ]
-          },
-          "totalDurationFrames": 97
+          "totalDurationFrames": 153
         },
         {
           "narrativeType": "LOGIC",
@@ -484,32 +466,32 @@
             {
               "text": "为什么要这么麻烦？",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 47
             },
             {
               "text": "因为只要医生一个眼神、",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 46,
+              "durationFrames": 45
             },
             {
               "text": "一个暗示，",
-              "startFrame": 60,
-              "durationFrames": 30
+              "startFrame": 91,
+              "durationFrames": 26
             },
             {
               "text": "或者病人一个先入为主的念头，",
-              "startFrame": 90,
-              "durationFrames": 31
+              "startFrame": 116,
+              "durationFrames": 67
             },
             {
               "text": "就能干扰实验结果。",
-              "startFrame": 121,
-              "durationFrames": 30
+              "startFrame": 183,
+              "durationFrames": 51
             }
           ],
           "order": 7,
           "param": {
-            "imageSrc": "医生检查病人的场景",
+            "imageSrc": "images/双盲实验/scene_2_7.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -518,17 +500,10 @@
                 "color": "#EF4444",
                 "anim": "spring",
                 "audioEffect": "impact_thud"
-              },
-              {
-                "text": "双盲实验",
-                "showFrom": 4,
-                "color": "#000000",
-                "anim": "popIn",
-                "audioEffect": "ping"
               }
             ]
           },
-          "totalDurationFrames": 151
+          "totalDurationFrames": 234
         },
         {
           "narrativeType": "LOGIC",
@@ -536,35 +511,40 @@
           "reasoning": "强调真药组和对照组的对比，得出结论，适合用`CENTER_FOCUS`。",
           "content": [
             {
-              "text": "只有当真药组的效果显著好于那个什么都不含的对照组时，",
+              "text": "只有当真药组的效果，",
               "startFrame": 0,
-              "durationFrames": 57
+              "durationFrames": 46
+            },
+            {
+              "text": "显著好于那个什么都不含的对照组时，",
+              "startFrame": 45,
+              "durationFrames": 84
             },
             {
               "text": "我们才能挺直腰板说，",
-              "startFrame": 57,
-              "durationFrames": 30
+              "startFrame": 129,
+              "durationFrames": 51
             },
             {
               "text": "这个药是真的有效。",
-              "startFrame": 87,
-              "durationFrames": 30
+              "startFrame": 180,
+              "durationFrames": 58
             }
           ],
           "order": 8,
           "param": {
-            "imageSrc": "药瓶和对照组实验的示意图",
+            "imageSrc": "images/双盲实验/scene_2_8.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
-                "text": "双盲实验",
+                "text": "用药组好于对照组",
                 "showFrom": 0,
                 "color": null,
                 "anim": "spring",
                 "audioEffect": "impact_thud"
               },
               {
-                "text": "幸存者偏差",
+                "text": "真有效",
                 "showFrom": 2,
                 "color": "#EF4444",
                 "anim": "highlight",
@@ -572,7 +552,7 @@
               }
             ]
           },
-          "totalDurationFrames": 117
+          "totalDurationFrames": 238
         },
         {
           "narrativeType": "CONCLUSION",
@@ -582,17 +562,17 @@
             {
               "text": "如果没有这个逻辑闭环，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 45
             },
             {
               "text": "所有的康复都只是一场概率论里的幸存者偏差。",
-              "startFrame": 30,
-              "durationFrames": 46
+              "startFrame": 44,
+              "durationFrames": 109
             }
           ],
           "order": 9,
           "param": {
-            "imageSrc": "一个天平倾斜，一侧是逻辑，另一侧是随机事件的视觉隐喻",
+            "imageSrc": "images/双盲实验/scene_2_9.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -604,9 +584,11 @@
               }
             ]
           },
-          "totalDurationFrames": 76
+          "totalDurationFrames": 154
         }
-      ]
+      ],
+      "audioSrc": "/audio/双盲实验/scene_2/scene_2.mp3",
+      "totalDurationFrames": 1687
     },
     {
       "sceneId": "scene_3",
@@ -620,33 +602,33 @@
             {
               "text": "为了保护我们自己的钱包和智商，",
               "startFrame": 0,
-              "durationFrames": 33
+              "durationFrames": 59
             },
             {
               "text": "下次再面对那些吹得天花乱坠的偏方时，",
-              "startFrame": 33,
-              "durationFrames": 40
+              "startFrame": 58,
+              "durationFrames": 88
             },
             {
               "text": "我们可以试着装上两件防御武装。",
-              "startFrame": 73,
-              "durationFrames": 33
+              "startFrame": 146,
+              "durationFrames": 79
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一个人思考，同时被金钱和问号包围的抽象概念图",
+            "imageSrc": "images/双盲实验/scene_3_1.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
-                "text": "智商",
+                "text": "保护智商",
                 "showFrom": 0,
                 "color": "#EF4444",
                 "anim": "highlight",
                 "audioEffect": "ping"
               },
               {
-                "text": "偏方",
+                "text": "防范偏方",
                 "showFrom": 1,
                 "color": "#EF4444",
                 "anim": "highlight",
@@ -654,166 +636,89 @@
               }
             ]
           },
-          "totalDurationFrames": 106
+          "totalDurationFrames": 225
         },
         {
           "narrativeType": "LOGIC",
-          "template": "LIST_MULTI_GROUP",
-          "reasoning": "这是第一个建议，属于并列分点，适合使用 LIST_MULTI_GROUP，为后续分点做铺垫。",
+          "template": "METHOD_STACK",
+          "reasoning": "第一条建议是「提醒标题 + 追问展开」，适合 METHOD_STACK（单标题、单主图、随幕逐步出现解释条）。",
           "content": [
             {
-              "text": "第一，",
+              "text": "第一，永远多问一句：",
               "startFrame": 0,
-              "durationFrames": 30
-            },
-            {
-              "text": "永远多问一句：",
-              "startFrame": 30,
-              "durationFrames": 30
+              "durationFrames": 58
             },
             {
               "text": "有没有大规模的双盲对照实验数据支撑？",
-              "startFrame": 60,
-              "durationFrames": 40
+              "startFrame": 57,
+              "durationFrames": 93
+            },
+            {
+              "text": "如果对方只跟你讲我二叔吃了效果好，",
+              "startFrame": 150,
+              "durationFrames": 76
+            },
+            {
+              "text": "那这本质上只是个故事，不是证据。",
+              "startFrame": 225,
+              "durationFrames": 74
             }
           ],
           "order": 2,
           "param": {
-            "groups": [
+            "title": "双盲对照",
+            "imageSrc": "images/双盲实验/scene_3_2.png",
+            "notes": [
               {
-                "textIndex": 0,
-                "image": {
-                  "src": "数字1的图标"
-                }
+                "text": "双盲数据",
+                "showFrom": 1
               },
               {
-                "textIndex": 1,
-                "image": {
-                  "src": "问号简笔画图标"
-                },
-                "anchor": {
-                  "text": "多问一句",
-                  "audioEffect": "ping"
-                }
-              },
-              {
-                "textIndex": 2,
-                "image": {
-                  "src": "双盲实验示意图"
-                },
-                "anchor": {
-                  "text": "双盲实验",
-                  "audioEffect": "impact_thud"
-                }
+                "text": "个例不是证据",
+                "showFrom": 3
               }
-            ],
-            "anchors": []
+            ]
           },
-          "totalDurationFrames": 100
+          "totalDurationFrames": 299
         },
         {
           "narrativeType": "LOGIC",
-          "template": "COGNITIVE_SHIFT",
-          "reasoning": "明确指出“不是...而是...”，属于认知转变，适合使用 COGNITIVE_SHIFT。",
-          "content": [
-            {
-              "text": "如果对方只跟你讲我二叔吃了效果好，",
-              "startFrame": 0,
-              "durationFrames": 37
-            },
-            {
-              "text": "那这本质上只是个故事，",
-              "startFrame": 37,
-              "durationFrames": 30
-            },
-            {
-              "text": "不是证据。",
-              "startFrame": 67,
-              "durationFrames": 30
-            }
-          ],
-          "order": 3,
-          "param": {
-            "notText": "只是个故事",
-            "butText": "不是证据",
-            "butSrc": "显微镜下观察实验数据",
-            "notContentIndex": 1,
-            "butContentIndex": 2,
-            "anchors": []
-          },
-          "totalDurationFrames": 97
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "LIST_MULTI_GROUP",
-          "reasoning": "这是第二个建议，属于并列分点，适合使用 LIST_MULTI_GROUP。",
+          "template": "METHOD_STACK",
+          "reasoning": "第二条建议是「提醒标题 + 一句展开」，适合 METHOD_STACK（单标题、单主图、随幕出现解释条）。",
           "content": [
             {
               "text": "第二，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 14
             },
             {
               "text": "学会区分相关性与因果关系。",
-              "startFrame": 30,
-              "durationFrames": 30
-            }
-          ],
-          "order": 4,
-          "param": {
-            "groups": [
-              {
-                "textIndex": 0,
-                "image": {
-                  "src": "数字2"
-                }
-              },
-              {
-                "textIndex": 1,
-                "image": {
-                  "src": "相关性与因果关系的图示"
-                },
-                "anchor": {
-                  "text": "因果关系",
-                  "audioEffect": "ping"
-                }
-              }
-            ],
-            "anchors": []
-          },
-          "totalDurationFrames": 60
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "提出一个反问，用于引发思考，并无明显结构，使用居中展示即可。",
-          "content": [
+              "startFrame": 13,
+              "durationFrames": 79
+            },
             {
               "text": "感冒好了是因为吃药，",
-              "startFrame": 0,
-              "durationFrames": 30
+              "startFrame": 91,
+              "durationFrames": 43
             },
             {
               "text": "还是因为熬过了那个周期？",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 134,
+              "durationFrames": 56
             }
           ],
-          "order": 5,
+          "order": 3,
           "param": {
-            "imageSrc": "一个人正在思考的简笔画",
-            "enterEffect": "fadeIn",
-            "anchors": [
+            "title": "区分相关与因果",
+            "imageSrc": "images/双盲实验/scene_3_3.png",
+            "notes": [
               {
-                "text": "因果关系",
-                "showFrom": 1,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
+                "text": "先后出现不等于必然因果",
+                "showFrom": 1
               }
             ]
           },
-          "totalDurationFrames": 60
+          "totalDurationFrames": 190
         },
         {
           "narrativeType": "CONCLUSION",
@@ -823,20 +728,20 @@
             {
               "text": "这种逻辑上的审视，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 44
             },
             {
               "text": "是我们在这个充满信息迷雾的时代，",
-              "startFrame": 30,
-              "durationFrames": 35
+              "startFrame": 43,
+              "durationFrames": 70
             },
             {
               "text": "最基础的自保手段。",
-              "startFrame": 65,
-              "durationFrames": 30
+              "startFrame": 113,
+              "durationFrames": 50
             }
           ],
-          "order": 6,
+          "order": 4,
           "param": {
             "coreSentence": "逻辑审视，是时代自保手段",
             "coreSentenceAnchors": [
@@ -850,9 +755,11 @@
               }
             ]
           },
-          "totalDurationFrames": 95
+          "totalDurationFrames": 163
         }
-      ]
+      ],
+      "audioSrc": "/audio/双盲实验/scene_3/scene_3.mp3",
+      "totalDurationFrames": 879
     },
     {
       "sceneId": "scene_4",
@@ -866,34 +773,34 @@
             {
               "text": "我们之所以追求逻辑与理性，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 60
             },
             {
               "text": "并不是为了否定某种传统或情感，",
-              "startFrame": 30,
-              "durationFrames": 33
+              "startFrame": 60,
+              "durationFrames": 69
             },
             {
               "text": "而是为了在这个充满套路的世界里，",
-              "startFrame": 63,
-              "durationFrames": 35
+              "startFrame": 128,
+              "durationFrames": 69
             },
             {
               "text": "拥有一份不被随意操纵的清醒。",
-              "startFrame": 98,
-              "durationFrames": 31
+              "startFrame": 197,
+              "durationFrames": 80
             }
           ],
           "order": 1,
           "param": {
             "notText": "否定传统情感",
             "butText": "拥抱清醒认知",
-            "butSrc": "大脑在星空中闪耀，周围环绕着各种连接的节点",
+            "butSrc": "images/双盲实验/scene_4_1.png",
             "notContentIndex": 1,
             "butContentIndex": 3,
             "anchors": []
           },
-          "totalDurationFrames": 129
+          "totalDurationFrames": 278
         },
         {
           "narrativeType": "LOGIC",
@@ -903,34 +810,34 @@
             {
               "text": "记住，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 18
             },
             {
               "text": "真正的科学从来不怕质疑，",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 17,
+              "durationFrames": 64
             },
             {
               "text": "而那些害怕你提问的，",
-              "startFrame": 60,
-              "durationFrames": 30
+              "startFrame": 80,
+              "durationFrames": 44
             },
             {
               "text": "往往就是想收割你的。",
-              "startFrame": 90,
-              "durationFrames": 30
+              "startFrame": 124,
+              "durationFrames": 48
             }
           ],
           "order": 2,
           "param": {
             "notText": "害怕你提问",
             "butText": "接受质疑",
-            "butSrc": "一个科学家正在接受一群人的提问，氛围活跃",
+            "butSrc": "images/双盲实验/scene_4_2.png",
             "notContentIndex": 2,
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 120
+          "totalDurationFrames": 173
         },
         {
           "narrativeType": "CONCLUSION",
@@ -940,22 +847,22 @@
             {
               "text": "让我们从这一刻起，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 43
             },
             {
               "text": "把评价事物的尺子，",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 42,
+              "durationFrames": 47
             },
             {
               "text": "从我觉得，",
-              "startFrame": 60,
-              "durationFrames": 30
+              "startFrame": 89,
+              "durationFrames": 28
             },
             {
               "text": "交还给证据。",
-              "startFrame": 90,
-              "durationFrames": 30
+              "startFrame": 116,
+              "durationFrames": 35
             }
           ],
           "order": 3,
@@ -967,9 +874,11 @@
               }
             ]
           },
-          "totalDurationFrames": 120
+          "totalDurationFrames": 152
         }
-      ]
+      ],
+      "audioSrc": "/audio/双盲实验/scene_4/scene_4.mp3",
+      "totalDurationFrames": 603
     }
   ],
   "fps": 30

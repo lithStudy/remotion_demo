@@ -51,6 +51,47 @@ export function normalizeContent(
 	return content;
 }
 
+/** 成对标点：句首为开符号而句尾不是对应的闭符号则去掉句首；句尾为闭符号而句首不是对应的开符号则去掉句尾（可多层嵌套重复处理）。 */
+const WRAP_PAIRS: ReadonlyArray<{ open: string; close: string }> = [
+	{ open: "\u201C", close: "\u201D" },
+	{ open: "\u2018", close: "\u2019" },
+	{ open: "(", close: ")" },
+	{ open: "（", close: "）" },
+	{ open: "[", close: "]" },
+	{ open: "【", close: "】" },
+	{ open: "{", close: "}" },
+	{ open: "《", close: "》" },
+	{ open: "「", close: "」" },
+	{ open: "〔", close: "〕" },
+	{ open: '"', close: '"' },
+	{ open: "'", close: "'" },
+];
+
+function stripUnmatchedWrapPunctuation(text: string): string {
+	let s = text;
+	let guard = 0;
+	const max = text.length + 16;
+	while (s.length > 0 && guard++ < max) {
+		const first = s[0];
+		const last = s[s.length - 1];
+		let removed = false;
+		for (const { open, close } of WRAP_PAIRS) {
+			if (first === open && last !== close) {
+				s = s.slice(1);
+				removed = true;
+				break;
+			}
+			if (last === close && first !== open) {
+				s = s.slice(0, -1);
+				removed = true;
+				break;
+			}
+		}
+		if (!removed) break;
+	}
+	return s;
+}
+
 interface TemplateContentRendererProps {
 	content?: ContentItem[];
 	anchors?: AnchorItem[];
@@ -69,9 +110,9 @@ export const TemplateContentRenderer: React.FC<
 	const items = normalizeContent(content);
 	const sanitizeSubtitleText = (text: string) => {
 		const trimmed = text.replace(/[\s\u00A0\u3000]+$/g, "");
-		return trimmed.replace(/[，。,；、,;.]$/, "");
+		const balanced = stripUnmatchedWrapPunctuation(trimmed);
+		return balanced.replace(/[，。,；、,;.]$/, "");
 	};
-	
 
 	return (
 		<>

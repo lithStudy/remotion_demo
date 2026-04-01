@@ -155,7 +155,8 @@ Prompt 文件位于 `prompts/step1/*.md`，占位符为 `__KEY__`，由 `prompt_
 ### 5.7 `_inject_preview_timings`（Step3 前的假时间轴）
 
 - 使用 `utils.extract_content_text` 取 **`item.content`** 每条文案长度，按 **`preview_frames_per_char`**、**`preview_min_duration_frames`** 计算每条 `startFrame` / `durationFrames`，累加得 **`item.totalDurationFrames`**。
-- **`_sanitize_anchors`**：校验 `param.anchors` 的 `showFrom`（须在 **`len(item.content)`** 范围内），非法项丢弃。
+- **`_sanitize_anchors`**：非 `TEXT_FOCUS` 模板校验 `param.anchors` 的 `showFrom`（须在 **`len(item.content)`** 范围内），非法项丢弃。
+- **`_sanitize_core_sentence_anchors`**：`TEXT_FOCUS` 校验 `param.coreSentenceAnchors`（每项 `coreSentenceAnchor` 须为 `coreSentence` 子串），并 **`pop("anchors")`** 去除旧字段。
 
 Step3 生成真实 TTS 后会覆盖这些时间与场景级时长。
 
@@ -176,7 +177,7 @@ Step3 生成真实 TTS 后会覆盖这些时间与场景级时长。
   → 每场景 [B] 2A 分镜 → 2B 选模板 → content_split 生成 item.content
   → 每 item [C] AI 填 param（不含 content）；item.content 为程序切句结果
   → 删除 scene.text / item.text；保留 item.content
-  → 写入 fps → 校验（±1 次修订且锁 content）→ 注入预览帧/anchors
+  → 写入 fps → 校验（±1 次修订且锁 content）→ 注入预览帧与 anchors / coreSentenceAnchors
   → scene-scripts.json + AI 日志
 ```
 

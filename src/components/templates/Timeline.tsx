@@ -84,6 +84,7 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 }) => {
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
+	const contentItems = content ?? [];
 	const lineProgress = interpolate(
 		spring({ frame, fps, config: { damping: 80, stiffness: 40 }, durationInFrames: 50 }),
 		[0, 1],
@@ -118,14 +119,18 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 			/>
 			{images.map((img, i) => {
 				const xFrac = img.position ? (TIMELINE_X_BY_POS[img.position] ?? 0.5) : 0.5;
-				const localFrame = Math.max(0, frame - (img.startFrame ?? 0));
+				const appearFrame =
+					typeof img.textIndex === "number" && img.textIndex >= 0
+						? (contentItems[img.textIndex]?.startFrame ?? img.startFrame ?? 0)
+						: (img.startFrame ?? 0);
+				const localFrame = Math.max(0, frame - appearFrame);
 				const nodeSpring = spring({
 					frame: localFrame,
 					fps,
 					config: { damping: 60, stiffness: 300 },
 					durationInFrames: 15,
 				});
-				const visible = frame >= (img.startFrame ?? 0);
+				const visible = frame >= appearFrame;
 				const isAbove = i % 2 === 0;
 				const iconTop = isAbove ? "28%" : "52%";
 				return (

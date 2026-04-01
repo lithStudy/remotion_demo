@@ -1,0 +1,962 @@
+{
+  "topic": "短视频时代如何避免认知偏差",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "先入为主的偏见",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述一个常见的认知现象，属于引出话题的hook，单图即可，没有其他结构。",
+          "content": [
+            {
+              "text": "你明明没有去过美国，",
+              "startFrame": 0,
+              "durationFrames": 50
+            },
+            {
+              "text": "但提起美国你就会觉得美国很乱、",
+              "startFrame": 49,
+              "durationFrames": 66
+            },
+            {
+              "text": "人民很苦。",
+              "startFrame": 114,
+              "durationFrames": 41
+            },
+            {
+              "text": "你有没有这样的瞬间？",
+              "startFrame": 154,
+              "durationFrames": 46
+            },
+            {
+              "text": "就比如刚刷到一条关于西雅图流浪汉或者芝加哥枪击案的短视频，",
+              "startFrame": 200,
+              "durationFrames": 146
+            },
+            {
+              "text": "你下意识地就会在评论区敲下一句：",
+              "startFrame": 345,
+              "durationFrames": 66
+            },
+            {
+              "text": "“这地方真不是人待的，",
+              "startFrame": 411,
+              "durationFrames": 53
+            },
+            {
+              "text": "还是家里安全。”",
+              "startFrame": 463,
+              "durationFrames": 35
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/可得性启发6/scene_1_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "美国",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "西雅图流浪汉",
+                "showFrom": 4,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "芝加哥枪击案",
+                "showFrom": 4,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 499
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "使用“不是…而是…”的结构，属于典型的认知偏差场景，使用COGNITIVE_SHIFT展示。",
+          "content": [
+            {
+              "text": "你不是那种盲目排外的愤青，",
+              "startFrame": 0,
+              "durationFrames": 65
+            },
+            {
+              "text": "也不是缺乏判断力的键盘侠，",
+              "startFrame": 64,
+              "durationFrames": 67
+            },
+            {
+              "text": "你只是太善良、",
+              "startFrame": 130,
+              "durationFrames": 39
+            },
+            {
+              "text": "太容易感同身受了。",
+              "startFrame": 169,
+              "durationFrames": 55
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "盲目排外的愤青",
+            "butText": "善良、易感同身受",
+            "butSrc": "images/可得性启发6/scene_1_2.png",
+            "notContentIndex": 0,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 224
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，总结原因，单图即可，没有其他结构。",
+          "content": [
+            {
+              "text": "你明明是出于对平静生活的珍惜和对混乱的本能恐惧，",
+              "startFrame": 0,
+              "durationFrames": 124
+            },
+            {
+              "text": "可你的认知坐标系，",
+              "startFrame": 123,
+              "durationFrames": 51
+            },
+            {
+              "text": "却在不知不觉中被算法和流量悄悄置换了。",
+              "startFrame": 173,
+              "durationFrames": 105
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/可得性启发6/scene_1_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "认知坐标系",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "算法",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "流量",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 278
+        }
+      ],
+      "audioSrc": "/audio/可得性启发6/scene_1/scene_1.mp3",
+      "totalDurationFrames": 1002
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "偏见分析",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，解释产生偏见的原因，适合单图展示，无特殊结构。",
+          "content": [
+            {
+              "text": "这种先入为主的偏见真不能全怪我们，",
+              "startFrame": 0,
+              "durationFrames": 86
+            },
+            {
+              "text": "因为我们的大脑在几万年的进化中，",
+              "startFrame": 85,
+              "durationFrames": 74
+            },
+            {
+              "text": "留下了一个致命的底层Bug。",
+              "startFrame": 158,
+              "durationFrames": 58
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/可得性启发6/scene_2_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "底层Bug",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 216
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，为下文做铺垫，适合单图展示，无特殊结构。",
+          "content": [
+            {
+              "text": "你要知道，",
+              "startFrame": 0,
+              "durationFrames": 21
+            },
+            {
+              "text": "现在的短视频算法和媒体博主，",
+              "startFrame": 20,
+              "durationFrames": 66
+            },
+            {
+              "text": "比你想象中更懂人性。",
+              "startFrame": 86,
+              "durationFrames": 55
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/可得性启发6/scene_2_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "短视频算法",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "更懂人性",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 141
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "口播将「平淡日常」与「血腥极端冲突」对仗并列，适合左右分屏对比展示流量逻辑。",
+          "content": [
+            {
+              "text": "他们深知1，",
+              "startFrame": 0,
+              "durationFrames": 29
+            },
+            {
+              "text": "比起平淡的日常，",
+              "startFrame": 28,
+              "durationFrames": 38
+            },
+            {
+              "text": "血淋淋的镜头和极端的冲突才是个流量抓手。",
+              "startFrame": 65,
+              "durationFrames": 99
+            }
+          ],
+          "order": 3,
+          "param": {
+            "leftSrc": "images/可得性启发6/scene_2_3_left.png",
+            "rightSrc": "images/可得性启发6/scene_2_3_right.png",
+            "leftLabel": "平淡日常",
+            "rightLabel": "极端冲突"
+          },
+          "totalDurationFrames": 165
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，解释容易上当的原因，适合单图展示，无特殊结构。",
+          "content": [
+            {
+              "text": "容易上当、",
+              "startFrame": 0,
+              "durationFrames": 23
+            },
+            {
+              "text": "情绪失控，",
+              "startFrame": 22,
+              "durationFrames": 29
+            },
+            {
+              "text": "其实是人类大脑的生存本能。",
+              "startFrame": 51,
+              "durationFrames": 66
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/可得性启发6/scene_2_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "生存本能",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 117
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "对“幸存者偏差”这一概念进行解释，适合用CONCEPT_CARD展示。",
+          "content": [
+            {
+              "text": "我们被拉入了一个精心设计的“幸存者偏差”陷阱：",
+              "startFrame": 0,
+              "durationFrames": 102
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": "精心设计的“幸存者偏差”陷阱",
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "幸存者偏差",
+                "color": "red"
+              }
+            ]
+          },
+          "totalDurationFrames": 102
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TIMELINE",
+          "reasoning": "从媒体投喂碎片→大脑补全逻辑→得出误判，呈因果链与阶段递进，适合用时间轴串联三节点。",
+          "content": [
+            {
+              "text": "媒体只负责喂养那些最离奇、",
+              "startFrame": 0,
+              "durationFrames": 74
+            },
+            {
+              "text": "最刺激的碎片，",
+              "startFrame": 73,
+              "durationFrames": 39
+            },
+            {
+              "text": "而我们的大脑则会自动接管剩下的逻辑，",
+              "startFrame": 111,
+              "durationFrames": 88
+            },
+            {
+              "text": "完成一次以偏概全的误判。",
+              "startFrame": 198,
+              "durationFrames": 63
+            }
+          ],
+          "order": 6,
+          "param": {
+            "images": [
+              {
+                "src": "images/可得性启发6/scene_2_6_left.png",
+                "position": "left",
+                "startFrame": 0,
+                "enterEffect": "slideLeft",
+                "textIndex": 0
+              },
+              {
+                "src": "images/可得性启发6/scene_2_6_center.png",
+                "position": "center",
+                "startFrame": 60,
+                "enterEffect": "zoomIn",
+                "textIndex": 2
+              },
+              {
+                "src": "images/可得性启发6/scene_2_6_right.png",
+                "position": "right",
+                "startFrame": 100,
+                "enterEffect": "fadeIn",
+                "textIndex": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 262
+        }
+      ],
+      "audioSrc": "/audio/可得性启发6/scene_2/scene_2.mp3",
+      "totalDurationFrames": 1003
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "可得性启发",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对“可得性启发”这一心理学概念进行介绍，适合用概念卡片突出专业术语。",
+          "content": [
+            {
+              "text": "在心理学上，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "这其实叫作“可得性启发”。",
+              "startFrame": 29,
+              "durationFrames": 79
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/可得性启发6/scene_3_1.png",
+            "conceptName": "可得性启发",
+            "anchors": []
+          },
+          "totalDurationFrames": 108
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "对上一句“可得性启发”进行了解释，但本身是平缓叙述，用单图即可。",
+          "content": [
+            {
+              "text": "听起来挺学术，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "说白了，",
+              "startFrame": 38,
+              "durationFrames": 21
+            },
+            {
+              "text": "你的大脑就是一个“偷懒的搜索工具”。",
+              "startFrame": 58,
+              "durationFrames": 76
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/可得性启发6/scene_3_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "搜索工具",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 135
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "进一步解释大脑的“偷懒”行为，平缓叙述，单图即可。",
+          "content": [
+            {
+              "text": "当我们要判断一件事发生的概率有多大、",
+              "startFrame": 0,
+              "durationFrames": 76
+            },
+            {
+              "text": "到底重不重要时，",
+              "startFrame": 75,
+              "durationFrames": 43
+            },
+            {
+              "text": "大脑懒得去翻枯燥的统计年鉴，",
+              "startFrame": 117,
+              "durationFrames": 79
+            },
+            {
+              "text": "它只会问自己一个问题：",
+              "startFrame": 196,
+              "durationFrames": 50
+            },
+            {
+              "text": "“这件事我能不能立刻想起来？”",
+              "startFrame": 245,
+              "durationFrames": 65
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/可得性启发6/scene_3_3.png",
+            "enterEffect": "breathe",
+            "anchors": [
+              {
+                "text": "判断概率",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "想起来",
+                "showFrom": 4,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 310
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "解释“可得性启发”如何影响直觉判断，平缓叙述，单图即可。",
+          "content": [
+            {
+              "text": "如果某个画面、",
+              "startFrame": 0,
+              "durationFrames": 29
+            },
+            {
+              "text": "某种恐惧能让你瞬间在大脑里“秒回”，",
+              "startFrame": 28,
+              "durationFrames": 92
+            },
+            {
+              "text": "你的直觉就会粗暴地告诉你：",
+              "startFrame": 120,
+              "durationFrames": 65
+            },
+            {
+              "text": "这事儿太常见了，",
+              "startFrame": 184,
+              "durationFrames": 54
+            },
+            {
+              "text": "世界就是这个样子的。",
+              "startFrame": 237,
+              "durationFrames": 45
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/可得性启发6/scene_3_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "直觉",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 283
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "用贴老虎贴纸的例子类比“可得性启发”，平缓叙述，单图即可。",
+          "content": [
+            {
+              "text": "这就像你家窗户上贴了一张印着老虎的贴纸，",
+              "startFrame": 0,
+              "durationFrames": 91
+            },
+            {
+              "text": "你往外看，",
+              "startFrame": 90,
+              "durationFrames": 30
+            },
+            {
+              "text": "就觉得满大街都是老虎。",
+              "startFrame": 120,
+              "durationFrames": 54
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/可得性启发6/scene_3_5.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "老虎",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "woosh"
+              }
+            ]
+          },
+          "totalDurationFrames": 174
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "使用“不是...而是...”的结构，属于认知偏差的典型表达，适合用 COGNITIVE_SHIFT 模板。",
+          "content": [
+            {
+              "text": "其实，",
+              "startFrame": 0,
+              "durationFrames": 24
+            },
+            {
+              "text": "不是老虎变多了，",
+              "startFrame": 24,
+              "durationFrames": 36
+            },
+            {
+              "text": "而是这张贴纸离你的眼睛最近，",
+              "startFrame": 60,
+              "durationFrames": 69
+            },
+            {
+              "text": "最容易被你看见。",
+              "startFrame": 128,
+              "durationFrames": 44
+            }
+          ],
+          "order": 6,
+          "param": {
+            "notText": "老虎变多",
+            "butText": "贴纸离眼近",
+            "butSrc": "images/可得性启发6/scene_3_6.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 173
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "使用“你以为...其实...”的结构，属于认知偏差的典型表达，适合用 COGNITIVE_SHIFT 模板。",
+          "content": [
+            {
+              "text": "你以为你看到了全世界，",
+              "startFrame": 0,
+              "durationFrames": 54
+            },
+            {
+              "text": "其实你只是看到了被喂到嘴边的那一小块“信息残渣”。",
+              "startFrame": 53,
+              "durationFrames": 119
+            }
+          ],
+          "order": 7,
+          "param": {
+            "notText": "看到了全世界",
+            "butText": "信息残渣",
+            "butSrc": "images/可得性启发6/scene_3_7.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 172
+        }
+      ],
+      "audioSrc": "/audio/可得性启发6/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1354
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "防御锦囊",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，引出防御锦囊，没有明显的结构，适合用 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "在这个信息过载、",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "真相碎片化的时代，",
+              "startFrame": 31,
+              "durationFrames": 41
+            },
+            {
+              "text": "我准备了三个极其简单的防御锦囊，",
+              "startFrame": 72,
+              "durationFrames": 78
+            },
+            {
+              "text": "下次再遇到这种“认知冲击”，",
+              "startFrame": 149,
+              "durationFrames": 58
+            },
+            {
+              "text": "请在心里默问自己：",
+              "startFrame": 207,
+              "durationFrames": 54
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/可得性启发6/scene_4_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "信息过载",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "认知冲击",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 261
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "提出一个问题，引发思考，属于平缓叙述，适合用 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "第一，",
+              "startFrame": 0,
+              "durationFrames": 18
+            },
+            {
+              "text": "正因为这件事是“新闻”，",
+              "startFrame": 17,
+              "durationFrames": 48
+            },
+            {
+              "text": "所以它在现实中大概率是极少数的个案吗？",
+              "startFrame": 65,
+              "durationFrames": 103
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/可得性启发6/scene_4_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "新闻",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "极少数",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 169
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "两种来源对比，大样本统计数据 vs 高赞视频。适合用 SPLIT_COMPARE。",
+          "content": [
+            {
+              "text": "第二，",
+              "startFrame": 0,
+              "durationFrames": 11
+            },
+            {
+              "text": "我的这个观点，",
+              "startFrame": 10,
+              "durationFrames": 43
+            },
+            {
+              "text": "是来自大样本的统计数据，",
+              "startFrame": 53,
+              "durationFrames": 65
+            },
+            {
+              "text": "还是仅仅来自昨天刷到的那段高赞视频？",
+              "startFrame": 117,
+              "durationFrames": 108
+            }
+          ],
+          "order": 3,
+          "param": {
+            "leftSrc": "images/可得性启发6/scene_4_3_left.png",
+            "rightSrc": "images/可得性启发6/scene_4_3_right.png",
+            "leftLabel": "统计数据",
+            "rightLabel": "高赞视频",
+            "anchors": []
+          },
+          "totalDurationFrames": 226
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "提出一个问题，引发思考，属于平缓叙述，适合用 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "第三，",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "如果我换一个关键词搜索，",
+              "startFrame": 18,
+              "durationFrames": 55
+            },
+            {
+              "text": "是不是能看到完全相反的一面？",
+              "startFrame": 73,
+              "durationFrames": 67
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/可得性启发6/scene_4_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "关键词搜索",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "相反一面",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 140
+        }
+      ],
+      "audioSrc": "/audio/可得性启发6/scene_4/scene_4.mp3",
+      "totalDurationFrames": 796
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "总结与呼吁",
+      "items": [
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，描述短视频可能带来的认知偏差，使用单图即可。",
+          "content": [
+            {
+              "text": "在这个充满套路的时代，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "别让几分钟的短视频定义了你对几万公里外世界的全部想象。",
+              "startFrame": 50,
+              "durationFrames": 136
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/可得性启发6/scene_5_1.png",
+            "enterEffect": "slideBottom",
+            "anchors": [
+              {
+                "text": "套路",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "想象",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 186
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片级短促强结论，强调独立思考的重要性，适合使用 TEXT_FOCUS 模板。",
+          "content": [
+            {
+              "text": "保持怀疑，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "保持理性，",
+              "startFrame": 30,
+              "durationFrames": 28
+            },
+            {
+              "text": "做自己大脑的主人，",
+              "startFrame": 57,
+              "durationFrames": 43
+            },
+            {
+              "text": "就是我们普通人最高级的自我保护。",
+              "startFrame": 100,
+              "durationFrames": 72
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": "保持怀疑，保持理性，做自己大脑的主人",
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "保持怀疑",
+                "color": null
+              },
+              {
+                "coreSentenceAnchor": "保持理性",
+                "color": null
+              },
+              {
+                "coreSentenceAnchor": "大脑的主人",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 173
+        }
+      ],
+      "audioSrc": "/audio/可得性启发6/scene_5/scene_5.mp3",
+      "totalDurationFrames": 360
+    }
+  ],
+  "fps": 30
+}

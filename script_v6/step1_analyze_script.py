@@ -172,6 +172,36 @@ def _sanitize_anchors(param: dict, content_len: int, item_order) -> list[dict]:
     return valid
 
 
+def _sanitize_core_sentence_anchors(param: dict, item_order) -> list[dict]:
+    """TEXT_FOCUS：校验并清洗 param.coreSentenceAnchors，丢弃非法条目。"""
+    raw = param.get("coreSentenceAnchors", [])
+    if not isinstance(raw, list):
+        print(f"   ⚠️ item order={item_order} 的 coreSentenceAnchors 非数组，已清空")
+        return []
+
+    core_sentence = str(param.get("coreSentence", "") or "")
+    valid: list[dict] = []
+    for idx, entry in enumerate(raw):
+        if not isinstance(entry, dict):
+            print(f"   ⚠️ item order={item_order} coreSentenceAnchors[{idx}] 非对象，已丢弃")
+            continue
+        phrase = str(entry.get("coreSentenceAnchor", "")).strip()
+        if not phrase:
+            print(f"   ⚠️ item order={item_order} coreSentenceAnchors[{idx}] 缺少 coreSentenceAnchor，已丢弃")
+            continue
+        if core_sentence and phrase not in core_sentence:
+            print(
+                f"   ⚠️ item order={item_order} coreSentenceAnchors[{idx}] "
+                f"不在 coreSentence 内，已丢弃"
+            )
+            continue
+        out: dict = {"coreSentenceAnchor": phrase}
+        if "color" in entry:
+            out["color"] = entry.get("color")
+        valid.append(out)
+    return valid
+
+
 def _inject_preview_timings(scene_scripts: dict, fps: int, config: dict) -> None:
     """
     为 Step1 结果注入默认时间轴，避免无音频预览时字幕重叠。
@@ -209,8 +239,71 @@ def _inject_preview_timings(scene_scripts: dict, fps: int, config: dict) -> None
                 cursor += duration_frames
 
             item["content"] = upgraded_content
-            param["anchors"] = _sanitize_anchors(param, len(upgraded_content), item.get("order", "?"))
+            template = item.get("template", "")
+            if template == "TEXT_FOCUS":
+                param.pop("anchors", None)
+                param["coreSentenceAnchors"] = _sanitize_core_sentence_anchors(
+                    param, item.get("order", "?")
+                )
+            else:
+                param["anchors"] = _sanitize_anchors(
+                    param, len(upgraded_content), item.get("order", "?")
+                )
             item["totalDurationFrames"] = max(cursor, min_frames)
+
+
+def _merge_dash_only_captions(scene_scripts: dict) -> None:
+    """
+    合并仅包含破折号的字幕条目（例如单独一条 "—"）。
+    典型场景：上一条已以 "—" 结尾，下一条又只有 "—"，不应拆为两段字幕。
+    规则：若 content[i].text 仅由 -/–/— 及空白组成，则合并到上一条：
+    - 延长上一条 durationFrames 覆盖当前条目
+    - 文本默认不追加（避免出现重复 "——"），除非上一条不以破折号结尾
+    """
+    dash_only_re = re.compile(r"^\s*[-–—]+\s*$")
+
+    for scene in scene_scripts.get("scenes", []):
+        for item in scene.get("items", []):
+            content = item.get("content", [])
+            if not isinstance(content, list) or len(content) < 2:
+                continue
+
+            merged: list[dict] = []
+            for entry in content:
+                if not isinstance(entry, dict):
+                    merged.append(entry)
+                    continue
+
+                text = str(entry.get("text", ""))
+                if dash_only_re.match(text) and merged:
+                    prev = merged[-1]
+                    if isinstance(prev, dict):
+                        prev_text = str(prev.get("text", ""))
+                        dash = text.strip() or "—"
+                        if not prev_text.rstrip().endswith(("-", "–", "—")):
+                            prev["text"] = prev_text + dash
+
+                        # 延长上一条的时长，覆盖当前破折号条目
+                        prev_start = prev.get("startFrame")
+                        prev_dur = prev.get("durationFrames")
+                        cur_start = entry.get("startFrame")
+                        cur_dur = entry.get("durationFrames")
+                        if (
+                            isinstance(prev_start, int)
+                            and isinstance(prev_dur, int)
+                            and isinstance(cur_start, int)
+                            and isinstance(cur_dur, int)
+                        ):
+                            prev_end = prev_start + prev_dur
+                            cur_end = cur_start + cur_dur
+                            new_end = max(prev_end, cur_end)
+                            prev["durationFrames"] = max(1, new_end - prev_start)
+                    # 丢弃当前仅破折号条目
+                    continue
+
+                merged.append(entry)
+
+            item["content"] = merged
 
 
 # ─────────────────────────────────────────────────────────────
@@ -317,7 +410,6 @@ def _validate_and_auto_fix(
     _, v_warnings = validate_and_normalize_scene_scripts(
         result, TEMPLATE_REGISTRY, default_template=default_tmpl
     )
-    advisory = [w for w in v_warnings if isinstance(w, str) and w.startswith("[ADVISORY]")]
     hard = [w for w in v_warnings if not (isinstance(w, str) and w.startswith("[ADVISORY]"))]
     if v_warnings:
         print("\n⚠️ 脚本校验与归一化（请人工复核）：")
@@ -459,6 +551,7 @@ def main():
 
     result = analyze_with_gemini(text, config, ai_logger)
     _inject_preview_timings(result, config.get("fps", 30), config)
+    _merge_dash_only_captions(result)
 
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / "scene-scripts.json"

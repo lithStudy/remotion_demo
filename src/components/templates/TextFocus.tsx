@@ -1,12 +1,18 @@
 /**
  * TEXT_FOCUS 模板：信噪比极致化，纯文字聚焦
  * 适用场景：全篇最核心金句，无需配图，白底大字 + 弹入动画。
- * 可选 coreSentence：口播 content 较长时，大屏仅展示一句精炼文案；锚点词在正文中高亮，底部保留字幕，不渲染锚点词弹出层。
+ * 可选 coreSentence：口播 content 较长时，大屏仅展示一句精炼文案；coreSentenceAnchors 在 coreSentence 内高亮子串，底部保留字幕，不渲染锚点词弹出层。
  */
 import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import type { TemplateAnchorsProps, TemplateBaseProps } from "./shared";
+import type { TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
+
+/** TEXT_FOCUS 专用：在 coreSentence 内高亮的子串 */
+export type CoreSentenceAnchorItem = {
+	coreSentenceAnchor: string;
+	color?: string | null;
+};
 
 export const templateMeta = {
 	"name": "TEXT_FOCUS",
@@ -23,28 +29,16 @@ export const templateMeta = {
 				"type": "string",
 				"description": "精炼核心句，不超过25个字",
 			},
-			"anchors": {
+			"coreSentenceAnchors": {
 				"type": "array",
-				"description": "可选；用于高亮正文子串。使用 coreSentence 时锚点词须出现在 coreSentence 内。showFrom 须落在当前 content 条数范围内",
+				"description":
+					"可选；在 coreSentence 内按顺序高亮子串。每项 coreSentenceAnchor 须为 coreSentence 的子串，否则会被校验丢弃",
 				"items": {
 					"type": "object",
-					"required": ["text", "showFrom"],
+					"required": ["coreSentenceAnchor"],
 					"properties": {
-						"text": { "type": "string", "description": "要高亮的子串" },
-						"showFrom": {
-							"type": "integer",
-							"format": "content_index",
-							"description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃",
-						},
-						"color": { "type": "string" },
-						"anim": {
-							"type": "string",
-							"enum": ["spring", "slideUp", "popIn", "highlight"],
-						},
-						"audioEffect": {
-							"type": "string",
-							"enum": ["impact_thud", "ping", "woosh"],
-						},
+						"coreSentenceAnchor": { "type": "string", "description": "要高亮的子串，须出现在 coreSentence 内" },
+						"color": { "type": "string", "description": "高亮颜色，省略时默认强调色" },
 					},
 				},
 			},
@@ -55,23 +49,25 @@ export const templateMeta = {
 		"template": "TEXT_FOCUS",
 		"param": {
 			"coreSentence": "承认自己“可能错了”并不是一种软弱",
-			"anchors": [{ "text": "可能错了", "showFrom": 0, "color": "red"}],
+			"coreSentenceAnchors": [{ "coreSentenceAnchor": "可能错了", "color": "red" }],
 		},
 	},
 } as const;
 
-export type BWTextFocusProps = TemplateBaseProps & TemplateAnchorsProps & {
+export type BWTextFocusProps = TemplateBaseProps & {
 	/**
 	 * 精炼核心句（通常由 AI 生成）。若 content 过长、不适合整段作为大屏主标题，可只填此句作为居中展示；
 	 * 未设置时主标题仍为 content 各条 text 的拼接。
 	 */
 	coreSentence?: string;
+	/** 在 coreSentence 内按顺序高亮的子串 */
+	coreSentenceAnchors?: CoreSentenceAnchorItem[];
 };
 
 export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 	content,
 	coreSentence,
-	anchors,
+	coreSentenceAnchors,
 	audioSrc,
 	style,
 	children,
@@ -100,17 +96,18 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 		: 1;
 
 	const mainText = coreSentence?.trim();
-	// 遍历所有锚点，按各自颜色高亮
-	const highlightedText = (anchors ?? []).reduce<React.ReactNode[]>(
-		(nodes, anchor) => {
-			if (!anchor.text) {
+	// 按顺序在 coreSentence 上叠加大字高亮
+	const highlightedText = (coreSentenceAnchors ?? []).reduce<React.ReactNode[]>(
+		(nodes, item, anchorIdx) => {
+			const phrase = item.coreSentenceAnchor?.trim();
+			if (!phrase) {
 				return nodes;
 			}
 			return nodes.flatMap((node, nodeIdx) => {
 				if (typeof node !== "string") {
 					return [node];
 				}
-				const parts = node.split(anchor.text);
+				const parts = node.split(phrase);
 				if (parts.length === 1) {
 					return [node];
 				}
@@ -119,8 +116,11 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 					mappedParts.push(part);
 					if (i < parts.length - 1) {
 						mappedParts.push(
-							<span key={`anchor-${anchor.showFrom}-${nodeIdx}-${i}`} style={{ color: anchor.color || "#E53E3E" }}>
-								{anchor.text}
+							<span
+								key={`csa-${anchorIdx}-${nodeIdx}-${i}`}
+								style={{ color: item.color || "#E53E3E" }}
+							>
+								{phrase}
 							</span>,
 						);
 					}
@@ -159,23 +159,8 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 				{highlightedText}
 			</div>
 
-			{/* 底部装饰线 */}
-			{/* <div
-				style={{
-					position: "absolute",
-					bottom: "38%",
-					left: "50%",
-					transform: "translateX(-50%)",
-					width: interpolate(scaleSpring, [0, 1], [0, 80]),
-					height: 5,
-					backgroundColor: "#111111",
-					borderRadius: 3,
-				}}
-			/> */}
-
 			<TemplateContentRenderer
 				content={content}
-				anchors={anchors}
 				audioSrc={audioSrc}
 				hideAnchors
 			/>

@@ -40,7 +40,7 @@ __TEMPLATE_GUIDE__
 - “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
 
 ### D. 节拍递进（expressionTag=beat）
-- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；或铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
   - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
 
 ### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
@@ -53,7 +53,7 @@ __TEMPLATE_GUIDE__
 ### F. 金句冲击（expressionTag=focus）
 - 全片级短促强结论、无需配图 → `TEXT_FOCUS`
 
-### G. 时间轴（expressionTag=timeline）
+### G. 时间轴，先后关系（expressionTag=timeline）
 - 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
 
 ### H. 默认（expressionTag=neutral）

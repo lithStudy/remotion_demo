@@ -23,7 +23,7 @@ export type { BWMultiImageProps } from "./ListMultiGroup";
 export { BWStepList } from "./StepList";
 export type { BWStepListProps } from "./StepList";
 export { BWTextFocus } from "./TextFocus";
-export type { BWTextFocusProps } from "./TextFocus";
+export type { BWTextFocusProps, CoreSentenceAnchorItem } from "./TextFocus";
 export { BWConceptCard } from "./ConceptCard";
 export type { BWConceptCardProps } from "./ConceptCard";
 export { BWQuoteCitation } from "./QuoteCitation";

@@ -156,10 +156,10 @@ export const TemplateContentRenderer: React.FC<
 							return null;
 						}
 						return (
-							<Sequence key={`sfx-${anchor.showFrom}-${anchor.text}`} from={startFrame-20}>
+							<Sequence key={`sfx-${anchor.showFrom}-${anchor.text}`} from={startFrame}>
 								<Audio
 									src={staticFile(`audio/effects/${name}.wav`)}
-									volume={0.6}
+									volume={0.2}
 								/>
 							</Sequence>
 						);

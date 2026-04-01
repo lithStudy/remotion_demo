@@ -252,7 +252,7 @@ export const Scene{n}: React.FC = () => {{
 '''
 
 
-def generate_composition_tsx(name: str, scenes: list, config: dict) -> str:
+def generate_composition_tsx(name: str, scenes: list, config: dict, *, mute_audio: bool = False) -> str:
     """生成主 Composition 文件"""
     pascal = to_pascal_case(name)
     transition = config.get("transition_duration_frames", 15)
@@ -269,8 +269,24 @@ def generate_composition_tsx(name: str, scenes: list, config: dict) -> str:
         for i, scene in enumerate(scenes)
     ])
 
+    bgm_block = ""
+    if not mute_audio:
+        bgm_block = """            <Audio
+                src={staticFile("audio/effects/The_Geometry_of_Breakthrough.mp3")}
+                loop
+                volume={0.22}
+                name="Background music"
+            />
+"""
+
+    remotion_named = (
+        "AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame"
+        if not mute_audio
+        else "AbsoluteFill, interpolate, useCurrentFrame"
+    )
+
     return f'''import React from "react";
-import {{ AbsoluteFill, interpolate, useCurrentFrame }} from "remotion";
+import {{ {remotion_named} }} from "remotion";
 import {{ z }} from "zod";
 import {{ linearTiming, TransitionSeries }} from "@remotion/transitions";
 import {{ fade }} from "@remotion/transitions/fade";
@@ -379,7 +395,7 @@ export const {pascal}: React.FC<z.infer<typeof {pascal}Schema>> = () => {{
 
     return (
         <AbsoluteFill>  
-            <div
+{bgm_block}            <div
                 style={{{{
                     height: "100%",
                     width: "100%",
@@ -561,7 +577,7 @@ def main():
     print("  ✅ index.ts")
 
     # 生成主 Composition 文件
-    comp_code = generate_composition_tsx(name, scenes, config)
+    comp_code = generate_composition_tsx(name, scenes, config, mute_audio=args.mute_audio)
     comp_path = remotion_dir / f"{pascal}.tsx"
     with open(comp_path, "w", encoding="utf-8") as f:
         f.write(comp_code)

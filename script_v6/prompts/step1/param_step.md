@@ -38,9 +38,9 @@ __EXAMPLE_STR__
 
    - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
 
-   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。音效仅写在锚点对象上的 `audioEffect`：`impact_thud` | `ping` | `woosh`，**不要**写在 content 条目里。
-
-
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
 
 2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `dontLabel` / `doLabel` / `conceptName` 等时）：
 

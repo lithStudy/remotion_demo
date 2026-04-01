@@ -28,7 +28,7 @@ export const Scene2: React.FC = () => {
                 <BWConceptCard content={[{"text": "为了彻底排除这种干扰，", "startFrame": 0, "durationFrames": 52}, {"text": "科学家发明了一种叫作双盲实验的武器。", "startFrame": 51, "durationFrames": 101}]} totalDurationFrames={152} imageSrc={staticFile("images/双盲实验/scene_2_5.png")} conceptName={"双盲实验"} anchors={[]} />
             </Sequence>
             <Sequence from={911} durationInFrames={153}>
-                <BWCenterFocus content={[{"text": "意思就是，", "startFrame": 0, "durationFrames": 26}, {"text": "实验的人和被试的人，", "startFrame": 25, "durationFrames": 51}, {"text": "谁都不知道手里拿的是真药还是糖片。", "startFrame": 75, "durationFrames": 78}]} totalDurationFrames={153} />
+                <BWCenterFocus content={[{"text": "意思就是，", "startFrame": 0, "durationFrames": 26}, {"text": "实验的人和被试的人，", "startFrame": 25, "durationFrames": 51}, {"text": "谁都不知道手里拿的是真药还是糖片。", "startFrame": 75, "durationFrames": 78}]} totalDurationFrames={153} imageSrc={staticFile("images/双盲实验/scene_2_8.png")} enterEffect="fadeIn" />
             </Sequence>
             <Sequence from={1064} durationInFrames={234}>
                 <BWCenterFocus content={[{"text": "为什么要这么麻烦？", "startFrame": 0, "durationFrames": 47}, {"text": "因为只要医生一个眼神、", "startFrame": 46, "durationFrames": 45}, {"text": "一个暗示，", "startFrame": 91, "durationFrames": 26}, {"text": "或者病人一个先入为主的念头，", "startFrame": 116, "durationFrames": 67}, {"text": "就能干扰实验结果。", "startFrame": 183, "durationFrames": 51}]} totalDurationFrames={234} imageSrc={staticFile("images/双盲实验/scene_2_7.png")} enterEffect="fadeIn" anchors={[{"text": "安慰剂效应", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud"}]} />

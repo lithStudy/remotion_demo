@@ -62,13 +62,6 @@
             "enterEffect": "fadeIn",
             "anchors": [
               {
-                "text": "科学",
-                "showFrom": 0,
-                "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "ping"
-              },
-              {
                 "text": "偏方",
                 "showFrom": 3,
                 "color": "#EF4444",
@@ -86,12 +79,19 @@
                 "text": "体质特殊",
                 "showFrom": 7,
                 "color": "#EF4444",
-                "anim": "slideUp",
+                "anim": "highlight",
+                "audioEffect": "woosh"
+              },
+              {
+                "text": "吃药的时机不对",
+                "showFrom": 8,
+                "color": "#EF4444",
+                "anim": "highlight",
                 "audioEffect": "woosh"
               }
             ]
           },
-          "totalDurationFrames": 459
+          "totalDurationFrames": 470
         },
         {
           "narrativeType": "LOGIC",
@@ -120,7 +120,7 @@
             "enterEffect": "fadeIn",
             "anchors": [
               {
-                "text": "死循环",
+                "text": "背锅",
                 "showFrom": 2,
                 "color": "#EF4444",
                 "anim": "spring",
@@ -306,9 +306,14 @@
           "reasoning": "解释套路如何包装自己，让人不敢怀疑 → 选择默认的居中展示",
           "content": [
             {
-              "text": "这些套路往往把自己包装成某种高深莫测的传统智慧或者绝对真理，",
+              "text": "这些套路往往把自己包装成",
               "startFrame": 0,
-              "durationFrames": 148
+              "durationFrames": 55
+            },
+            {
+              "text": "某种高深莫测的传统智慧或者绝对真理，",
+              "startFrame": 55,
+              "durationFrames": 92
             },
             {
               "text": "让你觉得如果敢怀疑，",

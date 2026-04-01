@@ -137,7 +137,7 @@
             "notText": "药效",
             "butText": "自我修复",
             "butSrc": "images/双盲实验/scene_1_3.png",
-            "notContentIndex": 0,
+            "notContentIndex": 1,
             "butContentIndex": 4,
             "anchors": []
           },
@@ -456,6 +456,11 @@
             }
           ],
           "order": 6,
+          "param": {
+            "imageSrc": "images/双盲实验/scene_2_8.png",
+            "enterEffect": "fadeIn"
+            
+          },
           "totalDurationFrames": 153
         },
         {

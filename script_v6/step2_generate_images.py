@@ -124,12 +124,13 @@ def _generate_with_gemini(
 # 从 param 中收集图片提示词
 # ─────────────────────────────────────────────────────────────
 
-def collect_image_tasks(scripts_data: dict, scene_filter: str = None) -> list:
+def collect_image_tasks(scripts_data: dict, scene_filter: str = None) -> tuple[list, int]:
     """
     按模板 param_schema 递归收集 format=image_prompt 的叶子，生成扁平任务列表。
-    字段与历史兼容：field_name、array_index、position、prompt、task_key。
+    返回 (待生成任务列表, 已跳过的已生成图片数)。
     """
     tasks = []
+    skipped = 0
     for scene in scripts_data.get("scenes", []):
         scene_id = scene["sceneId"]
         if scene_filter and scene_id != scene_filter:
@@ -144,8 +145,12 @@ def collect_image_tasks(scripts_data: dict, scene_filter: str = None) -> list:
                 schema if isinstance(schema, dict) else {},
                 scene_id=scene_id,
                 order=item["order"],
+                include_generated=True,
             )
             for t in sub:
+                if t["already_generated"]:
+                    skipped += 1
+                    continue
                 tasks.append({
                     "scene_id": t["scene_id"],
                     "order": t["order"],
@@ -155,15 +160,14 @@ def collect_image_tasks(scripts_data: dict, scene_filter: str = None) -> list:
                     "position": t["position"],
                     "task_key": t["task_key"],
                 })
-    return tasks
+    return tasks, skipped
 
 
 def get_output_filename(task: dict) -> str:
     """根据任务生成输出文件名"""
     base = f"{task['scene_id']}_{task['order']}"
     if task["array_index"] is not None:
-        pos = task.get("position", f"img{task['array_index']}")
-        return f"{base}_{pos}.png"
+        return f"{base}_img{task['array_index']}.png"
     if task["field_name"] in ("leftSrc", "rightSrc"):
         side = "left" if task["field_name"] == "leftSrc" else "right"
         return f"{base}_{side}.png"
@@ -237,11 +241,14 @@ def main():
     image_size = config.get("image_size", "1K")
 
     # ① 收集图片任务
-    tasks = collect_image_tasks(scripts_data, args.scene)
+    tasks, skipped = collect_image_tasks(scripts_data, args.scene)
+
+    if skipped:
+        print(f"⏭️  跳过 {skipped} 张已生成的图片（images/ 路径）")
 
     if not tasks:
-        print("❌ 无图片需要生成")
-        return False
+        print("✅ 无图片需要生成" if skipped else "❌ 未找到任何图片字段")
+        return skipped > 0
 
     # ② 分批：每 9 个一批
     batch_size = 9

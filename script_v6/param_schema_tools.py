@@ -396,9 +396,11 @@ def iter_image_prompt_tasks(
 	*,
 	scene_id: str,
 	order: Any,
+	include_generated: bool = False,
 ) -> list[dict]:
 	"""
-	遍历param，根据schema提取所有图片提示词任务信息。每个任务含scene_id, order, path, field_name, array_index, position, prompt, task_key
+	遍历param，根据schema提取所有图片提示词任务信息。每个任务含scene_id, order, path, field_name, array_index, position, prompt, task_key。
+	默认跳过已生成的图片（值以 images/ 开头），设 include_generated=True 可包含全部。
 	"""
 	out: list[dict] = []
 	if not isinstance(param, dict) or schema.get("type") != "object":
@@ -406,9 +408,12 @@ def iter_image_prompt_tasks(
 
 	def walk(val: Any, s: dict, path: list[str | int]) -> None:
 		st = s.get("type")
-		# 提取image_prompt类型的字符串字段
 		if st == "string" and s.get("format") == "image_prompt":
 			if isinstance(val, str) and val.strip():
+				stripped = val.strip()
+				already_generated = stripped.startswith("images/")
+				if already_generated and not include_generated:
+					return
 				tk = task_key(scene_id, order, path)
 				fn = path[0] if path else ""
 				arr_idx = path[1] if len(path) > 1 and isinstance(path[1], int) else None
@@ -424,8 +429,9 @@ def iter_image_prompt_tasks(
 					"field_name": fn,
 					"array_index": arr_idx,
 					"position": pos,
-					"prompt": val.strip(),
+					"prompt": stripped,
 					"task_key": tk,
+					"already_generated": already_generated,
 				})
 			return
 		# 递归处理对象字段

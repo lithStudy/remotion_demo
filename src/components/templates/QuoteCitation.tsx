@@ -100,6 +100,7 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 							fontSize: 50,
 							lineHeight: 1.22,
 							letterSpacing: 0.2,
+							fontWeight: 800,
 							fontFamily:
 								'"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif',
 							whiteSpace: "pre-line",
@@ -110,7 +111,6 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 						}}
 					>
 						{typedQuoteText}
-						<span style={{ opacity: frame % 18 < 9 ? 1 : 0 }}>▍</span>
 					</div>
 				)}
 				

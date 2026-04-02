@@ -27,7 +27,7 @@ export const templateMeta = {
 	"name": "BEAT_SEQUENCE",
 	"componentExport": "BWBeatSequence",
 	"description":
-		"适用：一问一驳一锤等同一镜头内情绪递进；多图按口播条切换，首段 calm、后续默认可 alert。\n差异：单段平缓叙述用 CENTER_FOCUS；单句结论暴击、无需配图时用 TEXT_FOCUS；本模板负责多段串联。\n慎用：stages 与 content 条数需一致；段落间若有空隙，画面保持上一张直至下一段切入（交叉淡化）。\n参数：stages[i].enterEffect / tone / showFrom（content 0-based，省略则同 i）；tone 省略时首条 calm、其余 alert。",
+		"适用：一问一驳一锤等同一镜头内情绪递进；多图按口播时间线换图，首段 calm、后续默认可 alert。\n差异：单段平缓叙述用 CENTER_FOCUS；单句结论暴击、无需配图时用 TEXT_FOCUS；本模板负责多段串联。\n口播条为镜头 item 外层与 param 同级的 content[]（含 text、startFrame 等）；showFrom 必须按该数组的 0-based 下标对齐，而非 stages 下标。stages 可少于口播条数，此时用 showFrom 指定从第几条口播起显示该图。\n段落间若有空隙，画面保持上一张直至下一条口播切入。\n参数：stages[i].enterEffect / tone / showFrom；省略 showFrom 时默认与 stages 下标 i 同列口播对齐。tone 省略时首条 calm、其余 alert。",
 	"psychology": "节拍递进",
 	"image_count": "2-4",
 	"param_schema": {
@@ -38,7 +38,7 @@ export const templateMeta = {
 				"minItems": 2,
 				"maxItems": 4,
 				"description":
-					"与 content 逐条对应：每节拍一条；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom",
+					"配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
 				"items": {
 					"type": "object",
 					"required": ["imageSrc"],
@@ -62,7 +62,8 @@ export const templateMeta = {
 						"showFrom": {
 							"type": "content_index",
 							"minimum": 0,
-							"description": "从 content 第几条（0-based）起显示该图；省略则与当前 stages 下标一致",
+							"description":
+								"镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）",
 						},
 					},
 				},
@@ -90,6 +91,54 @@ function getActiveBeatIndex(items: ContentItem[], frame: number): number {
 		if (items[i].startFrame <= frame) idx = i;
 	}
 	return idx;
+}
+
+/** 与 BWBeatSequence 内 effectiveShowFromIndex 一致（供纯函数计算用） */
+function beatEffectiveShowFrom(
+	stages: BeatStageItem[],
+	stageIndex: number,
+	maxContentIndex: number,
+): number {
+	const raw = stages[stageIndex]?.showFrom;
+	if (raw === undefined || raw === null || Number.isNaN(Number(raw))) return stageIndex;
+	return Math.min(Math.max(0, Math.floor(Number(raw))), maxContentIndex);
+}
+
+/** 假定当前口播条下标为 contentIdx 时，可见 stage 数量 */
+function visibleStageCountForContentIdx(
+	contentIdx: number,
+	n: number,
+	stages: BeatStageItem[],
+	maxContentIndex: number,
+): number {
+	let count = 0;
+	for (let i = 0; i < n; i++) {
+		if (contentIdx >= beatEffectiveShowFrom(stages, i, maxContentIndex)) count++;
+	}
+	return count;
+}
+
+/**
+ * 多图排布 spring 的锚点帧：仅在「可见图张数」变化时重置。
+ * 若用每条 content 的 startFrame，口播切换会误触发从单图位→双图位的插值，造成已稳定双图时突然晃动。
+ */
+function getBeatLayoutAnchorStartFrame(
+	items: ContentItem[],
+	contentActiveIdx: number,
+	n: number,
+	stages: BeatStageItem[],
+	maxContentIndex: number,
+): number {
+	if (items.length === 0 || n <= 0) return 0;
+	const vc = visibleStageCountForContentIdx(contentActiveIdx, n, stages, maxContentIndex);
+	let j = contentActiveIdx;
+	while (
+		j > 0 &&
+		visibleStageCountForContentIdx(j - 1, n, stages, maxContentIndex) === vc
+	) {
+		j--;
+	}
+	return items[j]?.startFrame ?? 0;
 }
 
 function resolveTone(stage: BeatStageItem | undefined, index: number): BeatStageTone {
@@ -221,22 +270,25 @@ export const BWBeatSequence: React.FC<BWBeatSequenceProps> = ({
 	const frame = useCurrentFrame();
 	const items = normalizeContent(content);
 	const n = Math.min(stages.length, items.length);
-	const activeIdx = Math.min(getActiveBeatIndex(items, frame), Math.max(0, n - 1));
+	const contentActiveIdx = getActiveBeatIndex(items, frame);
+	const activeIdx = Math.min(contentActiveIdx, Math.max(0, n - 1));
 	const tone = n > 0 ? resolveTone(stages[activeIdx], activeIdx) : "calm";
+	const maxContentIndex = Math.max(0, items.length - 1);
 
-	const effectiveShowFromIndex = (i: number) => {
-		const raw = stages[i]?.showFrom;
-		if (raw === undefined || raw === null || Number.isNaN(Number(raw))) return i;
-		return Math.min(Math.max(0, Math.floor(Number(raw))), Math.max(0, n - 1));
-	};
+	const effectiveShowFromIndex = (i: number) => beatEffectiveShowFrom(stages, i, maxContentIndex);
 
 	const visibleStageIndices =
 		n > 0
-			? Array.from({ length: n }, (_, i) => i).filter((i) => activeIdx >= effectiveShowFromIndex(i))
+			? Array.from({ length: n }, (_, i) => i).filter(
+					(i) => contentActiveIdx >= effectiveShowFromIndex(i),
+				)
 			: [];
 	const visibleCount = visibleStageIndices.length;
 	const { fps } = useVideoConfig();
-	const layoutStartFrame = n > 0 ? items[activeIdx].startFrame : 0;
+	const layoutStartFrame =
+		n > 0
+			? getBeatLayoutAnchorStartFrame(items, contentActiveIdx, n, stages, maxContentIndex)
+			: 0;
 	const layoutProgress = spring({
 		frame: frame - layoutStartFrame,
 		fps,

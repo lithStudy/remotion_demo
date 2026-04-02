@@ -13,17 +13,17 @@
             {
               "text": "深夜十一点半，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 38
             },
             {
               "text": "你习惯性地往下划着屏幕。",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 37,
+              "durationFrames": 58
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "深夜，一个疲惫的人盯着屏幕，房间里只有屏幕的光亮",
+            "imageSrc": "images/样本偏差/scene_1_1.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -35,7 +35,7 @@
               }
             ]
           },
-          "totalDurationFrames": 60
+          "totalDurationFrames": 95
         },
         {
           "narrativeType": "CASE",
@@ -45,33 +45,26 @@
             {
               "text": "满眼看过去，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 39
             },
             {
               "text": "都是二十多岁就背着爱马仕开着保时捷的年轻人，",
-              "startFrame": 30,
-              "durationFrames": 48
+              "startFrame": 38,
+              "durationFrames": 93
             },
             {
               "text": "要不就是刚毕业就拿下大厂百万年薪的职场精英。",
-              "startFrame": 78,
-              "durationFrames": 48
+              "startFrame": 130,
+              "durationFrames": 101
             }
           ],
           "order": 2,
           "param": {
-            "imageSrc": "一群焦虑的年轻人看着奢侈品和高薪工作的照片",
+            "imageSrc": "images/样本偏差/scene_1_2.png",
             "enterEffect": "slideBottom",
             "anchors": [
               {
-                "text": "爱马仕",
-                "showFrom": 1,
-                "color": "#EF4444",
-                "anim": "popIn",
-                "audioEffect": "ping"
-              },
-              {
-                "text": "保时捷",
+                "text": "爱马仕、保时捷",
                 "showFrom": 1,
                 "color": "#EF4444",
                 "anim": "popIn",
@@ -86,7 +79,7 @@
               }
             ]
           },
-          "totalDurationFrames": 126
+          "totalDurationFrames": 232
         },
         {
           "narrativeType": "LOGIC",
@@ -96,22 +89,22 @@
             {
               "text": "你转头看看自己身上那件洗得微微褪色的起球睡衣，",
               "startFrame": 0,
-              "durationFrames": 51
+              "durationFrames": 116
             },
             {
               "text": "再看看下个月又要还的账单，",
-              "startFrame": 51,
-              "durationFrames": 30
+              "startFrame": 115,
+              "durationFrames": 68
             },
             {
               "text": "心里突然涌起一阵让人窒息的巨大失败感。",
-              "startFrame": 81,
-              "durationFrames": 42
+              "startFrame": 183,
+              "durationFrames": 95
             }
           ],
           "order": 3,
           "param": {
-            "imageSrc": "一个疲惫的年轻人看着账单",
+            "imageSrc": "images/样本偏差/scene_1_3.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -123,9 +116,11 @@
               }
             ]
           },
-          "totalDurationFrames": 123
+          "totalDurationFrames": 278
         }
-      ]
+      ],
+      "audioSrc": "/audio/样本偏差/scene_1/scene_1.mp3",
+      "totalDurationFrames": 606
     },
     {
       "sceneId": "scene_2",
@@ -139,17 +134,17 @@
             {
               "text": "请立刻停下来，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 35
             },
             {
               "text": "不要再用这种精心包装的幻觉来惩罚你自己了。",
-              "startFrame": 30,
-              "durationFrames": 46
+              "startFrame": 34,
+              "durationFrames": 96
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一个人停下脚步，周围环境变得模糊",
+            "imageSrc": "images/样本偏差/scene_2_1.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -168,7 +163,7 @@
               }
             ]
           },
-          "totalDurationFrames": 76
+          "totalDurationFrames": 131
         },
         {
           "narrativeType": "LOGIC",
@@ -178,29 +173,29 @@
             {
               "text": "我们每天都在遭受着平台算法极其隐蔽的视觉霸凌，",
               "startFrame": 0,
-              "durationFrames": 51
+              "durationFrames": 113
             },
             {
               "text": "不知不觉地错把互联网精准投喂的信息茧房，",
-              "startFrame": 51,
-              "durationFrames": 44
+              "startFrame": 112,
+              "durationFrames": 105
             },
             {
               "text": "当成了外面真实的全世界。",
-              "startFrame": 95,
-              "durationFrames": 30
+              "startFrame": 217,
+              "durationFrames": 56
             }
           ],
           "order": 2,
           "param": {
             "notText": "视觉霸凌",
             "butText": "真实全世界",
-            "butSrc": "阳光明媚的真实城市",
+            "butSrc": "images/样本偏差/scene_2_2.png",
             "notContentIndex": 0,
             "butContentIndex": 2,
             "anchors": []
           },
-          "totalDurationFrames": 125
+          "totalDurationFrames": 273
         },
         {
           "narrativeType": "CONCLUSION",
@@ -210,36 +205,38 @@
             {
               "text": "其实根本不是我们混得太差，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 52
             },
             {
               "text": "而是那些收割注意力的资本和网红，",
-              "startFrame": 30,
-              "durationFrames": 35
+              "startFrame": 51,
+              "durationFrames": 72
             },
             {
               "text": "联合起来刻意制造了这种群体性的生存焦虑，",
-              "startFrame": 65,
-              "durationFrames": 44
+              "startFrame": 123,
+              "durationFrames": 90
             },
             {
               "text": "以此来掏空我们的口袋。",
-              "startFrame": 109,
-              "durationFrames": 30
+              "startFrame": 212,
+              "durationFrames": 57
             }
           ],
           "order": 3,
           "param": {
             "notText": "我们混得太差",
             "butText": "资本网红收割",
-            "butSrc": "一群网红在直播，背后是巨大的资本logo",
+            "butSrc": "images/样本偏差/scene_2_3.png",
             "notContentIndex": 0,
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 139
+          "totalDurationFrames": 269
         }
-      ]
+      ],
+      "audioSrc": "/audio/样本偏差/scene_2/scene_2.mp3",
+      "totalDurationFrames": 674
     },
     {
       "sceneId": "scene_3",
@@ -253,21 +250,21 @@
             {
               "text": "在社会统计学上，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 47
             },
             {
-              "text": "这种残忍的错觉叫做样本代表性缺失和幸存者偏差。",
-              "startFrame": 30,
-              "durationFrames": 51
+              "text": "这种残忍的错觉叫做样本代表性缺失",
+              "startFrame": 46,
+              "durationFrames": 99
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "认知偏差简笔画图标",
-            "conceptName": "样本代表性缺失和幸存者偏差",
+            "imageSrc": "images/样本偏差/scene_3_1.png",
+            "conceptName": "样本代表性缺失",
             "anchors": []
           },
-          "totalDurationFrames": 81
+          "totalDurationFrames": 146
         },
         {
           "narrativeType": "LOGIC",
@@ -277,22 +274,22 @@
             {
               "text": "你必须明白一个硬核真相，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 63
             },
             {
               "text": "想要了解一个群体的真实面貌，",
-              "startFrame": 30,
-              "durationFrames": 31
+              "startFrame": 62,
+              "durationFrames": 70
             },
             {
               "text": "你抽样出来的样本必须是整体社会的完美微缩模型。",
-              "startFrame": 61,
-              "durationFrames": 51
+              "startFrame": 131,
+              "durationFrames": 117
             }
           ],
           "order": 2,
           "param": {
-            "imageSrc": "人们围在一起讨论统计数据的简笔画",
+            "imageSrc": "images/样本偏差/scene_3_2.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -318,7 +315,7 @@
               }
             ]
           },
-          "totalDurationFrames": 112
+          "totalDurationFrames": 249
         },
         {
           "narrativeType": "LOGIC",
@@ -328,16 +325,16 @@
             {
               "text": "但社交媒体的展示机制从来就不是随机抽样的。",
               "startFrame": 0,
-              "durationFrames": 46
+              "durationFrames": 100
             }
           ],
           "order": 3,
           "param": {
-            "imageSrc": "社交媒体信息流的界面",
+            "imageSrc": "images/样本偏差/scene_3_3.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
-                "text": "随机抽样",
+                "text": "并非随机抽样",
                 "showFrom": 0,
                 "color": "#000000",
                 "anim": "highlight",
@@ -345,7 +342,7 @@
               }
             ]
           },
-          "totalDurationFrames": 46
+          "totalDurationFrames": 100
         },
         {
           "narrativeType": "CASE",
@@ -355,27 +352,27 @@
             {
               "text": "那些每天起早贪黑挤着沙丁鱼罐头般的地铁、",
               "startFrame": 0,
-              "durationFrames": 44
+              "durationFrames": 95
             },
             {
               "text": "吃着十几块钱路边摊、",
-              "startFrame": 44,
-              "durationFrames": 30
+              "startFrame": 94,
+              "durationFrames": 52
             },
             {
               "text": "为了几千块全勤奖精打细算的沉默大多数，",
-              "startFrame": 74,
-              "durationFrames": 42
+              "startFrame": 146,
+              "durationFrames": 107
             },
             {
               "text": "他们根本没有精力去发帖。",
-              "startFrame": 116,
-              "durationFrames": 30
+              "startFrame": 253,
+              "durationFrames": 57
             }
           ],
           "order": 4,
           "param": {
-            "imageSrc": "拥挤的地铁车厢，人们疲惫不堪的表情",
+            "imageSrc": "images/样本偏差/scene_3_4.png",
             "enterEffect": "slideBottom",
             "anchors": [
               {
@@ -387,7 +384,7 @@
               }
             ]
           },
-          "totalDurationFrames": 146
+          "totalDurationFrames": 310
         },
         {
           "narrativeType": "CASE",
@@ -397,17 +394,17 @@
             {
               "text": "就算发了，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 29
             },
             {
               "text": "也会被算法极其无情地沉入海底。",
-              "startFrame": 30,
-              "durationFrames": 33
+              "startFrame": 28,
+              "durationFrames": 74
             }
           ],
           "order": 5,
           "param": {
-            "imageSrc": "无情的算法将信息沉入海底的抽象概念图",
+            "imageSrc": "images/样本偏差/scene_3_5.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -426,7 +423,7 @@
               }
             ]
           },
-          "totalDurationFrames": 63
+          "totalDurationFrames": 103
         },
         {
           "narrativeType": "CONCLUSION",
@@ -436,36 +433,38 @@
             {
               "text": "你每天所看到的，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 41
             },
             {
               "text": "压根不是生活的常态，",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 40,
+              "durationFrames": 62
             },
             {
               "text": "而是一场经过极度滤镜过滤、",
-              "startFrame": 60,
-              "durationFrames": 30
+              "startFrame": 101,
+              "durationFrames": 68
             },
             {
               "text": "甚至靠拼单伪造出来的极端财富展览。",
-              "startFrame": 90,
-              "durationFrames": 37
+              "startFrame": 169,
+              "durationFrames": 87
             }
           ],
           "order": 6,
           "param": {
             "notText": "生活的常态",
             "butText": "财富展览",
-            "butSrc": "极度奢华的晚宴场景",
+            "butSrc": "images/样本偏差/scene_3_6.png",
             "notContentIndex": 1,
             "butContentIndex": 3,
             "anchors": []
           },
-          "totalDurationFrames": 127
+          "totalDurationFrames": 256
         }
-      ]
+      ],
+      "audioSrc": "/audio/样本偏差/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1163
     },
     {
       "sceneId": "scene_4",
@@ -479,17 +478,17 @@
             {
               "text": "想要彻底打破这种毒药般的精神内耗，",
               "startFrame": 0,
-              "durationFrames": 37
+              "durationFrames": 82
             },
             {
               "text": "请给自己配备两个防御动作。",
-              "startFrame": 37,
-              "durationFrames": 30
+              "startFrame": 81,
+              "durationFrames": 79
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "大脑被乌云笼罩的简笔画",
+            "imageSrc": "images/样本偏差/scene_4_1.png",
             "enterEffect": "slideBottom",
             "anchors": [
               {
@@ -508,7 +507,7 @@
               }
             ]
           },
-          "totalDurationFrames": 67
+          "totalDurationFrames": 161
         },
         {
           "narrativeType": "LOGIC",
@@ -518,23 +517,23 @@
             {
               "text": "第一，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 21
             },
             {
               "text": "主动去国家统计局的官网看看真实的国民收入基座，",
-              "startFrame": 30,
-              "durationFrames": 51
+              "startFrame": 20,
+              "durationFrames": 123
             },
             {
               "text": "去亲手找回那个被互联网隐藏起来的庞大分母。",
-              "startFrame": 81,
-              "durationFrames": 46
+              "startFrame": 142,
+              "durationFrames": 108
             }
           ],
           "order": 2,
           "param": {
             "title": "了解数据真相",
-            "imageSrc": "一个人在电脑前浏览国家统计局官网，认真研究数据的场景",
+            "imageSrc": "images/样本偏差/scene_4_2.png",
             "notes": [
               {
                 "text": "查看官方数据",
@@ -547,7 +546,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 127
+          "totalDurationFrames": 251
         },
         {
           "narrativeType": "LOGIC",
@@ -557,28 +556,28 @@
             {
               "text": "第二，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 19
             },
             {
               "text": "永远要在心里默念，",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 18,
+              "durationFrames": 51
             },
             {
               "text": "算法售卖的是你的眼球和焦虑，",
-              "startFrame": 60,
-              "durationFrames": 31
+              "startFrame": 68,
+              "durationFrames": 86
             },
             {
               "text": "而不是客观世界的真相。",
-              "startFrame": 91,
-              "durationFrames": 30
+              "startFrame": 153,
+              "durationFrames": 55
             }
           ],
           "order": 3,
           "param": {
             "title": "默念算法与真相",
-            "imageSrc": "手机屏幕信息流与焦虑表情，远景为阳光穿透云层照亮开阔地面的对比简笔画",
+            "imageSrc": "images/样本偏差/scene_4_3.png",
             "notes": [
               {
                 "text": "默念算法在搞事",
@@ -591,7 +590,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 121
+          "totalDurationFrames": 209
         },
         {
           "narrativeType": "CONCLUSION",
@@ -601,22 +600,22 @@
             {
               "text": "绝不要用别人精心修饰过、",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 54
             },
             {
               "text": "甚至造假的分子，",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 53,
+              "durationFrames": 44
             },
             {
               "text": "来丈量你真实且多维的人生。",
-              "startFrame": 60,
-              "durationFrames": 30
+              "startFrame": 97,
+              "durationFrames": 77
             }
           ],
           "order": 4,
           "param": {
-            "imageSrc": "手被许多线缠绕着，象征着被控制和束缚",
+            "imageSrc": "images/样本偏差/scene_4_4.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -642,7 +641,7 @@
               }
             ]
           },
-          "totalDurationFrames": 90
+          "totalDurationFrames": 174
         },
         {
           "narrativeType": "CONCLUSION",
@@ -652,17 +651,17 @@
             {
               "text": "真正的清醒，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 33
             },
             {
               "text": "是踏实地踩在自己泥泞但坚固的生活坐标上，",
-              "startFrame": 30,
-              "durationFrames": 44
+              "startFrame": 32,
+              "durationFrames": 105
             },
             {
               "text": "拒绝为虚假的统计学幻影买单。",
-              "startFrame": 74,
-              "durationFrames": 31
+              "startFrame": 137,
+              "durationFrames": 77
             }
           ],
           "order": 5,
@@ -675,9 +674,11 @@
               }
             ]
           },
-          "totalDurationFrames": 105
+          "totalDurationFrames": 214
         }
-      ]
+      ],
+      "audioSrc": "/audio/样本偏差/scene_4/scene_4.mp3",
+      "totalDurationFrames": 1009
     }
   ],
   "fps": 30,

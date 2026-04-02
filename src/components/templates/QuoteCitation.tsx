@@ -2,25 +2,20 @@
  * QUOTE_CITATION 模板：社会认同背书，引用展示
  */
 import React from "react";
-import { AbsoluteFill, Img, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { BW_TEXT, getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
+import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { BW_TEXT, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
 	"name": "QUOTE_CITATION",
 	"componentExport": "BWQuoteCitation",
 	"description":
-		"适用：任何“引用/摘录/证言/背书”体裁（名言、著作、研究结论、媒体引用、用户评价、客户证言、公告摘录等）；可选一张配角图。\n提示：引文主体建议放在 content/字幕中，本模板版心更强调“引用体裁 + 出处”。\n差异：非引用类普通叙述用 CENTER_FOCUS。\n参数：quoteSource 写清出处（来源/角色/机构）；imageSrc 可省略。",
+		"适用：任何“引用/摘录/证言/背书”体裁（名言、著作、研究结论、媒体引用、用户评价、客户证言、公告摘录等）。\n提示：引文主体来自 content；本模板版心强调“引用正文 + 出处”，并带逐字打字机效果。\n差异：非引用类普通叙述用 CENTER_FOCUS。\n参数：quoteSource 写清出处（来源/角色/机构）。",
 	"psychology": "社会认同背书",
-	"image_count": "0-1",
+	"image_count": 0,
 	"param_schema": {
 		"type": "object",
 		"properties": {
-			"imageSrc": {
-				"type": "string",
-				"format": "image_prompt",
-				"description": "可选配图描述",
-			},
 			"quoteSource": { "type": "string", "description": "引言来源" },
 		},
 		"required": ["quoteSource"],
@@ -34,12 +29,10 @@ export const templateMeta = {
 } as const;
 
 export interface BWQuoteCitationProps extends TemplateBaseProps, TemplateAnchorsProps {
-	imageSrc?: string;
 	quoteSource?: string;
 }
 
 export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
-	imageSrc,
 	quoteSource = "",
 	content,
 	anchors,
@@ -55,6 +48,27 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 		config: { damping: 80, stiffness: 100 },
 		durationInFrames: 30,
 	});
+
+	const quoteText = (content ?? [])
+		.map((c) => c.text.trim())
+		.filter(Boolean)
+		.join("")
+		.replace(/[\r\n\t]+/g, "")
+		.replace(/\s{2,}/g, " ")
+		.trim();
+	const hasQuoteText = quoteText.length > 0;
+
+	const typingStart = 8;
+	const typingDuration = 38;
+	const typingProgress = interpolate(frame, [typingStart, typingStart + typingDuration], [0, 1], {
+		extrapolateLeft: "clamp",
+		extrapolateRight: "clamp",
+	});
+	const visibleChars = Math.max(
+		0,
+		Math.min(quoteText.length, Math.floor(typingProgress * quoteText.length)),
+	);
+	const typedQuoteText = quoteText.slice(0, visibleChars);
 	return (
 		<AbsoluteFill style={style}>
 			<div
@@ -62,13 +76,13 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 					position: "absolute",
 					left: "8%",
 					right: "8%",
-					top: "15%",
+					top: "30%",
 					opacity,
 				}}
 			>
 				<div
 					style={{						
-						fontSize: 200,
+						fontSize: 50,
 						lineHeight: 0.7,
 						color: BW_TEXT,
 						fontFamily: "Georgia, 'Times New Roman', serif",
@@ -77,12 +91,29 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 				>
 					"
 				</div>
-				<div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
-					<Img
-						src={getSafeImageSrc(imageSrc)}
-						style={{ width: 160, height: 160, objectFit: "contain", opacity: 0.5 }}
-					/>
-				</div>
+				{hasQuoteText && (
+					<div
+						style={{
+							marginTop: 12,
+							textAlign: "center",
+							color: BW_TEXT,
+							fontSize: 50,
+							lineHeight: 1.22,
+							letterSpacing: 0.2,
+							fontFamily:
+								'"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif',
+							whiteSpace: "pre-line",
+							display: "-webkit-box",
+							WebkitBoxOrient: "vertical" as const,
+							WebkitLineClamp: 6,
+							overflow: "hidden",
+						}}
+					>
+						{typedQuoteText}
+						<span style={{ opacity: frame % 18 < 9 ? 1 : 0 }}>▍</span>
+					</div>
+				)}
+				
 				{quoteSource && (
 					<div
 						style={{

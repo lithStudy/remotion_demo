@@ -27,7 +27,7 @@ export const templateMeta = {
 	"name": "BEAT_SEQUENCE",
 	"componentExport": "BWBeatSequence",
 	"description":
-		"适用：一问一驳一锤等同一镜头内情绪递进；多图按口播条切换，首段 calm、后续默认可 alert。\n差异：单段平缓叙述用 CENTER_FOCUS；单句结论暴击、无需配图时用 TEXT_FOCUS；本模板负责多段串联。\n慎用：stages 与 content 条数需一致；段落间若有空隙，画面保持上一张直至下一段切入（交叉淡化）。\n参数：stages[i].enterEffect / tone；tone 省略时首条 calm、其余 alert。",
+		"适用：一问一驳一锤等同一镜头内情绪递进；多图按口播条切换，首段 calm、后续默认可 alert。\n差异：单段平缓叙述用 CENTER_FOCUS；单句结论暴击、无需配图时用 TEXT_FOCUS；本模板负责多段串联。\n慎用：stages 与 content 条数需一致；段落间若有空隙，画面保持上一张直至下一段切入（交叉淡化）。\n参数：stages[i].enterEffect / tone / showFrom（content 0-based，省略则同 i）；tone 省略时首条 calm、其余 alert。",
 	"psychology": "节拍递进",
 	"image_count": "2-4",
 	"param_schema": {
@@ -38,7 +38,7 @@ export const templateMeta = {
 				"minItems": 2,
 				"maxItems": 4,
 				"description":
-					"与 content 逐条对应：每节拍一条；imageSrc、enterEffect、可选 tone（calm|alert）",
+					"与 content 逐条对应：每节拍一条；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom",
 				"items": {
 					"type": "object",
 					"required": ["imageSrc"],
@@ -58,6 +58,11 @@ export const templateMeta = {
 							"type": "string",
 							"enum": ["calm", "alert"],
 							"description": "首条可 calm，其余默认可 alert",
+						},
+						"showFrom": {
+							"type": "content_index",
+							"minimum": 0,
+							"description": "从 content 第几条（0-based）起显示该图；省略则与当前 stages 下标一致",
 						},
 					},
 				},
@@ -189,7 +194,7 @@ const BeatSequenceImageSlot: React.FC<{
 			style={{
 				position: "absolute",
 				left: `${left}%`,
-				top: "60%",
+				top: "45%",
 				maxWidth: `${maxWidth}%`,
 				maxHeight: `${maxHeight}%`,
 				objectFit: "contain",
@@ -218,9 +223,20 @@ export const BWBeatSequence: React.FC<BWBeatSequenceProps> = ({
 	const n = Math.min(stages.length, items.length);
 	const activeIdx = Math.min(getActiveBeatIndex(items, frame), Math.max(0, n - 1));
 	const tone = n > 0 ? resolveTone(stages[activeIdx], activeIdx) : "calm";
-	const visibleCount = n > 0 ? Math.min(activeIdx + 1, n) : 0;
+
+	const effectiveShowFromIndex = (i: number) => {
+		const raw = stages[i]?.showFrom;
+		if (raw === undefined || raw === null || Number.isNaN(Number(raw))) return i;
+		return Math.min(Math.max(0, Math.floor(Number(raw))), Math.max(0, n - 1));
+	};
+
+	const visibleStageIndices =
+		n > 0
+			? Array.from({ length: n }, (_, i) => i).filter((i) => activeIdx >= effectiveShowFromIndex(i))
+			: [];
+	const visibleCount = visibleStageIndices.length;
 	const { fps } = useVideoConfig();
-	const layoutStartFrame = visibleCount > 0 ? items[visibleCount - 1].startFrame : 0;
+	const layoutStartFrame = n > 0 ? items[activeIdx].startFrame : 0;
 	const layoutProgress = spring({
 		frame: frame - layoutStartFrame,
 		fps,
@@ -240,25 +256,29 @@ export const BWBeatSequence: React.FC<BWBeatSequenceProps> = ({
 				});
 
 	return (
-		<AbsoluteFill
-			style={{
-				transform: `scale(${rootScale})`,
-				transformOrigin: "center center",
-				...style,
-			}}
-		>
-			<FirefliesBackdrop opacity={firefliesOpacity} seed={`BEAT_SEQUENCE-${firstStartFrame}`} />
-			{Array.from({ length: visibleCount }, (_, i) => (
-				<BeatSequenceImageSlot
-					key={i}
-					imageSrc={stages[i].imageSrc}
-					enterEffect={stages[i].enterEffect ?? "breathe"}
-					segmentStartFrame={items[i].startFrame}
-					imageIndex={i}
-					visibleCount={visibleCount}
-					layoutProgress={layoutProgress}
-				/>
-			))}
+		<AbsoluteFill style={style}>
+			{/* 画面层：允许呼吸缩放，但不影响字幕层 */}
+			<AbsoluteFill
+				style={{
+					transform: `scale(${rootScale})`,
+					transformOrigin: "center center",
+				}}
+			>
+				<FirefliesBackdrop opacity={firefliesOpacity} seed={`BEAT_SEQUENCE-${firstStartFrame}`} />
+				{visibleStageIndices.map((stageIndex, slotIndex) => (
+					<BeatSequenceImageSlot
+						key={stageIndex}
+						imageSrc={stages[stageIndex].imageSrc}
+						enterEffect={stages[stageIndex].enterEffect ?? "breathe"}
+						segmentStartFrame={items[effectiveShowFromIndex(stageIndex)].startFrame}
+						imageIndex={slotIndex}
+						visibleCount={visibleCount}
+						layoutProgress={layoutProgress}
+					/>
+				))}
+			</AbsoluteFill>
+
+			{/* 字幕/前景层：不跟随呼吸动画 */}
 			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>

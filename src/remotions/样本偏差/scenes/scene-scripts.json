@@ -1,0 +1,691 @@
+{
+  "topic": "破除社交媒体制造的焦虑",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "深夜刷屏的焦虑",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，描述深夜刷手机的场景 →  `CENTER_FOCUS`",
+          "content": [
+            {
+              "text": "深夜十一点半，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "你习惯性地往下划着屏幕。",
+              "startFrame": 30,
+              "durationFrames": 30
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "深夜，一个疲惫的人盯着屏幕，房间里只有屏幕的光亮",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "深夜",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 60
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述社交媒体上令人焦虑的案例 → `CENTER_FOCUS`",
+          "content": [
+            {
+              "text": "满眼看过去，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "都是二十多岁就背着爱马仕开着保时捷的年轻人，",
+              "startFrame": 30,
+              "durationFrames": 48
+            },
+            {
+              "text": "要不就是刚毕业就拿下大厂百万年薪的职场精英。",
+              "startFrame": 78,
+              "durationFrames": 48
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "一群焦虑的年轻人看着奢侈品和高薪工作的照片",
+            "enterEffect": "slideBottom",
+            "anchors": [
+              {
+                "text": "爱马仕",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "保时捷",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "百万年薪",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 126
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述自身情况与社交媒体展示的优越生活的对比，产生落差感和失败感 → `CENTER_FOCUS`",
+          "content": [
+            {
+              "text": "你转头看看自己身上那件洗得微微褪色的起球睡衣，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "再看看下个月又要还的账单，",
+              "startFrame": 51,
+              "durationFrames": 30
+            },
+            {
+              "text": "心里突然涌起一阵让人窒息的巨大失败感。",
+              "startFrame": 81,
+              "durationFrames": 42
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "一个疲惫的年轻人看着账单",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "失败感",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 123
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "算法的视觉霸凌",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，单图即可，无特殊结构。",
+          "content": [
+            {
+              "text": "请立刻停下来，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "不要再用这种精心包装的幻觉来惩罚你自己了。",
+              "startFrame": 30,
+              "durationFrames": 46
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "一个人停下脚步，周围环境变得模糊",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "停下来",
+                "showFrom": 0,
+                "color": null,
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "幻觉",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 76
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "使用“错把...当成...”的结构，表达认知偏差，适合认知转变模板。",
+          "content": [
+            {
+              "text": "我们每天都在遭受着平台算法极其隐蔽的视觉霸凌，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "不知不觉地错把互联网精准投喂的信息茧房，",
+              "startFrame": 51,
+              "durationFrames": 44
+            },
+            {
+              "text": "当成了外面真实的全世界。",
+              "startFrame": 95,
+              "durationFrames": 30
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "视觉霸凌",
+            "butText": "真实全世界",
+            "butSrc": "阳光明媚的真实城市",
+            "notContentIndex": 0,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 125
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "使用“不是...而是...”的结构，表达认知偏差，适合认知转变模板。",
+          "content": [
+            {
+              "text": "其实根本不是我们混得太差，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "而是那些收割注意力的资本和网红，",
+              "startFrame": 30,
+              "durationFrames": 35
+            },
+            {
+              "text": "联合起来刻意制造了这种群体性的生存焦虑，",
+              "startFrame": 65,
+              "durationFrames": 44
+            },
+            {
+              "text": "以此来掏空我们的口袋。",
+              "startFrame": 109,
+              "durationFrames": 30
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "我们混得太差",
+            "butText": "资本网红收割",
+            "butSrc": "一群网红在直播，背后是巨大的资本logo",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 139
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "统计学上的偏差",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对“样本代表性缺失和幸存者偏差”这一专业术语进行解释 → 选用`CONCEPT_CARD`。",
+          "content": [
+            {
+              "text": "在社会统计学上，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "这种残忍的错觉叫做样本代表性缺失和幸存者偏差。",
+              "startFrame": 30,
+              "durationFrames": 51
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "认知偏差简笔画图标",
+            "conceptName": "样本代表性缺失和幸存者偏差",
+            "anchors": []
+          },
+          "totalDurationFrames": 81
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，没有明显的结构特征 → 选用`CENTER_FOCUS`。",
+          "content": [
+            {
+              "text": "你必须明白一个硬核真相，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "想要了解一个群体的真实面貌，",
+              "startFrame": 30,
+              "durationFrames": 31
+            },
+            {
+              "text": "你抽样出来的样本必须是整体社会的完美微缩模型。",
+              "startFrame": 61,
+              "durationFrames": 51
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "人们围在一起讨论统计数据的简笔画",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "硬核真相",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "真实面貌",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": null
+              },
+              {
+                "text": "微缩模型",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 112
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，陈述一个事实 → 选用`CENTER_FOCUS`。",
+          "content": [
+            {
+              "text": "但社交媒体的展示机制从来就不是随机抽样的。",
+              "startFrame": 0,
+              "durationFrames": 46
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "社交媒体信息流的界面",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "随机抽样",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 46
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述一种生活状态，平缓叙述 → 选用`CENTER_FOCUS`。",
+          "content": [
+            {
+              "text": "那些每天起早贪黑挤着沙丁鱼罐头般的地铁、",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "吃着十几块钱路边摊、",
+              "startFrame": 44,
+              "durationFrames": 30
+            },
+            {
+              "text": "为了几千块全勤奖精打细算的沉默大多数，",
+              "startFrame": 74,
+              "durationFrames": 42
+            },
+            {
+              "text": "他们根本没有精力去发帖。",
+              "startFrame": 116,
+              "durationFrames": 30
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "拥挤的地铁车厢，人们疲惫不堪的表情",
+            "enterEffect": "slideBottom",
+            "anchors": [
+              {
+                "text": "社畜",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 146
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，陈述一个事实 → 选用`CENTER_FOCUS`。",
+          "content": [
+            {
+              "text": "就算发了，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "也会被算法极其无情地沉入海底。",
+              "startFrame": 30,
+              "durationFrames": 33
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "无情的算法将信息沉入海底的抽象概念图",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "算法",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "沉入海底",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 63
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "使用“不是...而是...”的结构 → 选用`COGNITIVE_SHIFT`。",
+          "content": [
+            {
+              "text": "你每天所看到的，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "压根不是生活的常态，",
+              "startFrame": 30,
+              "durationFrames": 30
+            },
+            {
+              "text": "而是一场经过极度滤镜过滤、",
+              "startFrame": 60,
+              "durationFrames": 30
+            },
+            {
+              "text": "甚至靠拼单伪造出来的极端财富展览。",
+              "startFrame": 90,
+              "durationFrames": 37
+            }
+          ],
+          "order": 6,
+          "param": {
+            "notText": "生活的常态",
+            "butText": "财富展览",
+            "butSrc": "极度奢华的晚宴场景",
+            "notContentIndex": 1,
+            "butContentIndex": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 127
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "防御动作",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，引出两个防御动作，适合单图展示 →  `CENTER_FOCUS`。",
+          "content": [
+            {
+              "text": "想要彻底打破这种毒药般的精神内耗，",
+              "startFrame": 0,
+              "durationFrames": 37
+            },
+            {
+              "text": "请给自己配备两个防御动作。",
+              "startFrame": 37,
+              "durationFrames": 30
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "大脑被乌云笼罩的简笔画",
+            "enterEffect": "slideBottom",
+            "anchors": [
+              {
+                "text": "精神内耗",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "防御动作",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 67
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "提出第一个防御动作，包含一个核心方法（去国家统计局官网看国民收入基座），和一句解释说明 → 适合 `METHOD_STACK`。",
+          "content": [
+            {
+              "text": "第一，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "主动去国家统计局的官网看看真实的国民收入基座，",
+              "startFrame": 30,
+              "durationFrames": 51
+            },
+            {
+              "text": "去亲手找回那个被互联网隐藏起来的庞大分母。",
+              "startFrame": 81,
+              "durationFrames": 46
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "了解数据真相",
+            "imageSrc": "一个人在电脑前浏览国家统计局官网，认真研究数据的场景",
+            "notes": [
+              {
+                "text": "查看官方数据",
+                "showFrom": 1
+              },
+              {
+                "text": "找回真实认知",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 127
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "第二个防御动作，为「提醒标题 + 多句解释展开」→ 适合 `METHOD_STACK`。",
+          "content": [
+            {
+              "text": "第二，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "永远要在心里默念，",
+              "startFrame": 30,
+              "durationFrames": 30
+            },
+            {
+              "text": "算法售卖的是你的眼球和焦虑，",
+              "startFrame": 60,
+              "durationFrames": 31
+            },
+            {
+              "text": "而不是客观世界的真相。",
+              "startFrame": 91,
+              "durationFrames": 30
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "默念算法与真相",
+            "imageSrc": "手机屏幕信息流与焦虑表情，远景为阳光穿透云层照亮开阔地面的对比简笔画",
+            "notes": [
+              {
+                "text": "默念算法在搞事",
+                "showFrom": 1
+              },
+              {
+                "text": "而非客观世界真相",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 121
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，给出建议，适合单图展示 →  `CENTER_FOCUS`。",
+          "content": [
+            {
+              "text": "绝不要用别人精心修饰过、",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "甚至造假的分子，",
+              "startFrame": 30,
+              "durationFrames": 30
+            },
+            {
+              "text": "来丈量你真实且多维的人生。",
+              "startFrame": 60,
+              "durationFrames": 30
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "手被许多线缠绕着，象征着被控制和束缚",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "精心修饰",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "造假",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "丈量人生",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 90
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片级短促强结论，无需配图 →  `TEXT_FOCUS`。",
+          "content": [
+            {
+              "text": "真正的清醒，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "是踏实地踩在自己泥泞但坚固的生活坐标上，",
+              "startFrame": 30,
+              "durationFrames": 44
+            },
+            {
+              "text": "拒绝为虚假的统计学幻影买单。",
+              "startFrame": 74,
+              "durationFrames": 31
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": "拒绝为虚假的统计学幻影买单",
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "统计学幻影",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 105
+        }
+      ]
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "样本偏差",
+    "subtitle": "破除社交媒体制造的焦虑",
+    "themeColor": "#2563EB",
+    "badge": "统计素养 · 理性思考"
+  }
+}

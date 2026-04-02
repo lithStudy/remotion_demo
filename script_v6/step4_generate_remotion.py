@@ -142,6 +142,50 @@ def _param_to_jsx_props(param: dict, name: str, scene_id: str, order: int) -> st
     return " ".join(props)
 
 
+def normalize_cover(scripts_data: dict) -> dict | None:
+    """
+    从 scene-scripts.json 顶层读取可选 cover。
+    有效条件：cover 为对象，durationFrames 为正整数，且含非空字符串 title、subtitle。
+    可选：themeColor、badge（字符串）。
+    """
+    raw = scripts_data.get("cover")
+    if not isinstance(raw, dict):
+        return None
+    try:
+        dur = int(raw.get("durationFrames", 0))
+    except (TypeError, ValueError):
+        return None
+    if dur <= 0:
+        return None
+    title = raw.get("title")
+    subtitle = raw.get("subtitle")
+    if not isinstance(title, str) or not title.strip():
+        return None
+    if not isinstance(subtitle, str) or not subtitle.strip():
+        return None
+    out = {"durationFrames": dur, "title": title.strip(), "subtitle": subtitle.strip()}
+    tc = raw.get("themeColor")
+    if isinstance(tc, str) and tc.strip():
+        out["themeColor"] = tc.strip()
+    bd = raw.get("badge")
+    if isinstance(bd, str) and bd.strip():
+        out["badge"] = bd.strip()
+    return out
+
+
+def static_cover_props_jsx(cover: dict) -> str:
+    """StaticCover 的 JSX 属性行（多行缩进与 Scene 内一致）。"""
+    lines = [
+        f'title={json.dumps(cover["title"], ensure_ascii=False)}',
+        f'subtitle={json.dumps(cover["subtitle"], ensure_ascii=False)}',
+    ]
+    if cover.get("themeColor"):
+        lines.append(f'themeColor={json.dumps(cover["themeColor"], ensure_ascii=False)}')
+    if cover.get("badge"):
+        lines.append(f'badge={json.dumps(cover["badge"], ensure_ascii=False)}')
+    return "\n                    ".join(lines)
+
+
 def _apply_preview_overrides(scenes: list, preview_image: str | None, mute_audio: bool) -> None:
     """
     预览覆盖：
@@ -252,11 +296,19 @@ export const Scene{n}: React.FC = () => {{
 '''
 
 
-def generate_composition_tsx(name: str, scenes: list, config: dict, *, mute_audio: bool = False) -> str:
-    """生成主 Composition 文件"""
+def generate_composition_tsx(
+    name: str,
+    scenes: list,
+    config: dict,
+    *,
+    mute_audio: bool = False,
+    cover: dict | None = None,
+) -> str:
+    """生成主 Composition 文件。若 scripts_data.cover 有效，则片头插入 StaticCover 并拉长总时长。"""
     pascal = to_pascal_case(name)
     transition = config.get("transition_duration_frames", 15)
     scene_end_padding = config.get("scene_end_padding_frames", 20)
+    main_duration_id = f"MAIN_DURATION_{name.upper()}"
 
     scene_imports = "\n".join([
         f'import {{ Scene{i+1}, calculateScene{i+1}Duration }} from "./scenes/Scene{i+1}";'
@@ -272,48 +324,170 @@ def generate_composition_tsx(name: str, scenes: list, config: dict, *, mute_audi
     bgm_block = ""
     if not mute_audio:
         bgm_block = """            <Audio
-                src={staticFile("audio/effects/The_Geometry_of_Breakthrough.mp3")}
+                src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
                 loop
                 volume={0.22}
                 name="Background music"
             />
 """
 
-    remotion_named = (
-        "AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame"
-        if not mute_audio
-        else "AbsoluteFill, interpolate, useCurrentFrame"
-    )
-
-    return f'''import React from "react";
-import {{ {remotion_named} }} from "remotion";
-import {{ z }} from "zod";
-import {{ linearTiming, TransitionSeries }} from "@remotion/transitions";
-import {{ fade }} from "@remotion/transitions/fade";
-
-{scene_imports}
-
-export const {pascal}Schema = z.object({{}});
-
-const TRANSITION_DURATION = {transition};
-const SCENE_END_PADDING = {scene_end_padding};
+    if cover:
+        remotion_named = (
+            "AbsoluteFill, Audio, interpolate, staticFile, Sequence, useCurrentFrame"
+            if not mute_audio
+            else "AbsoluteFill, interpolate, Sequence, useCurrentFrame"
+        )
+        static_import = 'import { StaticCover } from "../../components";\n'
+        cover_dur = cover["durationFrames"]
+        cover_props = static_cover_props_jsx(cover)
+        duration_block = f"""const COVER_DURATION_FRAMES = {cover_dur};
 
 const sceneConfigs = [
     {scene_configs},
 ];
 
-export const TOTAL_DURATION_{name.upper()} =
+const {main_duration_id} =
     sceneConfigs.reduce((total, c) => total + c.duration, 0) -
     (sceneConfigs.length - 1) * TRANSITION_DURATION;
 
-const ProgressBar: React.FC = () => {{
+export const TOTAL_DURATION_{name.upper()} =
+    COVER_DURATION_FRAMES + {main_duration_id};"""
+        progress_bar = f"""const ProgressBar: React.FC = () => {{
     const frame = useCurrentFrame();
-    
+    if (frame < COVER_DURATION_FRAMES) {{
+        return null;
+    }}
+    const contentFrame = frame - COVER_DURATION_FRAMES;
+
     let currentStart = 0;
     const segments = sceneConfigs.map((c, i) => {{
         const isLast = i === sceneConfigs.length - 1;
         const segmentDuration = isLast ? c.duration : c.duration - TRANSITION_DURATION;
-        
+
+        const segment = {{ start: currentStart, duration: segmentDuration }};
+        currentStart += segmentDuration;
+        return segment;
+    }});
+
+    const activeIndex = segments.findIndex(seg => contentFrame >= seg.start && contentFrame < seg.start + seg.duration);
+    const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
+    const activeLabel = sceneConfigs[validActiveIndex]?.label || "";
+
+    return (
+        <div style={{{{
+            position: "absolute", top: 40, left: 40, right: 40,
+            display: "flex", flexDirection: "column", gap: 16, zIndex: 100
+        }}}}>
+            <div style={{{{ display: "flex", gap: 8, height: 8 }}}}>
+                {{segments.map((seg, i) => {{
+                    const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));
+                    const isActive = i === validActiveIndex;
+                    return (
+                        <div key={{i}} style={{{{
+                            flex: 1,
+                            backgroundColor: isActive ? "rgba(34, 43, 69, 0.18)" : "rgba(34, 43, 69, 0.1)",
+                            borderRadius: 999,
+                            overflow: "hidden",
+                            border: isActive ? "1px solid rgba(34, 43, 69, 0.32)" : "1px solid rgba(34, 43, 69, 0.2)",
+                            boxShadow: isActive
+                                ? "0 3px 10px rgba(31, 41, 55, 0.12)"
+                                : "0 1px 4px rgba(31, 41, 55, 0.08)",
+                        }}}}>
+                            <div style={{{{
+                                width: `${{progress * 100}}%`,
+                                height: "100%",
+                                background: isActive
+                                    ? "linear-gradient(90deg, rgba(29, 78, 216, 0.95), rgba(56, 189, 248, 0.92))"
+                                    : "rgba(30, 41, 59, 0.72)",
+                                boxShadow: isActive ? "0 0 12px rgba(37, 99, 235, 0.35)" : "none",
+                            }}}} />
+                        </div>
+                    );
+                }})}}
+            </div>
+
+            <div style={{{{
+                fontSize: 30,
+                fontWeight: 700,
+                fontFamily: '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif',
+                letterSpacing: 0.4,
+                color: "rgba(17, 24, 39, 0.95)",
+                textAlign: "left",
+                textShadow: "0 1px 2px rgba(255,255,255,0.45)",
+                padding: "6px 14px",
+                backgroundColor: "rgba(255, 255, 255, 0.58)",
+                border: "1px solid rgba(17, 24, 39, 0.12)",
+                borderRadius: 10,
+                alignSelf: "flex-start",
+                backdropFilter: "blur(6px)",
+                boxShadow: "0 6px 20px rgba(15, 23, 42, 0.12)",
+            }}}}>
+                {{activeLabel}}
+            </div>
+        </div>
+    );
+}};"""
+        timeline_block = f"""            <Sequence durationInFrames={{COVER_DURATION_FRAMES}}>
+                <StaticCover
+                    {cover_props}
+                />
+            </Sequence>
+            <Sequence from={{COVER_DURATION_FRAMES}} durationInFrames={{{main_duration_id}}}>
+                <AbsoluteFill>
+                    <div
+                        style={{{{
+                            position: "absolute",
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            height: "10%",
+                            minHeight: 48,
+                            backgroundColor: "rgba(0,0,0,0.5)",
+                        }}}}
+                    />
+                    <TransitionSeries>
+                        {{sceneConfigs.map((config, index) => {{
+                            const SceneComp = config.component;
+                            const isLast = index === sceneConfigs.length - 1;
+                            return (
+                                <React.Fragment key={{config.name}}>
+                                    <TransitionSeries.Sequence durationInFrames={{config.duration}}>
+                                        <SceneComp />
+                                    </TransitionSeries.Sequence>
+                                    {{!isLast && (
+                                        <TransitionSeries.Transition
+                                            timing={{linearTiming({{ durationInFrames: TRANSITION_DURATION }})}}
+                                            presentation={{fade()}}
+                                        />
+                                    )}}
+                                </React.Fragment>
+                            );
+                        }})}}
+                    </TransitionSeries>
+                </AbsoluteFill>
+            </Sequence>"""
+    else:
+        remotion_named = (
+            "AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame"
+            if not mute_audio
+            else "AbsoluteFill, interpolate, useCurrentFrame"
+        )
+        static_import = ""
+        duration_block = f"""const sceneConfigs = [
+    {scene_configs},
+];
+
+export const TOTAL_DURATION_{name.upper()} =
+    sceneConfigs.reduce((total, c) => total + c.duration, 0) -
+    (sceneConfigs.length - 1) * TRANSITION_DURATION;"""
+        progress_bar = f"""const ProgressBar: React.FC = () => {{
+    const frame = useCurrentFrame();
+
+    let currentStart = 0;
+    const segments = sceneConfigs.map((c, i) => {{
+        const isLast = i === sceneConfigs.length - 1;
+        const segmentDuration = isLast ? c.duration : c.duration - TRANSITION_DURATION;
+
         const segment = {{ start: currentStart, duration: segmentDuration }};
         currentStart += segmentDuration;
         return segment;
@@ -355,7 +529,7 @@ const ProgressBar: React.FC = () => {{
                     );
                 }})}}
             </div>
-            
+
             <div style={{{{
                 fontSize: 30,
                 fontWeight: 700,
@@ -376,7 +550,54 @@ const ProgressBar: React.FC = () => {{
             </div>
         </div>
     );
-}};
+}};"""
+        timeline_block = """            <div
+                style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: "10%",
+                    minHeight: 48,
+                    backgroundColor: "rgba(0,0,0,0.5)",
+                }}
+            />
+            <TransitionSeries>
+                {sceneConfigs.map((config, index) => {
+                    const SceneComp = config.component;
+                    const isLast = index === sceneConfigs.length - 1;
+                    return (
+                        <React.Fragment key={config.name}>
+                            <TransitionSeries.Sequence durationInFrames={config.duration}>
+                                <SceneComp />
+                            </TransitionSeries.Sequence>
+                            {!isLast && (
+                                <TransitionSeries.Transition
+                                    timing={linearTiming({ durationInFrames: TRANSITION_DURATION })}
+                                    presentation={fade()}
+                                />
+                            )}
+                        </React.Fragment>
+                    );
+                })}
+            </TransitionSeries>"""
+
+    return f'''import React from "react";
+import {{ {remotion_named} }} from "remotion";
+import {{ z }} from "zod";
+import {{ linearTiming, TransitionSeries }} from "@remotion/transitions";
+import {{ fade }} from "@remotion/transitions/fade";
+
+{static_import}{scene_imports}
+
+export const {pascal}Schema = z.object({{}});
+
+const TRANSITION_DURATION = {transition};
+const SCENE_END_PADDING = {scene_end_padding};
+
+{duration_block}
+
+{progress_bar}
 
 export const {pascal}: React.FC<z.infer<typeof {pascal}Schema>> = () => {{
     const frame = useCurrentFrame();
@@ -394,7 +615,7 @@ export const {pascal}: React.FC<z.infer<typeof {pascal}Schema>> = () => {{
     }});
 
     return (
-        <AbsoluteFill>  
+        <AbsoluteFill>
 {bgm_block}            <div
                 style={{{{
                     height: "100%",
@@ -412,37 +633,8 @@ export const {pascal}: React.FC<z.infer<typeof {pascal}Schema>> = () => {{
                     background:
                         "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)",
                 }}}}
-            />          
-            <div
-                style={{{{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: "10%",
-                    minHeight: 48,
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                }}}}
             />
-            <TransitionSeries>
-                {{sceneConfigs.map((config, index) => {{
-                    const SceneComp = config.component;
-                    const isLast = index === sceneConfigs.length - 1;
-                    return (
-                        <React.Fragment key={{config.name}}>
-                            <TransitionSeries.Sequence durationInFrames={{config.duration}}>
-                                <SceneComp />
-                            </TransitionSeries.Sequence>
-                            {{!isLast && (
-                                <TransitionSeries.Transition
-                                    timing={{linearTiming({{ durationInFrames: TRANSITION_DURATION }})}}
-                                    presentation={{fade()}}
-                                />
-                            )}}
-                        </React.Fragment>
-                    );
-                }})}}
-            </TransitionSeries>
+{timeline_block}
             <ProgressBar />
         </AbsoluteFill>
     );
@@ -538,6 +730,12 @@ def main():
         print("❌ 无场景数据")
         return False
 
+    cover = normalize_cover(scripts_data)
+    if cover:
+        print(
+            f"📌 片头封面: {cover['durationFrames']} 帧 — "
+            f"{cover['title'][:20]}{'…' if len(cover['title']) > 20 else ''}"
+        )
 
     if args.preview_image or args.mute_audio:
         _apply_preview_overrides(
@@ -577,7 +775,9 @@ def main():
     print("  ✅ index.ts")
 
     # 生成主 Composition 文件
-    comp_code = generate_composition_tsx(name, scenes, config, mute_audio=args.mute_audio)
+    comp_code = generate_composition_tsx(
+        name, scenes, config, mute_audio=args.mute_audio, cover=cover
+    )
     comp_path = remotion_dir / f"{pascal}.tsx"
     with open(comp_path, "w", encoding="utf-8") as f:
         f.write(comp_code)

@@ -1,0 +1,573 @@
+{
+  "topic": "警惕数据图表的视觉欺骗",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "发布会现场的视觉陷阱",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述发布会现场场景，投资者被增长红线吸引，属于平缓叙述，适合用单图的CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "看着大屏幕上那条几乎垂直冲向云霄的业绩增长红线，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "台下的投资者们热血沸腾，",
+              "startFrame": 59,
+              "durationFrames": 30
+            },
+            {
+              "text": "响起了雷鸣般的掌声。",
+              "startFrame": 89,
+              "durationFrames": 30
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "发布会现场大屏幕，红色柱状图向上增长",
+            "enterEffect": "slideBottom",
+            "anchors": [
+              {
+                "text": "业绩增长",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "热血沸腾",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 119
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "此处是情绪节拍递进：先被图表的震撼感裹挟，再到“没人细看”，最后揭穿纵坐标被截断的关键细节；用 BEAT_SEQUENCE 让画面跟随口播逐拍升级更贴合。",
+          "content": [
+            {
+              "text": "屏幕上充满视觉张力的图表，",
+              "startFrame": 0,
+              "durationFrames": 25
+            },
+            {
+              "text": "看起来是如此的震撼和雄辩，",
+              "startFrame": 25,
+              "durationFrames": 28
+            },
+            {
+              "text": "以至于在场根本没有一个人去仔细看一眼，",
+              "startFrame": 53,
+              "durationFrames": 42
+            },
+            {
+              "text": "图表边缘那个被偷偷做过手脚、",
+              "startFrame": 95,
+              "durationFrames": 31
+            },
+            {
+              "text": "刻意截断了的纵坐标。",
+              "startFrame": 126,
+              "durationFrames": 30
+            }
+          ],
+          "order": 2,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "屏幕上出现一张极具视觉冲击力的统计图表，线条夸张、对比强烈，观众被吸引的简笔画",
+                "enterEffect": "breathe",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "一群人被图表震撼到，目光只盯着大趋势，没有人低头细看坐标与刻度的简笔画",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "图表边缘有一只手在偷偷调整坐标轴或刻度，表现“做过手脚”的隐蔽感，简笔画",
+                "enterEffect": "slideLeft",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "被截断的纵坐标特写：y轴从中间开始，底部刻度被切掉，形成误导性的巨大差异，简笔画",
+                "enterEffect": "zoomIn",
+                "tone": "alert"
+              }
+            ]
+          },
+          "totalDurationFrames": 156
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "视觉冲击与洗脑",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，引出话题，使用CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "我们普通人实在太容易被一张花哨的图表牵着鼻子走了。",
+              "startFrame": 0,
+              "durationFrames": 55
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "普通人被图表迷惑的简笔画",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "花哨图表",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 55
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用科学研究，作为论据，选择QUOTE_CITATION。",
+          "content": [
+            {
+              "text": "科学研究表明，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "人类大脑处理图像的速度比处理干瘪的文字快了几万倍。",
+              "startFrame": 30,
+              "durationFrames": 55
+            }
+          ],
+          "order": 2,
+          "param": {
+            "quoteSource": "科学研究",
+            "anchors": []
+          },
+          "totalDurationFrames": 85
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "过渡句，起承上启下作用，使用CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "这意味着什么？",
+              "startFrame": 0,
+              "durationFrames": 30
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "一个巨大的问号悬浮在空中",
+            "enterEffect": "zoomIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 30
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "通过对比“理性逻辑防线未启动”和“视觉冲击完成洗脑”来突出认知转变，选择COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "意味着在你的理性逻辑防线，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "还没有完全启动的时候，",
+              "startFrame": 30,
+              "durationFrames": 30
+            },
+            {
+              "text": "那种狂热的视觉冲击，",
+              "startFrame": 60,
+              "durationFrames": 30
+            },
+            {
+              "text": "就已经提前完成了对你的洗脑。",
+              "startFrame": 90,
+              "durationFrames": 31
+            }
+          ],
+          "order": 4,
+          "param": {
+            "notText": "理性逻辑防线",
+            "butText": "视觉冲击洗脑",
+            "butSrc": "冲击大脑的狂热视觉画面",
+            "notContentIndex": 0,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 121
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "结论性的金句冲击，使用TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "这不是你我不够聪明，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "而是那些别有用心的商业骗子和营销号，",
+              "startFrame": 30,
+              "durationFrames": 40
+            },
+            {
+              "text": "对我们发动的一场毫不留情的视觉降维打击。",
+              "startFrame": 70,
+              "durationFrames": 44
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": "别有用心的商业骗子和营销号",
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "商业骗子",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 114
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "几何骗局的常见手法",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "铺垫介绍，定性描述，适合居中展示。",
+          "content": [
+            {
+              "text": "在数据可视化与传播学中，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "这其实是一套极其阴险的几何骗局。",
+              "startFrame": 30,
+              "durationFrames": 35
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "数据图表，几何图形",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "几何骗局",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 65
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "介绍常见手法，适合居中展示。",
+          "content": [
+            {
+              "text": "他们最常见的手法就是截断Y轴。",
+              "startFrame": 0,
+              "durationFrames": 33
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "数据图表，Y轴被截断的示意图",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "截断Y轴",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 33
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述正常情况下的数据展示，为对比做铺垫。",
+          "content": [
+            {
+              "text": "正常的数据起伏如果从零开始画，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "可能只是一条平缓的波浪。",
+              "startFrame": 33,
+              "durationFrames": 30
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "一条弯曲的波浪线",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 63
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "通过“如果…那么…”结构展示数据被操控后的结果，形成认知转变。",
+          "content": [
+            {
+              "text": "但如果他们把坐标起点直接改成九十，",
+              "startFrame": 0,
+              "durationFrames": 37
+            },
+            {
+              "text": "那么原本只有百分之一的微小波动，",
+              "startFrame": 37,
+              "durationFrames": 35
+            },
+            {
+              "text": "在图表上就会瞬间变成拔地而起的陡峭山峰。",
+              "startFrame": 72,
+              "durationFrames": 44
+            }
+          ],
+          "order": 4,
+          "param": {
+            "notText": "平缓的波浪",
+            "butText": "陡峭的山峰",
+            "butSrc": "拔地而起的山峰，阳光照耀",
+            "notContentIndex": 0,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 116
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述另一种常见手法：选择性展示数据，适合居中展示。",
+          "content": [
+            {
+              "text": "另外，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "他们还会熟练地玩弄樱桃采摘的游戏，",
+              "startFrame": 30,
+              "durationFrames": 37
+            },
+            {
+              "text": "只截取数据猛烈上升的那几个特定月份给你看，",
+              "startFrame": 67,
+              "durationFrames": 46
+            },
+            {
+              "text": "把连年巨额亏损的丑陋真相死死掩盖在画框之外。",
+              "startFrame": 113,
+              "durationFrames": 48
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "一张图表，数据呈现断崖式下跌的趋势",
+            "enterEffect": "slideBottom",
+            "anchors": [
+              {
+                "text": "樱桃采摘",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "掩盖真相",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "woosh"
+              }
+            ]
+          },
+          "totalDurationFrames": 161
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "类比说明，强调只展示好的部分，隐藏坏的部分，适合居中展示。",
+          "content": [
+            {
+              "text": "这就好比故意切掉照片里满地垃圾的背景，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "只给你看一张擦得锃亮的干净桌面。",
+              "startFrame": 42,
+              "durationFrames": 35
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "满地垃圾的照片，背景模糊，前景是一张擦得锃亮的干净桌面",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "干净桌面",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 77
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "如何进行图表审计",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "将“图表审计”的三问合并为一个方法栈，适合在同一镜头内依次抛出检查项。",
+          "content": [
+            {
+              "text": "下次再看到任何让人心潮澎湃或者恐慌的趋势图时，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "先冷静一下，给它做个图表审计：",
+              "startFrame": 51,
+              "durationFrames": 60
+            },
+            {
+              "text": "Y轴是从0开始的吗？",
+              "startFrame": 111,
+              "durationFrames": 30
+            },
+            {
+              "text": "时间范围有被选择性截取吗？",
+              "startFrame": 141,
+              "durationFrames": 30
+            },
+            {
+              "text": "尺度比例有被刻意扭曲吗？",
+              "startFrame": 171,
+              "durationFrames": 30
+            }
+          ],
+          "order": 1,
+          "param": {
+            "title": "图表审计三问",
+            "imageSrc": "一个趋势图表，图表波动很大",
+            "notes": [
+              { "text": "Y轴从0开始吗？", "showFrom": 2 },
+              { "text": "时间范围被截取吗？", "showFrom": 3 },
+              { "text": "尺度比例被扭曲吗？", "showFrom": 4 }
+            ]
+          },
+          "totalDurationFrames": 201
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "QUOTE_CITATION",
+          "reasoning": "类似格言警句，适合用引用形式突出。",
+          "content": [
+            {
+              "text": "枯燥的数据也许不会直接说谎，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "但手里拿着画笔画图表的人一定会。",
+              "startFrame": 31,
+              "durationFrames": 35
+            }
+          ],
+          "order": 2,
+          "param": {
+            "quoteSource": "数据分析师的职场箴言",
+            "anchors": []
+          },
+          "totalDurationFrames": 66
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片结论，短促有冲击力，适合用金句形式强调。",
+          "content": [
+            {
+              "text": "一个具备现代公民素养的独立思考者，",
+              "startFrame": 0,
+              "durationFrames": 37
+            },
+            {
+              "text": "永远要把对这个世界的视觉解释权，",
+              "startFrame": 37,
+              "durationFrames": 35
+            },
+            {
+              "text": "牢牢夺回自己手里。",
+              "startFrame": 72,
+              "durationFrames": 30
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": "夺回对世界的视觉解释权",
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "视觉解释权",
+                "color": "red"
+              }
+            ]
+          },
+          "totalDurationFrames": 102
+        }
+      ]
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "数据可视化陷阱",
+    "subtitle": "警惕数据图表的视觉欺骗",
+    "themeColor": "#2563EB",
+    "badge": "统计素养 · 理性思考"
+  }
+}

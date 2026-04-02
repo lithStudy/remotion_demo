@@ -250,6 +250,8 @@ export interface BeatStageItem {
 	imageSrc: string;
 	enterEffect?: ImageEnterEffect;
 	tone?: BeatStageTone;
+	/** 从第几条口播（content 0-based）开始显示该图；省略则与当前节拍下标 i 一致 */
+	showFrom?: number;
 }
 
 // ─────────────────────────────────────────────────────────────

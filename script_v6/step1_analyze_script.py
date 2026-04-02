@@ -252,6 +252,57 @@ def _inject_preview_timings(scene_scripts: dict, fps: int, config: dict) -> None
             item["totalDurationFrames"] = max(cursor, min_frames)
 
 
+def _inject_cover_for_step4(
+    result: dict,
+    video_name: str,
+    config: dict,
+) -> None:
+    """
+    为 step4 的 StaticCover 片头写入顶层 cover（若尚无有效 cover）。
+    - title：优先使用命令行/配置的成片名 video_name；若为空则用 topic 截断作兜底。
+    - subtitle：使用 Step1 产出的 topic。
+    - durationFrames / themeColor / badge：来自 config.json（可选）。
+    若 cover_duration_frames<=0 或未配置为生成，则不写入 cover。
+    """
+    existing = result.get("cover")
+    if isinstance(existing, dict):
+        try:
+            dur = int(existing.get("durationFrames", 0))
+        except (TypeError, ValueError):
+            dur = 0
+        t = str(existing.get("title", "") or "").strip()
+        s = str(existing.get("subtitle", "") or "").strip()
+        if dur > 0 and t and s:
+            return
+
+    topic = str(result.get("topic", "") or "").strip()
+    if not topic:
+        return
+
+    try:
+        duration = int(config.get("cover_duration_frames", 5))
+    except (TypeError, ValueError):
+        duration = 5
+    if duration <= 0:
+        return
+
+    title = str(video_name or "").strip() or topic[:40]
+
+    cover: dict = {
+        "durationFrames": duration,
+        "title": title,
+        "subtitle": topic,
+    }
+    tc = config.get("cover_theme_color")
+    if isinstance(tc, str) and tc.strip():
+        cover["themeColor"] = tc.strip()
+    badge = config.get("cover_badge")
+    if isinstance(badge, str) and badge.strip():
+        cover["badge"] = badge.strip()
+
+    result["cover"] = cover
+
+
 def _merge_dash_only_captions(scene_scripts: dict) -> None:
     """
     合并仅包含破折号的字幕条目（例如单独一条 "—"）。
@@ -552,6 +603,7 @@ def main():
     result = analyze_with_gemini(text, config, ai_logger)
     _inject_preview_timings(result, config.get("fps", 30), config)
     _merge_dash_only_captions(result)
+    _inject_cover_for_step4(result, video_name, config)
 
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / "scene-scripts.json"

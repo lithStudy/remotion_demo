@@ -252,6 +252,17 @@ def _inject_preview_timings(scene_scripts: dict, fps: int, config: dict) -> None
             item["totalDurationFrames"] = max(cursor, min_frames)
 
 
+def _cover_methodology_steps_from_config(config: dict) -> list[str] | None:
+    raw = config.get("cover_methodology_steps")
+    if not isinstance(raw, list):
+        return None
+    out: list[str] = []
+    for x in raw:
+        if isinstance(x, str) and x.strip():
+            out.append(x.strip())
+    return out if out else None
+
+
 def _inject_cover_for_step4(
     result: dict,
     video_name: str,
@@ -261,7 +272,8 @@ def _inject_cover_for_step4(
     为 step4 的 StaticCover 片头写入顶层 cover（若尚无有效 cover）。
     - title：优先使用命令行/配置的成片名 video_name；若为空则用 topic 截断作兜底。
     - subtitle：使用 Step1 产出的 topic。
-    - durationFrames / themeColor / badge：来自 config.json（可选）。
+    - durationFrames / themeColor / badge / seriesLabel / seriesLabelEn /
+      methodologySteps / methodologyStepsEn：来自 config.json（可选）。
     若 cover_duration_frames<=0 或未配置为生成，则不写入 cover。
     """
     existing = result.get("cover")
@@ -273,6 +285,25 @@ def _inject_cover_for_step4(
         t = str(existing.get("title", "") or "").strip()
         s = str(existing.get("subtitle", "") or "").strip()
         if dur > 0 and t and s:
+            if not str(existing.get("seriesLabel", "") or "").strip():
+                series_label = config.get("cover_series_label")
+                if isinstance(series_label, str) and series_label.strip():
+                    existing["seriesLabel"] = series_label.strip()
+            if not str(existing.get("seriesLabelEn", "") or "").strip():
+                en = config.get("cover_series_label_en")
+                if isinstance(en, str) and en.strip():
+                    existing["seriesLabelEn"] = en.strip()
+            ms = existing.get("methodologySteps")
+            if not isinstance(ms, list) or not any(
+                isinstance(x, str) and x.strip() for x in ms
+            ):
+                parsed = _cover_methodology_steps_from_config(config)
+                if parsed:
+                    existing["methodologySteps"] = parsed
+            if not str(existing.get("methodologyStepsEn", "") or "").strip():
+                mse = config.get("cover_methodology_steps_en")
+                if isinstance(mse, str) and mse.strip():
+                    existing["methodologyStepsEn"] = mse.strip()
             return
 
     topic = str(result.get("topic", "") or "").strip()
@@ -299,6 +330,18 @@ def _inject_cover_for_step4(
     badge = config.get("cover_badge")
     if isinstance(badge, str) and badge.strip():
         cover["badge"] = badge.strip()
+    series_label = config.get("cover_series_label")
+    if isinstance(series_label, str) and series_label.strip():
+        cover["seriesLabel"] = series_label.strip()
+    series_label_en = config.get("cover_series_label_en")
+    if isinstance(series_label_en, str) and series_label_en.strip():
+        cover["seriesLabelEn"] = series_label_en.strip()
+    parsed_steps = _cover_methodology_steps_from_config(config)
+    if parsed_steps:
+        cover["methodologySteps"] = parsed_steps
+    methodology_steps_en = config.get("cover_methodology_steps_en")
+    if isinstance(methodology_steps_en, str) and methodology_steps_en.strip():
+        cover["methodologyStepsEn"] = methodology_steps_en.strip()
 
     result["cover"] = cover
 

@@ -3,7 +3,7 @@
  * 供各 BW 模板复用：背景/文字色、图片入场效果类型、多图项结构、useImageEnterStyle。
  */
 import React from "react";
-import { interpolate, spring } from "remotion";
+import { interpolate, spring, staticFile } from "remotion";
 import defaultImage from "./images/scene1_1.png";
 
 /** 默认图片地址 */
@@ -14,24 +14,27 @@ export const DEFAULT_IMAGE = defaultImage;
  */
 export function isValidImageSrc(src?: string): boolean {
 	if (!src || typeof src !== "string" || src.trim() === "") return false;
-	// 简单的正则表达式：匹配 http(s)://, data:image/, 或以 / 开头的路径，或包含常见图片后缀的字符串
-	const urlPattern = /^(https?:\/\/|data:image\/|\/|static:|[a-zA-Z]:\\)/i;
+	const trimmed = src.trim();
 	const extensionPattern = /\.(png|jpg|jpeg|gif|webp|svg|bmp)(\?.*)?$/i;
-
-	// 如果符合 URL 协议或以 / 开头，或者看起来像是一个文件路径（包含后缀）
-	return urlPattern.test(src) && extensionPattern.test(src);
+	if (!extensionPattern.test(trimmed)) return false;
+	// http(s)、data:、绝对路径、static:、Windows 盘符路径
+	const urlPattern = /^(https?:\/\/|data:image\/|\/|static:|[a-zA-Z]:\\)/i;
+	if (urlPattern.test(trimmed)) return true;
+	// public 下相对路径（scene-scripts 常见写法：images/xxx.png，无前导 /）
+	if (!trimmed.includes("://") && !trimmed.startsWith("..")) return true;
+	return false;
 }
 
 /** 
  * 获取安全的图片地址：如果 src 无效，则返回默认图片
  */
 export function getSafeImageSrc(src?: string): string {
-	console.log("src", src);
-	if (isValidImageSrc(src)) {
-		console.log('dddddddd:'+src)
-		return src!;
-	}
-	return DEFAULT_IMAGE;
+	if (!src || typeof src !== "string" || src.trim() === "") return DEFAULT_IMAGE;
+	const trimmed = src.trim();
+	if (!isValidImageSrc(trimmed)) return DEFAULT_IMAGE;
+	const urlPattern = /^(https?:\/\/|data:image\/|\/|static:|[a-zA-Z]:\\)/i;
+	if (urlPattern.test(trimmed)) return trimmed;
+	return staticFile(trimmed.replace(/^\//, ""));
 }
 
 /** 白底模板背景色 */

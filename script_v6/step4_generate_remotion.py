@@ -146,7 +146,8 @@ def normalize_cover(scripts_data: dict) -> dict | None:
     """
     从 scene-scripts.json 顶层读取可选 cover。
     有效条件：cover 为对象，durationFrames 为正整数，且含非空字符串 title、subtitle。
-    可选：themeColor、badge（字符串）。
+    可选：themeColor、badge、seriesLabel、seriesLabelEn（字符串）；
+    methodologySteps（非空字符串数组）、methodologyStepsEn（字符串）。
     """
     raw = scripts_data.get("cover")
     if not isinstance(raw, dict):
@@ -170,6 +171,20 @@ def normalize_cover(scripts_data: dict) -> dict | None:
     bd = raw.get("badge")
     if isinstance(bd, str) and bd.strip():
         out["badge"] = bd.strip()
+    sl = raw.get("seriesLabel")
+    if isinstance(sl, str) and sl.strip():
+        out["seriesLabel"] = sl.strip()
+    sle = raw.get("seriesLabelEn")
+    if isinstance(sle, str) and sle.strip():
+        out["seriesLabelEn"] = sle.strip()
+    ms = raw.get("methodologySteps")
+    if isinstance(ms, list):
+        steps = [str(x).strip() for x in ms if isinstance(x, str) and str(x).strip()]
+        if steps:
+            out["methodologySteps"] = steps
+    mse = raw.get("methodologyStepsEn")
+    if isinstance(mse, str) and mse.strip():
+        out["methodologyStepsEn"] = mse.strip()
     return out
 
 
@@ -183,6 +198,17 @@ def static_cover_props_jsx(cover: dict) -> str:
         lines.append(f'themeColor={json.dumps(cover["themeColor"], ensure_ascii=False)}')
     if cover.get("badge"):
         lines.append(f'badge={json.dumps(cover["badge"], ensure_ascii=False)}')
+    if cover.get("seriesLabel"):
+        lines.append(f'seriesLabel={json.dumps(cover["seriesLabel"], ensure_ascii=False)}')
+    if cover.get("seriesLabelEn"):
+        lines.append(f'seriesLabelEn={json.dumps(cover["seriesLabelEn"], ensure_ascii=False)}')
+    if cover.get("methodologySteps"):
+        arr = json.dumps(cover["methodologySteps"], ensure_ascii=False)
+        lines.append(f"methodologySteps={{{arr}}}")
+    if cover.get("methodologyStepsEn"):
+        lines.append(
+            f'methodologyStepsEn={json.dumps(cover["methodologyStepsEn"], ensure_ascii=False)}'
+        )
     return "\n                    ".join(lines)
 
 

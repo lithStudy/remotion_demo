@@ -13,32 +13,32 @@
             {
               "text": "你捏着鼻子灌下一大碗苦涩发黑的汤药，",
               "startFrame": 0,
-              "durationFrames": 40
+              "durationFrames": 96
             },
             {
               "text": "忍受着胃里的翻江倒海。",
-              "startFrame": 40,
-              "durationFrames": 30
+              "startFrame": 96,
+              "durationFrames": 63
             },
             {
               "text": "三天后病终于好了，",
-              "startFrame": 70,
-              "durationFrames": 30
+              "startFrame": 158,
+              "durationFrames": 70
             },
             {
               "text": "你立刻在朋友圈发了条长文，",
-              "startFrame": 100,
-              "durationFrames": 30
+              "startFrame": 228,
+              "durationFrames": 58
             },
             {
               "text": "感慨老祖宗的智慧就是牛",
-              "startFrame": 130,
-              "durationFrames": 30
+              "startFrame": 285,
+              "durationFrames": 65
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一个人捏着鼻子喝中药汤，表情痛苦",
+            "imageSrc": "images/相关不等于因果/scene_1_1.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -50,7 +50,7 @@
               }
             ]
           },
-          "totalDurationFrames": 160
+          "totalDurationFrames": 351
         },
         {
           "narrativeType": "LOGIC",
@@ -60,32 +60,32 @@
             {
               "text": "但你根本看不见，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 38
             },
             {
               "text": "在你昏睡发汗的时候，",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 37,
+              "durationFrames": 48
             },
             {
               "text": "你体内那套强大的免疫系统，",
-              "startFrame": 60,
-              "durationFrames": 30
+              "startFrame": 85,
+              "durationFrames": 69
             },
             {
               "text": "是如何不眠不休地疯狂搏杀，",
-              "startFrame": 90,
-              "durationFrames": 30
+              "startFrame": 153,
+              "durationFrames": 64
             },
             {
               "text": "才帮你夺回了健康的阵地。",
-              "startFrame": 120,
-              "durationFrames": 30
+              "startFrame": 216,
+              "durationFrames": 51
             }
           ],
           "order": 2,
           "param": {
-            "imageSrc": "强大的免疫系统在人体内战斗的卡通场景",
+            "imageSrc": "images/相关不等于因果/scene_1_2.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -97,7 +97,7 @@
               }
             ]
           },
-          "totalDurationFrames": 150
+          "totalDurationFrames": 268
         },
         {
           "narrativeType": "CONCLUSION",
@@ -107,25 +107,25 @@
             {
               "text": "我们所有人，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 29
             },
             {
-              "text": "都极其容易掉进这种看图说话的因果错觉里。",
-              "startFrame": 30,
-              "durationFrames": 44
+              "text": "都极其容易掉进这种看似相关的因果错觉里。",
+              "startFrame": 28,
+              "durationFrames": 111
             }
           ],
           "order": 3,
           "param": {
-            "coreSentence": "我们容易掉进看图说话的错觉里",
+            "coreSentence": "我们容易掉进看似相关的因果错觉里",
             "coreSentenceAnchors": [
               {
-                "coreSentenceAnchor": "看图说话",
+                "coreSentenceAnchor": "看似相关",
                 "color": "#EF4444"
               }
             ]
           },
-          "totalDurationFrames": 74
+          "totalDurationFrames": 139
         },
         {
           "narrativeType": "LOGIC",
@@ -135,29 +135,29 @@
             {
               "text": "千万不要觉得这是因为我们缺乏常识，",
               "startFrame": 0,
-              "durationFrames": 37
+              "durationFrames": 78
             },
             {
               "text": "这其实是人类大脑在几百万年进化中，",
-              "startFrame": 37,
-              "durationFrames": 37
+              "startFrame": 77,
+              "durationFrames": 75
             },
             {
               "text": "死死烙印在基因里的补丁缺陷。",
-              "startFrame": 74,
-              "durationFrames": 31
+              "startFrame": 151,
+              "durationFrames": 75
             }
           ],
           "order": 4,
           "param": {
             "notText": "缺乏常识",
             "butText": "基因的补丁缺陷",
-            "butSrc": "电路板上缠绕着基因链条",
+            "butSrc": "images/相关不等于因果/scene_1_4.png",
             "notContentIndex": 0,
             "butContentIndex": 2,
             "anchors": []
           },
-          "totalDurationFrames": 105
+          "totalDurationFrames": 226
         },
         {
           "narrativeType": "CASE",
@@ -167,32 +167,32 @@
             {
               "text": "在远古时代，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 34
             },
             {
               "text": "草丛一动哪怕只是一阵风，",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 33,
+              "durationFrames": 71
             },
             {
               "text": "我们的大脑也被设定为必须马上联想到老虎，",
-              "startFrame": 60,
-              "durationFrames": 44
+              "startFrame": 104,
+              "durationFrames": 98
             },
             {
               "text": "因为只有强行把先后发生的事情建立因果联系，",
-              "startFrame": 104,
-              "durationFrames": 46
+              "startFrame": 201,
+              "durationFrames": 98
             },
             {
               "text": "我们的祖先才能保命。",
-              "startFrame": 150,
-              "durationFrames": 30
+              "startFrame": 298,
+              "durationFrames": 55
             }
           ],
           "order": 5,
           "param": {
-            "imageSrc": "远古时代草丛随风摇曳，一只老虎隐藏其中",
+            "imageSrc": "images/相关不等于因果/scene_1_5.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -225,7 +225,7 @@
               }
             ]
           },
-          "totalDurationFrames": 180
+          "totalDurationFrames": 354
         },
         {
           "narrativeType": "CONCLUSION",
@@ -235,12 +235,12 @@
             {
               "text": "但在复杂的现代社会，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 48
             },
             {
               "text": "这种生存本能反而成了被别人收割的镰刀。",
-              "startFrame": 30,
-              "durationFrames": 42
+              "startFrame": 48,
+              "durationFrames": 98
             }
           ],
           "order": 6,
@@ -248,9 +248,11 @@
             "coreSentence": "生存本能成了被收割的镰刀",
             "coreSentenceAnchors": []
           },
-          "totalDurationFrames": 72
+          "totalDurationFrames": 146
         }
-      ]
+      ],
+      "audioSrc": "/audio/相关不等于因果/scene_1/scene_1.mp3",
+      "totalDurationFrames": 1483
     },
     {
       "sceneId": "scene_2",
@@ -264,22 +266,22 @@
             {
               "text": "在统计学和科学哲学的框架里，",
               "startFrame": 0,
-              "durationFrames": 31
+              "durationFrames": 79
             },
             {
               "text": "这其实叫作混淆了相关性与因果性。",
-              "startFrame": 31,
-              "durationFrames": 35
+              "startFrame": 78,
+              "durationFrames": 94
             }
           ],
           "order": 1,
           "param": {
-            "leftSrc": "极简黑白矢量：散点图与两条同步上升的趋势线，强调变量共同变化、无因果箭头",
-            "rightSrc": "极简黑白矢量：从原因指向结果的箭头或因果链示意图，强调机制与先后关系",
+            "leftSrc": "images/相关不等于因果/scene_2_1_left.png",
+            "rightSrc": "images/相关不等于因果/scene_2_1_right.png",
             "leftLabel": "相关性",
             "rightLabel": "因果性"
           },
-          "totalDurationFrames": 66
+          "totalDurationFrames": 173
         },
         {
           "narrativeType": "LOGIC",
@@ -289,29 +291,29 @@
             {
               "text": "两件事情凑巧同时发生，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 60
             },
             {
               "text": "或者一前一后发生，",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 60,
+              "durationFrames": 51
             },
             {
               "text": "绝对不代表是前者导致了后者。",
-              "startFrame": 60,
-              "durationFrames": 31
+              "startFrame": 110,
+              "durationFrames": 79
             }
           ],
           "order": 2,
           "param": {
             "notText": "前者导致后者",
             "butText": "存在其他变量",
-            "butSrc": "隐藏在幕布后的观察者",
+            "butSrc": "images/相关不等于因果/scene_2_2.png",
             "notContentIndex": 2,
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 91
+          "totalDurationFrames": 189
         },
         {
           "narrativeType": "LOGIC",
@@ -321,22 +323,22 @@
             {
               "text": "这中间往往隐藏着一个看不见的第三变量，",
               "startFrame": 0,
-              "durationFrames": 42
+              "durationFrames": 92
             },
             {
               "text": "比如你在喝偏方的同时，",
-              "startFrame": 42,
-              "durationFrames": 30
+              "startFrame": 91,
+              "durationFrames": 57
             },
             {
               "text": "是不是也请了假增加了睡眠时间？",
-              "startFrame": 72,
-              "durationFrames": 33
+              "startFrame": 148,
+              "durationFrames": 76
             }
           ],
           "order": 3,
           "param": {
-            "imageSrc": "隐藏在迷雾中的问号，旁边散落着草药和日历",
+            "imageSrc": "images/相关不等于因果/scene_2_3.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -362,7 +364,7 @@
               }
             ]
           },
-          "totalDurationFrames": 105
+          "totalDurationFrames": 224
         },
         {
           "narrativeType": "LOGIC",
@@ -372,17 +374,17 @@
             {
               "text": "更致命的是，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 28
             },
             {
               "text": "我们永远缺乏一个严谨的对照实验。",
-              "startFrame": 30,
-              "durationFrames": 35
+              "startFrame": 27,
+              "durationFrames": 80
             }
           ],
           "order": 4,
           "param": {
-            "imageSrc": "严谨的科研实验的示意图",
+            "imageSrc": "images/相关不等于因果/scene_2_4.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -394,7 +396,7 @@
               }
             ]
           },
-          "totalDurationFrames": 65
+          "totalDurationFrames": 107
         },
         {
           "narrativeType": "LOGIC",
@@ -404,27 +406,27 @@
             {
               "text": "如果没有一个年龄、",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 37
             },
             {
               "text": "体质、",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 36,
+              "durationFrames": 19
             },
             {
               "text": "病情和你完全一样，",
-              "startFrame": 60,
-              "durationFrames": 30
+              "startFrame": 54,
+              "durationFrames": 46
             },
             {
               "text": "但什么偏方都没吃的人作为参照物，",
-              "startFrame": 90,
-              "durationFrames": 35
+              "startFrame": 100,
+              "durationFrames": 68
             }
           ],
           "order": 5,
           "param": {
-            "imageSrc": "并排两人剪影对比，一人手持药碗一人无，象征对照组与参照",
+            "imageSrc": "images/相关不等于因果/scene_2_5.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -436,7 +438,7 @@
               }
             ]
           },
-          "totalDurationFrames": 156
+          "totalDurationFrames": 168
         },
         {
           "narrativeType": "LOGIC",
@@ -446,29 +448,31 @@
             {
               "text": "你根本没有办法在逻辑上排除，",
               "startFrame": 0,
-              "durationFrames": 31
+              "durationFrames": 64
             },
             {
               "text": "这究竟是神秘草药的法力，",
-              "startFrame": 31,
-              "durationFrames": 30
+              "startFrame": 63,
+              "durationFrames": 53
             },
             {
               "text": "还是你身体硬扛过去的自发痊愈。",
-              "startFrame": 61,
-              "durationFrames": 33
+              "startFrame": 115,
+              "durationFrames": 73
             }
           ],
           "order": 6,
           "param": {
-            "leftSrc": "发光草药与神秘符号，象征被夸大的偏方神力",
-            "rightSrc": "身体自愈细胞修复的示意图",
+            "leftSrc": "images/相关不等于因果/scene_2_6_left.png",
+            "rightSrc": "images/相关不等于因果/scene_2_6_right.png",
             "dontLabel": "❌ 偏方神力",
             "doLabel": "✅ 自发痊愈"
           },
-          "totalDurationFrames": 94
+          "totalDurationFrames": 188
         }
-      ]
+      ],
+      "audioSrc": "/audio/相关不等于因果/scene_2/scene_2.mp3",
+      "totalDurationFrames": 1050
     },
     {
       "sceneId": "scene_3",
@@ -482,22 +486,22 @@
             {
               "text": "所以，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 24
             },
             {
               "text": "下次再有任何人用亲身经历向你兜售某种神效偏方时，",
-              "startFrame": 30,
-              "durationFrames": 53
+              "startFrame": 24,
+              "durationFrames": 118
             },
             {
               "text": "请在心里谨记三个准则：",
-              "startFrame": 83,
-              "durationFrames": 30
+              "startFrame": 141,
+              "durationFrames": 59
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一群人围在一起听别人讲述经验的场景",
+            "imageSrc": "images/相关不等于因果/scene_3_1.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -523,7 +527,7 @@
               }
             ]
           },
-          "totalDurationFrames": 113
+          "totalDurationFrames": 201
         },
         {
           "narrativeType": "LOGIC",
@@ -533,22 +537,22 @@
             {
               "text": "1.相关只是线索，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 54
             },
             {
               "text": "不是定论；",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 53,
+              "durationFrames": 26
             },
             {
               "text": "2.检查第三变量和反向因果；",
-              "startFrame": 60,
-              "durationFrames": 31
+              "startFrame": 78,
+              "durationFrames": 90
             },
             {
               "text": "3.真正的因果需要双盲实验证明。",
-              "startFrame": 91,
-              "durationFrames": 35
+              "startFrame": 168,
+              "durationFrames": 96
             }
           ],
           "order": 2,
@@ -557,7 +561,7 @@
               {
                 "textIndex": 0,
                 "image": {
-                  "src": "放大镜简笔画，寻找线索"
+                  "src": "images/相关不等于因果/scene_3_2_img0.png"
                 },
                 "anchor": {
                   "text": "相关只是线索",
@@ -569,7 +573,7 @@
               {
                 "textIndex": 2,
                 "image": {
-                  "src": "问号简笔画，检查变量"
+                  "src": "images/相关不等于因果/scene_3_2_img1.png"
                 },
                 "anchor": {
                   "text": "检查第三变量",
@@ -581,7 +585,7 @@
               {
                 "textIndex": 3,
                 "image": {
-                  "src": "双盲实验流程图"
+                  "src": "images/相关不等于因果/scene_3_2_img2.png"
                 },
                 "anchor": {
                   "text": "双盲实验",
@@ -593,7 +597,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 126
+          "totalDurationFrames": 264
         },
         {
           "narrativeType": "CONCLUSION",
@@ -603,29 +607,29 @@
             {
               "text": "真正的尊重传统，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 43
             },
             {
               "text": "绝不是盲从，",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 42,
+              "durationFrames": 31
             },
             {
               "text": "而是用现代逻辑去祛魅和验证。",
-              "startFrame": 60,
-              "durationFrames": 31
+              "startFrame": 73,
+              "durationFrames": 81
             }
           ],
           "order": 3,
           "param": {
             "notText": "盲从",
             "butText": "逻辑祛魅和验证",
-            "butSrc": "一个研究者在实验室里进行科学实验",
+            "butSrc": "images/相关不等于因果/scene_3_3.png",
             "notContentIndex": 1,
             "butContentIndex": 2,
             "anchors": []
           },
-          "totalDurationFrames": 91
+          "totalDurationFrames": 154
         },
         {
           "narrativeType": "CONCLUSION",
@@ -635,17 +639,17 @@
             {
               "text": "你宝贵的健康和钱包，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 48
             },
             {
               "text": "值得交付给严谨的证据，",
-              "startFrame": 30,
-              "durationFrames": 30
+              "startFrame": 48,
+              "durationFrames": 55
             },
             {
               "text": "而不是一次偶然的巧合。",
-              "startFrame": 60,
-              "durationFrames": 30
+              "startFrame": 102,
+              "durationFrames": 62
             }
           ],
           "order": 4,
@@ -662,9 +666,11 @@
               }
             ]
           },
-          "totalDurationFrames": 90
+          "totalDurationFrames": 164
         }
-      ]
+      ],
+      "audioSrc": "/audio/相关不等于因果/scene_3/scene_3.mp3",
+      "totalDurationFrames": 785
     }
   ],
   "fps": 30,

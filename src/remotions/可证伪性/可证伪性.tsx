@@ -1,9 +1,10 @@
 import React from "react";
-import { AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, interpolate, staticFile, Sequence, useCurrentFrame } from "remotion";
 import { z } from "zod";
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 
+import { StaticCover } from "../../components";
 import { Scene1, calculateScene1Duration } from "./scenes/Scene1";
 import { Scene2, calculateScene2Duration } from "./scenes/Scene2";
 import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
@@ -14,6 +15,8 @@ export const 可证伪性Schema = z.object({});
 const TRANSITION_DURATION = 15;
 const SCENE_END_PADDING = 20;
 
+const COVER_DURATION_FRAMES = 5;
+
 const sceneConfigs = [
     { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引出现象：不可证伪的逻辑陷阱" },
     { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "剖析原因：人类对确定性的渴望" },
@@ -21,24 +24,31 @@ const sceneConfigs = [
     { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "防御锦囊：如何避免被忽悠" },
 ];
 
-export const TOTAL_DURATION_可证伪性 =
+const MAIN_DURATION_可证伪性 =
     sceneConfigs.reduce((total, c) => total + c.duration, 0) -
     (sceneConfigs.length - 1) * TRANSITION_DURATION;
 
+export const TOTAL_DURATION_可证伪性 =
+    COVER_DURATION_FRAMES + MAIN_DURATION_可证伪性;
+
 const ProgressBar: React.FC = () => {
     const frame = useCurrentFrame();
-    
+    if (frame < COVER_DURATION_FRAMES) {
+        return null;
+    }
+    const contentFrame = frame - COVER_DURATION_FRAMES;
+
     let currentStart = 0;
     const segments = sceneConfigs.map((c, i) => {
         const isLast = i === sceneConfigs.length - 1;
         const segmentDuration = isLast ? c.duration : c.duration - TRANSITION_DURATION;
-        
+
         const segment = { start: currentStart, duration: segmentDuration };
         currentStart += segmentDuration;
         return segment;
     });
 
-    const activeIndex = segments.findIndex(seg => frame >= seg.start && frame < seg.start + seg.duration);
+    const activeIndex = segments.findIndex(seg => contentFrame >= seg.start && contentFrame < seg.start + seg.duration);
     const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
     const activeLabel = sceneConfigs[validActiveIndex]?.label || "";
 
@@ -49,7 +59,7 @@ const ProgressBar: React.FC = () => {
         }}>
             <div style={{ display: "flex", gap: 8, height: 8 }}>
                 {segments.map((seg, i) => {
-                    const progress = Math.max(0, Math.min(1, (frame - seg.start) / seg.duration));
+                    const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));
                     const isActive = i === validActiveIndex;
                     return (
                         <div key={i} style={{
@@ -74,7 +84,7 @@ const ProgressBar: React.FC = () => {
                     );
                 })}
             </div>
-            
+
             <div style={{
                 fontSize: 30,
                 fontWeight: 700,
@@ -113,7 +123,7 @@ export const 可证伪性: React.FC<z.infer<typeof 可证伪性Schema>> = () => 
     });
 
     return (
-        <AbsoluteFill>  
+        <AbsoluteFill>
             <Audio
                 src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
                 loop
@@ -137,37 +147,49 @@ export const 可证伪性: React.FC<z.infer<typeof 可证伪性Schema>> = () => 
                     background:
                         "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)",
                 }}
-            />          
-            <div
-                style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: "10%",
-                    minHeight: 48,
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                }}
             />
-            <TransitionSeries>
-                {sceneConfigs.map((config, index) => {
-                    const SceneComp = config.component;
-                    const isLast = index === sceneConfigs.length - 1;
-                    return (
-                        <React.Fragment key={config.name}>
-                            <TransitionSeries.Sequence durationInFrames={config.duration}>
-                                <SceneComp />
-                            </TransitionSeries.Sequence>
-                            {!isLast && (
-                                <TransitionSeries.Transition
-                                    timing={linearTiming({ durationInFrames: TRANSITION_DURATION })}
-                                    presentation={fade()}
-                                />
-                            )}
-                        </React.Fragment>
-                    );
-                })}
-            </TransitionSeries>
+            <Sequence durationInFrames={COVER_DURATION_FRAMES}>
+                <StaticCover
+                    title="可证伪性"
+                    subtitle="如何识别和避免“不可证伪”的逻辑陷阱"
+                    themeColor="#2563EB"
+                    badge="如何识别伪科学"
+                />
+            </Sequence>
+            <Sequence from={COVER_DURATION_FRAMES} durationInFrames={MAIN_DURATION_可证伪性}>
+                <AbsoluteFill>
+                    <div
+                        style={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            height: "10%",
+                            minHeight: 48,
+                            backgroundColor: "rgba(0,0,0,0.5)",
+                        }}
+                    />
+                    <TransitionSeries>
+                        {sceneConfigs.map((config, index) => {
+                            const SceneComp = config.component;
+                            const isLast = index === sceneConfigs.length - 1;
+                            return (
+                                <React.Fragment key={config.name}>
+                                    <TransitionSeries.Sequence durationInFrames={config.duration}>
+                                        <SceneComp />
+                                    </TransitionSeries.Sequence>
+                                    {!isLast && (
+                                        <TransitionSeries.Transition
+                                            timing={linearTiming({ durationInFrames: TRANSITION_DURATION })}
+                                            presentation={fade()}
+                                        />
+                                    )}
+                                </React.Fragment>
+                            );
+                        })}
+                    </TransitionSeries>
+                </AbsoluteFill>
+            </Sequence>
             <ProgressBar />
         </AbsoluteFill>
     );

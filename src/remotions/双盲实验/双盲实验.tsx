@@ -151,9 +151,9 @@ export const 双盲实验: React.FC<z.infer<typeof 双盲实验Schema>> = () => 
             <Sequence durationInFrames={COVER_DURATION_FRAMES}>
                 <StaticCover
                     title="双盲实验"
-                    subtitle="避免认知陷阱，用科学方法理性思考"
+                    subtitle="没有对照组，你无法知道效果是来自你的干预，还是来自其他因素"
                     themeColor="#2563EB"
-                    badge="认知科普 · 理性思考"
+                    badge="如何识别伪科学"
                 />
             </Sequence>
             <Sequence from={COVER_DURATION_FRAMES} durationInFrames={MAIN_DURATION_双盲实验}>

@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Sequence, Audio, staticFile } from "remotion";
-import { BWCenterFocus, BWCognitiveShift, BWMultiImage } from "../../../components";
+import { BWCenterFocus, BWCognitiveShift, BWMultiImage, BWTextFocus } from "../../../components";
 
 // 理性看待偏方与传统
 const SCENE_DURATION = 113 + 126 + 91 + 90;
@@ -22,7 +22,7 @@ export const Scene3: React.FC = () => {
                 <BWCognitiveShift content={[{"text": "真正的尊重传统，", "startFrame": 0, "durationFrames": 30}, {"text": "绝不是盲从，", "startFrame": 30, "durationFrames": 30}, {"text": "而是用现代逻辑去祛魅和验证。", "startFrame": 60, "durationFrames": 31}]} totalDurationFrames={91} notText={"盲从"} butText={"逻辑祛魅和验证"} butSrc={staticFile("一个研究者在实验室里进行科学实验")} notContentIndex={1} butContentIndex={2} anchors={[]} />
             </Sequence>
             <Sequence from={330} durationInFrames={90}>
-                <BWCognitiveShift content={[{"text": "你宝贵的健康和钱包，", "startFrame": 0, "durationFrames": 30}, {"text": "值得交付给严谨的证据，", "startFrame": 30, "durationFrames": 30}, {"text": "而不是一次偶然的巧合。", "startFrame": 60, "durationFrames": 30}]} totalDurationFrames={90} notText={"偶然的巧合"} butText={"严谨的证据"} butSrc={staticFile("实验室内科学家观察实验数据")} notContentIndex={2} butContentIndex={1} anchors={[]} />
+                <BWTextFocus content={[{"text": "你宝贵的健康和钱包，", "startFrame": 0, "durationFrames": 30}, {"text": "值得交付给严谨的证据，", "startFrame": 30, "durationFrames": 30}, {"text": "而不是一次偶然的巧合。", "startFrame": 60, "durationFrames": 30}]} totalDurationFrames={90} coreSentence={"你宝贵的健康和钱包，值得交付给严谨证据，而非偶然巧合"} coreSentenceAnchors={[{"coreSentenceAnchor": "严谨证据", "color": "#EF4444"}, {"coreSentenceAnchor": "偶然巧合", "color": "#EF4444"}]} />
             </Sequence>
 
         </AbsoluteFill>

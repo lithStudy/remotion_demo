@@ -1,0 +1,658 @@
+{
+  "topic": "确认偏误与独立思考",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引出现象：弹幕争吵与自我优越感",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，描述一个场景，适合用 `CENTER_FOCUS`。",
+          "content": [
+            {
+              "text": "盯着满屏吵得不可开交的弹幕。",
+              "startFrame": 0,
+              "durationFrames": 31
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "满屏弹幕遮盖屏幕的动画",
+            "enterEffect": "breathe",
+            "anchors": []
+          },
+          "totalDurationFrames": 31
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "口播节奏递进，从拍大腿到嘟囔到下判断，适合用 `BEAT_SEQUENCE`。",
+          "content": [
+            {
+              "text": "你猛地一拍大腿。",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "嘴里嘟囔着我就知道会这样。",
+              "startFrame": 30,
+              "durationFrames": 30
+            },
+            {
+              "text": "你看果然又是这群人搞的鬼。",
+              "startFrame": 60,
+              "durationFrames": 30
+            }
+          ],
+          "order": 2,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "一个人拍打大腿",
+                "enterEffect": "breathe",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "一个人嘟囔自语",
+                "enterEffect": "slideBottom"
+              },
+              {
+                "imageSrc": "一群人鬼鬼祟祟",
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 90
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述一种感觉，可以使用`CENTER_FOCUS`。",
+          "content": [
+            {
+              "text": "这种众人皆醉我独醒的快感。",
+              "startFrame": 0,
+              "durationFrames": 30
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "一群人仰头看着天空的剪影",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "独醒",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 30
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促强结论，金句冲击，使用`TEXT_FOCUS`。",
+          "content": [
+            {
+              "text": "是不是让你觉得非常爽快。",
+              "startFrame": 0,
+              "durationFrames": 30
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": "是不是让你觉得非常爽快。",
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "非常爽快",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 30
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "揭示本质：大脑的认知偏误",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，描述一种常见的认知错觉，适合用 `CENTER_FOCUS`。",
+          "content": [
+            {
+              "text": "我们总以为自己有一双慧眼。",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "能看透互联网上的蝇营狗狗。",
+              "startFrame": 30,
+              "durationFrames": 30
+            },
+            {
+              "text": "但其实我们都被自己的大脑骗了。",
+              "startFrame": 60,
+              "durationFrames": 33
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "人们被放大的大脑控制的抽象概念图",
+            "enterEffect": "slideBottom",
+            "anchors": [
+              {
+                "text": "一双慧眼",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "大脑骗了",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 93
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "典型的“不是…而是…”结构，点明认知偏差的根源，用 `COGNITIVE_SHIFT`。",
+          "content": [
+            {
+              "text": "这不是因为我们缺乏判断力。",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "而是大脑为了偷懒留下的进化漏洞。",
+              "startFrame": 30,
+              "durationFrames": 35
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "缺乏判断力",
+            "butText": "大脑为了偷懒",
+            "butSrc": "人脑进行简化计算的抽象示意",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 65
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TIMELINE",
+          "reasoning": "平台如何利用漏洞形成一条先后链条（漏洞→投喂→茧房→错觉），用 `TIMELINE` 强化时间顺序与递进感；配图按前三句节点对齐，末句在时间轴完整呈现后收束。",
+          "content": [
+            {
+              "text": "各大平台早就把这个漏洞玩明白了。",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "他们精准投喂你爱看的观点。",
+              "startFrame": 35,
+              "durationFrames": 30
+            },
+            {
+              "text": "把你圈养在舒适的茧房里。",
+              "startFrame": 65,
+              "durationFrames": 30
+            },
+            {
+              "text": "让你误以为全世界都和你想的一样。",
+              "startFrame": 95,
+              "durationFrames": 35
+            }
+          ],
+          "order": 3,
+          "param": {
+            "images": [
+              {
+                "src": "社交媒体与算法控制的抽象界面示意",
+                "position": "left",
+                "enterEffect": "slideLeft",
+                "textIndex": 0
+              },
+              {
+                "src": "个性化推荐与信息流投喂界面示意",
+                "position": "center",
+                "enterEffect": "fadeIn",
+                "textIndex": 1
+              },
+              {
+                "src": "信息茧房与回声室空间的抽象示意",
+                "position": "right",
+                "enterEffect": "slideLeft",
+                "textIndex": 2
+              }
+            ],
+            "anchors": [
+              {
+                "text": "大脑漏洞",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "投喂观点",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "信息茧房",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 130
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "理论解释：确认偏误的概念",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对“确认偏误”这个专业术语进行解释 → 应该选用CONCEPT_CARD",
+          "content": [
+            {
+              "text": "翻开行为经济学的书你会发现。",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "这种套路叫作确认偏误。",
+              "startFrame": 31,
+              "durationFrames": 30
+            },
+            {
+              "text": "通俗点说就是只看自己想看的。",
+              "startFrame": 61,
+              "durationFrames": 31
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "戴着有色眼镜的眼睛图标",
+            "conceptName": "确认偏误",
+            "anchors": []
+          },
+          "totalDurationFrames": 92
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，单图即可 →  没有其他结构，因此选择CENTER_FOCUS",
+          "content": [
+            {
+              "text": "这就像是我们戴着一副有色眼镜。",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "只去搜寻和记忆符合既有信念的信息。",
+              "startFrame": 33,
+              "durationFrames": 37
+            },
+            {
+              "text": "而对反面证据视而不见。",
+              "startFrame": 70,
+              "durationFrames": 30
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "戴着有色眼镜的人的简笔画",
+            "enterEffect": "breathe",
+            "anchors": []
+          },
+          "totalDurationFrames": 107
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，单图即可 →  没有其他结构，因此选择CENTER_FOCUS",
+          "content": [
+            {
+              "text": "哪怕真相就硬生生地摆在眼前。",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "我们也会本能地去贬低它忽略它。",
+              "startFrame": 31,
+              "durationFrames": 33
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "一群人面对着屏幕，表情各异，有人皱眉，有人疑惑，有人不屑的简笔画",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 64
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "案例分析：热搜反转与主观认知",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，解释现象，无明显结构，适合用 `CENTER_FOCUS`。",
+          "content": [
+            {
+              "text": "这就解释了为什么热搜反转前。",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "那么多人会言之凿凿地站队。",
+              "startFrame": 31,
+              "durationFrames": 30
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "很多人在黑暗中争论的抽象示意图",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "热搜反转",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "言之凿凿",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 61
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，无明显结构，适合用 `CENTER_FOCUS`。",
+          "content": [
+            {
+              "text": "这就像在漆黑的房间里打手电筒。",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "你只会照亮你早就相信的那个角落。",
+              "startFrame": 33,
+              "durationFrames": 35
+            },
+            {
+              "text": "至于剩下的广阔空间你根本不在乎。",
+              "startFrame": 68,
+              "durationFrames": 35
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "一个人在黑暗房间里拿着手电筒照亮角落的场景",
+            "enterEffect": "breathe"
+            
+          },
+          "totalDurationFrames": 103
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促强结论，适合用 `TEXT_FOCUS`。",
+          "content": [
+            {
+              "text": "当你讨厌一个人时连他的呼吸都是错的。",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "因为我们其实根本不需要客观真相。",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "我们只需要被迎合被肯定。",
+              "startFrame": 35,
+              "durationFrames": 30
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": "我们需要的不是客观真相，而是被肯定",
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "客观真相",
+                "color": "#000000"
+              },
+              {
+                "coreSentenceAnchor": "被肯定",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 65
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "解决方案：打破认知陷阱",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "问题与对策一句接一句，合并为同一段居中叙事，锚点按 content 下标区分。",
+          "content": [
+            {
+              "text": "要想跳出这个被精心编织的逻辑陷阱。",
+              "startFrame": 0,
+              "durationFrames": 37
+            },
+            {
+              "text": "你需要立刻给自己装上防身武器。",
+              "startFrame": 37,
+              "durationFrames": 33
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "一个迷宫的鸟瞰图",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "逻辑陷阱",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "防身武器",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 70
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "「第一步」及后续两句同属一套做法，多段 content 共用一图，减少切镜。",
+          "content": [
+            {
+              "text": "第一步是主动制造认知摩擦。",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "去关注几个你平时很讨厌的博主。",
+              "startFrame": 30,
+              "durationFrames": 33
+            },
+            {
+              "text": "看看他们是怎么看待问题的。",
+              "startFrame": 63,
+              "durationFrames": 30
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "人们一起讨论问题的场景",
+            "enterEffect": "slideBottom",
+            "anchors": [
+              {
+                "text": "认知摩擦",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 93
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "「第二步」与自我追问连成一气，同一居中段落内完成。",
+          "content": [
+            {
+              "text": "第二步是假设真相完全相反。",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "会有什么样的证据支持它。",
+              "startFrame": 31,
+              "durationFrames": 33
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "一个人深呼吸的场景",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "寻找相反证据",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 64
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "结论金句，纯字聚焦；口播仍分两句，大屏用 coreSentence 收束并高亮关键词。",
+          "content": [
+            {
+              "text": "当你开始学着和不同的声音共处。",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "你就拿回了独立思考的权力。",
+              "startFrame": 33,
+              "durationFrames": 30
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": "和不同的声音共处，你就拿回了独立思考的权力。",
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "独立思考",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 63
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "翻转结论改为大字金句呈现；口播保留两句，coreSentence 合并 not/but 语义。",
+          "content": [
+            {
+              "text": "理性从来不是永远正确。",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "而是敢于亲手打碎自己的滤镜。",
+              "startFrame": 30,
+              "durationFrames": 31
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": "理性不是永远正确，而是敢于亲手打碎自己的滤镜",
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "打碎自己的滤镜",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 61
+        }
+      ]
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "确认偏误",
+    "subtitle": "确认偏误与独立思考",
+    "themeColor": "#2563EB",
+    "badge": "认识自我 · 理性思考",
+    "seriesLabel": "认知偏见",
+    "seriesLabelEn": "COGNITIVE BIAS",
+    "methodologySteps": [
+      "觉察",
+      "归因",
+      "调整"
+    ],
+    "methodologyStepsEn": "OBSERVE · ATTRIBUTE · ADJUST"
+  }
+}

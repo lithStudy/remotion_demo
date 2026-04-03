@@ -9,6 +9,7 @@ import { 样本偏差, 样本偏差Schema, TOTAL_DURATION_样本偏差 } from ".
 import { 数据可视化陷阱, 数据可视化陷阱Schema, TOTAL_DURATION_数据可视化陷阱 } from "./remotions/数据可视化陷阱/数据可视化陷阱";
 import { 平均数陷阱, 平均数陷阱Schema, TOTAL_DURATION_平均数陷阱 } from "./remotions/平均数陷阱/平均数陷阱";
 import { 相关不等于因果, 相关不等于因果Schema, TOTAL_DURATION_相关不等于因果 } from "./remotions/相关不等于因果/相关不等于因果";
+import { 认知偏见确认偏误, 认知偏见确认偏误Schema, TOTAL_DURATION_认知偏见_确认偏误 } from "./remotions/认知偏见_确认偏误/认知偏见确认偏误";
 
 
 // Each <Composition> is an entry in the sidebar!
@@ -98,6 +99,18 @@ export const RemotionRoot: React.FC = () => {
         width={960}
         height={1280}
         schema={相关不等于因果Schema}
+        defaultProps={{}}
+      />
+    
+      {/* 认知偏见确认偏误 - 自动生成 */}
+      <Composition
+        id="认知偏见确认偏误"
+        component={认知偏见确认偏误}
+        durationInFrames={TOTAL_DURATION_认知偏见_确认偏误}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={认知偏见确认偏误Schema}
         defaultProps={{}}
       />
     </>

@@ -28,7 +28,7 @@ export const Scene3: React.FC = () => {
                 <BWCenterFocus content={[{"text": "就算发了，", "startFrame": 0, "durationFrames": 29}, {"text": "也会被算法极其无情地沉入海底。", "startFrame": 28, "durationFrames": 74}]} totalDurationFrames={103} imageSrc={staticFile("images/样本偏差/scene_3_5.png")} enterEffect="fadeIn" anchors={[{"text": "算法", "showFrom": 1, "color": "#000000", "anim": "popIn", "audioEffect": "ping"}, {"text": "沉入海底", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud"}]} />
             </Sequence>
             <Sequence from={908} durationInFrames={256}>
-                <BWCognitiveShift content={[{"text": "你每天所看到的，", "startFrame": 0, "durationFrames": 41}, {"text": "压根不是生活的常态，", "startFrame": 40, "durationFrames": 62}, {"text": "而是一场经过极度滤镜过滤、", "startFrame": 101, "durationFrames": 68}, {"text": "甚至靠拼单伪造出来的极端财富展览。", "startFrame": 169, "durationFrames": 87}]} totalDurationFrames={256} notText={"生活的常态"} butText={"财富展览"} butSrc={staticFile("images/样本偏差/scene_3_6.png")} notContentIndex={1} butContentIndex={3} anchors={[]} />
+                <BWCognitiveShift content={[{"text": "你每天所看到的，", "startFrame": 0, "durationFrames": 41}, {"text": "压根不是生活的常态，", "startFrame": 40, "durationFrames": 62}, {"text": "而是一场经过极度滤镜过滤、", "startFrame": 101, "durationFrames": 68}, {"text": "甚至靠拼单伪造出来的极端财富展览。", "startFrame": 169, "durationFrames": 87}]} totalDurationFrames={256} notText={"生活的常态"} butText={"财富展览"} butSrc={staticFile("images/样本偏差/scene_3_6.png")} notContentIndex={0} butContentIndex={2} anchors={[]} />
             </Sequence>
             <Audio src={staticFile("/audio/样本偏差/scene_3/scene_3.mp3")} />
         </AbsoluteFill>

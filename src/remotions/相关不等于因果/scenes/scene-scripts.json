@@ -1,0 +1,667 @@
+{
+  "topic": "避免因果错觉，理性看待经验与传统",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "喝药痊愈的错觉",
+      "items": [
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述一个案例，没有明显结构，使用默认的居中展示即可。",
+          "content": [
+            {
+              "text": "你捏着鼻子灌下一大碗苦涩发黑的汤药，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "忍受着胃里的翻江倒海。",
+              "startFrame": 40,
+              "durationFrames": 30
+            },
+            {
+              "text": "三天后病终于好了，",
+              "startFrame": 70,
+              "durationFrames": 30
+            },
+            {
+              "text": "你立刻在朋友圈发了条长文，",
+              "startFrame": 100,
+              "durationFrames": 30
+            },
+            {
+              "text": "感慨老祖宗的智慧就是牛",
+              "startFrame": 130,
+              "durationFrames": 30
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "一个人捏着鼻子喝中药汤，表情痛苦",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "老祖宗的智慧",
+                "showFrom": 4,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 160
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "继续补充案例细节，着重描述了免疫系统的工作，用居中展示。",
+          "content": [
+            {
+              "text": "但你根本看不见，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "在你昏睡发汗的时候，",
+              "startFrame": 30,
+              "durationFrames": 30
+            },
+            {
+              "text": "你体内那套强大的免疫系统，",
+              "startFrame": 60,
+              "durationFrames": 30
+            },
+            {
+              "text": "是如何不眠不休地疯狂搏杀，",
+              "startFrame": 90,
+              "durationFrames": 30
+            },
+            {
+              "text": "才帮你夺回了健康的阵地。",
+              "startFrame": 120,
+              "durationFrames": 30
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "强大的免疫系统在人体内战斗的卡通场景",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "免疫系统",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 150
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "这句话是小结论，用纯文本高亮展示。",
+          "content": [
+            {
+              "text": "我们所有人，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "都极其容易掉进这种看图说话的因果错觉里。",
+              "startFrame": 30,
+              "durationFrames": 44
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": "我们容易掉进看图说话的错觉里",
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "看图说话",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 74
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "典型的“不是…而是…”的认知转变，使用COGNITIVE_SHIFT",
+          "content": [
+            {
+              "text": "千万不要觉得这是因为我们缺乏常识，",
+              "startFrame": 0,
+              "durationFrames": 37
+            },
+            {
+              "text": "这其实是人类大脑在几百万年进化中，",
+              "startFrame": 37,
+              "durationFrames": 37
+            },
+            {
+              "text": "死死烙印在基因里的补丁缺陷。",
+              "startFrame": 74,
+              "durationFrames": 31
+            }
+          ],
+          "order": 4,
+          "param": {
+            "notText": "缺乏常识",
+            "butText": "基因的补丁缺陷",
+            "butSrc": "电路板上缠绕着基因链条",
+            "notContentIndex": 0,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 105
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "解释原因，用居中展示",
+          "content": [
+            {
+              "text": "在远古时代，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "草丛一动哪怕只是一阵风，",
+              "startFrame": 30,
+              "durationFrames": 30
+            },
+            {
+              "text": "我们的大脑也被设定为必须马上联想到老虎，",
+              "startFrame": 60,
+              "durationFrames": 44
+            },
+            {
+              "text": "因为只有强行把先后发生的事情建立因果联系，",
+              "startFrame": 104,
+              "durationFrames": 46
+            },
+            {
+              "text": "我们的祖先才能保命。",
+              "startFrame": 150,
+              "durationFrames": 30
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "远古时代草丛随风摇曳，一只老虎隐藏其中",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "远古时代",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "草丛一动",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "联想老虎",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "woosh"
+              },
+              {
+                "text": "保命",
+                "showFrom": 4,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 180
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "再次结论，使用TEXT_FOCUS",
+          "content": [
+            {
+              "text": "但在复杂的现代社会，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "这种生存本能反而成了被别人收割的镰刀。",
+              "startFrame": 30,
+              "durationFrames": 42
+            }
+          ],
+          "order": 6,
+          "param": {
+            "coreSentence": "生存本能成了被收割的镰刀",
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 72
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "相关性与因果性的混淆",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "对“混淆相关性与因果性”这一概念进行解释，适合用 `CONCEPT_CARD`，但这里只是引出，还没有解释，故用 `CENTER_FOCUS`。",
+          "content": [
+            {
+              "text": "在统计学和科学哲学的框架里，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "这其实叫作混淆了相关性与因果性。",
+              "startFrame": 31,
+              "durationFrames": 35
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "统计图表与哲学书籍堆叠的场景",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "相关性",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "因果性",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 66
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "属于“不是…而是…”的认知偏差纠正，因此选择`COGNITIVE_SHIFT`。",
+          "content": [
+            {
+              "text": "两件事情凑巧同时发生，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "或者一前一后发生，",
+              "startFrame": 30,
+              "durationFrames": 30
+            },
+            {
+              "text": "绝对不代表是前者导致了后者。",
+              "startFrame": 60,
+              "durationFrames": 31
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "前者导致后者",
+            "butText": "存在其他变量",
+            "butSrc": "隐藏在幕布后的观察者",
+            "notContentIndex": 2,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 91
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "举例说明隐藏的第三变量，平缓叙述，用 `CENTER_FOCUS`。",
+          "content": [
+            {
+              "text": "这中间往往隐藏着一个看不见的第三变量，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "比如你在喝偏方的同时，",
+              "startFrame": 42,
+              "durationFrames": 30
+            },
+            {
+              "text": "是不是也请了假增加了睡眠时间？",
+              "startFrame": 72,
+              "durationFrames": 33
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "隐藏在迷雾中的问号，旁边散落着草药和日历",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "第三变量",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "喝偏方",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": null
+              },
+              {
+                "text": "睡眠时间",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 105
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，强调缺乏对照实验的严重性，适合 `CENTER_FOCUS`。",
+          "content": [
+            {
+              "text": "更致命的是，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "我们永远缺乏一个严谨的对照实验。",
+              "startFrame": 30,
+              "durationFrames": 35
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "严谨的科研实验的示意图",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "对照实验",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 65
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "对两种可能性进行对比，意在纠正认知偏差，所以使用`COGNITIVE_SHIFT`。",
+          "content": [
+            {
+              "text": "如果没有一个年龄、",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "体质、",
+              "startFrame": 30,
+              "durationFrames": 30
+            },
+            {
+              "text": "病情和你完全一样，",
+              "startFrame": 60,
+              "durationFrames": 30
+            },
+            {
+              "text": "但什么偏方都没吃的人作为参照物，",
+              "startFrame": 90,
+              "durationFrames": 35
+            },
+            {
+              "text": "你根本没有办法在逻辑上排除，",
+              "startFrame": 125,
+              "durationFrames": 31
+            },
+            {
+              "text": "这究竟是神秘草药的法力，",
+              "startFrame": 156,
+              "durationFrames": 30
+            },
+            {
+              "text": "还是你身体硬扛过去的自发痊愈。",
+              "startFrame": 186,
+              "durationFrames": 33
+            }
+          ],
+          "order": 5,
+          "param": {
+            "notText": "神秘草药法力",
+            "butText": "身体自发痊愈",
+            "butSrc": "身体自愈细胞修复的场景",
+            "notContentIndex": 5,
+            "butContentIndex": 6,
+            "anchors": []
+          },
+          "totalDurationFrames": 219
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "理性看待偏方与传统",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "铺垫性描述，引出后面的准则，适合用 `CENTER_FOCUS` 平缓过渡。",
+          "content": [
+            {
+              "text": "所以，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "下次再有任何人用亲身经历向你兜售某种神效偏方时，",
+              "startFrame": 30,
+              "durationFrames": 53
+            },
+            {
+              "text": "请在心里谨记三个准则：",
+              "startFrame": 83,
+              "durationFrames": 30
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "一群人围在一起听别人讲述经验的场景",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "亲身经历",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "神效偏方",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "woosh"
+              },
+              {
+                "text": "三个准则",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 113
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "LIST_MULTI_GROUP",
+          "reasoning": "原文明确给出了3个并列的准则，符合 `LIST_MULTI_GROUP` 的适用条件。",
+          "content": [
+            {
+              "text": "1.相关只是线索，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "不是定论；",
+              "startFrame": 30,
+              "durationFrames": 30
+            },
+            {
+              "text": "2.检查第三变量和反向因果；",
+              "startFrame": 60,
+              "durationFrames": 31
+            },
+            {
+              "text": "3.真正的因果需要双盲实验证明。",
+              "startFrame": 91,
+              "durationFrames": 35
+            }
+          ],
+          "order": 2,
+          "param": {
+            "groups": [
+              {
+                "textIndex": 0,
+                "image": {
+                  "src": "放大镜简笔画，寻找线索"
+                },
+                "anchor": {
+                  "text": "相关只是线索",
+                  "color": "#000000",
+                  "anim": "popIn",
+                  "audioEffect": "ping"
+                }
+              },
+              {
+                "textIndex": 2,
+                "image": {
+                  "src": "问号简笔画，检查变量"
+                },
+                "anchor": {
+                  "text": "检查第三变量",
+                  "color": "#000000",
+                  "anim": "popIn",
+                  "audioEffect": "ping"
+                }
+              },
+              {
+                "textIndex": 3,
+                "image": {
+                  "src": "双盲实验流程图"
+                },
+                "anchor": {
+                  "text": "双盲实验",
+                  "color": "#000000",
+                  "anim": "popIn",
+                  "audioEffect": "ping"
+                }
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 126
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明显的“不是...而是...”结构，适用于 `COGNITIVE_SHIFT`。",
+          "content": [
+            {
+              "text": "真正的尊重传统，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "绝不是盲从，",
+              "startFrame": 30,
+              "durationFrames": 30
+            },
+            {
+              "text": "而是用现代逻辑去祛魅和验证。",
+              "startFrame": 60,
+              "durationFrames": 31
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "盲从",
+            "butText": "逻辑祛魅和验证",
+            "butSrc": "一个研究者在实验室里进行科学实验",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 91
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "可理解为“不要交付给偶然的巧合，而是要交付给严谨的证据”，适用于 `COGNITIVE_SHIFT`。",
+          "content": [
+            {
+              "text": "你宝贵的健康和钱包，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "值得交付给严谨的证据，",
+              "startFrame": 30,
+              "durationFrames": 30
+            },
+            {
+              "text": "而不是一次偶然的巧合。",
+              "startFrame": 60,
+              "durationFrames": 30
+            }
+          ],
+          "order": 4,
+          "param": {
+            "notText": "偶然的巧合",
+            "butText": "严谨的证据",
+            "butSrc": "实验室内科学家观察实验数据",
+            "notContentIndex": 2,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 90
+        }
+      ]
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "相关≠因果",
+    "subtitle": "避免因果错觉，理性看待经验与传统",
+    "themeColor": "#2563EB",
+    "badge": "统计素养 · 理性思考"
+  }
+}

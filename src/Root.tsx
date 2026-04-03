@@ -11,6 +11,7 @@ import { 统计素养之相关不等于因果, 统计素养之相关不等于因
 import { 样本偏差, 样本偏差Schema, TOTAL_DURATION_样本偏差 } from "./remotions/样本偏差/样本偏差";
 import { 数据可视化陷阱, 数据可视化陷阱Schema, TOTAL_DURATION_数据可视化陷阱 } from "./remotions/数据可视化陷阱/数据可视化陷阱";
 import { 平均数陷阱, 平均数陷阱Schema, TOTAL_DURATION_平均数陷阱 } from "./remotions/平均数陷阱/平均数陷阱";
+import { 相关不等于因果, 相关不等于因果Schema, TOTAL_DURATION_相关不等于因果 } from "./remotions/相关不等于因果/相关不等于因果";
 
 
 // Each <Composition> is an entry in the sidebar!
@@ -141,6 +142,18 @@ export const RemotionRoot: React.FC = () => {
         width={960}
         height={1280}
         schema={平均数陷阱Schema}
+        defaultProps={{}}
+      />
+    
+      {/* 相关不等于因果 - 自动生成 */}
+      <Composition
+        id="相关不等于因果"
+        component={相关不等于因果}
+        durationInFrames={TOTAL_DURATION_相关不等于因果}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={相关不等于因果Schema}
         defaultProps={{}}
       />
     </>

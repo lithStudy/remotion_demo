@@ -296,7 +296,7 @@ export const StaticCover: React.FC<StaticCoverProps> = ({
 							style={{
 								margin: 0,
 								fontFamily: FONT_STACK,
-								fontSize: 38,
+								fontSize: 44,
 								fontWeight: 500,
 								lineHeight: 1.55,
 								letterSpacing: 1,

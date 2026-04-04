@@ -193,6 +193,7 @@ def static_cover_props_jsx(cover: dict) -> str:
     lines = [
         f'title={json.dumps(cover["title"], ensure_ascii=False)}',
         f'subtitle={json.dumps(cover["subtitle"], ensure_ascii=False)}',
+        "coverDurationInFrames={COVER_DURATION_FRAMES}",
     ]
     if cover.get("themeColor"):
         lines.append(f'themeColor={json.dumps(cover["themeColor"], ensure_ascii=False)}')

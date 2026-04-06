@@ -356,6 +356,8 @@ interface StaggeredListProps {
   items: React.ReactNode[];
   startFrame?: number;
   staggerDelay?: number;
+  /** 与 items 等长时，第 i 项在 itemDelays[i] 帧开始入场（局部时间轴，覆盖 startFrame + index * staggerDelay） */
+  itemDelays?: number[];
   itemStyle?: React.CSSProperties;
 }
 
@@ -363,6 +365,7 @@ export const StaggeredList: React.FC<StaggeredListProps> = ({
   items,
   startFrame = 0,
   staggerDelay = 15,
+  itemDelays,
   itemStyle,
 }) => {
   const frame = useCurrentFrame();
@@ -371,7 +374,10 @@ export const StaggeredList: React.FC<StaggeredListProps> = ({
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       {items.map((item, index) => {
-        const itemDelay = startFrame + index * staggerDelay;
+        const itemDelay =
+          itemDelays && itemDelays.length === items.length
+            ? itemDelays[index]!
+            : startFrame + index * staggerDelay;
         const opacity = spring({
           frame: frame - itemDelay,
           fps,

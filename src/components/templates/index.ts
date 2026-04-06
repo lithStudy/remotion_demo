@@ -21,7 +21,7 @@ export type { BWSplitCompareProps } from "./SplitCompare";
 export { BWMultiImage } from "./ListMultiGroup";
 export type { BWMultiImageProps } from "./ListMultiGroup";
 export { BWStepList } from "./StepList";
-export type { BWStepListProps } from "./StepList";
+export type { BWStepListProps, BWStepListStepItem } from "./StepList";
 export { BWTextFocus } from "./TextFocus";
 export type { BWTextFocusProps, CoreSentenceAnchorItem } from "./TextFocus";
 export { BWConceptCard } from "./ConceptCard";

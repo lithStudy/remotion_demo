@@ -36,7 +36,7 @@
 - **Azure TTS**：`azure_service_region`、`azure_voice_name`、`speech_rate`。
 - **转场与片尾**：`transition_duration_frames`、`scene_end_padding_frames`。
 - **Step1 行为**：`default_template`（未知模板回退）、`step1_retry_on_validate_warnings`（校验有告警时是否触发一次 AI 修订）。
-- **无音频预览**：`preview_min_duration_frames`、`preview_frames_per_char`（Step1 注入假时间轴用）。
+- **无音频预览**：`preview_min_duration_frames`、`preview_frames_per_char`（Step4 在尚未跑 Step3 时于内存中按文案长度注入 `content` 时间轴用；不写回 JSON）。
 
 ### 3.2 `.env`（由 `utils.load_env` 加载）
 
@@ -61,7 +61,7 @@
 
 ## 5. Step1：文案分析（`step1_analyze_script.py`）
 
-Step1 将口播全文转为 `scene-scripts.json`：多场景、每场景多 item，每项绑定 Remotion 模板名与 `param`。执行链为 **`main` → `analyze_with_gemini` →（AI 管线 + 清理 + 校验/修订 + 预览时间轴）→ 写盘**。
+Step1 将口播全文转为 `scene-scripts.json`：多场景、每场景多 item，每项绑定 Remotion 模板名与 `param`。执行链为 **`main` → `analyze_with_gemini` →（AI 管线 + 清理 + 校验/修订）→ 破折号字幕合并 → `finalize_step1_content_and_anchors`（content 仅 `text` + 锚点清洗，无时间轴）→ 写盘**。
 
 ### 5.1 入口与准备（`main`）
 
@@ -70,7 +70,7 @@ Step1 将口播全文转为 `scene-scripts.json`：多场景、每场景多 item
 3. **`video_name`**：`--name` 或 `config.package_name`。
 4. **预清理 `_cleanup_related_resources`**：删除与本次视频名相关的 `src/remotions/{name}/scenes`、`public/images/{name}`、`public/audio/{name}` 及输出目录下的 `scene-scripts.json`，避免旧产物混入。
 5. **`AiLogger(output_dir, video_name)`**：在输出目录下创建 `logs/`，后续每次请求/响应追加到 `{video_name}_step1_ai_时间戳.log`。
-6. **核心**：`result = analyze_with_gemini(text, config, ai_logger)`，再 `_inject_preview_timings`，最后写入 `scene-scripts.json`。
+6. **核心**：`result = analyze_with_gemini(text, config, ai_logger)`，再 `_merge_dash_only_captions`、`finalize_step1_content_and_anchors`（`scene_timing`），最后写入 `scene-scripts.json`。
 
 ### 5.2 `analyze_with_gemini`（总编排）
 
@@ -152,13 +152,12 @@ Prompt 文件位于 `prompts/step1/*.md`，占位符为 `__KEY__`，由 `prompt_
 4. **锁定 `content`**：修订前按 `(sceneId, order)` 备份 **`item.content`**，修订后写回；`param` 可由模型修订。
 5. 对修订结果再校验；打印修订后是否仍有告警。修订失败（如 JSON 解析错误）则保留初稿。
 
-### 5.7 `_inject_preview_timings`（Step3 前的假时间轴）
+### 5.7 `scene_timing.py`：Step1 落盘内容 vs Step4 内存预览帧
 
-- 使用 `utils.extract_content_text` 取 **`item.content`** 每条文案长度，按 **`preview_frames_per_char`**、**`preview_min_duration_frames`** 计算每条 `startFrame` / `durationFrames`，累加得 **`item.totalDurationFrames`**。
-- **`_sanitize_anchors`**：非 `TEXT_FOCUS` 模板校验 `param.anchors` 的 `showFrom`（须在 **`len(item.content)`** 范围内），非法项丢弃。
-- **`_sanitize_core_sentence_anchors`**：`TEXT_FOCUS` 校验 `param.coreSentenceAnchors`（每项 `coreSentenceAnchor` 须为 `coreSentence` 子串），并 **`pop("anchors")`** 去除旧字段。
+- **Step1 — `finalize_step1_content_and_anchors`**：将每条 `content` 归一为 **`{"text": ...}`**（不含 `startFrame` / `durationFrames`），并清洗 **`param.anchors` / `coreSentenceAnchors`**（逻辑同原 `_sanitize_anchors`、`_sanitize_core_sentence_anchors`）。**不写** `item.totalDurationFrames`。
+- **Step4 — `needs_text_length_timings_from_scripts` + `inject_text_length_content_timings`**：若首场景首个 item 的首条 `content` 上缺少 **`int` 型的 `startFrame` 与 `durationFrames`**，视为未跑 Step3，则在**内存中**按 **`preview_frames_per_char`**、**`preview_min_duration_frames`** 注入每条口播的帧时间轴并设置 **`item.totalDurationFrames`**，再清洗锚点；**不回写**输入的 `scene-scripts.json`。
 
-Step3 生成真实 TTS 后会覆盖这些时间与场景级时长。
+Step3 生成真实 TTS 后会覆盖 `content` 时间与场景级时长。
 
 ### 5.8 质量指标（控制台，不阻断）
 
@@ -177,7 +176,7 @@ Step3 生成真实 TTS 后会覆盖这些时间与场景级时长。
   → 每场景 [B] 2A 分镜 → 2B 选模板 → content_split 生成 item.content
   → 每 item [C] AI 填 param（不含 content）；item.content 为程序切句结果
   → 删除 scene.text / item.text；保留 item.content
-  → 写入 fps → 校验（±1 次修订且锁 content）→ 注入预览帧与 anchors / coreSentenceAnchors
+  → 写入 fps → 校验（±1 次修订且锁 content）→ 合并破折号字幕 → content 仅 text + 锚点清洗（无时间轴）
   → scene-scripts.json + AI 日志
 ```
 
@@ -243,7 +242,7 @@ Step3 生成真实 TTS 后会覆盖这些时间与场景级时长。
 
 ### 8.1 输入与复制
 
-读取 `scene-scripts.json`；若输入路径与目标不一致，会复制到 `src/remotions/{name}/scenes/scene-scripts.json`，便于工程内引用或调试。
+读取 `scene-scripts.json`；若检测到尚未具备 Step3 音频时间轴（见 `scene_timing.needs_text_length_timings_from_scripts`），则在内存中按文案长度注入预览帧后再生成 TSX（不写回源 JSON）。若输入路径与目标不一致，会复制到 `src/remotions/{name}/scenes/scene-scripts.json`，便于工程内引用或调试。
 
 ### 8.2 单场景 TSX（`generate_scene_tsx`）
 
@@ -265,7 +264,7 @@ Step3 生成真实 TTS 后会覆盖这些时间与场景级时长。
 ### 8.5 预览模式
 
 - `--mute-audio`：清空场景 `audioSrc`，用于无音频预览。
-- `--preview-image`：将所有已识别的图片字段及 `images[]`、`stages[].imageSrc` 等替换为固定 public 相对路径，配合 Step1 的假时间轴做快速看版。
+- `--preview-image`：将所有已识别的图片字段及 `images[]`、`stages[].imageSrc` 等替换为固定 public 相对路径；若未跑 Step3，Step4 会在内存中按文案长度补全时间轴后生成代码，便于快速看版。
 
 ---
 

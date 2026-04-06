@@ -281,7 +281,7 @@ export const StaticCover: React.FC<StaticCoverProps> = ({
 							display: "flex",
 							alignItems: "stretch",
 							gap: 22,
-							maxWidth: "min(92%, 1400px)",
+							// maxWidth: "min(92%, 1400px)",
 							padding: "14px 18px 16px 18px",
 							marginLeft: -18,
 							borderRadius: 10,

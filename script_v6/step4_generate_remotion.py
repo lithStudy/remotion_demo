@@ -21,6 +21,7 @@ if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
 
 from template_registry import TEMPLATE_REGISTRY, get_template_to_component_map
+from scene_timing import inject_text_length_content_timings, needs_text_length_timings_from_scripts
 from utils import load_config
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -756,6 +757,15 @@ def main():
     if not scenes:
         print("❌ 无场景数据")
         return False
+
+    if needs_text_length_timings_from_scripts(scripts_data):
+        inject_text_length_content_timings(
+            scripts_data, int(config.get("fps", 30)), config
+        )
+        print(
+            "⏱️ 未检测到 Step3 音频时间轴（首条 content 缺少 startFrame/durationFrames），"
+            "已按文案长度在内存中注入预览帧（不写回 scene-scripts.json）"
+        )
 
     cover = normalize_cover(scripts_data)
     if cover:

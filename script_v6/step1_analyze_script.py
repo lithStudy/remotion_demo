@@ -16,6 +16,7 @@ import sys
 from pathlib import Path
 
 from scene_script_validate import validate_and_normalize_scene_scripts
+from scene_timing import finalize_step1_content_and_anchors
 from step1_analysis import (
     analyze_items_for_scene,
     analyze_param_for_item,
@@ -139,118 +140,8 @@ def _cleanup_related_resources(video_name: str, output_dir: Path, config: dict, 
 
 
 # ─────────────────────────────────────────────────────────────
-# 预览时间轴注入
+# content 归一化与时间轴（无预览帧：见 scene_timing + Step4）
 # ─────────────────────────────────────────────────────────────
-
-def _sanitize_anchors(param: dict, content_len: int, item_order) -> list[dict]:
-    """校验并清洗 param.anchors，丢弃非法条目，返回有效列表。"""
-    anchors = param.get("anchors", [])
-    if not isinstance(anchors, list):
-        print(f"   ⚠️ item order={item_order} 的 anchors 非数组，已清空")
-        return []
-
-    valid = []
-    for idx, anchor_item in enumerate(anchors):
-        if not isinstance(anchor_item, dict):
-            print(f"   ⚠️ item order={item_order} anchors[{idx}] 非对象，已丢弃")
-            continue
-        anchor_text = str(anchor_item.get("text", "")).strip()
-        show_from = anchor_item.get("showFrom")
-        if not anchor_text:
-            print(f"   ⚠️ item order={item_order} anchors[{idx}] 缺少 text，已丢弃")
-            continue
-        if not isinstance(show_from, int) or show_from < 0 or show_from >= content_len:
-            print(f"   ⚠️ item order={item_order} anchors[{idx}].showFrom 非法，已丢弃")
-            continue
-        valid.append({
-            "text": anchor_text,
-            "showFrom": show_from,
-            "color": anchor_item.get("color"),
-            "anim": anchor_item.get("anim"),
-            "audioEffect": anchor_item.get("audioEffect"),
-        })
-    return valid
-
-
-def _sanitize_core_sentence_anchors(param: dict, item_order) -> list[dict]:
-    """TEXT_FOCUS：校验并清洗 param.coreSentenceAnchors，丢弃非法条目。"""
-    raw = param.get("coreSentenceAnchors", [])
-    if not isinstance(raw, list):
-        print(f"   ⚠️ item order={item_order} 的 coreSentenceAnchors 非数组，已清空")
-        return []
-
-    core_sentence = str(param.get("coreSentence", "") or "")
-    valid: list[dict] = []
-    for idx, entry in enumerate(raw):
-        if not isinstance(entry, dict):
-            print(f"   ⚠️ item order={item_order} coreSentenceAnchors[{idx}] 非对象，已丢弃")
-            continue
-        phrase = str(entry.get("coreSentenceAnchor", "")).strip()
-        if not phrase:
-            print(f"   ⚠️ item order={item_order} coreSentenceAnchors[{idx}] 缺少 coreSentenceAnchor，已丢弃")
-            continue
-        if core_sentence and phrase not in core_sentence:
-            print(
-                f"   ⚠️ item order={item_order} coreSentenceAnchors[{idx}] "
-                f"不在 coreSentence 内，已丢弃"
-            )
-            continue
-        out: dict = {"coreSentenceAnchor": phrase}
-        if "color" in entry:
-            out["color"] = entry.get("color")
-        valid.append(out)
-    return valid
-
-
-def _inject_preview_timings(scene_scripts: dict, fps: int, config: dict) -> None:
-    """
-    为 Step1 结果注入默认时间轴，避免无音频预览时字幕重叠。
-    Step3 会在生成真实音频后覆盖这些字段。
-    """
-    from utils import extract_content_text
-
-    min_frames = int(config.get("preview_min_duration_frames", max(1, fps)))
-    frames_per_char = float(config.get("preview_frames_per_char", 2.2))
-
-    for scene in scene_scripts.get("scenes", []):
-        for item in scene.get("items", []):
-            param = item.get("param", {})
-            if not isinstance(param, dict):
-                item["param"] = {}
-                param = item["param"]
-
-            content = item.get("content", [])
-            if not isinstance(content, list) or not content:
-                continue
-
-            upgraded_content = []
-            cursor = 0
-            for content_item in content:
-                text = extract_content_text(content_item)
-                text_len = max(1, len(text.strip()))
-                duration_frames = max(min_frames, int(round(text_len * frames_per_char)))
-                upgraded_content.append(
-                    {
-                        "text": text,
-                        "startFrame": cursor,
-                        "durationFrames": duration_frames,
-                    }
-                )
-                cursor += duration_frames
-
-            item["content"] = upgraded_content
-            template = item.get("template", "")
-            if template == "TEXT_FOCUS":
-                param.pop("anchors", None)
-                param["coreSentenceAnchors"] = _sanitize_core_sentence_anchors(
-                    param, item.get("order", "?")
-                )
-            else:
-                param["anchors"] = _sanitize_anchors(
-                    param, len(upgraded_content), item.get("order", "?")
-                )
-            item["totalDurationFrames"] = max(cursor, min_frames)
-
 
 def _cover_methodology_steps_from_config(config: dict) -> list[str] | None:
     raw = config.get("cover_methodology_steps")
@@ -644,8 +535,8 @@ def main():
     print(f"📄 读取文案: {len(text)} 字符")
 
     result = analyze_with_gemini(text, config, ai_logger)
-    _inject_preview_timings(result, config.get("fps", 30), config)
     _merge_dash_only_captions(result)
+    finalize_step1_content_and_anchors(result)
     _inject_cover_for_step4(result, video_name, config)
 
     output_dir.mkdir(parents=True, exist_ok=True)

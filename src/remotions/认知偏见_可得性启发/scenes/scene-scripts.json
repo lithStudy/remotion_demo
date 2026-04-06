@@ -1,39 +1,24 @@
 {
-  "topic": "如何避免被媒体和本能扭曲判断力",
+  "topic": "空难新闻让你改签高铁？别装了，你的大脑正在被收割",
   "scenes": [
     {
       "sceneId": "scene_1",
-      "sceneName": "空难新闻与避险心态",
+      "sceneName": "引入·空难焦虑与避险",
       "items": [
         {
           "narrativeType": "CASE",
           "template": "CENTER_FOCUS",
-          "reasoning": "平缓叙述用户行为，单图即可，无特殊结构。",
+          "reasoning": "平缓叙述，描述一个场景，适合用默认的CENTER_FOCUS模板。",
           "content": [
             {
               "text": "盯着那条空难上热搜的弹窗新闻。",
               "startFrame": 0,
               "durationFrames": 33
-            },
-            {
-              "text": "你默默取消了下周的特价机票。",
-              "startFrame": 33,
-              "durationFrames": 31
-            },
-            {
-              "text": "转身去抢了一张昂贵的高铁票。",
-              "startFrame": 64,
-              "durationFrames": 31
-            },
-            {
-              "text": "心里想着还是在地上跑更安全。",
-              "startFrame": 95,
-              "durationFrames": 31
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一个人盯着电脑屏幕，屏幕上显示空难新闻的弹窗",
+            "imageSrc": "一条手机弹窗新闻推送空难事故",
             "enterEffect": "breathe",
             "anchors": [
               {
@@ -42,66 +27,73 @@
                 "color": "#EF4444",
                 "anim": "spring",
                 "audioEffect": "impact_thud"
-              },
-              {
-                "text": "高铁票",
-                "showFrom": 2,
-                "color": "#000000",
-                "anim": "popIn",
-                "audioEffect": "ping"
-              },
-              {
-                "text": "更安全",
-                "showFrom": 3,
-                "color": "#EF4444",
-                "anim": "highlight",
-                "audioEffect": "woosh"
               }
             ]
           },
-          "totalDurationFrames": 126
+          "totalDurationFrames": 33
         },
         {
-          "narrativeType": "HOOK",
-          "template": "BEAT_SEQUENCE",
-          "reasoning": "铺垫-转折-结论的递进关系，适合BEAT_SEQUENCE。",
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，描述内心的想法和行为，适合用默认的CENTER_FOCUS模板。前后属于同一叙事角色，画面母题相同，避免句末机械切分，所以合并。",
           "content": [
             {
-              "text": "这种宁可折腾也要避险的心态。",
+              "text": "你默默把下周的航班改成了高铁。",
               "startFrame": 0,
-              "durationFrames": 31
+              "durationFrames": 33
+            },
+            {
+              "text": "明知路上要多耗大半天、",
+              "startFrame": 33,
+              "durationFrames": 30
+            },
+            {
+              "text": "换乘也更折腾。",
+              "startFrame": 63,
+              "durationFrames": 30
+            },
+            {
+              "text": "心里却觉得还是在地上跑更安全。",
+              "startFrame": 93,
+              "durationFrames": 33
+            },
+            {
+              "text": "这种宁可多花时间也要避险的心态。",
+              "startFrame": 126,
+              "durationFrames": 35
             },
             {
               "text": "是不是让你觉得非常踏实。",
-              "startFrame": 31,
+              "startFrame": 161,
               "durationFrames": 30
             }
           ],
           "order": 2,
           "param": {
-            "stages": [
+            "imageSrc": "一个人修改航班票的简笔画",
+            "enterEffect": "fadeIn",
+            "anchors": [
               {
-                "imageSrc": "宁可折腾也要避险的心态",
-                "enterEffect": "breathe",
-                "tone": "calm"
-              },
-              {
-                "imageSrc": "问号表情",
-                "enterEffect": "slideBottom"
-              },
-              {
-                "imageSrc": "感觉非常踏实的场景",
-                "enterEffect": "zoomIn"
+                "text": "避险心态",
+                "showFrom": 4,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
               }
-            ],
-            "anchors": []
+            ]
           },
-          "totalDurationFrames": 61
-        },
+          "totalDurationFrames": 191
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析·恐惧劫持与本能",
+      "items": [
         {
           "narrativeType": "LOGIC",
-          "template": "COGNITIVE_SHIFT",
-          "reasoning": "明确的“不是…而是…”结构，使用COGNITIVE_SHIFT。",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "口播对照「以为理性 vs 实为恐惧」，适合左右对错叙事 → DOS_AND_DONTS（左误区、右真相）。",
           "content": [
             {
               "text": "我们总以为这是出于谨慎的理性选择。",
@@ -114,21 +106,19 @@
               "durationFrames": 33
             }
           ],
-          "order": 3,
+          "order": 1,
           "param": {
-            "notText": "理性选择",
-            "butText": "恐惧劫持",
-            "butSrc": "一个被阴影笼罩的人",
-            "notContentIndex": 0,
-            "butContentIndex": 1,
-            "anchors": []
+            "leftSrc": "冷静天平与理性面具的极简剪影，象征自以为的理性决策",
+            "rightSrc": "大脑被红色警报与阴影笼罩的极简剪影，象征恐惧情绪劫持",
+            "dontLabel": "❌ 以为理性",
+            "doLabel": "✅ 恐惧劫持"
           },
           "totalDurationFrames": 70
         },
         {
           "narrativeType": "LOGIC",
-          "template": "COGNITIVE_SHIFT",
-          "reasoning": "明确的“不是…而是…”结构，使用COGNITIVE_SHIFT。",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "「不是胆小而是本能」为典型避坑归因：左为错误归因、右为正确归因 → DOS_AND_DONTS。",
           "content": [
             {
               "text": "这不是因为我们胆小怕事。",
@@ -141,21 +131,19 @@
               "durationFrames": 37
             }
           ],
-          "order": 4,
+          "order": 2,
           "param": {
-            "notText": "胆小怕事",
-            "butText": "基因本能",
-            "butSrc": "原始人在山洞中躲避危险",
-            "notContentIndex": 0,
-            "butContentIndex": 1,
-            "anchors": []
+            "leftSrc": "退缩胆怯、缩成一团的小人极简剪影",
+            "rightSrc": "DNA双螺旋与远古生存本能象征的极简黑白矢量图",
+            "dontLabel": "❌ 胆小怕事",
+            "doLabel": "✅ 生存本能"          
           },
           "totalDurationFrames": 67
         },
         {
           "narrativeType": "LOGIC",
           "template": "CENTER_FOCUS",
-          "reasoning": "平缓叙述社会现象，单图即可，无特殊结构。",
+          "reasoning": "后半转为流量时代与媒体放大罕见事件的平缓叙述，用 CENTER_FOCUS 承载主图与关键词锚点。",
           "content": [
             {
               "text": "在这个流量为王的焦躁时代。",
@@ -166,73 +154,58 @@
               "text": "媒体最喜欢放大的就是罕见极端事件。",
               "startFrame": 30,
               "durationFrames": 37
+            },
+            {
+              "text": "这些新闻像病毒一样霸占屏幕。",
+              "startFrame": 67,
+              "durationFrames": 31
+            },
+            {
+              "text": "让我们误以为这个世界极度危险。",
+              "startFrame": 98,
+              "durationFrames": 33
             }
           ],
-          "order": 5,
+          "order": 3,
           "param": {
-            "imageSrc": "媒体屏幕上出现大量新闻标题和图标",
+            "imageSrc": "手机屏幕被爆炸标题与新闻弹窗占满的极简图示",
             "enterEffect": "fadeIn",
             "anchors": [
               {
                 "text": "流量为王",
                 "showFrom": 0,
-                "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "ping"
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "woosh"
               },
               {
-                "text": "极端事件",
+                "text": "罕见极端事件",
                 "showFrom": 1,
                 "color": "#EF4444",
                 "anim": "highlight",
-                "audioEffect": "impact_thud"
-              }
-            ]
-          },
-          "totalDurationFrames": 67
-        },
-        {
-          "narrativeType": "CONCLUSION",
-          "template": "CENTER_FOCUS",
-          "reasoning": "平缓叙述新闻带来的影响，单图即可，无特殊结构。",
-          "content": [
-            {
-              "text": "这些新闻像病毒一样霸占屏幕。",
-              "startFrame": 0,
-              "durationFrames": 31
-            },
-            {
-              "text": "让我们误以为这个世界极度危险。",
-              "startFrame": 31,
-              "durationFrames": 33
-            }
-          ],
-          "order": 6,
-          "param": {
-            "imageSrc": "新闻媒体霸占屏幕的视觉隐喻",
-            "enterEffect": "slideBottom",
-            "anchors": [
+                "audioEffect": null
+              },
               {
-                "text": "信息茧房",
-                "showFrom": 1,
+                "text": "极度危险",
+                "showFrom": 3,
                 "color": "#EF4444",
-                "anim": "highlight",
+                "anim": "spring",
                 "audioEffect": "impact_thud"
               }
             ]
           },
-          "totalDurationFrames": 64
+          "totalDurationFrames": 131
         }
       ]
     },
     {
-      "sceneId": "scene_2",
-      "sceneName": "可得性启发",
+      "sceneId": "scene_3",
+      "sceneName": "命名·可得性启发",
       "items": [
         {
           "narrativeType": "LOGIC",
           "template": "CONCEPT_CARD",
-          "reasoning": "对“可得性启发”这一概念进行了解释，适合用`CONCEPT_CARD`展示",
+          "reasoning": "对“可得性启发”进行解释，属于概念定义 → 选 CONCEPT_CARD。",
           "content": [
             {
               "text": "学术界给这种大脑的错觉起了个名字。",
@@ -247,7 +220,7 @@
           ],
           "order": 1,
           "param": {
-            "imageSrc": "大脑认知偏差简笔画图标",
+            "imageSrc": "大脑简笔画图标",
             "conceptName": "可得性启发",
             "anchors": []
           },
@@ -255,8 +228,8 @@
         },
         {
           "narrativeType": "LOGIC",
-          "template": "COGNITIVE_SHIFT",
-          "reasoning": "陈述大脑判断概率的两种方式，属于“不是…而是…”的认知偏差，适合用`COGNITIVE_SHIFT`。",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，解释可得性启发的原因。没有明显的结构信号，所以选择CENTER_FOCUS。",
           "content": [
             {
               "text": "说白了就是大脑在极度偷懒。",
@@ -281,82 +254,93 @@
           ],
           "order": 2,
           "param": {
-            "notText": "看统计数据",
-            "butText": "脑子里想容易",
-            "butSrc": "大脑皮层中提取记忆的动画",
-            "notContentIndex": 2,
-            "butContentIndex": 3,
-            "anchors": []
-          },
-          "totalDurationFrames": 138
-        },
-        {
-          "narrativeType": "CASE",
-          "template": "CENTER_FOCUS",
-          "reasoning": "用空难的例子来论证可得性启发，平缓叙述，适合用`CENTER_FOCUS`。",
-          "content": [
-            {
-              "text": "因为空难极其惨烈且被疯狂报道。",
-              "startFrame": 0,
-              "durationFrames": 33
-            },
-            {
-              "text": "所以它在你的记忆库里特别鲜活。",
-              "startFrame": 33,
-              "durationFrames": 33
-            },
-            {
-              "text": "你的大脑一秒钟就能调取恐怖画面。",
-              "startFrame": 66,
-              "durationFrames": 35
-            },
-            {
-              "text": "于是立刻得出坐飞机随时会掉的结论。",
-              "startFrame": 101,
-              "durationFrames": 37
-            }
-          ],
-          "order": 3,
-          "param": {
-            "imageSrc": "空难现场的图像，飞机残骸和火光",
+            "imageSrc": "一个人在思考的抽象简笔画，周围是许多问号",
             "enterEffect": "fadeIn",
             "anchors": [
               {
-                "text": "空难",
+                "text": "极度偷懒",
                 "showFrom": 0,
                 "color": "#EF4444",
                 "anim": "spring",
                 "audioEffect": "impact_thud"
               },
               {
-                "text": "记忆鲜活",
-                "showFrom": 1,
+                "text": "统计数据",
+                "showFrom": 2,
                 "color": "#000000",
                 "anim": "slideUp",
-                "audioEffect": null
+                "audioEffect": "ping"
               },
               {
-                "text": "恐怖画面",
-                "showFrom": 2,
-                "color": "#EF4444",
-                "anim": "highlight",
-                "audioEffect": null
-              },
-              {
-                "text": "坠机结论",
-                "showFrom": 3,
-                "color": "#EF4444",
+                "text": "记忆库",
+                "showFrom": 5,
+                "color": "#000000",
                 "anim": "popIn",
-                "audioEffect": "impact_thud"
+                "audioEffect": null
               }
             ]
           },
-          "totalDurationFrames": 138
+          "totalDurationFrames": 204
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "反转·车祸与慢性病",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，解释大脑如何错误评估风险 → 适合CENTER_FOCUS",
+          "content": [
+            {
+              "text": "因为空难极其惨烈且被疯狂报道。",
+              "startFrame": 138,
+              "durationFrames": 33
+            },
+            {
+              "text": "所以它在你的记忆库里特别鲜活。",
+              "startFrame": 171,
+              "durationFrames": 33
+            },
+            {
+              "text": "你的大脑一秒钟就能调取恐怖画面。",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "于是立刻得出坐飞机随时会掉的结论。",
+              "startFrame": 35,
+              "durationFrames": 37
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "飞机和车祸的对比示意图",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "可得性启发",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "车祸",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 204
         },
         {
           "narrativeType": "LOGIC",
-          "template": "COGNITIVE_SHIFT",
-          "reasoning": "车祸死亡人数更多，但大脑忽略，属于“不是…而是…”的认知偏差，适合用`COGNITIVE_SHIFT`。",
+          "template": "CENTER_FOCUS",
+          "reasoning": "承接上段结论，用事实对比与「头条/忽略」强化可得性偏差 → 独立 CENTER_FOCUS 节拍",
           "content": [
             {
               "text": "但事实上车祸的死亡人数要多得多。",
@@ -374,284 +358,213 @@
               "durationFrames": 35
             }
           ],
-          "order": 4,
+          "order": 2,
           "param": {
-            "notText": "车祸死亡人数少",
-            "butText": "车祸死亡人数多",
-            "butSrc": "交通拥堵的城市街道",
-            "notContentIndex": 1,
-            "butContentIndex": 0,
-            "anchors": []
+            "imageSrc": "飞机和车祸的对比示意图",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "车祸",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
           },
           "totalDurationFrames": 101
         },
         {
           "narrativeType": "LOGIC",
           "template": "COGNITIVE_SHIFT",
-          "reasoning": "凶杀案和慢性病的对比，属于“不是…而是…”的认知偏差，适合用`COGNITIVE_SHIFT`。",
+          "reasoning": "用常见例子说明大脑的认知偏差 → 选择COGNITIVE_SHIFT更合适，突出认知转变",
           "content": [
             {
               "text": "同理凶杀案频发让你觉得治安极差。",
-              "startFrame": 0,
+              "startFrame": 35,
               "durationFrames": 35
             },
             {
               "text": "却没想过慢性病才是真正的隐形杀手。",
-              "startFrame": 35,
+              "startFrame": 70,
               "durationFrames": 37
+            },
+            {
+              "text": "就像靠新闻联播来判断天气注定会出错。",
+              "startFrame": 107,
+              "durationFrames": 40
             }
           ],
-          "order": 5,
+          "order": 3,
           "param": {
             "notText": "治安极差",
-            "butText": "慢性病是杀手",
-            "butSrc": "一个穿着白大褂的医生正在检查X光片",
+            "butText": "慢性病杀手",
+            "butSrc": "戴着面具的幽灵医生",
             "notContentIndex": 0,
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 72
-        },
-        {
-          "narrativeType": "CONCLUSION",
-          "template": "TEXT_FOCUS",
-          "reasoning": "短促有力的结论，适合用`TEXT_FOCUS`。",
-          "content": [
-            {
-              "text": "就像靠新闻联播来判断天气注定会出错。",
-              "startFrame": 0,
-              "durationFrames": 40
-            }
-          ],
-          "order": 6,
-          "param": {
-            "coreSentence": "就像靠新闻联播来判断天气注定会出错。",
-            "coreSentenceAnchors": [
-              {
-                "coreSentenceAnchor": "新闻联播",
-                "color": "#EF4444"
-              }
-            ]
-          },
-          "totalDurationFrames": 40
+          "totalDurationFrames": 147
         }
       ]
     },
     {
-      "sceneId": "scene_3",
-      "sceneName": "如何保护判断力",
+      "sceneId": "scene_5",
+      "sceneName": "召唤·数据与降级",
       "items": [
         {
           "narrativeType": "LOGIC",
           "template": "CENTER_FOCUS",
-          "reasoning": "铺垫句，平缓叙述，无明显结构特征，故选择CENTER_FOCUS。",
+          "reasoning": "平缓叙述，无明显结构特征，选择默认的CENTER_FOCUS模板。",
           "content": [
             {
               "text": "面对这种被媒体和本能双重扭曲的现实。",
               "startFrame": 0,
               "durationFrames": 40
+            },
+            {
+              "text": "我们该如何保护自己的判断力呢。",
+              "startFrame": 40,
+              "durationFrames": 33
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一个人在迷雾中寻找方向",
-            "enterEffect": "slideBottom",
-            "anchors": []
-          },
-          "totalDurationFrames": 40
-        },
-        {
-          "narrativeType": "HOOK",
-          "template": "CENTER_FOCUS",
-          "reasoning": "提问句，平缓叙述，无明显结构特征，故选择CENTER_FOCUS。",
-          "content": [
-            {
-              "text": "我们该如何保护自己的判断力呢。",
-              "startFrame": 0,
-              "durationFrames": 33
-            }
-          ],
-          "order": 2,
-          "param": {
             "imageSrc": "一个人思考的简笔画",
-            "enterEffect": "breathe",
-            "anchors": []
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "双重扭曲",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "判断力",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": null
+              }
+            ]
           },
-          "totalDurationFrames": 33
+          "totalDurationFrames": 73
         },
         {
           "narrativeType": "LOGIC",
           "template": "METHOD_STACK",
-          "reasoning": "提出方法，为后续解释做铺垫，METHOD_STACK更适合展示建议和方法。",
+          "reasoning": "一个核心观点（学会做无情的数据信徒）+ 2句解释展开，符合METHOD_STACK的结构。",
           "content": [
             {
               "text": "第一步是学会做无情的数据信徒。",
               "startFrame": 0,
               "durationFrames": 33
+            },
+            {
+              "text": "做重大决策前先查阅真实的统计数据。",
+              "startFrame": 33,
+              "durationFrames": 37
+            },
+            {
+              "text": "而不是凭感觉和热搜来拍脑袋。",
+              "startFrame": 70,
+              "durationFrames": 31
             }
           ],
-          "order": 3,
+          "order": 2,
           "param": {
-            "title": "成为数据信徒",
-            "imageSrc": "一个学者形象的人，手持数据报告，背景是各种图表和统计数据。",
+            "title": "数据信徒",
+            "imageSrc": "一个人戴着眼镜，专注地看着电脑屏幕上的统计图表",
             "notes": [
               {
-                "text": "学会做无情的决策",
-                "showFrom": 0
+                "text": "查阅统计数据",
+                "showFrom": 1
+              },
+              {
+                "text": "对抗滚烫的恐慌",
+                "showFrom": 2
               }
             ],
             "anchors": []
           },
-          "totalDurationFrames": 33
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "解释说明，为第一步做补充，平缓叙述，无明显结构特征，故选择CENTER_FOCUS。",
-          "content": [
-            {
-              "text": "做重大决策前先查阅真实的统计数据。",
-              "startFrame": 0,
-              "durationFrames": 37
-            }
-          ],
-          "order": 4,
-          "param": {
-            "imageSrc": "统计图表和数据分析的界面",
-            "enterEffect": "fadeIn",
-            "anchors": [
-              {
-                "text": "统计数据",
-                "showFrom": 0,
-                "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "ping"
-              }
-            ]
-          },
-          "totalDurationFrames": 37
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "COGNITIVE_SHIFT",
-          "reasoning": "典型的“不是…而是…”结构，选择COGNITIVE_SHIFT。",
-          "content": [
-            {
-              "text": "而不是凭感觉和热搜来拍脑袋。",
-              "startFrame": 0,
-              "durationFrames": 31
-            }
-          ],
-          "order": 5,
-          "param": {
-            "notText": "凭感觉和热搜",
-            "butText": "拍脑袋",
-            "butSrc": "一个人认真思考并最终顿悟",
-            "notContentIndex": 0,
-            "butContentIndex": 0,
-            "anchors": []
-          },
-          "totalDurationFrames": 31
+          "totalDurationFrames": 101
         },
         {
           "narrativeType": "LOGIC",
           "template": "METHOD_STACK",
-          "reasoning": "提出方法，为后续解释做铺垫，METHOD_STACK更适合展示建议和方法。",
+          "reasoning": "一个核心观点（给你的新闻消费降级）+ 1句解释展开，符合METHOD_STACK的结构。",
           "content": [
             {
               "text": "第二步是给你的新闻消费降级。",
               "startFrame": 0,
               "durationFrames": 31
+            },
+            {
+              "text": "减少对突发灾难新闻的过度关注。",
+              "startFrame": 31,
+              "durationFrames": 33
             }
           ],
-          "order": 6,
+          "order": 3,
           "param": {
-            "title": "减少新闻消费",
-            "imageSrc": "一个用户关闭手机新闻APP的简笔画",
+            "title": "消费降级",
+            "imageSrc": "一个人关掉手机上各种新闻app的推送，回归平静生活",
             "notes": [
               {
-                "text": "别过度关注突发灾难",
-                "showFrom": 0
+                "text": "减少对灾难新闻的关注",
+                "showFrom": 1
               }
             ],
             "anchors": []
           },
-          "totalDurationFrames": 31
+          "totalDurationFrames": 64
         },
         {
-          "narrativeType": "LOGIC",
+          "narrativeType": "CONCLUSION",
           "template": "CENTER_FOCUS",
-          "reasoning": "解释说明，为第二步做补充，平缓叙述，无明显结构特征，故选择CENTER_FOCUS。",
-          "content": [
-            {
-              "text": "减少对突发灾难新闻的过度关注。",
-              "startFrame": 0,
-              "durationFrames": 33
-            }
-          ],
-          "order": 7,
-          "param": {
-            "imageSrc": "一个人看着铺天盖地的灾难新闻报道的场景",
-            "enterEffect": "fadeIn",
-            "anchors": []
-          },
-          "totalDurationFrames": 33
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "过渡句，平缓叙述，无明显结构特征，故选择CENTER_FOCUS。",
+          "reasoning": "总结陈述，无明显结构特征，选择默认的CENTER_FOCUS模板。",
           "content": [
             {
               "text": "当你用冰冷的数据对抗滚烫的恐慌。",
               "startFrame": 0,
               "durationFrames": 35
+            },
+            {
+              "text": "你才能真正看清世界的全貌。",
+              "startFrame": 35,
+              "durationFrames": 30
             }
           ],
-          "order": 8,
+          "order": 4,
           "param": {
-            "imageSrc": "冰冷的数据和燃烧的火焰对比的抽象概念图",
+            "imageSrc": "一个人用放大镜观察数据图表的场景",
             "enterEffect": "fadeIn",
             "anchors": [
               {
-                "text": "冰冷的数据",
+                "text": "冰冷数据",
                 "showFrom": 0,
                 "color": "#000000",
-                "anim": "spring",
+                "anim": "slideUp",
                 "audioEffect": "ping"
               },
               {
-                "text": "滚烫的恐慌",
+                "text": "滚烫恐慌",
                 "showFrom": 0,
                 "color": "#EF4444",
                 "anim": "spring",
                 "audioEffect": "impact_thud"
-              }
-            ]
-          },
-          "totalDurationFrames": 35
-        },
-        {
-          "narrativeType": "CONCLUSION",
-          "template": "TEXT_FOCUS",
-          "reasoning": "结论句，全片级短促强结论，选择TEXT_FOCUS。",
-          "content": [
-            {
-              "text": "你才能真正看清世界的全貌。",
-              "startFrame": 0,
-              "durationFrames": 30
-            }
-          ],
-          "order": 9,
-          "param": {
-            "coreSentence": "你才能真正看清世界的全貌",
-            "coreSentenceAnchors": [
+              },
               {
-                "coreSentenceAnchor": "看清世界的全貌"
+                "text": "看清全貌",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "woosh"
               }
             ]
           },
-          "totalDurationFrames": 30
+          "totalDurationFrames": 65
         }
       ]
     }
@@ -660,11 +573,11 @@
   "cover": {
     "durationFrames": 5,
     "title": "认知偏见_可得性启发",
-    "subtitle": "如何避免被媒体和本能扭曲判断力",
+    "subtitle": "空难新闻让你改签高铁？别装了，你的大脑正在被收割",
     "themeColor": "#2563EB",
     "badge": "认识自我 · 理性思考",
-    "seriesLabel": "认知偏见",
-    "seriesLabelEn": "COGNITIVE BIAS",
+    "seriesLabel": "认知心理学",
+    "seriesLabelEn": "COGNITIVE PSYCHOLOGY",
     "methodologySteps": [
       "觉察",
       "归因",

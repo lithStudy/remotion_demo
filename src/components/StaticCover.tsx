@@ -275,19 +275,28 @@ export const StaticCover: React.FC<StaticCoverProps> = ({
 						{title}
 					</h1>
 
-					{/* 副标题 */}
+					{/* 副标题：小缩略图下提高可读性，层级仍明显低于主标题（体量/字重/无渐变） */}
 					<div
 						style={{
 							display: "flex",
 							alignItems: "stretch",
 							gap: 22,
+							maxWidth: "min(92%, 1400px)",
+							padding: "14px 18px 16px 18px",
+							marginLeft: -18,
+							borderRadius: 10,
+							/* 轻衬底弱化背后轨道/点阵对笔画的干扰，不形成第二视觉主角 */
+							background:
+								"linear-gradient(105deg, rgba(255,255,255,0.88) 0%, rgba(248,250,252,0.72) 45%, rgba(241,245,249,0.35) 78%, transparent 90%)",
+							boxShadow: "inset 0 1px 0 rgba(255,255,255,0.95)",
 						}}
 					>
 						<div
 							style={{
 								width: 5,
 								minHeight: 56,
-								background: `linear-gradient(180deg, ${themeColor} 0%, ${themeColor}22 100%)`,
+								alignSelf: "stretch",
+								background: `linear-gradient(180deg, ${themeColor} 0%, ${themeColor}44 100%)`,
 								borderRadius: 3,
 								flexShrink: 0,
 							}}
@@ -297,10 +306,14 @@ export const StaticCover: React.FC<StaticCoverProps> = ({
 								margin: 0,
 								fontFamily: FONT_STACK,
 								fontSize: 44,
-								fontWeight: 500,
-								lineHeight: 1.55,
-								letterSpacing: 1,
-								color: "#334155",
+								fontWeight: 580,
+								lineHeight: 1.68,
+								letterSpacing: 1.5,
+								color: "#0f172a",
+								/* 极轻描边式阴影：缩小时笔画与背景分离，肉眼不加粗观感 */
+								textShadow:
+									"0 0 1px rgba(255,255,255,0.9), 0 1px 2px rgba(248,250,252,0.95)",
+								WebkitFontSmoothing: "antialiased",
 							}}
 						>
 							{subtitle}

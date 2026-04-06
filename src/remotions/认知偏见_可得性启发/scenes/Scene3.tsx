@@ -1,9 +1,9 @@
 import React from "react";
 import { AbsoluteFill, Sequence, Audio, staticFile } from "remotion";
-import { BWCenterFocus, BWCognitiveShift, BWMethodStack, BWTextFocus } from "../../../components";
+import { BWCenterFocus, BWConceptCard } from "../../../components";
 
-// 如何保护判断力
-const SCENE_DURATION = 40 + 33 + 33 + 37 + 31 + 31 + 33 + 35 + 30;
+// 命名·可得性启发
+const SCENE_DURATION = 67 + 204;
 
 export const calculateScene3Duration = (): number => {
     return SCENE_DURATION;
@@ -12,32 +12,11 @@ export const calculateScene3Duration = (): number => {
 export const Scene3: React.FC = () => {
     return (
         <AbsoluteFill>
-            <Sequence from={0} durationInFrames={40}>
-                <BWCenterFocus content={[{"text": "面对这种被媒体和本能双重扭曲的现实。", "startFrame": 0, "durationFrames": 40}]} totalDurationFrames={40} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="slideBottom" anchors={[]} />
+            <Sequence from={0} durationInFrames={67}>
+                <BWConceptCard content={[{"text": "学术界给这种大脑的错觉起了个名字。", "startFrame": 0, "durationFrames": 37}, {"text": "叫做可得性启发。", "startFrame": 37, "durationFrames": 30}]} totalDurationFrames={67} imageSrc={staticFile("大脑简笔画图标")} conceptName={"可得性启发"} anchors={[]} />
             </Sequence>
-            <Sequence from={40} durationInFrames={33}>
-                <BWCenterFocus content={[{"text": "我们该如何保护自己的判断力呢。", "startFrame": 0, "durationFrames": 33}]} totalDurationFrames={33} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="breathe" anchors={[]} />
-            </Sequence>
-            <Sequence from={73} durationInFrames={33}>
-                <BWMethodStack content={[{"text": "第一步是学会做无情的数据信徒。", "startFrame": 0, "durationFrames": 33}]} totalDurationFrames={33} title={"成为数据信徒"} imageSrc={staticFile("images/template/scene1_1.png")} notes={[{"text": "学会做无情的决策", "showFrom": 0}]} anchors={[]} />
-            </Sequence>
-            <Sequence from={106} durationInFrames={37}>
-                <BWCenterFocus content={[{"text": "做重大决策前先查阅真实的统计数据。", "startFrame": 0, "durationFrames": 37}]} totalDurationFrames={37} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="fadeIn" anchors={[{"text": "统计数据", "showFrom": 0, "color": "#000000", "anim": "spring", "audioEffect": "ping"}]} />
-            </Sequence>
-            <Sequence from={143} durationInFrames={31}>
-                <BWCognitiveShift content={[{"text": "而不是凭感觉和热搜来拍脑袋。", "startFrame": 0, "durationFrames": 31}]} totalDurationFrames={31} notText={"凭感觉和热搜"} butText={"拍脑袋"} butSrc={staticFile("images/template/scene1_1.png")} notContentIndex={0} butContentIndex={0} anchors={[]} />
-            </Sequence>
-            <Sequence from={174} durationInFrames={31}>
-                <BWMethodStack content={[{"text": "第二步是给你的新闻消费降级。", "startFrame": 0, "durationFrames": 31}]} totalDurationFrames={31} title={"减少新闻消费"} imageSrc={staticFile("images/template/scene1_1.png")} notes={[{"text": "别过度关注突发灾难", "showFrom": 0}]} anchors={[]} />
-            </Sequence>
-            <Sequence from={205} durationInFrames={33}>
-                <BWCenterFocus content={[{"text": "减少对突发灾难新闻的过度关注。", "startFrame": 0, "durationFrames": 33}]} totalDurationFrames={33} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="fadeIn" anchors={[]} />
-            </Sequence>
-            <Sequence from={238} durationInFrames={35}>
-                <BWCenterFocus content={[{"text": "当你用冰冷的数据对抗滚烫的恐慌。", "startFrame": 0, "durationFrames": 35}]} totalDurationFrames={35} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="fadeIn" anchors={[{"text": "冰冷的数据", "showFrom": 0, "color": "#000000", "anim": "spring", "audioEffect": "ping"}, {"text": "滚烫的恐慌", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud"}]} />
-            </Sequence>
-            <Sequence from={273} durationInFrames={30}>
-                <BWTextFocus content={[{"text": "你才能真正看清世界的全貌。", "startFrame": 0, "durationFrames": 30}]} totalDurationFrames={30} coreSentence={"你才能真正看清世界的全貌"} coreSentenceAnchors={[{"coreSentenceAnchor": "看清世界的全貌"}]} />
+            <Sequence from={67} durationInFrames={204}>
+                <BWCenterFocus content={[{"text": "说白了就是大脑在极度偷懒。", "startFrame": 0, "durationFrames": 30}, {"text": "我们在判断一件事情发生的概率时。", "startFrame": 30, "durationFrames": 35}, {"text": "往往不去看枯燥真实的统计数据。", "startFrame": 65, "durationFrames": 33}, {"text": "而是看这件事在脑子里想起来有多容易。", "startFrame": 98, "durationFrames": 40}, {"text": "因为空难极其惨烈且被疯狂报道。", "startFrame": 138, "durationFrames": 33}, {"text": "所以它在你的记忆库里特别鲜活。", "startFrame": 171, "durationFrames": 33}]} totalDurationFrames={204} imageSrc={staticFile("一个人在思考的抽象简笔画，周围是许多问号")} enterEffect="fadeIn" anchors={[{"text": "极度偷懒", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud"}, {"text": "统计数据", "showFrom": 2, "color": "#000000", "anim": "slideUp", "audioEffect": "ping"}, {"text": "记忆库", "showFrom": 5, "color": "#000000", "anim": "popIn", "audioEffect": null}]} />
             </Sequence>
 
         </AbsoluteFill>

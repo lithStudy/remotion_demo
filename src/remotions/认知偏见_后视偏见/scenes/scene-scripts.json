@@ -1,5 +1,5 @@
 {
-  "topic": "为什么每次复盘，你都觉得自己是“预言帝”？",
+  "topic": "为什么事后总觉得自己是“预言家”？多数人都逃不掉的认知错觉",
   "scenes": [
     {
       "sceneId": "scene_1",
@@ -8,7 +8,7 @@
         {
           "narrativeType": "HOOK",
           "template": "CENTER_FOCUS",
-          "reasoning": "平缓叙述，描述一种常见的“事后诸葛亮”现象，用于引入后视偏见。没有明显的结构特征，选择CENTER_FOCUS。",
+          "reasoning": "平缓叙述，描述一个场景 → 选择CENTER_FOCUS",
           "content": [
             {
               "text": "看着满屏绿油油的暴跌基金，"
@@ -18,7 +18,28 @@
             },
             {
               "text": "默默退出了交易软件。"
-            },
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "一个上班族看着电脑屏幕上绿色下跌的基金曲线，叹气，然后关闭交易软件的场景",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "暴跌基金",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用朋友的抱怨 → 选择QUOTE_CITATION",
+          "content": [
             {
               "text": "然后跟朋友抱怨说："
             },
@@ -27,7 +48,19 @@
             },
             {
               "text": "昨天那个政策一出我就觉得不对劲。”"
-            },
+            }
+          ],
+          "order": 2,
+          "param": {
+            "quoteSource": "朋友",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "对“事后诸葛亮”进行解释 → 选择CENTER_FOCUS",
+          "content": [
             {
               "text": "这种“事后诸葛亮”式的先见之明，"
             },
@@ -35,14 +68,14 @@
               "text": "是不是让你心里稍微好受了一点？"
             }
           ],
-          "order": 1,
+          "order": 3,
           "param": {
-            "imageSrc": "一个疲惫的人坐在电脑前，屏幕上显示着下跌的基金图表",
+            "imageSrc": "一个人思考的表情",
             "enterEffect": "fadeIn",
             "anchors": [
               {
                 "text": "事后诸葛亮",
-                "showFrom": 6,
+                "showFrom": 0,
                 "color": "#EF4444",
                 "anim": "spring",
                 "audioEffect": "impact_thud"
@@ -53,23 +86,83 @@
         {
           "narrativeType": "LOGIC",
           "template": "CENTER_FOCUS",
-          "reasoning": "解释后视偏见的本质，说明其是一种自我安慰的虚假繁荣。平缓叙述，没有明显的结构特征，选择CENTER_FOCUS。",
+          "reasoning": "平缓叙述，描述一种现象 → 选择CENTER_FOCUS",
           "content": [
             {
               "text": "我们总喜欢在尘埃落定后指点江山，"
             },
             {
               "text": "觉得自己有一眼看透本质的超能力。"
-            },
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "一群人在江边高谈阔论",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "指点江山",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "超能力",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "对上文进行转折，指出本质是一种自我安慰 → 选择COGNITIVE_SHIFT",
+          "content": [
             {
               "text": "但其实这只是一种自我安慰的虚假繁荣。"
-            },
+            }
+          ],
+          "order": 5,
+          "param": {
+            "notText": "自我安慰",
+            "butText": "虚假繁荣",
+            "butSrc": "海市蜃楼",
+            "notContentIndex": 0,
+            "butContentIndex": 0,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "更深层次的解释，不是因为...而是因为... → 选择COGNITIVE_SHIFT",
+          "content": [
             {
               "text": "这不是因为我们真的料事如神，"
             },
             {
               "text": "而是我们的大脑根本无法忍受不确定性。"
-            },
+            }
+          ],
+          "order": 6,
+          "param": {
+            "notText": "料事如神",
+            "butText": "无法忍受不确定性",
+            "butSrc": "大脑思考宇宙混乱",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "解释大脑编造因果关系的原因和结果 → 选择CENTER_FOCUS",
+          "content": [
             {
               "text": "为了在混乱的宇宙中找回一点安全感，"
             },
@@ -80,31 +173,31 @@
               "text": "让我们误以为一切悲剧都是可以避免的。"
             }
           ],
-          "order": 2,
+          "order": 7,
           "param": {
-            "imageSrc": "大脑思考，宇宙星空的背景",
+            "imageSrc": "宇宙星空背景，一个大脑的简笔画",
             "enterEffect": "fadeIn",
             "anchors": [
+              {
+                "text": "安全感",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "因果关系",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
               {
                 "text": "自我安慰",
                 "showFrom": 2,
                 "color": "#EF4444",
-                "anim": "highlight",
-                "audioEffect": "ping"
-              },
-              {
-                "text": "不确定性",
-                "showFrom": 4,
-                "color": "#000000",
                 "anim": "spring",
                 "audioEffect": "impact_thud"
-              },
-              {
-                "text": "因果关系",
-                "showFrom": 6,
-                "color": "#000000",
-                "anim": "slideUp",
-                "audioEffect": null
               }
             ]
           }
@@ -118,7 +211,7 @@
         {
           "narrativeType": "LOGIC",
           "template": "CONCEPT_CARD",
-          "reasoning": "定义心理学概念“后视偏见”，适合用概念卡片突出展示。",
+          "reasoning": "解释心理学概念“后视偏见” → 适合用`CONCEPT_CARD`",
           "content": [
             {
               "text": "这在心理学中叫做“后视偏见”："
@@ -135,7 +228,7 @@
           ],
           "order": 1,
           "param": {
-            "imageSrc": "大脑思考过滤信息简笔画图标",
+            "imageSrc": "大脑思考过程的简笔画图标",
             "conceptName": "后视偏见",
             "anchors": []
           }
@@ -143,14 +236,35 @@
         {
           "narrativeType": "LOGIC",
           "template": "CENTER_FOCUS",
-          "reasoning": "解释后视偏见的具体表现，平缓叙述，适合用单图承载。",
+          "reasoning": "平缓叙述，解释“确定性的滤镜”的作用 → 适合用`CENTER_FOCUS`",
           "content": [
             {
               "text": "那个已经发生的结果就是一个“确定性的滤镜”，"
             },
             {
               "text": "它会自动过滤掉之前所有干扰你的信息。"
-            },
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "大脑过滤信息的抽象概念图",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "确定性滤镜",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，描述结果出来后的感觉 → 适合用`CENTER_FOCUS`",
+          "content": [
             {
               "text": "一旦结果出来了，"
             },
@@ -159,7 +273,28 @@
             },
             {
               "text": "仿佛当初只有这一条路可走。"
-            },
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "迷宫的俯视图，出口处有一个箭头",
+            "enterEffect": "slideBottom",
+            "anchors": [
+              {
+                "text": "铁证如山",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "描述事后和事前认知的对比和转变 → 适合用`COGNITIVE_SHIFT`",
+          "content": [
             {
               "text": "哪怕在事情发生前，"
             },
@@ -173,46 +308,55 @@
               "text": "你依然会觉得那些走错路的人“蠢得可笑”。"
             }
           ],
-          "order": 2,
+          "order": 4,
           "param": {
-            "imageSrc": "迷宫出口的抽象示意图，终点处有光芒",
-            "enterEffect": "fadeIn",
-            "anchors": [
-              {
-                "text": "后视偏见",
-                "showFrom": 0,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
-              },
-              {
-                "text": "确定性滤镜",
-                "showFrom": 1,
-                "color": "#000000",
-                "anim": "popIn",
-                "audioEffect": "ping"
-              },
-              {
-                "text": "自我欺骗",
-                "showFrom": 8,
-                "color": "#EF4444",
-                "anim": "highlight",
-                "audioEffect": "woosh"
-              }
-            ]
+            "notText": "不敢下注",
+            "butText": "蠢得可笑",
+            "butSrc": "一群嘲笑指点着迷路者的围观者",
+            "notContentIndex": 1,
+            "butContentIndex": 3,
+            "anchors": []
           }
         },
         {
           "narrativeType": "LOGIC",
           "template": "CENTER_FOCUS",
-          "reasoning": "用迷宫做类比，指出复盘时的自我欺骗，平缓叙述，适合用单图承载。",
+          "reasoning": "比喻论证，看着拼好的迷宫图纸，感觉一眼就能看到出口 → 适合用`CENTER_FOCUS`",
           "content": [
             {
               "text": "这就好比看着已经拼好的迷宫图纸，"
             },
             {
               "text": "你觉得自己一眼就能看到出口。"
-            },
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "一个人看着迷宫图纸寻找出口",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "迷宫图纸",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "看到出口",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "结论性金句 → 适合用`TEXT_FOCUS`",
+          "content": [
             {
               "text": "我们自以为的未雨绸缪，"
             },
@@ -220,24 +364,17 @@
               "text": "其实全是复盘时的自我欺骗。"
             }
           ],
-          "order": 3,
+          "order": 6,
           "param": {
-            "imageSrc": "一个已经拼好的迷宫图纸",
-            "enterEffect": "breathe",
-            "anchors": [
+            "coreSentence": "我们自以为的未雨绸缪，全是自我欺骗",
+            "coreSentenceAnchors": [
               {
-                "text": "迷宫图纸",
-                "showFrom": 0,
-                "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "ping"
+                "coreSentenceAnchor": "未雨绸缪",
+                "color": "#EF4444"
               },
               {
-                "text": "自我欺骗",
-                "showFrom": 3,
-                "color": "#EF4444",
-                "anim": "highlight",
-                "audioEffect": "impact_thud"
+                "coreSentenceAnchor": "自我欺骗",
+                "color": "#EF4444"
               }
             ]
           }
@@ -246,12 +383,12 @@
     },
     {
       "sceneId": "scene_3",
-      "sceneName": "剖析：生活场景",
+      "sceneName": "剖析：生活实例",
       "items": [
         {
-          "narrativeType": "LOGIC",
+          "narrativeType": "TRANSITION",
           "template": "CENTER_FOCUS",
-          "reasoning": "铺垫句，为下文举例做引入。无明显结构，选用默认的CENTER_FOCUS。",
+          "reasoning": "起强调作用的过渡句，平缓叙述，选择CENTER_FOCUS",
           "content": [
             {
               "text": "实际上，"
@@ -262,7 +399,7 @@
           ],
           "order": 1,
           "param": {
-            "imageSrc": "生活中常见的各种陷阱",
+            "imageSrc": "一个人在生活中遇到各种陷阱的示意图",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -270,7 +407,7 @@
                 "showFrom": 1,
                 "color": "#EF4444",
                 "anim": "spring",
-                "audioEffect": "woosh"
+                "audioEffect": "impact_thud"
               }
             ]
           }
@@ -278,7 +415,7 @@
         {
           "narrativeType": "CASE",
           "template": "CENTER_FOCUS",
-          "reasoning": "举例场景。职场复盘场景，叙述领导的言行，无明显结构，选用默认的CENTER_FOCUS。",
+          "reasoning": "生活案例，描述职场复盘场景，平缓叙述，选择CENTER_FOCUS",
           "content": [
             {
               "text": "- 职场复盘时："
@@ -298,15 +435,22 @@
           ],
           "order": 2,
           "param": {
-            "imageSrc": "办公室场景，员工在电脑前工作，领导在旁边指点",
-            "enterEffect": "fadeIn",
+            "imageSrc": "办公室场景，领导拍桌子的卡通形象",
+            "enterEffect": "slideBottom",
             "anchors": [
               {
                 "text": "职场复盘",
                 "showFrom": 0,
                 "color": "#000000",
-                "anim": "slideUp",
+                "anim": "spring",
                 "audioEffect": "ping"
+              },
+              {
+                "text": "马后炮",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
               }
             ]
           }
@@ -314,7 +458,7 @@
         {
           "narrativeType": "CASE",
           "template": "CENTER_FOCUS",
-          "reasoning": "举例场景。恋爱吵架场景，叙述对方的言行，无明显结构，选用默认的CENTER_FOCUS。",
+          "reasoning": "生活案例，描述恋爱吵架场景，平缓叙述，选择CENTER_FOCUS",
           "content": [
             {
               "text": "- 恋爱吵架时："
@@ -331,29 +475,22 @@
           ],
           "order": 3,
           "param": {
-            "imageSrc": "一对情侣在争吵，互相指责对方",
-            "enterEffect": "fadeIn",
+            "imageSrc": "情侣吵架互相指责的场景",
+            "enterEffect": "slideBottom",
             "anchors": [
               {
-                "text": "恋爱吵架",
-                "showFrom": 0,
+                "text": "靠不住",
+                "showFrom": 1,
                 "color": "#EF4444",
-                "anim": "highlight",
+                "anim": "spring",
                 "audioEffect": "impact_thud"
               },
               {
-                "text": "第一眼",
-                "showFrom": 1,
-                "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "ping"
-              },
-              {
-                "text": "求婚",
+                "text": "浪漫求婚",
                 "showFrom": 3,
-                "color": "#EF4444",
+                "color": "#000000",
                 "anim": "popIn",
-                "audioEffect": "woosh"
+                "audioEffect": "ping"
               }
             ]
           }
@@ -361,7 +498,7 @@
         {
           "narrativeType": "CASE",
           "template": "CENTER_FOCUS",
-          "reasoning": "举例场景。指责受害者场景，叙述评论区的言论，无明显结构，选用默认的CENTER_FOCUS。",
+          "reasoning": "生活案例，描述指责受害者场景，平缓叙述，选择CENTER_FOCUS",
           "content": [
             {
               "text": "- 指责受害者时："
@@ -374,7 +511,35 @@
             },
             {
               "text": "换我早就识破了”。"
-            },
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "人们在网络评论区指责受害者的场景",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "受害者",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": null
+              },
+              {
+                "text": "套路",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "对案例的总结，平缓叙述，选择CENTER_FOCUS",
+          "content": [
             {
               "text": "这种上帝视角，"
             },
@@ -385,17 +550,31 @@
               "text": "以此换取一点虚妄的安全感。"
             }
           ],
-          "order": 4,
+          "order": 5,
           "param": {
-            "imageSrc": "一群人围观一个被骗的人的简笔画",
-            "enterEffect": "slideBottom",
+            "imageSrc": "一个人站在高处俯视众生的场景",
+            "enterEffect": "fadeIn",
             "anchors": [
               {
                 "text": "上帝视角",
-                "showFrom": 4,
+                "showFrom": 0,
                 "color": "#EF4444",
-                "anim": "highlight",
+                "anim": "spring",
                 "audioEffect": "impact_thud"
+              },
+              {
+                "text": "伤口撒盐",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "安全感",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": null
               }
             ]
           }
@@ -404,12 +583,12 @@
     },
     {
       "sceneId": "scene_4",
-      "sceneName": "召唤：行动心法",
+      "sceneName": "召唤：应对心法",
       "items": [
         {
           "narrativeType": "LOGIC",
           "template": "CENTER_FOCUS",
-          "reasoning": "引出核心心法，为后续内容做铺垫，选择默认的CENTER_FOCUS模板。",
+          "reasoning": "平缓叙述，引出三个核心心法，无明显结构特征，适合用CENTER_FOCUS。",
           "content": [
             {
               "text": "要想不被这种“事后聪明”蒙蔽双眼，"
@@ -420,15 +599,22 @@
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一个人思考未来的简笔画",
+            "imageSrc": "一个人思考的简笔画",
             "enterEffect": "fadeIn",
             "anchors": [
               {
                 "text": "事后聪明",
                 "showFrom": 0,
                 "color": "#EF4444",
-                "anim": "highlight",
+                "anim": "spring",
                 "audioEffect": "impact_thud"
+              },
+              {
+                "text": "核心心法",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
               }
             ]
           }
@@ -436,7 +622,7 @@
         {
           "narrativeType": "LOGIC",
           "template": "METHOD_STACK",
-          "reasoning": "解释第一个核心心法，适合用METHOD_STACK展示标题和解释。",
+          "reasoning": "一个标题式核心（建立决策日记）+ 解释展开，适合METHOD_STACK。",
           "content": [
             {
               "text": "1. 建立决策日记："
@@ -451,14 +637,14 @@
           "order": 2,
           "param": {
             "title": "建立决策日记",
-            "imageSrc": "一本打开的日记本，旁边放着一支笔，象征记录决策过程",
+            "imageSrc": "一个打开的笔记本，旁边放着一支笔，记录着各种想法和信息",
             "notes": [
               {
-                "text": "记录当时的想法和信息",
+                "text": "记录真实想法和模糊信息",
                 "showFrom": 1
               },
               {
-                "text": "对照结果，反思决策",
+                "text": "事后无情对照",
                 "showFrom": 2
               }
             ],
@@ -468,7 +654,7 @@
         {
           "narrativeType": "LOGIC",
           "template": "METHOD_STACK",
-          "reasoning": "解释第二个核心心法，适合用METHOD_STACK展示标题和解释。",
+          "reasoning": "一个标题式核心（承认随机性）+ 解释展开，适合METHOD_STACK。",
           "content": [
             {
               "text": "2. 承认随机性："
@@ -489,19 +675,15 @@
           "order": 3,
           "param": {
             "title": "承认随机性",
-            "imageSrc": "一个骰子随机滚动，周围是混乱的线条和箭头",
+            "imageSrc": "一个骰子在空中旋转，周围是模糊的、不确定的背景",
             "notes": [
               {
-                "text": "接受世界复杂性",
+                "text": "世界充满复杂性",
                 "showFrom": 1
               },
               {
-                "text": "很多结果只是概率",
+                "text": "结果可能只是概率",
                 "showFrom": 3
-              },
-              {
-                "text": "而非绝对必然",
-                "showFrom": 4
               }
             ],
             "anchors": []
@@ -510,7 +692,7 @@
         {
           "narrativeType": "LOGIC",
           "template": "METHOD_STACK",
-          "reasoning": "解释第三个核心心法，适合用METHOD_STACK展示标题和解释。",
+          "reasoning": "一个标题式核心（警惕“总结癖”）+ 解释展开，适合METHOD_STACK。",
           "content": [
             {
               "text": "3. 警惕“总结癖”："
@@ -524,8 +706,8 @@
           ],
           "order": 4,
           "param": {
-            "title": "警惕总结癖",
-            "imageSrc": "一群人围坐在一起，其中一人滔滔不绝地讲述，其他人点头附和，画面充满主观臆断",
+            "title": "警惕“总结癖”",
+            "imageSrc": "一个人指着一堆事后诸葛亮的马后炮，表情不屑",
             "notes": [
               {
                 "text": "听到别人高谈阔论“我早就知道”时",
@@ -541,8 +723,8 @@
         },
         {
           "narrativeType": "CONCLUSION",
-          "template": "TEXT_FOCUS",
-          "reasoning": "总结，升华主题，使用TEXT_FOCUS突出强调核心观点。",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，总结，无明显结构特征，适合用CENTER_FOCUS。",
           "content": [
             {
               "text": "在这个充满未知的世界里，"
@@ -552,7 +734,42 @@
             },
             {
               "text": "你就永远无法在未来做出理性的判断。"
-            },
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "一个人站在十字路口，多个方向的路牌模糊不清",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "未知",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "woosh"
+              },
+              {
+                "text": "敬畏真实",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": null
+              },
+              {
+                "text": "理性判断",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": null
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片级短促强结论，适合TEXT_FOCUS。",
+          "content": [
             {
               "text": "永远记住，"
             },
@@ -563,17 +780,13 @@
               "text": "而不是在废墟上宣称自己早有预谋。"
             }
           ],
-          "order": 5,
+          "order": 6,
           "param": {
-            "coreSentence": "敬畏过去的真实，才能做出理性的判断",
+            "coreSentence": "真正的智慧是预见未知的风险",
             "coreSentenceAnchors": [
               {
-                "coreSentenceAnchor": "敬畏",
+                "coreSentenceAnchor": "预见未知的风险",
                 "color": "#EF4444"
-              },
-              {
-                "coreSentenceAnchor": "理性的判断",
-                "color": "#000000"
               }
             ]
           }
@@ -585,7 +798,7 @@
   "cover": {
     "durationFrames": 5,
     "title": "认知偏见_后视偏见",
-    "subtitle": "为什么每次复盘，你都觉得自己是“预言帝”？",
+    "subtitle": "为什么事后总觉得自己是“预言家”？多数人都逃不掉的认知错觉",
     "themeColor": "#2563EB",
     "badge": "认识自我 · 理性思考",
     "seriesLabel": "认知心理学",

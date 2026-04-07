@@ -64,9 +64,16 @@ def extract_texts_from_content(content: list) -> list:
 # TTS 合成
 # ─────────────────────────────────────────────────────────────
 
-def synthesize_speech(text_parts: list, output_path: str, speech_key: str,
-                      region: str, voice_name: str,
-                      speech_rate: str = "+0%") -> tuple:
+def synthesize_speech(
+    text_parts: list,
+    output_path: str,
+    speech_key: str,
+    region: str,
+    voice_name: str,
+    speech_rate: str = "+0%",
+    frame_timeout_ms: str = "60000",
+    rtf_timeout_threshold: str = "10",
+) -> tuple:
     """
     将多段文本合并为一个音频文件。
     通过 SSML bookmark 事件获取每段文本在音频中的起止时间。
@@ -75,6 +82,13 @@ def synthesize_speech(text_parts: list, output_path: str, speech_key: str,
       sentence_boundaries: [{"startMs": float, "endMs": float}, ...]
     """
     speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=region)
+    # 默认帧间隔 3000ms：长 SSML / HD 音色 / 网络波动时易「Timeout while synthesizing」
+    speech_config.set_property_by_name(
+        "SpeechSynthesis_FrameTimeoutInterval", frame_timeout_ms
+    )
+    speech_config.set_property_by_name(
+        "SpeechSynthesis_RtfTimeoutThreshold", rtf_timeout_threshold
+    )
     speech_config.set_speech_synthesis_output_format(
         speechsdk.SpeechSynthesisOutputFormat.Audio16Khz128KBitRateMonoMp3
     )
@@ -275,6 +289,8 @@ def main():
     voice_name = config.get("azure_voice_name", "zh-CN-XiaoxiaoNeural")
     speech_rate = config.get("speech_rate", "+0%")
     fps = config.get("fps", 30)
+    tts_frame_timeout_ms = str(config.get("azure_tts_frame_timeout_ms", 60_000))
+    tts_rtf_threshold = str(config.get("azure_tts_rtf_timeout_threshold", 10))
 
     if not speech_key:
         print("❌ 未设置 SPEECH_KEY")
@@ -339,7 +355,14 @@ def main():
         print(f"  🎵 整段合成 ({len(tts_texts)}句): {full_preview[:80]}...")
 
         ok, boundaries, total_dur = synthesize_speech(
-            tts_texts, str(filepath), speech_key, region, voice_name, speech_rate
+            tts_texts,
+            str(filepath),
+            speech_key,
+            region,
+            voice_name,
+            speech_rate,
+            frame_timeout_ms=tts_frame_timeout_ms,
+            rtf_timeout_threshold=tts_rtf_threshold,
         )
 
         if ok:

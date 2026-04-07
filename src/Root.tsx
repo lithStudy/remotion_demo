@@ -13,6 +13,7 @@ import { 认知偏见确认偏误, 认知偏见确认偏误Schema, TOTAL_DURATIO
 import { 认知偏见可得性启发, 认知偏见可得性启发Schema, TOTAL_DURATION_认知偏见_可得性启发 } from "./remotions/认知偏见_可得性启发/认知偏见可得性启发";
 import { 认知偏见锚定效应, 认知偏见锚定效应Schema, TOTAL_DURATION_认知偏见_锚定效应 } from "./remotions/认知偏见_锚定效应/认知偏见锚定效应";
 import { 认知偏见后视偏见, 认知偏见后视偏见Schema, TOTAL_DURATION_认知偏见_后视偏见 } from "./remotions/认知偏见_后视偏见/认知偏见后视偏见";
+import { 认知偏见幸存者偏差, 认知偏见幸存者偏差Schema, TOTAL_DURATION_认知偏见_幸存者偏差 } from "./remotions/认知偏见_幸存者偏差/认知偏见幸存者偏差";
 
 
 // Each <Composition> is an entry in the sidebar!
@@ -150,6 +151,18 @@ export const RemotionRoot: React.FC = () => {
         width={960}
         height={1280}
         schema={认知偏见后视偏见Schema}
+        defaultProps={{}}
+      />
+    
+      {/* 认知偏见幸存者偏差 - 自动生成 */}
+      <Composition
+        id="认知偏见幸存者偏差"
+        component={认知偏见幸存者偏差}
+        durationInFrames={TOTAL_DURATION_认知偏见_幸存者偏差}
+        fps={30}
+        width={960}
+        height={1280}
+        schema={认知偏见幸存者偏差Schema}
         defaultProps={{}}
       />
     </>

@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, interpolate, Sequence, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, interpolate, staticFile, Sequence, useCurrentFrame } from "remotion";
 import { z } from "zod";
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
@@ -124,6 +124,12 @@ export const 认知偏见后视偏见: React.FC<z.infer<typeof 认知偏见后�
 
     return (
         <AbsoluteFill>
+            <Audio
+                src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
+                loop
+                volume={0.22}
+                name="Background music"
+            />
             <div
                 style={{
                     height: "100%",
@@ -144,8 +150,8 @@ export const 认知偏见后视偏见: React.FC<z.infer<typeof 认知偏见后�
             />
             <Sequence durationInFrames={COVER_DURATION_FRAMES}>
                 <StaticCover
-                    title="认知偏见_后视偏见"
-                    subtitle="为什么事后总觉得自己是“预言家”？多数人都逃不掉的认知错觉"
+                    title="后视偏见"
+                    subtitle="我早就知道会这样!"
                     coverDurationInFrames={COVER_DURATION_FRAMES}
                     themeColor="#2563EB"
                     badge="认识自我 · 理性思考"

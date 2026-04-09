@@ -241,8 +241,8 @@ export const BWCauseChain: React.FC<BWCauseChainProps> = ({
 	const starts = chain.map((n, i) => resolveNodeStartFrame(n.showFrom, i, items, stagger));
 
 	const isVertical = layout === "vertical";
-	const maxImgH = isVertical ? Math.min(140, height * 0.14) : Math.min(120, height * 0.12);
-	const maxImgW = isVertical ? width * 0.42 : width * 0.22;
+	const maxImgH = isVertical ? Math.min(128, height * 0.12) : Math.min(110, height * 0.11);
+	const maxImgW = isVertical ? width * 0.36 : width * 0.2;
 
 	return (
 		<AbsoluteFill style={style}>
@@ -251,8 +251,8 @@ export const BWCauseChain: React.FC<BWCauseChainProps> = ({
 					position: "absolute",
 					left: 24,
 					right: 24,
-					top: "22%",
-					bottom: "26%",
+					top: "20%",
+					bottom: "22%",
 					display: "flex",
 					flexDirection: isVertical ? "column" : "row",
 					alignItems: "center",

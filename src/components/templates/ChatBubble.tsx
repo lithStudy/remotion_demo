@@ -68,7 +68,8 @@ export const BWChatBubble: React.FC<BWChatBubbleProps> = ({
 	style,
 }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, width, height } = useVideoConfig();
+	const avatar = Math.round(Math.min(110, Math.min(width, height) * 0.095));
 	const items = normalizeContent(content);
 
 	// 定位当前帧对应的 content 项
@@ -110,9 +111,9 @@ export const BWChatBubble: React.FC<BWChatBubbleProps> = ({
 				...style,
 			}}
 		>
-			<div style={{ display: "flex", alignItems: "flex-end", gap: 20, padding: "0 48px", width: "100%", maxHeight: "65%" }}>
+			<div style={{ display: "flex", alignItems: "flex-end", gap: Math.round(width * 0.014), padding: "0 5%", width: "100%", maxHeight: "56%" }}>
 				<div style={{
-					width: 110, height: 110, borderRadius: "50%", backgroundColor: "#e0e4eb",
+					width: avatar, height: avatar, borderRadius: "50%", backgroundColor: "#e0e4eb",
 					border: "4px solid #111111", display: "flex", alignItems: "center", justifyContent: "center",
 					flexShrink: 0, transform: `translateX(${avatarX}px)`, opacity: avatarSpring,
 				}}>

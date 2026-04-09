@@ -147,21 +147,21 @@ function resolveTone(stage: BeatStageItem | undefined, index: number): BeatStage
 }
 
 const IMAGE_LAYOUTS: Record<number, Array<{ left: string; maxWidth: string; maxHeight: string }>> = {
-	1: [{ left: "50%", maxWidth: "64%", maxHeight: "42%" }],
+	1: [{ left: "50%", maxWidth: "58%", maxHeight: "36%" }],
 	2: [
-		{ left: "35%", maxWidth: "32%", maxHeight: "28%" },
-		{ left: "65%", maxWidth: "32%", maxHeight: "28%" },
+		{ left: "35%", maxWidth: "30%", maxHeight: "24%" },
+		{ left: "65%", maxWidth: "30%", maxHeight: "24%" },
 	],
 	3: [
-		{ left: "22%", maxWidth: "24%", maxHeight: "24%" },
-		{ left: "50%", maxWidth: "24%", maxHeight: "24%" },
-		{ left: "78%", maxWidth: "24%", maxHeight: "24%" },
+		{ left: "22%", maxWidth: "22%", maxHeight: "21%" },
+		{ left: "50%", maxWidth: "22%", maxHeight: "21%" },
+		{ left: "78%", maxWidth: "22%", maxHeight: "21%" },
 	],
 	4: [
-		{ left: "13%", maxWidth: "18%", maxHeight: "20%" },
-		{ left: "38%", maxWidth: "18%", maxHeight: "20%" },
-		{ left: "62%", maxWidth: "18%", maxHeight: "20%" },
-		{ left: "87%", maxWidth: "18%", maxHeight: "20%" },
+		{ left: "13%", maxWidth: "17%", maxHeight: "18%" },
+		{ left: "38%", maxWidth: "17%", maxHeight: "18%" },
+		{ left: "62%", maxWidth: "17%", maxHeight: "18%" },
+		{ left: "87%", maxWidth: "17%", maxHeight: "18%" },
 	],
 };
 
@@ -230,7 +230,7 @@ const BeatSequenceImageSlot: React.FC<{
 		extrapolateRight: "clamp",
 	});
 	const introTranslateY = imageIndex === 0
-		? interpolate(introProgress, [0, 1], [120, 0], {
+		? interpolate(introProgress, [0, 1], [80, 0], {
 				extrapolateLeft: "clamp",
 				extrapolateRight: "clamp",
 			})
@@ -243,7 +243,7 @@ const BeatSequenceImageSlot: React.FC<{
 			style={{
 				position: "absolute",
 				left: `${left}%`,
-				top: "45%",
+				top: "43%",
 				maxWidth: `${maxWidth}%`,
 				maxHeight: `${maxHeight}%`,
 				objectFit: "contain",

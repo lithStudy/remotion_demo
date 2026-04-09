@@ -738,8 +738,8 @@ def generate_scenes_index(scene_count: int) -> str:
 
 def update_root_tsx(root_path: Path, name: str, pascal: str, config: dict):
     """更新 Root.tsx，添加新的 Composition"""
-    width = config.get("width", 960)
-    height = config.get("height", 1280)
+    width = config.get("width", 1920)
+    height = config.get("height", 1080)
 
     with open(root_path, "r", encoding="utf-8") as f:
         content = f.read()

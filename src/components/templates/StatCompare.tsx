@@ -77,7 +77,9 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 	style,
 }) => {
 	const frame = useCurrentFrame();
-	const { fps, width } = useVideoConfig();
+	const { fps, width, height } = useVideoConfig();
+	const barTrackH = Math.round(Math.min(240, height * 0.22));
+	const iconSize = Math.round(Math.min(80, Math.min(width, height) * 0.055));
 	const barSpring = spring({
 		frame: frame - 8,
 		fps,
@@ -120,7 +122,7 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 				style={{
 					position: "absolute",
 					left: "50%",
-					top: "40%",
+					top: "38%",
 					transform: "translate(-50%, -50%)",
 					display: "flex",
 					flexDirection: "row",
@@ -152,12 +154,12 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 					</div>
 					<Img
 						src={getSafeImageSrc(leftSrc)}
-						style={{ width: 72, height: 72, objectFit: "contain" }}
+						style={{ width: iconSize, height: iconSize, objectFit: "contain" }}
 					/>
 					<div
 						style={{
 							width: "100%",
-							height: 220,
+							height: barTrackH,
 							backgroundColor: "rgba(0,0,0,0.06)",
 							borderRadius: 12,
 							display: "flex",
@@ -211,12 +213,12 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 					</div>
 					<Img
 						src={getSafeImageSrc(rightSrc)}
-						style={{ width: 72, height: 72, objectFit: "contain" }}
+						style={{ width: iconSize, height: iconSize, objectFit: "contain" }}
 					/>
 					<div
 						style={{
 							width: "100%",
-							height: 220,
+							height: barTrackH,
 							backgroundColor: "rgba(0,0,0,0.06)",
 							borderRadius: 12,
 							display: "flex",

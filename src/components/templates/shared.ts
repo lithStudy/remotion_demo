@@ -82,7 +82,7 @@ export function useImageEnterStyle(
 			return { transform: `translate(-50%, -50%) translateX(${tx}px)`, opacity: enterSpring };
 		}
 		case "slideBottom": {
-			const ty = interpolate(enterSpring, [0, 1], [height * 0.25, 0]);
+			const ty = interpolate(enterSpring, [0, 1], [height * 0.18, 0]);
 			return { transform: `translate(-50%, -50%) translateY(${ty}px)`, opacity: enterSpring };
 		}
 		case "zoomIn": {
@@ -101,11 +101,12 @@ export function useImageEnterStyle(
 /**
  * 锚点列表布局常量（与 TemplateContentRenderer 中 AnchorWordList 保持一致）
  */
-export const ANCHOR_LIST_TOP_RATIO = 0.18;
-export const ANCHOR_LIST_ROW_MIN_HEIGHT_PX = 64;
-export const ANCHOR_LIST_ROW_GAP_PX = 16;
-export const SINGLE_IMAGE_CENTER_TOP_RATIO = 0.5;
-export const SINGLE_IMAGE_MAX_HEIGHT_RATIO = 0.4;
+/** 横屏 16:9：顶部锚点区略压缩，为中部主视觉与底部字幕让出纵向空间 */
+export const ANCHOR_LIST_TOP_RATIO = 0.13;
+export const ANCHOR_LIST_ROW_MIN_HEIGHT_PX = 60;
+export const ANCHOR_LIST_ROW_GAP_PX = 14;
+export const SINGLE_IMAGE_CENTER_TOP_RATIO = 0.47;
+export const SINGLE_IMAGE_MAX_HEIGHT_RATIO = 0.36;
 export const SINGLE_IMAGE_ANCHOR_MIN_GAP_PX = 50;
 
 function getVisibleAnchorItems(

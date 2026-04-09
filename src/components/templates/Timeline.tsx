@@ -83,7 +83,9 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 	style,
 }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, height } = useVideoConfig();
+	const nodeSize = Math.round(Math.min(140, height * 0.12));
+	const timelineY = 44;
 	const contentItems = content ?? [];
 	const lineProgress = interpolate(
 		spring({ frame, fps, config: { damping: 80, stiffness: 40 }, durationInFrames: 50 }),
@@ -91,8 +93,6 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 		[0, 80],
 		{ extrapolateLeft: "clamp", extrapolateRight: "clamp" },
 	);
-	const timelineY = 45;
-
 	return (
 		<AbsoluteFill style={style}>
 			<div
@@ -132,7 +132,7 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 				});
 				const visible = frame >= appearFrame;
 				const isAbove = i % 2 === 0;
-				const iconTop = isAbove ? "28%" : "52%";
+				const iconTop = isAbove ? "26%" : "54%";
 				return (
 					<React.Fragment key={i}>
 						<div
@@ -158,8 +158,8 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 								left: `${xFrac * 100}%`,
 								top: iconTop,
 								transform: `translate(-50%, 0) scale(${visible ? nodeSpring : 0.5})`,
-								width: 140,
-								height: 140,
+								width: nodeSize,
+								height: nodeSize,
 								objectFit: "contain",
 								opacity: visible ? nodeSpring : 0,
 							}}

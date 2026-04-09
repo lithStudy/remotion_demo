@@ -1,0 +1,801 @@
+{
+  "topic": "为什么“越努力越焦虑”？别让成功学鸡汤，毁了你的人生",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：读书无用论",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述一个场景，读书无用论的引入，平缓叙述，使用默认的CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "看着那个初中辍学创业、"
+            },
+            {
+              "text": "如今身价过亿的专访，"
+            },
+            {
+              "text": "你默默放下了手里正在啃的专业书，"
+            },
+            {
+              "text": "脑子里冒出一个念头："
+            },
+            {
+              "text": "也许读书真的无用。"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "一个年轻人看着电脑屏幕，屏幕上显示着成功人士的访谈节目",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "辍学创业",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "读书无用",
+                "showFrom": 4,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "woosh"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "对前面“读书无用”的现象进行解释，大佬印证神话，平缓叙述，使用默认的CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "那些在讲台上侃侃而谈的商业大佬，"
+            },
+            {
+              "text": "似乎都在用亲身经历印证“草根逆袭”的神话。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "一群人在台上演讲的场景",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "草根逆袭",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "woosh"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "做一个小总结，诱惑让你觉得书不香了，暗示读书是“错误”的选择，和其他“成功捷径”形成对比，属于COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "这种极具诱惑力的成功捷径，"
+            },
+            {
+              "text": "是不是让你瞬间觉得手里的书不香了？"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "读书有用",
+            "butText": "成功捷径",
+            "butSrc": "拥挤道路上空无一人的快速通道",
+            "notContentIndex": 1,
+            "butContentIndex": 0,
+            "anchors": []
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析：幸存者偏差",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，讲述传奇故事容易打动人，铺垫内容，无特殊结构，选择默认的CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "我们总是容易被这种传奇故事深深打动，"
+            },
+            {
+              "text": "觉得只要复制他们的套路就能逆天改命。"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "人们仰望星空的抽象画",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "逆天改命",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "出现转折，表示认知偏差，使用COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "但其实你正在被一种隐秘的“沉默”所欺骗。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "被沉默欺骗",
+            "butText": "被真相指引",
+            "butSrc": "拨开迷雾看见真相",
+            "notContentIndex": 0,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "继续解释“沉默”的原因，是“不是…而是…”的结构，属于认知偏差，用COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "这不是因为你见识短浅，"
+            },
+            {
+              "text": "而是因为这个社会只允许胜利者站在聚光灯下大声喧哗，"
+            },
+            {
+              "text": "而失败者的哀鸣，"
+            },
+            {
+              "text": "早就被掩盖在时代的废墟之下了。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "你见识短浅",
+            "butText": "社会只允许胜利",
+            "butSrc": "喧嚣的舞台上，聚光灯只打在最顶尖的舞者身上，周围是黑暗的人群",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对“幸存者偏差”进行命名，适合用CONCEPT_CARD。",
+          "content": [
+            {
+              "text": "这在逻辑学中叫做“幸存者偏差”："
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "人群中少数人被聚光灯照亮的简笔画图标",
+            "conceptName": "幸存者偏差",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "用一句精炼的话概括“幸存者偏差”，适合用TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "简单来说，"
+            },
+            {
+              "text": "就是死人永远不会说话。"
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": "简单来说，就是死人永远不会说话。",
+            "coreSentenceAnchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "认知偏差，不是…而是…结构，选择COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "我们在总结成功规律时，"
+            },
+            {
+              "text": "总是习惯性地盯着那些“活下来”的样本，"
+            },
+            {
+              "text": "却完全忽略了背后庞大到令人绝望的“分母”。"
+            }
+          ],
+          "order": 6,
+          "param": {
+            "notText": "活下来样本",
+            "butText": "庞大分母",
+            "butSrc": "无数墓碑的景象",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "举例说明，平缓叙述，选择CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "那个辍学大佬的成功，"
+            },
+            {
+              "text": "背后可能是万中无一的运气或时代红利。"
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "一位辍学的大佬站在聚光灯下的剪影，周围是黯淡的人群",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "辍学大佬",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "时代红利",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "转折，背后是大量失败者，使用COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "但他绝不会在访谈里告诉你，"
+            },
+            {
+              "text": "还有十万个和他一样毅然辍学的人，"
+            },
+            {
+              "text": "此刻正消失在茫茫人海，"
+            },
+            {
+              "text": "在流水线上日复一日地消磨青春。"
+            }
+          ],
+          "order": 8,
+          "param": {
+            "notText": "成功者访谈",
+            "butText": "沉默的大多数",
+            "butSrc": "无数双手在黑暗中挣扎",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "认知偏差，使用COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "你只看到了飞上天的风口猪，"
+            },
+            {
+              "text": "却没看到摔死在风口下的尸山血海。"
+            }
+          ],
+          "order": 9,
+          "param": {
+            "notText": "风口猪",
+            "butText": "尸山血海",
+            "butSrc": "无数尸体堆积成山的景象",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "类比医院门口采访，平缓叙述，选择CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "这就好比你在医院门口采访，"
+            },
+            {
+              "text": "得到的结论永远是“这家医院医术高超”，"
+            },
+            {
+              "text": "因为治不好的病人根本没机会走出大门。"
+            }
+          ],
+          "order": 10,
+          "param": {
+            "imageSrc": "医院大门，门口有几个模糊的人影走动",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "幸存者偏差",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "举例：剧毒鸡汤",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "铺垫，引出剧毒鸡汤的概念，适合用单图居中展示。",
+          "content": [
+            {
+              "text": "实际上，"
+            },
+            {
+              "text": "幸存者偏差的“剧毒鸡汤”随处可见："
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "一个人思考问题的抽象概念图",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "幸存者偏差",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "举例，描述理财圈的幸存者偏差现象，适合用单图居中展示。",
+          "content": [
+            {
+              "text": "理财圈的“大神”："
+            },
+            {
+              "text": "你看到某博主晒出翻倍的收益单，"
+            },
+            {
+              "text": "就觉得跟着他能发财。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "金融理财相关的简笔画图标",
+            "enterEffect": "breathe",
+            "anchors": [
+              {
+                "text": "理财圈",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": null
+              },
+              {
+                "text": "收益",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "认知转折，指出被忽略的真相，使用COGNITIVE_SHIFT强调“不是...而是...”的结构。",
+          "content": [
+            {
+              "text": "你没看到的是，"
+            },
+            {
+              "text": "他背后还有十个亏到销号的马甲，"
+            },
+            {
+              "text": "只是那个中奖的号恰好被你刷到了。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "收益会翻倍",
+            "butText": "多数会亏损",
+            "butSrc": "股市一片绿色下跌",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "举例，描述长寿老人的幸存者偏差现象，适合用单图居中展示。",
+          "content": [
+            {
+              "text": "长寿老人的“秘诀”："
+            },
+            {
+              "text": "某个百岁老人每天抽烟喝酒，"
+            },
+            {
+              "text": "大家就觉得养生没用。"
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "一位百岁老人抽着烟喝着酒，看起来很健康",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "幸存者偏差",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "认知转折，指出被忽略的真相，使用COGNITIVE_SHIFT强调“不是...而是...”的结构。",
+          "content": [
+            {
+              "text": "其实那只是因为他基因逆天，"
+            },
+            {
+              "text": "而那些学他抽烟喝酒的人，"
+            },
+            {
+              "text": "大多没活到能接受采访的年纪。"
+            }
+          ],
+          "order": 5,
+          "param": {
+            "notText": "基因逆天",
+            "butText": "没活到那年纪",
+            "butSrc": "一群人在墓碑前祭拜",
+            "notContentIndex": 0,
+            "butContentIndex": 2,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "举例，描述职场上的幸存者偏差现象，适合用单图居中展示。",
+          "content": [
+            {
+              "text": "职场上的“特例”："
+            },
+            {
+              "text": "公司里有个老员工从不加班也能升职，"
+            },
+            {
+              "text": "你觉得也能效仿。"
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "办公室场景，员工坐在工位上，电脑屏幕亮着",
+            "enterEffect": "slideBottom",
+            "anchors": [
+              {
+                "text": "特例",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "不加班",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": null
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "认知转折，指出被忽略的真相，使用COGNITIVE_SHIFT强调“不是...而是...”的结构。",
+          "content": [
+            {
+              "text": "却不知道他可能是某个大客户的亲侄子，"
+            },
+            {
+              "text": "或者是掌握了某种你根本无法复制的核心资源。"
+            }
+          ],
+          "order": 7,
+          "param": {
+            "notText": "普通老员工",
+            "butText": "客户的亲戚",
+            "butSrc": "一个穿着西装的男人和另一个大腹便便的男人握手",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "召唤：核心心法",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "铺垫，引出核心心法，平缓叙述，单图即可 → 选用CENTER_FOCUS",
+          "content": [
+            {
+              "text": "要想不被这种虚妄的神话毁掉人生，"
+            },
+            {
+              "text": "你最好记住这三个核心心法："
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "灯泡在脑海中闪现的动画",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "核心心法",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "一个标题式核心（寻找“沉默的证据”）+ 2～3 句解释展开（看到一个诱人的成功案例时，先去搜索它的失败率，去看看那些失败的人都踩了哪些坑）→ 选用METHOD_STACK",
+          "content": [
+            {
+              "text": "第一，"
+            },
+            {
+              "text": "寻找“沉默的证据”："
+            },
+            {
+              "text": "看到一个诱人的成功案例时，"
+            },
+            {
+              "text": "先去搜索它的失败率，"
+            },
+            {
+              "text": "去看看那些失败的人都踩了哪些坑。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "寻找沉默的证据",
+            "imageSrc": "一个侦探拿着放大镜寻找线索的卡通形象",
+            "notes": [
+              {
+                "text": "警惕诱人的成功案例",
+                "showFrom": 2
+              },
+              {
+                "text": "更要搜索它的失败率",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "一个标题式核心（剥离“运气的底色”）+ 2～3 句解释展开（冷酷地分析成功者的背景。如果他的成功依赖于特定的时代、家境或极低的概率，那对你来说就毫无参考价值）→ 选用METHOD_STACK",
+          "content": [
+            {
+              "text": "第二，"
+            },
+            {
+              "text": "剥离“运气的底色”："
+            },
+            {
+              "text": "冷酷地分析成功者的背景。"
+            },
+            {
+              "text": "如果他的成功依赖于特定的时代、"
+            },
+            {
+              "text": "家境或极低的概率，"
+            },
+            {
+              "text": "那对你来说就毫无参考价值。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "剥离“运气”",
+            "imageSrc": "一个人站在高楼顶端，眺望远方城市夜景，其中一栋楼格外闪亮",
+            "notes": [
+              {
+                "text": "分析成功者背景",
+                "showFrom": 2
+              },
+              {
+                "text": "辨别时代、家境等因素",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "一个标题式核心（建立“概率思维”）+ 2～3 句解释展开（别被个别“黑天鹅”带偏了节奏。在这个世界上，常识和大概率事件才是普通人避坑的护身符）→ 选用METHOD_STACK",
+          "content": [
+            {
+              "text": "第三，"
+            },
+            {
+              "text": "建立“概率思维”："
+            },
+            {
+              "text": "别被个别“黑天鹅”带偏了节奏。"
+            },
+            {
+              "text": "在这个世界上，"
+            },
+            {
+              "text": "常识和大概率事件才是普通人避坑的护身符。"
+            }
+          ],
+          "order": 4,
+          "param": {
+            "title": "建立概率思维",
+            "imageSrc": "黑天鹅在人群中飞舞的示意图",
+            "notes": [
+              {
+                "text": "别被个别现象带偏",
+                "showFrom": 2
+              },
+              {
+                "text": "常识才是护身符",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "反转：认清概率",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "铺垫，描述了当下的环境，属于平缓叙述，使用居中单图模版。",
+          "content": [
+            {
+              "text": "在这个崇拜赢家的时代里，"
+            },
+            {
+              "text": "如果你不主动去推开聚光灯外的黑暗，"
+            },
+            {
+              "text": "你就永远无法看清脚下的路。"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "聚光灯照亮黑暗的道路",
+            "enterEffect": "breathe",
+            "anchors": [
+              {
+                "text": "崇拜赢家",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "聚光灯外",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "本段落属于认知转变，描述了“不是...而是...”的结构，因此选择COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "永远记住，"
+            },
+            {
+              "text": "真正的清醒不是复刻别人的奇迹，"
+            },
+            {
+              "text": "而是认清概率后，"
+            },
+            {
+              "text": "依然有勇气选择那条胜算最高的正道。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "复刻别人奇迹",
+            "butText": "选胜算最高的",
+            "butSrc": "站在山顶，眺望远方道路的人",
+            "notContentIndex": 1,
+            "butContentIndex": 3,
+            "anchors": []
+          }
+        }
+      ]
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "test",
+    "subtitle": "为什么“越努力越焦虑”？别让成功学鸡汤，毁了你的人生",
+    "themeColor": "#2563EB",
+    "badge": "认识自我 · 理性思考",
+    "seriesLabel": "认知心理学",
+    "seriesLabelEn": "COGNITIVE PSYCHOLOGY",
+    "methodologySteps": [
+      "觉察",
+      "归因",
+      "调整"
+    ],
+    "methodologyStepsEn": "OBSERVE · ATTRIBUTE · ADJUST"
+  }
+}

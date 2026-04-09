@@ -49,7 +49,9 @@ export const BWConceptCard: React.FC<BWConceptCardProps> = ({
 	style,
 }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, height, width } = useVideoConfig();
+	const imgBox = Math.round(Math.min(300, Math.min(width, height) * 0.26));
+	const nameSize = Math.round(Math.min(60, height * 0.052));
 	const enterSpring = spring({
 		frame,
 		fps,
@@ -68,7 +70,7 @@ export const BWConceptCard: React.FC<BWConceptCardProps> = ({
 				style={{
 					position: "absolute",
 					left: "50%",
-					top: "42%",
+					top: "40%",
 					transform: `translate(-50%, -50%) scale(${scale})`,
 					opacity: enterSpring,
 					display: "flex",
@@ -76,21 +78,21 @@ export const BWConceptCard: React.FC<BWConceptCardProps> = ({
 					alignItems: "center",
 					border: "4px solid #111111",
 					borderRadius: 28,
-					padding: "40px 60px 32px",
-					gap: 24,
+					padding: "28px 48px 24px",
+					gap: 18,
 					backgroundColor: "#ffffff",
 					boxShadow: "6px 6px 0 #111111",
-					minWidth: 360,
+					minWidth: Math.min(360, width * 0.32),
 				}}
 			>
 				<Img
 					src={getSafeImageSrc(imageSrc)}
-					style={{ width: 320, height: 320, objectFit: "contain" }}
+					style={{ width: imgBox, height: imgBox, objectFit: "contain" }}
 				/>
 				{conceptName && (
 					<div
 						style={{
-							fontSize: 60,
+							fontSize: nameSize,
 							fontWeight: 900,
 							color: BW_TEXT,
 							letterSpacing: "0.04em",

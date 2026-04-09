@@ -55,7 +55,10 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 	style,
 }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, height } = useVideoConfig();
+	const quoteSize = Math.round(Math.min(50, height * 0.044));
+	const sourceSize = Math.round(Math.min(30, height * 0.028));
+	const sourceMarginTop = Math.round(Math.min(100, height * 0.08));
 	const opacity = spring({
 		frame,
 		fps,
@@ -90,13 +93,13 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 					position: "absolute",
 					left: "8%",
 					right: "8%",
-					top: "30%",
+					top: "26%",
 					opacity,
 				}}
 			>
 				<div
 					style={{						
-						fontSize: 50,
+						fontSize: quoteSize,
 						lineHeight: 0.7,
 						color: BW_TEXT,
 						fontFamily: "Georgia, 'Times New Roman', serif",
@@ -111,7 +114,7 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 							marginTop: 12,
 							textAlign: "center",
 							color: BW_TEXT,
-							fontSize: 50,
+							fontSize: quoteSize,
 							lineHeight: 1.22,
 							letterSpacing: 0.2,
 							fontWeight: 800,
@@ -131,8 +134,8 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 				{quoteSource && (
 					<div
 						style={{
-							marginTop: 100,
-							fontSize: 30,
+							marginTop: sourceMarginTop,
+							fontSize: sourceSize,
 							color: "#555555",
 							fontStyle: "italic",
 							borderLeft: "4px solid #111111",

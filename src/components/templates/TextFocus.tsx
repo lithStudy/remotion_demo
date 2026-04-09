@@ -73,7 +73,8 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 	children,
 }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, height } = useVideoConfig();
+	const fontScale = Math.min(1.05, height / 1080);
 
 	const fadeIn = interpolate(frame, [0, 10], [0, 1], {
 		extrapolateLeft: "clamp",
@@ -101,15 +102,17 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 		(content ?? []).map((item) => item.text).join("").trim();
 	const charCount = Math.max(1, [...headlineForSizing].length);
 	// 根据标题字符数动态调整字号——标题字符数越多，字号越小
-	const titleFontSize = interpolate(
-		charCount,            // 字符数
-		[6, 12, 18, 26, 36],  // 不同字符长度的区间
-		[88, 76, 62, 52, 42], // 对应区间字号（单位：px），字符越多字号越小
-		{
-			extrapolateLeft: "clamp",   // 小于最小区间时，字号不会进一步变大
-			extrapolateRight: "clamp",  // 超过最大区间时，字号不会进一步变小
-		},
-	);
+	const titleFontSize =
+		fontScale *
+		interpolate(
+			charCount,
+			[6, 12, 18, 26, 36],
+			[80, 70, 58, 48, 40],
+			{
+				extrapolateLeft: "clamp",
+				extrapolateRight: "clamp",
+			},
+		);
 
 	// 按顺序在 coreSentence 上叠加大字高亮
 	const highlightedText = (coreSentenceAnchors ?? []).reduce<React.ReactNode[]>(

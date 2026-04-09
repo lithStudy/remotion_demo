@@ -58,7 +58,7 @@ export const BWProgressRing: React.FC<BWProgressRingProps> = ({
 	style,
 }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, height } = useVideoConfig();
 	const clamped = Math.max(0, Math.min(100, percent));
 	const ringSpring = spring({
 		frame,
@@ -70,8 +70,8 @@ export const BWProgressRing: React.FC<BWProgressRingProps> = ({
 		extrapolateLeft: "clamp",
 		extrapolateRight: "clamp",
 	});
-	const size = 280;
-	const stroke = 18;
+	const size = Math.round(Math.min(260, height * 0.26));
+	const stroke = Math.round(Math.max(14, size * 0.055));
 	const r = (size - stroke) / 2;
 	const c = 2 * Math.PI * r;
 	const offset = c - (animatedPct / 100) * c;
@@ -88,7 +88,7 @@ export const BWProgressRing: React.FC<BWProgressRingProps> = ({
 				style={{
 					position: "absolute",
 					left: "50%",
-					top: "38%",
+					top: "36%",
 					transform: "translate(-50%, -50%)",
 					width: size,
 					height: size,
@@ -148,7 +148,7 @@ export const BWProgressRing: React.FC<BWProgressRingProps> = ({
 					position: "absolute",
 					left: 0,
 					right: 0,
-					top: "62%",
+					top: "60%",
 					textAlign: "center",
 					padding: "0 10%",
 					opacity: textOpacity,

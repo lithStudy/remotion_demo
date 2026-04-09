@@ -174,10 +174,10 @@ export const BWPanelGrid: React.FC<BWPanelGridProps> = ({
 
 	const maxH =
 		n <= 2
-			? Math.min(height * 0.22, 220)
+			? Math.min(height * 0.2, 200)
 			: n === 3
-				? Math.min(height * 0.18, 180)
-				: Math.min(height * 0.16, 160);
+				? Math.min(height * 0.165, 168)
+				: Math.min(height * 0.15, 150);
 
 	const gridStyle: React.CSSProperties =
 		n === 2
@@ -210,8 +210,8 @@ export const BWPanelGrid: React.FC<BWPanelGridProps> = ({
 					position: "absolute",
 					left: Math.min(32, width * 0.04),
 					right: Math.min(32, width * 0.04),
-					top: "22%",
-					bottom: "26%",
+					top: "20%",
+					bottom: "22%",
 					...gridStyle,
 				}}
 			>

@@ -228,7 +228,7 @@ export const BWChecklistReveal: React.FC<BWChecklistRevealProps> = ({
 					left: 40,
 					right: imageSrc ? 120 : 40,
 					top: title ? "26%" : "28%",
-					bottom: "24%",
+					bottom: "22%",
 					display: "flex",
 					flexDirection: "column",
 					gap: 14,

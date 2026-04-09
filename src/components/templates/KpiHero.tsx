@@ -76,7 +76,9 @@ export const BWKpiHero: React.FC<BWKpiHeroProps> = ({
 	style,
 }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, height } = useVideoConfig();
+	const heroFont = Math.round(Math.min(112, height * 0.095));
+	const headlineSize = Math.round(Math.min(36, height * 0.034));
 	const progress = spring({
 		frame,
 		fps,
@@ -106,7 +108,7 @@ export const BWKpiHero: React.FC<BWKpiHeroProps> = ({
 						right: 0,
 						top: "12%",
 						textAlign: "center",
-						fontSize: 36,
+						fontSize: headlineSize,
 						fontWeight: 800,
 						color: BW_TEXT,
 						opacity: blockOpacity,
@@ -123,13 +125,13 @@ export const BWKpiHero: React.FC<BWKpiHeroProps> = ({
 					position: "absolute",
 					left: 0,
 					right: getSafeImageSrc(imageSrc) ? "28%" : 0,
-					top: "42%",
+					top: "40%",
 					transform: "translateY(-50%)",
 					display: "flex",
 					justifyContent: "center",
 					alignItems: "baseline",
 					opacity: blockOpacity,
-					fontSize: 112,
+					fontSize: heroFont,
 					fontWeight: 900,
 					color: BW_TEXT,
 					letterSpacing: "0.02em",
@@ -149,7 +151,7 @@ export const BWKpiHero: React.FC<BWKpiHeroProps> = ({
 				style={{
 					position: "absolute",
 					right: "6%",
-					top: "38%",
+					top: "36%",
 					transform: "translateY(-50%)",
 					width: "22%",
 					maxWidth: 280,

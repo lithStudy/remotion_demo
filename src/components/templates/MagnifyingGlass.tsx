@@ -79,6 +79,7 @@ export const BWMagnifyingGlass: React.FC<BWMagnifyingGlassProps> = ({
 }) => {
 	const frame = useCurrentFrame();
 	const { fps, height } = useVideoConfig();
+	const glass = Math.round(Math.min(250, height * 0.22));
 	const enterSpring = spring({ frame, fps, config: { damping: 60, stiffness: 180 }, durationInFrames: 25 });
 	const scale = interpolate(enterSpring, [0, 1], [0.6, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 	const anchorAvoidanceShift = getSingleImageAnchorAvoidanceShiftAnimatedPx({
@@ -103,13 +104,13 @@ export const BWMagnifyingGlass: React.FC<BWMagnifyingGlassProps> = ({
 					top: "50%",
 					transform: `translate(calc(-50% + ${driftX}px), calc(-50% + ${driftY + anchorAvoidanceShift}px)) scale(${scale})`,
 					opacity: enterSpring,
-					width: 250,
+					width: glass,
 
 				}}
 			>
 				<svg
-					width={250}
-					height={250}
+					width={glass}
+					height={glass}
 					viewBox="0 0 200 200"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg"

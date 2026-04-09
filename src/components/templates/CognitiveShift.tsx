@@ -72,7 +72,10 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 	style,
 }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, height } = useVideoConfig();
+	const butFontSize = Math.round(Math.min(88, height * 0.078));
+	const notFontSize = Math.round(Math.min(56, height * 0.05));
+	const butImgMaxH = Math.round(height * 0.22);
 
 	// 动态获取内容起始帧
 	let notStartFrame = 0;
@@ -121,17 +124,17 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 			<FirefliesBackdrop opacity={firefliesOpacity} seed={`COGNITIVE_SHIFT-${notStartFrame}`} />
 			<div style={{
 				display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-				height: "85%", // 留出底部字幕空间
-				padding: "0 40px",
+				height: "78%",
+				padding: "0 6%",
 			}}>
 				{/* "不是" 部分 */}
 				<div style={{
 					display: "flex", flexDirection: "column", alignItems: "center",
 					opacity: notOpacity * notEnter, transform: `scale(${notScale}) translateY(${interpolate(notEnter, [0, 1], [20, 0])}px)`,
-					marginBottom: 40,
+					marginBottom: 28,
 				}}>
 					<div style={{ position: "relative" }}>
-						<div style={{ fontSize: 56, fontWeight: 900, color: BW_TEXT, position: "relative" }}>
+						<div style={{ fontSize: notFontSize, fontWeight: 900, color: BW_TEXT, position: "relative" }}>
 							{notText}
 							{/* 删除线 */}
 							<div style={{
@@ -150,15 +153,15 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 				<div style={{
 					display: "flex", flexDirection: "column", alignItems: "center",
 					opacity: butEnter, transform: `scale(${butScale}) translateY(${butY}px)`,
-					marginTop: 20,
+					marginTop: 12,
 				}}>
 					<div style={{
-						fontSize: 88, fontWeight: 900, color: BW_TEXT, textAlign: "center",
+						fontSize: butFontSize, fontWeight: 900, color: BW_TEXT, textAlign: "center",
 						textShadow: "0 10px 20px rgba(0,0,0,0.1)", lineHeight: 1.1
 					}}>
 						{butText}
 					</div>
-					<Img src={getSafeImageSrc(butSrc)} style={{ marginTop: 30, maxWidth: "70%", maxHeight: 280, objectFit: "contain", borderRadius: 20 }} />
+					<Img src={getSafeImageSrc(butSrc)} style={{ marginTop: 20, maxWidth: "min(62%, 720px)", maxHeight: butImgMaxH, objectFit: "contain", borderRadius: 20 }} />
 				</div>
 			</div>
 

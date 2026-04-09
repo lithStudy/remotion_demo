@@ -34,6 +34,9 @@ const DEFAULT_SERIES_LABEL_EN = "SCIENTIFIC METHODOLOGY";
 const DEFAULT_METHODOLOGY_STEPS = ["观察", "假设", "验证"] as const;
 const DEFAULT_METHODOLOGY_STEPS_EN = "OBSERVE · HYPOTHESIZE · TEST";
 
+/** 横屏画布内主内容区宽度（居中柱），与竖屏内容幅面一致 */
+const CONTENT_COLUMN_PX = 960;
+
 export const StaticCover: React.FC<StaticCoverProps> = ({
 	title,
 	subtitle,
@@ -139,67 +142,86 @@ export const StaticCover: React.FC<StaticCoverProps> = ({
 				}}
 			/>
 
-			{/* 系列角标：小图/缩略图时仍易辨认*/}
+			{/* 居中 960 内容柱：角标、主文案、底栏同宽对齐 */}
 			<div
 				style={{
 					position: "absolute",
-					top: 40,
-					right: 60,
-					zIndex: 2,
-					padding: "14px 26px 14px 22px",
-					borderRadius: 8,
-					backgroundColor: "#0a1628",
-					borderLeft: `7px solid ${themeColor}`,
-					boxShadow: `0 6px 28px rgba(15,23,42,0.55), 0 0 0 1px rgba(255,255,255,0.06)`,
+					inset: 0,
+					display: "flex",
+					justifyContent: "center",
 					pointerEvents: "none",
 				}}
 			>
 				<div
 					style={{
-						fontFamily: FONT_STACK,
-						fontSize: 44,
-						fontWeight: 900,
-						lineHeight: 1.1,
-						color: "#f1f5f9",
-						letterSpacing: 3,
-						textShadow: "0 1px 4px rgba(0,0,0,0.6)",
+						position: "relative",
+						width: CONTENT_COLUMN_PX,
+						maxWidth: "100%",
+						height: "100%",
+						flexShrink: 0,
 					}}
 				>
-					{seriesLabel}
-				</div>
-				<div
-					style={{
-						marginTop: 7,
-						fontFamily:
-							'"JetBrains Mono", "Cascadia Code", Consolas, monospace',
-						fontSize: 15,
-						fontWeight: 600,
-						color: themeColor,
-						letterSpacing: 2,
-						opacity: 0.9,
-					}}
-				>
-					{seriesLabelEn}
-				</div>
-			</div>
+					{/* 系列角标：柱内右上 */}
+					<div
+						style={{
+							position: "absolute",
+							top: 40,
+							right: 0,
+							zIndex: 2,
+							padding: "14px 26px 14px 22px",
+							borderRadius: 8,
+							backgroundColor: "#0a1628",
+							borderLeft: `7px solid ${themeColor}`,
+							boxShadow: `0 6px 28px rgba(15,23,42,0.55), 0 0 0 1px rgba(255,255,255,0.06)`,
+							pointerEvents: "none",
+						}}
+					>
+						<div
+							style={{
+								fontFamily: FONT_STACK,
+								fontSize: 44,
+								fontWeight: 900,
+								lineHeight: 1.1,
+								color: "#f1f5f9",
+								letterSpacing: 3,
+								textShadow: "0 1px 4px rgba(0,0,0,0.6)",
+							}}
+						>
+							{seriesLabel}
+						</div>
+						<div
+							style={{
+								marginTop: 7,
+								fontFamily:
+									'"JetBrains Mono", "Cascadia Code", Consolas, monospace',
+								fontSize: 15,
+								fontWeight: 600,
+								color: themeColor,
+								letterSpacing: 2,
+								opacity: 0.9,
+							}}
+						>
+							{seriesLabelEn}
+						</div>
+					</div>
 
-			{/* 主内容区：为顶部角标让出垂直空间 */}
-			<div
-				style={{
-					position: "absolute",
-					left: 72,
-					right: 72,
-					top: 0,
-					bottom: 0,
-					paddingTop: 160,
-					paddingBottom: 160,
-					display: "flex",
-					flexDirection: "column",
-					justifyContent: "center",
-					alignItems: "flex-start",
-					gap: 44,
-				}}
-			>
+					{/* 主内容区：为顶部角标让出垂直空间 */}
+					<div
+						style={{
+							position: "absolute",
+							left: 0,
+							right: 0,
+							top: 0,
+							bottom: 0,
+							paddingTop: 160,
+							paddingBottom: 160,
+							display: "flex",
+							flexDirection: "column",
+							justifyContent: "center",
+							alignItems: "flex-start",
+							gap: 44,
+						}}
+					>
 				{/* 顶部标签 & 装饰线 */}
 				<div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
 					<div style={{ display: "flex", alignItems: "center", gap: 18 }}>
@@ -320,52 +342,53 @@ export const StaticCover: React.FC<StaticCoverProps> = ({
 						</p>
 					</div>
 				</div>
-			</div>
+					</div>
 
-			{/* 底部学术/杂志风装饰：轻量化处理 */}
-			<div
-				style={{
-					position: "absolute",
-					bottom: 50,
-					left: 72,
-					right: 72,
-					display: "flex",
-					justifyContent: "space-between",
-					alignItems: "center",
-					borderTop: `1px solid ${themeColor}28`,
-					paddingTop: 22,
-					pointerEvents: "none",
-				}}
-			>
-				<div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+					{/* 底部学术/杂志风装饰：与主内容同宽 */}
 					<div
 						style={{
-							width: 7,
-							height: 7,
-							background: themeColor,
-							transform: "rotate(45deg)",
-							opacity: 0.55,
-						}}
-					/>
-					<div
-						style={{
-							fontFamily: '"JetBrains Mono", "Cascadia Code", Consolas, monospace',
-							fontSize: 17,
-							fontWeight: 600,
-							color: themeColor,
-							letterSpacing: 3.5,
-							opacity: 0.55,
+							position: "absolute",
+							bottom: 50,
+							left: 0,
+							right: 0,
+							display: "flex",
+							justifyContent: "space-between",
+							alignItems: "center",
+							borderTop: `1px solid ${themeColor}28`,
+							paddingTop: 22,
+							pointerEvents: "none",
 						}}
 					>
-						KNOWLEDGE EXPLORATION
-					</div>
-				</div>
+						<div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+							<div
+								style={{
+									width: 7,
+									height: 7,
+									background: themeColor,
+									transform: "rotate(45deg)",
+									opacity: 0.55,
+								}}
+							/>
+							<div
+								style={{
+									fontFamily: '"JetBrains Mono", "Cascadia Code", Consolas, monospace',
+									fontSize: 17,
+									fontWeight: 600,
+									color: themeColor,
+									letterSpacing: 3.5,
+									opacity: 0.55,
+								}}
+							>
+								KNOWLEDGE EXPLORATION
+							</div>
+						</div>
 
-				{/* 系列进度指示器 */}
-				<div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-					<div style={{ width: 36, height: 4, background: themeColor, borderRadius: 2, opacity: 0.6 }} />
-					<div style={{ width: 10, height: 4, background: themeColor, borderRadius: 2, opacity: 0.22 }} />
-					<div style={{ width: 10, height: 4, background: themeColor, borderRadius: 2, opacity: 0.22 }} />
+						<div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+							<div style={{ width: 36, height: 4, background: themeColor, borderRadius: 2, opacity: 0.6 }} />
+							<div style={{ width: 10, height: 4, background: themeColor, borderRadius: 2, opacity: 0.22 }} />
+							<div style={{ width: 10, height: 4, background: themeColor, borderRadius: 2, opacity: 0.22 }} />
+						</div>
+					</div>
 				</div>
 			</div>
 		</AbsoluteFill>

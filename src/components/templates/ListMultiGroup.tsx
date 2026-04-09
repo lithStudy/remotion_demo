@@ -115,19 +115,18 @@ type SlotLayout = {
 const getFixedLayout = (count: number, order: number): SlotLayout => {
 	const safeCount = Math.min(Math.max(count, 1), 5);
 	const topMatrix: Record<number, number[]> = {
-		1: [50],
-		2: [40, 55],
-		3: [40, 50, 60],
-		4: [35, 45, 55, 65],
-		5: [30, 40, 50, 60, 70],
+		1: [48],
+		2: [38, 54],
+		3: [38, 48, 58],
+		4: [34, 44, 52, 62],
+		5: [30, 38, 46, 54, 62],
 	};
 	const sizeByCount: Record<number, { imageMaxWidth: number; imageMaxHeight: number; anchorFontSize: number }> = {
-		// 单组时尽可能放大；新增组出现时通过插值平滑缩小
-		1: { imageMaxWidth: 25, imageMaxHeight: 42, anchorFontSize: 52 },
-		2: { imageMaxWidth: 20, imageMaxHeight: 30, anchorFontSize: 50 },
-		3: { imageMaxWidth: 15, imageMaxHeight: 23, anchorFontSize: 45 },
-		4: { imageMaxWidth: 10, imageMaxHeight: 18, anchorFontSize: 42 },
-		5: { imageMaxWidth: 10, imageMaxHeight: 15, anchorFontSize: 40 },
+		1: { imageMaxWidth: 22, imageMaxHeight: 34, anchorFontSize: 48 },
+		2: { imageMaxWidth: 17, imageMaxHeight: 26, anchorFontSize: 46 },
+		3: { imageMaxWidth: 13, imageMaxHeight: 20, anchorFontSize: 42 },
+		4: { imageMaxWidth: 9, imageMaxHeight: 16, anchorFontSize: 38 },
+		5: { imageMaxWidth: 9, imageMaxHeight: 13, anchorFontSize: 36 },
 	};
 	const tops = topMatrix[safeCount];
 	const sizes = sizeByCount[safeCount];
@@ -158,7 +157,7 @@ export const BWMultiImage: React.FC<BWMultiImageProps> = ({
 	style,
 }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, width: canvasW } = useVideoConfig();
 	const normalizedContent = normalizeContent(content);
 	const normalizedGroups = (groups ?? []).slice(0, 5);
 
@@ -317,7 +316,7 @@ export const BWMultiImage: React.FC<BWMultiImageProps> = ({
 								color={anchorItem.color || undefined}
 								animStyle={anchorItem.anim || "spring"}
 								style={{
-									left: 350,
+									left: Math.round(canvasW * 0.24),
 									right: "2%",
 									top: `${top}%`,
 									transform: "translateY(-50%)",

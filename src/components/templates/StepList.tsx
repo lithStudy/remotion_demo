@@ -2,7 +2,7 @@
  * STEP_LIST 模板：降低认知负荷，步骤/流程展示
  */
 import React from "react";
-import { AbsoluteFill } from "remotion";
+import { AbsoluteFill, useVideoConfig } from "remotion";
 import { StaggeredList } from "../TextAnimations";
 import { BW_TEXT, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
@@ -116,6 +116,8 @@ export const BWStepList: React.FC<BWStepListProps> = ({
 	style,
 }) => {
 	const items = normalizeContent(content);
+	const { height } = useVideoConfig();
+	const stepFont = Math.round(Math.min(32, height * 0.03));
 	const stepRows = normalizeStepItems(steps, items);
 	const itemDelays = stepRows.map((row, i) =>
 		startFrame + resolveStepEntryFrame(row, i, items, staggerDelay),
@@ -143,7 +145,7 @@ export const BWStepList: React.FC<BWStepListProps> = ({
 								padding: "12px 20px",
 								backgroundColor: i % 2 === 0 ? "#f0f0f0" : "#fff",
 								borderLeft: "4px solid #111",
-								fontSize: 32,
+								fontSize: stepFont,
 								fontWeight: 600,
 								color: BW_TEXT,
 							}}

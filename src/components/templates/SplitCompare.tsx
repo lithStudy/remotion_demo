@@ -102,8 +102,8 @@ export const BWSplitCompare: React.FC<BWSplitCompareProps> = ({
 					<Img
 						src={getSafeImageSrc(leftSrc)}
 						style={{
-							maxWidth: "80%",
-							maxHeight: "50%",
+							maxWidth: "78%",
+							maxHeight: "44%",
 							objectFit: "contain",
 						}}
 					/>
@@ -133,8 +133,8 @@ export const BWSplitCompare: React.FC<BWSplitCompareProps> = ({
 					<Img
 						src={getSafeImageSrc(rightSrc)}
 						style={{
-							maxWidth: "80%",
-							maxHeight: "50%",
+							maxWidth: "78%",
+							maxHeight: "44%",
 							objectFit: "contain",
 						}}
 					/>
@@ -159,7 +159,7 @@ export const BWSplitCompare: React.FC<BWSplitCompareProps> = ({
 					left: "50%",
 					top: "50%",
 					width: 3,
-					height: "40%",
+					height: "36%",
 					background: "#111",
 					transformOrigin: "center center",
 					transform: `translate(-50%, -50%) scaleY(${lineProgress})`,

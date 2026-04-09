@@ -101,9 +101,9 @@ python pipeline.py --input 文案.txt --name my_video --only 3
 | `azure_voice_name` | TTS 语音 | `zh-CN-Xiaoxiao2:DragonHDFlashLatestNeural` |
 | `speech_rate` | 语速 | `+0%` |
 | `fps` | 帧率 | `30` |
-| `width` / `height` | 视频尺寸 | `960 x 1280`（竖屏） |
+| `width` / `height` | 视频尺寸 | `1920 x 1080`（横屏 16:9） |
 | `image_style` | 图片风格（BW 矢量描述，会拼进 imagePrompt） | Minimalist black and white vector... |
-| `image_aspect_ratio` | 单图比例 | `3:4` |
+| `image_aspect_ratio` | 单图比例 | `16:9` |
 | `image_size` | 图片尺寸档位 | `1K` |
 | `project_root` | Remotion 项目根目录（Step 4 输出路径） | 当前项目绝对路径 |
 | `transition_duration_frames` | 转场帧数 | `15` |

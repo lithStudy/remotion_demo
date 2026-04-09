@@ -97,7 +97,9 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 	style,
 }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, width, height } = useVideoConfig();
+	const thumbW = Math.round(Math.min(Math.max(width * 0.14, 168), 340));
+	const thumbMaxH = Math.round(Math.min(height * 0.3, 360));
 	const items = normalizeContent(content);
 	const visibleNotes = notes
 		.filter((note) => typeof note.text === "string" && note.text.trim())
@@ -169,8 +171,8 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 					style={{
 						flex: "0 0 auto",
 						alignSelf: "center",
-						width: "clamp(160px, 22vw, 260px)",
-						maxHeight: "min(32vh, 320px)",
+						width: thumbW,
+						maxHeight: thumbMaxH,
 						aspectRatio: "4 / 3",
 						borderRadius: 20,
 						backgroundColor: "#F8FAFC",

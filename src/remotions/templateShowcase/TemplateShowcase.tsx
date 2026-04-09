@@ -19,6 +19,9 @@ import {
 	BWBeatSequence,
 	BWCognitiveShift,
 	BWMethodStack,
+	BWCauseChain,
+	BWChecklistReveal,
+	BWPanelGrid,
 	BWSubtitle,
 } from "../../components";
 
@@ -319,6 +322,68 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 					</div>
 				</BWTextFocus>
 				<BWSubtitle position="top" text="TEXT_FOCUS · 信噪比极致化" startFrame={0} />
+			</>
+		),
+	},
+	{
+		key: "cause-chain",
+		content: (
+			<>
+				<BWCauseChain
+					nodes={[
+						{ label: "诱因", imageSrc: img("images/template/scene1_1.png"), showFrom: 0 },
+						{ label: "加工", imageSrc: img("images/template/scene2_1.png"), showFrom: 1 },
+						{ label: "结果", imageSrc: img("images/template/scene6_15.png"), showFrom: 2 },
+					]}
+					content={[
+						{ text: "外界先给你一个刺激", startFrame: 0, durationFrames: 24 },
+						{ text: "大脑再用偏见去加工", startFrame: 24, durationFrames: 26 },
+						{ text: "最后得到偏离事实的判断", startFrame: 50, durationFrames: 25 },
+					]}
+				/>
+				<BWSubtitle position="top" text="CAUSE_CHAIN · 因果链" startFrame={0} />
+			</>
+		),
+	},
+	{
+		key: "checklist-reveal",
+		content: (
+			<>
+				<BWChecklistReveal
+					title="自检三项"
+					imageSrc={img("images/template/scene2_1.png")}
+					rows={[
+						{ text: "事实写清楚", showFrom: 0 },
+						{ text: "推断分开写", showFrom: 1 },
+						{ text: "留痕可追溯", showFrom: 2 },
+					]}
+					content={[
+						{ text: "先把事实写清楚", startFrame: 0, durationFrames: 24 },
+						{ text: "再把推断分开写", startFrame: 24, durationFrames: 25 },
+						{ text: "最后保证可追溯", startFrame: 49, durationFrames: 26 },
+					]}
+				/>
+				<BWSubtitle position="top" text="CHECKLIST_REVEAL · 清单打勾" startFrame={0} />
+			</>
+		),
+	},
+	{
+		key: "panel-grid",
+		content: (
+			<>
+				<BWPanelGrid
+					panels={[
+						{ src: img("images/template/scene4_1.png"), showFrom: 0, enterEffect: "zoomIn" },
+						{ src: img("images/template/scene4_2.png"), showFrom: 1 },
+						{ src: img("images/template/scene4_3.png"), showFrom: 2 },
+					]}
+					content={[
+						{ text: "第一块拼图是输入", startFrame: 0, durationFrames: 24 },
+						{ text: "第二块是处理机制", startFrame: 24, durationFrames: 26 },
+						{ text: "第三块是输出行为", startFrame: 50, durationFrames: 25 },
+					]}
+				/>
+				<BWSubtitle position="top" text="PANEL_GRID · 宫格并列" startFrame={0} />
 			</>
 		),
 	},

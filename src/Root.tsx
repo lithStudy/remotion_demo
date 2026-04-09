@@ -22,7 +22,7 @@ export const RemotionRoot: React.FC = () => {
   return (
     <>
 
-      {/* 13 个模板示例动画（仅展示用） */}
+      {/* TemplateShowcase：BWImageBreath 基元 + 全模板分段演示（含 CAUSE_CHAIN / CHECKLIST_REVEAL / PANEL_GRID 等） */}
       <Composition
         id="TemplateShowcase"
         component={TemplateShowcase}

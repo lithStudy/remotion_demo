@@ -122,6 +122,52 @@ def _param_to_jsx_props(param: dict, name: str, scene_id: str, order: int) -> st
                         parts.append(f'{sk}: {json.dumps(sv, ensure_ascii=False)}')
                 stage_jsx_parts.append("{ " + ", ".join(parts) + " }")
             props.append(f'stages={{[{", ".join(stage_jsx_parts)}]}}')
+        elif key == "nodes" and isinstance(value, list):
+            # CAUSE_CHAIN：每项含 label、imageSrc、showFrom、可选 enterEffect
+            node_jsx_parts = []
+            for nd in value:
+                if not isinstance(nd, dict):
+                    continue
+                parts = []
+                for nk, nv in nd.items():
+                    if nk == "imageSrc" and isinstance(nv, str):
+                        parts.append(f'imageSrc: staticFile("{_escape_jsx(nv)}")')
+                    elif nk == "enterEffect" and isinstance(nv, str):
+                        parts.append(f'{nk}: "{_escape_jsx(nv)}"')
+                    elif isinstance(nv, str):
+                        parts.append(f'{nk}: "{_escape_jsx(nv)}"')
+                    elif isinstance(nv, bool):
+                        parts.append(f'{nk}: {str(nv).lower()}')
+                    elif isinstance(nv, (int, float)):
+                        parts.append(f'{nk}: {nv}')
+                    else:
+                        parts.append(f'{nk}: {json.dumps(nv, ensure_ascii=False)}')
+                node_jsx_parts.append("{ " + ", ".join(parts) + " }")
+            props.append(f'nodes={{[{", ".join(node_jsx_parts)}]}}')
+        elif key == "panels" and isinstance(value, list):
+            # PANEL_GRID：每项含 src、showFrom、可选 enterEffect、position
+            panel_jsx_parts = []
+            for pn in value:
+                if not isinstance(pn, dict):
+                    continue
+                parts = []
+                for pk, pv in pn.items():
+                    if pk == "src" and isinstance(pv, str):
+                        parts.append(f'src: staticFile("{_escape_jsx(pv)}")')
+                    elif pk == "enterEffect" and isinstance(pv, str):
+                        parts.append(f'{pk}: "{_escape_jsx(pv)}"')
+                    elif pk == "position" and isinstance(pv, str):
+                        parts.append(f'{pk}: "{_escape_jsx(pv)}"')
+                    elif isinstance(pv, str):
+                        parts.append(f'{pk}: "{_escape_jsx(pv)}"')
+                    elif isinstance(pv, bool):
+                        parts.append(f'{pk}: {str(pv).lower()}')
+                    elif isinstance(pv, (int, float)):
+                        parts.append(f'{pk}: {pv}')
+                    else:
+                        parts.append(f'{pk}: {json.dumps(pv, ensure_ascii=False)}')
+                panel_jsx_parts.append("{ " + ", ".join(parts) + " }")
+            props.append(f'panels={{[{", ".join(panel_jsx_parts)}]}}')
         elif key in IMAGE_PARAM_FIELDS:
             if isinstance(value, str):
                 props.append(f'{key}={{staticFile("{value}")}}')
@@ -245,6 +291,18 @@ def _apply_preview_overrides(scenes: list, preview_image: str | None, mute_audio
                     for st in stages:
                         if isinstance(st, dict) and "imageSrc" in st:
                             st["imageSrc"] = preview_image
+
+                nodes = param.get("nodes")
+                if isinstance(nodes, list):
+                    for nd in nodes:
+                        if isinstance(nd, dict) and "imageSrc" in nd:
+                            nd["imageSrc"] = preview_image
+
+                panels = param.get("panels")
+                if isinstance(panels, list):
+                    for pn in panels:
+                        if isinstance(pn, dict) and "src" in pn:
+                            pn["src"] = preview_image
 
 def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -> str:
     """生成单个场景文件"""

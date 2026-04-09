@@ -10,7 +10,7 @@ metadata:
 {
   "name": "QUOTE_CITATION",
   "componentExport": "BWQuoteCitation",
-  "description": "适用：任何“引用/摘录/证言/背书”体裁（名言、著作、研究结论、媒体引用、用户评价、客户证言、公告摘录等）。\n提示：引文主体来自 content；本模板版心强调“引用正文 + 出处”，并带逐字打字机效果。\n差异：非引用类普通叙述用 CENTER_FOCUS。\n参数：quoteSource 写清出处（来源/角色/机构）。",
+  "description": "适用：任何“引用/摘录/证言/背书”体裁（名言、著作、研究结论、媒体引用、用户评价、客户证言、公告摘录等）。\n提示：版心引用正文的打字底稿默认由 content 拼接；若需与画外/字幕 content 不同的展示文案，请传 quoteDisplayText。\n差异：非引用类普通叙述用 CENTER_FOCUS。\n参数：quoteSource 写清出处（来源/角色/机构）；quoteDisplayText 可选，覆盖版心打字内容。",
   "psychology": "社会认同背书",
   "image_count": 0,
   "param_schema": {
@@ -19,6 +19,10 @@ metadata:
       "quoteSource": {
         "type": "string",
         "description": "引言来源"
+      },
+      "quoteDisplayText": {
+        "type": "string",
+        "description": "版心引用正文（打字机效果）；不传则使用 content 拼接结果"
       }
     },
     "required": [

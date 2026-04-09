@@ -74,6 +74,8 @@ __TEMPLATE_GUIDE__
 ### D. 节拍递进（expressionTag=beat）
 - 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
   - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+- **2～4 宫格并列**（每格一图、非纵向左图右文叙事）→ `PANEL_GRID`
 
 ### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
 - 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
@@ -87,6 +89,9 @@ __TEMPLATE_GUIDE__
 
 ### G. 时间轴，先后关系（expressionTag=timeline）
 - 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
 
 ### H. 默认（expressionTag=neutral）
 - 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`

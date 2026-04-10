@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, interpolate, Sequence, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, interpolate, staticFile, Sequence, useCurrentFrame } from "remotion";
 import { z } from "zod";
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
@@ -126,6 +126,12 @@ export const Test: React.FC<z.infer<typeof TestSchema>> = () => {
 
     return (
         <AbsoluteFill>
+            <Audio
+                src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
+                loop
+                volume={0.22}
+                name="Background music"
+            />
             <div
                 style={{
                     height: "100%",
@@ -159,7 +165,7 @@ export const Test: React.FC<z.infer<typeof TestSchema>> = () => {
             </Sequence>
             <Sequence from={COVER_DURATION_FRAMES} durationInFrames={MAIN_DURATION_TEST}>
                 <AbsoluteFill>
-                    <div
+                    {/* <div
                         style={{
                             position: "absolute",
                             bottom: 0,
@@ -169,7 +175,7 @@ export const Test: React.FC<z.infer<typeof TestSchema>> = () => {
                             minHeight: 48,
                             backgroundColor: "rgba(0,0,0,0.5)",
                         }}
-                    />
+                    /> */}
                     <TransitionSeries>
                         {sceneConfigs.map((config, index) => {
                             const SceneComp = config.component;

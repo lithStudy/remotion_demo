@@ -30,8 +30,8 @@ export const RemotionRoot: React.FC = () => {
         component={Test}
         durationInFrames={TOTAL_DURATION_TEST}
         fps={30}
-        width={1080}
-        height={680}
+        width={1920}
+        height={1080}
         schema={TestSchema}
         defaultProps={{}}
       />

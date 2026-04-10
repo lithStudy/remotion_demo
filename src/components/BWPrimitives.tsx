@@ -47,7 +47,7 @@ export const BWAnchorWord: React.FC<BWAnchorWordProps> = ({
 	});
 
 	let animTransform = "";
-	let animOpacity = springVal;
+	const animOpacity = springVal;
 
 	switch (animStyle) {
 		case "slideUp": {
@@ -136,39 +136,48 @@ export const BWSubtitle: React.FC<BWSubtitleProps> = ({
 	position = "bottom",
 	style,
 	durationFrames = 15,
-}) => (
-	<div
-		style={{
-			position: "absolute",
-			left: 0,
-			right: 0,
-			...(position === "top" ? { top: 0, bottom: "auto" } : { bottom: 0 }),
-			height: "10%",
-			minHeight: 48,
-			display: "flex",
-			alignItems: "center",
-			justifyContent: "center",
-			padding: "8px 24px",
-			...(position === "top" ? { backgroundColor: "rgba(0, 0, 0, 0.55)" } : {}),
-			...style,
-		}}
-	>
-		<FadeInText
-			delay={startFrame}
-			duration={durationFrames}
-			style={{ width: "100%", textAlign: "center" }}
+}) => {
+	const onLightBg = position !== "top";
+
+	return (
+		<div
+			style={{
+				position: "absolute",
+				left: 0,
+				bottom: 30,
+				right: 0,
+				height: "10%",
+				minHeight: 48,
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				padding: "8px 24px",
+				...(position === "top" ? { backgroundColor: "rgba(0, 0, 0, 0.55)" } : {}),
+				...style,
+			}}
 		>
-			<span
-				style={{
-					fontSize: 40,
-					fontWeight: 500,
-					color: "rgba(255, 255, 255, 0.95)",
-					fontFamily:
-						'"Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", sans-serif',
-				}}
+			<FadeInText
+				delay={startFrame}
+				duration={durationFrames}
+				style={{ width: "100%", textAlign: "center" }}
 			>
-				{text}
-			</span>
-		</FadeInText>
-	</div>
-);
+				<span
+					style={{
+						fontSize: 56,
+						fontWeight: onLightBg ? 700 : 600,
+						letterSpacing: onLightBg ? "0.03em" : "0.02em",
+						lineHeight: 1.35,
+						color: onLightBg ? "#0a0a0a" : "rgba(255, 255, 255, 0.96)",
+						textShadow: onLightBg
+							? "0 1px 0 rgba(255,255,255,0.92), 0 0 2px rgba(255,255,255,0.65), 0 2px 8px rgba(0,0,0,0.12)"
+							: "0 1px 2px rgba(0,0,0,0.45)",
+						fontFamily:
+							'"Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", sans-serif',
+					}}
+				>
+					{text}
+				</span>
+			</FadeInText>
+		</div>
+	);
+};

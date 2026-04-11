@@ -43,7 +43,6 @@ export const BWConceptCard: React.FC<BWConceptCardProps> = ({
 	imageSrc,
 	conceptName = "",
 	content,
-	anchors,
 	audioSrc,
 	children,
 	style,
@@ -68,29 +67,29 @@ export const BWConceptCard: React.FC<BWConceptCardProps> = ({
 				style={{
 					position: "absolute",
 					left: "50%",
-					top: "42%",
+					top: "44%",
 					transform: `translate(-50%, -50%) scale(${scale})`,
 					opacity: enterSpring,
 					display: "flex",
 					flexDirection: "column",
 					alignItems: "center",
-					border: "4px solid #111111",
-					borderRadius: 28,
-					padding: "40px 60px 32px",
-					gap: 24,
+					border: "6px solid #111111",
+					borderRadius: 40,
+					padding: "10px 30px 20px",
+					// gap: 36,
 					backgroundColor: "#ffffff",
-					boxShadow: "6px 6px 0 #111111",
-					minWidth: 360,
+					boxShadow: "10px 10px 0 #111111",
+					minWidth: 720,
 				}}
 			>
 				<Img
 					src={getSafeImageSrc(imageSrc)}
-					style={{ width: 320, height: 320, objectFit: "contain" }}
+					style={{ width: 400, height: 400, objectFit: "contain" }}
 				/>
 				{conceptName && (
 					<div
 						style={{
-							fontSize: 60,
+							fontSize: 96,
 							fontWeight: 900,
 							color: BW_TEXT,
 							letterSpacing: "0.04em",

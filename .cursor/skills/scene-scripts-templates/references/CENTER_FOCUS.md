@@ -10,7 +10,7 @@ metadata:
 {
   "name": "CENTER_FOCUS",
   "componentExport": "BWCenterFocus",
-  "description": "适用：默认叙事底盘；平缓讲事实、下定义、引入话题；单图居中。\n差异：强情绪/震惊句用 TEXT_FOCUS；专业术语卡用 CONCEPT_CARD；多要素同时出现用 LIST_MULTI_GROUP。\n慎用：需要左右对比或步骤列表时请换 SPLIT_COMPARE / STEP_LIST 等。\n参数：enterEffect 默认 breathe；anchors 可选，showFrom 为 content 下标（非帧数），锚点词会按时间依次出现并保留为列表。",
+  "description": "适用：默认叙事底盘；平缓讲事实、下定义、引入话题；单图居中。\n差异：强情绪/震惊句用 TEXT_FOCUS；专业术语卡用 CONCEPT_CARD；多要素同时出现用 PANEL_GRID。\n慎用：需要左右对比或步骤列表时请换 SPLIT_COMPARE / STEP_LIST 等。\n参数：enterEffect 默认 breathe；anchors 可选，showFrom 为 content 下标（非帧数），锚点词会按时间依次出现并保留为列表。",
   "psychology": "视觉中心稳定",
   "image_count": 1,
   "param_schema": {

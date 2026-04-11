@@ -66,7 +66,6 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 	notContentIndex = 0,
 	butContentIndex = 1,
 	content,
-	anchors,
 	audioSrc,
 	children,
 	style,
@@ -112,7 +111,7 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 	const notScale = interpolate(shiftProgress, [0, 1], [1, 0.85]);
 
 	const butScale = interpolate(butEnter, [0, 1], [0.6, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-	const butY = interpolate(butEnter, [0, 1], [40, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+	const butY = interpolate(butEnter, [0, 1], [56, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
 
 
@@ -121,22 +120,22 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 			<FirefliesBackdrop opacity={firefliesOpacity} seed={`COGNITIVE_SHIFT-${notStartFrame}`} />
 			<div style={{
 				display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-				height: "85%", // 留出底部字幕空间
-				padding: "0 40px",
+				height: "84%", // 留出底部字幕空间
+				padding: "0 96px",
 			}}>
 				{/* "不是" 部分 */}
 				<div style={{
 					display: "flex", flexDirection: "column", alignItems: "center",
-					opacity: notOpacity * notEnter, transform: `scale(${notScale}) translateY(${interpolate(notEnter, [0, 1], [20, 0])}px)`,
-					marginBottom: 40,
+					opacity: notOpacity * notEnter, transform: `scale(${notScale}) translateY(${interpolate(notEnter, [0, 1], [28, 0])}px)`,
+					marginBottom: 56,
 				}}>
 					<div style={{ position: "relative" }}>
-						<div style={{ fontSize: 56, fontWeight: 900, color: BW_TEXT, position: "relative" }}>
+						<div style={{ fontSize: 88, fontWeight: 900, color: BW_TEXT, position: "relative" }}>
 							{notText}
 							{/* 删除线 */}
 							<div style={{
-								position: "absolute", top: "55%", left: "-5%", width: `${strikeWidth}%`, height: 8,
-								backgroundColor: "#E53E3E", borderRadius: 4, transform: "rotate(-2deg)",
+								position: "absolute", top: "55%", left: "-5%", width: `${strikeWidth}%`, height: 12,
+								backgroundColor: "#E53E3E", borderRadius: 6, transform: "rotate(-2deg)",
 							}} />
 						</div>
 					</div>
@@ -150,19 +149,19 @@ export const BWCognitiveShift: React.FC<BWCognitiveShiftProps> = ({
 				<div style={{
 					display: "flex", flexDirection: "column", alignItems: "center",
 					opacity: butEnter, transform: `scale(${butScale}) translateY(${butY}px)`,
-					marginTop: 20,
+					marginTop: 36,
 				}}>
 					<div style={{
-						fontSize: 88, fontWeight: 900, color: BW_TEXT, textAlign: "center",
-						textShadow: "0 10px 20px rgba(0,0,0,0.1)", lineHeight: 1.1
+						fontSize: 132, fontWeight: 900, color: BW_TEXT, textAlign: "center",
+						textShadow: "0 14px 28px rgba(0,0,0,0.12)", lineHeight: 1.1
 					}}>
 						{butText}
 					</div>
-					<Img src={getSafeImageSrc(butSrc)} style={{ marginTop: 30, maxWidth: "70%", maxHeight: 280, objectFit: "contain", borderRadius: 20 }} />
+					<Img src={getSafeImageSrc(butSrc)} style={{ marginTop: 48, maxWidth: "68%", maxHeight: 420, objectFit: "contain", borderRadius: 28 }} />
 				</div>
 			</div>
 
-			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} hideAnchors />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

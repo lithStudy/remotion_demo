@@ -11,6 +11,7 @@ import {
 	useVideoConfig,
 } from "remotion";
 import { BW_TEXT, getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
+import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -112,7 +113,7 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 		}),
 	);
 
-	const colW = Math.min(200, width * 0.28);
+	const colW = Math.min(320, width * 0.28);
 
 	return (
 		<AbsoluteFill style={{ ...style }}>
@@ -136,13 +137,13 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 						display: "flex",
 						flexDirection: "column",
 						alignItems: "center",
-						gap: 16,
+						gap: 24,
 						width: colW,
 					}}
 				>
 					<div
 						style={{
-							fontSize: 44,
+							fontSize: 66,
 							fontWeight: 900,
 							color: BW_TEXT,
 							fontFamily: fontStack,
@@ -152,14 +153,14 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 					</div>
 					<Img
 						src={getSafeImageSrc(leftSrc)}
-						style={{ width: 72, height: 72, objectFit: "contain" }}
+						style={{ width: 108, height: 108, objectFit: "contain" }}
 					/>
 					<div
 						style={{
 							width: "100%",
-							height: 220,
+							height: 300,
 							backgroundColor: "rgba(0,0,0,0.06)",
-							borderRadius: 12,
+							borderRadius: 18,
 							display: "flex",
 							flexDirection: "column",
 							justifyContent: "flex-end",
@@ -172,13 +173,13 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 								height: `${leftH}%`,
 								minHeight: 8,
 								backgroundColor: "#C53030",
-								borderRadius: "0 0 12px 12px",
+								borderRadius: "0 0 18px 18px",
 							}}
 						/>
 					</div>
 					<div
 						style={{
-							fontSize: 26,
+							fontSize: 40,
 							fontWeight: 700,
 							color: BW_TEXT,
 							textAlign: "center",
@@ -195,13 +196,13 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 						display: "flex",
 						flexDirection: "column",
 						alignItems: "center",
-						gap: 16,
+						gap: 24,
 						width: colW,
 					}}
 				>
 					<div
 						style={{
-							fontSize: 44,
+							fontSize: 66,
 							fontWeight: 900,
 							color: BW_TEXT,
 							fontFamily: fontStack,
@@ -211,14 +212,14 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 					</div>
 					<Img
 						src={getSafeImageSrc(rightSrc)}
-						style={{ width: 72, height: 72, objectFit: "contain" }}
+						style={{ width: 108, height: 108, objectFit: "contain" }}
 					/>
 					<div
 						style={{
 							width: "100%",
-							height: 220,
+							height: 300,
 							backgroundColor: "rgba(0,0,0,0.06)",
-							borderRadius: 12,
+							borderRadius: 18,
 							display: "flex",
 							flexDirection: "column",
 							justifyContent: "flex-end",
@@ -231,13 +232,13 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 								height: `${rightH}%`,
 								minHeight: 8,
 								backgroundColor: "#276749",
-								borderRadius: "0 0 12px 12px",
+								borderRadius: "0 0 18px 18px",
 							}}
 						/>
 					</div>
 					<div
 						style={{
-							fontSize: 26,
+							fontSize: 40,
 							fontWeight: 700,
 							color: BW_TEXT,
 							textAlign: "center",
@@ -249,7 +250,8 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 				</div>
 			</div>
 
-			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
+			<TemplateDefaultAnchors content={content} anchors={anchors} />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

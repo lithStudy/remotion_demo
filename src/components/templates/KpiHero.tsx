@@ -11,6 +11,7 @@ import {
 	useVideoConfig,
 } from "remotion";
 import { BW_TEXT, getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
+import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -106,7 +107,7 @@ export const BWKpiHero: React.FC<BWKpiHeroProps> = ({
 						right: 0,
 						top: "12%",
 						textAlign: "center",
-						fontSize: 36,
+						fontSize: 54,
 						fontWeight: 800,
 						color: BW_TEXT,
 						opacity: blockOpacity,
@@ -129,7 +130,7 @@ export const BWKpiHero: React.FC<BWKpiHeroProps> = ({
 					justifyContent: "center",
 					alignItems: "baseline",
 					opacity: blockOpacity,
-					fontSize: 112,
+					fontSize: 168,
 					fontWeight: 900,
 					color: BW_TEXT,
 					letterSpacing: "0.02em",
@@ -152,7 +153,7 @@ export const BWKpiHero: React.FC<BWKpiHeroProps> = ({
 					top: "38%",
 					transform: "translateY(-50%)",
 					width: "22%",
-					maxWidth: 280,
+					maxWidth: 440,
 					opacity: blockOpacity,
 				}}
 			>
@@ -162,7 +163,8 @@ export const BWKpiHero: React.FC<BWKpiHeroProps> = ({
 				/>
 			</div>
 
-			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
+			<TemplateDefaultAnchors content={content} anchors={anchors} />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

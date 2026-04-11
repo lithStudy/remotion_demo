@@ -20,6 +20,7 @@ import {
 	type TemplateAnchorsProps,
 	type TemplateBaseProps,
 } from "./shared";
+import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
 import { FirefliesBackdrop } from "./FirefliesBackdrop";
 
@@ -331,7 +332,8 @@ export const BWBeatSequence: React.FC<BWBeatSequenceProps> = ({
 			</AbsoluteFill>
 
 			{/* 字幕/前景层：不跟随呼吸动画 */}
-			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
+			<TemplateDefaultAnchors content={content} anchors={anchors} />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

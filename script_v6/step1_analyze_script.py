@@ -37,29 +37,10 @@ if hasattr(sys.stderr, "reconfigure"):
 # 质量指标收集
 # ─────────────────────────────────────────────────────────────
 
-def _looks_like_list_intro_without_points(text: str, next_text: str | None = None) -> bool:
-    normalized = str(text or "").strip()
-    if not normalized:
-        return False
-
-    has_count_hint = any(token in normalized for token in ("两个", "两点", "三个", "三点", "四个", "四点"))
-    has_explicit_points = bool(
-        re.search(r"(第一|第二|第三|一是|二是|三是|1[、\.]|2[、\.]|3[、\.])", normalized)
-    )
-    next_has_explicit_points = bool(
-        next_text
-        and re.search(r"^\s*(第一|第二|第三|一是|二是|三是|1[、\.]|2[、\.]|3[、\.])", str(next_text))
-    )
-    return has_count_hint and not has_explicit_points and (
-        normalized.endswith(("：", ":")) or next_has_explicit_points
-    )
-
-
 def _collect_template_quality_metrics(scenes: list[dict]) -> dict:
     mixed_group_scenes: list[str] = []
     total_step_list = 0
     single_point_step_list = 0
-    suspicious_list_multi_group_items: list[str] = []
     total_items = 0
 
     for scene in scenes:
@@ -67,14 +48,8 @@ def _collect_template_quality_metrics(scenes: list[dict]) -> dict:
         items = scene.get("items", [])
         total_items += len(items)
 
-        for idx, item in enumerate(items):
+        for item in items:
             if item.get("template") != "STEP_LIST":
-                if item.get("template") == "LIST_MULTI_GROUP":
-                    next_text = items[idx + 1].get("text", "") if idx + 1 < len(items) else ""
-                    if _looks_like_list_intro_without_points(item.get("text", ""), next_text):
-                        suspicious_list_multi_group_items.append(
-                            f"{scene_id}#order={item.get('order', idx + 1)}"
-                        )
                 continue
             total_step_list += 1
             content = item.get("content", [])
@@ -102,7 +77,6 @@ def _collect_template_quality_metrics(scenes: list[dict]) -> dict:
         "single_point_step_list": single_point_step_list,
         "single_step_ratio": single_step_ratio,
         "mixed_group_scenes": mixed_group_scenes,
-        "suspicious_list_multi_group_items": suspicious_list_multi_group_items,
     }
 
 
@@ -334,11 +308,6 @@ def _run_ai_analysis_pipeline(
         print(
             "   ⚠️ [Step 2 质量告警] 存在同组模板混搭场景: "
             f"{quality_metrics['mixed_group_scenes']}"
-        )
-    if quality_metrics["suspicious_list_multi_group_items"]:
-        print(
-            "   ⚠️ [Step 2 质量告警] 存在疑似总起句误判为 LIST_MULTI_GROUP的 item: "
-            f"{quality_metrics['suspicious_list_multi_group_items']}"
         )
 
     # 阶段 3：逐 Item 参数细化

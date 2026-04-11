@@ -10,7 +10,7 @@ metadata:
 {
   "name": "CAUSE_CHAIN",
   "componentExport": "BWCauseChain",
-  "description": "适用：同一镜头内讲清「因→果→再果」传导、机制链条；每段口播对应链上一环。\n差异：有时间刻度/年代演进用 TIMELINE；单标题+多句解释用 METHOD_STACK；左右对照用 SPLIT_COMPARE；情绪递进换图用 BEAT_SEQUENCE。\n参数：nodes 2～4 项，每项 label（短标签）、imageSrc、showFrom（content 下标 0-based，非帧数）；可选 layout 为 vertical（默认，适配竖屏）或 horizontal。",
+  "description": "适用：同一镜头内讲清「因→果→再果」传导、机制链条；每段口播对应链上一环。\n差异：有时间刻度/年代演进用 TIMELINE；单标题+多句解释用 METHOD_STACK；左右对照用 SPLIT_COMPARE；情绪递进换图用 BEAT_SEQUENCE。\n参数：nodes 2～4 项，每项 label（短标签）、imageSrc、showFrom（content 下标 0-based，非帧数）；可选 layout 为 horizontal（默认，左→右链）或 vertical（竖向堆叠，适配竖屏）。",
   "psychology": "因果可视化",
   "image_count": "2-4",
   "content_min_items": 2,
@@ -21,11 +21,11 @@ metadata:
       "layout": {
         "type": "string",
         "enum": [
-          "vertical",
-          "horizontal"
+          "horizontal",
+          "vertical"
         ],
-        "default": "vertical",
-        "description": "链的排布方向，竖屏建议 vertical"
+        "default": "horizontal",
+        "description": "链的排布方向；横屏/常规叙事默认 horizontal，竖屏可设 vertical"
       },
       "nodes": {
         "type": "array",
@@ -76,7 +76,7 @@ metadata:
   "example": {
     "template": "CAUSE_CHAIN",
     "param": {
-      "layout": "vertical",
+      "layout": "horizontal",
       "nodes": [
         {
           "label": "刺激",

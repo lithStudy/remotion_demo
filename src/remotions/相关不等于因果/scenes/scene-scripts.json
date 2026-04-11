@@ -531,8 +531,8 @@
         },
         {
           "narrativeType": "LOGIC",
-          "template": "LIST_MULTI_GROUP",
-          "reasoning": "原文明确给出了3个并列的准则，符合 `LIST_MULTI_GROUP` 的适用条件。",
+          "template": "PANEL_GRID",
+          "reasoning": "原文明确给出了3个并列的准则，适合用 `PANEL_GRID` 宫格配图呈现。",
           "content": [
             {
               "text": "1.相关只是线索，",
@@ -557,45 +557,46 @@
           ],
           "order": 2,
           "param": {
-            "groups": [
+            "panels": [
               {
-                "textIndex": 0,
-                "image": {
-                  "src": "images/相关不等于因果/scene_3_2_img0.png"
-                },
-                "anchor": {
-                  "text": "相关只是线索",
-                  "color": "#000000",
-                  "anim": "popIn",
-                  "audioEffect": "ping"
-                }
+                "src": "images/相关不等于因果/scene_3_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "breathe"
               },
               {
-                "textIndex": 2,
-                "image": {
-                  "src": "images/相关不等于因果/scene_3_2_img1.png"
-                },
-                "anchor": {
-                  "text": "检查第三变量",
-                  "color": "#000000",
-                  "anim": "popIn",
-                  "audioEffect": "ping"
-                }
+                "src": "images/相关不等于因果/scene_3_2_img1.png",
+                "showFrom": 2,
+                "enterEffect": "breathe"
               },
               {
-                "textIndex": 3,
-                "image": {
-                  "src": "images/相关不等于因果/scene_3_2_img2.png"
-                },
-                "anchor": {
-                  "text": "双盲实验",
-                  "color": "#000000",
-                  "anim": "popIn",
-                  "audioEffect": "ping"
-                }
+                "src": "images/相关不等于因果/scene_3_2_img2.png",
+                "showFrom": 3,
+                "enterEffect": "breathe"
               }
             ],
-            "anchors": []
+            "anchors": [
+              {
+                "text": "相关只是线索",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "检查第三变量",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "双盲实验",
+                "showFrom": 3,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
           },
           "totalDurationFrames": 264
         },

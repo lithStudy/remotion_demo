@@ -104,7 +104,7 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 	const titleFontSize = interpolate(
 		charCount,            // 字符数
 		[6, 12, 18, 26, 36],  // 不同字符长度的区间
-		[88, 76, 62, 52, 42], // 对应区间字号（单位：px），字符越多字号越小
+		[128, 110, 90, 76, 62], // 对应区间字号（单位：px），字符越多字号越小
 		{
 			extrapolateLeft: "clamp",   // 小于最小区间时，字号不会进一步变大
 			extrapolateRight: "clamp",  // 超过最大区间时，字号不会进一步变小
@@ -161,7 +161,7 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 				style={{
 					transform: `scale(${scale * breathe})`,
 					transformOrigin: "center center",
-					padding: "0 60px",
+					padding: "0 96px",
 					textAlign: "center",
 					fontSize: titleFontSize,
 					fontWeight: 900,
@@ -174,11 +174,7 @@ export const BWTextFocus: React.FC<BWTextFocusProps> = ({
 				{highlightedText}
 			</div>
 
-			<TemplateContentRenderer
-				content={content}
-				audioSrc={audioSrc}
-				hideAnchors
-			/>
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 
 			{children}
 		</AbsoluteFill>

@@ -36,7 +36,9 @@
     "dev": "remotion studio",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
+    "lint": "eslint src && tsc",
+    "render:认知偏见锚定效应_横屏": "remotion render src/index.ts 认知偏见锚定效应 out/认知偏见锚定效应_1920x1080.mp4",
+    "render:认知偏见锚定效应_竖屏": "remotion render src/index.ts 认知偏见锚定效应竖屏 out/认知偏见锚定效应_1080x1920.mp4"
   },
   "sideEffects": [
     "*.css"

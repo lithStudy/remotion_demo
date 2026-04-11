@@ -11,13 +11,14 @@ import {
 	type TemplateAnchorsProps,
 	type TemplateBaseProps,
 } from "./shared";
+import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
 
 export const templateMeta = {
 	"name": "CAUSE_CHAIN",
 	"componentExport": "BWCauseChain",
 	"description":
-		"适用：同一镜头内讲清「因→果→再果」传导、机制链条；每段口播对应链上一环。\n差异：有时间刻度/年代演进用 TIMELINE；单标题+多句解释用 METHOD_STACK；左右对照用 SPLIT_COMPARE；情绪递进换图用 BEAT_SEQUENCE。\n参数：nodes 2～4 项，每项 label（短标签）、imageSrc、showFrom（content 下标 0-based，非帧数）；可选 layout 为 vertical（默认，适配竖屏）或 horizontal。",
+		"适用：同一镜头内讲清「因→果→再果」传导、机制链条；每段口播对应链上一环。\n差异：有时间刻度/年代演进用 TIMELINE；单标题+多句解释用 METHOD_STACK；左右对照用 SPLIT_COMPARE；情绪递进换图用 BEAT_SEQUENCE。\n参数：nodes 2～4 项，每项 label（短标签）、imageSrc、showFrom（content 下标 0-based，非帧数）；可选 layout 为 horizontal（默认，左→右链）或 vertical（竖向堆叠，适配竖屏）。",
 	"psychology": "因果可视化",
 	"image_count": "2-4",
 	"content_min_items": 2,
@@ -27,9 +28,9 @@ export const templateMeta = {
 		"properties": {
 			"layout": {
 				"type": "string",
-				"enum": ["vertical", "horizontal"],
-				"default": "vertical",
-				"description": "链的排布方向，竖屏建议 vertical",
+				"enum": ["horizontal", "vertical"],
+				"default": "horizontal",
+				"description": "链的排布方向；横屏/常规叙事默认 horizontal，竖屏可设 vertical",
 			},
 			"nodes": {
 				"type": "array",
@@ -65,7 +66,7 @@ export const templateMeta = {
 	"example": {
 		"template": "CAUSE_CHAIN",
 		"param": {
-			"layout": "vertical",
+			"layout": "horizontal",
 			"nodes": [
 				{ "label": "刺激", "imageSrc": "闪电击中大脑的简笔画", "showFrom": 0 },
 				{ "label": "解读", "imageSrc": "放大镜看信息的简笔画", "showFrom": 1 },
@@ -111,7 +112,8 @@ const CauseChainNodeCard: React.FC<{
 	isVertical: boolean;
 	maxImgH: number;
 	maxImgW: number;
-}> = ({ node, startFrame, isVertical, maxImgH, maxImgW }) => {
+	labelFontSize: number;
+}> = ({ node, startFrame, isVertical, maxImgH, maxImgW, labelFontSize }) => {
 	const frame = useCurrentFrame();
 	const { fps, width, height } = useVideoConfig();
 	const rel = frame - startFrame;
@@ -140,7 +142,7 @@ const CauseChainNodeCard: React.FC<{
 				flexDirection: "column",
 				alignItems: "center",
 				opacity,
-				gap: 8,
+				gap: isVertical ? 12 : 14,
 				flex: isVertical ? "0 0 auto" : "1 1 0",
 				minWidth: isVertical ? undefined : 0,
 			}}
@@ -167,7 +169,7 @@ const CauseChainNodeCard: React.FC<{
 			</div>
 			<div
 				style={{
-					fontSize: 26,
+					fontSize: labelFontSize,
 					fontWeight: 700,
 					color: BW_TEXT,
 					textAlign: "center",
@@ -202,8 +204,8 @@ const ChainArrow: React.FC<{
 		return (
 			<div
 				style={{
-					width: 3,
-					height: 28 * len,
+					width: 5,
+					height: 44 * len,
 					background: `linear-gradient(to bottom, ${BW_TEXT}, ${BW_TEXT}88)`,
 					borderRadius: 2,
 					flexShrink: 0,
@@ -214,8 +216,8 @@ const ChainArrow: React.FC<{
 	return (
 		<div
 			style={{
-				height: 3,
-				width: 24 * len,
+				height: 5,
+				width: 44 * len,
 				background: `linear-gradient(to right, ${BW_TEXT}, ${BW_TEXT}88)`,
 				borderRadius: 2,
 				flexShrink: 0,
@@ -226,7 +228,7 @@ const ChainArrow: React.FC<{
 
 export const BWCauseChain: React.FC<BWCauseChainProps> = ({
 	nodes,
-	layout = "vertical",
+	layout = "horizontal",
 	content,
 	anchors,
 	audioSrc,
@@ -241,8 +243,17 @@ export const BWCauseChain: React.FC<BWCauseChainProps> = ({
 	const starts = chain.map((n, i) => resolveNodeStartFrame(n.showFrom, i, items, stagger));
 
 	const isVertical = layout === "vertical";
-	const maxImgH = isVertical ? Math.min(140, height * 0.14) : Math.min(120, height * 0.12);
-	const maxImgW = isVertical ? width * 0.42 : width * 0.22;
+	const n = chain.length;
+	const maxImgH = isVertical
+		? Math.min(195, height * 0.195)
+		: Math.min(220, height * 0.22);
+	const maxImgW = isVertical
+		? width * 0.5
+		: Math.min(
+				width * 0.38,
+				(width - 48 - Math.max(0, n - 1) * 52) / Math.max(n, 1) - 6,
+			);
+	const labelFontSize = isVertical ? 50 : 60;
 
 	return (
 		<AbsoluteFill style={style}>
@@ -251,13 +262,13 @@ export const BWCauseChain: React.FC<BWCauseChainProps> = ({
 					position: "absolute",
 					left: 24,
 					right: 24,
-					top: "22%",
-					bottom: "26%",
+					top: "12%",
+					bottom: "18%",
 					display: "flex",
 					flexDirection: isVertical ? "column" : "row",
 					alignItems: "center",
 					justifyContent: "center",
-					gap: isVertical ? 8 : 12,
+					gap: isVertical ? 14 : 22,
 				}}
 			>
 				{chain.map((node, i) => (
@@ -268,6 +279,7 @@ export const BWCauseChain: React.FC<BWCauseChainProps> = ({
 							isVertical={isVertical}
 							maxImgH={maxImgH}
 							maxImgW={maxImgW}
+							labelFontSize={labelFontSize}
 						/>
 						{i < chain.length - 1 ? (
 							<ChainArrow
@@ -280,7 +292,8 @@ export const BWCauseChain: React.FC<BWCauseChainProps> = ({
 					</React.Fragment>
 				))}
 			</div>
-			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
+			<TemplateDefaultAnchors content={content} anchors={anchors} />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

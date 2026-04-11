@@ -4,6 +4,7 @@
 import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { BW_TEXT, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
+import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -96,7 +97,7 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 			>
 				<div
 					style={{						
-						fontSize: 50,
+						fontSize: 76,
 						lineHeight: 0.7,
 						color: BW_TEXT,
 						fontFamily: "Georgia, 'Times New Roman', serif",
@@ -111,7 +112,7 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 							marginTop: 12,
 							textAlign: "center",
 							color: BW_TEXT,
-							fontSize: 50,
+							fontSize: 76,
 							lineHeight: 1.22,
 							letterSpacing: 0.2,
 							fontWeight: 800,
@@ -132,7 +133,7 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 					<div
 						style={{
 							marginTop: 100,
-							fontSize: 30,
+							fontSize: 46,
 							color: "#555555",
 							fontStyle: "italic",
 							borderLeft: "4px solid #111111",
@@ -145,7 +146,8 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 					</div>
 				)}
 			</div>
-			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
+			<TemplateDefaultAnchors content={content} anchors={anchors} />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

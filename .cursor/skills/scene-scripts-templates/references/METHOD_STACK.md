@@ -10,7 +10,7 @@ metadata:
 {
   "name": "METHOD_STACK",
   "componentExport": "BWMethodStack",
-  "description": "适用：单个 item 内是「一个标题式核心 + 解释展开」，例如：一个方法/建议/观点/卖点/亮点/推荐理由，后面紧跟 2～4 句说明。\n差异：多个独立步骤/并列分点用 STEP_LIST 或 LIST_MULTI_GROUP；多条不同方法/不同卖点不要为了套模板强行合并到同一 item。\n参数：title 为视觉标题，imageSrc 为单张主图，notes 为按讲解顺序出现的解释短语。",
+  "description": "适用：单个 item 内是「一个标题式核心 + 解释展开」，例如：一个方法/建议/观点/卖点/亮点/推荐理由，后面紧跟 2～4 句说明。\n差异：多个独立步骤/并列分点用 STEP_LIST 或 PANEL_GRID；多条不同方法/不同卖点不要为了套模板强行合并到同一 item。\n参数：title 为视觉标题，imageSrc 为单张主图，notes 为按讲解顺序出现的解释短语。",
   "psychology": "聚焦解释",
   "image_count": 1,
   "param_schema": {

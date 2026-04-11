@@ -10,13 +10,14 @@ import {
 	type TemplateAnchorsProps,
 	type TemplateBaseProps,
 } from "./shared";
+import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
 	"name": "TIMELINE",
 	"componentExport": "BWTimeline",
 	"description":
-		"适用：历史演进、时间顺序、前后对比带明确时间轴。\n差异：无时间线的并列要点用 LIST_MULTI_GROUP；操作步骤用 STEP_LIST。\n参数：images 2～3 项，position 常 left/right 以配合轴线。",
+		"适用：历史演进、时间顺序、前后对比带明确时间轴。\n差异：无时间线的并列要点用 PANEL_GRID；操作步骤用 STEP_LIST。\n参数：images 2～3 项，position 常 left/right 以配合轴线。",
 	"psychology": "叙事连贯性",
 	"image_count": "2-3",
 	"param_schema": {
@@ -101,9 +102,9 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 					left: "10%",
 					width: "80%",
 					top: `${timelineY}%`,
-					height: 6,
+					height: 9,
 					backgroundColor: "#e0e0e0",
-					borderRadius: 3,
+					borderRadius: 5,
 				}}
 			/>
 			<div
@@ -112,9 +113,9 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 					left: "10%",
 					width: `${lineProgress}%`,
 					top: `${timelineY}%`,
-					height: 6,
+					height: 9,
 					backgroundColor: BW_TEXT,
-					borderRadius: 3,
+					borderRadius: 5,
 				}}
 			/>
 			{images.map((img, i) => {
@@ -141,12 +142,12 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 								left: `${xFrac * 100}%`,
 								top: `${timelineY}%`,
 								transform: "translate(-50%, -50%)",
-								width: 24,
-								height: 24,
+								width: 36,
+								height: 36,
 								borderRadius: "50%",
 								backgroundColor: BW_TEXT,
-								border: "4px solid #fff",
-								boxShadow: "0 0 0 2px #111",
+								border: "6px solid #fff",
+								boxShadow: "0 0 0 3px #111",
 								opacity: visible ? nodeSpring : 0,
 								zIndex: 2,
 							}}
@@ -158,8 +159,8 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 								left: `${xFrac * 100}%`,
 								top: iconTop,
 								transform: `translate(-50%, 0) scale(${visible ? nodeSpring : 0.5})`,
-								width: 140,
-								height: 140,
+								width: 200,
+								height: 200,
 								objectFit: "contain",
 								opacity: visible ? nodeSpring : 0,
 							}}
@@ -167,7 +168,8 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 					</React.Fragment>
 				);
 			})}
-			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
+			<TemplateDefaultAnchors content={content} anchors={anchors} />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

@@ -110,26 +110,26 @@ export const BWChatBubble: React.FC<BWChatBubbleProps> = ({
 				...style,
 			}}
 		>
-			<div style={{ display: "flex", alignItems: "flex-end", gap: 20, padding: "0 48px", width: "100%", maxHeight: "65%" }}>
+			<div style={{ display: "flex", alignItems: "flex-end", gap: 32, padding: "0 80px", width: "100%", maxHeight: "68%" }}>
 				<div style={{
-					width: 110, height: 110, borderRadius: "50%", backgroundColor: "#e0e4eb",
-					border: "4px solid #111111", display: "flex", alignItems: "center", justifyContent: "center",
+					width: 168, height: 168, borderRadius: "50%", backgroundColor: "#e0e4eb",
+					border: "5px solid #111111", display: "flex", alignItems: "center", justifyContent: "center",
 					flexShrink: 0, transform: `translateX(${avatarX}px)`, opacity: avatarSpring,
 				}}>
 					<Img src={getSafeImageSrc(imageSrc)} style={{ width: "72%", height: "72%", objectFit: "contain" }} />
 				</div>
 				<div style={{
-					flex: 1, backgroundColor: "#ffffff", border: "3px solid #111111",
-					borderRadius: "24px 24px 24px 6px", padding: "28px 36px",
-					boxShadow: "4px 4px 0 #111111", transform: `scale(${bubbleScale})`,
-					transformOrigin: "bottom left", opacity: bubbleSpring, minHeight: 80,
+					flex: 1, backgroundColor: "#ffffff", border: "4px solid #111111",
+					borderRadius: "32px 32px 32px 8px", padding: "40px 52px",
+					boxShadow: "8px 8px 0 #111111", transform: `scale(${bubbleScale})`,
+					transformOrigin: "bottom left", opacity: bubbleSpring, minHeight: 112,
 				}}>
-					<span style={{ color: BW_TEXT, fontSize: 28, fontWeight: 600, lineHeight: 1.4 }}>
+					<span style={{ color: BW_TEXT, fontSize: 44, fontWeight: 600, lineHeight: 1.4 }}>
 						{renderBubbleContent()}
 					</span>
 				</div>
 			</div>
-			<TemplateContentRenderer content={content} audioSrc={audioSrc} hideAnchors />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 		</AbsoluteFill>
 	);
 };

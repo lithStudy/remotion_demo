@@ -11,13 +11,14 @@ import {
 	type TemplateAnchorsProps,
 	type TemplateBaseProps,
 } from "./shared";
+import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
 
 export const templateMeta = {
 	"name": "PANEL_GRID",
 	"componentExport": "BWPanelGrid",
 	"description":
-		"适用：同一镜头内并列 2～4 个主题块（如三个误区、四个检查项），每块一图，随对应口播条显现。\n差异：纵向左图右文、组间重排用 LIST_MULTI_GROUP；时间演进用 TIMELINE；节拍换图用 BEAT_SEQUENCE。\n参数：panels 2～4 项，结构与 TIMELINE 的 images 类似：src（image_prompt）、showFrom（content 下标）、可选 enterEffect、position（布局弱提示，可省略）。",
+		"适用：同一镜头内并列 2～4 个主题块（如三个误区、四个检查项），每块一图，随对应口播条显现。\n差异：时间演进用 TIMELINE；节拍换图用 BEAT_SEQUENCE。\n参数：panels 2～4 项，结构与 TIMELINE 的 images 类似：src（image_prompt）、showFrom（content 下标）、可选 enterEffect、position（布局弱提示，可省略）。",
 	"psychology": "结构并列",
 	"image_count": "2-4",
 	"content_min_items": 2,
@@ -225,7 +226,8 @@ export const BWPanelGrid: React.FC<BWPanelGridProps> = ({
 					/>
 				))}
 			</div>
-			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
+			<TemplateDefaultAnchors content={content} anchors={anchors} />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

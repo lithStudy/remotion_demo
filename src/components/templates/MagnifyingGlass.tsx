@@ -9,6 +9,7 @@ import {
 	type TemplateAnchorsProps,
 	type TemplateBaseProps,
 } from "./shared";
+import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -158,7 +159,8 @@ export const BWMagnifyingGlass: React.FC<BWMagnifyingGlassProps> = ({
 				</svg>
 
 			</div>
-			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
+			<TemplateDefaultAnchors content={content} anchors={anchors} />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

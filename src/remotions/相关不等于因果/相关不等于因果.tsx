@@ -156,17 +156,6 @@ export const 相关不等于因果: React.FC<z.infer<typeof 相关不等于因�
             </Sequence>
             <Sequence from={COVER_DURATION_FRAMES} durationInFrames={MAIN_DURATION_相关不等于因果}>
                 <AbsoluteFill>
-                    <div
-                        style={{
-                            position: "absolute",
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            height: "10%",
-                            minHeight: 48,
-                            backgroundColor: "rgba(0,0,0,0.5)",
-                        }}
-                    />
                     <TransitionSeries>
                         {sceneConfigs.map((config, index) => {
                             const SceneComp = config.component;

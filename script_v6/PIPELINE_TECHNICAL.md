@@ -161,7 +161,7 @@ Step3 生成真实 TTS 后会覆盖 `content` 时间与场景级时长。
 
 ### 5.8 质量指标（控制台，不阻断）
 
-**`_collect_template_quality_metrics`**：统计 STEP_LIST 单条占比、同 `groupKey` 下模板混搭场景、`LIST_MULTI_GROUP` 疑似「总起句无分点」等，仅打印告警。
+**`_collect_template_quality_metrics`**：统计 STEP_LIST 单条占比、同 `groupKey` 下模板混搭场景等，仅打印告警。
 
 ### 5.9 落盘与收尾
 
@@ -190,7 +190,7 @@ Step3 生成真实 TTS 后会覆盖 `content` 时间与场景级时长。
 
 - 普通 `image_prompt` 字符串字段；
 - `image_prompt_array`（如多图列表）；
-- `list_multi_group_group_array` 等嵌套结构中的 `image.src`。
+- 嵌套结构（如 `panels[].src`、`images[].src`）中的图片提示词字段。
 
 ### 6.2 批量生成策略
 

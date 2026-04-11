@@ -10,6 +10,7 @@ import {
 	useVideoConfig,
 } from "remotion";
 import { BW_TEXT, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
+import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -131,7 +132,7 @@ export const BWProgressRing: React.FC<BWProgressRingProps> = ({
 				>
 					<div
 						style={{
-							fontSize: 52,
+							fontSize: 78,
 							fontWeight: 900,
 							color: BW_TEXT,
 							fontFamily: fontStack,
@@ -156,7 +157,7 @@ export const BWProgressRing: React.FC<BWProgressRingProps> = ({
 			>
 				<div
 					style={{
-						fontSize: 34,
+						fontSize: 52,
 						fontWeight: 800,
 						color: BW_TEXT,
 						fontFamily: fontStack,
@@ -168,7 +169,7 @@ export const BWProgressRing: React.FC<BWProgressRingProps> = ({
 				{subLabel ? (
 					<div
 						style={{
-							fontSize: 22,
+							fontSize: 34,
 							fontWeight: 600,
 							color: "rgba(17,17,17,0.65)",
 							fontFamily: fontStack,
@@ -179,7 +180,8 @@ export const BWProgressRing: React.FC<BWProgressRingProps> = ({
 				) : null}
 			</div>
 
-			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
+			<TemplateDefaultAnchors content={content} anchors={anchors} />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

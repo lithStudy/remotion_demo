@@ -95,6 +95,7 @@ python pipeline.py --input 文案.txt --name my_video --only 3
 
 | 字段 | 说明 | 默认/示例 |
 |------|------|-----------|
+
 | `gemini_model` | Gemini 文本模型 | `gemini-2.0-flash` |
 | `imagen_model` | 图片生成模型 | `gemini-3.1-flash-image-preview` |
 | `azure_service_region` | Azure 区域 | `eastasia` |

@@ -11,6 +11,7 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
+import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
 import { BW_TEXT, getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 
@@ -23,7 +24,7 @@ export const templateMeta = {
 	"name": "METHOD_STACK",
 	"componentExport": "BWMethodStack",
 	"description":
-		"适用：单个 item 内是「一个标题式核心 + 解释展开」，例如：一个方法/建议/观点/卖点/亮点/推荐理由，后面紧跟 2～4 句说明。\n差异：多个独立步骤/并列分点用 STEP_LIST 或 LIST_MULTI_GROUP；多条不同方法/不同卖点不要为了套模板强行合并到同一 item。\n参数：title 为视觉标题，imageSrc 为单张主图，notes 为按讲解顺序出现的解释短语。",
+		"适用：单个 item 内是「一个标题式核心 + 解释展开」，例如：一个方法/建议/观点/卖点/亮点/推荐理由，后面紧跟 2～4 句说明。\n差异：多个独立步骤/并列分点用 STEP_LIST 或 PANEL_GRID；多条不同方法/不同卖点不要为了套模板强行合并到同一 item。\n参数：title 为视觉标题，imageSrc 为单张主图，notes 为按讲解顺序出现的解释短语。",
 	"psychology": "聚焦解释",
 	"image_count": 1,
 	"param_schema": {
@@ -127,13 +128,13 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 					display: "flex",
 					flexDirection: "column",
 					alignItems: "center",
-					gap: 18,
+					gap: 28,
 				}}
 			>
 				
 				<div
 					style={{
-						fontSize: 58,
+						fontSize: 88,
 						fontWeight: 900,
 						color: BW_TEXT,
 						lineHeight: 1.2,
@@ -161,7 +162,7 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 					flexDirection: "column",
 					alignItems: "stretch",
 					justifyContent: "flex-start",
-					gap: 24,
+					gap: 36,
 				}}
 			>
 				{/* 图片在上，尺寸收小为辅 */}
@@ -169,18 +170,18 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 					style={{
 						flex: "0 0 auto",
 						alignSelf: "center",
-						width: "clamp(160px, 22vw, 260px)",
-						maxHeight: "min(32vh, 320px)",
+						width: "clamp(260px, 24vw, 420px)",
+						maxHeight: "min(34vh, 440px)",
 						aspectRatio: "4 / 3",
-						borderRadius: 20,
+						borderRadius: 28,
 						backgroundColor: "#F8FAFC",
-						border: "2px solid #E5E7EB",
-						boxShadow: "0 10px 28px rgba(17, 24, 39, 0.06)",
+						border: "3px solid #E5E7EB",
+						boxShadow: "0 16px 40px rgba(17, 24, 39, 0.08)",
 						display: "flex",
 						alignItems: "center",
 						justifyContent: "center",
 						overflow: "hidden",
-						transform: `translateY(${interpolate(imageEnter, [0, 1], [20, 0], {
+						transform: `translateY(${interpolate(imageEnter, [0, 1], [28, 0], {
 							extrapolateLeft: "clamp",
 							extrapolateRight: "clamp",
 						})}px)`,
@@ -205,7 +206,7 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 						minWidth: 0,
 						display: "flex",
 						flexDirection: "column",
-						gap: 22,
+						gap: 32,
 					}}
 				>
 					{visibleNotes.map((note, index) => {
@@ -223,13 +224,13 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 							<div
 								key={`${note.text}-${index}`}
 								style={{
-									padding: "22px 28px",
-									borderRadius: 20,
+									padding: "32px 40px",
+									borderRadius: 28,
 									backgroundColor: "#FFFFFF",
-									border: "2px solid #E5E7EB",
-									boxShadow: "0 12px 36px rgba(17, 24, 39, 0.07)",
+									border: "3px solid #E5E7EB",
+									boxShadow: "0 18px 48px rgba(17, 24, 39, 0.08)",
 									opacity: noteEnter,
-									transform: `translateY(${interpolate(noteEnter, [0, 1], [20, 0], {
+									transform: `translateY(${interpolate(noteEnter, [0, 1], [28, 0], {
 										extrapolateLeft: "clamp",
 										extrapolateRight: "clamp",
 									})}px)`,
@@ -238,7 +239,7 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 								
 								<div
 									style={{
-										fontSize: 34,
+										fontSize: 52,
 										fontWeight: 800,
 										lineHeight: 1.45,
 										color: "#1F2937",
@@ -253,7 +254,8 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 				</div>
 			</div>
 
-			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
+			<TemplateDefaultAnchors content={content} anchors={anchors} />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

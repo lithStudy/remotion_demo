@@ -4,6 +4,7 @@
 import React from "react";
 import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
+import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -86,7 +87,7 @@ export const BWDosAndDonts: React.FC<BWDosAndDontsProps> = ({
 					flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
 					gap: 24, transform: `translateX(${leftX}px)`, backgroundColor: "rgba(229, 62, 62, 0.05)", borderRight: "4px solid #E53E3E",
 				}}>
-					<div style={{ fontSize: 40, fontWeight: 900, color: "#E53E3E", textAlign: "center", padding: "0 16px", fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif' }}>
+					<div style={{ fontSize: 62, fontWeight: 900, color: "#E53E3E", textAlign: "center", padding: "0 28px", fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif' }}>
 						{dontLabel}
 					</div>
 					<Img src={getSafeImageSrc(leftSrc)} style={{ maxWidth: "55%", maxHeight: "38%", objectFit: "contain", opacity: 0.75 }} />
@@ -95,13 +96,14 @@ export const BWDosAndDonts: React.FC<BWDosAndDontsProps> = ({
 					flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
 					gap: 24, transform: `translateX(${rightX}px)`, backgroundColor: "rgba(39, 103, 73, 0.05)",
 				}}>
-					<div style={{ fontSize: 40, fontWeight: 900, color: "#276749", textAlign: "center", padding: "0 16px", fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif' }}>
+					<div style={{ fontSize: 62, fontWeight: 900, color: "#276749", textAlign: "center", padding: "0 28px", fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif' }}>
 						{doLabel}
 					</div>
 					<Img src={getSafeImageSrc(rightSrc)} style={{ maxWidth: "55%", maxHeight: "38%", objectFit: "contain" }} />
 				</div>
 			</div>
-			<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
+			<TemplateDefaultAnchors content={content} anchors={anchors} />
+			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>
 	);

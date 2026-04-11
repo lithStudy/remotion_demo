@@ -4,7 +4,6 @@ import {
 	BWImageBreath,
 	BWCenterFocus,
 	BWSplitCompare,
-	BWMultiImage,
 	BWStepList,
 	BWTextFocus,
 	BWConceptCard,
@@ -38,7 +37,7 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 		key: "image-breath",
 		content: (
 			<>
-				<BWImageBreath src={img("images/template/scene1_1.png")} enterEffect="breathe" />
+				<BWImageBreath src={img("images/template/scene1_1.png")} />
 				<BWSubtitle position="top" text="BWImageBreath · 单图入场基元（breathe）" startFrame={0} />
 			</>
 		),
@@ -102,7 +101,7 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 		key: "center-focus",
 		content: (
 			<>
-				<BWCenterFocus imageSrc={img("images/template/scene1_1.png")} enterEffect="breathe" />
+				<BWCenterFocus imageSrc={img("images/template/scene1_1.png")} />
 				<BWSubtitle position="top" text="CENTER_FOCUS · 视觉中心稳定" startFrame={0} />
 			</>
 		),
@@ -161,7 +160,7 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 		key: "concept-card",
 		content: (
 			<>
-				<BWConceptCard imageSrc={img("images/template/scene1_1.png")} conceptName="专业术语" />
+				<BWConceptCard imageSrc={img("images/template/scene1_1.png")} conceptName="可得性启发fasdfasdfs" />
 				<BWSubtitle position="top" text="CONCEPT_CARD · 术语锚定" startFrame={0} />
 			</>
 		),
@@ -213,24 +212,6 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 					anchors={[{ text: "供需失衡", showFrom: 0, color: "#111111", anim: "popIn" }]}
 				/>
 				<BWSubtitle position="top" text="MAGNIFYING_GLASS · 揭秘底层" startFrame={0} />
-			</>
-		),
-	},
-	{
-		key: "multi-image",
-		content: (
-			<>
-				<BWMultiImage
-					groups={[
-						{
-							image: { src: img("images/template/scene3_1.png"), position: "left" }
-						},
-						{
-							image: { src: img("images/template/scene3_2.png"), position: "right" }
-						}
-					]}
-				/>
-				<BWSubtitle position="top" text="LIST_MULTI_GROUP · 多要素并列" startFrame={0} />
 			</>
 		),
 	},

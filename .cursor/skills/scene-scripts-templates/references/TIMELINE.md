@@ -10,7 +10,7 @@ metadata:
 {
   "name": "TIMELINE",
   "componentExport": "BWTimeline",
-  "description": "适用：历史演进、时间顺序、前后对比带明确时间轴。\n差异：无时间线的并列要点用 LIST_MULTI_GROUP；操作步骤用 STEP_LIST。\n参数：images 2～3 项，position 常 left/right 以配合轴线。",
+  "description": "适用：历史演进、时间顺序、前后对比带明确时间轴。\n差异：无时间线的并列要点用 PANEL_GRID；操作步骤用 STEP_LIST。\n参数：images 2～3 项，position 常 left/right 以配合轴线。",
   "psychology": "叙事连贯性",
   "image_count": "2-3",
   "param_schema": {

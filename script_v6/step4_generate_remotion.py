@@ -4,6 +4,12 @@ Step 4: Remotion 动画代码生成（模板驱动版）
 根据 scene-scripts.json（含音频时长）生成 Remotion 动画 TSX 代码。
 每个 item 的 `content`、`totalDurationFrames` 与 `param`（模板字段）共同传给对应组件。
 
+交付物（与 docs/横竖屏双导出与字幕改造指南.md 一致）：
+  - 横屏主片 1920×1080（*Landscape 组件，Root id 为 PascalCase 名）
+  - 竖屏壳 1080×1920（*Vertical 组件，Root id 为 同名 + 「竖屏」后缀）
+  生成 *Constants.ts、*MainBody.tsx、*Landscape.tsx、*Vertical.tsx、*VerticalChrome.tsx，
+  入口 *.tsx 为双 Composition re-export。
+
 用法：
   python step4_generate_remotion.py --input scene-scripts.json --name video_name
 """
@@ -236,11 +242,10 @@ def normalize_cover(scripts_data: dict) -> dict | None:
 
 
 def static_cover_props_jsx(cover: dict) -> str:
-    """StaticCover 的 JSX 属性行（多行缩进与 Scene 内一致）。"""
+    """StaticCover 的 JSX 属性行（多行缩进与 Scene 内一致）。时长由外层 Sequence 的 durationInFrames 控制。"""
     lines = [
         f'title={json.dumps(cover["title"], ensure_ascii=False)}',
         f'subtitle={json.dumps(cover["subtitle"], ensure_ascii=False)}',
-        "coverDurationInFrames={COVER_DURATION_FRAMES}",
     ]
     if cover.get("themeColor"):
         lines.append(f'themeColor={json.dumps(cover["themeColor"], ensure_ascii=False)}')
@@ -382,310 +387,208 @@ export const Scene{n}: React.FC = () => {{
 '''
 
 
-def generate_composition_tsx(
-    name: str,
-    scenes: list,
-    config: dict,
-    *,
-    mute_audio: bool = False,
-    cover: dict | None = None,
+def _build_scene_configs_lines(scenes: list) -> str:
+    def _clean_label(t):
+        return t.replace('"', '\\"') if t else ""
+
+    return ",\n    ".join([
+        (
+            f'{{ name: "scene{i+1}", duration: calculateScene{i+1}Duration() + SCENE_END_PADDING, '
+            f'component: Scene{i+1}, label: "{_clean_label(scene.get("sceneName", f"Scene {i+1}"))}" }}'
+        )
+        for i, scene in enumerate(scenes)
+    ])
+
+
+def _theme_accent_soft(theme: str) -> str:
+    if isinstance(theme, str) and theme.startswith("#") and len(theme) == 7:
+        return theme + "D9"
+    return "rgba(37, 99, 235, 0.85)"
+
+
+def _vertical_headline_meta(
+    cover: dict | None, scenes: list, pascal: str, config: dict
+) -> tuple[str, str, str, str, str]:
+    headline = ""
+    if cover and isinstance(cover.get("title"), str):
+        headline = cover["title"].strip()
+    if not headline and scenes:
+        sn = scenes[0].get("sceneName")
+        if isinstance(sn, str) and sn.strip():
+            headline = sn.strip()
+    if not headline:
+        headline = pascal
+
+    sub = ""
+    if cover and isinstance(cover.get("seriesLabel"), str) and cover["seriesLabel"].strip():
+        sub = cover["seriesLabel"].strip()
+    if not sub:
+        sub = str(config.get("cover_series_label") or "系列")
+
+    sub_en = ""
+    if cover and isinstance(cover.get("seriesLabelEn"), str) and cover["seriesLabelEn"].strip():
+        sub_en = cover["seriesLabelEn"].strip()
+    if not sub_en:
+        sub_en = str(config.get("cover_series_label_en") or "SERIES")
+
+    theme = ""
+    if cover and isinstance(cover.get("themeColor"), str) and cover["themeColor"].strip():
+        theme = cover["themeColor"].strip()
+    if not theme:
+        theme = str(config.get("cover_theme_color") or "#2563EB")
+
+    soft = _theme_accent_soft(theme)
+    return headline, sub, sub_en, theme, soft
+
+
+def generate_constants_tsx(
+    name: str, pascal: str, scenes: list, config: dict, cover: dict | None
 ) -> str:
-    """生成主 Composition 文件。若 scripts_data.cover 有效，则片头插入 StaticCover 并拉长总时长。"""
-    pascal = to_pascal_case(name)
     transition = config.get("transition_duration_frames", 15)
     scene_end_padding = config.get("scene_end_padding_frames", 20)
+    cover_dur = int(cover["durationFrames"]) if cover else 0
     main_duration_id = f"MAIN_DURATION_{name.upper()}"
+    total_duration_token = f"TOTAL_DURATION_{name.upper()}"
 
     scene_imports = "\n".join([
         f'import {{ Scene{i+1}, calculateScene{i+1}Duration }} from "./scenes/Scene{i+1}";'
         for i in range(len(scenes))
     ])
+    scene_configs = _build_scene_configs_lines(scenes)
 
-    def _clean_label(t): return t.replace('"', '\\"') if t else ""
-    scene_configs = ",\n    ".join([
-        f'{{ name: "scene{i+1}", duration: calculateScene{i+1}Duration() + SCENE_END_PADDING, component: Scene{i+1}, label: "{_clean_label(scene.get("sceneName", f"Scene {i+1}"))}" }}'
-        for i, scene in enumerate(scenes)
-    ])
+    return f'''import {{ z }} from "zod";
+{scene_imports}
 
-    bgm_block = ""
+export const {pascal}Schema = z.object({{}});
+
+export const TRANSITION_DURATION = {transition};
+export const SCENE_END_PADDING = {scene_end_padding};
+export const COVER_DURATION_FRAMES = {cover_dur};
+
+export const sceneConfigs = [
+    {scene_configs},
+];
+
+export const {main_duration_id} =
+    sceneConfigs.reduce((total, c) => total + c.duration, 0) -
+    (sceneConfigs.length - 1) * TRANSITION_DURATION;
+
+export const {total_duration_token} =
+    COVER_DURATION_FRAMES + {main_duration_id};
+
+/** 版心：与 BW_LAYOUT_*、横屏主片一致 1920×1080 */
+export const DESIGN_W = 1920;
+export const DESIGN_H = 1080;
+
+export const LANDSCAPE_W = 1920;
+export const LANDSCAPE_H = 1080;
+export const LANDSCAPE_CONTAIN_SCALE = Math.min(LANDSCAPE_W / DESIGN_W, LANDSCAPE_H / DESIGN_H);
+
+export const VERTICAL_CANVAS_W = 1080;
+export const VERTICAL_CANVAS_H = 1920;
+export const VERTICAL_PLAY_W = VERTICAL_CANVAS_W;
+export const VERTICAL_PLAY_H = Math.round((VERTICAL_CANVAS_W * 9) / 16);
+export const VERTICAL_PLAY_TOP = Math.round((VERTICAL_CANVAS_H - VERTICAL_PLAY_H) / 2);
+export const VERTICAL_PLAY_PROGRESS_GAP = 12;
+export const VERTICAL_CONTENT_SCALE = VERTICAL_PLAY_H / DESIGN_H;
+'''
+
+
+def generate_main_body_tsx(
+    name: str, pascal: str, cover: dict | None
+) -> str:
+    main_duration_id = f"MAIN_DURATION_{name.upper()}"
+    const_import = f'''import {{
+    COVER_DURATION_FRAMES,
+    {main_duration_id},
+    sceneConfigs,
+    TRANSITION_DURATION,
+}} from "./{pascal}Constants";'''
+
+    transition_series = f'''                <TransitionSeries>
+                    {{sceneConfigs.map((config, index) => {{
+                        const SceneComp = config.component;
+                        const isLast = index === sceneConfigs.length - 1;
+                        return (
+                            <React.Fragment key={{config.name}}>
+                                <TransitionSeries.Sequence durationInFrames={{config.duration}}>
+                                    <SceneComp />
+                                </TransitionSeries.Sequence>
+                                {{!isLast && (
+                                    <TransitionSeries.Transition
+                                        timing={{linearTiming({{ durationInFrames: TRANSITION_DURATION }})}}
+                                        presentation={{fade()}}
+                                    />
+                                )}}
+                            </React.Fragment>
+                        );
+                    }})}}
+                </TransitionSeries>'''
+
+    if cover:
+        cover_props = static_cover_props_jsx(cover)
+        return f'''import React from "react";
+import {{ AbsoluteFill, Sequence }} from "remotion";
+import {{ linearTiming, TransitionSeries }} from "@remotion/transitions";
+import {{ fade }} from "@remotion/transitions/fade";
+import {{ StaticCover }} from "../../components";
+{const_import}
+
+/** 横竖屏共用正文：封面 + 场景过渡（无全局 BGM、无外层 scale/壳） */
+export const {pascal}MainBody: React.FC = () => (
+    <>
+        <Sequence durationInFrames={{COVER_DURATION_FRAMES}}>
+            <StaticCover
+                {cover_props}
+            />
+        </Sequence>
+        <Sequence from={{COVER_DURATION_FRAMES}} durationInFrames={{{main_duration_id}}}>
+            <AbsoluteFill>
+{transition_series}
+            </AbsoluteFill>
+        </Sequence>
+    </>
+);
+'''
+
+    return f'''import React from "react";
+import {{ AbsoluteFill }} from "remotion";
+import {{ linearTiming, TransitionSeries }} from "@remotion/transitions";
+import {{ fade }} from "@remotion/transitions/fade";
+{const_import}
+
+/** 横竖屏共用正文（无封面、无全局 BGM） */
+export const {pascal}MainBody: React.FC = () => (
+    <AbsoluteFill>
+{transition_series}
+    </AbsoluteFill>
+);
+'''
+
+
+def generate_landscape_tsx(pascal: str, mute_audio: bool) -> str:
     if not mute_audio:
-        bgm_block = """            <Audio
+        audio_block = """            <Audio
                 src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
                 loop
                 volume={0.22}
                 name="Background music"
             />
 """
-
-    if cover:
-        remotion_named = (
-            "AbsoluteFill, Audio, interpolate, staticFile, Sequence, useCurrentFrame"
-            if not mute_audio
-            else "AbsoluteFill, interpolate, Sequence, useCurrentFrame"
-        )
-        static_import = 'import { StaticCover } from "../../components";\n'
-        cover_dur = cover["durationFrames"]
-        cover_props = static_cover_props_jsx(cover)
-        duration_block = f"""const COVER_DURATION_FRAMES = {cover_dur};
-
-const sceneConfigs = [
-    {scene_configs},
-];
-
-const {main_duration_id} =
-    sceneConfigs.reduce((total, c) => total + c.duration, 0) -
-    (sceneConfigs.length - 1) * TRANSITION_DURATION;
-
-export const TOTAL_DURATION_{name.upper()} =
-    COVER_DURATION_FRAMES + {main_duration_id};"""
-        progress_bar = f"""const ProgressBar: React.FC = () => {{
-    const frame = useCurrentFrame();
-    if (frame < COVER_DURATION_FRAMES) {{
-        return null;
-    }}
-    const contentFrame = frame - COVER_DURATION_FRAMES;
-
-    let currentStart = 0;
-    const segments = sceneConfigs.map((c, i) => {{
-        const isLast = i === sceneConfigs.length - 1;
-        const segmentDuration = isLast ? c.duration : c.duration - TRANSITION_DURATION;
-
-        const segment = {{ start: currentStart, duration: segmentDuration }};
-        currentStart += segmentDuration;
-        return segment;
-    }});
-
-    const activeIndex = segments.findIndex(seg => contentFrame >= seg.start && contentFrame < seg.start + seg.duration);
-    const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
-    const activeLabel = sceneConfigs[validActiveIndex]?.label || "";
-
-    return (
-        <div style={{{{
-            position: "absolute", top: 40, left: 40, right: 40,
-            display: "flex", flexDirection: "column", gap: 16, zIndex: 100
-        }}}}>
-            <div style={{{{ display: "flex", gap: 8, height: 8 }}}}>
-                {{segments.map((seg, i) => {{
-                    const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));
-                    const isActive = i === validActiveIndex;
-                    return (
-                        <div key={{i}} style={{{{
-                            flex: 1,
-                            backgroundColor: isActive ? "rgba(34, 43, 69, 0.18)" : "rgba(34, 43, 69, 0.1)",
-                            borderRadius: 999,
-                            overflow: "hidden",
-                            border: isActive ? "1px solid rgba(34, 43, 69, 0.32)" : "1px solid rgba(34, 43, 69, 0.2)",
-                            boxShadow: isActive
-                                ? "0 3px 10px rgba(31, 41, 55, 0.12)"
-                                : "0 1px 4px rgba(31, 41, 55, 0.08)",
-                        }}}}>
-                            <div style={{{{
-                                width: `${{progress * 100}}%`,
-                                height: "100%",
-                                background: isActive
-                                    ? "linear-gradient(90deg, rgba(29, 78, 216, 0.95), rgba(56, 189, 248, 0.92))"
-                                    : "rgba(30, 41, 59, 0.72)",
-                                boxShadow: isActive ? "0 0 12px rgba(37, 99, 235, 0.35)" : "none",
-                            }}}} />
-                        </div>
-                    );
-                }})}}
-            </div>
-
-            <div style={{{{
-                fontSize: 30,
-                fontWeight: 700,
-                fontFamily: '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif',
-                letterSpacing: 0.4,
-                color: "rgba(17, 24, 39, 0.95)",
-                textAlign: "left",
-                textShadow: "0 1px 2px rgba(255,255,255,0.45)",
-                padding: "6px 14px",
-                backgroundColor: "rgba(255, 255, 255, 0.58)",
-                border: "1px solid rgba(17, 24, 39, 0.12)",
-                borderRadius: 10,
-                alignSelf: "flex-start",
-                backdropFilter: "blur(6px)",
-                boxShadow: "0 6px 20px rgba(15, 23, 42, 0.12)",
-            }}}}>
-                {{activeLabel}}
-            </div>
-        </div>
-    );
-}};"""
-        timeline_block = f"""            <Sequence durationInFrames={{COVER_DURATION_FRAMES}}>
-                <StaticCover
-                    {cover_props}
-                />
-            </Sequence>
-            <Sequence from={{COVER_DURATION_FRAMES}} durationInFrames={{{main_duration_id}}}>
-                <AbsoluteFill>
-                    <div
-                        style={{{{
-                            position: "absolute",
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            height: "10%",
-                            minHeight: 48,
-                            backgroundColor: "rgba(0,0,0,0.5)",
-                        }}}}
-                    />
-                    <TransitionSeries>
-                        {{sceneConfigs.map((config, index) => {{
-                            const SceneComp = config.component;
-                            const isLast = index === sceneConfigs.length - 1;
-                            return (
-                                <React.Fragment key={{config.name}}>
-                                    <TransitionSeries.Sequence durationInFrames={{config.duration}}>
-                                        <SceneComp />
-                                    </TransitionSeries.Sequence>
-                                    {{!isLast && (
-                                        <TransitionSeries.Transition
-                                            timing={{linearTiming({{ durationInFrames: TRANSITION_DURATION }})}}
-                                            presentation={{fade()}}
-                                        />
-                                    )}}
-                                </React.Fragment>
-                            );
-                        }})}}
-                    </TransitionSeries>
-                </AbsoluteFill>
-            </Sequence>"""
+        remotion_import = "AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame"
     else:
-        remotion_named = (
-            "AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame"
-            if not mute_audio
-            else "AbsoluteFill, interpolate, useCurrentFrame"
-        )
-        static_import = ""
-        duration_block = f"""const sceneConfigs = [
-    {scene_configs},
-];
-
-export const TOTAL_DURATION_{name.upper()} =
-    sceneConfigs.reduce((total, c) => total + c.duration, 0) -
-    (sceneConfigs.length - 1) * TRANSITION_DURATION;"""
-        progress_bar = f"""const ProgressBar: React.FC = () => {{
-    const frame = useCurrentFrame();
-
-    let currentStart = 0;
-    const segments = sceneConfigs.map((c, i) => {{
-        const isLast = i === sceneConfigs.length - 1;
-        const segmentDuration = isLast ? c.duration : c.duration - TRANSITION_DURATION;
-
-        const segment = {{ start: currentStart, duration: segmentDuration }};
-        currentStart += segmentDuration;
-        return segment;
-    }});
-
-    const activeIndex = segments.findIndex(seg => frame >= seg.start && frame < seg.start + seg.duration);
-    const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
-    const activeLabel = sceneConfigs[validActiveIndex]?.label || "";
-
-    return (
-        <div style={{{{
-            position: "absolute", top: 40, left: 40, right: 40,
-            display: "flex", flexDirection: "column", gap: 16, zIndex: 100
-        }}}}>
-            <div style={{{{ display: "flex", gap: 8, height: 8 }}}}>
-                {{segments.map((seg, i) => {{
-                    const progress = Math.max(0, Math.min(1, (frame - seg.start) / seg.duration));
-                    const isActive = i === validActiveIndex;
-                    return (
-                        <div key={{i}} style={{{{
-                            flex: 1,
-                            backgroundColor: isActive ? "rgba(34, 43, 69, 0.18)" : "rgba(34, 43, 69, 0.1)",
-                            borderRadius: 999,
-                            overflow: "hidden",
-                            border: isActive ? "1px solid rgba(34, 43, 69, 0.32)" : "1px solid rgba(34, 43, 69, 0.2)",
-                            boxShadow: isActive
-                                ? "0 3px 10px rgba(31, 41, 55, 0.12)"
-                                : "0 1px 4px rgba(31, 41, 55, 0.08)",
-                        }}}}>
-                            <div style={{{{
-                                width: `${{progress * 100}}%`,
-                                height: "100%",
-                                background: isActive
-                                    ? "linear-gradient(90deg, rgba(29, 78, 216, 0.95), rgba(56, 189, 248, 0.92))"
-                                    : "rgba(30, 41, 59, 0.72)",
-                                boxShadow: isActive ? "0 0 12px rgba(37, 99, 235, 0.35)" : "none",
-                            }}}} />
-                        </div>
-                    );
-                }})}}
-            </div>
-
-            <div style={{{{
-                fontSize: 30,
-                fontWeight: 700,
-                fontFamily: '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif',
-                letterSpacing: 0.4,
-                color: "rgba(17, 24, 39, 0.95)",
-                textAlign: "left",
-                textShadow: "0 1px 2px rgba(255,255,255,0.45)",
-                padding: "6px 14px",
-                backgroundColor: "rgba(255, 255, 255, 0.58)",
-                border: "1px solid rgba(17, 24, 39, 0.12)",
-                borderRadius: 10,
-                alignSelf: "flex-start",
-                backdropFilter: "blur(6px)",
-                boxShadow: "0 6px 20px rgba(15, 23, 42, 0.12)",
-            }}}}>
-                {{activeLabel}}
-            </div>
-        </div>
-    );
-}};"""
-        timeline_block = """            <div
-                style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: "10%",
-                    minHeight: 48,
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                }}
-            />
-            <TransitionSeries>
-                {sceneConfigs.map((config, index) => {
-                    const SceneComp = config.component;
-                    const isLast = index === sceneConfigs.length - 1;
-                    return (
-                        <React.Fragment key={config.name}>
-                            <TransitionSeries.Sequence durationInFrames={config.duration}>
-                                <SceneComp />
-                            </TransitionSeries.Sequence>
-                            {!isLast && (
-                                <TransitionSeries.Transition
-                                    timing={linearTiming({ durationInFrames: TRANSITION_DURATION })}
-                                    presentation={fade()}
-                                />
-                            )}
-                        </React.Fragment>
-                    );
-                })}
-            </TransitionSeries>"""
+        audio_block = ""
+        remotion_import = "AbsoluteFill, interpolate, staticFile, useCurrentFrame"
 
     return f'''import React from "react";
-import {{ {remotion_named} }} from "remotion";
-import {{ z }} from "zod";
-import {{ linearTiming, TransitionSeries }} from "@remotion/transitions";
-import {{ fade }} from "@remotion/transitions/fade";
+import {{ {remotion_import} }} from "remotion";
 
-{static_import}{scene_imports}
+import {{ RemotionLayoutMetricsProvider }} from "../../components";
+import {{ {pascal}MainBody }} from "./{pascal}MainBody";
+import {{ DESIGN_H, DESIGN_W, LANDSCAPE_CONTAIN_SCALE }} from "./{pascal}Constants";
 
-export const {pascal}Schema = z.object({{}});
-
-const TRANSITION_DURATION = {transition};
-const SCENE_END_PADDING = {scene_end_padding};
-
-{duration_block}
-
-{progress_bar}
-
-export const {pascal}: React.FC<z.infer<typeof {pascal}Schema>> = () => {{
+/** 横屏主片 1920×1080：版心 contain，避免裁切字幕/锚点 */
+export const {pascal}Landscape: React.FC = () => {{
     const frame = useCurrentFrame();
     const bgShiftX = interpolate(frame % 240, [0, 120, 240], [-4, 4, -4], {{
         extrapolateLeft: "clamp",
@@ -701,9 +604,11 @@ export const {pascal}: React.FC<z.infer<typeof {pascal}Schema>> = () => {{
     }});
 
     return (
-        <AbsoluteFill>
-{bgm_block}            <div
+        <AbsoluteFill style={{{{ background: "#0f172a" }}}}>
+{audio_block}            <div
                 style={{{{
+
+
                     height: "100%",
                     width: "100%",
                     background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)",
@@ -711,6 +616,8 @@ export const {pascal}: React.FC<z.infer<typeof {pascal}Schema>> = () => {{
             />
             <div
                 style={{{{
+
+
                     position: "absolute",
                     inset: "-6%",
                     pointerEvents: "none",
@@ -720,12 +627,579 @@ export const {pascal}: React.FC<z.infer<typeof {pascal}Schema>> = () => {{
                         "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)",
                 }}}}
             />
-{timeline_block}
-            <ProgressBar />
+            <RemotionLayoutMetricsProvider value={{{{ width: DESIGN_W, height: DESIGN_H }}}}>
+                <AbsoluteFill
+                    style={{{{
+
+
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "hidden",
+                    }}}}
+                >
+                    <div
+                        style={{{{
+
+
+                            width: DESIGN_W,
+                            height: DESIGN_H,
+                            flexShrink: 0,
+                            transform: `scale(${{LANDSCAPE_CONTAIN_SCALE}})`,
+                            transformOrigin: "center center",
+                        }}}}
+                    >
+                        <{pascal}MainBody />
+                    </div>
+                </AbsoluteFill>
+            </RemotionLayoutMetricsProvider>
         </AbsoluteFill>
     );
 }};
 '''
+
+
+def generate_vertical_tsx(pascal: str, mute_audio: bool) -> str:
+    if not mute_audio:
+        audio_block = """            <Audio
+                src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
+                loop
+                volume={0.22}
+                name="Background music"
+            />
+"""
+        remotion_import = "AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame"
+    else:
+        audio_block = ""
+        remotion_import = "AbsoluteFill, interpolate, staticFile, useCurrentFrame"
+
+    return f'''import React from "react";
+import {{ {remotion_import} }} from "remotion";
+
+import {{ RemotionLayoutMetricsProvider }} from "../../components";
+import {{ {pascal}MainBody }} from "./{pascal}MainBody";
+import {{ {pascal}ProgressBar, {pascal}TopStaticHeadline }} from "./{pascal}VerticalChrome";
+import {{
+    DESIGN_H,
+    DESIGN_W,
+    VERTICAL_CANVAS_W,
+    VERTICAL_CONTENT_SCALE,
+    VERTICAL_PLAY_H,
+    VERTICAL_PLAY_PROGRESS_GAP,
+    VERTICAL_PLAY_TOP,
+    VERTICAL_PLAY_W,
+}} from "./{pascal}Constants";
+
+/** 竖屏 1080×1920：顶栏 + 中间 16:9 视口 + 进度条 */
+export const {pascal}Vertical: React.FC = () => {{
+    const frame = useCurrentFrame();
+    const bgShiftX = interpolate(frame % 240, [0, 120, 240], [-4, 4, -4], {{
+        extrapolateLeft: "clamp",
+        extrapolateRight: "clamp",
+    }});
+    const bgShiftY = interpolate(frame % 180, [0, 90, 180], [-3, 3, -3], {{
+        extrapolateLeft: "clamp",
+        extrapolateRight: "clamp",
+    }});
+    const bgBreathOpacity = interpolate(frame % 150, [0, 75, 150], [0.22, 0.34, 0.22], {{
+        extrapolateLeft: "clamp",
+        extrapolateRight: "clamp",
+    }});
+
+    return (
+        <AbsoluteFill style={{{{ background: "#000" }}}}>
+{audio_block}            <{pascal}TopStaticHeadline canvasW={{VERTICAL_CANVAS_W}} topBandH={{VERTICAL_PLAY_TOP}} />
+            <div
+                style={{{{
+
+
+                    position: "absolute",
+                    left: 0,
+                    top: VERTICAL_PLAY_TOP,
+                    width: VERTICAL_PLAY_W,
+                    height: VERTICAL_PLAY_H,
+                    overflow: "hidden",
+                }}}}
+            >
+                <div
+                    style={{{{
+
+
+                        height: "100%",
+                        width: "100%",
+                        background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)",
+                    }}}}
+                />
+                <div
+                    style={{{{
+
+
+                        position: "absolute",
+                        inset: "-6%",
+                        pointerEvents: "none",
+                        opacity: bgBreathOpacity,
+                        transform: `translate(${{bgShiftX}}px, ${{bgShiftY}}px)`,
+                        background:
+                            "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)",
+                    }}}}
+                />
+                <div
+                    style={{{{
+
+
+                        position: "absolute",
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        height: VERTICAL_PLAY_H,
+                        overflow: "hidden",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "flex-start",
+                    }}}}
+                >
+                    <RemotionLayoutMetricsProvider value={{{{ width: DESIGN_W, height: DESIGN_H }}}}>
+                        <div
+                            style={{{{
+
+
+                                width: DESIGN_W,
+                                height: DESIGN_H,
+                                flexShrink: 0,
+                                transform: `scale(${{VERTICAL_CONTENT_SCALE}})`,
+                                transformOrigin: "top center",
+                            }}}}
+                        >
+                            <{pascal}MainBody />
+                        </div>
+                    </RemotionLayoutMetricsProvider>
+                </div>
+            </div>
+            <div
+                style={{{{
+
+
+                    position: "absolute",
+                    left: 0,
+                    top: VERTICAL_PLAY_TOP + VERTICAL_PLAY_H + VERTICAL_PLAY_PROGRESS_GAP,
+                    width: VERTICAL_CANVAS_W,
+                    paddingLeft: 40,
+                    paddingRight: 40,
+                    boxSizing: "border-box",
+                    pointerEvents: "none",
+                }}}}
+            >
+                <{pascal}ProgressBar />
+            </div>
+        </AbsoluteFill>
+    );
+}};
+'''
+
+
+def generate_vertical_chrome_tsx(
+    pascal: str,
+    cover: dict | None,
+    scenes: list,
+    config: dict,
+) -> str:
+    h, sub, sub_en, theme, theme_soft = _vertical_headline_meta(cover, scenes, pascal, config)
+    head = (
+        'import React from "react";\n'
+        'import { useCurrentFrame } from "remotion";\n\n'
+        f'import {{ COVER_DURATION_FRAMES, sceneConfigs, TRANSITION_DURATION }} '
+        f'from "./{pascal}Constants";\n\n'
+        'const FONT_STACK =\n'
+        '    \'"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif\';\n\n'
+        f"const STATIC_HEADLINE = {json.dumps(h, ensure_ascii=False)};\n"
+        f"const STATIC_HEADLINE_SUB = {json.dumps(sub, ensure_ascii=False)};\n"
+        f"const STATIC_HEADLINE_SUB_EN = {json.dumps(sub_en, ensure_ascii=False)};\n"
+        f"const THEME_ACCENT = {json.dumps(theme, ensure_ascii=False)};\n"
+        f"const THEME_ACCENT_SOFT = {json.dumps(theme_soft, ensure_ascii=False)};\n\n"
+        "type TopStaticHeadlineProps = {\n"
+        "    canvasW: number;\n"
+        "    topBandH: number;\n"
+        "};\n\n"
+        f"export const {pascal}TopStaticHeadline: React.FC<TopStaticHeadlineProps> = "
+        "({ canvasW, topBandH }) => (\n"
+        "    <div\n"
+        "        style={{\n"
+        "            position: \"absolute\",\n"
+        "            left: 0,\n"
+        "            top: 0,\n"
+        "            width: canvasW,\n"
+        "            height: topBandH,\n"
+        "            overflow: \"hidden\",\n"
+        "            boxSizing: \"border-box\",\n"
+        "            pointerEvents: \"none\",\n"
+        "        }}\n"
+        "    >\n"
+        "        <div\n"
+        "            style={{\n"
+        "                position: \"absolute\",\n"
+        "                inset: 0,\n"
+        "                background:\n"
+        "                    \"radial-gradient(ellipse 72% 85% at 50% 48%, rgba(37, 99, 235, 0.14) 0%, "
+        "transparent 58%), radial-gradient(ellipse 50% 40% at 50% 100%, rgba(56, 189, 248, 0.08) 0%, "
+        "transparent 50%)\",\n"
+        "            }}\n"
+        "        />\n"
+        "        <div\n"
+        "            style={{\n"
+        "                position: \"absolute\",\n"
+        "                left: \"12%\",\n"
+        "                right: \"12%\",\n"
+        "                bottom: 0,\n"
+        "                height: 1,\n"
+        "                background: \"linear-gradient(90deg, transparent 0%, rgba(226, 232, 240, 0.45) 45%, "
+        "rgba(226, 232, 240, 0.45) 55%, transparent 100%)\",\n"
+        "            }}\n"
+        "        />\n"
+        "        <div\n"
+        "            style={{\n"
+        "                position: \"absolute\",\n"
+        "                left: 36,\n"
+        "                top: 36,\n"
+        "                width: 40,\n"
+        "                height: 40,\n"
+        "                borderLeft: \"2px solid rgba(248, 250, 252, 0.22)\",\n"
+        "                borderTop: \"2px solid rgba(248, 250, 252, 0.22)\",\n"
+        "                borderRadius: \"2px 0 0 0\",\n"
+        "            }}\n"
+        "        />\n"
+        "        <div\n"
+        "            style={{\n"
+        "                position: \"absolute\",\n"
+        "                right: 36,\n"
+        "                top: 36,\n"
+        "                width: 40,\n"
+        "                height: 40,\n"
+        "                borderRight: \"2px solid rgba(248, 250, 252, 0.22)\",\n"
+        "                borderTop: \"2px solid rgba(248, 250, 252, 0.22)\",\n"
+        "                borderRadius: \"0 2px 0 0\",\n"
+        "            }}\n"
+        "        />\n"
+        "        <div\n"
+        "            style={{\n"
+        "                position: \"relative\",\n"
+        "                zIndex: 1,\n"
+        "                height: \"100%\",\n"
+        "                display: \"flex\",\n"
+        "                flexDirection: \"column\",\n"
+        "                alignItems: \"center\",\n"
+        "                justifyContent: \"center\",\n"
+        "                padding: \"0 56px\",\n"
+        "                boxSizing: \"border-box\",\n"
+        "            }}\n"
+        "        >\n"
+        "            <div\n"
+        "                style={{\n"
+        "                    width: 56,\n"
+        "                    height: 4,\n"
+        "                    borderRadius: 999,\n"
+        "                    background: `linear-gradient(90deg, ${THEME_ACCENT_SOFT}, rgba(56, 189, 248, 0.95))`,\n"
+        "                    boxShadow: \"0 0 22px rgba(37, 99, 235, 0.45)\",\n"
+        "                    marginBottom: 22,\n"
+        "                }}\n"
+        "            />\n"
+        "            <div\n"
+        "                style={{\n"
+        "                    fontSize: 80,\n"
+        "                    fontWeight: 800,\n"
+        "                    fontFamily: FONT_STACK,\n"
+        "                    color: \"#fafafa\",\n"
+        "                    letterSpacing: \"0.14em\",\n"
+        "                    textAlign: \"center\",\n"
+        "                    lineHeight: 1.08,\n"
+        "                    textShadow:\n"
+        "                        \"0 1px 0 rgba(255,255,255,0.12), 0 4px 36px rgba(0,0,0,0.55), "
+        "0 0 48px rgba(37, 99, 235, 0.25)\",\n"
+        "                }}\n"
+        "            >\n"
+        "                {STATIC_HEADLINE}\n"
+        "            </div>\n"
+        "            <div\n"
+        "                style={{\n"
+        "                    marginTop: 10,\n"
+        "                    fontSize: 15,\n"
+        "                    fontWeight: 600,\n"
+        "                    fontFamily: 'ui-sans-serif, \"Segoe UI\", sans-serif',\n"
+        "                    color: \"rgba(148, 163, 184, 0.95)\",\n"
+        "                    letterSpacing: \"0.42em\",\n"
+        "                    textAlign: \"center\",\n"
+        "                }}\n"
+        "            >\n"
+        "                {STATIC_HEADLINE_SUB_EN}\n"
+        "            </div>\n"
+        "            <div\n"
+        "                style={{\n"
+        "                    marginTop: 20,\n"
+        "                    display: \"flex\",\n"
+        "                    flexDirection: \"row\",\n"
+        "                    alignItems: \"center\",\n"
+        "                    justifyContent: \"center\",\n"
+        "                    gap: 20,\n"
+        "                    width: \"100%\",\n"
+        "                    maxWidth: 520,\n"
+        "                }}\n"
+        "            >\n"
+        "                <div\n"
+        "                    style={{\n"
+        "                        flex: 1,\n"
+        "                        height: 1,\n"
+        "                        background: \"linear-gradient(90deg, transparent, rgba(248, 250, 252, 0.38))\",\n"
+        "                    }}\n"
+        "                />\n"
+        "                <div\n"
+        "                    style={{\n"
+        "                        width: 7,\n"
+        "                        height: 7,\n"
+        "                        transform: \"rotate(45deg)\",\n"
+        "                        background: `linear-gradient(135deg, ${THEME_ACCENT}, rgba(56, 189, 248, 0.9))`,\n"
+        "                        boxShadow: \"0 0 12px rgba(37, 99, 235, 0.5)\",\n"
+        "                        flexShrink: 0,\n"
+        "                    }}\n"
+        "                />\n"
+        "                <div\n"
+        "                    style={{\n"
+        "                        fontSize: 26,\n"
+        "                        fontWeight: 600,\n"
+        "                        fontFamily: FONT_STACK,\n"
+        "                        color: \"rgba(248, 250, 252, 0.88)\",\n"
+        "                        letterSpacing: \"0.42em\",\n"
+        "                        textAlign: \"center\",\n"
+        "                        flexShrink: 0,\n"
+        "                    }}\n"
+        "                >\n"
+        "                    {STATIC_HEADLINE_SUB}\n"
+        "                </div>\n"
+        "                <div\n"
+        "                    style={{\n"
+        "                        width: 7,\n"
+        "                        height: 7,\n"
+        "                        transform: \"rotate(45deg)\",\n"
+        "                        background: `linear-gradient(135deg, ${THEME_ACCENT}, rgba(56, 189, 248, 0.9))`,\n"
+        "                        boxShadow: \"0 0 12px rgba(37, 99, 235, 0.5)\",\n"
+        "                        flexShrink: 0,\n"
+        "                    }}\n"
+        "                />\n"
+        "                <div\n"
+        "                    style={{\n"
+        "                        flex: 1,\n"
+        "                        height: 1,\n"
+        "                        background: \"linear-gradient(270deg, transparent, rgba(248, 250, 252, 0.38))\",\n"
+        "                    }}\n"
+        "                />\n"
+        "            </div>\n"
+        "        </div>\n"
+        "    </div>\n"
+        ");\n\n"
+    )
+    prog = (
+        f"export const {pascal}ProgressBar: React.FC = () => {{\n"
+        "    const frame = useCurrentFrame();\n"
+        "    if (frame < COVER_DURATION_FRAMES) {\n"
+        "        return null;\n"
+        "    }\n"
+        "    const contentFrame = frame - COVER_DURATION_FRAMES;\n\n"
+        "    let currentStart = 0;\n"
+        "    const segments = sceneConfigs.map((c, i) => {\n"
+        "        const isLast = i === sceneConfigs.length - 1;\n"
+        "        const segmentDuration = isLast ? c.duration : c.duration - TRANSITION_DURATION;\n\n"
+        "        const segment = { start: currentStart, duration: segmentDuration };\n"
+        "        currentStart += segmentDuration;\n"
+        "        return segment;\n"
+        "    });\n\n"
+        "    const activeIndex = segments.findIndex(\n"
+        "        seg => contentFrame >= seg.start && contentFrame < seg.start + seg.duration,\n"
+        "    );\n"
+        "    const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;\n"
+        "    const activeLabel = sceneConfigs[validActiveIndex]?.label || \"\";\n\n"
+        "    return (\n"
+        "        <div\n"
+        "            style={{\n"
+        "                width: \"100%\",\n"
+        "                display: \"flex\",\n"
+        "                flexDirection: \"column\",\n"
+        "                gap: 12,\n"
+        "                zIndex: 100,\n"
+        "            }}\n"
+        "        >\n"
+        "            <div style={{ display: \"flex\", gap: 8, height: 8 }}>\n"
+        "                {segments.map((seg, i) => {\n"
+        "                    const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));\n"
+        "                    const isActive = i === validActiveIndex;\n"
+        "                    return (\n"
+        "                        <div\n"
+        "                            key={i}\n"
+        "                            style={{\n"
+        "                                flex: 1,\n"
+        "                                backgroundColor: isActive ? \"rgba(34, 43, 69, 0.18)\" : \"rgba(34, 43, 69, 0.1)\",\n"
+        "                                borderRadius: 999,\n"
+        "                                overflow: \"hidden\",\n"
+        "                                border: isActive ? \"1px solid rgba(34, 43, 69, 0.32)\" : "
+        "\"1px solid rgba(34, 43, 69, 0.2)\",\n"
+        "                                boxShadow: isActive\n"
+        "                                    ? \"0 3px 10px rgba(31, 41, 55, 0.12)\"\n"
+        "                                    : \"0 1px 4px rgba(31, 41, 55, 0.08)\",\n"
+        "                            }}\n"
+        "                        >\n"
+        "                            <div\n"
+        "                                style={{\n"
+        "                                    width: `${progress * 100}%`,\n"
+        "                                    height: \"100%\",\n"
+        "                                    background: isActive\n"
+        "                                        ? \"linear-gradient(90deg, rgba(29, 78, 216, 0.95), "
+        "rgba(56, 189, 248, 0.92))\"\n"
+        "                                        : \"rgba(30, 41, 59, 0.72)\",\n"
+        "                                    boxShadow: isActive ? \"0 0 12px rgba(37, 99, 235, 0.35)\" : \"none\",\n"
+        "                                }}\n"
+        "                            />\n"
+        "                        </div>\n"
+        "                    );\n"
+        "                })}\n"
+        "            </div>\n\n"
+        "            <div\n"
+        "                style={{\n"
+        "                    fontSize: 30,\n"
+        "                    fontWeight: 700,\n"
+        "                    fontFamily: FONT_STACK,\n"
+        "                    letterSpacing: 0.4,\n"
+        "                    color: \"rgba(17, 24, 39, 0.95)\",\n"
+        "                    textAlign: \"left\",\n"
+        "                    textShadow: \"0 1px 2px rgba(255,255,255,0.45)\",\n"
+        "                    padding: \"6px 14px\",\n"
+        "                    backgroundColor: \"rgba(255, 255, 255, 0.58)\",\n"
+        "                    border: \"1px solid rgba(17, 24, 39, 0.12)\",\n"
+        "                    borderRadius: 10,\n"
+        "                    alignSelf: \"flex-start\",\n"
+        "                    backdropFilter: \"blur(6px)\",\n"
+        "                    boxShadow: \"0 6px 20px rgba(15, 23, 42, 0.12)\",\n"
+        "                }}\n"
+        "            >\n"
+        "                {activeLabel}\n"
+        "            </div>\n"
+        "        </div>\n"
+        "    );\n"
+        "};\n"
+    )
+    return head + prog
+
+
+def generate_entry_tsx(name: str, pascal: str) -> str:
+    td = f"TOTAL_DURATION_{name.upper()}"
+    main_d = f"MAIN_DURATION_{name.upper()}"
+    return f'''/**
+ * 横屏主片 + 竖屏黑边壳双入口，共享 {pascal}MainBody。
+ * 参见 docs/横竖屏双导出与字幕改造指南.md
+ */
+export {{
+    {pascal}Schema,
+    COVER_DURATION_FRAMES,
+    DESIGN_H,
+    DESIGN_W,
+    LANDSCAPE_CONTAIN_SCALE,
+    LANDSCAPE_H,
+    LANDSCAPE_W,
+    {main_d},
+    sceneConfigs,
+    {td},
+    TRANSITION_DURATION,
+    VERTICAL_CANVAS_H,
+    VERTICAL_CANVAS_W,
+    VERTICAL_CONTENT_SCALE,
+    VERTICAL_PLAY_H,
+    VERTICAL_PLAY_PROGRESS_GAP,
+    VERTICAL_PLAY_TOP,
+    VERTICAL_PLAY_W,
+}} from "./{pascal}Constants";
+export {{ {pascal}Landscape as {pascal} }} from "./{pascal}Landscape";
+export {{ {pascal}Vertical as {pascal}竖屏 }} from "./{pascal}Vertical";
+'''
+
+
+def update_root_tsx(root_path: Path, name: str, pascal: str, config: dict):
+    """在 Root.tsx 注册横屏 + 竖屏双 Composition，并更新 import。"""
+    fps = config.get("fps", 30)
+    duration_token = f"TOTAL_DURATION_{name.upper()}"
+    vert_id = f"{pascal}竖屏"
+
+    with open(root_path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    # 只删除「单个」Composition：从 <Composition 到目标 id 之间不能跨过另一个 <Composition，
+    # 否则会从文件里第一个 <Composition（如 TemplateShowcase）一直吞到目标 id，误删中间所有条目。
+    for comp_id in (pascal, vert_id):
+        pattern = (
+            r"\n\s*(?:\{/\*[^\n]*\*/\}\s*\n)?\s*<Composition\b"
+            r"(?:(?!<Composition)[\s\S])*?\bid=\""
+            + re.escape(comp_id)
+            + r"\"[\s\S]*?/>"
+        )
+        content = re.sub(pattern, "\n", content, count=1)
+
+    imp_line_re = re.compile(
+        r"^\s*import\s*\{[^}]+\}\s*from\s*[\"']\./remotions/"
+        + re.escape(name)
+        + "/"
+        + re.escape(pascal)
+        + r"[\"'];\s*\n",
+        re.MULTILINE,
+    )
+    content = imp_line_re.sub("", content)
+
+    import_line = (
+        f'import {{ {pascal}, {vert_id}, {pascal}Schema, {duration_token} }} '
+        f'from "./remotions/{name}/{pascal}";'
+    )
+
+    composition_block = f"""
+      {{/* {pascal} - 横屏 1920×1080（自动生成） */}}
+      <Composition
+        id="{pascal}"
+        component={{{pascal}}}
+        durationInFrames={{{duration_token}}}
+        fps={{{fps}}}
+        width={{1920}}
+        height={{1080}}
+        schema={{{pascal}Schema}}
+        defaultProps={{{{}}}}
+      />
+
+      {{/* {vert_id} - 竖屏 1080×1920（自动生成） */}}
+      <Composition
+        id="{vert_id}"
+        component={{{vert_id}}}
+        durationInFrames={{{duration_token}}}
+        fps={{{fps}}}
+        width={{1080}}
+        height={{1920}}
+        schema={{{pascal}Schema}}
+        defaultProps={{{{}}}}
+      />"""
+
+    lines = content.split("\n")
+    insert_at = None
+    for i, line in enumerate(lines):
+        if line.strip().startswith("import ") and "./remotions/" in line:
+            insert_at = i + 1
+    if insert_at is not None:
+        lines.insert(insert_at, import_line)
+        content = "\n".join(lines)
+    else:
+        last_import = content.rfind("import ")
+        if last_import >= 0:
+            end_of_line = content.index("\n", last_import)
+            content = content[: end_of_line + 1] + import_line + "\n" + content[end_of_line + 1 :]
+
+    close_frag = content.rfind("\n    </>")
+    if close_frag >= 0:
+        content = content[:close_frag] + composition_block + content[close_frag:]
+
+    with open(root_path, "w", encoding="utf-8") as f:
+        f.write(content)
+
+    print("  ✅ Root.tsx 已更新（横屏 + 竖屏双 Composition）")
 
 
 def generate_scenes_index(scene_count: int) -> str:
@@ -734,50 +1208,6 @@ def generate_scenes_index(scene_count: int) -> str:
         for i in range(scene_count)
     ])
     return exports
-
-
-def update_root_tsx(root_path: Path, name: str, pascal: str, config: dict):
-    """更新 Root.tsx，添加新的 Composition"""
-    width = config.get("width", 960)
-    height = config.get("height", 1280)
-
-    with open(root_path, "r", encoding="utf-8") as f:
-        content = f.read()
-
-    import_line = (
-        f'import {{ {pascal}, {pascal}Schema, TOTAL_DURATION_{name.upper()} }} '
-        f'from "./remotions/{name}/{pascal}";'
-    )
-    composition_block = f'''
-      {{/* {pascal} - 自动生成 */}}
-      <Composition
-        id="{pascal}"
-        component={{{pascal}}}
-        durationInFrames={{TOTAL_DURATION_{name.upper()}}}
-        fps={{{config.get("fps", 30)}}}
-        width={{{width}}}
-        height={{{height}}}
-        schema={{{pascal}Schema}}
-        defaultProps={{{{}}}}
-      />'''
-
-    if import_line in content:
-        print(f"  ℹ️ Root.tsx 已包含 {pascal} 的导入，跳过")
-        return
-
-    last_import = content.rfind("import ")
-    if last_import >= 0:
-        end_of_line = content.index("\n", last_import)
-        content = content[:end_of_line + 1] + import_line + "\n" + content[end_of_line + 1:]
-
-    close_tag = content.rfind("</>")
-    if close_tag >= 0:
-        content = content[:close_tag] + composition_block + "\n    " + content[close_tag:]
-
-    with open(root_path, "w", encoding="utf-8") as f:
-        f.write(content)
-
-    print("  ✅ Root.tsx 已更新")
 
 
 def main():
@@ -869,14 +1299,36 @@ def main():
         f.write(index_code)
     print("  ✅ index.ts")
 
-    # 生成主 Composition 文件
-    comp_code = generate_composition_tsx(
-        name, scenes, config, mute_audio=args.mute_audio, cover=cover
-    )
-    comp_path = remotion_dir / f"{pascal}.tsx"
-    with open(comp_path, "w", encoding="utf-8") as f:
-        f.write(comp_code)
-    print(f"  ✅ {pascal}.tsx")
+    # 横竖双入口：Constants / MainBody / Landscape / Vertical / Chrome / 入口 re-export
+    const_code = generate_constants_tsx(name, pascal, scenes, config, cover)
+    with open(remotion_dir / f"{pascal}Constants.ts", "w", encoding="utf-8") as f:
+        f.write(const_code)
+    print(f"  ✅ {pascal}Constants.ts")
+
+    main_body = generate_main_body_tsx(name, pascal, cover)
+    with open(remotion_dir / f"{pascal}MainBody.tsx", "w", encoding="utf-8") as f:
+        f.write(main_body)
+    print(f"  ✅ {pascal}MainBody.tsx")
+
+    land = generate_landscape_tsx(pascal, mute_audio=args.mute_audio)
+    with open(remotion_dir / f"{pascal}Landscape.tsx", "w", encoding="utf-8") as f:
+        f.write(land)
+    print(f"  ✅ {pascal}Landscape.tsx")
+
+    vert = generate_vertical_tsx(pascal, mute_audio=args.mute_audio)
+    with open(remotion_dir / f"{pascal}Vertical.tsx", "w", encoding="utf-8") as f:
+        f.write(vert)
+    print(f"  ✅ {pascal}Vertical.tsx")
+
+    chrome = generate_vertical_chrome_tsx(pascal, cover, scenes, config)
+    with open(remotion_dir / f"{pascal}VerticalChrome.tsx", "w", encoding="utf-8") as f:
+        f.write(chrome)
+    print(f"  ✅ {pascal}VerticalChrome.tsx")
+
+    entry = generate_entry_tsx(name, pascal)
+    with open(remotion_dir / f"{pascal}.tsx", "w", encoding="utf-8") as f:
+        f.write(entry)
+    print(f"  ✅ {pascal}.tsx（双 export）")
 
     # 更新 Root.tsx
     if not args.skip_root:
@@ -884,9 +1336,10 @@ def main():
         if root_path.exists():
             update_root_tsx(root_path, name, pascal, config)
 
-    print("\n✅ Remotion 代码生成完成!")
+    print("\n✅ Remotion 代码生成完成（横屏 + 竖屏双入口）!")
     print(f"   📂 {remotion_dir}")
-    print("   🚀 运行 npm run dev 预览")
+    print(f"   Root：Composition「{pascal}」1920×1080、「{pascal}竖屏」1080×1920")
+    print("   Studio 请分别预览上述两个 id；导出需各执行一次 remotion render")
 
     return True
 

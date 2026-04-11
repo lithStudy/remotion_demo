@@ -1,8 +1,10 @@
 export {
 	BW_BG,
 	BW_TEXT,
+	normalizeContent,
 	useImageEnterStyle,
 	type ImageEnterEffect,
+	type ImageEnterTransformMode,
 	type ImagePosition,
 	type MultiImageItem,
 	type ContentItem,
@@ -18,8 +20,6 @@ export { BWCenterFocus } from "./CenterFocus";
 export type { BWCenterFocusProps } from "./CenterFocus";
 export { BWSplitCompare } from "./SplitCompare";
 export type { BWSplitCompareProps } from "./SplitCompare";
-export { BWMultiImage } from "./ListMultiGroup";
-export type { BWMultiImageProps } from "./ListMultiGroup";
 export { BWStepList } from "./StepList";
 export type { BWStepListProps, BWStepListStepItem } from "./StepList";
 export { BWTextFocus } from "./TextFocus";

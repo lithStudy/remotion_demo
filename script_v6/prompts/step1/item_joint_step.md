@@ -65,7 +65,7 @@ __TEMPLATE_GUIDE__
 
 ### C. 多分点/清单/步骤（expressionTag=list|steps|method）
 - 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
-- 当前 item 原文本身就明确展开 2～5 个并列分点/并列例子 → `LIST_MULTI_GROUP`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
 - 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
   - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
   - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
@@ -75,7 +75,6 @@ __TEMPLATE_GUIDE__
 - 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
   - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
 - 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
-- **2～4 宫格并列**（每格一图、非纵向左图右文叙事）→ `PANEL_GRID`
 
 ### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
 - 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`

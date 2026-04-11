@@ -158,17 +158,6 @@ export const 双盲实验: React.FC<z.infer<typeof 双盲实验Schema>> = () => 
             </Sequence>
             <Sequence from={COVER_DURATION_FRAMES} durationInFrames={MAIN_DURATION_双盲实验}>
                 <AbsoluteFill>
-                    <div
-                        style={{
-                            position: "absolute",
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            height: "10%",
-                            minHeight: 48,
-                            backgroundColor: "rgba(0,0,0,0.5)",
-                        }}
-                    />
                     <TransitionSeries>
                         {sceneConfigs.map((config, index) => {
                             const SceneComp = config.component;

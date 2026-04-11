@@ -33,7 +33,7 @@ export const BWAnchorWord: React.FC<BWAnchorWordProps> = ({
 	delay = 0,
 	color = BW_TEXT,
 	animStyle = "spring",
-	fontSize = 56,
+	fontSize = 72,
 	style,
 }) => {
 	const frame = useCurrentFrame();
@@ -47,11 +47,11 @@ export const BWAnchorWord: React.FC<BWAnchorWordProps> = ({
 	});
 
 	let animTransform = "";
-	let animOpacity = springVal;
+	const animOpacity = springVal;
 
 	switch (animStyle) {
 		case "slideUp": {
-			const ty = interpolate(springVal, [0, 1], [40, 0], {
+			const ty = interpolate(springVal, [0, 1], [36, 0], {
 				extrapolateLeft: "clamp",
 				extrapolateRight: "clamp",
 			});
@@ -91,7 +91,7 @@ export const BWAnchorWord: React.FC<BWAnchorWordProps> = ({
 				position: "absolute",
 				left: 0,
 				right: 0,
-				top: "22%",
+				top: "17%",
 				display: "flex",
 				justifyContent: "center",
 				opacity: animOpacity,
@@ -130,10 +130,13 @@ interface BWSubtitleProps {
 	durationFrames?: number;
 }
 
+/** 小屏可读：深字 + 亮描边，不依赖底部灰条 */
+const SUBTITLE_FONT =
+	'"PingFang SC", "Microsoft YaHei", "Source Han Sans SC", "Noto Sans SC", sans-serif';
+
 export const BWSubtitle: React.FC<BWSubtitleProps> = ({
 	text,
 	startFrame = 0,
-	position = "bottom",
 	style,
 	durationFrames = 15,
 }) => (
@@ -142,14 +145,14 @@ export const BWSubtitle: React.FC<BWSubtitleProps> = ({
 			position: "absolute",
 			left: 0,
 			right: 0,
-			...(position === "top" ? { top: 0, bottom: "auto" } : { bottom: 0 }),
-			height: "10%",
-			minHeight: 48,
+			bottom: 20,
+			height: "12%",
+			minHeight: 52,
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "center",
-			padding: "8px 24px",
-			...(position === "top" ? { backgroundColor: "rgba(0, 0, 0, 0.55)" } : {}),
+			padding: "12px 48px",
+			boxSizing: "border-box",
 			...style,
 		}}
 	>
@@ -160,11 +163,17 @@ export const BWSubtitle: React.FC<BWSubtitleProps> = ({
 		>
 			<span
 				style={{
-					fontSize: 40,
-					fontWeight: 500,
-					color: "rgba(255, 255, 255, 0.95)",
-					fontFamily:
-						'"Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", sans-serif',
+					display: "inline-block",
+					maxWidth: "96%",
+					fontSize: 58,
+					fontWeight: 700,
+					lineHeight: 1.42,
+					letterSpacing: "0.02em",
+					color: "#0f172a",
+					fontFamily: SUBTITLE_FONT,
+					textShadow:
+						"0 0 1px rgba(255,255,255,1), 0 0 10px rgba(255,255,255,0.95), 0 1px 2px rgba(255,255,255,0.9), 0 2px 12px rgba(0,0,0,0.12)",
+					WebkitFontSmoothing: "antialiased",
 				}}
 			>
 				{text}

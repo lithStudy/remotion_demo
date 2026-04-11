@@ -42,8 +42,22 @@ export const BW_BG = "#ffffff";
 /** 主文字色 */
 export const BW_TEXT = "#111111";
 
+/** 模板逻辑版心：横屏1920×1080；竖屏中间 16:9 视口经 scale 后与此同源。 */
+export const BW_LAYOUT_WIDTH = 1920;
+export const BW_LAYOUT_HEIGHT = 1080;
+
 /** 图片入场效果：呼吸 | 左滑 | 下滑 | 放大 | 淡入 */
 export type ImageEnterEffect = "breathe" | "slideLeft" | "slideBottom" | "zoomIn" | "fadeIn";
+
+/**
+ * withCentering：含 translate(-50%,-50%)，用于绝对定位在 left50%/top50% 的 Img。
+ * effectOnly：仅位移/缩放/透明度，配合外层已做居中的包裹层（如 BWImageBreath）。
+ */
+export type ImageEnterTransformMode = "withCentering" | "effectOnly";
+
+function joinCssTransforms(parts: Array<string | false | undefined>): string {
+	return parts.filter(Boolean).join(" ");
+}
 
 /**
  * 根据效果类型计算图片入场样式（位移、缩放、透明度）
@@ -52,6 +66,7 @@ export type ImageEnterEffect = "breathe" | "slideLeft" | "slideBottom" | "zoomIn
  * @param fps 帧率
  * @param width 画布宽
  * @param height 画布高
+ * @param transformMode 是否包含居中平移（默认 withCentering）
  */
 export function useImageEnterStyle(
 	effect: ImageEnterEffect,
@@ -59,6 +74,7 @@ export function useImageEnterStyle(
 	fps: number,
 	width: number,
 	height: number,
+	transformMode: ImageEnterTransformMode = "withCentering",
 ): React.CSSProperties {
 	const enterSpring = spring({
 		frame,
@@ -66,47 +82,99 @@ export function useImageEnterStyle(
 		config: { damping: 60, stiffness: 180 },
 		durationInFrames: 25,
 	});
-	// 呼吸：周期 75 帧（约 2.5s），吸气 0→30 放大，呼气 30→75 收回，幅度 1 ↔ 1.08
+	// 呼吸：周期 75 帧（约 2.5s），吸气 0→37 放大，呼气 37→74 收回，幅度 1 ↔ 1.08
 	const breatheCycle = 75;
 	const breathePhase = frame % breatheCycle;
 	const breatheScale = interpolate(
 		breathePhase,
-		[0, 30, 75],
+		[0, 37, 74],
 		[1, 1.08, 1],
 		{ extrapolateLeft: "clamp", extrapolateRight: "clamp" },
 	);
 
+	const c = transformMode === "withCentering" ? "translate(-50%, -50%)" : "";
+
 	switch (effect) {
 		case "slideLeft": {
 			const tx = interpolate(enterSpring, [0, 1], [width * 0.5, 0]);
-			return { transform: `translate(-50%, -50%) translateX(${tx}px)`, opacity: enterSpring };
+			return {
+				transform: joinCssTransforms([c, `translateX(${tx}px)`]),
+				opacity: enterSpring,
+			};
 		}
 		case "slideBottom": {
 			const ty = interpolate(enterSpring, [0, 1], [height * 0.25, 0]);
-			return { transform: `translate(-50%, -50%) translateY(${ty}px)`, opacity: enterSpring };
+			return {
+				transform: joinCssTransforms([c, `translateY(${ty}px)`]),
+				opacity: enterSpring,
+			};
 		}
 		case "zoomIn": {
 			const sc = interpolate(enterSpring, [0, 1], [0.5, 1]);
-			return { transform: `translate(-50%, -50%) scale(${sc})`, opacity: enterSpring };
+			return {
+				transform: joinCssTransforms([c, `scale(${sc})`]),
+				opacity: enterSpring,
+			};
 		}
 		case "fadeIn": {
-			return { transform: "translate(-50%, -50%)", opacity: enterSpring };
+			return {
+				...(c ? { transform: c } : {}),
+				opacity: enterSpring,
+			};
 		}
 		case "breathe":
 		default:
-			return { transform: `translate(-50%, -50%) scale(${breatheScale})` };
+			return {
+				transform: joinCssTransforms([c, `scale(${breatheScale})`]),
+			};
 	}
 }
 
 /**
- * 锚点列表布局常量（与 TemplateContentRenderer 中 AnchorWordList 保持一致）
+ * 锚点列表布局常量（与 TemplateAnchorsLayer 中默认顶部锚点列表保持一致）
  */
 export const ANCHOR_LIST_TOP_RATIO = 0.18;
-export const ANCHOR_LIST_ROW_MIN_HEIGHT_PX = 64;
+/** 锚点词行高、间距（按 1080p 版心直接取值） */
+export const ANCHOR_LIST_ROW_MIN_HEIGHT_PX = 56;
 export const ANCHOR_LIST_ROW_GAP_PX = 16;
-export const SINGLE_IMAGE_CENTER_TOP_RATIO = 0.5;
-export const SINGLE_IMAGE_MAX_HEIGHT_RATIO = 0.4;
-export const SINGLE_IMAGE_ANCHOR_MIN_GAP_PX = 50;
+/** 与 BWImageBreath 一致：图片中心纵坐标为 top 45% + translate(-50%,-50%) */
+export const SINGLE_IMAGE_CENTER_TOP_RATIO = 0.45;
+export const SINGLE_IMAGE_MAX_HEIGHT_RATIO = 0.42;
+export const SINGLE_IMAGE_ANCHOR_MIN_GAP_PX = 48;
+/** 三个锚点时前两行用负 margin 收紧列表，需与 TemplateAnchorsLayer 一致 */
+export const ANCHOR_LIST_THREE_ROWS_COMPACT_PX = 28;
+
+/**
+ * 锚点列表距顶比例：≥3 条时整体上移，避免与中部主图重叠（与 TemplateAnchorsLayer 同步）
+ */
+export function getAnchorListTopRatio(visibleAnchorCount: number): number {
+	if (visibleAnchorCount >= 3) return 0.11;
+	return ANCHOR_LIST_TOP_RATIO;
+}
+
+/** 第三条锚点出现后列表上移/收紧，与 TemplateAnchorsLayer 共用同一 spring */
+export const ANCHOR_THREE_ROW_REFLOW_SPRING_CONFIG = {
+	damping: 14,
+	stiffness: 120,
+	mass: 0.85,
+} as const;
+export const ANCHOR_THREE_ROW_REFLOW_DURATION_FRAMES = 26;
+
+/**
+ * 第三行锚点出现当帧为 0，随后过渡到 1（列表上移 + 前两行收紧完成）
+ */
+export function getAnchorThreeRowReflowProgress(
+	frame: number,
+	thirdAnchorStartFrame: number,
+	fps: number,
+): number {
+	return spring({
+		frame: frame - thirdAnchorStartFrame,
+		fps,
+		config: ANCHOR_THREE_ROW_REFLOW_SPRING_CONFIG,
+		durationInFrames: ANCHOR_THREE_ROW_REFLOW_DURATION_FRAMES,
+	});
+}
 
 function getVisibleAnchorItems(
 	content: ContentItem[] | undefined,
@@ -127,6 +195,39 @@ function getVisibleAnchorItems(
 		.sort((a, b) => a.startFrame - b.startFrame);
 }
 
+function getSingleImageAnchorAvoidanceShiftFromLayout({
+	visibleAnchorCount,
+	height,
+	minGapPx,
+	topRatio,
+	verticalCompactPx,
+}: {
+	visibleAnchorCount: number;
+	height: number;
+	minGapPx: number;
+	topRatio: number;
+	verticalCompactPx: number;
+}): number {
+	if (visibleAnchorCount === 0) return 0;
+
+	const anchorBottomPx =
+		height * topRatio +
+		visibleAnchorCount * ANCHOR_LIST_ROW_MIN_HEIGHT_PX +
+		Math.max(0, visibleAnchorCount - 1) * ANCHOR_LIST_ROW_GAP_PX -
+		verticalCompactPx;
+
+	const imageTopPx =
+		height * SINGLE_IMAGE_CENTER_TOP_RATIO -
+		(height * SINGLE_IMAGE_MAX_HEIGHT_RATIO) / 2;
+	const gapPx = imageTopPx - anchorBottomPx;
+	/** 出现第二条锚点起主图再多下移一截，与单锚点留白区分 */
+	const extraShiftTwoPlusPx =
+		visibleAnchorCount >= 2 ? Math.round(height * 0.022) : 0;
+	const targetGap = minGapPx + extraShiftTwoPlusPx;
+	if (gapPx >= targetGap) return 0;
+	return targetGap - gapPx;
+}
+
 function getSingleImageAnchorAvoidanceShiftByCount({
 	visibleAnchorCount,
 	height,
@@ -137,18 +238,14 @@ function getSingleImageAnchorAvoidanceShiftByCount({
 	minGapPx: number;
 }): number {
 	if (visibleAnchorCount === 0) return 0;
-
-	const anchorBottomPx =
-		height * ANCHOR_LIST_TOP_RATIO +
-		visibleAnchorCount * ANCHOR_LIST_ROW_MIN_HEIGHT_PX +
-		Math.max(0, visibleAnchorCount - 1) * ANCHOR_LIST_ROW_GAP_PX;
-
-	const imageTopPx =
-		height * SINGLE_IMAGE_CENTER_TOP_RATIO -
-		(height * SINGLE_IMAGE_MAX_HEIGHT_RATIO) / 2;
-	const gapPx = imageTopPx - anchorBottomPx;
-	if (gapPx >= minGapPx) return 0;
-	return minGapPx - gapPx;
+	return getSingleImageAnchorAvoidanceShiftFromLayout({
+		visibleAnchorCount,
+		height,
+		minGapPx,
+		topRatio: getAnchorListTopRatio(visibleAnchorCount),
+		verticalCompactPx:
+			visibleAnchorCount >= 3 ? ANCHOR_LIST_THREE_ROWS_COMPACT_PX : 0,
+	});
 }
 
 /**
@@ -196,17 +293,30 @@ export function getSingleImageAnchorAvoidanceShiftAnimatedPx({
 	const visibleAnchors = getVisibleAnchorItems(content, anchors, frame);
 	if (visibleAnchors.length === 0) return 0;
 
-	let animatedShiftPx = 0;
-	for (let i = 1; i <= visibleAnchors.length; i++) {
-		const prevShiftPx = getSingleImageAnchorAvoidanceShiftByCount({
+	const shift2Target = getSingleImageAnchorAvoidanceShiftFromLayout({
+		visibleAnchorCount: 2,
+		height,
+		minGapPx,
+		topRatio: ANCHOR_LIST_TOP_RATIO,
+		verticalCompactPx: 0,
+	});
+
+	let twoDone = 0;
+	const nForTwoLoop = Math.min(visibleAnchors.length, 2);
+	for (let i = 1; i <= nForTwoLoop; i++) {
+		const prevShiftPx = getSingleImageAnchorAvoidanceShiftFromLayout({
 			visibleAnchorCount: i - 1,
 			height,
 			minGapPx,
+			topRatio: ANCHOR_LIST_TOP_RATIO,
+			verticalCompactPx: 0,
 		});
-		const currentShiftPx = getSingleImageAnchorAvoidanceShiftByCount({
+		const currentShiftPx = getSingleImageAnchorAvoidanceShiftFromLayout({
 			visibleAnchorCount: i,
 			height,
 			minGapPx,
+			topRatio: ANCHOR_LIST_TOP_RATIO,
+			verticalCompactPx: 0,
 		});
 		const deltaShiftPx = Math.max(0, currentShiftPx - prevShiftPx);
 		if (deltaShiftPx <= 0) continue;
@@ -222,10 +332,129 @@ export function getSingleImageAnchorAvoidanceShiftAnimatedPx({
 			extrapolateLeft: "clamp",
 			extrapolateRight: "clamp",
 		});
-		animatedShiftPx += animatedDeltaShiftPx;
+		twoDone += animatedDeltaShiftPx;
 	}
 
-	return animatedShiftPx;
+	if (visibleAnchors.length < 3) {
+		return twoDone;
+	}
+
+	const p = getAnchorThreeRowReflowProgress(
+		frame,
+		visibleAnchors[2].startFrame,
+		fps,
+	);
+	const shift3Start = getSingleImageAnchorAvoidanceShiftFromLayout({
+		visibleAnchorCount: 3,
+		height,
+		minGapPx,
+		topRatio: ANCHOR_LIST_TOP_RATIO,
+		verticalCompactPx: 0,
+	});
+	const shift3End = getSingleImageAnchorAvoidanceShiftFromLayout({
+		visibleAnchorCount: 3,
+		height,
+		minGapPx,
+		topRatio: getAnchorListTopRatio(3),
+		verticalCompactPx: ANCHOR_LIST_THREE_ROWS_COMPACT_PX,
+	});
+	const reflowExtra = interpolate(p, [0, 1], [0, shift3End - shift3Start], {
+		extrapolateLeft: "clamp",
+		extrapolateRight: "clamp",
+	});
+
+	return twoDone + (shift3Start - shift2Target) + reflowExtra;
+}
+
+/**
+ * CENTER_FOCUS 堆叠间距（单位 px）：
+ * - 锚点行与锚点行之间（红框内行距）
+ * - 最后一行锚点与主图顶边之间（绿框）
+ */
+export const CENTER_FOCUS_ANCHOR_ROW_GAP_PX = 62;
+export const CENTER_FOCUS_ANCHOR_IMAGE_GAP_PX = 10;
+
+const CENTER_FOCUS_STACK_SPRING_CONFIG = {
+	damping: 14,
+	stiffness: 120,
+	mass: 0.85,
+} as const;
+const CENTER_FOCUS_STACK_TRANSITION_FRAMES = 24;
+
+/**
+ * CENTER_FOCUS：以 refY（默认 45% 高度）为整列视觉中心的均衡布局。
+ * 自上而下为锚点 1…m，行距见 CENTER_FOCUS_ANCHOR_ROW_GAP_PX，最后一行与主图见 CENTER_FOCUS_ANCHOR_IMAGE_GAP_PX。
+ */
+export function computeCenterFocusEquilibrium(
+	m: number,
+	height: number,
+	refY: number,
+): { anchorCenters: number[]; imageCenter: number } {
+	const gRow = CENTER_FOCUS_ANCHOR_ROW_GAP_PX;
+	const gImg = CENTER_FOCUS_ANCHOR_IMAGE_GAP_PX;
+	const r = ANCHOR_LIST_ROW_MIN_HEIGHT_PX;
+	const imgHalf = (height * SINGLE_IMAGE_MAX_HEIGHT_RATIO) / 2;
+	const step = r + gRow;
+	if (m <= 0) {
+		return { anchorCenters: [], imageCenter: refY };
+	}
+	const c1 =
+		refY - ((m - 1) * step + gImg + 2 * imgHalf) / 2;
+	const anchorCenters: number[] = [];
+	for (let k = 0; k < m; k++) {
+		anchorCenters.push(c1 + k * step);
+	}
+	const cImg =
+		c1 + (m - 1) * step + r / 2 + gImg + imgHalf;
+	return { anchorCenters, imageCenter: cImg };
+}
+
+/**
+ * CENTER_FOCUS：主图中心 Y、各可见锚点行中心 Y（与 content/anchors 时间轴一致）。
+ * 新锚点从 refY 出现，与上一稳态之间用 spring 过渡。
+ */
+export function getCenterFocusStackLayoutAtFrame({
+	content,
+	anchors,
+	frame,
+	fps,
+	height,
+}: {
+	content: ContentItem[] | undefined;
+	anchors: AnchorItem[] | undefined;
+	frame: number;
+	fps: number;
+	height: number;
+}): { anchorCenterYs: number[]; imageCenterY: number } {
+	const refY = height * SINGLE_IMAGE_CENTER_TOP_RATIO;
+	const visible = getVisibleAnchorItems(content, anchors, frame);
+	const m = visible.length;
+	if (m === 0) {
+		return { anchorCenterYs: [], imageCenterY: refY };
+	}
+	const T = visible[m - 1].startFrame;
+	const p = spring({
+		frame: frame - T,
+		fps,
+		config: CENTER_FOCUS_STACK_SPRING_CONFIG,
+		durationInFrames: CENTER_FOCUS_STACK_TRANSITION_FRAMES,
+	});
+	const eqPrev = computeCenterFocusEquilibrium(m - 1, height, refY);
+	const eqNext = computeCenterFocusEquilibrium(m, height, refY);
+	const startAnchors =
+		m === 1 ? [refY] : [...eqPrev.anchorCenters, refY];
+	const startImage = m === 1 ? refY : eqPrev.imageCenter;
+	const anchorCenterYs = startAnchors.map((s, i) =>
+		interpolate(p, [0, 1], [s, eqNext.anchorCenters[i]], {
+			extrapolateLeft: "clamp",
+			extrapolateRight: "clamp",
+		}),
+	);
+	const imageCenterY = interpolate(p, [0, 1], [startImage, eqNext.imageCenter], {
+		extrapolateLeft: "clamp",
+		extrapolateRight: "clamp",
+	});
+	return { anchorCenterYs, imageCenterY };
 }
 
 /** 多图/时间轴中单图位置：居中 | 左 | 右 | 上 | 下 */
@@ -235,7 +464,7 @@ export type ImagePosition = "center" | "left" | "right" | "top" | "bottom";
 export interface MultiImageItem {
 	/** 图片地址 */
 	src: string;
-	/** 可选：在画布中的位置（LIST_MULTI_GROUP 已不依赖该参数） */
+	/** 可选：在画布中的位置（部分模板会弱化该字段） */
 	position?: ImagePosition;
 	/** 可选入场效果，默认 breathe */
 	enterEffect?: ImageEnterEffect;
@@ -310,6 +539,12 @@ export interface ContentItem {
 	durationFrames: number;
 }
 
+/** 将 content 数组标准化为 ContentItem[] */
+export function normalizeContent(content?: ContentItem[]): ContentItem[] {
+	if (!content) return [];
+	return content;
+}
+
 /** item 级锚点数据：与 content 同级，通过 showFrom 绑定字幕索引 */
 export interface AnchorItem {
 	/** 锚点文本 */
@@ -324,7 +559,7 @@ export interface AnchorItem {
 	audioEffect?: string | null;
 }
 
-/** 顶层 param 锚点（与 content 同级）；仅使用字幕旁锚点/TemplateContentRenderer 的模板应组合此接口 */
+/** 顶层 param 锚点（与 content 同级）；需要展示锚点的模板应组合此接口并在模板内渲染 */
 export interface TemplateAnchorsProps {
 	anchors?: AnchorItem[];
 }

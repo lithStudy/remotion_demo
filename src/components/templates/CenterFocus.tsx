@@ -2,17 +2,33 @@
  * CENTER_FOCUS 模板：视觉中心稳定，单图居中展示
  */
 import React from "react";
-import { AbsoluteFill } from "remotion";
-import type { TemplateAnchorsProps, TemplateBaseProps } from "./shared";
+import {
+	AbsoluteFill,
+	Sequence,
+	Audio,
+	staticFile,
+	useCurrentFrame,
+	useVideoConfig,
+} from "remotion";
+import {
+	normalizeContent,
+	ANCHOR_LIST_ROW_MIN_HEIGHT_PX,
+	getCenterFocusStackLayoutAtFrame,
+	type ImageEnterEffect,
+	type TemplateAnchorsProps,
+	type TemplateBaseProps,
+	type AnchorItem,
+	type ContentItem,
+} from "./shared";
 import { BWImageBreath } from "./BWImageBreath";
-import type { ImageEnterEffect } from "./shared";
+import { BWAnchorWord } from "../BWPrimitives";
+import { useRemotionLayoutMetricsOverride } from "../RemotionLayoutMetricsContext";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
-
 export const templateMeta = {
 	"name": "CENTER_FOCUS",
 	"componentExport": "BWCenterFocus",
 	"description":
-		"适用：默认叙事底盘；平缓讲事实、下定义、引入话题；单图居中。\n差异：强情绪/震惊句用 TEXT_FOCUS；专业术语卡用 CONCEPT_CARD；多要素同时出现用 LIST_MULTI_GROUP。\n慎用：需要左右对比或步骤列表时请换 SPLIT_COMPARE / STEP_LIST 等。\n参数：enterEffect 默认 breathe；anchors 可选，showFrom 为 content 下标（非帧数），锚点词会按时间依次出现并保留为列表。",
+		"适用：默认叙事底盘；平缓讲事实、下定义、引入话题；单图居中。\n差异：强情绪/震惊句用 TEXT_FOCUS；专业术语卡用 CONCEPT_CARD；多要素同时出现用 PANEL_GRID。\n慎用：需要左右对比或步骤列表时请换 SPLIT_COMPARE / STEP_LIST 等。\n参数：图片始终带呼吸效果；enterEffect 控制入场方式，默认 fadeIn；anchors 可选，showFrom 为 content 下标（非帧数），锚点词会按时间依次出现并保留为列表。",
 	"psychology": "视觉中心稳定",
 	"image_count": 1,
 	"param_schema": {
@@ -25,9 +41,9 @@ export const templateMeta = {
 			},
 			"enterEffect": {
 				"type": "string",
-				"enum": ["breathe", "slideLeft", "slideBottom", "zoomIn", "fadeIn"],
-				"default": "breathe",
-				"description": "入场效果",
+				"enum": ["fadeIn", "slideLeft", "slideBottom", "zoomIn"],
+				"default": "fadeIn",
+				"description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）",
 			},
 			"anchors": {
 				"type": "array",
@@ -63,20 +79,97 @@ export const templateMeta = {
 		"template": "CENTER_FOCUS",
 		"param": {
 			"imageSrc": "上班族坐在电脑前的简笔画图标",
-			"enterEffect": "breathe",
+			"enterEffect": "fadeIn",
 			"anchors": [{ "text": "可得性启发", "showFrom": 0, "color": "red" }],
 		},
 	},
 } as const;
 
+/** 锚点与主图同轴堆叠 + 锚点音效 */
+const CenterFocusAnchors: React.FC<{
+	content: ContentItem[];
+	anchors: AnchorItem[];
+}> = ({ content, anchors }) => {
+	const frame = useCurrentFrame();
+	const { fps, height: compHeight } = useVideoConfig();
+	const layoutOverride = useRemotionLayoutMetricsOverride();
+	const height = layoutOverride?.height ?? compHeight;
+	const { anchorCenterYs } = getCenterFocusStackLayoutAtFrame({
+		content,
+		anchors,
+		frame,
+		fps,
+		height,
+	});
+	const visible = (anchors ?? [])
+		.map((anchor) => ({
+			...anchor,
+			startFrame: content[anchor.showFrom]?.startFrame,
+		}))
+		.filter(
+			(item): item is AnchorItem & { startFrame: number } =>
+				typeof item.startFrame === "number" && item.startFrame <= frame,
+		)
+		.sort((a, b) => a.startFrame - b.startFrame);
+	const hasAnyAnchor = (anchors ?? []).some(
+		(a) => typeof content[a.showFrom]?.startFrame === "number",
+	);
+	if (!hasAnyAnchor) return null;
+	return (
+		<>
+			{visible.map((item, i) => (
+				<div
+					key={`${item.showFrom}-${item.text}-${i}`}
+					style={{
+						position: "absolute",
+						left: 0,
+						right: 0,
+						top: anchorCenterYs[i],
+						transform: "translateY(-50%)",
+						minHeight: ANCHOR_LIST_ROW_MIN_HEIGHT_PX,
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "center",
+					}}
+				>
+					<BWAnchorWord
+						anchor={item.text}
+						delay={item.startFrame}
+						color={item.color || "#111111"}
+						animStyle={item.anim || "spring"}
+						style={{ position: "relative", top: 0, left: 0, right: 0 }}
+					/>
+				</div>
+			))}
+			{(anchors ?? []).map((anchor) => {
+				const startFrame = content[anchor.showFrom]?.startFrame;
+				const name = anchor.audioEffect;
+				if (typeof startFrame !== "number" || !name) {
+					return null;
+				}
+				return (
+					<Sequence key={`sfx-${anchor.showFrom}-${anchor.text}`} from={startFrame}>
+						<Audio
+							src={staticFile(`audio/effects/${name}.wav`)}
+							volume={0.2}
+						/>
+					</Sequence>
+				);
+			})}
+		</>
+	);
+};
+
+
+
 export interface BWCenterFocusProps extends TemplateBaseProps, TemplateAnchorsProps {
 	imageSrc: string;
-	enterEffect?: ImageEnterEffect;
+	enterEffect?: Exclude<ImageEnterEffect, "breathe">;
 }
 
 export const BWCenterFocus: React.FC<BWCenterFocusProps> = ({
 	imageSrc,
-	enterEffect = "breathe",
+	enterEffect = "fadeIn",
 	content,
 	anchors,
 	audioSrc,
@@ -84,8 +177,18 @@ export const BWCenterFocus: React.FC<BWCenterFocusProps> = ({
 	style,
 }) => (
 	<AbsoluteFill style={style}>
-		<BWImageBreath src={imageSrc} enterEffect={enterEffect} content={content} anchors={anchors} />
-		<TemplateContentRenderer content={content} anchors={anchors} audioSrc={audioSrc} />
+		<BWImageBreath
+			src={imageSrc}
+			enterEffect={enterEffect}
+			content={content}
+			anchors={anchors}
+			centerFocusStack
+		/>
+		<TemplateContentRenderer content={content} audioSrc={audioSrc} />
+		<CenterFocusAnchors
+			content={normalizeContent(content)}
+			anchors={anchors ?? []}
+		/>
 		{children}
 	</AbsoluteFill>
 );

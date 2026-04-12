@@ -22,7 +22,7 @@ export const Scene3: React.FC = () => {
                 <BWMethodStack content={[{"text": "第二，", "startFrame": 0, "durationFrames": 14}, {"text": "学会区分相关性与因果关系。", "startFrame": 13, "durationFrames": 79}, {"text": "感冒好了是因为吃药，", "startFrame": 91, "durationFrames": 43}, {"text": "还是因为熬过了那个周期？", "startFrame": 134, "durationFrames": 56}]} totalDurationFrames={190} title={"区分相关与因果"} imageSrc={staticFile("images/双盲实验/scene_3_3.png")} notes={[{"text": "先后出现不等于必然因果", "showFrom": 1}]} />
             </Sequence>
             <Sequence from={714} durationInFrames={163}>
-                <BWTextFocus content={[{"text": "这种逻辑上的审视，", "startFrame": 0, "durationFrames": 44}, {"text": "是我们在这个充满信息迷雾的时代，", "startFrame": 43, "durationFrames": 70}, {"text": "最基础的自保手段。", "startFrame": 113, "durationFrames": 50}]} totalDurationFrames={163} coreSentence={"逻辑审视，是时代自保手段"} coreSentenceAnchors={[{"coreSentenceAnchor": "逻辑审视", "color": "#000000"}, {"coreSentenceAnchor": "自保手段", "color": "#EF4444"}]} />
+                <BWTextFocus content={[{"text": "这种逻辑上的审视，", "startFrame": 0, "durationFrames": 44}, {"text": "是我们在这个充满信息迷雾的时代，", "startFrame": 43, "durationFrames": 70}, {"text": "最基础的自保手段。", "startFrame": 113, "durationFrames": 50}]} totalDurationFrames={163} coreSentence={["逻辑审视，是时代自保手段"]} coreSentenceAnchors={[{"coreSentenceAnchor": "逻辑审视", "color": "#000000"}, {"coreSentenceAnchor": "自保手段", "color": "#EF4444"}]} />
             </Sequence>
             <Audio src={staticFile("/audio/双盲实验/scene_3/scene_3.mp3")} />
         </AbsoluteFill>

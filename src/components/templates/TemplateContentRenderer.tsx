@@ -5,7 +5,7 @@
 import React from "react";
 import { Sequence, Audio } from "remotion";
 import { normalizeContent, type ContentItem } from "./shared";
-import { BWSubtitle } from "../BWPrimitives";
+import { BWSubtitle } from "../common/BWPrimitives";
 
 export { normalizeContent } from "./shared";
 

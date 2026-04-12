@@ -19,7 +19,7 @@ export const Scene4: React.FC = () => {
                 <BWQuoteCitation content={[{"text": "枯燥的数据也许不会直接说谎，", "startFrame": 0, "durationFrames": 62}, {"text": "但手里拿着画笔画图表的人一定会。", "startFrame": 61, "durationFrames": 74}]} totalDurationFrames={135} quoteSource={"数据分析师的职场箴言"} anchors={[]} />
             </Sequence>
             <Sequence from={514} durationInFrames={201}>
-                <BWTextFocus content={[{"text": "一个具备现代公民素养的独立思考者，", "startFrame": 0, "durationFrames": 76}, {"text": "永远要把对这个世界的视觉解释权，", "startFrame": 75, "durationFrames": 71}, {"text": "牢牢夺回自己手里。", "startFrame": 146, "durationFrames": 55}]} totalDurationFrames={201} coreSentence={"夺回对世界的视觉解释权"} coreSentenceAnchors={[{"coreSentenceAnchor": "视觉解释权", "color": "red"}]} />
+                <BWTextFocus content={[{"text": "一个具备现代公民素养的独立思考者，", "startFrame": 0, "durationFrames": 76}, {"text": "永远要把对这个世界的视觉解释权，", "startFrame": 75, "durationFrames": 71}, {"text": "牢牢夺回自己手里。", "startFrame": 146, "durationFrames": 55}]} totalDurationFrames={201} coreSentence={["夺回对世界的视觉解释权"]} coreSentenceAnchors={[{"coreSentenceAnchor": "视觉解释权", "color": "red"}]} />
             </Sequence>
             <Audio src={staticFile("/audio/数据可视化陷阱/scene_4/scene_4.mp3")} />
         </AbsoluteFill>

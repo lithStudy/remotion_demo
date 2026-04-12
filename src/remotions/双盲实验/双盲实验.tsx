@@ -4,7 +4,7 @@ import { z } from "zod";
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 
-import { StaticCover } from "../../components";
+import { LandscapeCoverPoster } from "../../components";
 import { Scene1, calculateScene1Duration } from "./scenes/Scene1";
 import { Scene2, calculateScene2Duration } from "./scenes/Scene2";
 import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
@@ -149,7 +149,7 @@ export const 双盲实验: React.FC<z.infer<typeof 双盲实验Schema>> = () => 
                 }}
             />
             <Sequence durationInFrames={COVER_DURATION_FRAMES}>
-                <StaticCover
+                <LandscapeCoverPoster
                     title="双盲实验"
                     subtitle="没有对照组，你无法知道效果是来自你的干预，还是来自其他因素"
                     themeColor="#2563EB"

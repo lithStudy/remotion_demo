@@ -76,8 +76,7 @@ export const BWConceptCard: React.FC<BWConceptCardProps> = ({
 					border: "6px solid #111111",
 					borderRadius: 40,
 					padding: "10px 30px 20px",
-					// gap: 36,
-					backgroundColor: "#ffffff",
+					backgroundColor: "#ffffff",					
 					boxShadow: "10px 10px 0 #111111",
 					minWidth: 720,
 				}}

@@ -13,7 +13,7 @@ export const Scene3: React.FC = () => {
     return (
         <AbsoluteFill>
             <Sequence from={0} durationInFrames={94}>
-                <BWTextFocus content={[{"text": "实际上，", "startFrame": 0, "durationFrames": 21}, {"text": "锚定效应不只是出现在购物上。", "startFrame": 20, "durationFrames": 74}]} totalDurationFrames={94} coreSentence={"锚定效应不只是出现在购物上"} coreSentenceAnchors={[{"coreSentenceAnchor": "不只是", "color": "#EF4444"}]} />
+                <BWTextFocus content={[{"text": "实际上，", "startFrame": 0, "durationFrames": 21}, {"text": "锚定效应不只是出现在购物上。", "startFrame": 20, "durationFrames": 74}]} totalDurationFrames={94} coreSentence={["锚定效应不只是出现在购物上"]} coreSentenceAnchors={[{"coreSentenceAnchor": "不只是", "color": "#EF4444"}]} />
             </Sequence>
             <Sequence from={94} durationInFrames={195}>
                 <BWCenterFocus content={[{"text": "职场谈薪时，", "startFrame": 0, "durationFrames": 36}, {"text": "老板先给你一个人均五千的锚，", "startFrame": 36, "durationFrames": 60}, {"text": "等最后落到“工资六千”时，", "startFrame": 96, "durationFrames": 53}, {"text": "你竟然觉得还真不错呢。", "startFrame": 148, "durationFrames": 46}]} totalDurationFrames={195} imageSrc={staticFile("images/认知偏见_锚定效应/scene_3_2.png")} enterEffect="fadeIn" anchors={[{"text": "人均五千", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud"}, {"text": "能拿六千", "showFrom": 2, "color": "#000000", "anim": "popIn", "audioEffect": "ping"}]} />

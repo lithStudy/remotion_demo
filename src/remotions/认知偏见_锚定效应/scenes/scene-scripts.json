@@ -384,7 +384,7 @@
           ],
           "order": 1,
           "param": {
-            "coreSentence": "锚定效应不只是出现在购物上",
+            "coreSentence": ["锚定效应不只是出现在购物上"],
             "coreSentenceAnchors": [
               {
                 "coreSentenceAnchor": "不只是",
@@ -781,7 +781,7 @@
           ],
           "order": 6,
           "param": {
-            "coreSentence": "你的价值由你定义，不由对方的锚定义。",
+            "coreSentence": ["你的价值由你定义，不由对方的锚定义。"],
             "coreSentenceAnchors": [
               {
                 "coreSentenceAnchor": "由你定义",

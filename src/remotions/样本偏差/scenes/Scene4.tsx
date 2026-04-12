@@ -25,7 +25,7 @@ export const Scene4: React.FC = () => {
                 <BWCenterFocus content={[{"text": "绝不要用别人精心修饰过、", "startFrame": 0, "durationFrames": 54}, {"text": "甚至造假的分子，", "startFrame": 53, "durationFrames": 44}, {"text": "来丈量你真实且多维的人生。", "startFrame": 97, "durationFrames": 77}]} totalDurationFrames={174} imageSrc={staticFile("images/样本偏差/scene_4_4.png")} enterEffect="fadeIn" anchors={[{"text": "精心修饰", "showFrom": 0, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud"}, {"text": "造假", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud"}, {"text": "丈量人生", "showFrom": 2, "color": "#000000", "anim": "slideUp", "audioEffect": null}]} />
             </Sequence>
             <Sequence from={795} durationInFrames={214}>
-                <BWTextFocus content={[{"text": "真正的清醒，", "startFrame": 0, "durationFrames": 33}, {"text": "是踏实地踩在自己泥泞但坚固的生活坐标上，", "startFrame": 32, "durationFrames": 105}, {"text": "拒绝为虚假的统计学幻影买单。", "startFrame": 137, "durationFrames": 77}]} totalDurationFrames={214} coreSentence={"拒绝为虚假的统计学幻影买单"} coreSentenceAnchors={[{"coreSentenceAnchor": "统计学幻影", "color": "#EF4444"}]} />
+                <BWTextFocus content={[{"text": "真正的清醒，", "startFrame": 0, "durationFrames": 33}, {"text": "是踏实地踩在自己泥泞但坚固的生活坐标上，", "startFrame": 32, "durationFrames": 105}, {"text": "拒绝为虚假的统计学幻影买单。", "startFrame": 137, "durationFrames": 77}]} totalDurationFrames={214} coreSentence={["拒绝为虚假的统计学幻影买单"]} coreSentenceAnchors={[{"coreSentenceAnchor": "统计学幻影", "color": "#EF4444"}]} />
             </Sequence>
             <Audio src={staticFile("/audio/样本偏差/scene_4/scene_4.mp3")} />
         </AbsoluteFill>

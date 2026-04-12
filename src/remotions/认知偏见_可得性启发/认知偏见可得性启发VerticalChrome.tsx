@@ -188,7 +188,7 @@ export const 认知偏见可得性启发TopStaticHeadline: React.FC<TopStaticHea
     </div>
 );
 
-const AvailabilityHeuristicVerticalProgressBarInner: React.FC = () => {
+export const 认知偏见可得性启发ProgressBar: React.FC = () => {
     const frame = useCurrentFrame();
     return (
         <VerticalSegmentedProgressBar
@@ -200,5 +200,3 @@ const AvailabilityHeuristicVerticalProgressBarInner: React.FC = () => {
         />
     );
 };
-
-export const 认知偏见可得性启发ProgressBar = AvailabilityHeuristicVerticalProgressBarInner;

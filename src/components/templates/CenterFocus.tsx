@@ -21,7 +21,7 @@ import {
 	type ContentItem,
 } from "./shared";
 import { BWImageBreath } from "./BWImageBreath";
-import { BWAnchorWord } from "../BWPrimitives";
+import { BWAnchorWord } from "../common/BWPrimitives";
 import { useRemotionLayoutMetricsOverride } from "../RemotionLayoutMetricsContext";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 export const templateMeta = {

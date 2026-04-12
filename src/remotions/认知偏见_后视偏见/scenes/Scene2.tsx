@@ -25,7 +25,7 @@ export const Scene2: React.FC = () => {
                 <BWSplitCompare content={[{"text": "哪怕在事情发生前，", "startFrame": 0, "durationFrames": 46}, {"text": "你面对海量矛盾的信息时根本不敢下注，", "startFrame": 45, "durationFrames": 91}, {"text": "但在事后，", "startFrame": 136, "durationFrames": 28}, {"text": "你依然会觉得那些走错路的人“蠢得可笑”。", "startFrame": 163, "durationFrames": 95}]} totalDurationFrames={259} leftSrc={staticFile("images/认知偏见_后视偏见/scene_2_4_left.png")} rightSrc={staticFile("images/认知偏见_后视偏见/scene_2_4_right.png")} leftLabel={"事前迷茫"} rightLabel={"事后笃定"} />
             </Sequence>
             <Sequence from={879} durationInFrames={111}>
-                <BWTextFocus content={[{"text": "我们自以为的未雨绸缪，", "startFrame": 0, "durationFrames": 46}, {"text": "其实全是复盘时的自我欺骗。", "startFrame": 45, "durationFrames": 65}]} totalDurationFrames={111} coreSentence={"我们自以为的未雨绸缪，全是自我欺骗"} coreSentenceAnchors={[{"coreSentenceAnchor": "未雨绸缪", "color": "#EF4444"}, {"coreSentenceAnchor": "自我欺骗", "color": "#EF4444"}]} />
+                <BWTextFocus content={[{"text": "我们自以为的未雨绸缪，", "startFrame": 0, "durationFrames": 46}, {"text": "其实全是复盘时的自我欺骗。", "startFrame": 45, "durationFrames": 65}]} totalDurationFrames={111} coreSentence={["我们自以为的未雨绸缪，全是自我欺骗"]} coreSentenceAnchors={[{"coreSentenceAnchor": "未雨绸缪", "color": "#EF4444"}, {"coreSentenceAnchor": "自我欺骗", "color": "#EF4444"}]} />
             </Sequence>
             <Audio src={staticFile("/audio/认知偏见_后视偏见/scene_2/scene_2.mp3")} />
         </AbsoluteFill>

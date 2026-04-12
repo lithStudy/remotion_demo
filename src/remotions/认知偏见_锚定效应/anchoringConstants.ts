@@ -42,5 +42,5 @@ export const VERTICAL_PLAY_W = VERTICAL_CANVAS_W;
 export const VERTICAL_PLAY_H = Math.round((VERTICAL_CANVAS_W * 9) / 16);
 /** 播放区垂直居中后的顶部偏移 */
 export const VERTICAL_PLAY_TOP = Math.round((VERTICAL_CANVAS_H - VERTICAL_PLAY_H) / 2);
-export const VERTICAL_PLAY_PROGRESS_GAP = 12;
+export const VERTICAL_PLAY_PROGRESS_GAP = 4;
 export const VERTICAL_CONTENT_SCALE = VERTICAL_PLAY_H / DESIGN_H;

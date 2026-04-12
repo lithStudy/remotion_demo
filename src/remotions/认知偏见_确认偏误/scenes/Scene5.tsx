@@ -22,10 +22,10 @@ export const Scene5: React.FC = () => {
                 <BWMethodStack content={[{"text": "第二步是假设真相完全相反。", "startFrame": 0, "durationFrames": 81}, {"text": "会有什么样的证据支持它。", "startFrame": 80, "durationFrames": 68}]} totalDurationFrames={149} title={"寻找相反证据"} imageSrc={staticFile("images/认知偏见_确认偏误/scene_5_3.png")} notes={[{"text": "假设真相完全相反", "showFrom": 0}, {"text": "会有什么样的证据支持它。", "showFrom": 1}]} />
             </Sequence>
             <Sequence from={549} durationInFrames={130}>
-                <BWTextFocus content={[{"text": "当你开始学着和不同的声音共处。", "startFrame": 0, "durationFrames": 71}, {"text": "你就拿回了独立思考的权力。", "startFrame": 70, "durationFrames": 59}]} totalDurationFrames={130} coreSentence={"和不同的声音共处，你就拿回了独立思考的权力。"} coreSentenceAnchors={[{"coreSentenceAnchor": "不同的声音", "color": "#EF4444"}, {"coreSentenceAnchor": "独立思考", "color": "#EF4444"}]} />
+                <BWTextFocus content={[{"text": "当你开始学着和不同的声音共处。", "startFrame": 0, "durationFrames": 71}, {"text": "你就拿回了独立思考的权力。", "startFrame": 70, "durationFrames": 59}]} totalDurationFrames={130} coreSentence={["和不同的声音共处，你就拿回了独立思考的权力。"]} coreSentenceAnchors={[{"coreSentenceAnchor": "不同的声音", "color": "#EF4444"}, {"coreSentenceAnchor": "独立思考", "color": "#EF4444"}]} />
             </Sequence>
             <Sequence from={679} durationInFrames={121}>
-                <BWTextFocus content={[{"text": "理性从来不是永远正确。", "startFrame": 0, "durationFrames": 51}, {"text": "而是敢于亲手打碎自己的滤镜。", "startFrame": 50, "durationFrames": 70}]} totalDurationFrames={121} coreSentence={"理性不是永远正确，而是敢于亲手打碎自己的滤镜"} coreSentenceAnchors={[{"coreSentenceAnchor": "打碎自己的滤镜", "color": "#EF4444"}]} />
+                <BWTextFocus content={[{"text": "理性从来不是永远正确。", "startFrame": 0, "durationFrames": 51}, {"text": "而是敢于亲手打碎自己的滤镜。", "startFrame": 50, "durationFrames": 70}]} totalDurationFrames={121} coreSentence={["理性不是永远正确，而是敢于亲手打碎自己的滤镜"]} coreSentenceAnchors={[{"coreSentenceAnchor": "打碎自己的滤镜", "color": "#EF4444"}]} />
             </Sequence>
             <Audio src={staticFile("/audio/认知偏见_确认偏误/scene_5/scene_5.mp3")} />
         </AbsoluteFill>

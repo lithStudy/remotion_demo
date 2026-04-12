@@ -88,7 +88,7 @@ def _build_main_skill_body(registry: dict[str, dict], config: dict, subskills_pa
 		"- `content` 为数组；元素多为 `{\"text\": \"...\"}`。口播以 `content[].text` 为准。",
 		f"- 未知或非法 `template` 时，管线可能回退到默认模板（当前配置为 **`{default_tmpl}`**）。",
 		"- `param` 内不应长期存放 `content` 或 `totalDurationFrames`（校验会剔除）；时长与分句权威在 `item` 上。",
-		"- **TEXT_FOCUS** 使用 `param.coreSentence` 与 `param.coreSentenceAnchors`（非普通 `anchors`）；锚点短语须为 `coreSentence` 的子串。",
+		"- **TEXT_FOCUS** 使用 `param.coreSentence`（非空 string[]，每元素一行）与 `param.coreSentenceAnchors`（非普通 `anchors`）；锚点短语须为各段按顺序直接拼接后的子串。",
 		"- 带 `anchors` 的模板：`showFrom` 为 **content 数组的 0-based 下标**，不是时间轴帧号。",
 		"",
 		"## 图片类字段",

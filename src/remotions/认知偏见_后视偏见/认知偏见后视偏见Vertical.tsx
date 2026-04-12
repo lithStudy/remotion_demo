@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame } from "remotion";
 
-import { RemotionLayoutMetricsProvider } from "../../components";
+import { RemotionLayoutMetricsProvider, VERTICAL_SHELL_BG } from "../../components";
 import { 认知偏见后视偏见MainBody } from "./认知偏见后视偏见MainBody";
 import { 认知偏见后视偏见ProgressBar, 认知偏见后视偏见TopStaticHeadline } from "./认知偏见后视偏见VerticalChrome";
 import {
@@ -32,7 +32,7 @@ export const 认知偏见后视偏见Vertical: React.FC = () => {
     });
 
     return (
-        <AbsoluteFill style={{ background: "#000" }}>
+        <AbsoluteFill style={{ background: VERTICAL_SHELL_BG }}>
             <Audio
                 src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
                 loop
@@ -76,8 +76,6 @@ export const 认知偏见后视偏见Vertical: React.FC = () => {
                 />
                 <div
                     style={{
-
-
                         position: "absolute",
                         left: 0,
                         right: 0,
@@ -92,8 +90,6 @@ export const 认知偏见后视偏见Vertical: React.FC = () => {
                     <RemotionLayoutMetricsProvider value={{ width: DESIGN_W, height: DESIGN_H }}>
                         <div
                             style={{
-
-
                                 width: DESIGN_W,
                                 height: DESIGN_H,
                                 flexShrink: 0,
@@ -108,14 +104,25 @@ export const 认知偏见后视偏见Vertical: React.FC = () => {
             </div>
             <div
                 style={{
+                    position: "absolute",
+                    left: 0,
+                    top: VERTICAL_PLAY_TOP,
+                    width: VERTICAL_PLAY_W,
+                    height: VERTICAL_PLAY_H,
+                    border: "1px solid rgba(255, 255, 255, 0.07)",
+                    boxSizing: "border-box",
+                    pointerEvents: "none",
+                    zIndex: 20,
+                }}
+            />
+            <div
+                style={{
 
 
                     position: "absolute",
                     left: 0,
                     top: VERTICAL_PLAY_TOP + VERTICAL_PLAY_H + VERTICAL_PLAY_PROGRESS_GAP,
                     width: VERTICAL_CANVAS_W,
-                    paddingLeft: 40,
-                    paddingRight: 40,
                     boxSizing: "border-box",
                     pointerEvents: "none",
                 }}

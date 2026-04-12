@@ -22,7 +22,7 @@ export const Scene1: React.FC = () => {
                 <BWCenterFocus content={[{"text": "这种众人皆醉我独醒的快感。", "startFrame": 0, "durationFrames": 66}]} totalDurationFrames={66} imageSrc={staticFile("images/认知偏见_确认偏误/scene_1_3.png")} enterEffect="zoomIn" anchors={[{"text": "独醒", "showFrom": 0, "color": "#EF4444", "anim": "highlight", "audioEffect": "ping"}]} />
             </Sequence>
             <Sequence from={325} durationInFrames={52}>
-                <BWTextFocus content={[{"text": "是不是让你觉得非常爽快。", "startFrame": 0, "durationFrames": 52}]} totalDurationFrames={52} coreSentence={"是不是让你觉得非常爽快。"} coreSentenceAnchors={[{"coreSentenceAnchor": "非常爽快", "color": "#EF4444"}]} />
+                <BWTextFocus content={[{"text": "是不是让你觉得非常爽快。", "startFrame": 0, "durationFrames": 52}]} totalDurationFrames={52} coreSentence={["是不是让你觉得非常爽快。"]} coreSentenceAnchors={[{"coreSentenceAnchor": "非常爽快", "color": "#EF4444"}]} />
             </Sequence>
             <Audio src={staticFile("/audio/认知偏见_确认偏误/scene_1/scene_1.mp3")} />
         </AbsoluteFill>

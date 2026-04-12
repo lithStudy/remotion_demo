@@ -134,7 +134,7 @@ def _inject_cover_for_step4(
     config: dict,
 ) -> None:
     """
-    为 step4 的 StaticCover 片头写入顶层 cover（若尚无有效 cover）。
+    为 step4 的 LandscapeCoverPoster 片头写入顶层 cover（若尚无有效 cover）。
     - title：优先使用命令行/配置的成片名 video_name；若为空则用 topic 截断作兜底。
     - subtitle：使用 Step1 产出的 topic。
     - durationFrames / themeColor / badge / seriesLabel / seriesLabelEn /

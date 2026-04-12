@@ -3,8 +3,7 @@
  */
 import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { BW_TEXT, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
-import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
+import { BW_TEXT, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -28,12 +27,13 @@ export const templateMeta = {
 	"example": {
 		"template": "QUOTE_CITATION",
 		"param": {
+			"quoteDisplayText": "我思故我在",
 			"quoteSource": "《思考，快与慢》",
 		},
 	},
 } as const;
 
-export interface BWQuoteCitationProps extends TemplateBaseProps, TemplateAnchorsProps {
+export interface BWQuoteCitationProps extends TemplateBaseProps {
 	quoteSource?: string;
 	/** 版心打字机效果的完整文本；不传则从 content 拼接 */
 	quoteDisplayText?: string;
@@ -50,7 +50,6 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 	quoteSource = "",
 	quoteDisplayText,
 	content,
-	anchors,
 	audioSrc,
 	children,
 	style,
@@ -146,7 +145,6 @@ export const BWQuoteCitation: React.FC<BWQuoteCitationProps> = ({
 					</div>
 				)}
 			</div>
-			<TemplateDefaultAnchors content={content} anchors={anchors} />
 			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>

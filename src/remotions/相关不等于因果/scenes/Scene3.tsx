@@ -22,7 +22,7 @@ export const Scene3: React.FC = () => {
                 <BWCognitiveShift content={[{"text": "真正的尊重传统，", "startFrame": 0, "durationFrames": 43}, {"text": "绝不是盲从，", "startFrame": 42, "durationFrames": 31}, {"text": "而是用现代逻辑去祛魅和验证。", "startFrame": 73, "durationFrames": 81}]} totalDurationFrames={154} notText={"盲从"} butText={"逻辑祛魅和验证"} butSrc={staticFile("images/相关不等于因果/scene_3_3.png")} notContentIndex={1} butContentIndex={2} anchors={[]} />
             </Sequence>
             <Sequence from={619} durationInFrames={164}>
-                <BWTextFocus content={[{"text": "你宝贵的健康和钱包，", "startFrame": 0, "durationFrames": 48}, {"text": "值得交付给严谨的证据，", "startFrame": 48, "durationFrames": 55}, {"text": "而不是一次偶然的巧合。", "startFrame": 102, "durationFrames": 62}]} totalDurationFrames={164} coreSentence={"你宝贵的健康和钱包，值得交付给严谨证据，而非偶然巧合"} coreSentenceAnchors={[{"coreSentenceAnchor": "严谨证据", "color": "#EF4444"}, {"coreSentenceAnchor": "偶然巧合", "color": "#EF4444"}]} />
+                <BWTextFocus content={[{"text": "你宝贵的健康和钱包，", "startFrame": 0, "durationFrames": 48}, {"text": "值得交付给严谨的证据，", "startFrame": 48, "durationFrames": 55}, {"text": "而不是一次偶然的巧合。", "startFrame": 102, "durationFrames": 62}]} totalDurationFrames={164} coreSentence={["你宝贵的健康和钱包，值得交付给严谨证据，而非偶然巧合"]} coreSentenceAnchors={[{"coreSentenceAnchor": "严谨证据", "color": "#EF4444"}, {"coreSentenceAnchor": "偶然巧合", "color": "#EF4444"}]} />
             </Sequence>
             <Audio src={staticFile("/audio/相关不等于因果/scene_3/scene_3.mp3")} />
         </AbsoluteFill>

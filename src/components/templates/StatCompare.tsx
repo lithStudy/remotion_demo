@@ -2,16 +2,8 @@
  * STAT_COMPARE 模板：对比效应，双指标并列 + 条形比例
  */
 import React from "react";
-import {
-	AbsoluteFill,
-	Img,
-	interpolate,
-	spring,
-	useCurrentFrame,
-	useVideoConfig,
-} from "remotion";
-import { BW_TEXT, getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
-import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
+import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { BW_TEXT, type TemplateBaseProps } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -20,7 +12,7 @@ export const templateMeta = {
 	"description":
 		"适用：两项 KPI 并列对比（前后、A/B、涨跌）；条形高度反映相对大小。\n差异：左右场景图对比用 SPLIT_COMPARE；单数字强调用 KPI_HERO；若强调完成度/进度闭环感用 PROGRESS_RING。\n参数：leftValue/rightValue 为非负整数；标签宜短。",
 	"psychology": "对比效应",
-	"image_count": "0-2",
+	"image_count": "0",
 	"param_schema": {
 		"type": "object",
 		"properties": {
@@ -28,16 +20,6 @@ export const templateMeta = {
 			"rightValue": { "type": "integer", "description": "右侧数值（非负整数）" },
 			"leftLabel": { "type": "string", "description": "左侧标签" },
 			"rightLabel": { "type": "string", "description": "右侧标签" },
-			"leftSrc": {
-				"type": "string",
-				"format": "image_prompt",
-				"description": "左侧小图标",
-			},
-			"rightSrc": {
-				"type": "string",
-				"format": "image_prompt",
-				"description": "右侧小图标",
-			},
 		},
 		"required": ["leftValue", "rightValue", "leftLabel", "rightLabel"],
 	},
@@ -52,13 +34,11 @@ export const templateMeta = {
 	},
 } as const;
 
-export interface BWStatCompareProps extends TemplateBaseProps, TemplateAnchorsProps {
+export interface BWStatCompareProps extends TemplateBaseProps {
 	leftValue: number;
 	rightValue: number;
 	leftLabel?: string;
 	rightLabel?: string;
-	leftSrc?: string;
-	rightSrc?: string;
 }
 
 const fontStack =
@@ -69,10 +49,7 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 	rightValue,
 	leftLabel = "",
 	rightLabel = "",
-	leftSrc,
-	rightSrc,
 	content,
-	anchors,
 	audioSrc,
 	children,
 	style,
@@ -151,10 +128,6 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 					>
 						{leftShown}
 					</div>
-					<Img
-						src={getSafeImageSrc(leftSrc)}
-						style={{ width: 108, height: 108, objectFit: "contain" }}
-					/>
 					<div
 						style={{
 							width: "100%",
@@ -210,10 +183,6 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 					>
 						{rightShown}
 					</div>
-					<Img
-						src={getSafeImageSrc(rightSrc)}
-						style={{ width: 108, height: 108, objectFit: "contain" }}
-					/>
 					<div
 						style={{
 							width: "100%",
@@ -250,7 +219,6 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = ({
 				</div>
 			</div>
 
-			<TemplateDefaultAnchors content={content} anchors={anchors} />
 			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>

@@ -90,11 +90,31 @@ def task_key(scene_id: str, order: Any, path: list[str | int]) -> str:
 	return "_".join(parts)
 
 
+def _nonempty_matches_oneof_branch(val: Any, br: dict) -> bool:
+	"""值在该 oneOf 分支下是否视为非空（用于必填校验）。"""
+	st = br.get("type")
+	if st == "string":
+		return isinstance(val, str) and bool(val.strip())
+	if st == "array":
+		if not isinstance(val, list) or len(val) == 0:
+			return False
+		items = br.get("items") or {}
+		if items.get("type") == "string":
+			return any(isinstance(x, str) and str(x).strip() for x in val)
+		return True
+	return False
+
+
 def _is_empty_value(val: Any, schema: dict) -> bool:
 	"""判断值是否算作“空”，依据schema类型定义。主要用于必填项校验"""
-	st = schema.get("type")
 	if val is None:
 		return True
+	if "oneOf" in schema:
+		branches = schema.get("oneOf")
+		if not isinstance(branches, list):
+			return True
+		return not any(_nonempty_matches_oneof_branch(val, br) for br in branches if isinstance(br, dict))
+	st = schema.get("type")
 	if st == "string":
 		return isinstance(val, str) and not val.strip()
 	if st in ("number", "integer"):
@@ -137,6 +157,24 @@ def _validate_and_normalize_value(
 	param_root: dict = ctx["param_root"]
 	warn: Callable[[str], None] = ctx["warn"]
 	path_s = ".".join(str(p) for p in path) or "(root)"
+
+	if "oneOf" in schema:
+		branches = schema.get("oneOf")
+		if not isinstance(branches, list) or not branches:
+			warn(f"`{path_s}` schema oneOf 非法")
+			return
+		for br in branches:
+			if not isinstance(br, dict):
+				continue
+			st = br.get("type")
+			if st == "string" and isinstance(val, str):
+				_validate_and_normalize_value(val, br, ctx=ctx, path=path)
+				return
+			if st == "array" and isinstance(val, list):
+				_validate_and_normalize_value(val, br, ctx=ctx, path=path)
+				return
+		warn(f"`{path_s}` 期望 oneOf（string 或 string 数组），实际为 {type(val).__name__}")
+		return
 
 	st = schema.get("type")
 	if st == "string":
@@ -368,6 +406,23 @@ def _field_lines(name: str, schema: dict, req_label: str, indent: int) -> list[s
 	st = schema.get("type")
 	desc = schema.get("description") or ""
 	head = f"{pad}- `{name}`（{req_label}）"
+	if "oneOf" in schema:
+		desc = schema.get("description") or ""
+		opts: list[str] = []
+		for br in schema.get("oneOf") or []:
+			if not isinstance(br, dict):
+				continue
+			bst = br.get("type")
+			if bst == "array":
+				opts.append("array")
+			elif bst:
+				opts.append(str(bst))
+		opt_s = " | ".join(opts) if opts else "oneOf"
+		parts = [head]
+		if desc:
+			parts.append(desc)
+		parts.append(f"类型: {opt_s}")
+		return ["：".join(parts)]
 	if st == "object":
 		lines = [head + (f": {desc}" if desc else "")]
 		lines.extend(schema_to_markdown_lines(schema, indent=indent + 1))

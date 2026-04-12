@@ -389,7 +389,7 @@
           ],
           "order": 6,
           "param": {
-            "coreSentence": "我们自以为的未雨绸缪，全是自我欺骗",
+            "coreSentence": ["我们自以为的未雨绸缪，全是自我欺骗"],
             "coreSentenceAnchors": [
               {
                 "coreSentenceAnchor": "未雨绸缪",
@@ -857,7 +857,7 @@
           ],
           "order": 6,
           "param": {
-            "coreSentence": "真正的智慧是预见未知的风险",
+            "coreSentence": ["真正的智慧是预见未知的风险"],
             "coreSentenceAnchors": [
               {
                 "coreSentenceAnchor": "预见未知的风险",

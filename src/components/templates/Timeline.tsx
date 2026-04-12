@@ -92,7 +92,7 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 		[0, 80],
 		{ extrapolateLeft: "clamp", extrapolateRight: "clamp" },
 	);
-	const timelineY = 45;
+	const timelineY = 50;
 
 	return (
 		<AbsoluteFill style={style}>

@@ -4,7 +4,7 @@ import { z } from "zod";
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 
-import { StaticCover } from "../../components";
+import { LandscapeCoverPoster } from "../../components";
 import { Scene1, calculateScene1Duration } from "./scenes/Scene1";
 import { Scene2, calculateScene2Duration } from "./scenes/Scene2";
 import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
@@ -147,7 +147,7 @@ export const 平均数陷阱: React.FC<z.infer<typeof 平均数陷阱Schema>> = 
                 }}
             />
             <Sequence durationInFrames={COVER_DURATION_FRAMES}>
-                <StaticCover
+                <LandscapeCoverPoster
                     title="平均数陷阱"
                     subtitle="平均数陷阱与中位数的重要性"
                     themeColor="#2563EB"

@@ -23,7 +23,7 @@
               "text": "脑子里冒出一个念头："
             },
             {
-              "text": "也许读书真的无用。"
+              "text": "也许读书真的没用。"
             }
           ],
           "order": 1,
@@ -34,19 +34,19 @@
               {
                 "text": "辍学创业",
                 "showFrom": 0,
-                "color": "#EF4444",
+                "color": "#000000",
                 "anim": "spring",
                 "audioEffect": "impact_thud"
               },
               {
                 "text": "身家过亿",
                 "showFrom": 1,
-                "color": "#EF4444",
+                "color": "#000000",
                 "anim": "spring",
                 "audioEffect": "impact_thud"
               },
               {
-                "text": "读书无用",
+                "text": "读书没用",
                 "showFrom": 4,
                 "color": "#EF4444",
                 "anim": "highlight",
@@ -117,27 +117,40 @@
       "items": [
         {
           "narrativeType": "HOOK",
-          "template": "CENTER_FOCUS",
-          "reasoning": "平缓叙述，讲述人们容易被传奇故事打动，没有明显的结构，适合用 `CENTER_FOCUS`。",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "口播呈「被打动→想复制套路→实则被沉默欺骗」的传导链条，适合用 `CAUSE_CHAIN` 把三句落成因果链上的三环。",
           "content": [
             {
               "text": "我们总是容易被这种传奇故事深深打动，"
             },
             {
               "text": "觉得只要复制他们的套路就能逆天改命。"
+            },
+            {
+              "text": "但其实你正在被一种隐秘的“沉默”所欺骗。"
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一个人看着一个传奇故事，思考的样子",
-            "enterEffect": "fadeIn",
-            "anchors": [
+            "layout": "horizontal",
+            "nodes": [
               {
-                "text": "逆天改命",
+                "label": "传奇打动",
+                "imageSrc": "一个人看着一个传奇故事，思考的样子",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "复制套路",
+                "imageSrc": "人们模仿成功人士路径的简笔画",
                 "showFrom": 1,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "沉默欺骗",
+                "imageSrc": "静音符号与问号暗示被掩盖的真相",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
               }
             ]
           }
@@ -148,29 +161,38 @@
           "reasoning": "通过“不是…而是…”的结构，进行认知转变，因此选择 `COGNITIVE_SHIFT`。",
           "content": [
             {
-              "text": "但其实你正在被一种隐秘的“沉默”所欺骗。"
-            },
-            {
               "text": "这不是因为你见识短浅，"
             },
             {
               "text": "而是因为这个社会只允许胜利者站在聚光灯下大声喧哗，"
-            },
-            {
-              "text": "而失败者的哀鸣，"
-            },
-            {
-              "text": "早就被掩盖在时代的废墟之下了。"
             }
           ],
           "order": 2,
           "param": {
             "notText": "见识短浅",
-            "butText": "社会的允许",
+            "butText": "胜利者被看见",
             "butSrc": "聚光灯照亮舞台中央的成功者",
-            "notContentIndex": 1,
-            "butContentIndex": 2,
+            "notContentIndex": 0,
+            "butContentIndex": 1,
             "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "承接「而是」后的具象落点与情绪收束，短句递进，适合用 `CENTER_FOCUS`。",
+          "content": [
+            {
+              "text": "那些失败者的哀鸣，"
+            },
+            {
+              "text": "早就被掩盖在时代的废墟之下了。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "时代废墟中被掩埋的无声剪影",
+            "enterEffect": "fadeIn"
           }
         },
         {
@@ -191,7 +213,7 @@
               "text": "只有活下来的“幸存者”让你看到了。"
             }
           ],
-          "order": 3,
+          "order": 4,
           "param": {
             "imageSrc": "人群中部分人被聚光灯照亮的简笔画",
             "conceptName": "幸存者偏差",
@@ -213,7 +235,7 @@
               "text": "却完全忽略了背后庞大到令人绝望的“分母”。"
             }
           ],
-          "order": 4,
+          "order": 5,
           "param": {
             "imageSrc": "人们拿着放大镜寻找线索的抽象画",
             "enterEffect": "fadeIn"           
@@ -243,7 +265,7 @@
               "text": "在流水线上日复一日地消磨青春。"
             }
           ],
-          "order": 5,
+          "order": 6,
           "param": {
             "stages": [
               {
@@ -304,8 +326,8 @@
           ],
           "order": 8,
           "param": {
-            "quoteSource": "街头采访",
-            "anchors": []
+            "quoteDisplayText": "这家医院医术高超",
+            "quoteSource": "幸存者的采访"
           }
         }
       ]
@@ -329,16 +351,7 @@
           "order": 1,
           "param": {
             "imageSrc": "乌云密布的天空中，一只鸡正在喝毒药",
-            "enterEffect": "slideBottom",
-            "anchors": [
-              {
-                "text": "幸存者偏差",
-                "showFrom": 1,
-                "color": "#EF4444",
-                "anim": "highlight",
-                "audioEffect": "impact_thud"
-              }
-            ]
+            "enterEffect": "slideBottom"
           }
         },
         {
@@ -346,9 +359,6 @@
           "template": "METHOD_STACK",
           "reasoning": "一个理财圈大神的例子，先说看到的，再说看不到的，可以提炼一个观点+解释的结构",
           "content": [
-            {
-              "text": "理财圈的“大神”："
-            },
             {
               "text": "你看到某博主晒出翻倍的收益单，"
             },
@@ -369,18 +379,14 @@
           "param": {
             "title": "理财陷阱",
             "imageSrc": "许多人围着一张收益表，表情贪婪",
-            "notes": [
+            "notes": [             
               {
-                "text": "幸存者偏差",
+                "text": "收益可观？",
                 "showFrom": 0
               },
               {
-                "text": "只看贼吃肉，不见贼挨打",
+                "text": "亏的没让你看到",
                 "showFrom": 3
-              },
-              {
-                "text": "信息茧房",
-                "showFrom": 5
               }
             ],
             "anchors": []
@@ -391,9 +397,6 @@
           "template": "METHOD_STACK",
           "reasoning": "一个长寿老人的例子，先说看到的，再说背后的原因，可以提炼一个观点+解释的结构",
           "content": [
-            {
-              "text": "长寿老人的“秘诀”："
-            },
             {
               "text": "某个百岁老人每天抽烟喝酒，"
             },
@@ -416,12 +419,16 @@
             "imageSrc": "一位面带微笑的百岁老人正在抽烟，旁边放着一杯酒",
             "notes": [
               {
-                "text": "幸存者偏差",
+                "text": "抽烟喝酒不养生？",
+                "showFrom": 0
+              },
+              {
+                "text": "个别的基因逆天",
                 "showFrom": 2
               },
               {
-                "text": "忽略沉默的大多数",
-                "showFrom": 5
+                "text": "大多没活到能接受采访的年纪",
+                "showFrom": 4
               }
             ],
             "anchors": []
@@ -432,9 +439,6 @@
           "template": "METHOD_STACK",
           "reasoning": "一个职场特例的例子，先说看到的，再说背后的原因，可以提炼一个观点+解释的结构",
           "content": [
-            {
-              "text": "职场上的“特例”："
-            },
             {
               "text": "公司里有个老员工从不加班也能升职，"
             },
@@ -454,12 +458,12 @@
             "imageSrc": "办公室里，一个戴着墨镜的人悠闲地坐在办公椅上，周围的人忙碌地工作",
             "notes": [
               {
-                "text": "升职不一定靠努力",
-                "showFrom": 1
+                "text": "不努力也能升职？",
+                "showFrom": 0
               },
               {
-                "text": "资源才是关键",
-                "showFrom": 4
+                "text": "其他你不知道的因素在起作用",
+                "showFrom": 2
               }
             ],
             "anchors": []
@@ -676,7 +680,7 @@
           ],
           "order": 6,
           "param": {
-            "coreSentence": "认清概率后，依然选择胜算最高的正道",
+            "coreSentence": ["认清概率后，依然选择胜算最高的正道"],
             "coreSentenceAnchors": [
               {
                 "coreSentenceAnchor": "胜算最高",

@@ -35,7 +35,7 @@ export const 认知偏见可得性启发Landscape: React.FC = () => {
 
                     height: "100%",
                     width: "100%",
-                    background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)",
+                    background: "linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #e2e8f0 100%)",
                 }}
             />
             <div
@@ -48,7 +48,7 @@ export const 认知偏见可得性启发Landscape: React.FC = () => {
                     opacity: bgBreathOpacity,
                     transform: `translate(${bgShiftX}px, ${bgShiftY}px)`,
                     background:
-                        "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)",
+                        "radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08), transparent 40%), radial-gradient(circle at 80% 60%, rgba(56, 189, 248, 0.12), transparent 45%), radial-gradient(circle at 40% 80%, rgba(148, 163, 184, 0.15), transparent 50%)",
                 }}
             />
             <RemotionLayoutMetricsProvider value={{ width: DESIGN_W, height: DESIGN_H }}>

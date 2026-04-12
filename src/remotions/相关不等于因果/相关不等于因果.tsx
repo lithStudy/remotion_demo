@@ -4,7 +4,7 @@ import { z } from "zod";
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 
-import { StaticCover } from "../../components";
+import { LandscapeCoverPoster } from "../../components";
 import { Scene1, calculateScene1Duration } from "./scenes/Scene1";
 import { Scene2, calculateScene2Duration } from "./scenes/Scene2";
 import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
@@ -147,7 +147,7 @@ export const 相关不等于因果: React.FC<z.infer<typeof 相关不等于因�
                 }}
             />
             <Sequence durationInFrames={COVER_DURATION_FRAMES}>
-                <StaticCover
+                <LandscapeCoverPoster
                     title="相关≠因果"
                     subtitle="避免因果错觉，理性看待经验与传统"
                     themeColor="#2563EB"

@@ -34,7 +34,7 @@ export const Scene4: React.FC = () => {
                 <BWCognitiveShift content={[{"text": "科学的尊严不在于它从不犯错，", "startFrame": 0, "durationFrames": 79}, {"text": "而在于它敢于承认错误。", "startFrame": 78, "durationFrames": 57}]} totalDurationFrames={136} notText={"从不犯错"} butText={"敢于承认错误"} butSrc={staticFile("images/可证伪性/scene_4_7.png")} notContentIndex={0} butContentIndex={1} anchors={[]} />
             </Sequence>
             <Sequence from={1054} durationInFrames={135}>
-                <BWTextFocus content={[{"text": "做一个清醒的普通人，", "startFrame": 0, "durationFrames": 46}, {"text": "就是从学会质疑那些“永远正确”的鬼话开始。", "startFrame": 45, "durationFrames": 89}]} totalDurationFrames={135} coreSentence={"做一个清醒的普通人，从学会质疑开始"} coreSentenceAnchors={[{"coreSentenceAnchor": "质疑", "color": "#EF4444"}]} />
+                <BWTextFocus content={[{"text": "做一个清醒的普通人，", "startFrame": 0, "durationFrames": 46}, {"text": "就是从学会质疑那些“永远正确”的鬼话开始。", "startFrame": 45, "durationFrames": 89}]} totalDurationFrames={135} coreSentence={["做一个清醒的普通人，从学会质疑开始"]} coreSentenceAnchors={[{"coreSentenceAnchor": "质疑", "color": "#EF4444"}]} />
             </Sequence>
             <Audio src={staticFile("/audio/可证伪性/scene_4/scene_4.mp3")} />
         </AbsoluteFill>

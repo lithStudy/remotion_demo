@@ -127,8 +127,8 @@ export const BWStepList: React.FC<BWStepListProps> = ({
 			<div
 				style={{
 					position: "absolute",
-					left: 72,
-					right: 72,
+					left: 200,					
+					right: 200,
 					top: "50%",
 					transform: "translateY(-50%)",
 				}}
@@ -151,7 +151,7 @@ export const BWStepList: React.FC<BWStepListProps> = ({
 						>
 							<span style={{ opacity: 0.6 }}>{i + 1}.</span>
 							{row.text}
-						</div>
+						</div> 
 					))}
 					itemDelays={itemDelays}
 					staggerDelay={staggerDelay}

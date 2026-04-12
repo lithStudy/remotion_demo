@@ -41,6 +41,14 @@ def sanitize_anchors(param: dict, content_len: int, item_order) -> list[dict]:
     return valid
 
 
+def core_sentence_text_for_anchor_match(param: dict) -> str:
+    """TEXT_FOCUS：将 param.coreSentence（string[]）规范为一段连续文本，用于锚点子串校验。"""
+    cs = param.get("coreSentence", "")
+    if not isinstance(cs, list):
+        return ""
+    return "".join(str(x).strip() for x in cs)
+
+
 def sanitize_core_sentence_anchors(param: dict, item_order) -> list[dict]:
     """TEXT_FOCUS：校验并清洗 param.coreSentenceAnchors，丢弃非法条目。"""
     raw = param.get("coreSentenceAnchors", [])
@@ -48,7 +56,7 @@ def sanitize_core_sentence_anchors(param: dict, item_order) -> list[dict]:
         print(f"   ⚠️ item order={item_order} 的 coreSentenceAnchors 非数组，已清空")
         return []
 
-    core_sentence = str(param.get("coreSentence", "") or "")
+    core_sentence = core_sentence_text_for_anchor_match(param)
     valid: list[dict] = []
     for idx, entry in enumerate(raw):
         if not isinstance(entry, dict):

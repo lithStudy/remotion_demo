@@ -44,7 +44,7 @@ __TEMPLATE_GUIDE__
 
 **Step 5 — 高情绪 / 金句**
 - 「不是…而是…」强对立翻转（纠偏、观点翻转、定位重述均可）→ `COGNITIVE_SHIFT`
-- 全片级金句、零图大字冲击 → `TEXT_FOCUS`（`narrativeRole=hook` **单独不足以**选本模板，须语气上真是短促强结论）；参数阶段大屏高亮用 `coreSentenceAnchors`（每项 `coreSentenceAnchor` + 可选 `color`，子串须出现在 `coreSentence` 内），**不要**填 `anchors` / `showFrom`
+- 全片级金句、零图大字冲击 → `TEXT_FOCUS`（`narrativeRole=hook` **单独不足以**选本模板，须语气上真是短促强结论）；参数阶段大屏主文案用非空 `coreSentence`（string[]，每元素一行）；大屏高亮用 `coreSentenceAnchors`（每项 `coreSentenceAnchor` + 可选 `color`，子串须出现在各段 `coreSentence` 按顺序拼接后的全文内），**不要**填 `anchors` / `showFrom`
 
 **Step 6 — 对话 / 发问 / 心声**
 - 仅在满足以下 **强信号** 时才选 `CHAT_BUBBLE`（任一命中即可）：  

@@ -1,6 +1,7 @@
 import "./index.css";
 import React from "react";
 import { Composition } from "remotion";
+import { VERTICAL_COVER_POSTER_H, VERTICAL_COVER_POSTER_W } from "./components";
 import { TemplateShowcase, TOTAL_DURATION_TEMPLATE_SHOWCASE } from "./remotions/templateShowcase/TemplateShowcase";
 import { 可证伪性, 可证伪性Schema, TOTAL_DURATION_可证伪性 } from "./remotions/可证伪性/可证伪性";
 import { 双盲实验, 双盲实验Schema, TOTAL_DURATION_双盲实验 } from "./remotions/双盲实验/双盲实验";
@@ -14,11 +15,12 @@ import {
   认知偏见锚定效应Schema,
   TOTAL_DURATION_认知偏见_锚定效应,
 } from "./remotions/认知偏见_锚定效应/认知偏见锚定效应";
-import { 认知偏见幸存者偏差, 认知偏见幸存者偏差Schema, TOTAL_DURATION_认知偏见_幸存者偏差 } from "./remotions/认知偏见_幸存者偏差/认知偏见幸存者偏差";
 import { 认知偏见确认偏误, 认知偏见确认偏误竖屏, 认知偏见确认偏误Schema, TOTAL_DURATION_认知偏见_确认偏误 } from "./remotions/认知偏见_确认偏误/认知偏见确认偏误";
 import { 认知偏见后视偏见, 认知偏见后视偏见竖屏, 认知偏见后视偏见Schema, TOTAL_DURATION_认知偏见_后视偏见 } from "./remotions/认知偏见_后视偏见/认知偏见后视偏见";
 import { 认知偏见可得性启发, 认知偏见可得性启发竖屏, 认知偏见可得性启发Schema, TOTAL_DURATION_认知偏见_可得性启发 } from "./remotions/认知偏见_可得性启发/认知偏见可得性启发";
-
+import { 认知偏见可得性启发封面横屏, 认知偏见可得性启发封面竖屏 } from "./remotions/认知偏见_可得性启发/认知偏见可得性启发CoverStills";
+import { 认知偏见幸存者偏差, 认知偏见幸存者偏差竖屏, 认知偏见幸存者偏差Schema, TOTAL_DURATION_认知偏见_幸存者偏差 } from "./remotions/认知偏见_幸存者偏差/认知偏见幸存者偏差";
+import { 认知偏见幸存者偏差封面横屏, 认知偏见幸存者偏差封面竖屏 } from "./remotions/认知偏见_幸存者偏差/认知偏见幸存者偏差CoverStills";
 // Each <Composition> is an entry in the sidebar!
 
 export const RemotionRoot: React.FC = () => {
@@ -133,18 +135,6 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{}}
       />
 
-
-      {/* 认知偏见幸存者偏差 - 自动生成 */}
-      <Composition
-        id="认知偏见幸存者偏差"
-        component={认知偏见幸存者偏差}
-        durationInFrames={TOTAL_DURATION_认知偏见_幸存者偏差}
-        fps={30}
-        width={960}
-        height={1280}
-        schema={认知偏见幸存者偏差Schema}
-        defaultProps={{}}
-      />
       {/* 认知偏见确认偏误 - 横屏 1920×1080（自动生成） */}
       <Composition
         id="认知偏见确认偏误"
@@ -191,6 +181,8 @@ export const RemotionRoot: React.FC = () => {
         schema={认知偏见后视偏见Schema}
         defaultProps={{}}
       />
+
+
       {/* 认知偏见可得性启发 - 横屏 1920×1080（自动生成） */}
       <Composition
         id="认知偏见可得性启发"
@@ -212,6 +204,73 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         schema={认知偏见可得性启发Schema}
+        defaultProps={{}}
+      />
+      {/* 认知偏见可得性启发封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="认知偏见可得性启发封面横屏"
+        component={认知偏见可得性启发封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏见可得性启发封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="认知偏见可得性启发封面竖屏"
+        component={认知偏见可得性启发封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
+        defaultProps={{}}
+      />
+
+
+      {/* 认知偏见幸存者偏差 - 横屏 1920×1080（自动生成） */}
+      <Composition
+        id="认知偏见幸存者偏差"
+        component={认知偏见幸存者偏差}
+        durationInFrames={TOTAL_DURATION_认知偏见_幸存者偏差}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={认知偏见幸存者偏差Schema}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏见幸存者偏差竖屏 - 竖屏 1080×1920（自动生成） */}
+      <Composition
+        id="认知偏见幸存者偏差竖屏"
+        component={认知偏见幸存者偏差竖屏}
+        durationInFrames={TOTAL_DURATION_认知偏见_幸存者偏差}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={认知偏见幸存者偏差Schema}
+        defaultProps={{}}
+      />
+      {/* 认知偏见幸存者偏差封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="认知偏见幸存者偏差封面横屏"
+        component={认知偏见幸存者偏差封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏见幸存者偏差封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="认知偏见幸存者偏差封面竖屏"
+        component={认知偏见幸存者偏差封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
         defaultProps={{}}
       />
     </>

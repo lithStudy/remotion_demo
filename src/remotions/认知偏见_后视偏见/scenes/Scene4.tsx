@@ -28,7 +28,7 @@ export const Scene4: React.FC = () => {
                 <BWCenterFocus content={[{"text": "在这个充满未知的世界里，", "startFrame": 0, "durationFrames": 53}, {"text": "如果你不敬畏过去的真实，", "startFrame": 52, "durationFrames": 56}, {"text": "你就永远无法在未来做出理性的判断。", "startFrame": 108, "durationFrames": 82}]} totalDurationFrames={190} imageSrc={staticFile("images/认知偏见_后视偏见/scene_4_5.png")} enterEffect="fadeIn" anchors={[{"text": "敬畏过去的真实", "showFrom": 1, "color": "#EF4444", "anim": "slideUp", "audioEffect": null}, {"text": "理性判断", "showFrom": 2, "color": "#000000", "anim": "popIn", "audioEffect": null}]} />
             </Sequence>
             <Sequence from={980} durationInFrames={187}>
-                <BWTextFocus content={[{"text": "永远记住，", "startFrame": 0, "durationFrames": 29}, {"text": "真正的智慧是预见未知的风险，", "startFrame": 28, "durationFrames": 74}, {"text": "而不是在废墟上宣称自己早有预谋。", "startFrame": 101, "durationFrames": 85}]} totalDurationFrames={187} coreSentence={"真正的智慧是预见未知的风险"} coreSentenceAnchors={[{"coreSentenceAnchor": "预见未知的风险", "color": "#EF4444"}]} />
+                <BWTextFocus content={[{"text": "永远记住，", "startFrame": 0, "durationFrames": 29}, {"text": "真正的智慧是预见未知的风险，", "startFrame": 28, "durationFrames": 74}, {"text": "而不是在废墟上宣称自己早有预谋。", "startFrame": 101, "durationFrames": 85}]} totalDurationFrames={187} coreSentence={["真正的智慧是预见未知的风险"]} coreSentenceAnchors={[{"coreSentenceAnchor": "预见未知的风险", "color": "#EF4444"}]} />
             </Sequence>
             <Audio src={staticFile("/audio/认知偏见_后视偏见/scene_4/scene_4.mp3")} />
         </AbsoluteFill>

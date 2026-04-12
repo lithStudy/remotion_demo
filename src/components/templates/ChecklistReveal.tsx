@@ -2,13 +2,8 @@
  * CHECKLIST_REVEAL 模板：收束清单 / 要点复诵，逐项打勾显现
  */
 import React from "react";
-import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import {
-	BW_TEXT,
-	getSafeImageSrc,
-	type TemplateAnchorsProps,
-	type TemplateBaseProps,
-} from "./shared";
+import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { BW_TEXT, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
 
@@ -16,9 +11,9 @@ export const templateMeta = {
 	"name": "CHECKLIST_REVEAL",
 	"componentExport": "BWChecklistReveal",
 	"description":
-		"适用：收束段、行动清单、要点复诵；口播逐条对应清单行，行随 content 时间显现并打勾。\n差异：可执行「第一步/第二步」短步骤用 STEP_LIST；并列多组大图用 PANEL_GRID；纯叙述单图用 CENTER_FOCUS。\n参数：rows 2～6 项，每项 text（短标签）、showFrom（content 下标）；可选 title；可选 imageSrc 为角落装饰小图（非主叙事图时可省略）。",
+		"适用：收束段、行动清单、要点复诵；口播逐条对应清单行，行随 content 时间显现并打勾。\n差异：可执行「第一步/第二步」短步骤用 STEP_LIST；并列多组大图用 PANEL_GRID；纯叙述单图用 CENTER_FOCUS。\n参数：rows 2～6 项，每项 text（短标签）、showFrom（content 下标）；可选 title。",
 	"psychology": "闭环与可执行感",
-	"image_count": "0-1",
+	"image_count": "0",
 	"content_min_items": 2,
 	"content_max_items": 8,
 	"param_schema": {
@@ -27,11 +22,6 @@ export const templateMeta = {
 			"title": {
 				"type": "string",
 				"description": "可选；清单上方标题，建议 4～14 字",
-			},
-			"imageSrc": {
-				"type": "string",
-				"format": "image_prompt",
-				"description": "可选；右上角小装饰图，不需要可省略",
 			},
 			"rows": {
 				"type": "array",
@@ -75,7 +65,6 @@ export type ChecklistRowItem = {
 export interface BWChecklistRevealProps extends TemplateBaseProps, TemplateAnchorsProps {
 	rows: ChecklistRowItem[];
 	title?: string;
-	imageSrc?: string;
 }
 
 const resolveRowStartFrame = (
@@ -181,53 +170,24 @@ const CheckRow: React.FC<{
 export const BWChecklistReveal: React.FC<BWChecklistRevealProps> = ({
 	rows,
 	title,
-	imageSrc,
 	content,
 	anchors,
 	audioSrc,
 	children,
 	style,
 }) => {
-	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
 	const items = normalizeContent(content);
 	const list = (rows ?? []).slice(0, 6);
 	const stagger = 16;
 	const starts = list.map((r, i) => resolveRowStartFrame(r.showFrom, i, items, stagger));
-	const decorIn = spring({
-		frame,
-		fps,
-		config: { damping: 80, stiffness: 120 },
-		durationInFrames: 20,
-	});
-	const decorOpacity = imageSrc
-		? interpolate(decorIn, [0, 1], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
-		: 0;
 
 	return (
 		<AbsoluteFill style={style}>
-			{imageSrc ? (
-				<div
-					style={{
-						position: "absolute",
-						right: 32,
-						top: "20%",
-						width: 72,
-						height: 72,
-						opacity: decorOpacity,
-					}}
-				>
-					<Img
-						src={getSafeImageSrc(imageSrc)}
-						style={{ width: "100%", height: "100%", objectFit: "contain" }}
-					/>
-				</div>
-			) : null}
 			<div
 				style={{
 					position: "absolute",
-					left: 40,
-					right: imageSrc ? 120 : 40,
+					left: 200,
+					right: 200,
 					top: title ? "26%" : "28%",
 					bottom: "24%",
 					display: "flex",

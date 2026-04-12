@@ -19,10 +19,10 @@ export const Scene3: React.FC = () => {
                 <BWCenterFocus content={[{"text": "不要再为那些，", "startFrame": 0, "durationFrames": 35}, {"text": "根本无法代表你生活轨迹的虚高数据感到任何抱歉。", "startFrame": 34, "durationFrames": 106}]} totalDurationFrames={141} imageSrc={staticFile("images/平均数陷阱/scene_3_2.png")} enterEffect="fadeIn" anchors={[{"text": "虚高数据", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud"}]} />
             </Sequence>
             <Sequence from={292} durationInFrames={196}>
-                <BWTextFocus content={[{"text": "我们要明白，", "startFrame": 0, "durationFrames": 28}, {"text": "真正的社会进步和文明底线，", "startFrame": 27, "durationFrames": 72}, {"text": "绝不仅仅是极少数权贵的天花板被无限拉高，", "startFrame": 99, "durationFrames": 96}]} totalDurationFrames={196} coreSentence={"社会进步不是权贵天花板被拉高"} />
+                <BWTextFocus content={[{"text": "我们要明白，", "startFrame": 0, "durationFrames": 28}, {"text": "真正的社会进步和文明底线，", "startFrame": 27, "durationFrames": 72}, {"text": "绝不仅仅是极少数权贵的天花板被无限拉高，", "startFrame": 99, "durationFrames": 96}]} totalDurationFrames={196} coreSentence={["社会进步不是权贵天花板被拉高"]} />
             </Sequence>
             <Sequence from={488} durationInFrames={174}>
-                <BWTextFocus content={[{"text": "而是大多数普通人脚踩着的那块泥泞地板，", "startFrame": 0, "durationFrames": 102}, {"text": "能被坚定而稳稳地托起。", "startFrame": 101, "durationFrames": 72}]} totalDurationFrames={174} coreSentence={"而是多数人的泥泞地板被托起"} />
+                <BWTextFocus content={[{"text": "而是大多数普通人脚踩着的那块泥泞地板，", "startFrame": 0, "durationFrames": 102}, {"text": "能被坚定而稳稳地托起。", "startFrame": 101, "durationFrames": 72}]} totalDurationFrames={174} coreSentence={["而是多数人的泥泞地板被托起"]} />
             </Sequence>
             <Audio src={staticFile("/audio/平均数陷阱/scene_3/scene_3.mp3")} />
         </AbsoluteFill>

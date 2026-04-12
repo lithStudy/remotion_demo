@@ -4,7 +4,7 @@ import { z } from "zod";
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 
-import { StaticCover } from "../../components";
+import { LandscapeCoverPoster } from "../../components";
 import { Scene1, calculateScene1Duration } from "./scenes/Scene1";
 import { Scene2, calculateScene2Duration } from "./scenes/Scene2";
 import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
@@ -149,7 +149,7 @@ export const 可证伪性: React.FC<z.infer<typeof 可证伪性Schema>> = () => 
                 }}
             />
             <Sequence durationInFrames={COVER_DURATION_FRAMES}>
-                <StaticCover
+                <LandscapeCoverPoster
                     title="可证伪性"
                     subtitle="如何识别和避免“不可证伪”的逻辑陷阱"
                     themeColor="#2563EB"

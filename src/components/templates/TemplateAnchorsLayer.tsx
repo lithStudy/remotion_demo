@@ -20,7 +20,7 @@ import {
 	type AnchorItem,
 	type ContentItem,
 } from "./shared";
-import { BWAnchorWord } from "../BWPrimitives";
+import { BWAnchorWord } from "../common/BWPrimitives";
 import { normalizeContent } from "./shared";
 
 const DefaultAnchorWordList: React.FC<{

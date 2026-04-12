@@ -8,10 +8,8 @@ import {
 	getSafeImageSrc,
 	useImageEnterStyle,
 	type ImageEnterEffect,
-	type TemplateAnchorsProps,
 	type TemplateBaseProps,
 } from "./shared";
-import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
 
 export const templateMeta = {
@@ -83,7 +81,7 @@ export type CauseChainNodeItem = {
 	enterEffect?: ImageEnterEffect;
 };
 
-export interface BWCauseChainProps extends TemplateBaseProps, TemplateAnchorsProps {
+export interface BWCauseChainProps extends TemplateBaseProps {
 	nodes: CauseChainNodeItem[];
 	layout?: "vertical" | "horizontal";
 }
@@ -230,7 +228,6 @@ export const BWCauseChain: React.FC<BWCauseChainProps> = ({
 	nodes,
 	layout = "horizontal",
 	content,
-	anchors,
 	audioSrc,
 	children,
 	style,
@@ -292,7 +289,6 @@ export const BWCauseChain: React.FC<BWCauseChainProps> = ({
 					</React.Fragment>
 				))}
 			</div>
-			<TemplateDefaultAnchors content={content} anchors={anchors} />
 			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>

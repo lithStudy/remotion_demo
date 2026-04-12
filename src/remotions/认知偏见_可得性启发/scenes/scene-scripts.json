@@ -11,14 +11,14 @@
           "reasoning": "平缓叙述，描述一个场景，适合用默认的CENTER_FOCUS模板。",
           "content": [
             {
-              "text": "盯着那条空难上热搜的弹窗新闻。",
+              "text": "盯着那条空难上热搜的弹窗新闻，",
               "startFrame": 0,
-              "durationFrames": 101
+              "durationFrames": 78
             },
             {
               "text": "你默默把下周的航班改成了高铁。",
-              "startFrame": 100,
-              "durationFrames": 99
+              "startFrame": 77,
+              "durationFrames": 81
             }
           ],
           "order": 1,
@@ -35,7 +35,7 @@
               }
             ]
           },
-          "totalDurationFrames": 199
+          "totalDurationFrames": 159
         },
         {
           "narrativeType": "CASE",
@@ -45,27 +45,27 @@
             {
               "text": "明知路上要多耗大半天、",
               "startFrame": 0,
-              "durationFrames": 53
+              "durationFrames": 58
             },
             {
-              "text": "换乘也更折腾。",
-              "startFrame": 52,
-              "durationFrames": 56
+              "text": "换乘也更折腾，",
+              "startFrame": 57,
+              "durationFrames": 43
             },
             {
               "text": "心里却觉得还是在地上跑更安全。",
-              "startFrame": 107,
-              "durationFrames": 86
+              "startFrame": 100,
+              "durationFrames": 71
             },
             {
-              "text": "这种宁可多花时间也要避险的心态。",
-              "startFrame": 193,
-              "durationFrames": 80
+              "text": "这种宁可多花时间也要避险的心态，",
+              "startFrame": 171,
+              "durationFrames": 79
             },
             {
               "text": "是不是让你觉得非常踏实。",
-              "startFrame": 272,
-              "durationFrames": 58
+              "startFrame": 249,
+              "durationFrames": 51
             }
           ],
           "order": 2,
@@ -89,11 +89,11 @@
               }
             ]
           },
-          "totalDurationFrames": 330
+          "totalDurationFrames": 301
         }
       ],
       "audioSrc": "/audio/认知偏见_可得性启发/scene_1/scene_1.mp3",
-      "totalDurationFrames": 531
+      "totalDurationFrames": 461
     },
     {
       "sceneId": "scene_2",
@@ -105,14 +105,14 @@
           "reasoning": "口播对照「以为理性 vs 实为恐惧」，适合左右对错叙事 → DOS_AND_DONTS（左误区、右真相）。",
           "content": [
             {
-              "text": "我们总以为这是出于谨慎的理性选择。",
+              "text": "我们总以为这是出于谨慎的理性选择，",
               "startFrame": 0,
-              "durationFrames": 86
+              "durationFrames": 77
             },
             {
               "text": "但其实我们又被恐惧情绪劫持了。",
-              "startFrame": 85,
-              "durationFrames": 59
+              "startFrame": 76,
+              "durationFrames": 75
             }
           ],
           "order": 1,
@@ -122,7 +122,7 @@
             "dontLabel": "❌ 以为理性",
             "doLabel": "✅ 恐惧劫持"
           },
-          "totalDurationFrames": 144
+          "totalDurationFrames": 151
         },
         {
           "narrativeType": "LOGIC",
@@ -130,14 +130,14 @@
           "reasoning": "「不是胆小而是本能」为典型避坑归因：左为错误归因、右为正确归因 → DOS_AND_DONTS。",
           "content": [
             {
-              "text": "这不是因为我们胆小怕事。",
+              "text": "这不是因为我们胆小怕事，",
               "startFrame": 0,
-              "durationFrames": 47
+              "durationFrames": 46
             },
             {
               "text": "而是原始基因刻在骨子里的生存本能。",
-              "startFrame": 46,
-              "durationFrames": 99
+              "startFrame": 45,
+              "durationFrames": 82
             }
           ],
           "order": 2,
@@ -147,7 +147,7 @@
             "dontLabel": "❌ 胆小怕事",
             "doLabel": "✅ 生存本能"
           },
-          "totalDurationFrames": 146
+          "totalDurationFrames": 128
         },
         {
           "narrativeType": "LOGIC",
@@ -155,24 +155,24 @@
           "reasoning": "后半转为流量时代与媒体放大罕见事件的平缓叙述，用 CENTER_FOCUS 承载主图与关键词锚点。",
           "content": [
             {
-              "text": "在这个流量为王的焦躁时代。",
+              "text": "在这个流量为王的焦躁时代，",
               "startFrame": 0,
-              "durationFrames": 55
+              "durationFrames": 60
             },
             {
               "text": "媒体最喜欢放大的就是罕见极端事件。",
-              "startFrame": 54,
-              "durationFrames": 91
+              "startFrame": 59,
+              "durationFrames": 86
             },
             {
-              "text": "这些新闻像病毒一样霸占屏幕。",
+              "text": "这些新闻像病毒一样霸占屏幕，",
               "startFrame": 145,
-              "durationFrames": 63
+              "durationFrames": 69
             },
             {
               "text": "让我们误以为这个世界极度危险。",
-              "startFrame": 207,
-              "durationFrames": 66
+              "startFrame": 214,
+              "durationFrames": 77
             }
           ],
           "order": 3,
@@ -203,11 +203,11 @@
               }
             ]
           },
-          "totalDurationFrames": 273
+          "totalDurationFrames": 291
         }
       ],
       "audioSrc": "/audio/认知偏见_可得性启发/scene_2/scene_2.mp3",
-      "totalDurationFrames": 564
+      "totalDurationFrames": 571
     },
     {
       "sceneId": "scene_3",
@@ -219,14 +219,14 @@
           "reasoning": "对“可得性启发”进行解释，属于概念定义 → 选 CONCEPT_CARD。",
           "content": [
             {
-              "text": "学术界给这种大脑的错觉起了个名字。",
+              "text": "学术界给这种大脑的错觉起了个名字，",
               "startFrame": 0,
-              "durationFrames": 79
+              "durationFrames": 94
             },
             {
               "text": "叫做可得性启发。",
-              "startFrame": 78,
-              "durationFrames": 55
+              "startFrame": 93,
+              "durationFrames": 62
             }
           ],
           "order": 1,
@@ -235,7 +235,7 @@
             "conceptName": "可得性启发",
             "anchors": []
           },
-          "totalDurationFrames": 134
+          "totalDurationFrames": 155
         },
         {
           "narrativeType": "LOGIC",
@@ -245,22 +245,22 @@
             {
               "text": "说白了就是大脑在极度偷懒。",
               "startFrame": 0,
-              "durationFrames": 75
+              "durationFrames": 87
             },
             {
-              "text": "我们在判断一件事情发生的概率时。",
-              "startFrame": 74,
-              "durationFrames": 67
+              "text": "我们在判断一件事情发生的概率时，",
+              "startFrame": 86,
+              "durationFrames": 66
             },
             {
-              "text": "往往不去看枯燥真实的统计数据。",
-              "startFrame": 140,
-              "durationFrames": 82
+              "text": "往往不去看枯燥真实的统计数据，",
+              "startFrame": 151,
+              "durationFrames": 84
             },
             {
               "text": "而是看这件事在脑子里想起来有多容易。",
-              "startFrame": 222,
-              "durationFrames": 88
+              "startFrame": 235,
+              "durationFrames": 86
             }
           ],
           "order": 2,
@@ -291,11 +291,11 @@
               }
             ]
           },
-          "totalDurationFrames": 310
+          "totalDurationFrames": 322
         }
       ],
       "audioSrc": "/audio/认知偏见_可得性启发/scene_3/scene_3.mp3",
-      "totalDurationFrames": 445
+      "totalDurationFrames": 479
     },
     {
       "sceneId": "scene_4",
@@ -307,24 +307,24 @@
           "reasoning": "从快速联想到错误结论再到媒体报道与记忆强化，呈时间链 → 适合 TIMELINE",
           "content": [
             {
-              "text": "因为空难极其惨烈且被疯狂报道。",
+              "text": "因为空难极其惨烈且被疯狂报道，",
               "startFrame": 0,
-              "durationFrames": 88
+              "durationFrames": 84
             },
             {
               "text": "所以它在你的记忆库里特别鲜活。",
-              "startFrame": 87,
-              "durationFrames": 77
+              "startFrame": 84,
+              "durationFrames": 70
             },
             {
-              "text": "你的大脑一秒钟就能调取恐怖画面。",
-              "startFrame": 163,
-              "durationFrames": 76
+              "text": "你的大脑一秒钟就能调取恐怖画面，",
+              "startFrame": 153,
+              "durationFrames": 82
             },
             {
               "text": "于是立刻得出坐飞机随时会掉的结论。",
-              "startFrame": 238,
-              "durationFrames": 95
+              "startFrame": 235,
+              "durationFrames": 102
             }
           ],
           "order": 1,
@@ -373,7 +373,7 @@
               }
             ]
           },
-          "totalDurationFrames": 334
+          "totalDurationFrames": 338
         },
         {
           "narrativeType": "LOGIC",
@@ -381,19 +381,19 @@
           "reasoning": "承接上段结论，用事实对比与「头条/忽略」强化可得性偏差 → 独立 CENTER_FOCUS 节拍",
           "content": [
             {
-              "text": "但事实上车祸的死亡人数要多得多。",
+              "text": "但事实上车祸的死亡人数要多得多，",
               "startFrame": 0,
-              "durationFrames": 81
+              "durationFrames": 79
             },
             {
-              "text": "只因为车祸太常见上不了头条。",
-              "startFrame": 80,
-              "durationFrames": 74
+              "text": "只因为车祸太常见上不了头条，",
+              "startFrame": 78,
+              "durationFrames": 79
             },
             {
               "text": "你的大脑就自动忽略了它的危险性。",
-              "startFrame": 153,
-              "durationFrames": 70
+              "startFrame": 157,
+              "durationFrames": 72
             }
           ],
           "order": 2,
@@ -410,7 +410,7 @@
               }
             ]
           },
-          "totalDurationFrames": 224
+          "totalDurationFrames": 229
         },
         {
           "narrativeType": "LOGIC",
@@ -418,14 +418,14 @@
           "reasoning": "口播对比随机枪击与车祸死亡率 → 用 STAT_COMPARE 双指标并列呈现数据反差",
           "content": [
             {
-              "text": "同理美国枪击案新闻频发会让你觉得美国治安极差。",
+              "text": "同理美国枪击案新闻频发会让你觉得美国治安极差，",
               "startFrame": 0,
-              "durationFrames": 123
+              "durationFrames": 113
             },
             {
               "text": "却没想过随机枪击死亡率比车祸死亡率低的多得多。",
-              "startFrame": 122,
-              "durationFrames": 128
+              "startFrame": 112,
+              "durationFrames": 125
             }
           ],
           "order": 3,
@@ -435,11 +435,11 @@
             "leftLabel": "随机枪击",
             "rightLabel": "车祸"
           },
-          "totalDurationFrames": 251
+          "totalDurationFrames": 237
         }
       ],
       "audioSrc": "/audio/认知偏见_可得性启发/scene_4/scene_4.mp3",
-      "totalDurationFrames": 809
+      "totalDurationFrames": 806
     },
     {
       "sceneId": "scene_5",
@@ -451,14 +451,14 @@
           "reasoning": "平缓叙述，无明显结构特征，选择默认的CENTER_FOCUS模板。",
           "content": [
             {
-              "text": "面对这种被媒体和本能双重扭曲的现实。",
+              "text": "面对这种被媒体和本能双重扭曲的现实，",
               "startFrame": 0,
-              "durationFrames": 99
+              "durationFrames": 95
             },
             {
               "text": "我们该如何保护自己的判断力呢。",
-              "startFrame": 98,
-              "durationFrames": 70
+              "startFrame": 94,
+              "durationFrames": 74
             }
           ],
           "order": 1,
@@ -490,24 +490,24 @@
           "reasoning": "三条并列准则清单，无「第一步」式方法展开 → 用 STEP_LIST 降低认知负荷、逐项呈现",
           "content": [
             {
-              "text": "记住这几个准则。",
+              "text": "记住这几个准则：",
               "startFrame": 0,
-              "durationFrames": 42
+              "durationFrames": 40
             },
             {
               "text": "上热搜不等于很常见。",
-              "startFrame": 41,
-              "durationFrames": 68
+              "startFrame": 39,
+              "durationFrames": 70
             },
             {
               "text": "容易想起来不等于真的重要。",
               "startFrame": 109,
-              "durationFrames": 62
+              "durationFrames": 63
             },
             {
               "text": "用数据校准你被媒体扭曲的直觉。",
-              "startFrame": 170,
-              "durationFrames": 88
+              "startFrame": 171,
+              "durationFrames": 84
             }
           ],
           "order": 2,
@@ -528,7 +528,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 258
+          "totalDurationFrames": 256
         },
         {
           "narrativeType": "CONCLUSION",
@@ -538,22 +538,25 @@
             {
               "text": "记住，",
               "startFrame": 0,
-              "durationFrames": 18
+              "durationFrames": 20
             },
             {
               "text": "只有用真实的数据对抗带有偏见的直觉，",
-              "startFrame": 17,
-              "durationFrames": 88
+              "startFrame": 19,
+              "durationFrames": 94
             },
             {
               "text": "你才能真正看清世界的全貌。",
-              "startFrame": 104,
-              "durationFrames": 62
+              "startFrame": 113,
+              "durationFrames": 63
             }
           ],
           "order": 3,
           "param": {
-            "coreSentence": "只有用数据对抗直觉，你才能真正看清世界的全貌。",
+            "coreSentence": [
+              "用数据对抗直觉",
+              "才能真正看清世界的全貌"
+            ],
             "coreSentenceAnchors": [
               {
                 "coreSentenceAnchor": "看清世界的全貌",
@@ -561,16 +564,16 @@
               }
             ]
           },
-          "totalDurationFrames": 167
+          "totalDurationFrames": 177
         }
       ],
       "audioSrc": "/audio/认知偏见_可得性启发/scene_5/scene_5.mp3",
-      "totalDurationFrames": 594
+      "totalDurationFrames": 602
     }
   ],
   "fps": 30,
   "cover": {
-    "durationFrames": 5,
+    "durationFrames": 0,
     "title": "可得性启发",
     "subtitle": "美国很危险，到处被枪击！",
     "themeColor": "#2563EB",

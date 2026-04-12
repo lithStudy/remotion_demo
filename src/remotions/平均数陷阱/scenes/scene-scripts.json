@@ -91,7 +91,7 @@
           ],
           "order": 3,
           "param": {
-            "coreSentence": "请马上停止自责与内疚",
+            "coreSentence": ["请马上停止自责与内疚"],
             "coreSentenceAnchors": [
               {
                 "coreSentenceAnchor": "自责与内疚",
@@ -557,7 +557,7 @@
           ],
           "order": 3,
           "param": {
-            "coreSentence": "社会进步不是权贵天花板被拉高"
+            "coreSentence": ["社会进步不是权贵天花板被拉高"]
           },
           "totalDurationFrames": 196
         },
@@ -579,7 +579,7 @@
           ],
           "order": 4,
           "param": {
-            "coreSentence": "而是多数人的泥泞地板被托起"
+            "coreSentence": ["而是多数人的泥泞地板被托起"]
           },
           "totalDurationFrames": 174
         }

@@ -332,7 +332,6 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 			<>
 				<BWChecklistReveal
 					title="自检三项"
-					imageSrc={img("images/template/scene2_1.png")}
 					rows={[
 						{ text: "事实写清楚", showFrom: 0 },
 						{ text: "推断分开写", showFrom: 1 },

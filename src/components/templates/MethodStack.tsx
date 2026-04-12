@@ -11,7 +11,6 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
-import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
 import { BW_TEXT, getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
 
@@ -81,7 +80,7 @@ const getNoteStartFrame = (
 	return content[note.showFrom]?.startFrame ?? 0;
 };
 
-export interface BWMethodStackProps extends TemplateBaseProps, TemplateAnchorsProps {
+export interface BWMethodStackProps extends TemplateBaseProps {
 	title: string;
 	imageSrc: string;
 	notes?: MethodNoteItem[];
@@ -92,7 +91,6 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 	imageSrc,
 	notes = [],
 	content,
-	anchors,
 	audioSrc,
 	children,
 	style,
@@ -154,8 +152,8 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 			<div
 				style={{
 					position: "absolute",
-					left: "7%",
-					right: "7%",
+					left: "10%",
+					right: "10%",
 					top: "28%",
 					bottom: "18%",
 					display: "flex",
@@ -224,7 +222,7 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 							<div
 								key={`${note.text}-${index}`}
 								style={{
-									padding: "32px 40px",
+									padding: "20px 28px",
 									borderRadius: 28,
 									backgroundColor: "#FFFFFF",
 									border: "3px solid #E5E7EB",
@@ -239,10 +237,11 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 								
 								<div
 									style={{
-										fontSize: 52,
+										fontSize: 42,
 										fontWeight: 800,
 										lineHeight: 1.45,
 										color: "#1F2937",
+										letterSpacing: "0.1em",
 										textAlign: "center",
 									}}
 								>
@@ -254,7 +253,6 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 				</div>
 			</div>
 
-			<TemplateDefaultAnchors content={content} anchors={anchors} />
 			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>

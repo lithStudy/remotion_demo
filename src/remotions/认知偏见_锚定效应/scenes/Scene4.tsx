@@ -28,7 +28,7 @@ export const Scene4: React.FC = () => {
                 <BWCenterFocus content={[{"text": "在这个到处都是“钩子”的世界里，", "startFrame": 0, "durationFrames": 68}, {"text": "如果你不主动设定自己的“锚”，", "startFrame": 67, "durationFrames": 62}, {"text": "你就只能在别人的鱼塘里当一条待宰的鱼。", "startFrame": 128, "durationFrames": 88}]} totalDurationFrames={216} imageSrc={staticFile("images/认知偏见_锚定效应/scene_4_5.png")} enterEffect="fadeIn" anchors={[{"text": "钩子", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud"}, {"text": "自己的锚", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud"}]} />
             </Sequence>
             <Sequence from={753} durationInFrames={110}>
-                <BWTextFocus content={[{"text": "永远记住，", "startFrame": 0, "durationFrames": 23}, {"text": "你的价值由你定义，", "startFrame": 22, "durationFrames": 43}, {"text": "不由对方的“锚”定义。", "startFrame": 65, "durationFrames": 45}]} totalDurationFrames={110} coreSentence={"你的价值由你定义，不由对方的锚定义。"} coreSentenceAnchors={[{"coreSentenceAnchor": "由你定义", "color": "#EF4444"}]} />
+                <BWTextFocus content={[{"text": "永远记住，", "startFrame": 0, "durationFrames": 23}, {"text": "你的价值由你定义，", "startFrame": 22, "durationFrames": 43}, {"text": "不由对方的“锚”定义。", "startFrame": 65, "durationFrames": 45}]} totalDurationFrames={110} coreSentence={["你的价值由你定义，不由对方的锚定义。"]} coreSentenceAnchors={[{"coreSentenceAnchor": "由你定义", "color": "#EF4444"}]} />
             </Sequence>
             <Audio src={staticFile("/audio/认知偏见_锚定效应/scene_4/scene_4.mp3")} />
         </AbsoluteFill>

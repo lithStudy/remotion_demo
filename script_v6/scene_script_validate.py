@@ -69,8 +69,10 @@ def _normalize_missing_content(
 		param = item.get("param")
 		if isinstance(param, dict):
 			cs = param.get("coreSentence")
-			if isinstance(cs, str) and cs.strip():
-				fallback = cs.strip()
+			if isinstance(cs, list):
+				joined = "".join(str(x).strip() for x in cs if str(x).strip())
+				if joined:
+					fallback = joined
 	if fallback is None:
 		return
 	warnings.append(

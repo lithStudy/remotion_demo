@@ -1,10 +1,4 @@
-export {
-	VerticalSegmentedProgressBar,
-} from "./common";
-export type {
-	VerticalSceneSegmentConfig,
-	VerticalSegmentedProgressBarProps,
-} from "./common";
+export * from "./common";
 export {
 	RemotionLayoutMetricsProvider,
 	useRemotionLayoutMetricsOverride,
@@ -12,8 +6,11 @@ export {
 export type { RemotionLayoutMetrics } from "./RemotionLayoutMetricsContext";
 export * from "./TextAnimations";
 export * from "./LottieAnimation";
-export * from "./StrawManToTarget";
-export * from "./AutoHighlightText";
-export * from "./BWLayouts";
-export { StaticCover, StaticCoverSchema } from "./StaticCover";
-export type { StaticCoverProps } from "./StaticCover";
+export { CoverPosterCore, StaticCoverSchema } from "./CoverPosterCore";
+export type { StaticCoverProps } from "./CoverPosterCore";
+export { LandscapeCoverPoster } from "./CoverPosterLandscape";
+export {
+	VerticalCoverPoster,
+	VERTICAL_COVER_POSTER_H,
+	VERTICAL_COVER_POSTER_W,
+} from "./CoverPosterVertical";

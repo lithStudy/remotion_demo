@@ -2,7 +2,7 @@ import React from "react";
 import { AbsoluteFill, Sequence } from "remotion";
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
-import { StaticCover } from "../../components";
+import { LandscapeCoverPoster } from "../../components";
 import {
     COVER_DURATION_FRAMES,
     MAIN_DURATION_认知偏见_确认偏误,
@@ -14,7 +14,7 @@ import {
 export const 认知偏见确认偏误MainBody: React.FC = () => (
     <>
         <Sequence durationInFrames={COVER_DURATION_FRAMES}>
-            <StaticCover
+            <LandscapeCoverPoster
                 title="确认偏误"
                     subtitle="确认偏误与独立思考"
                     themeColor="#2563EB"

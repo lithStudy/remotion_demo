@@ -28,7 +28,7 @@ export const Scene1: React.FC = () => {
                 <BWCenterFocus content={[{"text": "算法正是利用了这种认知本能，", "startFrame": 0, "durationFrames": 69}, {"text": "每天在信息茧房里给我们投喂无数个我吃了这个药、", "startFrame": 68, "durationFrames": 110}, {"text": "身体变好了的孤例。", "startFrame": 177, "durationFrames": 51}]} totalDurationFrames={228} imageSrc={staticFile("images/双盲实验/scene_1_5.png")} enterEffect="fadeIn" anchors={[{"text": "认知本能", "showFrom": 0, "color": "#000000", "anim": "highlight", "audioEffect": "ping"}, {"text": "信息茧房", "showFrom": 1, "color": "#000000", "anim": "highlight", "audioEffect": "ping"}]} />
             </Sequence>
             <Sequence from={1450} durationInFrames={177}>
-                <BWTextFocus content={[{"text": "在这种单向的叙事围猎下，", "startFrame": 0, "durationFrames": 58}, {"text": "我们很难察觉，", "startFrame": 57, "durationFrames": 41}, {"text": "自己其实正处于一种智力上的盲区。", "startFrame": 98, "durationFrames": 79}]} totalDurationFrames={177} coreSentence={"我们正处于一种智力上的盲区"} coreSentenceAnchors={[{"coreSentenceAnchor": "智力上的盲区", "color": "#EF4444"}]} />
+                <BWTextFocus content={[{"text": "在这种单向的叙事围猎下，", "startFrame": 0, "durationFrames": 58}, {"text": "我们很难察觉，", "startFrame": 57, "durationFrames": 41}, {"text": "自己其实正处于一种智力上的盲区。", "startFrame": 98, "durationFrames": 79}]} totalDurationFrames={177} coreSentence={["我们正处于一种智力上的盲区"]} coreSentenceAnchors={[{"coreSentenceAnchor": "智力上的盲区", "color": "#EF4444"}]} />
             </Sequence>
             <Audio src={staticFile("/audio/双盲实验/scene_1/scene_1.mp3")} />
         </AbsoluteFill>

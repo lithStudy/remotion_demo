@@ -3,7 +3,7 @@ import { AbsoluteFill, Sequence } from "remotion";
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 
-import { StaticCover } from "../../components";
+import { LandscapeCoverPoster } from "../../components";
 import {
     COVER_DURATION_FRAMES,
     MAIN_DURATION_认知偏见_锚定效应,
@@ -17,7 +17,7 @@ import {
 export const AnchoringBiasMainBody: React.FC = () => (
     <>
         <Sequence durationInFrames={COVER_DURATION_FRAMES}>
-            <StaticCover
+            <LandscapeCoverPoster
                 title="锚定效应"
                 subtitle="第一印象是怎么操控你的判断的？"
                 themeColor="#2563EB"

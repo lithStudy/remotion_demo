@@ -9,7 +9,7 @@ export const 认知偏见可得性启发Schema = z.object({});
 
 export const TRANSITION_DURATION = 15;
 export const SCENE_END_PADDING = 20;
-export const COVER_DURATION_FRAMES = 5;
+export const COVER_DURATION_FRAMES = 0;
 
 export const sceneConfigs = [
     { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引入·空难焦虑与避险" },
@@ -39,5 +39,7 @@ export const VERTICAL_CANVAS_H = 1920;
 export const VERTICAL_PLAY_W = VERTICAL_CANVAS_W;
 export const VERTICAL_PLAY_H = Math.round((VERTICAL_CANVAS_W * 9) / 16);
 export const VERTICAL_PLAY_TOP = Math.round((VERTICAL_CANVAS_H - VERTICAL_PLAY_H) / 2);
-export const VERTICAL_PLAY_PROGRESS_GAP = 12;
+export const VERTICAL_PLAY_PROGRESS_GAP = 4;
 export const VERTICAL_CONTENT_SCALE = VERTICAL_PLAY_H / DESIGN_H;
+/** 竖屏底部品牌栏距画布底边的偏移 */
+export const VERTICAL_BOTTOM_BRAND_OFFSET = 400;

@@ -19,7 +19,7 @@ export const Scene1: React.FC = () => {
                 <BWChatBubble content={[{"text": "你沉默着点开手机银行查了查仅剩的余额，", "startFrame": 0, "durationFrames": 98}, {"text": "苦笑着在评论区敲下一行字:", "startFrame": 97, "durationFrames": 75}, {"text": "对不起大家，", "startFrame": 171, "durationFrames": 27}, {"text": "我又一次把大腿都给拖断了。", "startFrame": 197, "durationFrames": 58}]} totalDurationFrames={256} bubbleText={"对不起大家，我又一次把大腿都给拖断了。"} showFrom={2} imageSrc={staticFile("images/平均数陷阱/scene_1_2.png")} />
             </Sequence>
             <Sequence from={458} durationInFrames={85}>
-                <BWTextFocus content={[{"text": "请马上停止这种毫无意义的自责与内疚。", "startFrame": 0, "durationFrames": 85}]} totalDurationFrames={85} coreSentence={"请马上停止自责与内疚"} coreSentenceAnchors={[{"coreSentenceAnchor": "自责与内疚", "color": "#EF4444"}]} />
+                <BWTextFocus content={[{"text": "请马上停止这种毫无意义的自责与内疚。", "startFrame": 0, "durationFrames": 85}]} totalDurationFrames={85} coreSentence={["请马上停止自责与内疚"]} coreSentenceAnchors={[{"coreSentenceAnchor": "自责与内疚", "color": "#EF4444"}]} />
             </Sequence>
             <Sequence from={543} durationInFrames={226}>
                 <BWBeatSequence content={[{"text": "我们已经无数次，", "startFrame": 0, "durationFrames": 42}, {"text": "在宏大的平均数面前感到深深的自卑，", "startFrame": 41, "durationFrames": 80}, {"text": "但最冷酷的真相是，", "startFrame": 121, "durationFrames": 46}, {"text": "你从来都没有拖过谁的后腿。", "startFrame": 166, "durationFrames": 59}]} totalDurationFrames={226} stages={[{ imageSrc: staticFile("images/平均数陷阱/scene_1_4_None.png"), enterEffect: "zoomIn", showFrom: 0 }, { imageSrc: staticFile("images/平均数陷阱/scene_2_5.png"), enterEffect: "zoomIn", showFrom: 2 }]} />

@@ -9,6 +9,8 @@ Step 4: Remotion 动画代码生成（模板驱动版）
   - 竖屏壳 1080×1920（*Vertical 组件，Root id 为 同名 + 「竖屏」后缀）
   生成 *Constants.ts、*MainBody.tsx、*Landscape.tsx、*Vertical.tsx、*VerticalChrome.tsx，
   入口 *.tsx 为双 Composition re-export。
+  若 scene-scripts.json 含有效 cover（title/subtitle），另生成 *CoverProps.ts、*CoverStills.tsx，
+  并在 Root 注册「PascalCase封面横屏」「PascalCase封面竖屏」（横 1920×1080；竖 3:4 即 1080×1440，duration=1）。
 
 用法：
   python step4_generate_remotion.py --input scene-scripts.json --name video_name
@@ -241,8 +243,46 @@ def normalize_cover(scripts_data: dict) -> dict | None:
     return out
 
 
+def normalize_cover_still(scripts_data: dict) -> dict | None:
+    """
+    从 scene-scripts.json 顶层 cover 提取横/竖屏封面 still 用文案。
+    不要求 durationFrames > 0；只要 title、subtitle 非空即可（可与正片无封面片头并存）。
+    """
+    raw = scripts_data.get("cover")
+    if not isinstance(raw, dict):
+        return None
+    title = raw.get("title")
+    subtitle = raw.get("subtitle")
+    if not isinstance(title, str) or not title.strip():
+        return None
+    if not isinstance(subtitle, str) or not subtitle.strip():
+        return None
+    out: dict = {"title": title.strip(), "subtitle": subtitle.strip()}
+    tc = raw.get("themeColor")
+    if isinstance(tc, str) and tc.strip():
+        out["themeColor"] = tc.strip()
+    bd = raw.get("badge")
+    if isinstance(bd, str) and bd.strip():
+        out["badge"] = bd.strip()
+    sl = raw.get("seriesLabel")
+    if isinstance(sl, str) and sl.strip():
+        out["seriesLabel"] = sl.strip()
+    sle = raw.get("seriesLabelEn")
+    if isinstance(sle, str) and sle.strip():
+        out["seriesLabelEn"] = sle.strip()
+    ms = raw.get("methodologySteps")
+    if isinstance(ms, list):
+        steps = [str(x).strip() for x in ms if isinstance(x, str) and str(x).strip()]
+        if steps:
+            out["methodologySteps"] = steps
+    mse = raw.get("methodologyStepsEn")
+    if isinstance(mse, str) and mse.strip():
+        out["methodologyStepsEn"] = mse.strip()
+    return out
+
+
 def static_cover_props_jsx(cover: dict) -> str:
-    """StaticCover 的 JSX 属性行（多行缩进与 Scene 内一致）。时长由外层 Sequence 的 durationInFrames 控制。"""
+    """LandscapeCoverPoster 的 JSX 属性行（多行缩进与 Scene 内一致）。时长由外层 Sequence 的 durationInFrames 控制。"""
     lines = [
         f'title={json.dumps(cover["title"], ensure_ascii=False)}',
         f'subtitle={json.dumps(cover["subtitle"], ensure_ascii=False)}',
@@ -263,6 +303,56 @@ def static_cover_props_jsx(cover: dict) -> str:
             f'methodologyStepsEn={json.dumps(cover["methodologyStepsEn"], ensure_ascii=False)}'
         )
     return "\n                    ".join(lines)
+
+
+def generate_cover_props_tsx(pascal: str, cover: dict) -> str:
+    """*CoverProps.ts：StaticCoverProps 常量，供 CoverStills 与文档对照。"""
+    parts = [
+        f'\ttitle: {json.dumps(cover["title"], ensure_ascii=False)},',
+        f'\tsubtitle: {json.dumps(cover["subtitle"], ensure_ascii=False)},',
+    ]
+    if cover.get("themeColor"):
+        parts.append(f'\tthemeColor: {json.dumps(cover["themeColor"], ensure_ascii=False)},')
+    if cover.get("badge"):
+        parts.append(f'\tbadge: {json.dumps(cover["badge"], ensure_ascii=False)},')
+    if cover.get("seriesLabel"):
+        parts.append(f'\tseriesLabel: {json.dumps(cover["seriesLabel"], ensure_ascii=False)},')
+    if cover.get("seriesLabelEn"):
+        parts.append(f'\tseriesLabelEn: {json.dumps(cover["seriesLabelEn"], ensure_ascii=False)},')
+    if cover.get("methodologySteps"):
+        arr = json.dumps(cover["methodologySteps"], ensure_ascii=False)
+        parts.append(f"\tmethodologySteps: {arr},")
+    if cover.get("methodologyStepsEn"):
+        parts.append(
+            f'\tmethodologyStepsEn: {json.dumps(cover["methodologyStepsEn"], ensure_ascii=False)},'
+        )
+    body = "\n".join(parts)
+    return f'''import type {{ StaticCoverProps }} from "../../components";
+
+/** 与 scene-scripts.json 中 cover 一致，供横/竖屏封面 still 与文档对照 */
+export const {pascal}_STATIC_COVER_PROPS: StaticCoverProps = {{
+{body}
+}};
+'''
+
+
+def generate_cover_stills_tsx(pascal: str) -> str:
+    """*CoverStills.tsx：横屏 LandscapeCoverPoster + 竖屏 VerticalCoverPoster。"""
+    return f'''import React from "react";
+
+import {{ LandscapeCoverPoster, VerticalCoverPoster }} from "../../components";
+import {{ {pascal}_STATIC_COVER_PROPS }} from "./{pascal}CoverProps";
+
+/** 1920×1080，`remotion still` 横屏封面 */
+export const {pascal}封面横屏: React.FC = () => (
+\t<LandscapeCoverPoster {{...{pascal}_STATIC_COVER_PROPS}} />
+);
+
+/** 3:4（1080×1440），`remotion still` 竖屏/抖音封面 */
+export const {pascal}封面竖屏: React.FC = () => (
+\t<VerticalCoverPoster {{...{pascal}_STATIC_COVER_PROPS}} />
+);
+'''
 
 
 def _apply_preview_overrides(scenes: list, preview_image: str | None, mute_audio: bool) -> None:
@@ -407,33 +497,45 @@ def _theme_accent_soft(theme: str) -> str:
 
 
 def _vertical_headline_meta(
-    cover: dict | None, scenes: list, pascal: str, config: dict
+    cover: dict | None,
+    cover_still: dict | None,
+    pascal: str,
+    config: dict,
 ) -> tuple[str, str, str, str, str]:
+    """竖屏顶栏固定标题：与封面 cover.title 一致；勿用首场景 sceneName（会与进度条第一段混淆）。"""
     headline = ""
     if cover and isinstance(cover.get("title"), str):
         headline = cover["title"].strip()
-    if not headline and scenes:
-        sn = scenes[0].get("sceneName")
-        if isinstance(sn, str) and sn.strip():
-            headline = sn.strip()
+    if not headline and cover_still and isinstance(cover_still.get("title"), str):
+        headline = cover_still["title"].strip()
+    if not headline:
+        vt = config.get("vertical_top_title")
+        if isinstance(vt, str) and vt.strip():
+            headline = vt.strip()
     if not headline:
         headline = pascal
 
     sub = ""
     if cover and isinstance(cover.get("seriesLabel"), str) and cover["seriesLabel"].strip():
         sub = cover["seriesLabel"].strip()
+    if not sub and cover_still and isinstance(cover_still.get("seriesLabel"), str):
+        sub = cover_still["seriesLabel"].strip()
     if not sub:
         sub = str(config.get("cover_series_label") or "系列")
 
     sub_en = ""
     if cover and isinstance(cover.get("seriesLabelEn"), str) and cover["seriesLabelEn"].strip():
         sub_en = cover["seriesLabelEn"].strip()
+    if not sub_en and cover_still and isinstance(cover_still.get("seriesLabelEn"), str):
+        sub_en = cover_still["seriesLabelEn"].strip()
     if not sub_en:
         sub_en = str(config.get("cover_series_label_en") or "SERIES")
 
     theme = ""
     if cover and isinstance(cover.get("themeColor"), str) and cover["themeColor"].strip():
         theme = cover["themeColor"].strip()
+    if not theme and cover_still and isinstance(cover_still.get("themeColor"), str):
+        theme = cover_still["themeColor"].strip()
     if not theme:
         theme = str(config.get("cover_theme_color") or "#2563EB")
 
@@ -489,8 +591,10 @@ export const VERTICAL_CANVAS_H = 1920;
 export const VERTICAL_PLAY_W = VERTICAL_CANVAS_W;
 export const VERTICAL_PLAY_H = Math.round((VERTICAL_CANVAS_W * 9) / 16);
 export const VERTICAL_PLAY_TOP = Math.round((VERTICAL_CANVAS_H - VERTICAL_PLAY_H) / 2);
-export const VERTICAL_PLAY_PROGRESS_GAP = 12;
+export const VERTICAL_PLAY_PROGRESS_GAP = 4;
 export const VERTICAL_CONTENT_SCALE = VERTICAL_PLAY_H / DESIGN_H;
+/** 竖屏底部品牌栏距画布底边的偏移 */
+export const VERTICAL_BOTTOM_BRAND_OFFSET = 400;
 '''
 
 
@@ -531,14 +635,14 @@ def generate_main_body_tsx(
 import {{ AbsoluteFill, Sequence }} from "remotion";
 import {{ linearTiming, TransitionSeries }} from "@remotion/transitions";
 import {{ fade }} from "@remotion/transitions/fade";
-import {{ StaticCover }} from "../../components";
+import {{ LandscapeCoverPoster }} from "../../components";
 {const_import}
 
 /** 横竖屏共用正文：封面 + 场景过渡（无全局 BGM、无外层 scale/壳） */
 export const {pascal}MainBody: React.FC = () => (
     <>
         <Sequence durationInFrames={{COVER_DURATION_FRAMES}}>
-            <StaticCover
+            <LandscapeCoverPoster
                 {cover_props}
             />
         </Sequence>
@@ -611,7 +715,7 @@ export const {pascal}Landscape: React.FC = () => {{
 
                     height: "100%",
                     width: "100%",
-                    background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)",
+                    background: "linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #e2e8f0 100%)",
                 }}}}
             />
             <div
@@ -624,7 +728,7 @@ export const {pascal}Landscape: React.FC = () => {{
                     opacity: bgBreathOpacity,
                     transform: `translate(${{bgShiftX}}px, ${{bgShiftY}}px)`,
                     background:
-                        "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)",
+                        "radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08), transparent 40%), radial-gradient(circle at 80% 60%, rgba(56, 189, 248, 0.12), transparent 45%), radial-gradient(circle at 40% 80%, rgba(148, 163, 184, 0.15), transparent 50%)",
                 }}}}
             />
             <RemotionLayoutMetricsProvider value={{{{ width: DESIGN_W, height: DESIGN_H }}}}>
@@ -676,12 +780,13 @@ def generate_vertical_tsx(pascal: str, mute_audio: bool) -> str:
     return f'''import React from "react";
 import {{ {remotion_import} }} from "remotion";
 
-import {{ RemotionLayoutMetricsProvider }} from "../../components";
+import {{ RemotionLayoutMetricsProvider, VERTICAL_SHELL_BG, VerticalBottomBrandBar }} from "../../components";
 import {{ {pascal}MainBody }} from "./{pascal}MainBody";
 import {{ {pascal}ProgressBar, {pascal}TopStaticHeadline }} from "./{pascal}VerticalChrome";
 import {{
     DESIGN_H,
     DESIGN_W,
+    VERTICAL_BOTTOM_BRAND_OFFSET,
     VERTICAL_CANVAS_W,
     VERTICAL_CONTENT_SCALE,
     VERTICAL_PLAY_H,
@@ -707,7 +812,7 @@ export const {pascal}Vertical: React.FC = () => {{
     }});
 
     return (
-        <AbsoluteFill style={{{{ background: "#000" }}}}>
+        <AbsoluteFill style={{{{ background: VERTICAL_SHELL_BG }}}}>
 {audio_block}            <{pascal}TopStaticHeadline canvasW={{VERTICAL_CANVAS_W}} topBandH={{VERTICAL_PLAY_TOP}} />
             <div
                 style={{{{
@@ -727,21 +832,21 @@ export const {pascal}Vertical: React.FC = () => {{
 
                         height: "100%",
                         width: "100%",
-                        background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)",
-                    }}}}
-                />
-                <div
-                    style={{{{
+                    background: "linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #e2e8f0 100%)",
+                }}}}
+            />
+            <div
+                style={{{{
 
 
-                        position: "absolute",
-                        inset: "-6%",
-                        pointerEvents: "none",
-                        opacity: bgBreathOpacity,
-                        transform: `translate(${{bgShiftX}}px, ${{bgShiftY}}px)`,
-                        background:
-                            "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)",
-                    }}}}
+                    position: "absolute",
+                    inset: "-6%",
+                    pointerEvents: "none",
+                    opacity: bgBreathOpacity,
+                    transform: `translate(${{bgShiftX}}px, ${{bgShiftY}}px)`,
+                    background:
+                        "radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08), transparent 40%), radial-gradient(circle at 80% 60%, rgba(56, 189, 248, 0.12), transparent 45%), radial-gradient(circle at 40% 80%, rgba(148, 163, 184, 0.15), transparent 50%)",
+                }}}}
                 />
                 <div
                     style={{{{
@@ -777,19 +882,41 @@ export const {pascal}Vertical: React.FC = () => {{
             </div>
             <div
                 style={{{{
-
-
+                    position: "absolute",
+                    left: 0,
+                    top: VERTICAL_PLAY_TOP,
+                    width: VERTICAL_PLAY_W,
+                    height: VERTICAL_PLAY_H,
+                    border: "1px solid rgba(255, 255, 255, 0.07)",
+                    boxSizing: "border-box",
+                    pointerEvents: "none",
+                    zIndex: 20,
+                }}}}
+            />
+            <div
+                style={{{{
                     position: "absolute",
                     left: 0,
                     top: VERTICAL_PLAY_TOP + VERTICAL_PLAY_H + VERTICAL_PLAY_PROGRESS_GAP,
                     width: VERTICAL_CANVAS_W,
-                    paddingLeft: 40,
-                    paddingRight: 40,
                     boxSizing: "border-box",
                     pointerEvents: "none",
                 }}}}
             >
                 <{pascal}ProgressBar />
+            </div>
+            <div
+                style={{{{ 
+                    position: "absolute",
+                    left: 0,
+                    bottom: VERTICAL_BOTTOM_BRAND_OFFSET,
+                    width: VERTICAL_CANVAS_W,
+                    boxSizing: "border-box",
+                    pointerEvents: "none",
+                    zIndex: 18,
+                }}}}
+            >
+                <VerticalBottomBrandBar canvasW={{VERTICAL_CANVAS_W}} />
             </div>
         </AbsoluteFill>
     );
@@ -800,13 +927,16 @@ export const {pascal}Vertical: React.FC = () => {{
 def generate_vertical_chrome_tsx(
     pascal: str,
     cover: dict | None,
-    scenes: list,
+    cover_still: dict | None,
     config: dict,
 ) -> str:
-    h, sub, sub_en, theme, theme_soft = _vertical_headline_meta(cover, scenes, pascal, config)
+    h, sub, sub_en, theme, theme_soft = _vertical_headline_meta(
+        cover, cover_still, pascal, config
+    )
     head = (
         'import React from "react";\n'
         'import { useCurrentFrame } from "remotion";\n\n'
+        'import { VerticalSegmentedProgressBar } from "../../components";\n'
         f'import {{ COVER_DURATION_FRAMES, sceneConfigs, TRANSITION_DURATION }} '
         f'from "./{pascal}Constants";\n\n'
         'const FONT_STACK =\n'
@@ -998,88 +1128,14 @@ def generate_vertical_chrome_tsx(
     prog = (
         f"export const {pascal}ProgressBar: React.FC = () => {{\n"
         "    const frame = useCurrentFrame();\n"
-        "    if (frame < COVER_DURATION_FRAMES) {\n"
-        "        return null;\n"
-        "    }\n"
-        "    const contentFrame = frame - COVER_DURATION_FRAMES;\n\n"
-        "    let currentStart = 0;\n"
-        "    const segments = sceneConfigs.map((c, i) => {\n"
-        "        const isLast = i === sceneConfigs.length - 1;\n"
-        "        const segmentDuration = isLast ? c.duration : c.duration - TRANSITION_DURATION;\n\n"
-        "        const segment = { start: currentStart, duration: segmentDuration };\n"
-        "        currentStart += segmentDuration;\n"
-        "        return segment;\n"
-        "    });\n\n"
-        "    const activeIndex = segments.findIndex(\n"
-        "        seg => contentFrame >= seg.start && contentFrame < seg.start + seg.duration,\n"
-        "    );\n"
-        "    const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;\n"
-        "    const activeLabel = sceneConfigs[validActiveIndex]?.label || \"\";\n\n"
         "    return (\n"
-        "        <div\n"
-        "            style={{\n"
-        "                width: \"100%\",\n"
-        "                display: \"flex\",\n"
-        "                flexDirection: \"column\",\n"
-        "                gap: 12,\n"
-        "                zIndex: 100,\n"
-        "            }}\n"
-        "        >\n"
-        "            <div style={{ display: \"flex\", gap: 8, height: 8 }}>\n"
-        "                {segments.map((seg, i) => {\n"
-        "                    const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));\n"
-        "                    const isActive = i === validActiveIndex;\n"
-        "                    return (\n"
-        "                        <div\n"
-        "                            key={i}\n"
-        "                            style={{\n"
-        "                                flex: 1,\n"
-        "                                backgroundColor: isActive ? \"rgba(34, 43, 69, 0.18)\" : \"rgba(34, 43, 69, 0.1)\",\n"
-        "                                borderRadius: 999,\n"
-        "                                overflow: \"hidden\",\n"
-        "                                border: isActive ? \"1px solid rgba(34, 43, 69, 0.32)\" : "
-        "\"1px solid rgba(34, 43, 69, 0.2)\",\n"
-        "                                boxShadow: isActive\n"
-        "                                    ? \"0 3px 10px rgba(31, 41, 55, 0.12)\"\n"
-        "                                    : \"0 1px 4px rgba(31, 41, 55, 0.08)\",\n"
-        "                            }}\n"
-        "                        >\n"
-        "                            <div\n"
-        "                                style={{\n"
-        "                                    width: `${progress * 100}%`,\n"
-        "                                    height: \"100%\",\n"
-        "                                    background: isActive\n"
-        "                                        ? \"linear-gradient(90deg, rgba(29, 78, 216, 0.95), "
-        "rgba(56, 189, 248, 0.92))\"\n"
-        "                                        : \"rgba(30, 41, 59, 0.72)\",\n"
-        "                                    boxShadow: isActive ? \"0 0 12px rgba(37, 99, 235, 0.35)\" : \"none\",\n"
-        "                                }}\n"
-        "                            />\n"
-        "                        </div>\n"
-        "                    );\n"
-        "                })}\n"
-        "            </div>\n\n"
-        "            <div\n"
-        "                style={{\n"
-        "                    fontSize: 30,\n"
-        "                    fontWeight: 700,\n"
-        "                    fontFamily: FONT_STACK,\n"
-        "                    letterSpacing: 0.4,\n"
-        "                    color: \"rgba(17, 24, 39, 0.95)\",\n"
-        "                    textAlign: \"left\",\n"
-        "                    textShadow: \"0 1px 2px rgba(255,255,255,0.45)\",\n"
-        "                    padding: \"6px 14px\",\n"
-        "                    backgroundColor: \"rgba(255, 255, 255, 0.58)\",\n"
-        "                    border: \"1px solid rgba(17, 24, 39, 0.12)\",\n"
-        "                    borderRadius: 10,\n"
-        "                    alignSelf: \"flex-start\",\n"
-        "                    backdropFilter: \"blur(6px)\",\n"
-        "                    boxShadow: \"0 6px 20px rgba(15, 23, 42, 0.12)\",\n"
-        "                }}\n"
-        "            >\n"
-        "                {activeLabel}\n"
-        "            </div>\n"
-        "        </div>\n"
+        "        <VerticalSegmentedProgressBar\n"
+        "            frame={frame}\n"
+        "            coverDurationFrames={COVER_DURATION_FRAMES}\n"
+        "            sceneConfigs={sceneConfigs}\n"
+        "            transitionDuration={TRANSITION_DURATION}\n"
+        "            fontStack={FONT_STACK}\n"
+        "        />\n"
         "    );\n"
         "};\n"
     )
@@ -1105,6 +1161,7 @@ export {{
     sceneConfigs,
     {td},
     TRANSITION_DURATION,
+    VERTICAL_BOTTOM_BRAND_OFFSET,
     VERTICAL_CANVAS_H,
     VERTICAL_CANVAS_W,
     VERTICAL_CONTENT_SCALE,
@@ -1118,14 +1175,37 @@ export {{ {pascal}Vertical as {pascal}竖屏 }} from "./{pascal}Vertical";
 '''
 
 
-def update_root_tsx(root_path: Path, name: str, pascal: str, config: dict):
-    """在 Root.tsx 注册横屏 + 竖屏双 Composition，并更新 import。"""
+def update_root_tsx(
+    root_path: Path, name: str, pascal: str, config: dict, cover_still: dict | None
+):
+    """在 Root.tsx 注册横屏 + 竖屏 Composition；cover_still 有值时追加横/竖封面 still 与 import。"""
     fps = config.get("fps", 30)
     duration_token = f"TOTAL_DURATION_{name.upper()}"
     vert_id = f"{pascal}竖屏"
+    cover_land_id = f"{pascal}封面横屏"
+    cover_vert_id = f"{pascal}封面竖屏"
 
     with open(root_path, "r", encoding="utf-8") as f:
         content = f.read()
+
+    for comp_id in (cover_land_id, cover_vert_id):
+        pattern = (
+            r"\n\s*(?:\{/\*[^\n]*\*/\}\s*\n)?\s*<Composition\b"
+            r"(?:(?!<Composition)[\s\S])*?\bid=\""
+            + re.escape(comp_id)
+            + r"\"[\s\S]*?/>"
+        )
+        content = re.sub(pattern, "\n", content, count=1)
+
+    cover_imp_line_re = re.compile(
+        r"^\s*import\s*\{[^}]+\}\s*from\s*[\"']\./remotions/"
+        + re.escape(name)
+        + "/"
+        + re.escape(pascal)
+        + r"CoverStills[\"'];\s*\n?",
+        re.MULTILINE,
+    )
+    content = cover_imp_line_re.sub("", content)
 
     # 只删除「单个」Composition：从 <Composition 到目标 id 之间不能跨过另一个 <Composition，
     # 否则会从文件里第一个 <Composition（如 TemplateShowcase）一直吞到目标 id，误删中间所有条目。
@@ -1143,7 +1223,7 @@ def update_root_tsx(root_path: Path, name: str, pascal: str, config: dict):
         + re.escape(name)
         + "/"
         + re.escape(pascal)
-        + r"[\"'];\s*\n",
+        + r"[\"'];\s*\n?",
         re.MULTILINE,
     )
     content = imp_line_re.sub("", content)
@@ -1152,6 +1232,37 @@ def update_root_tsx(root_path: Path, name: str, pascal: str, config: dict):
         f'import {{ {pascal}, {vert_id}, {pascal}Schema, {duration_token} }} '
         f'from "./remotions/{name}/{pascal}";'
     )
+    cover_import_line = ""
+    if cover_still:
+        cover_import_line = (
+            f'import {{ {cover_land_id}, {cover_vert_id} }} '
+            f'from "./remotions/{name}/{pascal}CoverStills";'
+        )
+
+    cover_comp_block = ""
+    if cover_still:
+        cover_comp_block = f"""
+      {{/* {cover_land_id} - 横屏封面 still 1920×1080 */}}
+      <Composition
+        id="{cover_land_id}"
+        component={{{cover_land_id}}}
+        durationInFrames={{1}}
+        fps={{{fps}}}
+        width={{1920}}
+        height={{1080}}
+        defaultProps={{{{}}}}
+      />
+
+      {{/* {cover_vert_id} - 3:4 封面 still 1080×1440 */}}
+      <Composition
+        id="{cover_vert_id}"
+        component={{{cover_vert_id}}}
+        durationInFrames={{1}}
+        fps={{{fps}}}
+        width={{1080}}
+        height={{1440}}
+        defaultProps={{{{}}}}
+      />"""
 
     composition_block = f"""
       {{/* {pascal} - 横屏 1920×1080（自动生成） */}}
@@ -1176,7 +1287,7 @@ def update_root_tsx(root_path: Path, name: str, pascal: str, config: dict):
         height={{1920}}
         schema={{{pascal}Schema}}
         defaultProps={{{{}}}}
-      />"""
+      />{cover_comp_block}"""
 
     lines = content.split("\n")
     insert_at = None
@@ -1185,12 +1296,15 @@ def update_root_tsx(root_path: Path, name: str, pascal: str, config: dict):
             insert_at = i + 1
     if insert_at is not None:
         lines.insert(insert_at, import_line)
+        if cover_import_line:
+            lines.insert(insert_at + 1, cover_import_line)
         content = "\n".join(lines)
     else:
         last_import = content.rfind("import ")
         if last_import >= 0:
             end_of_line = content.index("\n", last_import)
-            content = content[: end_of_line + 1] + import_line + "\n" + content[end_of_line + 1 :]
+            extra = import_line + ("\n" + cover_import_line if cover_import_line else "")
+            content = content[: end_of_line + 1] + extra + "\n" + content[end_of_line + 1 :]
 
     close_frag = content.rfind("\n    </>")
     if close_frag >= 0:
@@ -1199,7 +1313,11 @@ def update_root_tsx(root_path: Path, name: str, pascal: str, config: dict):
     with open(root_path, "w", encoding="utf-8") as f:
         f.write(content)
 
-    print("  ✅ Root.tsx 已更新（横屏 + 竖屏双 Composition）")
+    root_msg = "  ✅ Root.tsx 已更新（横屏 + 竖屏双 Composition"
+    if cover_still:
+        root_msg += " + 横/竖封面 still"
+    root_msg += "）"
+    print(root_msg)
 
 
 def generate_scenes_index(scene_count: int) -> str:
@@ -1262,6 +1380,10 @@ def main():
             f"{cover['title'][:20]}{'…' if len(cover['title']) > 20 else ''}"
         )
 
+    cover_still = normalize_cover_still(scripts_data)
+    if cover_still:
+        print("📎 封面 still：已检测到 cover 文案，将生成 CoverProps / CoverStills 并注册 Root")
+
     if args.preview_image or args.mute_audio:
         _apply_preview_overrides(
             scenes=scenes,
@@ -1320,7 +1442,7 @@ def main():
         f.write(vert)
     print(f"  ✅ {pascal}Vertical.tsx")
 
-    chrome = generate_vertical_chrome_tsx(pascal, cover, scenes, config)
+    chrome = generate_vertical_chrome_tsx(pascal, cover, cover_still, config)
     with open(remotion_dir / f"{pascal}VerticalChrome.tsx", "w", encoding="utf-8") as f:
         f.write(chrome)
     print(f"  ✅ {pascal}VerticalChrome.tsx")
@@ -1330,15 +1452,37 @@ def main():
         f.write(entry)
     print(f"  ✅ {pascal}.tsx（双 export）")
 
+    cover_props_path = remotion_dir / f"{pascal}CoverProps.ts"
+    cover_stills_path = remotion_dir / f"{pascal}CoverStills.tsx"
+    if cover_still:
+        with open(cover_props_path, "w", encoding="utf-8") as f:
+            f.write(generate_cover_props_tsx(pascal, cover_still))
+        print(f"  ✅ {pascal}CoverProps.ts")
+        with open(cover_stills_path, "w", encoding="utf-8") as f:
+            f.write(generate_cover_stills_tsx(pascal))
+        print(f"  ✅ {pascal}CoverStills.tsx")
+    else:
+        if cover_props_path.exists():
+            cover_props_path.unlink()
+            print(f"  🗑️ 已删除 {pascal}CoverProps.ts（cover 无有效 title/subtitle）")
+        if cover_stills_path.exists():
+            cover_stills_path.unlink()
+            print(f"  🗑️ 已删除 {pascal}CoverStills.tsx")
+
     # 更新 Root.tsx
     if not args.skip_root:
         root_path = project_root / "src" / "Root.tsx"
         if root_path.exists():
-            update_root_tsx(root_path, name, pascal, config)
+            update_root_tsx(root_path, name, pascal, config, cover_still)
 
     print("\n✅ Remotion 代码生成完成（横屏 + 竖屏双入口）!")
     print(f"   📂 {remotion_dir}")
     print(f"   Root：Composition「{pascal}」1920×1080、「{pascal}竖屏」1080×1920")
+    if cover_still:
+        print(
+            f"   封面 still：「{pascal}封面横屏」「{pascal}封面竖屏」"
+            " — `npx remotion still src/index.ts <id> out/cover.png --frame=0`"
+        )
     print("   Studio 请分别预览上述两个 id；导出需各执行一次 remotion render")
 
     return True

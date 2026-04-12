@@ -4,7 +4,7 @@ import { z } from "zod";
 import { linearTiming, TransitionSeries } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 
-import { StaticCover } from "../../components";
+import { LandscapeCoverPoster } from "../../components";
 import { Scene1, calculateScene1Duration } from "./scenes/Scene1";
 import { Scene2, calculateScene2Duration } from "./scenes/Scene2";
 import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
@@ -149,7 +149,7 @@ export const 数据可视化陷阱: React.FC<z.infer<typeof 数据可视化陷�
                 }}
             />
             <Sequence durationInFrames={COVER_DURATION_FRAMES}>
-                <StaticCover
+                <LandscapeCoverPoster
                     title="数据可视化陷阱"
                     subtitle="警惕数据图表的视觉欺骗"
                     themeColor="#2563EB"

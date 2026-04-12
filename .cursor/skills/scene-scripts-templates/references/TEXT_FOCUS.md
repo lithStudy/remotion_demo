@@ -10,7 +10,7 @@ metadata:
 {
   "name": "TEXT_FOCUS",
   "componentExport": "BWTextFocus",
-  "description": "适用：全片最强金句、结论暴击；0 图纯大字。\n差异：需要配图锚定用 CENTER_FOCUS；模拟读者吐槽口吻用 CHAT_BUBBLE。\n慎用：content 建议不超过 3 条以保持冲击；若口播/字幕必须保留长 content，可填 coreSentence 仅用于大屏一句展示。",
+  "description": "适用：全片最强金句、结论暴击；0 图纯大字。\n差异：需要配图锚定用 CENTER_FOCUS；模拟读者吐槽口吻用 CHAT_BUBBLE。\n慎用：content 建议不超过 3 条以保持冲击；若口播/字幕必须保留长 content，可填 coreSentence（string[]，一行或多行）作为大屏主文案。",
   "content_max_items": 3,
   "psychology": "信噪比极致化",
   "image_count": 0,
@@ -18,12 +18,16 @@ metadata:
     "type": "object",
     "properties": {
       "coreSentence": {
-        "type": "string",
-        "description": "精炼核心句，不超过25个字"
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "string"
+        },
+        "description": "大屏核心文案：非空字符串数组，每元素一行；锚点校验时按顺序直接拼接（无分隔符）。"
       },
       "coreSentenceAnchors": {
         "type": "array",
-        "description": "可选；在 coreSentence 内按顺序高亮子串。每项 coreSentenceAnchor 须为 coreSentence 的子串，否则会被校验丢弃",
+        "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
         "items": {
           "type": "object",
           "required": [
@@ -32,7 +36,7 @@ metadata:
           "properties": {
             "coreSentenceAnchor": {
               "type": "string",
-              "description": "要高亮的子串，须出现在 coreSentence 内"
+              "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
             },
             "color": {
               "type": "string",
@@ -49,7 +53,9 @@ metadata:
   "example": {
     "template": "TEXT_FOCUS",
     "param": {
-      "coreSentence": "承认自己“可能错了”并不是一种软弱",
+      "coreSentence": [
+        "承认自己“可能错了”并不是一种软弱"
+      ],
       "coreSentenceAnchors": [
         {
           "coreSentenceAnchor": "可能错了",

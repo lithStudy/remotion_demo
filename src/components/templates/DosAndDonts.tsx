@@ -64,7 +64,6 @@ export const BWDosAndDonts: React.FC<BWDosAndDontsProps> = ({
 	const frame = useCurrentFrame();
 	const { fps, width, height } = useVideoConfig();
 	const half = width / 2;
-	const progressSafeArea = 40;
 	// 与 BWSubtitle 保持一致：底部约 10% 为字幕安全区，模板主内容不进入该区域。
 	const subtitleSafeArea = Math.max(48, Math.round(height * 0.1));
 
@@ -79,13 +78,13 @@ export const BWDosAndDonts: React.FC<BWDosAndDontsProps> = ({
 				style={{
 					display: "flex",
 					width: "100%",
-					height: `calc(100% - ${progressSafeArea}px - ${subtitleSafeArea}px)`,
-					marginTop: progressSafeArea,
+					// height: "85%",
+					height: "100%",
 				}}
 			>
 				<div style={{
 					flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-					gap: 24, transform: `translateX(${leftX}px)`, backgroundColor: "rgba(229, 62, 62, 0.05)", borderRight: "4px solid #E53E3E",
+					gap: 24, transform: `translateX(${leftX}px)`, backgroundColor: "rgba(229, 62, 62, 0.05)",
 				}}>
 					<div style={{ fontSize: 62, fontWeight: 900, color: "#E53E3E", textAlign: "center", padding: "0 28px", fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif' }}>
 						{dontLabel}

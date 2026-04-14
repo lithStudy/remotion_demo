@@ -190,8 +190,8 @@
         },
         {
           "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "平缓叙述，表达一种现象，选择CENTER_FOCUS",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "同一镜头内讲清「为掌控感→贴负面标签→聪明人转向外因」的传导，用 CAUSE_CHAIN 做因果链可视化。",
           "content": [
             {
               "text": "他们甚至会为了维护这种“心理掌控感”，"
@@ -205,22 +205,25 @@
           ],
           "order": 2,
           "param": {
-            "imageSrc": "一群人互相指责的卡通形象",
-            "enterEffect": "fadeIn",
-            "anchors": [
+            "layout": "horizontal",
+            "nodes": [
               {
-                "text": "心理掌控感",
+                "label": "心理掌控",
+                "imageSrc": "一只手紧握方向盘或操纵杆的隐喻简笔画，象征需要掌控感",
                 "showFrom": 0,
-                "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "ping"
+                "enterEffect": "fadeIn"
               },
               {
-                "text": "贴标签",
+                "label": "贴标签",
+                "imageSrc": "一群人互相指责、往对方身上贴红色负面标签条的卡通形象",
                 "showFrom": 1,
-                "color": "#EF4444",
-                "anim": "highlight",
-                "audioEffect": "impact_thud"
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "看外因",
+                "imageSrc": "人物用放大镜观察外部环境因素（天气、流程、资源）而非指责他人的简笔画",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
               }
             ]
           }

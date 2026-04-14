@@ -125,7 +125,7 @@ export const 平均数陷阱: React.FC<z.infer<typeof 平均数陷阱Schema>> = 
             <Audio
                 src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
                 loop
-                volume={0.22}
+                volume={0.15}
                 name="Background music"
             />
             <div

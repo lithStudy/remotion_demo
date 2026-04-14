@@ -41,3 +41,5 @@ export const VERTICAL_PLAY_H = Math.round((VERTICAL_CANVAS_W * 9) / 16);
 export const VERTICAL_PLAY_TOP = Math.round((VERTICAL_CANVAS_H - VERTICAL_PLAY_H) / 2);
 export const VERTICAL_PLAY_PROGRESS_GAP = 4;
 export const VERTICAL_CONTENT_SCALE = VERTICAL_PLAY_H / DESIGN_H;
+/** 竖屏底部品牌栏距画布底边的偏移 */
+export const VERTICAL_BOTTOM_BRAND_OFFSET = 400;

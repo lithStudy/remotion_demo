@@ -242,7 +242,7 @@ const PanelCell: React.FC<{
 				gridColumn: spanFullWidth ? "1 / -1" : undefined,
 			}}
 		>
-			<div style={{ position: "relative", width: "88%", height: maxH }}>
+			<div style={{ position: "relative", width: "96%", height: maxH }}>
 				<Img
 					src={getSafeImageSrc(panel.src)}
 					style={{
@@ -275,12 +275,13 @@ export const BWPanelGrid: React.FC<BWPanelGridProps> = ({
 	const stagger = 15;
 	const starts = list.map((p, i) => resolvePanelStartFrame(p.showFrom, i, items, stagger));
 
+	// 宫格配图可视高度：过小会显得图标「缩在角落」；需与 top/bottom 留白及 2×2 行高协调
 	const maxH =
 		n <= 2
-			? Math.min(height * 0.22, 220)
+			? Math.min(height * 0.30, 320)
 			: n === 3
-				? Math.min(height * 0.18, 180)
-				: Math.min(height * 0.16, 160);
+				? Math.min(height * 0.26, 280)
+				: Math.min(height * 0.24, 280);
 
 	const gridStyle: React.CSSProperties =
 		n === 2

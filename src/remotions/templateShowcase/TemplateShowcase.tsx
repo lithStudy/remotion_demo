@@ -18,6 +18,7 @@ import {
 	BWBeatSequence,
 	BWCognitiveShift,
 	BWMethodStack,
+	BWCaseBreakdown,
 	BWCauseChain,
 	BWChecklistReveal,
 	BWPanelGrid,
@@ -98,6 +99,32 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 		),
 	},
 	{
+		key: "case-breakdown",
+		content: (
+			<>
+				<BWCaseBreakdown
+					title="长寿悖论"
+					imageSrc={img("images/template/scene1_1.png")}
+					phases={[
+						{ phaseLabel: "表面个案", showFrom: 0 },
+						{ phaseLabel: "常见推论", showFrom: 1 },
+						{ phaseLabel: "真相", showFrom: 2 },
+						{ phaseLabel: "收束", showFrom: 4 },
+					]}
+					content={[
+						{ text: "某个百岁老人每天抽烟喝酒，", startFrame: 0, durationFrames: 18 },
+						{ text: "大家就觉得养生没用。", startFrame: 18, durationFrames: 16 },
+						{ text: "其实那只是因为他基因逆天，", startFrame: 34, durationFrames: 16 },
+						{ text: "而那些学他抽烟喝酒的人，", startFrame: 50, durationFrames: 14 },
+						{ text: "大多没活到能接受采访的年纪。", startFrame: 64, durationFrames: 11 },
+					]}
+					anchors={[]}
+				/>
+				<BWSubtitle position="top" text="CASE_BREAKDOWN · 案例/子话题详解" startFrame={0} />
+			</>
+		),
+	},
+	{
 		key: "center-focus",
 		content: (
 			<>
@@ -170,10 +197,8 @@ const SHOWCASE_SEGMENTS: Array<{ key: string; content: React.ReactNode }> = [
 		content: (
 			<>
 				<BWDosAndDonts
-					leftSrc={img("images/template/scene5_1.png")}
-					rightSrc={img("images/template/scene5_2.png")}
-					dontLabel="错误示范"
-					doLabel="正确做法"
+					left={{ label: "错误示范", src: img("images/template/scene5_1.png"), showFrom: 0 }}
+					right={{ label: "正确做法", src: img("images/template/scene5_2.png"), showFrom: 10 }}
 				/>
 				<BWSubtitle position="top" text="DOS_AND_DONTS · 避坑对比" startFrame={0} />
 			</>

@@ -48,6 +48,8 @@ export { BWCognitiveShift } from "./CognitiveShift";
 export type { BWCognitiveShiftProps } from "./CognitiveShift";
 export { BWMethodStack } from "./MethodStack";
 export type { BWMethodStackProps } from "./MethodStack";
+export { BWCaseBreakdown } from "./CaseBreakdown";
+export type { BWCaseBreakdownProps } from "./CaseBreakdown";
 export { BWCauseChain } from "./CauseChain";
 export type { BWCauseChainProps, CauseChainNodeItem } from "./CauseChain";
 export { BWChecklistReveal } from "./ChecklistReveal";

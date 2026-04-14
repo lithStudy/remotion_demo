@@ -20,6 +20,8 @@ const u = (px: number) => Math.round(px * SCALE);
 
 const DEFAULT_THEME = "#1d4ed8";
 
+const COVER_SOLID_BG = "#f1f5f9";
+
 /** 四角括号：L 形双线，两条边，可控 arm 长和线宽 */
 const CornerBracket: React.FC<{
 	color: string;
@@ -78,17 +80,7 @@ export const VerticalCoverPoster: React.FC<StaticCoverProps> = ({
 				style={{
 					position: "absolute",
 					inset: 0,
-					background:
-						"linear-gradient(168deg, #f8fafc 0%, #f1f5f9 42%, #e8eef5 100%)",
-				}}
-			/>
-			<div
-				style={{
-					position: "absolute",
-					inset: 0,
-					pointerEvents: "none",
-					background: `radial-gradient(ellipse 70% 50% at 60% 10%, ${themeColor}14, transparent 55%),
-						radial-gradient(ellipse 50% 40% at 40% 92%, ${themeColor}0c, transparent 50%)`,
+					background: COVER_SOLID_BG,
 				}}
 			/>
 
@@ -99,7 +91,7 @@ export const VerticalCoverPoster: React.FC<StaticCoverProps> = ({
 					left: u(64),
 					right: u(64),
 					height: u(2),
-					background: `linear-gradient(90deg, transparent, ${themeColor}55 30%, ${themeColor}55 70%, transparent)`,
+					background: `${themeColor}55`,
 					borderRadius: u(1),
 					pointerEvents: "none",
 				}}
@@ -111,7 +103,7 @@ export const VerticalCoverPoster: React.FC<StaticCoverProps> = ({
 					left: u(64),
 					right: u(64),
 					height: u(2),
-					background: `linear-gradient(90deg, transparent, ${themeColor}55 30%, ${themeColor}55 70%, transparent)`,
+					background: `${themeColor}55`,
 					borderRadius: u(1),
 					pointerEvents: "none",
 				}}
@@ -133,7 +125,7 @@ export const VerticalCoverPoster: React.FC<StaticCoverProps> = ({
 					justifyContent: "center",
 				}}
 			>
-				<CoverPosterCore themeColor={themeColor} {...coreProps} />
+				<CoverPosterCore themeColor={themeColor} {...coreProps} titleFitSingleLine />
 			</div>
 		</AbsoluteFill>
 	);

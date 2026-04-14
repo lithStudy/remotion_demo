@@ -188,7 +188,7 @@ export const 认知偏见后视偏见TopStaticHeadline: React.FC<TopStaticHeadli
     </div>
 );
 
-const HindsightBiasVerticalProgressBarInner: React.FC = () => {
+export const 认知偏见后视偏见ProgressBar: React.FC = () => {
     const frame = useCurrentFrame();
     return (
         <VerticalSegmentedProgressBar
@@ -200,5 +200,3 @@ const HindsightBiasVerticalProgressBarInner: React.FC = () => {
         />
     );
 };
-
-export const 认知偏见后视偏见ProgressBar = HindsightBiasVerticalProgressBarInner;

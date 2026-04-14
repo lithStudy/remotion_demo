@@ -176,6 +176,21 @@ def _param_to_jsx_props(param: dict, name: str, scene_id: str, order: int) -> st
                         parts.append(f'{pk}: {json.dumps(pv, ensure_ascii=False)}')
                 panel_jsx_parts.append("{ " + ", ".join(parts) + " }")
             props.append(f'panels={{[{", ".join(panel_jsx_parts)}]}}')
+        elif key in ("left", "right") and isinstance(value, dict):
+            # DOS_AND_DONTS：左右侧配置，src 需 staticFile
+            parts = []
+            for sk, sv in value.items():
+                if sk == "src" and isinstance(sv, str):
+                    parts.append(f'src: staticFile("{_escape_jsx(sv)}")')
+                elif isinstance(sv, str):
+                    parts.append(f'{sk}: "{_escape_jsx(sv)}"')
+                elif isinstance(sv, bool):
+                    parts.append(f'{sk}: {str(sv).lower()}')
+                elif isinstance(sv, (int, float)):
+                    parts.append(f'{sk}: {sv}')
+                else:
+                    parts.append(f'{sk}: {json.dumps(sv, ensure_ascii=False)}')
+            props.append(f'{key}={{{{' + ", ".join(parts) + " }}")
         elif key in IMAGE_PARAM_FIELDS:
             if isinstance(value, str):
                 props.append(f'{key}={{staticFile("{value}")}}')
@@ -675,7 +690,7 @@ def generate_landscape_tsx(pascal: str, mute_audio: bool) -> str:
         audio_block = """            <Audio
                 src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
                 loop
-                volume={0.22}
+                volume={0.10}
                 name="Background music"
             />
 """
@@ -768,7 +783,7 @@ def generate_vertical_tsx(pascal: str, mute_audio: bool) -> str:
         audio_block = """            <Audio
                 src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
                 loop
-                volume={0.22}
+                volume={0.10}
                 name="Background music"
             />
 """

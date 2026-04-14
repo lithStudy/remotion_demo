@@ -1,5 +1,6 @@
 /**
- * 认知偏见 · 锚定效应：横屏主片 + 竖屏黑边壳双入口，共享 AnchoringBiasMainBody。
+ * 横屏主片 + 竖屏黑边壳双入口，共享 认知偏见锚定效应MainBody。
+ * 参见 docs/横竖屏双导出与字幕改造指南.md
  */
 export {
     认知偏见锚定效应Schema,
@@ -13,6 +14,7 @@ export {
     sceneConfigs,
     TOTAL_DURATION_认知偏见_锚定效应,
     TRANSITION_DURATION,
+    VERTICAL_BOTTOM_BRAND_OFFSET,
     VERTICAL_CANVAS_H,
     VERTICAL_CANVAS_W,
     VERTICAL_CONTENT_SCALE,
@@ -20,6 +22,6 @@ export {
     VERTICAL_PLAY_PROGRESS_GAP,
     VERTICAL_PLAY_TOP,
     VERTICAL_PLAY_W,
-} from "./anchoringConstants";
-export { AnchoringBiasLandscape as 认知偏见锚定效应 } from "./AnchoringBiasLandscape";
-export { AnchoringBiasVertical as 认知偏见锚定效应竖屏 } from "./AnchoringBiasVertical";
+} from "./认知偏见锚定效应Constants";
+export { 认知偏见锚定效应Landscape as 认知偏见锚定效应 } from "./认知偏见锚定效应Landscape";
+export { 认知偏见锚定效应Vertical as 认知偏见锚定效应竖屏 } from "./认知偏见锚定效应Vertical";

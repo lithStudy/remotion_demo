@@ -171,6 +171,8 @@ def get_output_filename(task: dict) -> str:
     if task["field_name"] in ("leftSrc", "rightSrc"):
         side = "left" if task["field_name"] == "leftSrc" else "right"
         return f"{base}_{side}.png"
+    if task["field_name"] in ("left", "right"):
+        return f"{base}_{task['field_name']}.png"
     return f"{base}.png"
 
 

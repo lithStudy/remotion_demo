@@ -188,7 +188,7 @@ export const 认知偏见确认偏误TopStaticHeadline: React.FC<TopStaticHeadli
     </div>
 );
 
-const ConfirmationBiasVerticalProgressBarInner: React.FC = () => {
+export const 认知偏见确认偏误ProgressBar: React.FC = () => {
     const frame = useCurrentFrame();
     return (
         <VerticalSegmentedProgressBar
@@ -200,5 +200,3 @@ const ConfirmationBiasVerticalProgressBarInner: React.FC = () => {
         />
     );
 };
-
-export const 认知偏见确认偏误ProgressBar = ConfirmationBiasVerticalProgressBarInner;

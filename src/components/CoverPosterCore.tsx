@@ -2,6 +2,7 @@
  * 横/竖屏封面共用的居中主视觉：系列标签 + 主副标题 + 细线装饰。
  * StaticCoverSchema / StaticCoverProps 定义于此，供 Remotion defaultProps 与封面组件复用。
  */
+import { fitText } from "@remotion/layout-utils";
 import React from "react";
 import { useVideoConfig } from "remotion";
 import { z } from "zod";
@@ -20,6 +21,8 @@ export const StaticCoverSchema = z.object({
 	methodologyStepsEn: z.string().optional(),
 	/** 可选角标文案；封面核心块不展示，保留以兼容既有 props */
 	badge: z.string().optional(),
+	/** 为 true 时主标题单行排版，字号在不超过设计上限的前提下随文案长度缩放 */
+	titleFitSingleLine: z.boolean().optional(),
 });
 
 export type StaticCoverProps = z.infer<typeof StaticCoverSchema>;
@@ -43,11 +46,31 @@ export const CoverPosterCore: React.FC<StaticCoverProps> = ({
 	themeColor = DEFAULT_THEME,
 	seriesLabel = DEFAULT_SERIES_LABEL,
 	seriesLabelEn,
+	titleFitSingleLine = false,
 }) => {
 	const { width, height } = useVideoConfig();
 	const scale = Math.min(width / DESIGN_REF_W, height / DESIGN_REF_H);
 	const u = (px: number) => Math.round(px * scale);
 	const uf = (px: number) => Math.round(px * scale * THUMB_READABILITY_MULT);
+
+	const titleHorizontalPadding = u(110);
+	const titleMaxFontSize = uf(170);
+	const titleLetterSpacingPx = uf(2);
+	const titleAvailableWidth = Math.max(0, width - 2 * titleHorizontalPadding - 4);
+
+	let titleFontSize = titleMaxFontSize;
+	if (titleFitSingleLine && title.trim().length > 0 && titleAvailableWidth > 0) {
+		const { fontSize: fitted } = fitText({
+			text: title,
+			withinWidth: titleAvailableWidth,
+			fontFamily: FONT_STACK,
+			fontWeight: 900,
+			letterSpacing: `${titleLetterSpacingPx}px`,
+		});
+		if (Number.isFinite(fitted) && fitted > 0) {
+			titleFontSize = Math.min(titleMaxFontSize, fitted);
+		}
+	}
 
 	return (
 		<div
@@ -114,7 +137,7 @@ export const CoverPosterCore: React.FC<StaticCoverProps> = ({
 					style={{
 						flex: 1,
 						height: u(1),
-						background: `linear-gradient(90deg, transparent, ${themeColor}44)`,
+						background: `${themeColor}44`,
 					}}
 				/>
 				<div
@@ -130,7 +153,7 @@ export const CoverPosterCore: React.FC<StaticCoverProps> = ({
 					style={{
 						flex: 1,
 						height: u(1),
-						background: `linear-gradient(270deg, transparent, ${themeColor}44)`,
+						background: `${themeColor}44`,
 					}}
 				/>
 			</div>
@@ -139,12 +162,14 @@ export const CoverPosterCore: React.FC<StaticCoverProps> = ({
 				style={{
 					margin: 0,
 					padding: 0,
-					fontSize: uf(170),
+					fontSize: titleFontSize,
 					fontWeight: 900,
 					lineHeight: 1.1,
-					letterSpacing: uf(2),
+					letterSpacing: titleLetterSpacingPx,
 					color: "#0f172a",
-					wordBreak: "break-word",
+					wordBreak: titleFitSingleLine ? "keep-all" : "break-word",
+					whiteSpace: titleFitSingleLine ? "nowrap" : "normal",
+					maxWidth: "100%",
 				}}
 			>
 				{title}
@@ -155,7 +180,7 @@ export const CoverPosterCore: React.FC<StaticCoverProps> = ({
 					style={{
 						flex: 1,
 						height: u(1),
-						background: `linear-gradient(90deg, transparent, ${themeColor}44)`,
+						background: `${themeColor}44`,
 					}}
 				/>
 				<div
@@ -171,7 +196,7 @@ export const CoverPosterCore: React.FC<StaticCoverProps> = ({
 					style={{
 						flex: 1,
 						height: u(1),
-						background: `linear-gradient(270deg, transparent, ${themeColor}44)`,
+						background: `${themeColor}44`,
 					}}
 				/>
 			</div>

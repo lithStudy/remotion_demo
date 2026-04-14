@@ -127,7 +127,7 @@ export const 双盲实验: React.FC<z.infer<typeof 双盲实验Schema>> = () => 
             <Audio
                 src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
                 loop
-                volume={0.22}
+                volume={0.15}
                 name="Background music"
             />
             <div

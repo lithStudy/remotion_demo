@@ -10,6 +10,9 @@ import { CoverPosterCore, type StaticCoverProps } from "./CoverPosterCore";
 /** 偏学院蓝，与理性、方法论气质一致 */
 const DEFAULT_THEME = "#1d4ed8";
 
+/** 封面底色素色（与原先灰阶主色一致） */
+const COVER_SOLID_BG = "#f1f5f9";
+
 export const LandscapeCoverPoster: React.FC<StaticCoverProps> = ({
 	themeColor = DEFAULT_THEME,
 	...coreProps
@@ -20,42 +23,7 @@ export const LandscapeCoverPoster: React.FC<StaticCoverProps> = ({
 				style={{
 					position: "absolute",
 					inset: 0,
-					background:
-						"linear-gradient(168deg, #f8fafc 0%, #f1f5f9 42%, #e8eef5 100%)",
-				}}
-			/>
-			<div
-				style={{
-					position: "absolute",
-					inset: "-4%",
-					pointerEvents: "none",
-					opacity: 0.38,
-					background: `radial-gradient(circle at 14% 20%, rgba(148, 163, 184, 0.22), transparent 40%),
-						radial-gradient(circle at 78% 55%, rgba(29, 78, 216, 0.12), transparent 45%),
-						radial-gradient(circle at 48% 92%, rgba(51, 65, 85, 0.08), transparent 48%)`,
-				}}
-			/>
-
-			<div
-				style={{
-					position: "absolute",
-					inset: 0,
-					pointerEvents: "none",
-					opacity: 0.045,
-					backgroundImage: `linear-gradient(90deg, #64748b 1px, transparent 1px),
-						linear-gradient(#64748b 1px, transparent 1px)`,
-					backgroundSize: "48px 48px",
-				}}
-			/>
-
-			<div
-				style={{
-					position: "absolute",
-					inset: 0,
-					pointerEvents: "none",
-					opacity: 0.1,
-					backgroundImage: `radial-gradient(${themeColor} 1.5px, transparent 1.5px)`,
-					backgroundSize: "28px 28px",
+					background: COVER_SOLID_BG,
 				}}
 			/>
 
@@ -85,20 +53,6 @@ export const LandscapeCoverPoster: React.FC<StaticCoverProps> = ({
 					pointerEvents: "none",
 				}}
 			/>
-			<div
-				style={{
-					position: "absolute",
-					right: "15%",
-					top: "20%",
-					width: "200px",
-					height: "200px",
-					borderRadius: "50%",
-					background: themeColor,
-					filter: "blur(120px)",
-					opacity: 0.15,
-					pointerEvents: "none",
-				}}
-			/>
 
 			<div
 				style={{
@@ -116,12 +70,12 @@ export const LandscapeCoverPoster: React.FC<StaticCoverProps> = ({
 				style={{
 					position: "absolute",
 					bottom: 50,
-					left: 72,
-					right: 72,
+					left: 200,
+					right: 200,
 					display: "flex",
 					justifyContent: "space-between",
 					alignItems: "center",
-					borderTop: `1px solid ${themeColor}28`,
+					// borderTop: `1px solid ${themeColor}28`,
 					paddingTop: 22,
 					pointerEvents: "none",
 				}}

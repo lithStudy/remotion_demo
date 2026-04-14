@@ -1,0 +1,1050 @@
+{
+  "topic": "排队买奶茶、跟风换手机…你以为很聪明，其实正在“自杀式合群”？",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入·从众心理",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，描述排队场景 → 无明显结构，使用默认模板",
+          "content": [
+            {
+              "text": "看着商场里的网红奶茶店，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": " 队伍排得根本看不到尽头。",
+              "startFrame": 58,
+              "durationFrames": 55
+            },
+            {
+              "text": " 你毫不犹豫地排到队尾。",
+              "startFrame": 113,
+              "durationFrames": 54
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/认知偏见_从众效应/scene_1_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "网红奶茶店",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "排队",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 167
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，描述心理活动 → 无明显结构，使用默认模板",
+          "content": [
+            {
+              "text": "哪怕你连这家店卖什么，",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": " 好不好喝都一无所知。",
+              "startFrame": 51,
+              "durationFrames": 59
+            },
+            {
+              "text": " 你心里默默笃定：",
+              "startFrame": 110,
+              "durationFrames": 42
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/认知偏见_从众效应/scene_1_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 152
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用心理活动 → 使用引用模版",
+          "content": [
+            {
+              "text": "“这么多人愿意排队，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": " 味道肯定差不到哪里去。”",
+              "startFrame": 43,
+              "durationFrames": 47
+            }
+          ],
+          "order": 3,
+          "param": {
+            "quoteSource": "从众心理",
+            "anchors": []
+          },
+          "totalDurationFrames": 90
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述从众心理带来的感受 → 无明显结构，使用默认模版",
+          "content": [
+            {
+              "text": "将自己隐入庞大的人群，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": " 不仅没有任何心理负担，",
+              "startFrame": 58,
+              "durationFrames": 47
+            },
+            {
+              "text": " 这种充满错觉的安全感，",
+              "startFrame": 105,
+              "durationFrames": 53
+            },
+            {
+              "text": " 还让你觉得特别轻松，",
+              "startFrame": 158,
+              "durationFrames": 50
+            },
+            {
+              "text": " 甚至有一丝合群的沾沾自喜。",
+              "startFrame": 207,
+              "durationFrames": 70
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/认知偏见_从众效应/scene_1_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "安全感",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "合群",
+                "showFrom": 4,
+                "color": "#EF4444",
+                "anim": "slideUp",
+                "audioEffect": "woosh"
+              }
+            ]
+          },
+          "totalDurationFrames": 278
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "三句口播呈「相信群众雪亮→借力群体智慧避坑→实则贱卖独立思考」的传导链条，适合用 `CAUSE_CHAIN` 每环一图串联机制。",
+          "content": [
+            {
+              "text": "我们总以为群众眼睛雪亮。",
+              "startFrame": 0,
+              "durationFrames": 68
+            },
+            {
+              "text": " 认为这是在利用群体智慧避坑。",
+              "startFrame": 67,
+              "durationFrames": 73
+            },
+            {
+              "text": "但其实，你正在贱卖独立思考权。",
+              "startFrame": 139,
+              "durationFrames": 84
+            }
+          ],
+          "order": 5,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "群众雪亮",
+                "imageSrc": "images/认知偏见_从众效应/scene_1_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "群体智慧",
+                "imageSrc": "images/认知偏见_从众效应/scene_1_5_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "贱卖思考",
+                "imageSrc": "images/认知偏见_从众效应/scene_1_5_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              }
+            ]
+          },
+          "totalDurationFrames": 224
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "口播为「并非智商/主见问题→而是基因生存法则」的纠偏结构，适合用 `COGNITIVE_SHIFT` 做旧认知划线与新结论高亮。",
+          "content": [
+            {
+              "text": "这并非你天生智商欠费，",
+              "startFrame": 0,
+              "durationFrames": 56
+            },
+            {
+              "text": " 也不是你毫无主见。",
+              "startFrame": 55,
+              "durationFrames": 44
+            },
+            {
+              "text": " 而是基因里的生存法则作祟。",
+              "startFrame": 99,
+              "durationFrames": 64
+            }
+          ],
+          "order": 7,
+          "param": {
+            "notText": "智商或主见",
+            "butText": "生存法则",
+            "butSrc": "images/认知偏见_从众效应/scene_1_7.png",
+            "notContentIndex": 0,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 163
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "举例说明生存法则 → 无明显结构，使用默认模版",
+          "content": [
+            {
+              "text": "远古时代落单的原始人，",
+              "startFrame": 0,
+              "durationFrames": 56
+            },
+            {
+              "text": " 面临的往往是死路一条。",
+              "startFrame": 55,
+              "durationFrames": 53
+            }
+          ],
+          "order": 8,
+          "param": {
+            "imageSrc": "images/认知偏见_从众效应/scene_1_8.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "落单",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "死路一条",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 109
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "指出当今社会对从众心理的利用 → 无明显结构，使用默认模版",
+          "content": [
+            {
+              "text": "而在今天，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": " 无数举着镰刀的嗜血资本，",
+              "startFrame": 26,
+              "durationFrames": 56
+            },
+            {
+              "text": " 精准利用了这种原始恐惧。",
+              "startFrame": 81,
+              "durationFrames": 55
+            },
+            {
+              "text": " 无限放大了你的不安全感。",
+              "startFrame": 136,
+              "durationFrames": 63
+            }
+          ],
+          "order": 9,
+          "param": {
+            "imageSrc": "images/认知偏见_从众效应/scene_1_9.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "嗜血资本",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "放大不安全感",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 199
+        }
+      ],
+      "audioSrc": "/audio/认知偏见_从众效应/scene_1/scene_1.mp3",
+      "totalDurationFrames": 1381
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "命名：从众效应",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对“从众效应”进行解释，适合用概念卡片突出关键术语。",
+          "content": [
+            {
+              "text": "这在心理学上叫从众效应。",
+              "startFrame": 0,
+              "durationFrames": 77
+            },
+            {
+              "text": "简单来说，",
+              "startFrame": 76,
+              "durationFrames": 26
+            },
+            {
+              "text": " 就是主动放弃动口动脑。",
+              "startFrame": 101,
+              "durationFrames": 58
+            },
+            {
+              "text": "把人生的决策和判断权，",
+              "startFrame": 159,
+              "durationFrames": 57
+            },
+            {
+              "text": " 免费打包外包给一群陌生人。",
+              "startFrame": 216,
+              "durationFrames": 79
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/认知偏见_从众效应/scene_2_1.png",
+            "conceptName": "从众效应",
+            "anchors": []
+          },
+          "totalDurationFrames": 295
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述从众效应的影响，用单图居中展示即可。该段较长，但逻辑结构一致，不拆分。",
+          "content": [
+            {
+              "text": "当个体身处狂热的群体中，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": " 为了不显得格格不入，",
+              "startFrame": 58,
+              "durationFrames": 41
+            },
+            {
+              "text": " 或逃避独自决策的巨大压力，",
+              "startFrame": 99,
+              "durationFrames": 67
+            },
+            {
+              "text": " 我们会阉割真实的自我，",
+              "startFrame": 165,
+              "durationFrames": 47
+            },
+            {
+              "text": " 去毫无底线地迎合多数人。",
+              "startFrame": 212,
+              "durationFrames": 58
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/认知偏见_从众效应/scene_2_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "从众",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "阉割自我",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 271
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "过渡到互联网时代，用单图居中展示即可。",
+          "content": [
+            {
+              "text": "在算法统治的互联网时代，",
+              "startFrame": 0,
+              "durationFrames": 60
+            },
+            {
+              "text": " 这种效应变得更加致命。",
+              "startFrame": 60,
+              "durationFrames": 70
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "images/认知偏见_从众效应/scene_2_7.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "算法统治",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "致命效应",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 130
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "比喻点赞和转发的作用，用单图居中展示即可。",
+          "content": [
+            {
+              "text": "屏幕上几百万的点赞和转发，",
+              "startFrame": 0,
+              "durationFrames": 72
+            },
+            {
+              "text": " 就像是无声抽打的皮鞭。",
+              "startFrame": 72,
+              "durationFrames": 58
+            },
+            {
+              "text": "逼着你接受荒谬的共识。",
+              "startFrame": 129,
+              "durationFrames": 63
+            }
+          ],
+          "order": 8,
+          "param": {
+            "imageSrc": "images/认知偏见_从众效应/scene_2_8.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "荒谬的共识",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 193
+        }
+      ],
+      "audioSrc": "/audio/认知偏见_从众效应/scene_2/scene_2.mp3",
+      "totalDurationFrames": 889
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "剖析：羊群效应危害",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "总起句，奠定基调，平缓叙述，单图即可，无特殊结构。",
+          "content": [
+            {
+              "text": "这种缺乏理智的羊群行为，",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "无所不在的影响你的人生轨迹。",
+              "startFrame": 54,
+              "durationFrames": 70
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/认知偏见_从众效应/scene_3_1.png",
+            "enterEffect": "fadeIn"
+          },
+          "totalDurationFrames": 125
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "一个韭菜圈跟风炒鞋买盲盒的案例，呈现个案→误判/推论→纠偏→收束的叙事弧。",
+          "content": [
+            {
+              "text": " 看朋友圈在讨论牛市已来，",
+              "startFrame": 0,
+              "durationFrames": 57
+            },
+            {
+              "text": " 听大家都在高喊财富自由，",
+              "startFrame": 56,
+              "durationFrames": 62
+            },
+            {
+              "text": " 你就掏出所有积蓄跟风入场。",
+              "startFrame": 117,
+              "durationFrames": 64
+            },
+            {
+              "text": " 你根本不知道，",
+              "startFrame": 181,
+              "durationFrames": 34
+            },
+            {
+              "text": " 当大妈都来谈论风口时，",
+              "startFrame": 214,
+              "durationFrames": 55
+            },
+            {
+              "text": " 就是庄家提笼收网的时机",
+              "startFrame": 269,
+              "durationFrames": 59
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "韭菜暴富陷阱",
+            "imageSrc": "images/认知偏见_从众效应/scene_3_2.png",
+            "phases": [
+              {
+                "phaseLabel": "大众情绪",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "跟风入场",
+                "showFrom": 2
+              },
+              {
+                "phaseLabel": "资本收割",
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 329
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "一个消费主义的案例，呈现个案→误判/推论→纠偏→收束的叙事弧。",
+          "content": [
+            {
+              "text": " 看同事争相换了最新款手机，",
+              "startFrame": 0,
+              "durationFrames": 67
+            },
+            {
+              "text": " 背着溢价严重的奢侈品包包。",
+              "startFrame": 66,
+              "durationFrames": 64
+            },
+            {
+              "text": " 哪怕你还得还高额花呗，",
+              "startFrame": 129,
+              "durationFrames": 69
+            },
+            {
+              "text": " 也要咬着后槽牙硬挺跟进。",
+              "startFrame": 198,
+              "durationFrames": 69
+            },
+            {
+              "text": " 因为你打心底里恐惧，",
+              "startFrame": 267,
+              "durationFrames": 47
+            },
+            {
+              "text": " 一旦脱节就会沦为鄙视链底端。",
+              "startFrame": 314,
+              "durationFrames": 84
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "消费主义陷阱",
+            "imageSrc": "images/认知偏见_从众效应/scene_3_3.png",
+            "phases": [
+              {
+                "phaseLabel": "盲目攀比",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "负债前行",
+                "showFrom": 2
+              },
+              {
+                "phaseLabel": "精神困境",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 399
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "一个网络暴力的案例，呈现个案→误判/推论→纠偏→收束的叙事弧。",
+          "content": [
+            {
+              "text": " 当全网都在声讨热点当事人，",
+              "startFrame": 0,
+              "durationFrames": 67
+            },
+            {
+              "text": " 你连事情真相都没弄清楚，",
+              "startFrame": 66,
+              "durationFrames": 52
+            },
+            {
+              "text": " 就急不可耐地敲键盘跟风狂骂。",
+              "startFrame": 117,
+              "durationFrames": 73
+            },
+            {
+              "text": " 你以为自己是在替天行道，",
+              "startFrame": 189,
+              "durationFrames": 56
+            },
+            {
+              "text": " 其实只是给吃血馒头的号主，",
+              "startFrame": 245,
+              "durationFrames": 65
+            },
+            {
+              "text": " 贡献了微不足道的流量数据。",
+              "startFrame": 309,
+              "durationFrames": 65
+            }
+          ],
+          "order": 4,
+          "param": {
+            "title": "网络暴力狂欢",
+            "imageSrc": "images/认知偏见_从众效应/scene_3_4.png",
+            "phases": [
+              {
+                "phaseLabel": "现象",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "盲从",
+                "showFrom": 2
+              },
+              {
+                "phaseLabel": "反噬",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 375
+        }
+      ],
+      "audioSrc": "/audio/认知偏见_从众效应/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1228
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "召唤：焊死三道防线",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "总起句，引出话题，采用平缓叙述的CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "想在乌合之众里保住清醒的大脑，",
+              "startFrame": 0,
+              "durationFrames": 64
+            },
+            {
+              "text": " 你必须死死焊住这三道防线：",
+              "startFrame": 63,
+              "durationFrames": 69
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/认知偏见_从众效应/scene_4_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "清醒的大脑",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 132
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "提出一个方法“强制隔离期”，并进行解释，适合METHOD_STACK。",
+          "content": [
+            {
+              "text": "第一，建立“强制隔离期”。",
+              "startFrame": 0,
+              "durationFrames": 76
+            },
+            {
+              "text": " 在排队狂欢或跟风下单前，",
+              "startFrame": 75,
+              "durationFrames": 70
+            },
+            {
+              "text": " 强迫自己停机思考三秒钟，",
+              "startFrame": 145,
+              "durationFrames": 73
+            },
+            {
+              "text": " 反问三个直击灵魂的问题：",
+              "startFrame": 217,
+              "durationFrames": 62
+            },
+            {
+              "text": "这东西我真的必须买吗？",
+              "startFrame": 278,
+              "durationFrames": 51
+            },
+            {
+              "text": " 地球上就没有其他平替吗？",
+              "startFrame": 328,
+              "durationFrames": 54
+            },
+            {
+              "text": " 哪怕店门口半个人影都没有，",
+              "startFrame": 381,
+              "durationFrames": 62
+            },
+            {
+              "text": " 我也一样会毅然走进去吗？",
+              "startFrame": 442,
+              "durationFrames": 61
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "建立强制隔离期",
+            "imageSrc": "images/认知偏见_从众效应/scene_4_2.png",
+            "notes": [
+              {
+                "text": "停机思考三秒钟",
+                "showFrom": 1
+              },
+              {
+                "text": "反问直击灵魂的问题",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 503
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "提出第二个方法，适合METHOD_STACK。",
+          "content": [
+            {
+              "text": "第二，开启反人性预警器。",
+              "startFrame": 0,
+              "durationFrames": 82
+            },
+            {
+              "text": "对全网跟风爆火保持生理警惕。",
+              "startFrame": 81,
+              "durationFrames": 96
+            },
+            {
+              "text": " 仔细回想股神巴菲特说的，",
+              "startFrame": 177,
+              "durationFrames": 59
+            },
+            {
+              "text": " 要在别人贪婪时感受恐惧。",
+              "startFrame": 236,
+              "durationFrames": 78
+            },
+            {
+              "text": "当一条独木桥挤满狂乱人群时，",
+              "startFrame": 314,
+              "durationFrames": 78
+            },
+            {
+              "text": " 它通向的往往不是光辉顶点，",
+              "startFrame": 391,
+              "durationFrames": 69
+            },
+            {
+              "text": " 而是惨烈的大型踩踏现场。",
+              "startFrame": 460,
+              "durationFrames": 67
+            }
+          ],
+          "order": 4,
+          "param": {
+            "title": "开启反人性预警",
+            "imageSrc": "images/认知偏见_从众效应/scene_4_4.png",
+            "notes": [
+              {
+                "text": "对全网爆火保持生理警惕",
+                "showFrom": 1
+              },
+              {
+                "text": "别人贪婪时你要感受恐惧",
+                "showFrom": 3
+              },
+              {
+                "text": "人群的方向往往是踩踏而非顶点",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 527
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "提出第三个方法，适合METHOD_STACK。",
+          "content": [
+            {
+              "text": "第三，接受高质量的孤独。",
+              "startFrame": 0,
+              "durationFrames": 71
+            },
+            {
+              "text": "彻底斩断对群体认同的病态渴望。",
+              "startFrame": 70,
+              "durationFrames": 91
+            },
+            {
+              "text": " 坦然接受自己和别人的不同，",
+              "startFrame": 161,
+              "durationFrames": 57
+            },
+            {
+              "text": " 接受不合群带来的短暂焦虑。",
+              "startFrame": 218,
+              "durationFrames": 77
+            },
+            {
+              "text": "在人云亦云的喧嚣世界里，",
+              "startFrame": 294,
+              "durationFrames": 59
+            },
+            {
+              "text": " 独立本身就是最昂贵的奢侈品。",
+              "startFrame": 353,
+              "durationFrames": 66
+            }
+          ],
+          "order": 7,
+          "param": {
+            "title": "接受高质量孤独",
+            "imageSrc": "images/认知偏见_从众效应/scene_4_7.png",
+            "notes": [
+              {
+                "text": "斩断对群体认同的病态渴望",
+                "showFrom": 1
+              },
+              {
+                "text": "接纳独立的焦虑",
+                "showFrom": 3
+              },
+              {
+                "text": "独立本身就是最昂贵的奢侈品。",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 419
+        }
+      ],
+      "audioSrc": "/audio/认知偏见_从众效应/scene_4/scene_4.mp3",
+      "totalDurationFrames": 1582
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "反转：绝地反击",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "铺垫，描述了一个被流水线认同的时代，个人挣扎也无济于事，较为平缓的叙述，适合单图展示，选择CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "在这个习惯了把“随大流”当做标准答案的时代，",
+              "startFrame": 0,
+              "durationFrames": 86
+            },
+            {
+              "text": "一旦你交出了思考的权利，",
+              "startFrame": 85,
+              "durationFrames": 62
+            },
+            {
+              "text": "再穷其一生拼命挣扎，",
+              "startFrame": 146,
+              "durationFrames": 64
+            },
+            {
+              "text": " 也不过是别人剧本里的龙套。",
+              "startFrame": 209,
+              "durationFrames": 62
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/认知偏见_从众效应/scene_5_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "交出思考权",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "龙套",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "slideUp",
+                "audioEffect": "woosh"
+              }
+            ]
+          },
+          "totalDurationFrames": 271
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "总结，干脆有力的结论，适合用TEXT_FOCUS突出强调。",
+          "content": [
+            {
+              "text": "守住你清醒的大脑，",
+              "startFrame": 0,
+              "durationFrames": 45
+            },
+            {
+              "text": "做一个安静且笃定的异类，",
+              "startFrame": 44,
+              "durationFrames": 65
+            },
+            {
+              "text": "你才真正夺回了人生的方向盘",
+              "startFrame": 109,
+              "durationFrames": 65
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              "守住你清醒的大脑",
+              "你才真正夺回了人生的方向盘。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "清醒的大脑",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "人生的方向盘",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 174
+        }
+      ],
+      "audioSrc": "/audio/认知偏见_从众效应/scene_5/scene_5.mp3",
+      "totalDurationFrames": 447
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "从众效应",
+    "subtitle": "大家都这么干，一定有他的道理！",
+    "themeColor": "#2563EB",
+    "badge": "认识自我 · 理性思考",
+    "seriesLabel": "认知心理学",
+    "seriesLabelEn": "COGNITIVE PSYCHOLOGY",
+    "methodologySteps": [
+      "觉察",
+      "归因",
+      "调整"
+    ],
+    "methodologyStepsEn": "OBSERVE · ATTRIBUTE · ADJUST"
+  }
+}

@@ -95,6 +95,7 @@ export {
 	BWBeatSequence,
 	BWCognitiveShift,
 	BWMethodStack,
+	BWCaseBreakdown,
 	BWCauseChain,
 	BWChecklistReveal,
 	BWPanelGrid,

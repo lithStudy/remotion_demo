@@ -28,7 +28,7 @@ export const AnchoringBiasLandscape: React.FC = () => {
             <Audio
                 src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
                 loop
-                volume={0.22}
+                volume={0.15}
                 name="Background music"
             />
             <div

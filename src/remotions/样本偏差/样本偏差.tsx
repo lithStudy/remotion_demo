@@ -127,7 +127,7 @@ export const 样本偏差: React.FC<z.infer<typeof 样本偏差Schema>> = () => 
             <Audio
                 src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
                 loop
-                volume={0.22}
+                volume={0.15}
                 name="Background music"
             />
             <div

@@ -32,6 +32,7 @@ metadata:
   "example": {
     "template": "QUOTE_CITATION",
     "param": {
+      "quoteDisplayText": "我思故我在",
       "quoteSource": "《思考，快与慢》"
     }
   }

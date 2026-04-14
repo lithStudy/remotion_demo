@@ -1,0 +1,469 @@
+{
+  "topic": "你以为的成功，只是大脑在自嗨？操控人生的真相，藏在“双标”里",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，单图即可，无特殊结构，因此选择CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "你的大脑其实是个“骗子”。",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "它为了让你活得开心，",
+              "startFrame": 58,
+              "durationFrames": 46
+            },
+            {
+              "text": "每天都在编造关于“成功”和“失败”的剧本。",
+              "startFrame": 104,
+              "durationFrames": 93
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/认知偏差_自利偏差/scene_1_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "骗子",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "成功 VS 失败",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 198
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "两方并列对比（赚vs亏），选择SPLIT_COMPARE。",
+          "content": [
+            {
+              "text": "你赚了钱，是因为自己“眼光毒、胆子大”。",
+              "startFrame": 0,
+              "durationFrames": 96
+            },
+            {
+              "text": "你亏了钱，是因为“行情烂、运气背”。",
+              "startFrame": 96,
+              "durationFrames": 92
+            }
+          ],
+          "order": 2,
+          "param": {
+            "leftSrc": "images/认知偏差_自利偏差/scene_1_2_left.png",
+            "rightSrc": "images/认知偏差_自利偏差/scene_1_2_right.png",
+            "leftLabel": "眼光毒、胆子大",
+            "rightLabel": "行情烂、运气背",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 188
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "两方并列对比（没迟到vs迟到），选择SPLIT_COMPARE。",
+          "content": [
+            {
+              "text": "你上班没迟到是因为自己起得早，很守时；",
+              "startFrame": 0,
+              "durationFrames": 96
+            },
+            {
+              "text": "上班迟到，",
+              "startFrame": 96,
+              "durationFrames": 28
+            },
+            {
+              "text": "则是因为“堵车、闹钟坏了、生活不易”；",
+              "startFrame": 123,
+              "durationFrames": 86
+            }
+          ],
+          "order": 3,
+          "param": {
+            "leftSrc": "images/认知偏差_自利偏差/scene_1_3_left.png",
+            "rightSrc": "images/认知偏差_自利偏差/scene_1_3_right.png",
+            "leftLabel": "很守时",
+            "rightLabel": "堵车、闹钟坏了",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 209
+        }
+      ],
+      "audioSrc": "/audio/认知偏差_自利偏差/scene_1/scene_1.mp3",
+      "totalDurationFrames": 596
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "自利偏差",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对“自利偏差”这个心理学概念进行命名解释，使用CONCEPT_CARD。",
+          "content": [
+            {
+              "text": "心理学管这叫“自利偏差”。",
+              "startFrame": 0,
+              "durationFrames": 60
+            },
+            {
+              "text": "我们习惯于将好的结果归于自己，",
+              "startFrame": 60,
+              "durationFrames": 87
+            },
+            {
+              "text": "将坏的结果甩锅给环境。",
+              "startFrame": 146,
+              "durationFrames": 64
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/认知偏差_自利偏差/scene_2_1.png",
+            "conceptName": "自利偏差",
+            "anchors": []
+          },
+          "totalDurationFrames": 210
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "这是一个因果链，解释了自利偏差的原因和作用，用CAUSE_CHAIN展现因果递进关系。",
+          "content": [
+            {
+              "text": "这其实是进化出来的“消炎药”，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "它必须让你觉得自己很行，",
+              "startFrame": 58,
+              "durationFrames": 57
+            },
+            {
+              "text": "否则面对负面的自我，",
+              "startFrame": 115,
+              "durationFrames": 47
+            },
+            {
+              "text": "你根本活不下去。",
+              "startFrame": 162,
+              "durationFrames": 38
+            }
+          ],
+          "order": 3,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "自我肯定",
+                "imageSrc": "images/认知偏差_自利偏差/scene_2_3_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "自尊保护",
+                "imageSrc": "images/认知偏差_自利偏差/scene_2_3_img1.png",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 200
+        }
+      ],
+      "audioSrc": "/audio/认知偏差_自利偏差/scene_2/scene_2.mp3",
+      "totalDurationFrames": 412
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "双标反转",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "弱者 vs 强者的做法对照，适合用 DOS_AND_DONTS 以「错误/正确」的左右对照呈现。",
+          "content": [
+            {
+              "text": "弱者用这种双标来麻痹自尊，",
+              "startFrame": 0,
+              "durationFrames": 72
+            },
+            {
+              "text": "靠这种滤镜维持活下去的勇气。",
+              "startFrame": 72,
+              "durationFrames": 63
+            },
+            {
+              "text": "却也用它封死了自己进化的通道。",
+              "startFrame": 134,
+              "durationFrames": 81
+            },
+            {
+              "text": "但强者从不被这个机制奴役,",
+              "startFrame": 214,
+              "durationFrames": 71
+            },
+            {
+              "text": "他们用反向双标来平衡世界。",
+              "startFrame": 285,
+              "durationFrames": 64
+            }
+          ],
+          "order": 1,
+          "param": {
+            "left": {
+              "label": "❌ 弱者",
+              "src": "images/认知偏差_自利偏差/scene_3_1_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 强者",
+              "src": "images/认知偏差_自利偏差/scene_3_1_right.png",
+              "showFrom": 3
+            }
+          },
+          "totalDurationFrames": 350
+        }
+      ],
+      "audioSrc": "/audio/认知偏差_自利偏差/scene_3/scene_3.mp3",
+      "totalDurationFrames": 352
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "非对称归因",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对新概念“非对称归因”进行解释 → 选用`CONCEPT_CARD`",
+          "content": [
+            {
+              "text": "顶级操盘手都有“非对称归因”的能力。",
+              "startFrame": 0,
+              "durationFrames": 89
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/认知偏差_自利偏差/scene_4_1.png",
+            "conceptName": "非对称归因",
+            "anchors": []
+          },
+          "totalDurationFrames": 89
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "一个核心观点“对内残酷”，并进行了解释说明 → 选用`METHOD_STACK`",
+          "content": [
+            {
+              "text": "第一，",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "对内残酷，",
+              "startFrame": 18,
+              "durationFrames": 32
+            },
+            {
+              "text": "即便环境真的很烂，",
+              "startFrame": 50,
+              "durationFrames": 43
+            },
+            {
+              "text": "也永远优先反思自己的核心能力，",
+              "startFrame": 92,
+              "durationFrames": 75
+            },
+            {
+              "text": "因为唯有自己是可控变量。",
+              "startFrame": 166,
+              "durationFrames": 62
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "对内残酷",
+            "imageSrc": "images/认知偏差_自利偏差/scene_4_2.png",
+            "notes": [
+              {
+                "text": "优先反思自己的核心能力",
+                "showFrom": 3
+              },
+              {
+                "text": "自己是可控变量",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 229
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "一个核心观点“对外慈悲”，并进行了解释说明 → 选用`METHOD_STACK`",
+          "content": [
+            {
+              "text": "第二，",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "对外慈悲，",
+              "startFrame": 21,
+              "durationFrames": 27
+            },
+            {
+              "text": "看别人的落魄多看他头顶的乌云，",
+              "startFrame": 48,
+              "durationFrames": 84
+            },
+            {
+              "text": "看别人狂妄多看他背后的风口。",
+              "startFrame": 132,
+              "durationFrames": 73
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "对外慈悲",
+            "imageSrc": "images/认知偏差_自利偏差/scene_4_3.png",
+            "notes": [
+              {
+                "text": "多理解他人处境",
+                "showFrom": 1
+              },
+              {
+                "text": "不妄加评判",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 205
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "「用自利偏差麻醉自己」vs「清醒者用它看透世界」为明确对错/路径对照，收束本节 → 选用 `DOS_AND_DONTS`。",
+          "content": [
+            {
+              "text": "平庸的人用自利偏差麻醉自己，",
+              "startFrame": 0,
+              "durationFrames": 76
+            },
+            {
+              "text": "清醒的人用它看透世界。",
+              "startFrame": 75,
+              "durationFrames": 64
+            }
+          ],
+          "order": 4,
+          "param": {
+            "left": {
+              "label": "麻醉自己",
+              "src": "images/认知偏差_自利偏差/scene_3_1_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "看透世界",
+              "src": "images/认知偏差_自利偏差/scene_3_1_right.png",
+              "showFrom": 1
+            }
+          },
+          "totalDurationFrames": 139
+        }
+      ],
+      "audioSrc": "/audio/认知偏差_自利偏差/scene_4/scene_4.mp3",
+      "totalDurationFrames": 662
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "收束",
+      "items": [
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束金句“不再需要骗自己很行才真正变强”，使用 TEXT_FOCUS 强化收束感。",
+          "content": [
+            {
+              "text": "最后你会发现，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "当你不再需要骗自己很行的时候，",
+              "startFrame": 36,
+              "durationFrames": 66
+            },
+            {
+              "text": "你才真正开始变强。",
+              "startFrame": 101,
+              "durationFrames": 44
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              "当你不再需要骗自己很行的时候",
+              "你才真正开始变强"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "骗自己很行",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "真正开始变强",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 145
+        }
+      ],
+      "audioSrc": "/audio/认知偏差_自利偏差/scene_5/scene_5.mp3",
+      "totalDurationFrames": 147
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "自利偏差",
+    "subtitle": "为了保护你可怜的自尊，大脑撒了无数个慌",
+    "themeColor": "#2563EB",
+    "badge": "认识自我 · 理性思考",
+    "seriesLabel": "认知心理学",
+    "seriesLabelEn": "COGNITIVE PSYCHOLOGY",
+    "methodologySteps": [
+      "觉察",
+      "归因",
+      "调整"
+    ],
+    "methodologyStepsEn": "OBSERVE · ATTRIBUTE · ADJUST"
+  }
+}

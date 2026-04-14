@@ -13,7 +13,7 @@
             {
               "text": "盯着满屏吵得不可开交的弹幕。",
               "startFrame": 0,
-              "durationFrames": 77
+              "durationFrames": 68
             }
           ],
           "order": 1,
@@ -22,7 +22,7 @@
             "enterEffect": "breathe",
             "anchors": []
           },
-          "totalDurationFrames": 77
+          "totalDurationFrames": 68
         },
         {
           "narrativeType": "HOOK",
@@ -32,12 +32,12 @@
             {
               "text": "你猛地一拍大腿。",
               "startFrame": 0,
-              "durationFrames": 37
+              "durationFrames": 44
             },
             {
               "text": "嘴里嘟囔着我就知道会这样。",
-              "startFrame": 36,
-              "durationFrames": 81
+              "startFrame": 43,
+              "durationFrames": 74
             },
             {
               "text": "你看果然又是这群人搞的鬼。",
@@ -74,7 +74,7 @@
             {
               "text": "这种众人皆醉我独醒的快感。",
               "startFrame": 0,
-              "durationFrames": 66
+              "durationFrames": 64
             }
           ],
           "order": 3,
@@ -91,7 +91,7 @@
               }
             ]
           },
-          "totalDurationFrames": 66
+          "totalDurationFrames": 64
         },
         {
           "narrativeType": "LOGIC",
@@ -101,12 +101,14 @@
             {
               "text": "是不是让你觉得非常爽快。",
               "startFrame": 0,
-              "durationFrames": 52
+              "durationFrames": 49
             }
           ],
           "order": 4,
           "param": {
-            "coreSentence": ["是不是让你觉得非常爽快。"],
+            "coreSentence": [
+              "是不是让你觉得非常爽快。"
+            ],
             "coreSentenceAnchors": [
               {
                 "coreSentenceAnchor": "非常爽快",
@@ -114,11 +116,11 @@
               }
             ]
           },
-          "totalDurationFrames": 52
+          "totalDurationFrames": 49
         }
       ],
       "audioSrc": "/audio/认知偏见_确认偏误/scene_1/scene_1.mp3",
-      "totalDurationFrames": 376
+      "totalDurationFrames": 363
     },
     {
       "sceneId": "scene_2",
@@ -132,17 +134,17 @@
             {
               "text": "我们总以为自己有一双慧眼。",
               "startFrame": 0,
-              "durationFrames": 63
+              "durationFrames": 68
             },
             {
               "text": "能看透互联网上的蝇营狗狗。",
-              "startFrame": 62,
-              "durationFrames": 73
+              "startFrame": 67,
+              "durationFrames": 70
             },
             {
               "text": "但其实我们都被自己的大脑骗了。",
-              "startFrame": 134,
-              "durationFrames": 84
+              "startFrame": 137,
+              "durationFrames": 77
             }
           ],
           "order": 1,
@@ -166,7 +168,7 @@
               }
             ]
           },
-          "totalDurationFrames": 219
+          "totalDurationFrames": 214
         },
         {
           "narrativeType": "LOGIC",
@@ -176,12 +178,12 @@
             {
               "text": "这不是因为我们缺乏判断力。",
               "startFrame": 0,
-              "durationFrames": 59
+              "durationFrames": 58
             },
             {
               "text": "而是大脑为了偷懒留下的进化漏洞。",
-              "startFrame": 58,
-              "durationFrames": 83
+              "startFrame": 57,
+              "durationFrames": 86
             }
           ],
           "order": 2,
@@ -193,7 +195,7 @@
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 142
+          "totalDurationFrames": 143
         },
         {
           "narrativeType": "LOGIC",
@@ -203,22 +205,22 @@
             {
               "text": "各大平台早就把这个漏洞玩明白了。",
               "startFrame": 0,
-              "durationFrames": 75
+              "durationFrames": 79
             },
             {
               "text": "他们精准投喂你爱看的观点。",
-              "startFrame": 74,
-              "durationFrames": 70
+              "startFrame": 78,
+              "durationFrames": 69
             },
             {
               "text": "把你圈养在舒适的茧房里。",
-              "startFrame": 144,
-              "durationFrames": 61
+              "startFrame": 147,
+              "durationFrames": 56
             },
             {
               "text": "让你误以为全世界都和你想的一样。",
-              "startFrame": 204,
-              "durationFrames": 73
+              "startFrame": 202,
+              "durationFrames": 74
             }
           ],
           "order": 3,
@@ -267,11 +269,11 @@
               }
             ]
           },
-          "totalDurationFrames": 278
+          "totalDurationFrames": 277
         }
       ],
       "audioSrc": "/audio/认知偏见_确认偏误/scene_2/scene_2.mp3",
-      "totalDurationFrames": 640
+      "totalDurationFrames": 636
     },
     {
       "sceneId": "scene_3",
@@ -285,17 +287,17 @@
             {
               "text": "翻开行为经济学的书你会发现。",
               "startFrame": 0,
-              "durationFrames": 64
+              "durationFrames": 63
             },
             {
               "text": "这种套路叫作确认偏误。",
-              "startFrame": 63,
-              "durationFrames": 78
+              "startFrame": 62,
+              "durationFrames": 93
             },
             {
               "text": "通俗点说就是只看自己想看的。",
-              "startFrame": 140,
-              "durationFrames": 91
+              "startFrame": 154,
+              "durationFrames": 90
             }
           ],
           "order": 2,
@@ -304,7 +306,7 @@
             "conceptName": "确认偏误",
             "anchors": []
           },
-          "totalDurationFrames": 232
+          "totalDurationFrames": 245
         },
         {
           "narrativeType": "LOGIC",
@@ -314,17 +316,17 @@
             {
               "text": "这就像是我们戴着一副有色眼镜。",
               "startFrame": 0,
-              "durationFrames": 64
+              "durationFrames": 76
             },
             {
               "text": "只去搜寻和记忆符合既有信念的信息。",
-              "startFrame": 63,
-              "durationFrames": 91
+              "startFrame": 75,
+              "durationFrames": 98
             },
             {
               "text": "而对反面证据视而不见。",
-              "startFrame": 153,
-              "durationFrames": 59
+              "startFrame": 172,
+              "durationFrames": 65
             }
           ],
           "order": 4,
@@ -333,7 +335,7 @@
             "enterEffect": "breathe",
             "anchors": []
           },
-          "totalDurationFrames": 213
+          "totalDurationFrames": 237
         },
         {
           "narrativeType": "LOGIC",
@@ -343,12 +345,12 @@
             {
               "text": "哪怕真相就硬生生地摆在眼前。",
               "startFrame": 0,
-              "durationFrames": 66
+              "durationFrames": 70
             },
             {
               "text": "我们也会本能地去贬低它忽略它。",
-              "startFrame": 65,
-              "durationFrames": 77
+              "startFrame": 69,
+              "durationFrames": 76
             }
           ],
           "order": 7,
@@ -357,11 +359,11 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 142
+          "totalDurationFrames": 145
         }
       ],
       "audioSrc": "/audio/认知偏见_确认偏误/scene_3/scene_3.mp3",
-      "totalDurationFrames": 588
+      "totalDurationFrames": 628
     },
     {
       "sceneId": "scene_4",
@@ -375,12 +377,12 @@
             {
               "text": "这就解释了为什么热搜反转前。",
               "startFrame": 0,
-              "durationFrames": 60
+              "durationFrames": 68
             },
             {
               "text": "那么多人会言之凿凿地站队。",
-              "startFrame": 60,
-              "durationFrames": 75
+              "startFrame": 67,
+              "durationFrames": 72
             }
           ],
           "order": 1,
@@ -404,7 +406,7 @@
               }
             ]
           },
-          "totalDurationFrames": 135
+          "totalDurationFrames": 140
         },
         {
           "narrativeType": "LOGIC",
@@ -414,17 +416,17 @@
             {
               "text": "这就像在漆黑的房间里打手电筒。",
               "startFrame": 0,
-              "durationFrames": 74
+              "durationFrames": 69
             },
             {
               "text": "你只会照亮你早就相信的那个角落。",
-              "startFrame": 73,
-              "durationFrames": 76
+              "startFrame": 68,
+              "durationFrames": 77
             },
             {
               "text": "至于剩下的广阔空间你根本不在乎。",
-              "startFrame": 148,
-              "durationFrames": 84
+              "startFrame": 145,
+              "durationFrames": 88
             }
           ],
           "order": 3,
@@ -442,22 +444,24 @@
             {
               "text": "当你讨厌一个人时连他的呼吸都是错的。",
               "startFrame": 0,
-              "durationFrames": 86
+              "durationFrames": 89
             },
             {
               "text": "因为我们其实根本不需要客观真相。",
-              "startFrame": 85,
-              "durationFrames": 65
+              "startFrame": 88,
+              "durationFrames": 64
             },
             {
               "text": "我们只需要被迎合被肯定。",
-              "startFrame": 149,
-              "durationFrames": 60
+              "startFrame": 151,
+              "durationFrames": 66
             }
           ],
           "order": 5,
           "param": {
-            "coreSentence": ["我们需要的不是客观真相，而是被肯定"],
+            "coreSentence": [
+              "我们需要的不是客观真相，而是被肯定"
+            ],
             "coreSentenceAnchors": [
               {
                 "coreSentenceAnchor": "客观真相",
@@ -469,11 +473,11 @@
               }
             ]
           },
-          "totalDurationFrames": 210
+          "totalDurationFrames": 218
         }
       ],
       "audioSrc": "/audio/认知偏见_确认偏误/scene_4/scene_4.mp3",
-      "totalDurationFrames": 578
+      "totalDurationFrames": 592
     },
     {
       "sceneId": "scene_5",
@@ -487,12 +491,12 @@
             {
               "text": "要想跳出这个被精心编织的逻辑陷阱。",
               "startFrame": 0,
-              "durationFrames": 98
+              "durationFrames": 94
             },
             {
               "text": "你需要立刻给自己装上防身武器。",
-              "startFrame": 97,
-              "durationFrames": 82
+              "startFrame": 93,
+              "durationFrames": 74
             }
           ],
           "order": 1,
@@ -516,7 +520,7 @@
               }
             ]
           },
-          "totalDurationFrames": 179
+          "totalDurationFrames": 167
         },
         {
           "narrativeType": "LOGIC",
@@ -530,13 +534,13 @@
             },
             {
               "text": "去关注几个你平时很讨厌的博主。",
-              "startFrame": 83,
-              "durationFrames": 77
+              "startFrame": 84,
+              "durationFrames": 76
             },
             {
               "text": "看看他们是怎么看待问题的。",
-              "startFrame": 160,
-              "durationFrames": 60
+              "startFrame": 159,
+              "durationFrames": 56
             }
           ],
           "order": 2,
@@ -554,7 +558,7 @@
               }
             ]
           },
-          "totalDurationFrames": 221
+          "totalDurationFrames": 215
         },
         {
           "narrativeType": "LOGIC",
@@ -569,7 +573,7 @@
             {
               "text": "会有什么样的证据支持它。",
               "startFrame": 80,
-              "durationFrames": 68
+              "durationFrames": 60
             }
           ],
           "order": 3,
@@ -587,7 +591,7 @@
               }
             ]
           },
-          "totalDurationFrames": 149
+          "totalDurationFrames": 141
         },
         {
           "narrativeType": "CONCLUSION",
@@ -597,17 +601,19 @@
             {
               "text": "当你开始学着和不同的声音共处。",
               "startFrame": 0,
-              "durationFrames": 71
+              "durationFrames": 68
             },
             {
               "text": "你就拿回了独立思考的权力。",
-              "startFrame": 70,
-              "durationFrames": 59
+              "startFrame": 67,
+              "durationFrames": 57
             }
           ],
           "order": 4,
           "param": {
-            "coreSentence": ["和不同的声音共处，你就拿回了独立思考的权力。"],
+            "coreSentence": [
+              "和不同的声音共处，你就拿回了独立思考的权力。"
+            ],
             "coreSentenceAnchors": [
               {
                 "coreSentenceAnchor": "不同的声音",
@@ -619,7 +625,7 @@
               }
             ]
           },
-          "totalDurationFrames": 130
+          "totalDurationFrames": 125
         },
         {
           "narrativeType": "CONCLUSION",
@@ -629,17 +635,19 @@
             {
               "text": "理性从来不是永远正确。",
               "startFrame": 0,
-              "durationFrames": 51
+              "durationFrames": 55
             },
             {
               "text": "而是敢于亲手打碎自己的滤镜。",
-              "startFrame": 50,
+              "startFrame": 54,
               "durationFrames": 70
             }
           ],
           "order": 5,
           "param": {
-            "coreSentence": ["理性不是永远正确，而是敢于亲手打碎自己的滤镜"],
+            "coreSentence": [
+              "理性不是永远正确，而是敢于亲手打碎自己的滤镜"
+            ],
             "coreSentenceAnchors": [
               {
                 "coreSentenceAnchor": "打碎自己的滤镜",
@@ -647,18 +655,18 @@
               }
             ]
           },
-          "totalDurationFrames": 121
+          "totalDurationFrames": 124
         }
       ],
       "audioSrc": "/audio/认知偏见_确认偏误/scene_5/scene_5.mp3",
-      "totalDurationFrames": 800
+      "totalDurationFrames": 773
     }
   ],
   "fps": 30,
   "cover": {
     "durationFrames": 5,
     "title": "确认偏误",
-    "subtitle": "确认偏误与独立思考",
+    "subtitle": "你要的不是真相，而是被迎合和肯定",
     "themeColor": "#2563EB",
     "badge": "认识自我 · 理性思考",
     "seriesLabel": "认知偏见",

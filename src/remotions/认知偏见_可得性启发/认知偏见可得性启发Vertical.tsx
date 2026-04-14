@@ -37,7 +37,7 @@ export const 认知偏见可得性启发Vertical: React.FC = () => {
             <Audio
                 src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
                 loop
-                volume={0.22}
+                volume={0.10}
                 name="Background music"
             />
             <认知偏见可得性启发TopStaticHeadline canvasW={VERTICAL_CANVAS_W} topBandH={VERTICAL_PLAY_TOP} />

@@ -16,7 +16,7 @@ export const 认知偏见确认偏误MainBody: React.FC = () => (
         <Sequence durationInFrames={COVER_DURATION_FRAMES}>
             <LandscapeCoverPoster
                 title="确认偏误"
-                    subtitle="确认偏误与独立思考"
+                    subtitle="你要的不是真相，而是被迎合和肯定"
                     themeColor="#2563EB"
                     badge="认识自我 · 理性思考"
                     seriesLabel="认知偏见"

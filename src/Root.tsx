@@ -9,18 +9,28 @@ import { 样本偏差, 样本偏差Schema, TOTAL_DURATION_样本偏差 } from ".
 import { 数据可视化陷阱, 数据可视化陷阱Schema, TOTAL_DURATION_数据可视化陷阱 } from "./remotions/数据可视化陷阱/数据可视化陷阱";
 import { 平均数陷阱, 平均数陷阱Schema, TOTAL_DURATION_平均数陷阱 } from "./remotions/平均数陷阱/平均数陷阱";
 import { 相关不等于因果, 相关不等于因果Schema, TOTAL_DURATION_相关不等于因果 } from "./remotions/相关不等于因果/相关不等于因果";
-import {
-  认知偏见锚定效应,
-  认知偏见锚定效应竖屏,
-  认知偏见锚定效应Schema,
-  TOTAL_DURATION_认知偏见_锚定效应,
-} from "./remotions/认知偏见_锚定效应/认知偏见锚定效应";
-import { 认知偏见确认偏误, 认知偏见确认偏误竖屏, 认知偏见确认偏误Schema, TOTAL_DURATION_认知偏见_确认偏误 } from "./remotions/认知偏见_确认偏误/认知偏见确认偏误";
-import { 认知偏见后视偏见, 认知偏见后视偏见竖屏, 认知偏见后视偏见Schema, TOTAL_DURATION_认知偏见_后视偏见 } from "./remotions/认知偏见_后视偏见/认知偏见后视偏见";
-import { 认知偏见可得性启发, 认知偏见可得性启发竖屏, 认知偏见可得性启发Schema, TOTAL_DURATION_认知偏见_可得性启发 } from "./remotions/认知偏见_可得性启发/认知偏见可得性启发";
-import { 认知偏见可得性启发封面横屏, 认知偏见可得性启发封面竖屏 } from "./remotions/认知偏见_可得性启发/认知偏见可得性启发CoverStills";
 import { 认知偏见幸存者偏差, 认知偏见幸存者偏差竖屏, 认知偏见幸存者偏差Schema, TOTAL_DURATION_认知偏见_幸存者偏差 } from "./remotions/认知偏见_幸存者偏差/认知偏见幸存者偏差";
 import { 认知偏见幸存者偏差封面横屏, 认知偏见幸存者偏差封面竖屏 } from "./remotions/认知偏见_幸存者偏差/认知偏见幸存者偏差CoverStills";
+import { 认知偏见可得性启发, 认知偏见可得性启发竖屏, 认知偏见可得性启发Schema, TOTAL_DURATION_认知偏见_可得性启发 } from "./remotions/认知偏见_可得性启发/认知偏见可得性启发";
+import { 认知偏见可得性启发封面横屏, 认知偏见可得性启发封面竖屏 } from "./remotions/认知偏见_可得性启发/认知偏见可得性启发CoverStills";
+import { 认知偏见确认偏误, 认知偏见确认偏误竖屏, 认知偏见确认偏误Schema, TOTAL_DURATION_认知偏见_确认偏误 } from "./remotions/认知偏见_确认偏误/认知偏见确认偏误";
+import { 认知偏见确认偏误封面横屏, 认知偏见确认偏误封面竖屏 } from "./remotions/认知偏见_确认偏误/认知偏见确认偏误CoverStills";
+import { 认知偏见后视偏见, 认知偏见后视偏见竖屏, 认知偏见后视偏见Schema, TOTAL_DURATION_认知偏见_后视偏见 } from "./remotions/认知偏见_后视偏见/认知偏见后视偏见";
+import { 认知偏见后视偏见封面横屏, 认知偏见后视偏见封面竖屏 } from "./remotions/认知偏见_后视偏见/认知偏见后视偏见CoverStills";
+import { 认知偏见锚定效应, 认知偏见锚定效应竖屏, 认知偏见锚定效应Schema, TOTAL_DURATION_认知偏见_锚定效应 } from "./remotions/认知偏见_锚定效应/认知偏见锚定效应";
+import { 认知偏见锚定效应封面横屏, 认知偏见锚定效应封面竖屏 } from "./remotions/认知偏见_锚定效应/认知偏见锚定效应CoverStills";
+import { 认知偏见沉没成本谬误, 认知偏见沉没成本谬误竖屏, 认知偏见沉没成本谬误Schema, TOTAL_DURATION_认知偏见_沉没成本谬误 } from "./remotions/认知偏见_沉没成本谬误/认知偏见沉没成本谬误";
+import { 认知偏见沉没成本谬误封面横屏, 认知偏见沉没成本谬误封面竖屏 } from "./remotions/认知偏见_沉没成本谬误/认知偏见沉没成本谬误CoverStills";
+import { 认知偏见从众效应, 认知偏见从众效应竖屏, 认知偏见从众效应Schema, TOTAL_DURATION_认知偏见_从众效应 } from "./remotions/认知偏见_从众效应/认知偏见从众效应";
+import { 认知偏见从众效应封面横屏, 认知偏见从众效应封面竖屏 } from "./remotions/认知偏见_从众效应/认知偏见从众效应CoverStills";
+import { 认知偏见光环效应, 认知偏见光环效应竖屏, 认知偏见光环效应Schema, TOTAL_DURATION_认知偏见_光环效应 } from "./remotions/认知偏见_光环效应/认知偏见光环效应";
+import { 认知偏见光环效应封面横屏, 认知偏见光环效应封面竖屏 } from "./remotions/认知偏见_光环效应/认知偏见光环效应CoverStills";
+import { 认知偏见达克效应, 认知偏见达克效应竖屏, 认知偏见达克效应Schema, TOTAL_DURATION_认知偏见_达克效应 } from "./remotions/认知偏见_达克效应/认知偏见达克效应";
+import { 认知偏见达克效应封面横屏, 认知偏见达克效应封面竖屏 } from "./remotions/认知偏见_达克效应/认知偏见达克效应CoverStills";
+import { 认知偏差自利偏差, 认知偏差自利偏差竖屏, 认知偏差自利偏差Schema, TOTAL_DURATION_认知偏差_自利偏差 } from "./remotions/认知偏差_自利偏差/认知偏差自利偏差";
+import { 认知偏差自利偏差封面横屏, 认知偏差自利偏差封面竖屏 } from "./remotions/认知偏差_自利偏差/认知偏差自利偏差CoverStills";
+import { 认知偏差基本归因错误, 认知偏差基本归因错误竖屏, 认知偏差基本归因错误Schema, TOTAL_DURATION_认知偏差_基本归因错误 } from "./remotions/认知偏差_基本归因错误/认知偏差基本归因错误";
+import { 认知偏差基本归因错误封面横屏, 认知偏差基本归因错误封面竖屏 } from "./remotions/认知偏差_基本归因错误/认知偏差基本归因错误CoverStills";
 // Each <Composition> is an entry in the sidebar!
 
 export const RemotionRoot: React.FC = () => {
@@ -111,76 +121,54 @@ export const RemotionRoot: React.FC = () => {
       />
 
 
-      {/* 认知偏见锚定效应 - 横屏 1920×1080 */}
+
+
+      {/* 认知偏见幸存者偏差 - 横屏 1920×1080（自动生成） */}
       <Composition
-        id="认知偏见锚定效应"
-        component={认知偏见锚定效应}
-        durationInFrames={TOTAL_DURATION_认知偏见_锚定效应}
+        id="认知偏见幸存者偏差"
+        component={认知偏见幸存者偏差}
+        durationInFrames={TOTAL_DURATION_认知偏见_幸存者偏差}
         fps={30}
         width={1920}
         height={1080}
-        schema={认知偏见锚定效应Schema}
+        schema={认知偏见幸存者偏差Schema}
         defaultProps={{}}
       />
 
-      {/* 认知偏见锚定效应 - 竖屏 1080×1920 */}
+      {/* 认知偏见幸存者偏差竖屏 - 竖屏 1080×1920（自动生成） */}
       <Composition
-        id="认知偏见锚定效应竖屏"
-        component={认知偏见锚定效应竖屏}
-        durationInFrames={TOTAL_DURATION_认知偏见_锚定效应}
+        id="认知偏见幸存者偏差竖屏"
+        component={认知偏见幸存者偏差竖屏}
+        durationInFrames={TOTAL_DURATION_认知偏见_幸存者偏差}
         fps={30}
         width={1080}
         height={1920}
-        schema={认知偏见锚定效应Schema}
+        schema={认知偏见幸存者偏差Schema}
         defaultProps={{}}
       />
-
-      {/* 认知偏见确认偏误 - 横屏 1920×1080（自动生成） */}
+      {/* 认知偏见幸存者偏差封面横屏 - 横屏封面 still 1920×1080 */}
       <Composition
-        id="认知偏见确认偏误"
-        component={认知偏见确认偏误}
-        durationInFrames={TOTAL_DURATION_认知偏见_确认偏误}
+        id="认知偏见幸存者偏差封面横屏"
+        component={认知偏见幸存者偏差封面横屏}
+        durationInFrames={1}
         fps={30}
         width={1920}
         height={1080}
-        schema={认知偏见确认偏误Schema}
         defaultProps={{}}
       />
 
-      {/* 认知偏见确认偏误竖屏 - 竖屏 1080×1920（自动生成） */}
+      {/* 认知偏见幸存者偏差封面竖屏 - 3:4 封面 still 1080×1440 */}
       <Composition
-        id="认知偏见确认偏误竖屏"
-        component={认知偏见确认偏误竖屏}
-        durationInFrames={TOTAL_DURATION_认知偏见_确认偏误}
+        id="认知偏见幸存者偏差封面竖屏"
+        component={认知偏见幸存者偏差封面竖屏}
+        durationInFrames={1}
         fps={30}
         width={1080}
-        height={1920}
-        schema={认知偏见确认偏误Schema}
-        defaultProps={{}}
-      />
-      {/* 认知偏见后视偏见 - 横屏 1920×1080（自动生成） */}
-      <Composition
-        id="认知偏见后视偏见"
-        component={认知偏见后视偏见}
-        durationInFrames={TOTAL_DURATION_认知偏见_后视偏见}
-        fps={30}
-        width={1920}
-        height={1080}
-        schema={认知偏见后视偏见Schema}
+        height={1440}
         defaultProps={{}}
       />
 
-      {/* 认知偏见后视偏见竖屏 - 竖屏 1080×1920（自动生成） */}
-      <Composition
-        id="认知偏见后视偏见竖屏"
-        component={认知偏见后视偏见竖屏}
-        durationInFrames={TOTAL_DURATION_认知偏见_后视偏见}
-        fps={30}
-        width={1080}
-        height={1920}
-        schema={认知偏见后视偏见Schema}
-        defaultProps={{}}
-      />
+
 
 
       {/* 认知偏见可得性启发 - 横屏 1920×1080（自动生成） */}
@@ -229,33 +217,35 @@ export const RemotionRoot: React.FC = () => {
       />
 
 
-      {/* 认知偏见幸存者偏差 - 横屏 1920×1080（自动生成） */}
+
+
+      {/* 认知偏见确认偏误 - 横屏 1920×1080（自动生成） */}
       <Composition
-        id="认知偏见幸存者偏差"
-        component={认知偏见幸存者偏差}
-        durationInFrames={TOTAL_DURATION_认知偏见_幸存者偏差}
+        id="认知偏见确认偏误"
+        component={认知偏见确认偏误}
+        durationInFrames={TOTAL_DURATION_认知偏见_确认偏误}
         fps={30}
         width={1920}
         height={1080}
-        schema={认知偏见幸存者偏差Schema}
+        schema={认知偏见确认偏误Schema}
         defaultProps={{}}
       />
 
-      {/* 认知偏见幸存者偏差竖屏 - 竖屏 1080×1920（自动生成） */}
+      {/* 认知偏见确认偏误竖屏 - 竖屏 1080×1920（自动生成） */}
       <Composition
-        id="认知偏见幸存者偏差竖屏"
-        component={认知偏见幸存者偏差竖屏}
-        durationInFrames={TOTAL_DURATION_认知偏见_幸存者偏差}
+        id="认知偏见确认偏误竖屏"
+        component={认知偏见确认偏误竖屏}
+        durationInFrames={TOTAL_DURATION_认知偏见_确认偏误}
         fps={30}
         width={1080}
         height={1920}
-        schema={认知偏见幸存者偏差Schema}
+        schema={认知偏见确认偏误Schema}
         defaultProps={{}}
       />
-      {/* 认知偏见幸存者偏差封面横屏 - 横屏封面 still 1920×1080 */}
+      {/* 认知偏见确认偏误封面横屏 - 横屏封面 still 1920×1080 */}
       <Composition
-        id="认知偏见幸存者偏差封面横屏"
-        component={认知偏见幸存者偏差封面横屏}
+        id="认知偏见确认偏误封面横屏"
+        component={认知偏见确认偏误封面横屏}
         durationInFrames={1}
         fps={30}
         width={1920}
@@ -263,10 +253,376 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{}}
       />
 
-      {/* 认知偏见幸存者偏差封面竖屏 - 3:4 封面 still 1080×1440 */}
+      {/* 认知偏见确认偏误封面竖屏 - 3:4 封面 still 1080×1440 */}
       <Composition
-        id="认知偏见幸存者偏差封面竖屏"
-        component={认知偏见幸存者偏差封面竖屏}
+        id="认知偏见确认偏误封面竖屏"
+        component={认知偏见确认偏误封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
+        defaultProps={{}}
+      />
+      {/* 认知偏见后视偏见 - 横屏 1920×1080（自动生成） */}
+      <Composition
+        id="认知偏见后视偏见"
+        component={认知偏见后视偏见}
+        durationInFrames={TOTAL_DURATION_认知偏见_后视偏见}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={认知偏见后视偏见Schema}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏见后视偏见竖屏 - 竖屏 1080×1920（自动生成） */}
+      <Composition
+        id="认知偏见后视偏见竖屏"
+        component={认知偏见后视偏见竖屏}
+        durationInFrames={TOTAL_DURATION_认知偏见_后视偏见}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={认知偏见后视偏见Schema}
+        defaultProps={{}}
+      />
+      {/* 认知偏见后视偏见封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="认知偏见后视偏见封面横屏"
+        component={认知偏见后视偏见封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏见后视偏见封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="认知偏见后视偏见封面竖屏"
+        component={认知偏见后视偏见封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
+        defaultProps={{}}
+      />
+
+
+      {/* 认知偏见锚定效应 - 横屏 1920×1080（自动生成） */}
+      <Composition
+        id="认知偏见锚定效应"
+        component={认知偏见锚定效应}
+        durationInFrames={TOTAL_DURATION_认知偏见_锚定效应}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={认知偏见锚定效应Schema}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏见锚定效应竖屏 - 竖屏 1080×1920（自动生成） */}
+      <Composition
+        id="认知偏见锚定效应竖屏"
+        component={认知偏见锚定效应竖屏}
+        durationInFrames={TOTAL_DURATION_认知偏见_锚定效应}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={认知偏见锚定效应Schema}
+        defaultProps={{}}
+      />
+      {/* 认知偏见锚定效应封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="认知偏见锚定效应封面横屏"
+        component={认知偏见锚定效应封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏见锚定效应封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="认知偏见锚定效应封面竖屏"
+        component={认知偏见锚定效应封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
+        defaultProps={{}}
+      />
+
+
+      {/* 认知偏见沉没成本谬误 - 横屏 1920×1080（自动生成） */}
+      <Composition
+        id="认知偏见沉没成本谬误"
+        component={认知偏见沉没成本谬误}
+        durationInFrames={TOTAL_DURATION_认知偏见_沉没成本谬误}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={认知偏见沉没成本谬误Schema}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏见沉没成本谬误竖屏 - 竖屏 1080×1920（自动生成） */}
+      <Composition
+        id="认知偏见沉没成本谬误竖屏"
+        component={认知偏见沉没成本谬误竖屏}
+        durationInFrames={TOTAL_DURATION_认知偏见_沉没成本谬误}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={认知偏见沉没成本谬误Schema}
+        defaultProps={{}}
+      />
+      {/* 认知偏见沉没成本谬误封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="认知偏见沉没成本谬误封面横屏"
+        component={认知偏见沉没成本谬误封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏见沉没成本谬误封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="认知偏见沉没成本谬误封面竖屏"
+        component={认知偏见沉没成本谬误封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
+        defaultProps={{}}
+      />
+
+
+      {/* 认知偏见从众效应 - 横屏 1920×1080（自动生成） */}
+      <Composition
+        id="认知偏见从众效应"
+        component={认知偏见从众效应}
+        durationInFrames={TOTAL_DURATION_认知偏见_从众效应}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={认知偏见从众效应Schema}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏见从众效应竖屏 - 竖屏 1080×1920（自动生成） */}
+      <Composition
+        id="认知偏见从众效应竖屏"
+        component={认知偏见从众效应竖屏}
+        durationInFrames={TOTAL_DURATION_认知偏见_从众效应}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={认知偏见从众效应Schema}
+        defaultProps={{}}
+      />
+      {/* 认知偏见从众效应封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="认知偏见从众效应封面横屏"
+        component={认知偏见从众效应封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏见从众效应封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="认知偏见从众效应封面竖屏"
+        component={认知偏见从众效应封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
+        defaultProps={{}}
+      />
+
+
+      {/* 认知偏见光环效应 - 横屏 1920×1080（自动生成） */}
+      <Composition
+        id="认知偏见光环效应"
+        component={认知偏见光环效应}
+        durationInFrames={TOTAL_DURATION_认知偏见_光环效应}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={认知偏见光环效应Schema}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏见光环效应竖屏 - 竖屏 1080×1920（自动生成） */}
+      <Composition
+        id="认知偏见光环效应竖屏"
+        component={认知偏见光环效应竖屏}
+        durationInFrames={TOTAL_DURATION_认知偏见_光环效应}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={认知偏见光环效应Schema}
+        defaultProps={{}}
+      />
+      {/* 认知偏见光环效应封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="认知偏见光环效应封面横屏"
+        component={认知偏见光环效应封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏见光环效应封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="认知偏见光环效应封面竖屏"
+        component={认知偏见光环效应封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
+        defaultProps={{}}
+      />
+
+
+      {/* 认知偏见达克效应 - 横屏 1920×1080（自动生成） */}
+      <Composition
+        id="认知偏见达克效应"
+        component={认知偏见达克效应}
+        durationInFrames={TOTAL_DURATION_认知偏见_达克效应}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={认知偏见达克效应Schema}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏见达克效应竖屏 - 竖屏 1080×1920（自动生成） */}
+      <Composition
+        id="认知偏见达克效应竖屏"
+        component={认知偏见达克效应竖屏}
+        durationInFrames={TOTAL_DURATION_认知偏见_达克效应}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={认知偏见达克效应Schema}
+        defaultProps={{}}
+      />
+      {/* 认知偏见达克效应封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="认知偏见达克效应封面横屏"
+        component={认知偏见达克效应封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏见达克效应封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="认知偏见达克效应封面竖屏"
+        component={认知偏见达克效应封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
+        defaultProps={{}}
+      />
+
+
+      {/* 认知偏差自利偏差 - 横屏 1920×1080（自动生成） */}
+      <Composition
+        id="认知偏差自利偏差"
+        component={认知偏差自利偏差}
+        durationInFrames={TOTAL_DURATION_认知偏差_自利偏差}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={认知偏差自利偏差Schema}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏差自利偏差竖屏 - 竖屏 1080×1920（自动生成） */}
+      <Composition
+        id="认知偏差自利偏差竖屏"
+        component={认知偏差自利偏差竖屏}
+        durationInFrames={TOTAL_DURATION_认知偏差_自利偏差}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={认知偏差自利偏差Schema}
+        defaultProps={{}}
+      />
+      {/* 认知偏差自利偏差封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="认知偏差自利偏差封面横屏"
+        component={认知偏差自利偏差封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏差自利偏差封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="认知偏差自利偏差封面竖屏"
+        component={认知偏差自利偏差封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
+        defaultProps={{}}
+      />
+
+
+      {/* 认知偏差基本归因错误 - 横屏 1920×1080（自动生成） */}
+      <Composition
+        id="认知偏差基本归因错误"
+        component={认知偏差基本归因错误}
+        durationInFrames={TOTAL_DURATION_认知偏差_基本归因错误}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={认知偏差基本归因错误Schema}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏差基本归因错误竖屏 - 竖屏 1080×1920（自动生成） */}
+      <Composition
+        id="认知偏差基本归因错误竖屏"
+        component={认知偏差基本归因错误竖屏}
+        durationInFrames={TOTAL_DURATION_认知偏差_基本归因错误}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={认知偏差基本归因错误Schema}
+        defaultProps={{}}
+      />
+      {/* 认知偏差基本归因错误封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="认知偏差基本归因错误封面横屏"
+        component={认知偏差基本归因错误封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 认知偏差基本归因错误封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="认知偏差基本归因错误封面竖屏"
+        component={认知偏差基本归因错误封面竖屏}
         durationInFrames={1}
         fps={30}
         width={1080}

@@ -339,10 +339,14 @@
           ],
           "order": 2,
           "param": {
-            "leftSrc": "images/双盲实验/scene_2_2_left.png",
-            "rightSrc": "images/双盲实验/scene_2_2_right.png",
-            "dontLabel": "干预有效",
-            "doLabel": "命足够大"
+            "left": {
+              "label": "干预有效",
+              "src": "images/双盲实验/scene_2_2_left.png"
+            },
+            "right": {
+              "label": "命足够大",
+              "src": "images/双盲实验/scene_2_2_right.png"
+            }
           },
           "totalDurationFrames": 196
         },

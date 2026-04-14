@@ -12,7 +12,7 @@ metadata:
   "componentExport": "BWStatCompare",
   "description": "适用：两项 KPI 并列对比（前后、A/B、涨跌）；条形高度反映相对大小。\n差异：左右场景图对比用 SPLIT_COMPARE；单数字强调用 KPI_HERO；若强调完成度/进度闭环感用 PROGRESS_RING。\n参数：leftValue/rightValue 为非负整数；标签宜短。",
   "psychology": "对比效应",
-  "image_count": "0-2",
+  "image_count": "0",
   "param_schema": {
     "type": "object",
     "properties": {
@@ -31,16 +31,6 @@ metadata:
       "rightLabel": {
         "type": "string",
         "description": "右侧标签"
-      },
-      "leftSrc": {
-        "type": "string",
-        "format": "image_prompt",
-        "description": "左侧小图标"
-      },
-      "rightSrc": {
-        "type": "string",
-        "format": "image_prompt",
-        "description": "右侧小图标"
       }
     },
     "required": [

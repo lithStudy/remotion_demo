@@ -117,10 +117,14 @@
           ],
           "order": 1,
           "param": {
-            "leftSrc": "images/认知偏见_可得性启发/scene_2_1_left.png",
-            "rightSrc": "images/认知偏见_可得性启发/scene_2_1_right.png",
-            "dontLabel": "❌ 以为理性",
-            "doLabel": "✅ 恐惧劫持"
+            "left": {
+              "label": "❌ 以为理性",
+              "src": "images/认知偏见_可得性启发/scene_2_1_left.png"
+            },
+            "right": {
+              "label": "✅ 恐惧劫持",
+              "src": "images/认知偏见_可得性启发/scene_2_1_right.png"
+            }
           },
           "totalDurationFrames": 151
         },
@@ -142,10 +146,14 @@
           ],
           "order": 2,
           "param": {
-            "leftSrc": "images/认知偏见_可得性启发/scene_2_2_left.png",
-            "rightSrc": "images/认知偏见_可得性启发/scene_2_2_right.png",
-            "dontLabel": "❌ 胆小怕事",
-            "doLabel": "✅ 生存本能"
+            "left": {
+              "label": "❌ 胆小怕事",
+              "src": "images/认知偏见_可得性启发/scene_2_2_left.png"
+            },
+            "right": {
+              "label": "✅ 生存本能",
+              "src": "images/认知偏见_可得性启发/scene_2_2_right.png"
+            }
           },
           "totalDurationFrames": 128
         },

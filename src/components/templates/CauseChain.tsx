@@ -257,8 +257,8 @@ export const BWCauseChain: React.FC<BWCauseChainProps> = ({
 			<div
 				style={{
 					position: "absolute",
-					left: 24,
-					right: 24,
+					left: 140,
+					right: 140,
 					top: "12%",
 					bottom: "18%",
 					display: "flex",

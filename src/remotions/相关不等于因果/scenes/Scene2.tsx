@@ -28,7 +28,7 @@ export const Scene2: React.FC = () => {
                 <BWCenterFocus content={[{"text": "如果没有一个年龄、", "startFrame": 0, "durationFrames": 37}, {"text": "体质、", "startFrame": 36, "durationFrames": 19}, {"text": "病情和你完全一样，", "startFrame": 54, "durationFrames": 46}, {"text": "但什么偏方都没吃的人作为参照物，", "startFrame": 100, "durationFrames": 68}]} totalDurationFrames={168} imageSrc={staticFile("images/相关不等于因果/scene_2_5.png")} enterEffect="fadeIn" anchors={[{"text": "参照物", "showFrom": 3, "color": "#000000", "anim": "highlight", "audioEffect": "ping"}]} />
             </Sequence>
             <Sequence from={861} durationInFrames={188}>
-                <BWDosAndDonts content={[{"text": "你根本没有办法在逻辑上排除，", "startFrame": 0, "durationFrames": 64}, {"text": "这究竟是神秘草药的法力，", "startFrame": 63, "durationFrames": 53}, {"text": "还是你身体硬扛过去的自发痊愈。", "startFrame": 115, "durationFrames": 73}]} totalDurationFrames={188} leftSrc={staticFile("images/相关不等于因果/scene_2_6_left.png")} rightSrc={staticFile("images/相关不等于因果/scene_2_6_right.png")} dontLabel={"❌ 偏方神力"} doLabel={"✅ 自发痊愈"} />
+                <BWDosAndDonts content={[{"text": "你根本没有办法在逻辑上排除，", "startFrame": 0, "durationFrames": 64}, {"text": "这究竟是神秘草药的法力，", "startFrame": 63, "durationFrames": 53}, {"text": "还是你身体硬扛过去的自发痊愈。", "startFrame": 115, "durationFrames": 73}]} totalDurationFrames={188} left={{ label: "❌ 偏方神力", src: staticFile("images/相关不等于因果/scene_2_6_left.png"), showFrom: 0 }} right={{ label: "✅ 自发痊愈", src: staticFile("images/相关不等于因果/scene_2_6_right.png"), showFrom: 10 }} />
             </Sequence>
             <Audio src={staticFile("/audio/相关不等于因果/scene_2/scene_2.mp3")} />
         </AbsoluteFill>

@@ -3,7 +3,7 @@
   "scenes": [
     {
       "sceneId": "scene_1",
-      "sceneName": "引入：锚定效应与占便宜心理",
+      "sceneName": "案例引入",
       "items": [
         {
           "narrativeType": "HOOK",
@@ -13,32 +13,32 @@
             {
               "text": "看着直播间里被划掉的999元，",
               "startFrame": 0,
-              "durationFrames": 84
+              "durationFrames": 80
             },
             {
               "text": "再看看旁边闪烁的99元限时秒杀，",
-              "startFrame": 84,
-              "durationFrames": 89
+              "startFrame": 79,
+              "durationFrames": 83
             },
             {
               "text": "你毫不犹豫地按下了付款按钮，",
-              "startFrame": 172,
-              "durationFrames": 65
+              "startFrame": 162,
+              "durationFrames": 64
             },
             {
               "text": "心里激动地想着今天真是赚翻了。",
-              "startFrame": 236,
-              "durationFrames": 103
+              "startFrame": 225,
+              "durationFrames": 94
             },
             {
               "text": "这种捡到绝世大便宜的狂喜，",
-              "startFrame": 339,
-              "durationFrames": 67
+              "startFrame": 319,
+              "durationFrames": 72
             },
             {
               "text": "是不是让你觉得特别有成就感？",
-              "startFrame": 405,
-              "durationFrames": 54
+              "startFrame": 391,
+              "durationFrames": 58
             }
           ],
           "order": 1,
@@ -62,7 +62,7 @@
               }
             ]
           },
-          "totalDurationFrames": 460
+          "totalDurationFrames": 450
         },
         {
           "narrativeType": "LOGIC",
@@ -72,17 +72,17 @@
             {
               "text": "我们总以为自己是个精明的消费者，",
               "startFrame": 0,
-              "durationFrames": 65
+              "durationFrames": 68
             },
             {
               "text": "能精准捕捉到商家的每一次“大放血”，",
-              "startFrame": 64,
-              "durationFrames": 82
+              "startFrame": 67,
+              "durationFrames": 88
             },
             {
               "text": "但其实我们早就掉进了资本的陷阱。",
-              "startFrame": 146,
-              "durationFrames": 77
+              "startFrame": 154,
+              "durationFrames": 83
             }
           ],
           "order": 2,
@@ -91,7 +91,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 223
+          "totalDurationFrames": 238
         },
         {
           "narrativeType": "LOGIC",
@@ -101,12 +101,12 @@
             {
               "text": "这不是因为我们贪图小便宜，",
               "startFrame": 0,
-              "durationFrames": 57
+              "durationFrames": 56
             },
             {
               "text": "而是大脑处理信息时存在致命弱点。",
-              "startFrame": 56,
-              "durationFrames": 97
+              "startFrame": 55,
+              "durationFrames": 81
             }
           ],
           "order": 3,
@@ -118,7 +118,7 @@
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 154
+          "totalDurationFrames": 136
         },
         {
           "narrativeType": "LOGIC",
@@ -128,17 +128,17 @@
             {
               "text": "资本家早就把人性研究透彻了，",
               "startFrame": 0,
-              "durationFrames": 77
+              "durationFrames": 70
             },
             {
               "text": "他们精准地在你的潜意识里植入一根“针”，",
-              "startFrame": 76,
-              "durationFrames": 79
+              "startFrame": 69,
+              "durationFrames": 89
             },
             {
               "text": "让你心甘情愿地掏空钱包还感恩戴德。",
-              "startFrame": 154,
-              "durationFrames": 93
+              "startFrame": 158,
+              "durationFrames": 87
             }
           ],
           "order": 4,
@@ -162,15 +162,15 @@
               }
             ]
           },
-          "totalDurationFrames": 248
+          "totalDurationFrames": 245
         }
       ],
       "audioSrc": "/audio/认知偏见_锚定效应/scene_1/scene_1.mp3",
-      "totalDurationFrames": 1086
+      "totalDurationFrames": 1070
     },
     {
       "sceneId": "scene_2",
-      "sceneName": "命名：锚定效应的定义与影响",
+      "sceneName": "定义与影响",
       "items": [
         {
           "narrativeType": "LOGIC",
@@ -180,22 +180,22 @@
             {
               "text": "这在心理学中叫做“锚定效应”：",
               "startFrame": 0,
-              "durationFrames": 70
+              "durationFrames": 72
             },
             {
               "text": "人们在做判断时，",
-              "startFrame": 69,
-              "durationFrames": 41
+              "startFrame": 72,
+              "durationFrames": 39
             },
             {
               "text": "会过度依赖最先接触到的信息（“锚”），",
               "startFrame": 110,
-              "durationFrames": 94
+              "durationFrames": 100
             },
             {
               "text": "即使这个信息毫无意义或误导性极强。",
-              "startFrame": 204,
-              "durationFrames": 82
+              "startFrame": 209,
+              "durationFrames": 94
             }
           ],
           "order": 1,
@@ -204,7 +204,7 @@
             "conceptName": "锚定效应",
             "anchors": []
           },
-          "totalDurationFrames": 286
+          "totalDurationFrames": 304
         },
         {
           "narrativeType": "LOGIC",
@@ -218,28 +218,28 @@
             },
             {
               "text": "它像一根无形的铁链死死锁住你。",
-              "startFrame": 96,
+              "startFrame": 95,
               "durationFrames": 76
             },
             {
               "text": "一旦你的大脑接受了这个天价设定，",
               "startFrame": 171,
-              "durationFrames": 78
+              "durationFrames": 69
             },
             {
               "text": "后面无论价格怎么变，",
-              "startFrame": 248,
-              "durationFrames": 57
+              "startFrame": 240,
+              "durationFrames": 45
             },
             {
               "text": "只要低于这个数字，",
-              "startFrame": 305,
-              "durationFrames": 44
+              "startFrame": 285,
+              "durationFrames": 36
             },
             {
               "text": "你都会觉得是优惠。",
-              "startFrame": 349,
-              "durationFrames": 56
+              "startFrame": 321,
+              "durationFrames": 41
             }
           ],
           "order": 2,
@@ -270,7 +270,7 @@
               }
             ]
           },
-          "totalDurationFrames": 405
+          "totalDurationFrames": 362
         },
         {
           "narrativeType": "LOGIC",
@@ -280,12 +280,12 @@
             {
               "text": "哪怕这件东西的成本只有区区十块钱，",
               "startFrame": 0,
-              "durationFrames": 87
+              "durationFrames": 81
             },
             {
               "text": "你依然会为99元的价格欢呼雀跃。",
-              "startFrame": 86,
-              "durationFrames": 82
+              "startFrame": 80,
+              "durationFrames": 91
             }
           ],
           "order": 3,
@@ -309,7 +309,7 @@
               }
             ]
           },
-          "totalDurationFrames": 169
+          "totalDurationFrames": 172
         },
         {
           "narrativeType": "CASE",
@@ -319,26 +319,26 @@
             {
               "text": "这就好比相亲时先给你看张极丑的照片，",
               "startFrame": 0,
-              "durationFrames": 95
+              "durationFrames": 82
             },
             {
               "text": "后面再出来个普通人，",
-              "startFrame": 94,
-              "durationFrames": 47
+              "startFrame": 81,
+              "durationFrames": 46
             },
             {
               "text": "你也觉得眉清目秀。",
-              "startFrame": 141,
-              "durationFrames": 43
+              "startFrame": 127,
+              "durationFrames": 44
             },
             {
               "text": "我们自以为的理性计算，",
-              "startFrame": 184,
-              "durationFrames": 47
+              "startFrame": 171,
+              "durationFrames": 45
             },
             {
               "text": "早就被设定了起跑线。",
-              "startFrame": 231,
+              "startFrame": 216,
               "durationFrames": 51
             }
           ],
@@ -356,15 +356,15 @@
               }
             ]
           },
-          "totalDurationFrames": 283
+          "totalDurationFrames": 267
         }
       ],
       "audioSrc": "/audio/认知偏见_锚定效应/scene_2/scene_2.mp3",
-      "totalDurationFrames": 1143
+      "totalDurationFrames": 1105
     },
     {
       "sceneId": "scene_3",
-      "sceneName": "剖析：锚定效应的应用场景",
+      "sceneName": "应用场景",
       "items": [
         {
           "narrativeType": "TRANSITION",
@@ -374,17 +374,19 @@
             {
               "text": "实际上，",
               "startFrame": 0,
-              "durationFrames": 21
+              "durationFrames": 24
             },
             {
               "text": "锚定效应不只是出现在购物上。",
-              "startFrame": 20,
-              "durationFrames": 74
+              "startFrame": 24,
+              "durationFrames": 72
             }
           ],
           "order": 1,
           "param": {
-            "coreSentence": ["锚定效应不只是出现在购物上"],
+            "coreSentence": [
+              "锚定效应不只是出现在购物上"
+            ],
             "coreSentenceAnchors": [
               {
                 "coreSentenceAnchor": "不只是",
@@ -392,7 +394,7 @@
               }
             ]
           },
-          "totalDurationFrames": 94
+          "totalDurationFrames": 96
         },
         {
           "narrativeType": "CASE",
@@ -407,17 +409,17 @@
             {
               "text": "老板先给你一个人均五千的锚，",
               "startFrame": 36,
-              "durationFrames": 60
+              "durationFrames": 68
             },
             {
               "text": "等最后落到“工资六千”时，",
-              "startFrame": 96,
+              "startFrame": 103,
               "durationFrames": 53
             },
             {
               "text": "你竟然觉得还真不错呢。",
-              "startFrame": 148,
-              "durationFrames": 46
+              "startFrame": 155,
+              "durationFrames": 47
             }
           ],
           "order": 2,
@@ -441,7 +443,7 @@
               }
             ]
           },
-          "totalDurationFrames": 195
+          "totalDurationFrames": 203
         },
         {
           "narrativeType": "CASE",
@@ -451,27 +453,27 @@
             {
               "text": "去饭店点菜，",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 39
             },
             {
               "text": "菜单第一页躺着几道几千块的澳洲大龙虾",
-              "startFrame": 34,
-              "durationFrames": 112
+              "startFrame": 38,
+              "durationFrames": 101
             },
             {
               "text": "它们存在的意义根本不是为了被卖掉，",
-              "startFrame": 146,
-              "durationFrames": 83
+              "startFrame": 138,
+              "durationFrames": 69
             },
             {
               "text": "而是为了让你觉得后面那道98元的红烧肉",
-              "startFrame": 229,
-              "durationFrames": 86
+              "startFrame": 207,
+              "durationFrames": 93
             },
             {
               "text": "“简直太亲民了”。",
-              "startFrame": 314,
-              "durationFrames": 45
+              "startFrame": 299,
+              "durationFrames": 54
             }
           ],
           "order": 3,
@@ -495,7 +497,7 @@
               }
             ]
           },
-          "totalDurationFrames": 359
+          "totalDurationFrames": 354
         },
         {
           "narrativeType": "CASE",
@@ -505,42 +507,42 @@
             {
               "text": "甚至在房地产售楼处，",
               "startFrame": 0,
-              "durationFrames": 51
+              "durationFrames": 47
             },
             {
               "text": "销售永远会先带你看那套地段差、",
-              "startFrame": 50,
-              "durationFrames": 72
+              "startFrame": 46,
+              "durationFrames": 79
             },
             {
               "text": "户型烂、",
-              "startFrame": 122,
-              "durationFrames": 24
+              "startFrame": 125,
+              "durationFrames": 27
             },
             {
               "text": "价格还贵的“垃圾房”，",
-              "startFrame": 146,
-              "durationFrames": 55
+              "startFrame": 151,
+              "durationFrames": 65
             },
             {
               "text": "等你快崩溃时，",
-              "startFrame": 200,
-              "durationFrames": 40
+              "startFrame": 216,
+              "durationFrames": 36
             },
             {
               "text": "他再掏出那套所谓的“保留房源”，",
-              "startFrame": 240,
-              "durationFrames": 76
+              "startFrame": 251,
+              "durationFrames": 73
             },
             {
               "text": "即便它依然溢价严重，",
-              "startFrame": 315,
-              "durationFrames": 53
+              "startFrame": 324,
+              "durationFrames": 54
             },
             {
               "text": "你也会像抓住了救命稻草一样赶紧签合同。",
-              "startFrame": 367,
-              "durationFrames": 102
+              "startFrame": 377,
+              "durationFrames": 98
             }
           ],
           "order": 4,
@@ -564,15 +566,15 @@
               }
             ]
           },
-          "totalDurationFrames": 470
+          "totalDurationFrames": 475
         }
       ],
       "audioSrc": "/audio/认知偏见_锚定效应/scene_3/scene_3.mp3",
-      "totalDurationFrames": 1118
+      "totalDurationFrames": 1129
     },
     {
       "sceneId": "scene_4",
-      "sceneName": "召唤：如何避免锚定效应",
+      "sceneName": "如何避免锚定效应",
       "items": [
         {
           "narrativeType": "LOGIC",
@@ -582,12 +584,12 @@
             {
               "text": "要想不让你的判断被“锚”所劫持，",
               "startFrame": 0,
-              "durationFrames": 74
+              "durationFrames": 64
             },
             {
               "text": "你最好记住这三个核心心法",
-              "startFrame": 73,
-              "durationFrames": 59
+              "startFrame": 63,
+              "durationFrames": 62
             }
           ],
           "order": 1,
@@ -604,7 +606,7 @@
               }
             ]
           },
-          "totalDurationFrames": 132
+          "totalDurationFrames": 125
         },
         {
           "narrativeType": "LOGIC",
@@ -614,17 +616,17 @@
             {
               "text": "1. 先问自己：",
               "startFrame": 0,
-              "durationFrames": 41
+              "durationFrames": 42
             },
             {
               "text": "不看标价/不听评价，",
-              "startFrame": 40,
-              "durationFrames": 55
+              "startFrame": 41,
+              "durationFrames": 64
             },
             {
               "text": "我自己的判断是什么？",
-              "startFrame": 94,
-              "durationFrames": 47
+              "startFrame": 104,
+              "durationFrames": 48
             }
           ],
           "order": 2,
@@ -643,7 +645,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 142
+          "totalDurationFrames": 153
         },
         {
           "narrativeType": "LOGIC",
@@ -653,17 +655,17 @@
             {
               "text": "2. 多维参照：",
               "startFrame": 0,
-              "durationFrames": 46
+              "durationFrames": 47
             },
             {
               "text": "收集多个独立信息源，",
-              "startFrame": 45,
-              "durationFrames": 55
+              "startFrame": 46,
+              "durationFrames": 50
             },
             {
               "text": "而非只看第一个。",
-              "startFrame": 100,
-              "durationFrames": 44
+              "startFrame": 96,
+              "durationFrames": 42
             }
           ],
           "order": 3,
@@ -682,7 +684,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 144
+          "totalDurationFrames": 138
         },
         {
           "narrativeType": "LOGIC",
@@ -692,12 +694,12 @@
             {
               "text": "3. 警惕先入为主：",
               "startFrame": 0,
-              "durationFrames": 56
+              "durationFrames": 62
             },
             {
               "text": "意识到\"第一印象\"的巨大影响力。",
-              "startFrame": 55,
-              "durationFrames": 63
+              "startFrame": 61,
+              "durationFrames": 64
             }
           ],
           "order": 4,
@@ -712,7 +714,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 119
+          "totalDurationFrames": 125
         },
         {
           "narrativeType": "CONCLUSION",
@@ -722,17 +724,17 @@
             {
               "text": "在这个到处都是“钩子”的世界里，",
               "startFrame": 0,
-              "durationFrames": 68
+              "durationFrames": 59
             },
             {
               "text": "如果你不主动设定自己的“锚”，",
-              "startFrame": 67,
-              "durationFrames": 62
+              "startFrame": 58,
+              "durationFrames": 56
             },
             {
               "text": "你就只能在别人的鱼塘里当一条待宰的鱼。",
-              "startFrame": 128,
-              "durationFrames": 88
+              "startFrame": 114,
+              "durationFrames": 93
             }
           ],
           "order": 5,
@@ -756,7 +758,7 @@
               }
             ]
           },
-          "totalDurationFrames": 216
+          "totalDurationFrames": 208
         },
         {
           "narrativeType": "CONCLUSION",
@@ -766,22 +768,24 @@
             {
               "text": "永远记住，",
               "startFrame": 0,
-              "durationFrames": 23
+              "durationFrames": 27
             },
             {
               "text": "你的价值由你定义，",
-              "startFrame": 22,
-              "durationFrames": 43
+              "startFrame": 26,
+              "durationFrames": 45
             },
             {
               "text": "不由对方的“锚”定义。",
-              "startFrame": 65,
+              "startFrame": 70,
               "durationFrames": 45
             }
           ],
           "order": 6,
           "param": {
-            "coreSentence": ["你的价值由你定义，不由对方的锚定义。"],
+            "coreSentence": [
+              "你的价值由你定义，不由对方的锚定义。"
+            ],
             "coreSentenceAnchors": [
               {
                 "coreSentenceAnchor": "由你定义",
@@ -789,7 +793,7 @@
               }
             ]
           },
-          "totalDurationFrames": 110
+          "totalDurationFrames": 116
         }
       ],
       "audioSrc": "/audio/认知偏见_锚定效应/scene_4/scene_4.mp3",

@@ -127,7 +127,7 @@ export const 可证伪性: React.FC<z.infer<typeof 可证伪性Schema>> = () => 
             <Audio
                 src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
                 loop
-                volume={0.22}
+                volume={0.15}
                 name="Background music"
             />
             <div

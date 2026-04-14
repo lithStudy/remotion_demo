@@ -463,10 +463,14 @@
           ],
           "order": 6,
           "param": {
-            "leftSrc": "images/相关不等于因果/scene_2_6_left.png",
-            "rightSrc": "images/相关不等于因果/scene_2_6_right.png",
-            "dontLabel": "❌ 偏方神力",
-            "doLabel": "✅ 自发痊愈"
+            "left": {
+              "label": "❌ 偏方神力",
+              "src": "images/相关不等于因果/scene_2_6_left.png"
+            },
+            "right": {
+              "label": "✅ 自发痊愈",
+              "src": "images/相关不等于因果/scene_2_6_right.png"
+            }
           },
           "totalDurationFrames": 188
         }

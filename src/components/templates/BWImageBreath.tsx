@@ -9,6 +9,8 @@ import {
 	getCenterFocusStackLayoutAtFrame,
 	getSafeImageSrc,
 	getSingleImageAnchorAvoidanceShiftAnimatedPx,
+	SINGLE_IMAGE_BOX_MAX_HEIGHT_RATIO,
+	SINGLE_IMAGE_BOX_MAX_WIDTH_RATIO,
 	type AnchorItem,
 	useImageEnterStyle,
 	type ContentItem,
@@ -86,6 +88,8 @@ export const BWImageBreath: React.FC<BWImageBreathProps> = ({
 
 	const safeSrc = getSafeImageSrc(src);
 	const topValue = stack ? `${stack.imageCenterY}px` : "45%";
+	const imageBoxW = width * SINGLE_IMAGE_BOX_MAX_WIDTH_RATIO;
+	const imageBoxH = height * SINGLE_IMAGE_BOX_MAX_HEIGHT_RATIO;
 
 	return (
 		// 外层：只负责定位（absolute 居中 + 锚点避让）
@@ -102,8 +106,8 @@ export const BWImageBreath: React.FC<BWImageBreathProps> = ({
 				style={{
 					transform: `scale(${breatheScale})`,
 					transformOrigin: "50% 50%",
-					maxWidth: `${width * 0.68}px`,
-					maxHeight: `${height * 0.42}px`,
+					width: `${imageBoxW}px`,
+					height: `${imageBoxH}px`,
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "center",
@@ -112,10 +116,8 @@ export const BWImageBreath: React.FC<BWImageBreathProps> = ({
 				<Img
 					src={safeSrc}
 					style={{
-						maxWidth: "100%",
-						maxHeight: "100%",
-						width: "auto",
-						height: "auto",
+						width: "100%",
+						height: "100%",
 						display: "block",
 						objectFit: "contain",
 						...enterStyle,

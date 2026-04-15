@@ -11,18 +11,24 @@
           "reasoning": "平缓叙述，引出核心主题，无明显结构，使用默认模板CENTER_FOCUS。",
           "content": [
             {
-              "text": "别再自我折磨了，"
+              "text": "别再自我折磨了，",
+              "startFrame": 0,
+              "durationFrames": 41
             },
             {
-              "text": "那些让你心烦意乱的“人际难题”，"
+              "text": "那些让你心烦意乱的“人际难题”，",
+              "startFrame": 40,
+              "durationFrames": 60
             },
             {
-              "text": "90% 都是因为你大脑的一个进化 Bug。"
+              "text": "90% 都是因为你大脑的一个进化 Bug。",
+              "startFrame": 100,
+              "durationFrames": 90
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一个大脑思考问题的卡通图",
+            "imageSrc": "images/认知偏差_基本归因错误/scene_1_1.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -40,7 +46,8 @@
                 "audioEffect": "ping"
               }
             ]
-          }
+          },
+          "totalDurationFrames": 190
         },
         {
           "narrativeType": "LOGIC",
@@ -48,48 +55,63 @@
           "reasoning": "本段罗列了三个并列的例子，适合用PANEL_GRID展示。",
           "content": [
             {
-              "text": "你看，"
+              "text": "你看，",
+              "startFrame": 0,
+              "durationFrames": 18
             },
             {
-              "text": "同事回消息晚了，"
+              "text": "同事回消息晚了，",
+              "startFrame": 17,
+              "durationFrames": 44
             },
             {
-              "text": "你就觉得他在轻视你。"
+              "text": "你就觉得他在轻视你。",
+              "startFrame": 61,
+              "durationFrames": 48
             },
             {
-              "text": "领导开会没点你名，"
+              "text": "领导开会没点你名，",
+              "startFrame": 109,
+              "durationFrames": 52
             },
             {
-              "text": "你就觉得他在针对你。"
+              "text": "你就觉得他在针对你。",
+              "startFrame": 160,
+              "durationFrames": 52
             },
             {
-              "text": "伴侣进门拉着脸，"
+              "text": "伴侣进门拉着脸，",
+              "startFrame": 211,
+              "durationFrames": 42
             },
             {
-              "text": "你就开始反思自己是不是又说错话了。"
+              "text": "你就开始反思自己是不是又说错话了。",
+              "startFrame": 253,
+              "durationFrames": 74
             }
           ],
           "order": 2,
           "param": {
             "panels": [
               {
-                "src": "同事皱眉的简笔画",
+                "src": "images/认知偏差_基本归因错误/scene_1_2_img0.png",
                 "showFrom": 0,
                 "enterEffect": "fadeIn"
               },
               {
-                "src": "领导讲话，员工低头的简笔画",
+                "src": "images/认知偏差_基本归因错误/scene_1_2_img1.png",
                 "showFrom": 3,
                 "enterEffect": "fadeIn"
               },
               {
-                "src": "伴侣背对，女生哭泣的简笔画",
+                "src": "images/认知偏差_基本归因错误/scene_1_2_img2.png",
                 "showFrom": 5,
                 "enterEffect": "fadeIn"
               }
             ],
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 327
         },
         {
           "narrativeType": "LOGIC",
@@ -97,15 +119,19 @@
           "reasoning": "反问句，平缓叙述，无明显结构，使用默认模板CENTER_FOCUS。",
           "content": [
             {
-              "text": "这种精神内耗，"
+              "text": "这种精神内耗，",
+              "startFrame": 0,
+              "durationFrames": 39
             },
             {
-              "text": "是不是快把你榨干了？"
+              "text": "是不是快把你榨干了？",
+              "startFrame": 38,
+              "durationFrames": 43
             }
           ],
           "order": 3,
           "param": {
-            "imageSrc": "一个面容憔悴的人，被无形的力量榨取能量，逐渐干瘪",
+            "imageSrc": "images/认知偏差_基本归因错误/scene_1_3.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -114,11 +140,14 @@
                 "color": "#EF4444",
                 "anim": "spring",
                 "audioEffect": "impact_thud"
-              }
+              }           
             ]
-          }
+          },
+          "totalDurationFrames": 81
         }
-      ]
+      ],
+      "audioSrc": "/audio/认知偏差_基本归因错误/scene_1/scene_1.mp3",
+      "totalDurationFrames": 599
     },
     {
       "sceneId": "scene_2",
@@ -130,32 +159,47 @@
           "reasoning": "对“基本归因错误”这一专业术语进行解释，适合用CONCEPT_CARD模板。",
           "content": [
             {
-              "text": "心理学上，"
+              "text": "心理学上，",
+              "startFrame": 0,
+              "durationFrames": 29
             },
             {
-              "text": "这叫基本归因错误。"
+              "text": "这叫基本归因错误。",
+              "startFrame": 28,
+              "durationFrames": 54
             },
             {
-              "text": "简单说，就是评估别人时，"
+              "text": "简单说，就是评估别人时，",
+              "startFrame": 81,
+              "durationFrames": 65
             },
             {
-              "text": "我们习惯性归因为性格、人品或者态度。"
+              "text": "我们习惯性归因为性格、人品或者态度。",
+              "startFrame": 146,
+              "durationFrames": 90
             },
             {
-              "text": "却无意识地，"
+              "text": "却无意识地，",
+              "startFrame": 235,
+              "durationFrames": 27
             },
             {
-              "text": "把对方身处的环境、压力、无奈，彻底抹杀了。"
+              "text": "把对方身处的环境、压力、无奈，彻底抹杀了。",
+              "startFrame": 261,
+              "durationFrames": 99
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "大脑简笔画图标",
+            "imageSrc": "images/认知偏差_基本归因错误/scene_2_1.png",
             "conceptName": "基本归因错误",
             "anchors": []
-          }
-        }      
-      ]
+          },
+          "totalDurationFrames": 361
+        }
+      ],
+      "audioSrc": "/audio/认知偏差_基本归因错误/scene_2/scene_2.mp3",
+      "totalDurationFrames": 363
     },
     {
       "sceneId": "scene_3",
@@ -163,44 +207,33 @@
       "items": [
         {
           "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "平缓叙述，表达一种现象，选择CENTER_FOCUS。",
-          "content": [
-            {
-              "text": "所有的平庸者，"
-            },
-            {
-              "text": "都喜欢在别人身上找主观原因。"
-            }
-          ],
-          "order": 1,
-          "param": {
-            "imageSrc": "一群人面无表情地坐在办公桌前",
-            "enterEffect": "fadeIn",
-            "anchors": [
-              {
-                "text": "主观原因",
-                "showFrom": 1,
-                "color": "#000000",
-                "anim": "slideUp",
-                "audioEffect": "ping"
-              }
-            ]
-          }
-        },
-        {
-          "narrativeType": "LOGIC",
           "template": "CAUSE_CHAIN",
           "reasoning": "同一镜头内讲清「为掌控感→贴负面标签→聪明人转向外因」的传导，用 CAUSE_CHAIN 做因果链可视化。",
           "content": [
             {
-              "text": "他们甚至会为了维护这种“心理掌控感”，"
+              "text": "所有的平庸者，",
+              "startFrame": 0,
+              "durationFrames": 34
             },
             {
-              "text": "强行给别人贴上“没素质、冷血、不负责”的标签。"
+              "text": "都喜欢在别人身上找主观原因。",
+              "startFrame": 33,
+              "durationFrames": 69
             },
             {
-              "text": "而真正的聪明人，只看外部变量。"
+              "text": "他们甚至会为了维护这种“心理掌控感”，",
+              "startFrame": 102,
+              "durationFrames": 79
+            },
+            {
+              "text": "强行给别人贴上“没素质、冷血、不负责”的标签。",
+              "startFrame": 181,
+              "durationFrames": 113
+            },
+            {
+              "text": "而真正的高手，只看外部变量。",
+              "startFrame": 293,
+              "durationFrames": 72
             }
           ],
           "order": 2,
@@ -208,27 +241,31 @@
             "layout": "horizontal",
             "nodes": [
               {
-                "label": "心理掌控",
-                "imageSrc": "一只手紧握方向盘或操纵杆的隐喻简笔画，象征需要掌控感",
+                "label": "主观原因",
+                "imageSrc": "images/认知偏差_基本归因错误/scene_3_2_img1.png",
                 "showFrom": 0,
                 "enterEffect": "fadeIn"
               },
               {
-                "label": "贴标签",
-                "imageSrc": "一群人互相指责、往对方身上贴红色负面标签条的卡通形象",
-                "showFrom": 1,
+                "label": "心理掌控",
+                "imageSrc": "images/认知偏差_基本归因错误/scene_3_2_img0.png",
+                "showFrom": 2,
                 "enterEffect": "fadeIn"
               },
+             
               {
                 "label": "看外因",
-                "imageSrc": "人物用放大镜观察外部环境因素（天气、流程、资源）而非指责他人的简笔画",
-                "showFrom": 2,
+                "imageSrc": "images/认知偏差_基本归因错误/scene_3_2_img2.png",
+                "showFrom": 4,
                 "enterEffect": "fadeIn"
               }
             ]
-          }
+          },
+          "totalDurationFrames": 365
         }
-      ]
+      ],
+      "audioSrc": "/audio/认知偏差_基本归因错误/scene_3/scene_3.mp3",
+      "totalDurationFrames": 368
     },
     {
       "sceneId": "scene_4",
@@ -240,15 +277,18 @@
           "reasoning": "过渡句，引入方法，平缓叙述，单图即可 → 选用CENTER_FOCUS",
           "content": [
             {
-              "text": "要想对抗这种偏见，记住两招。"
+              "text": "作为一个聪明人，要想对抗这种偏见，记住两招。",
+              "startFrame": 0,
+              "durationFrames": 108
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "两个卡通小人握手的简笔画",
+            "imageSrc": "images/认知偏差_基本归因错误/scene_4_1.png",
             "enterEffect": "fadeIn",
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 108
         },
         {
           "narrativeType": "LOGIC",
@@ -256,60 +296,63 @@
           "reasoning": "第一招「强制外因替代」：标题引入 + 操作说明 + 举例 + 认知切换收束，合并为同一 METHOD_STACK 单主图讲透。",
           "content": [
             {
-              "text": "第一招，"
+              "text": "第一招，强制外因替代。",
+              "startFrame": 0,
+              "durationFrames": 68
             },
             {
-              "text": "强制外因替代。"
+              "text": "当你被对方的行为刺痛时，",
+              "startFrame": 67,
+              "durationFrames": 58
             },
             {
-              "text": "当你被对方的行为刺痛时，"
+              "text": "立刻在心里默念：",
+              "startFrame": 125,
+              "durationFrames": 44
             },
             {
-              "text": "立刻在心里默念："
+              "text": "他可能正经历着我不知道的危机。",
+              "startFrame": 169,
+              "durationFrames": 67
             },
             {
-              "text": "他可能正经历着我不知道的危机。"
+              "text": "比如，他刚才收到了裁员通知，",
+              "startFrame": 235,
+              "durationFrames": 67
             },
             {
-              "text": "比如，"
+              "text": "或者他刚和家里大吵一架。",
+              "startFrame": 302,
+              "durationFrames": 68
             },
             {
-              "text": "他刚才收到了裁员通知，"
+              "text": "用“处境”代替“人品”，",
+              "startFrame": 369,
+              "durationFrames": 53
             },
             {
-              "text": "或者他刚和家里大吵一架。"
-            },
-            {
-              "text": "用“处境”代替“人品”，"
-            },
-            {
-              "text": "你的怒火瞬间就会熄灭。"
+              "text": "你的怒火瞬间就会熄灭。",
+              "startFrame": 422,
+              "durationFrames": 50
             }
           ],
           "order": 2,
           "param": {
             "title": "强制外因替代",
-            "imageSrc": "一人被言语刺伤、另一人背负裁员与家庭压力的分镜式卡通，表达从归咎人品转向理解外因处境",
+            "imageSrc": "images/认知偏差_基本归因错误/scene_4_2.png",
             "notes": [
               {
-                "text": "第一招：强制外因替代",
-                "showFrom": 0
+                "text": "对方可能有隐情",
+                "showFrom": 3
               },
               {
-                "text": "刺痛时先停：默念对方可能有隐情",
-                "showFrom": 2
-              },
-              {
-                "text": "裁员、吵架都是可能的外因",
+                "text": "用“处境”代替“人品",
                 "showFrom": 6
-              },
-              {
-                "text": "用处境替代人品",
-                "showFrom": 8
               }
             ],
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 472
         },
         {
           "narrativeType": "LOGIC",
@@ -317,50 +360,52 @@
           "reasoning": "第二招「课题分离」：标题引入 + 边界说明与行动原则，合并为同一 METHOD_STACK 单主图讲完。",
           "content": [
             {
-              "text": "第二招，"
+              "text": "第二招，课题分离。",
+              "startFrame": 0,
+              "durationFrames": 51
             },
             {
-              "text": "课题分离。"
+              "text": "他的情绪是他的环境产物，",
+              "startFrame": 50,
+              "durationFrames": 58
             },
             {
-              "text": "他的情绪是他的环境产物，"
+              "text": "与你无关。",
+              "startFrame": 108,
+              "durationFrames": 30
             },
             {
-              "text": "与你无关。"
+              "text": "你只需要观察，",
+              "startFrame": 137,
+              "durationFrames": 28
             },
             {
-              "text": "你只需要观察，"
-            },
-            {
-              "text": "不需要负责。"
+              "text": "不需要负责。",
+              "startFrame": 164,
+              "durationFrames": 31
             }
           ],
           "order": 3,
           "param": {
             "title": "课题分离",
-            "imageSrc": "两人划清心理边界：一侧情绪如云受环境影响，另一侧人物只做旁观、不承担对方情绪的示意图",
+            "imageSrc": "images/认知偏差_基本归因错误/scene_4_3.png",
             "notes": [
               {
-                "text": "第二招：课题分离",
-                "showFrom": 0
-              },
-              {
                 "text": "情绪多来自环境，非针对你",
-                "showFrom": 2
-              },
-              {
-                "text": "与你无关",
-                "showFrom": 3
+                "showFrom": 1
               },
               {
                 "text": "只观察，不必替他负责",
-                "showFrom": 4
+                "showFrom": 3
               }
             ],
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 196
         }
-      ]
+      ],
+      "audioSrc": "/audio/认知偏差_基本归因错误/scene_4/scene_4.mp3",
+      "totalDurationFrames": 777
     },
     {
       "sceneId": "scene_5",
@@ -372,67 +417,79 @@
           "reasoning": "该段为金句，适合使用引用类模板，将“原谅别人”视为一种“把自己从牢笼里放出来”的行为，引发思考。",
           "content": [
             {
-              "text": "原谅别人，"
+              "text": "原谅别人，",
+              "startFrame": 0,
+              "durationFrames": 24
             },
             {
-              "text": "其实是把自己从别人的牢笼里放出来。"
+              "text": "其实是把自己从别人的牢笼里放出来。",
+              "startFrame": 24,
+              "durationFrames": 87
             }
           ],
           "order": 1,
           "param": {
-            "quoteSource": "一句台词",
+            "quoteSource": "心理学研究",
             "quoteDisplayText": "原谅别人，其实是把自己从别人的牢笼里放出来。",
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 111
         },
         {
           "narrativeType": "CONCLUSION",
-          "template": "CENTER_FOCUS",
-          "reasoning": "该段为结论性陈述，表达了一种理解和共情，适合使用中心聚焦模板，平缓叙述，总结观点。",
+          "template": "TEXT_FOCUS",
+          "reasoning": "结论性共情收束，纯文字金句暴击，无需配图，使用 TEXT_FOCUS。",
           "content": [
             {
-              "text": "看清了环境的枷锁，"
+              "text": "看清了环境的枷锁，",
+              "startFrame": 0,
+              "durationFrames": 42
             },
             {
-              "text": "你才会发现，"
+              "text": "你才会发现，",
+              "startFrame": 41,
+              "durationFrames": 30
             },
             {
-              "text": "这个世界没有那么多坏人，"
+              "text": "这个世界没有那么多坏人，",
+              "startFrame": 70,
+              "durationFrames": 53
             },
             {
-              "text": "只有被生活掐住脖子的普通人。"
+              "text": "只有被生活掐住脖子的普通人。",
+              "startFrame": 123,
+              "durationFrames": 66
             }
           ],
           "order": 2,
           "param": {
-            "imageSrc": "一个人被锁链束缚，然后挣脱锁链的场景",
-            "enterEffect": "fadeIn",
-            "anchors": [
+            "coreSentence": [
+              "这个世界没有那么多坏人",
+              "只有被生活掐住脖子的普通人"
+            ],
+            "coreSentenceAnchors": [
               {
-                "text": "枷锁",
-                "showFrom": 0,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
+                "coreSentenceAnchor": "没有那么多坏人",
+                "color": "#EF4444"
               },
               {
-                "text": "普通人",
-                "showFrom": 3,
-                "color": "#000000",
-                "anim": "slideUp",
-                "audioEffect": "ping"
+                "coreSentenceAnchor": "掐住脖子的普通人",
+                "color": "#EF4444"
               }
             ]
-          }
+          },
+          "totalDurationFrames": 189
         }
-      ]
+      ],
+      "audioSrc": "/audio/认知偏差_基本归因错误/scene_5/scene_5.mp3",
+      "totalDurationFrames": 301
     }
   ],
   "fps": 30,
   "cover": {
     "durationFrames": 5,
-    "title": "认知偏差_基本归因错误",
-    "subtitle": "为什么TA对你忽冷忽热？别瞎想，90%是因为这个大脑Bug",
+    "title": "基本归因错误",
+    "subtitle": "别再自我折磨了！90%的人际烦恼都是大脑Bug",
     "themeColor": "#2563EB",
     "badge": "认识自我 · 理性思考",
     "seriesLabel": "认知心理学",

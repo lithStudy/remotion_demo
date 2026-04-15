@@ -7,7 +7,7 @@ import { COVER_DURATION_FRAMES, sceneConfigs, TRANSITION_DURATION } from "./认�
 const FONT_STACK =
     '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
 
-const STATIC_HEADLINE = "认知偏差_基本归因错误";
+const STATIC_HEADLINE = "基本归因错误";
 const STATIC_HEADLINE_SUB = "认知心理学";
 const STATIC_HEADLINE_SUB_EN = "COGNITIVE PSYCHOLOGY";
 const THEME_ACCENT = "#2563EB";

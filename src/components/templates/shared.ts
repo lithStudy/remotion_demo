@@ -138,8 +138,16 @@ export const ANCHOR_LIST_TOP_RATIO = 0.18;
 export const ANCHOR_LIST_ROW_MIN_HEIGHT_PX = 56;
 export const ANCHOR_LIST_ROW_GAP_PX = 16;
 /** 与 BWImageBreath 一致：图片中心纵坐标为 top 45% + translate(-50%,-50%) */
-export const SINGLE_IMAGE_CENTER_TOP_RATIO = 0.45;
-export const SINGLE_IMAGE_MAX_HEIGHT_RATIO = 0.42;
+export const SINGLE_IMAGE_CENTER_TOP_RATIO = 0.50;
+/**
+ * 布局用主图高度占比：锚点避让、CENTER_FOCUS 堆叠里「主图占位半高」只读此值。
+ * 与 BWImageBreath 视觉版心 {@link SINGLE_IMAGE_BOX_MAX_HEIGHT_RATIO} 分离，避免调大图时锚点词跟着重排。
+ */
+export const SINGLE_IMAGE_MAX_HEIGHT_RATIO = 0.45;
+/** BWImageBreath 视觉版心宽度占画布比例（不影响锚点布局数学） */
+export const SINGLE_IMAGE_BOX_MAX_WIDTH_RATIO = 0.82;
+/** BWImageBreath 视觉版心高度占画布比例（不影响锚点布局数学） */
+export const SINGLE_IMAGE_BOX_MAX_HEIGHT_RATIO = 0.35;
 export const SINGLE_IMAGE_ANCHOR_MIN_GAP_PX = 48;
 /** 三个锚点时前两行用负 margin 收紧列表，需与 TemplateAnchorsLayer 一致 */
 export const ANCHOR_LIST_THREE_ROWS_COMPACT_PX = 28;

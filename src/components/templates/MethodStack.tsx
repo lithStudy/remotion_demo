@@ -5,6 +5,7 @@
 import React from "react";
 import {
 	AbsoluteFill,
+	Easing,
 	Img,
 	interpolate,
 	spring,
@@ -12,10 +13,16 @@ import {
 	useVideoConfig,
 } from "remotion";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
-import { BW_TEXT, getSafeImageSrc, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
+import { BW_TEXT, getSafeImageSrc, type TemplateBaseProps } from "./shared";
 
+/** 一条「解释短语」及其与口播时间轴的对齐方式 */
 type MethodNoteItem = {
+	/** 展示在卡片内的说明文字，与 scene 口播对应 */
 	text: string;
+	/**
+	 * 从 `content[showFrom]` 的起始帧开始显示本条（与 `normalizeContent` 后的下标一致）。
+	 * 值为 **content 数组下标（0-based）**，不是视频帧号。
+	 */
 	showFrom: number;
 };
 
@@ -80,9 +87,19 @@ const getNoteStartFrame = (
 	return content[note.showFrom]?.startFrame ?? 0;
 };
 
+/**
+ * METHOD_STACK 组件入参。
+ * 继承字段含义见 {@link TemplateBaseProps}：`content`、`audioSrc`、`totalDurationFrames`、`children`、`style`。
+ */
 export interface BWMethodStackProps extends TemplateBaseProps {
+	/** 画面上方主标题（大字），建议与 scene-scripts 中 item 标题一致 */
 	title: string;
+	/** 主图：提示词或静态资源路径，经 `getSafeImageSrc` 解析后交给 `Img` */
 	imageSrc: string;
+	/**
+	 * 可选；标题下方按时间依次出现的解释卡片。
+	 * 每条通过 `showFrom` 绑定到 `content` 的某一句起始帧；非法项会被过滤，最多使用 4 条。
+	 */
 	notes?: MethodNoteItem[];
 }
 
@@ -114,6 +131,61 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 		config: { damping: 18, stiffness: 120 },
 		durationInFrames: 22,
 	});
+
+	/** 首条 note 对应 content 条的起始帧；无 note 时为 null，不做「先大后收」 */
+	const firstNoteStartFrame =
+		visibleNotes.length > 0 ? getNoteStartFrame(visibleNotes[0], items) : null;
+	/** 首条 note 出现前，主图相对最终尺寸的放大倍数（仅 scale，不改变布局占位） */
+	const LARGE_IMAGE_SCALE = 2;
+	/** 从首条 note 出现起，缩小动画所持续的帧数（越大越慢） */
+	const SHRINK_DURATION_FRAMES = 20;
+	/** 缩小曲线：`back` 第二参数越大，过冲越明显 */
+	const shrinkEaseOutBack = Easing.out(Easing.back(1.5));
+
+	const isShrinkPhase =
+		firstNoteStartFrame !== null &&
+		firstNoteStartFrame > 0 &&
+		frame >= firstNoteStartFrame;
+	const shrinkFrame = isShrinkPhase ? frame - firstNoteStartFrame : 0;
+	const shrinkT = interpolate(
+		shrinkFrame,
+		[0, SHRINK_DURATION_FRAMES],
+		[0, 1],
+		{ extrapolateLeft: "clamp", extrapolateRight: "clamp" },
+	);
+	const shrinkEase = shrinkEaseOutBack(shrinkT);
+
+	const imageScale =
+		firstNoteStartFrame === null || firstNoteStartFrame <= 0
+			? 1
+			: frame < firstNoteStartFrame
+				? LARGE_IMAGE_SCALE
+				: Math.max(
+						0.985, // 缩小过冲时允许的最小 scale，避免画面过小发虚
+						interpolate(shrinkEase, [0, 1], [LARGE_IMAGE_SCALE, 1], {
+							extrapolateLeft: "clamp",
+							extrapolateRight: "extend",
+						}),
+					);
+
+	/** 缩小阶段附加的垂直位移（px）；负值略上移，与 scale 同步；外层 clamp 限制抖动幅度 */
+	const shrinkLiftPx = isShrinkPhase
+		? Math.max(
+				-22,
+				Math.min(
+					10,
+					interpolate(shrinkEase, [0, 1], [-16, 0], {
+						extrapolateLeft: "clamp",
+						extrapolateRight: "extend",
+					}),
+				),
+			)
+		: 0;
+	const imageTranslateY =
+		interpolate(imageEnter, [0, 1], [28, 0], {
+			extrapolateLeft: "clamp",
+			extrapolateRight: "clamp",
+		}) + shrinkLiftPx;
 
 	return (
 		<AbsoluteFill style={style}>
@@ -179,10 +251,8 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 						alignItems: "center",
 						justifyContent: "center",
 						overflow: "hidden",
-						transform: `translateY(${interpolate(imageEnter, [0, 1], [28, 0], {
-							extrapolateLeft: "clamp",
-							extrapolateRight: "clamp",
-						})}px)`,
+						transformOrigin: "center top",
+						transform: `translateY(${imageTranslateY}px) scale(${imageScale})`,
 						opacity: imageEnter,
 					}}
 				>

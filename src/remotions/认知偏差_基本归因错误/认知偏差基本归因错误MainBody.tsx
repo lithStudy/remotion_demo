@@ -15,8 +15,8 @@ export const 认知偏差基本归因错误MainBody: React.FC = () => (
     <>
         <Sequence durationInFrames={COVER_DURATION_FRAMES}>
             <LandscapeCoverPoster
-                title="认知偏差_基本归因错误"
-                    subtitle="为什么TA对你忽冷忽热？别瞎想，90%是因为这个大脑Bug"
+                title="基本归因错误"
+                    subtitle="别再自我折磨了！90%的人际烦恼都是大脑Bug"
                     themeColor="#2563EB"
                     badge="认识自我 · 理性思考"
                     seriesLabel="认知心理学"

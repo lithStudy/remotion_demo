@@ -253,37 +253,14 @@
         {
           "narrativeType": "LOGIC",
           "template": "METHOD_STACK",
-          "reasoning": "介绍第一招，属于方法罗列，标题式核心 + 解释展开 → 选用METHOD_STACK",
+          "reasoning": "第一招「强制外因替代」：标题引入 + 操作说明 + 举例 + 认知切换收束，合并为同一 METHOD_STACK 单主图讲透。",
           "content": [
             {
               "text": "第一招，"
             },
             {
               "text": "强制外因替代。"
-            }
-          ],
-          "order": 2,
-          "param": {
-            "title": "强制外因替代",
-            "imageSrc": "一个人感到愤怒，另一个人正在经历困难的场景",
-            "notes": [
-              {
-                "text": "第一招",
-                "showFrom": 0
-              },
-              {
-                "text": "强制外因替代",
-                "showFrom": 1
-              }
-            ],
-            "anchors": []
-          }
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "解释说明强制外因替代的具体做法，平缓叙述 → 选用CENTER_FOCUS",
-          "content": [
+            },
             {
               "text": "当你被对方的行为刺痛时，"
             },
@@ -301,42 +278,7 @@
             },
             {
               "text": "或者他刚和家里大吵一架。"
-            }
-          ],
-          "order": 3,
-          "param": {
-            "imageSrc": "一个人感到悲伤，被箭刺中的卡通形象",
-            "enterEffect": "fadeIn",
-            "anchors": [
-              {
-                "text": "刺痛",
-                "showFrom": 0,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
-              },
-              {
-                "text": "危机",
-                "showFrom": 2,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
-              },
-              {
-                "text": "裁员通知",
-                "showFrom": 4,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
-              }
-            ]
-          }
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "COGNITIVE_SHIFT",
-          "reasoning": "给出建议：用A代替B。明确的认知转换 → 选用COGNITIVE_SHIFT",
-          "content": [
+            },
             {
               "text": "用“处境”代替“人品”，"
             },
@@ -344,36 +286,26 @@
               "text": "你的怒火瞬间就会熄灭。"
             }
           ],
-          "order": 4,
+          "order": 2,
           "param": {
-            "notText": "人品",
-            "butText": "处境",
-            "butSrc": "人站在泥泞的道路上",
-            "notContentIndex": 0,
-            "butContentIndex": 0,
-            "anchors": []
-          }
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "METHOD_STACK",
-          "reasoning": "介绍第二招，属于方法罗列，标题式核心 + 解释展开 → 选用METHOD_STACK",
-          "content": [
-            {
-              "text": "第二招，"
-            },
-            {
-              "text": "课题分离。"
-            }
-          ],
-          "order": 5,
-          "param": {
-            "title": "课题分离",
-            "imageSrc": "两个人之间划清界限，各自处理自己的事情的示意图",
+            "title": "强制外因替代",
+            "imageSrc": "一人被言语刺伤、另一人背负裁员与家庭压力的分镜式卡通，表达从归咎人品转向理解外因处境",
             "notes": [
               {
-                "text": "他的情绪与你无关",
-                "showFrom": 1
+                "text": "第一招：强制外因替代",
+                "showFrom": 0
+              },
+              {
+                "text": "刺痛时先停：默念对方可能有隐情",
+                "showFrom": 2
+              },
+              {
+                "text": "裁员、吵架都是可能的外因",
+                "showFrom": 6
+              },
+              {
+                "text": "用处境替代人品",
+                "showFrom": 8
               }
             ],
             "anchors": []
@@ -381,9 +313,15 @@
         },
         {
           "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "解释说明课题分离，平缓叙述，单图即可 → 选用CENTER_FOCUS",
+          "template": "METHOD_STACK",
+          "reasoning": "第二招「课题分离」：标题引入 + 边界说明与行动原则，合并为同一 METHOD_STACK 单主图讲完。",
           "content": [
+            {
+              "text": "第二招，"
+            },
+            {
+              "text": "课题分离。"
+            },
             {
               "text": "他的情绪是他的环境产物，"
             },
@@ -397,19 +335,29 @@
               "text": "不需要负责。"
             }
           ],
-          "order": 6,
+          "order": 3,
           "param": {
-            "imageSrc": "情绪波动的人的简笔画",
-            "enterEffect": "fadeIn",
-            "anchors": [
+            "title": "课题分离",
+            "imageSrc": "两人划清心理边界：一侧情绪如云受环境影响，另一侧人物只做旁观、不承担对方情绪的示意图",
+            "notes": [
               {
-                "text": "课题分离",
-                "showFrom": 1,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
+                "text": "第二招：课题分离",
+                "showFrom": 0
+              },
+              {
+                "text": "情绪多来自环境，非针对你",
+                "showFrom": 2
+              },
+              {
+                "text": "与你无关",
+                "showFrom": 3
+              },
+              {
+                "text": "只观察，不必替他负责",
+                "showFrom": 4
               }
-            ]
+            ],
+            "anchors": []
           }
         }
       ]

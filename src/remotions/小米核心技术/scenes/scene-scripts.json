@@ -1,0 +1,913 @@
+{
+  "topic": "别再骂小米组装厂！百亿研发背后，藏着你不知道的科技底牌",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：核心技术误区",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，引出话题，适合用默认的居中展示模板。",
+          "content": [
+            {
+              "text": "争论小米有没有核心技术的人，"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "一群人正在激烈的争论的画面",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "核心技术",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "典型的“不是…而是…”句式，属于认知转变，适合用`COGNITIVE_SHIFT`。",
+          "content": [
+            {
+              "text": "不仅没搞懂到底什么叫核心技术，"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "没搞懂核心技术",
+            "butText": "掌握研发底牌",
+            "butSrc": "堆满高科技芯片和精密仪器的实验室",
+            "notContentIndex": 0,
+            "butContentIndex": 0,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，引出话题，适合用默认的居中展示模板。",
+          "content": [
+            {
+              "text": "更对它的恐怖研发底牌一无所知。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "一个人困惑地看着前方，周围有问号的抽象概念图",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析：超级供应链整合",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，定义核心技术，无明显结构特征，使用默认模板。",
+          "content": [
+            {
+              "text": "我们先说说什么叫核心技术。"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "一个齿轮的特写",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "核心技术",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述一种错误观点，使用默认模板。",
+          "content": [
+            {
+              "text": "很多人认为，"
+            },
+            {
+              "text": "必须从零开始造轮子，"
+            },
+            {
+              "text": "\n架构要自己画，"
+            },
+            {
+              "text": "光刻机要自己造，"
+            },
+            {
+              "text": "芯片也要自己生产，"
+            },
+            {
+              "text": "\n才配得到一句网民的肯定。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "工厂生产线上，机器臂正在组装芯片",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "造轮子",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "核心技术",
+                "showFrom": 4,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确指出“不是...而是...”，属于认知转变，使用COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "但这不过是落后的老农种地思维。"
+            },
+            {
+              "text": "\n在高度分工的现代商业里，"
+            },
+            {
+              "text": "\n最深的护城河，"
+            },
+            {
+              "text": "早就不是单点突破。"
+            },
+            {
+              "text": "\n而是对超级供应链的恐怖整合能力。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "单点突破",
+            "butText": "整合能力",
+            "butSrc": "繁忙的巨型自动化工厂车间，无数机械臂协同工作",
+            "notContentIndex": 3,
+            "butContentIndex": 4,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "举例说明，描述组装手机的灾难性结果，使用默认模板。",
+          "content": [
+            {
+              "text": "你可以试着组装一台手机看看，"
+            },
+            {
+              "text": "\n把最好的芯片、"
+            },
+            {
+              "text": "屏幕和镜头，"
+            },
+            {
+              "text": "\n凑在一块强行跑个分。"
+            },
+            {
+              "text": "\n结果一定是一场灾难。"
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "一堆手机零件散落在桌子上，有人尝试组装",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "灾难",
+                "showFrom": 4,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "提出一系列问题，引出背后的挑战，使用默认模板。",
+          "content": [
+            {
+              "text": "硬件底层的通讯怎么打通？"
+            },
+            {
+              "text": "\n功耗如何榨取到极限？"
+            },
+            {
+              "text": "\n如何在千万级量产下，"
+            },
+            {
+              "text": "\n把良品率咬死在百分之九十九以上？"
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "复杂的电路板",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "算法调优",
+                "showFrom": 3,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述算法调优的重要性，小米的供应链整合能力，使用默认模板。",
+          "content": [
+            {
+              "text": "这背后需要海量的算法调优。"
+            },
+            {
+              "text": "\n小米能让全球最顶尖的供应商，"
+            },
+            {
+              "text": "\n心甘情愿配合它的节奏。"
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "复杂的算法优化流程图",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "算法调优",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "供应商",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "woosh"
+              },
+              {
+                "text": "配合节奏",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "总结小米的系统能力，使用默认模板。",
+          "content": [
+            {
+              "text": "在这无数个硬件孤岛里，"
+            },
+            {
+              "text": "\n硬生生蹚出一条澎湃系统的高速公路。"
+            },
+            {
+              "text": "\n这就是别人抄不走的系统能力。"
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "一条高速公路在群岛中延伸的抽象概念图，象征系统互联互通",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "硬件孤岛",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "高速公路",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "woosh"
+              },
+              {
+                "text": "系统能力",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "剖析：百亿研发底牌",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓过渡，开启新话题，适合默认的单图居中模板。",
+          "content": [
+            {
+              "text": "我们再讲讲小米的研发底牌。"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "演讲者站在聚光灯下的舞台上",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "小米",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "研发底牌",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "woosh"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "典型的“不是...而是...”结构，用认知转变模板。",
+          "content": [
+            {
+              "text": "小米不仅是做整合，"
+            },
+            {
+              "text": "还在死磕自研。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "做整合",
+            "butText": "死磕自研",
+            "butSrc": "工程师在实验室里研究芯片",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "为数据做铺垫，选择默认模板。",
+          "content": [
+            {
+              "text": "翻开小米最新的财报数据。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "图表数据增长的趋势",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "财报数据",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "强调单个核心数值，选择KPI_HERO模板。",
+          "content": [
+            {
+              "text": "过去一年研发投入飙过了几百亿。"
+            }
+          ],
+          "order": 4,
+          "param": {
+            "value": 300,
+            "suffix": "亿",
+            "headline": "研发投入",
+            "countDuration": 36,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "补充说明数据的权威性，选择默认模板。",
+          "content": [
+            {
+              "text": "这可是上市公司有审计的公开数据。"
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "审计报告文件的图标",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "上市公司",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "公开数据",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "反面衬托，选择默认模板。",
+          "content": [
+            {
+              "text": "不是某些把公关营销费用都算在研发里的公司所能比拟的。"
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "公司财务报表数据图表",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "强调单个核心数值，选择KPI_HERO模板。",
+          "content": [
+            {
+              "text": "这个数据已经超过了全世界九成以上的高科技企业。"
+            }
+          ],
+          "order": 7,
+          "param": {
+            "value": 90,
+            "prefix": "",
+            "suffix": "%",
+            "headline": "超过全球高科技企业",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "简单比喻，选择默认模板。",
+          "content": [
+            {
+              "text": "造一辆车不是去超市买菜。"
+            }
+          ],
+          "order": 8,
+          "param": {
+            "imageSrc": "一辆汽车停在超市门口，超市里人来人往",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "具体案例，强调努力，选择默认模板。",
+          "content": [
+            {
+              "text": "小米汽车的底盘架构，"
+            },
+            {
+              "text": "\n是几千个工程师硬生生啃下来的。"
+            }
+          ],
+          "order": 9,
+          "param": {
+            "imageSrc": "工程师团队围着汽车底盘模型进行讨论",
+            "enterEffect": "slideBottom",
+            "anchors": [
+              {
+                "text": "小米汽车",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "底盘架构",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": null
+              },
+              {
+                "text": "硬生生啃下来",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "强调单个核心数值，选择KPI_HERO模板。",
+          "content": [
+            {
+              "text": "它的超级电机转速，"
+            },
+            {
+              "text": "\n直接捅破了行业的量产天花板。"
+            }
+          ],
+          "order": 10,
+          "param": {
+            "value": 100,
+            "prefix": "",
+            "suffix": "%",
+            "headline": "超级电机转速",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "强调单个核心数值，选择KPI_HERO模板。",
+          "content": [
+            {
+              "text": "在自动驾驶系统领域，"
+            },
+            {
+              "text": "\n小米手里的绝对专利数，"
+            },
+            {
+              "text": "\n早就默默排进了全球前十。"
+            }
+          ],
+          "order": 11,
+          "param": {
+            "value": 10,
+            "prefix": "全球",
+            "suffix": "强",
+            "headline": "绝对专利数",
+            "anchors": []
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "反转：技术洁癖双标",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "铺垫观点，平缓叙述，使用居中模板。",
+          "content": [
+            {
+              "text": "那些成天嘲笑它是组装厂的人，"
+            },
+            {
+              "text": "\n陷入了极度双标的技术洁癖。"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "一群人嘲笑别人的简笔画",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "双标",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "洁癖",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明显的“对...视而不见，对...却...”结构，属于认知偏差，使用COGNITIVE_SHIFT模板。",
+          "content": [
+            {
+              "text": "对国外巨头采购硬件视而不见。"
+            },
+            {
+              "text": "\n对自己人却抱着莫须有的耻辱感。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "国外巨头",
+            "butText": "自己人",
+            "butSrc": "特写镜头，一个自豪的工程师正在检查芯片",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明显的“对...视而不见，却对...”结构，属于认知偏差，使用COGNITIVE_SHIFT模板。",
+          "content": [
+            {
+              "text": "对账本上的百亿研发视而不见。"
+            },
+            {
+              "text": "\n却对十年前的陈词滥调倒背如流。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "百亿研发",
+            "butText": "十年陈词滥调",
+            "butSrc": "一个老旧的卷轴，上面写满了文字",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "承接上文，提出假设，并解释原因，使用居中模板。",
+          "content": [
+            {
+              "text": "可是你想过没有？"
+            },
+            {
+              "text": "\n没有这样像鲶鱼一样的企业在前面撕咬。"
+            },
+            {
+              "text": "\n逼着产业链把成本打到地板价。"
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "鲶鱼在水中游动的动画",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "鲶鱼效应",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "地板价",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "上文假设带来的后果，平缓叙述，使用居中模板。",
+          "content": [
+            {
+              "text": "你今天买一部好用的智能设备，"
+            },
+            {
+              "text": "\n至少还要多掏一半的冤枉钱。"
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "一个人对着智能设备计算费用的场景",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "冤枉钱",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "总结，讲述客观事实，平缓叙述，使用居中模板。",
+          "content": [
+            {
+              "text": "键盘侠享受别人打下的价格底线，"
+            },
+            {
+              "text": "\n却在鄙视那个把底线砸穿的人。"
+            },
+            {
+              "text": "\n这就叫吃水还要骂挖井的人。"
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "一个人在键盘前敲击键盘的场景",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "价格底线",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "砸穿底线",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "吃水骂井",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "召唤：重新评估",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，表达一种观点，没有明显的结构特征，适合使用CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "不要再用旧时代的有色眼镜，"
+            },
+            {
+              "text": "\n去评判一个高速进化的中国企业。"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "一个人戴着旧式眼镜打量着前方",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "有色眼镜",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "高速进化",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "QUOTE_CITATION",
+          "reasoning": "类似名言警句，强调数据和专利的客观性，适合使用QUOTE_CITATION。",
+          "content": [
+            {
+              "text": "数据不会撒谎，"
+            },
+            {
+              "text": "专利更不会骗人。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "quoteSource": "谚语",
+            "quoteDisplayText": "数据不会撒谎，专利更不会骗人。",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "通过反问，暗示公司有核心技术，属于一种“不是…而是…”的表达，适合使用COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "如果一家舍得砸百亿死磕底层系统的公司没有核心技术，"
+            },
+            {
+              "text": "\n那什么叫有核心技术？"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "没有核心技术",
+            "butText": "掌握核心技术",
+            "butSrc": "技术人员在实验室里认真研究芯片",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "结论性的短句，强调公司拥有自主技术，适合使用TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "想必一定不是被掐脖子的技术吧！"
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              "想必一定不是被掐脖子的技术吧！"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "掐脖子",
+                "color": "#EF4444"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "小米核心技术",
+    "subtitle": "别再骂小米组装厂！百亿研发背后，藏着你不知道的科技底牌",
+    "themeColor": "#2563EB",
+    "badge": "认识自我 · 理性思考",
+    "seriesLabel": "认知心理学",
+    "seriesLabelEn": "COGNITIVE PSYCHOLOGY",
+    "methodologySteps": [
+      "觉察",
+      "归因",
+      "调整"
+    ],
+    "methodologyStepsEn": "OBSERVE · ATTRIBUTE · ADJUST"
+  }
+}

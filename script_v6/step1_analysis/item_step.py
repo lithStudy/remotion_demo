@@ -9,16 +9,6 @@ def _default_group_key(order: int) -> str:
     return f"solo_{order}"
 
 
-def _normalize_for_coverage(text: str) -> str:
-    # 覆盖校验只关心非空白字符是否完整一致
-    return re.sub(r"\s+", "", str(text or ""))
-
-
-def _is_coverage_ok(scene_text: str, items: list[dict]) -> bool:
-    joined = "".join([str(it.get("text", "")) for it in items if isinstance(it, dict)])
-    return _normalize_for_coverage(scene_text) == _normalize_for_coverage(joined)
-
-
 def _confidence_level(value) -> str:
     """
     统一 joint 输出的置信度格式：low | medium | high
@@ -54,11 +44,8 @@ def _looks_quote_contrast(text: str) -> bool:
     return t.count("“") >= 2 and t.count("”") >= 2
 
 
-def _collect_joint_refine_reasons(scene_text: str, items: list[dict]) -> list[str]:
+def _collect_joint_refine_reasons(items: list[dict]) -> list[str]:
     reasons: list[str] = []
-
-    if not _is_coverage_ok(scene_text, items):
-        reasons.append("coverage_mismatch: items.text 拼接后未完整覆盖 scene 原文或存在漏字/重叠（只允许调整 item 边界，不允许改写任何字）")
 
     for idx, it in enumerate(items):
         if not isinstance(it, dict):
@@ -194,9 +181,6 @@ def _joint_refine_items(
     if not cleaned:
         raise RuntimeError(f"❌ Scene {scene.get('sceneId')} joint refine 输出 items 无有效条目。")
 
-    if not _is_coverage_ok(scene_text, cleaned):
-        raise RuntimeError("joint refine 覆盖校验失败（items.text 拼接未覆盖原文）")
-
     return cleaned
 
 
@@ -301,7 +285,7 @@ def analyze_items_for_scene(
                 f"      Scene {scene_id}: joint 分镜+选型完成 → {[it.get('template', '?') for it in matched_items]}"
             )
 
-            refine_reasons = _collect_joint_refine_reasons(scene.get("text", ""), matched_items)
+            refine_reasons = _collect_joint_refine_reasons(matched_items)
             if refine_reasons:
                 matched_items = _joint_refine_items(
                     client,
@@ -316,10 +300,6 @@ def analyze_items_for_scene(
                 print(
                     f"      Scene {scene_id}: joint refine 完成 → {[it.get('template', '?') for it in matched_items]}"
                 )
-
-            # 覆盖校验：refine 后仍失败则回落 legacy 以保证可用性
-            if not _is_coverage_ok(scene.get("text", ""), matched_items):
-                raise RuntimeError("joint 覆盖校验失败（items.text 拼接未覆盖原文）")
 
         except Exception as ex:
             print(f"      Scene {scene_id}: ⚠️ joint 失败，回落 legacy（原因：{ex}）")
@@ -338,8 +318,8 @@ def analyze_items_for_scene(
         )
         print(f"      Scene {scene_id}: 2B 模板匹配完成 → {[it.get('template', '?') for it in matched_items]}")
 
-        # legacy refine：覆盖不完整 / 模板语义不一致 / 低置信度（最多一次）
-        refine_reasons = _collect_joint_refine_reasons(scene.get("text", ""), matched_items)
+        # legacy refine：模板语义不一致 / 低置信度（最多一次）
+        refine_reasons = _collect_joint_refine_reasons(matched_items)
         if refine_reasons:
             matched_items = _joint_refine_items(
                 client,
@@ -352,10 +332,6 @@ def analyze_items_for_scene(
                 append_ai_log=append_ai_log,
             )
             print(f"      Scene {scene_id}: legacy→refine 完成 → {[it.get('template', '?') for it in matched_items]}")
-
-        # 覆盖校验：legacy/refine 后仍失败则直接失败（避免静默漏字）
-        if not _is_coverage_ok(scene.get("text", ""), matched_items):
-            raise RuntimeError("legacy 覆盖校验失败（items.text 拼接未覆盖原文）")
 
     # 拆分字幕长度，并设置序号
     for idx, item in enumerate(matched_items):

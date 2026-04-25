@@ -8,8 +8,8 @@ const FONT_STACK =
     '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
 
 const STATIC_HEADLINE = "小米核心技术";
-const STATIC_HEADLINE_SUB = "认知心理学";
-const STATIC_HEADLINE_SUB_EN = "COGNITIVE PSYCHOLOGY";
+const STATIC_HEADLINE_SUB = "科技热点深读";
+const STATIC_HEADLINE_SUB_EN = "TECH DEEP DIVE";
 const THEME_ACCENT = "#2563EB";
 const THEME_ACCENT_SOFT = "#2563EBD9";
 

@@ -23,6 +23,8 @@ export const StaticCoverSchema = z.object({
 	badge: z.string().optional(),
 	/** 为 true 时主标题单行排版，字号在不超过设计上限的前提下随文案长度缩放 */
 	titleFitSingleLine: z.boolean().optional(),
+	/** 浅色底用 light；深蓝渐变壳层用 dark，主副标题与分隔线随表面反色 */
+	surface: z.enum(["light", "dark"]).optional(),
 });
 
 export type StaticCoverProps = z.infer<typeof StaticCoverSchema>;
@@ -47,7 +49,9 @@ export const CoverPosterCore: React.FC<StaticCoverProps> = ({
 	seriesLabel = DEFAULT_SERIES_LABEL,
 	seriesLabelEn,
 	titleFitSingleLine = false,
+	surface = "light",
 }) => {
+	const isDark = surface === "dark";
 	const { width, height } = useVideoConfig();
 	const scale = Math.min(width / DESIGN_REF_W, height / DESIGN_REF_H);
 	const u = (px: number) => Math.round(px * scale);
@@ -101,7 +105,10 @@ export const CoverPosterCore: React.FC<StaticCoverProps> = ({
 						padding: `${u(14)}px ${u(36)}px`,
 						borderRadius: u(6),
 						background: themeColor,
-						boxShadow: `0 ${u(4)}px ${u(24)}px ${themeColor}44`,
+						boxShadow: isDark
+							? "none"
+							: `0 ${u(4)}px ${u(24)}px ${themeColor}44`,
+						border: isDark ? `${u(1)}px solid rgba(255,255,255,0.18)` : undefined,
 					}}
 				>
 					<span
@@ -122,9 +129,9 @@ export const CoverPosterCore: React.FC<StaticCoverProps> = ({
 							fontFamily: MONO_STACK,
 							fontSize: uf(16),
 							fontWeight: 600,
-							color: themeColor,
+							color: isDark ? "#cbd5e1" : themeColor,
 							letterSpacing: uf(3),
-							opacity: 0.65,
+							opacity: isDark ? 0.95 : 0.65,
 						}}
 					>
 						{seriesLabelEn}
@@ -137,7 +144,7 @@ export const CoverPosterCore: React.FC<StaticCoverProps> = ({
 					style={{
 						flex: 1,
 						height: u(1),
-						background: `${themeColor}44`,
+						background: isDark ? "rgba(148,163,184,0.35)" : `${themeColor}44`,
 					}}
 				/>
 				<div
@@ -145,15 +152,15 @@ export const CoverPosterCore: React.FC<StaticCoverProps> = ({
 						width: u(8),
 						height: u(8),
 						borderRadius: "50%",
-						background: themeColor,
-						opacity: 0.45,
+						background: isDark ? "#94a3b8" : themeColor,
+						opacity: isDark ? 0.55 : 0.45,
 					}}
 				/>
 				<div
 					style={{
 						flex: 1,
 						height: u(1),
-						background: `${themeColor}44`,
+						background: isDark ? "rgba(148,163,184,0.35)" : `${themeColor}44`,
 					}}
 				/>
 			</div>
@@ -166,7 +173,7 @@ export const CoverPosterCore: React.FC<StaticCoverProps> = ({
 					fontWeight: 900,
 					lineHeight: 1.1,
 					letterSpacing: titleLetterSpacingPx,
-					color: "#0f172a",
+					color: isDark ? "#f8fafc" : "#0f172a",
 					wordBreak: titleFitSingleLine ? "keep-all" : "break-word",
 					whiteSpace: titleFitSingleLine ? "nowrap" : "normal",
 					maxWidth: "100%",
@@ -180,7 +187,7 @@ export const CoverPosterCore: React.FC<StaticCoverProps> = ({
 					style={{
 						flex: 1,
 						height: u(1),
-						background: `${themeColor}44`,
+						background: isDark ? "rgba(148,163,184,0.35)" : `${themeColor}44`,
 					}}
 				/>
 				<div
@@ -188,15 +195,15 @@ export const CoverPosterCore: React.FC<StaticCoverProps> = ({
 						width: u(8),
 						height: u(8),
 						borderRadius: "50%",
-						background: themeColor,
-						opacity: 0.45,
+						background: isDark ? "#94a3b8" : themeColor,
+						opacity: isDark ? 0.55 : 0.45,
 					}}
 				/>
 				<div
 					style={{
 						flex: 1,
 						height: u(1),
-						background: `${themeColor}44`,
+						background: isDark ? "rgba(148,163,184,0.35)" : `${themeColor}44`,
 					}}
 				/>
 			</div>
@@ -208,7 +215,7 @@ export const CoverPosterCore: React.FC<StaticCoverProps> = ({
 					fontWeight: 600,
 					lineHeight: 1.6,
 					letterSpacing: uf(1),
-					color: "#334155",
+					color: isDark ? "#cbd5e1" : "#334155",
 				}}
 			>
 				{subtitle}

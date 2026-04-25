@@ -1,7 +1,7 @@
 /**
- * 竖屏 3:4 静态封面（简化居中 + 装饰版）
+ * 竖屏 3:4 静态封面
  * 主视觉与横屏共用 CoverPosterCore
- * 装饰：四角括号框 + 标题两侧横线 + 顶底细线
+ * surface=light：浅底 + 四角括号；surface=dark：深蓝纯色底 + 左侧品牌条 + 顶底细线
  * 画布固定 1080×1440
  */
 import React from "react";
@@ -22,7 +22,9 @@ const DEFAULT_THEME = "#1d4ed8";
 
 const COVER_SOLID_BG = "#f1f5f9";
 
-/** 四角括号：L 形双线，两条边，可控 arm 长和线宽 */
+const COVER_DARK_SOLID = "#0f172a";
+
+/** 四角括号：L 形，浅色壳用 */
 const CornerBracket: React.FC<{
 	color: string;
 	size: number;
@@ -72,17 +74,38 @@ const CornerBracket: React.FC<{
 
 export const VerticalCoverPoster: React.FC<StaticCoverProps> = ({
 	themeColor = DEFAULT_THEME,
+	surface = "light",
 	...coreProps
 }) => {
+	const isDark = surface === "dark";
+
+	const lineColor = isDark ? `${themeColor}aa` : `${themeColor}55`;
+	const bracketOpacity = 0.7;
+
 	return (
 		<AbsoluteFill style={{ overflow: "hidden", fontFamily: FONT_STACK }}>
 			<div
 				style={{
 					position: "absolute",
 					inset: 0,
-					background: COVER_SOLID_BG,
+					background: isDark ? COVER_DARK_SOLID : COVER_SOLID_BG,
 				}}
 			/>
+
+			{isDark ? (
+				<div
+					style={{
+						position: "absolute",
+						left: 0,
+						top: u(120),
+						bottom: u(120),
+						width: u(5),
+						background: themeColor,
+						opacity: 0.45,
+						pointerEvents: "none",
+					}}
+				/>
+			) : null}
 
 			<div
 				style={{
@@ -91,7 +114,7 @@ export const VerticalCoverPoster: React.FC<StaticCoverProps> = ({
 					left: u(64),
 					right: u(64),
 					height: u(2),
-					background: `${themeColor}55`,
+					background: lineColor,
 					borderRadius: u(1),
 					pointerEvents: "none",
 				}}
@@ -103,18 +126,44 @@ export const VerticalCoverPoster: React.FC<StaticCoverProps> = ({
 					left: u(64),
 					right: u(64),
 					height: u(2),
-					background: `${themeColor}55`,
+					background: lineColor,
 					borderRadius: u(1),
 					pointerEvents: "none",
 				}}
 			/>
 
-			<div style={{ position: "absolute", inset: u(48), pointerEvents: "none" }}>
-				<CornerBracket color={themeColor} size={u(56)} thickness={u(3)} corner="tl" opacity={0.7} />
-				<CornerBracket color={themeColor} size={u(56)} thickness={u(3)} corner="tr" opacity={0.7} />
-				<CornerBracket color={themeColor} size={u(56)} thickness={u(3)} corner="bl" opacity={0.7} />
-				<CornerBracket color={themeColor} size={u(56)} thickness={u(3)} corner="br" opacity={0.7} />
-			</div>
+			{!isDark ? (
+				<div style={{ position: "absolute", inset: u(48), pointerEvents: "none" }}>
+					<CornerBracket
+						color={themeColor}
+						size={u(56)}
+						thickness={u(3)}
+						corner="tl"
+						opacity={bracketOpacity}
+					/>
+					<CornerBracket
+						color={themeColor}
+						size={u(56)}
+						thickness={u(3)}
+						corner="tr"
+						opacity={bracketOpacity}
+					/>
+					<CornerBracket
+						color={themeColor}
+						size={u(56)}
+						thickness={u(3)}
+						corner="bl"
+						opacity={bracketOpacity}
+					/>
+					<CornerBracket
+						color={themeColor}
+						size={u(56)}
+						thickness={u(3)}
+						corner="br"
+						opacity={bracketOpacity}
+					/>
+				</div>
+			) : null}
 
 			<div
 				style={{
@@ -125,7 +174,12 @@ export const VerticalCoverPoster: React.FC<StaticCoverProps> = ({
 					justifyContent: "center",
 				}}
 			>
-				<CoverPosterCore themeColor={themeColor} {...coreProps} titleFitSingleLine />
+				<CoverPosterCore
+					themeColor={themeColor}
+					surface={surface}
+					{...coreProps}
+					titleFitSingleLine
+				/>
 			</div>
 		</AbsoluteFill>
 	);

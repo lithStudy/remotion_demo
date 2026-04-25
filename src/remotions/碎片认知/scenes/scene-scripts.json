@@ -1,0 +1,889 @@
+{
+  "topic": "为什么你总在事故视频里争论？算法正在偷走你的思考力",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开篇强问句、纯大字冲击、无需配图 → 选择TEXT_FOCUS",
+          "content": [
+            {
+              "text": "给我一个买电车的理由！",
+              "startFrame": 0,
+              "durationFrames": 45
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              "给我一个买电车的理由！"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "买电车",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 45
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述短视频的特点，平缓叙述 → 选择CENTER_FOCUS",
+          "content": [
+            {
+              "text": "想必你一定在一个电车事故的短视频中看到过这样的评论。",
+              "startFrame": 0,
+              "durationFrames": 127
+            },
+            {
+              "text": "这种事故现场的短视频，",
+              "startFrame": 126,
+              "durationFrames": 54
+            },
+            {
+              "text": "往往只有最惨烈的那几秒：",
+              "startFrame": 179,
+              "durationFrames": 61
+            },
+            {
+              "text": "火光冲天、车体变形。",
+              "startFrame": 240,
+              "durationFrames": 72
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/碎片认知/scene_1_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "惨烈的那几秒",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 312
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "通过两个问题，引出事故发生的原因，呈现因果链 → 选择CAUSE_CHAIN",
+          "content": [
+            {
+              "text": "但它没有拍下的是：",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "司机是否连续驾驶了十几个小时？",
+              "startFrame": 42,
+              "durationFrames": 81
+            },
+            {
+              "text": "路口是否突然窜出了一辆逆行的电动车？",
+              "startFrame": 123,
+              "durationFrames": 85
+            }
+          ],
+          "order": 3,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "疲劳驾驶",
+                "imageSrc": "images/碎片认知/scene_1_3_img0.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "突发情况",
+                "imageSrc": "images/碎片认知/scene_1_3_img1.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 208
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "解释“语境”这个概念 → 选择CONCEPT_CARD",
+          "content": [
+            {
+              "text": "在传统的图文时代，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "新闻报道会试图还原事件的“语境”—",
+              "startFrame": 43,
+              "durationFrames": 86
+            },
+            {
+              "text": "时间、地点、人物、",
+              "startFrame": 128,
+              "durationFrames": 57
+            },
+            {
+              "text": "起因、经过、结果。",
+              "startFrame": 185,
+              "durationFrames": 58
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/碎片认知/scene_1_4.png",
+            "conceptName": "语境",
+            "anchors": []
+          },
+          "totalDurationFrames": 244
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "对比短视频时代和图文时代，短视频语境缺失，平缓叙述 → 选择CENTER_FOCUS",
+          "content": [
+            {
+              "text": "但在短视频时代，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "语境被粗暴地剥离了。",
+              "startFrame": 39,
+              "durationFrames": 54
+            },
+            {
+              "text": "我们看到的，",
+              "startFrame": 92,
+              "durationFrames": 30
+            },
+            {
+              "text": "永远是被剪裁过的“高潮”。",
+              "startFrame": 122,
+              "durationFrames": 63
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/碎片认知/scene_1_5.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "高潮",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 185
+        }
+      ],
+      "audioSrc": "/audio/碎片认知/scene_1/scene_1.mp3",
+      "totalDurationFrames": 995
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，交代背景，无明显结构，适合使用居中焦点模板。estimatedSeconds: 10.9",
+          "content": [
+            {
+              "text": "古人说“眼见为实”，",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "是因为在过去，",
+              "startFrame": 46,
+              "durationFrames": 32
+            },
+            {
+              "text": "当你“眼见”一个事件时，",
+              "startFrame": 78,
+              "durationFrames": 44
+            },
+            {
+              "text": "你通常身处现场，",
+              "startFrame": 122,
+              "durationFrames": 43
+            },
+            {
+              "text": "拥有全息的视角和完整的时空感知。",
+              "startFrame": 164,
+              "durationFrames": 89
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/碎片认知/scene_2_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "眼见为实",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "时空感知",
+                "showFrom": 4,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 254
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "存在明显的认知转变，选择认知转变模板。estimatedSeconds: 3.8",
+          "content": [
+            {
+              "text": "但在今天，",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "这句古语成了一个巨大的认知陷阱。",
+              "startFrame": 31,
+              "durationFrames": 77
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "过去眼见为实",
+            "butText": "今天认知陷阱",
+            "butSrc": "images/碎片认知/scene_2_2.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 109
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述一个场景，平缓叙述，无明显结构，适合使用居中焦点模板。estimatedSeconds: 9.6",
+          "content": [
+            {
+              "text": "网民通过一块6英寸的屏幕，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "看了一个经过剪辑、",
+              "startFrame": 58,
+              "durationFrames": 42
+            },
+            {
+              "text": "配着惊悚BGM的5秒切片，",
+              "startFrame": 100,
+              "durationFrames": 77
+            },
+            {
+              "text": "就傲慢地认为自己掌握了全局。",
+              "startFrame": 176,
+              "durationFrames": 84
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/碎片认知/scene_2_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "认知陷阱",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 261
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "对前文描述的现象进行总结，比较平缓的叙述，适合居中焦点模板。estimatedSeconds: 5.6",
+          "content": [
+            {
+              "text": "这种媒介赋予我们的“虚假全知全能感”，",
+              "startFrame": 0,
+              "durationFrames": 78
+            },
+            {
+              "text": "是极其危险的。",
+              "startFrame": 77,
+              "durationFrames": 42
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/碎片认知/scene_2_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "虚假全知",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 119
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "陈述一个观点，平缓叙述，无明显结构，适合使用居中焦点模板。estimatedSeconds: 6.9",
+          "content": [
+            {
+              "text": "视频和照片具有极强的欺骗性，",
+              "startFrame": 0,
+              "durationFrames": 74
+            },
+            {
+              "text": "因为它们看起来太像“客观记录”了。",
+              "startFrame": 73,
+              "durationFrames": 70
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/碎片认知/scene_2_5.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "欺骗性",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "客观记录",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 143
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "文字 vs 影像的对比，因此使用对比模板。estimatedSeconds: 9.8",
+          "content": [
+            {
+              "text": "文字带有明显的作者主观色彩，",
+              "startFrame": 0,
+              "durationFrames": 77
+            },
+            {
+              "text": "读者天然会有防备心；",
+              "startFrame": 76,
+              "durationFrames": 58
+            },
+            {
+              "text": "但影像直接冲击视觉，",
+              "startFrame": 134,
+              "durationFrames": 55
+            },
+            {
+              "text": "让人误以为这就是未经加工的现实。",
+              "startFrame": 188,
+              "durationFrames": 81
+            }
+          ],
+          "order": 6,
+          "param": {
+            "leftSrc": "images/碎片认知/scene_2_6_left.png",
+            "rightSrc": "images/碎片认知/scene_2_6_right.png",
+            "leftLabel": "文字",
+            "rightLabel": "影像",
+            "leftShowFrom": 0,
+            "rightShowFrom": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 270
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述一个场景，点明背后隐藏的主观筛选，适合使用居中焦点模板。estimatedSeconds: 11.1",
+          "content": [
+            {
+              "text": "当人们看着起火的画面时，",
+              "startFrame": 0,
+              "durationFrames": 54
+            },
+            {
+              "text": "他们忘记了：",
+              "startFrame": 53,
+              "durationFrames": 31
+            },
+            {
+              "text": "镜头指向哪里、",
+              "startFrame": 84,
+              "durationFrames": 38
+            },
+            {
+              "text": "何时开机、",
+              "startFrame": 121,
+              "durationFrames": 29
+            },
+            {
+              "text": "何时关机，",
+              "startFrame": 149,
+              "durationFrames": 33
+            },
+            {
+              "text": "本身就是一种主观的筛选。",
+              "startFrame": 182,
+              "durationFrames": 57
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "images/碎片认知/scene_2_7.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "主观筛选",
+                "showFrom": 5,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 239
+        }
+      ],
+      "audioSrc": "/audio/碎片认知/scene_2/scene_2.mp3",
+      "totalDurationFrames": 1395
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "反转",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，指出平台算法的关注点，没有明显的结构化信息，适合使用默认的CENTER_FOCUS模板。",
+          "content": [
+            {
+              "text": "更糟糕的是，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "平台算法并不关心那辆车到底为什么起火，",
+              "startFrame": 27,
+              "durationFrames": 89
+            },
+            {
+              "text": "算法只关心“完播率”、“评论数”和“转发量”。",
+              "startFrame": 115,
+              "durationFrames": 91
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/碎片认知/scene_3_1.png",
+            "enterEffect": "slideBottom",
+            "anchors": [
+              {
+                "text": "算法",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "完播率",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 207
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "本段对比了两种视频的命运，形成鲜明对比，因此选择SPLIT_COMPARE模板。",
+          "content": [
+            {
+              "text": "一个客观冷静、",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "分析多种可能性的视频，",
+              "startFrame": 39,
+              "durationFrames": 52
+            },
+            {
+              "text": "往往无人问津；",
+              "startFrame": 90,
+              "durationFrames": 38
+            },
+            {
+              "text": "而一个带有极强煽动性、",
+              "startFrame": 127,
+              "durationFrames": 66
+            },
+            {
+              "text": "能引发两派网友在评论区互骂的“定论式”视频，",
+              "startFrame": 193,
+              "durationFrames": 114
+            },
+            {
+              "text": "会被算法迅速推流到千万人的手机里。",
+              "startFrame": 306,
+              "durationFrames": 88
+            }
+          ],
+          "order": 2,
+          "param": {
+            "leftSrc": "images/碎片认知/scene_3_2_left.png",
+            "rightSrc": "images/碎片认知/scene_3_2_right.png",
+            "leftLabel": "理性分析",
+            "rightLabel": "情绪煽动",
+            "leftShowFrom": 0,
+            "rightShowFrom": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 394
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确指出“事实”和“情绪价值”之间的转变，是一种COGNITIVE_SHIFT，因此选择该模板。",
+          "content": [
+            {
+              "text": "在这种媒介生态下，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "“事实”变得不再重要，",
+              "startFrame": 42,
+              "durationFrames": 45
+            },
+            {
+              "text": "“情绪价值”成了唯一的硬通货。",
+              "startFrame": 87,
+              "durationFrames": 70
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "事实",
+            "butText": "情绪价值",
+            "butSrc": "images/碎片认知/scene_3_3.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 157
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "对前文的总结，强调评论区里急于下定论的人是被算法驯化的数据节点，适合使用CENTER_FOCUS模板。",
+          "content": [
+            {
+              "text": "那些在评论区里急于下定论的人，",
+              "startFrame": 0,
+              "durationFrames": 65
+            },
+            {
+              "text": "其实是被算法驯化的数据节点，",
+              "startFrame": 64,
+              "durationFrames": 67
+            },
+            {
+              "text": "用自己的偏见为平台贡献着日活和流量。",
+              "startFrame": 130,
+              "durationFrames": 97
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/碎片认知/scene_3_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "算法驯化",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "贡献流量",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 228
+        }
+      ],
+      "audioSrc": "/audio/碎片认知/scene_3/scene_3.mp3",
+      "totalDurationFrames": 986
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "召唤",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "从媒介形态→信息被压缩→认知被塑造，同一镜头内传导因果链 → 选择CAUSE_CHAIN",
+          "content": [
+            {
+              "text": "碎片化的媒介，",
+              "startFrame": 0,
+              "durationFrames": 50
+            },
+            {
+              "text": "把过程与语境压成几秒高光，",
+              "startFrame": 49,
+              "durationFrames": 79
+            },
+            {
+              "text": "必然塑造出碎片化的认知。",
+              "startFrame": 127,
+              "durationFrames": 70
+            }
+          ],
+          "order": 1,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "碎片化媒介",
+                "imageSrc": "images/碎片认知/scene_4_1_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "高光截取",
+                "imageSrc": "images/碎片认知/scene_4_1_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "碎片化认知",
+                "imageSrc": "images/碎片认知/scene_4_1_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 198
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对“语境”这个概念进行强调。",
+          "content": [
+            {
+              "text": "要打破这种幻觉，",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "我们必须重建对“语境”的尊重。",
+              "startFrame": 54,
+              "durationFrames": 75
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/碎片认知/scene_4_2.png",
+            "conceptName": "语境",
+            "anchors": []
+          },
+          "totalDurationFrames": 129
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CHECKLIST_REVEAL",
+          "reasoning": "四条递进式自问，适合收束为可执行自检清单、逐条打勾显现 → 选择CHECKLIST_REVEAL",
+          "content": [
+            {
+              "text": "当你下一次看到一个极具冲击力的短视频时，",
+              "startFrame": 0,
+              "durationFrames": 91
+            },
+            {
+              "text": "请先问自己：",
+              "startFrame": 90,
+              "durationFrames": 35
+            },
+            {
+              "text": "这个画面的上一秒是什么？",
+              "startFrame": 125,
+              "durationFrames": 64
+            },
+            {
+              "text": "镜头之外有什么？",
+              "startFrame": 188,
+              "durationFrames": 36
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "补全语境的自检",
+            "rows": [
+              {
+                "text": "先在心里按暂停",
+                "showFrom": 1
+              },
+              {
+                "text": "上一秒发生了什么？",
+                "showFrom": 2
+              },
+              {
+                "text": "镜头之外有什么？",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 225
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束段排比与升华、纯大字压场，无需引用来源卡片 → 选择TEXT_FOCUS；长口播保留 content，大屏用 coreSentence 对齐各行。",
+          "content": [
+            {
+              "text": "真正的“眼见为实”，",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "从来不是相信自己看见的一切，",
+              "startFrame": 45,
+              "durationFrames": 67
+            },
+            {
+              "text": "而是承认自己还有许多没看见的东西。",
+              "startFrame": 112,
+              "durationFrames": 89
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              "真正的“眼见为实”",
+              "是承认自己还有许多没看见的东西"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "眼见为实",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "没看见的东西",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 201
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束段排比与升华、纯大字压场，无需引用来源卡片 → 选择TEXT_FOCUS；长口播保留 content，大屏用 coreSentence 对齐各行。",
+          "content": [
+            {
+              "text": "在语境被归还之前，那份悬置判断的沉默，",
+              "startFrame": 0,
+              "durationFrames": 105
+            },
+            {
+              "text": "既是对真相的尊重，",
+              "startFrame": 104,
+              "durationFrames": 1
+            },
+            {
+              "text": "也是对我们自身心智的最后保护。",
+              "startFrame": 0,
+              "durationFrames": 272
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              "悬置的沉默，既是对真相的尊重",
+              "也是对我们自身心智的最后保护"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "对真相的尊重",
+                "color": "#2563EB"
+              },
+              {
+                "coreSentenceAnchor": "最后保护",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 237
+        }
+      ],
+      "audioSrc": "/audio/碎片认知/scene_4/scene_4.mp3",
+      "totalDurationFrames": 991
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "碎片认知",
+    "subtitle": "给我一个买电车的理由！",
+    "themeColor": "#2563EB",
+    "badge": "认识自我 · 理性思考",
+    "seriesLabel": "认知心理学",
+    "seriesLabelEn": "COGNITIVE PSYCHOLOGY",
+    "methodologySteps": [
+      "觉察",
+      "归因",
+      "调整"
+    ],
+    "methodologyStepsEn": "OBSERVE · ATTRIBUTE · ADJUST"
+  }
+}

@@ -1,0 +1,656 @@
+{
+  "topic": "当年山寨横行的充电宝去哪了？一条鲶鱼把小家电行业全搅了！",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "山寨消失",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，引出话题，使用单图即可，没有明显其他结构。",
+          "content": [
+            {
+              "text": "你有没有发现，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "以前那种充一次电就鼓包的山寨充电宝，",
+              "startFrame": 27,
+              "durationFrames": 89
+            },
+            {
+              "text": "用几个月就坏的劣质插线板，",
+              "startFrame": 115,
+              "durationFrames": 70
+            },
+            {
+              "text": "现在几乎绝迹了？",
+              "startFrame": 185,
+              "durationFrames": 53
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/小米掀翻蚂蚁市场/scene_1_1.png",
+            "enterEffect": "slideBottom",
+            "anchors": [
+              {
+                "text": "绝迹",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 238
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，承接上文，引出关键角色。使用单图即可，没有明显其他结构。",
+          "content": [
+            {
+              "text": "十年前，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "有一条鲶鱼，",
+              "startFrame": 27,
+              "durationFrames": 32
+            },
+            {
+              "text": "把这些烂摊子的桌子给掀了。",
+              "startFrame": 58,
+              "durationFrames": 58
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/小米掀翻蚂蚁市场/scene_1_2.png",
+            "enterEffect": "slideBottom",
+            "anchors": [
+              {
+                "text": "鲶鱼",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 116
+        }
+      ],
+      "audioSrc": "/audio/小米掀翻蚂蚁市场/scene_1/scene_1.mp3",
+      "totalDurationFrames": 356
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "蚂蚁市场",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对“蚂蚁市场”这个概念进行了解释，适合用概念卡片展示。",
+          "content": [
+            {
+              "text": "以前的中国小家电市场，",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "经济学上叫“蚂蚁市场”。",
+              "startFrame": 52,
+              "durationFrames": 63
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/小米掀翻蚂蚁市场/scene_2_1.png",
+            "conceptName": "蚂蚁市场",
+            "anchors": []
+          },
+          "totalDurationFrames": 115
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PEER_INDUCT",
+          "reasoning": "先并列三个同级行业现象（门槛低、山寨多、劣币驱逐），再口播归纳到消费者痛点无人照管，符合「并列前提 → 归纳收束」。",
+          "content": [
+            {
+              "text": "门槛极低，",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "山寨横行，",
+              "startFrame": 31,
+              "durationFrames": 32
+            },
+            {
+              "text": "劣币驱逐良币，",
+              "startFrame": 63,
+              "durationFrames": 42
+            },
+            {
+              "text": "消费者的痛点，",
+              "startFrame": 104,
+              "durationFrames": 35
+            },
+            {
+              "text": "根本没人管。",
+              "startFrame": 139,
+              "durationFrames": 31
+            }
+          ],
+          "order": 2,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "images/小米掀翻蚂蚁市场/scene_2_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "imageSrc": "images/小米掀翻蚂蚁市场/scene_2_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "imageSrc": "images/小米掀翻蚂蚁市场/scene_2_2_img2.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "images/小米掀翻蚂蚁市场/scene_2_2.png",
+              "enterEffect": "zoomIn",
+              "showFrom": 3,
+              "tone": "alert"
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 171
+        }
+      ],
+      "audioSrc": "/audio/小米掀翻蚂蚁市场/scene_2/scene_2.mp3",
+      "totalDurationFrames": 287
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "8080战略",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，单图即可，无特殊结构，选择CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "小米带着资本和效率杀进来。",
+              "startFrame": 0,
+              "durationFrames": 64
+            },
+            {
+              "text": "用所谓八零八零法则，",
+              "startFrame": 63,
+              "durationFrames": 52
+            },
+            {
+              "text": "抓住八成大众刚需、",
+              "startFrame": 114,
+              "durationFrames": 52
+            },
+            {
+              "text": "用八成资源把它打穿。",
+              "startFrame": 165,
+              "durationFrames": 52
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/小米掀翻蚂蚁市场/scene_3_1.png",
+            "enterEffect": "slideLeft",
+            "anchors": [
+              {
+                "text": "8080法则",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "woosh"
+              }
+            ]
+          },
+          "totalDurationFrames": 218
+        }
+      ],
+      "audioSrc": "/audio/小米掀翻蚂蚁市场/scene_3/scene_3.mp3",
+      "totalDurationFrames": 220
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "石头突围",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短句总结，使用text focus突出重点",
+          "content": [
+            {
+              "text": "一个血战案例就够说明白。",
+              "startFrame": 0,
+              "durationFrames": 69
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              "一个血战案例就够说明白"
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 69
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平铺叙述，交代背景信息",
+          "content": [
+            {
+              "text": "2014年，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "石头科技刚成立，",
+              "startFrame": 34,
+              "durationFrames": 43
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/小米掀翻蚂蚁市场/scene_4_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "石头科技",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 78
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "KPI_HERO",
+          "reasoning": "口播含 5 人、40 天、3 个月三组硬数字，用 KPI_HERO 多列随句递进锚定「小团队快迭代 + 资本迅速到位」。",
+          "content": [
+            {
+              "text": "5个工程师，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "40天手搓出一台粗糙的扫地机样机。",
+              "startFrame": 37,
+              "durationFrames": 96
+            },
+            {
+              "text": "小米生态链看中后，",
+              "startFrame": 133,
+              "durationFrames": 50
+            },
+            {
+              "text": "三个月战略投资到位；",
+              "startFrame": 182,
+              "durationFrames": 54
+            }
+          ],
+          "order": 4,
+          "param": {
+            "blocks": [
+              {
+                "value": 5,
+                "suffix": "人",
+                "label": "工程师",
+                "showFrom": 0
+              },
+              {
+                "value": 40,
+                "suffix": "天",
+                "label": "手搓样机",
+                "showFrom": 1
+              },
+              {
+                "value": 3,
+                "suffix": "个月",
+                "label": "投资到位",
+                "showFrom": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 236
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对新名词进行解释",
+          "content": [
+            {
+              "text": "更狠的是“占股不控股”—",
+              "startFrame": 0,
+              "durationFrames": 62
+            },
+            {
+              "text": "工业设计、供应链、全国渠道，",
+              "startFrame": 61,
+              "durationFrames": 79
+            },
+            {
+              "text": "像保姆一样全盘托出，",
+              "startFrame": 139,
+              "durationFrames": 55
+            },
+            {
+              "text": "让你放手去干。",
+              "startFrame": 194,
+              "durationFrames": 36
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/小米掀翻蚂蚁市场/scene_4_5.png",
+            "conceptName": "占股不控股",
+            "anchors": []
+          },
+          "totalDurationFrames": 230
+        }
+      ],
+      "audioSrc": "/audio/小米掀翻蚂蚁市场/scene_4/scene_4.mp3",
+      "totalDurationFrames": 614
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "降维打击",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，为后续内容做铺垫，使用居中展示的模板即可。",
+          "content": [
+            {
+              "text": "后面几代米家扫地机，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "把当时 iRobot 那种三四千的“高价低配”，",
+              "startFrame": 50,
+              "durationFrames": 92
+            },
+            {
+              "text": "直接打到几百块。",
+              "startFrame": 141,
+              "durationFrames": 44
+            },
+            {
+              "text": "同时也让石头科技声名鹊起。",
+              "startFrame": 185,
+              "durationFrames": 75
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/小米掀翻蚂蚁市场/scene_5_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 260
+        }
+      ],
+      "audioSrc": "/audio/小米掀翻蚂蚁市场/scene_5/scene_5.mp3",
+      "totalDurationFrames": 262
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "科技森林",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，单图即可，无特殊结构，适合用CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "很多人以为小米只会卖手机。",
+              "startFrame": 0,
+              "durationFrames": 68
+            },
+            {
+              "text": "实际上，小米累计投孵超过500家硬科技，",
+              "startFrame": 67,
+              "durationFrames": 106
+            },
+            {
+              "text": "好达电子、华星光电那些打破国外垄断的技术，",
+              "startFrame": 173,
+              "durationFrames": 115
+            },
+            {
+              "text": "都是依靠小米一点点培养出来的",
+              "startFrame": 287,
+              "durationFrames": 70
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/小米掀翻蚂蚁市场/scene_6_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "只会卖手机",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "好达电子、华星光电",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "woosh"
+              }
+            ]
+          },
+          "totalDurationFrames": 358
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "因果链，适合用CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "海量确定订单倒逼长三角、",
+              "startFrame": 0,
+              "durationFrames": 71
+            },
+            {
+              "text": "珠三角大批作坊做标准、",
+              "startFrame": 70,
+              "durationFrames": 67
+            },
+            {
+              "text": "上品质、",
+              "startFrame": 137,
+              "durationFrames": 27
+            },
+            {
+              "text": "改工艺。",
+              "startFrame": 163,
+              "durationFrames": 27
+            }
+          ],
+          "order": 4,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "确定订单",
+                "imageSrc": "images/小米掀翻蚂蚁市场/scene_6_4_img0.png",
+                "showFrom": 0,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "label": "产业升级",
+                "imageSrc": "images/小米掀翻蚂蚁市场/scene_6_4_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "label": "标准工艺",
+                "imageSrc": "images/小米掀翻蚂蚁市场/scene_6_4_img2.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "label": "品质提升",
+                "imageSrc": "images/小米掀翻蚂蚁市场/scene_6_4_img3.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 190
+        }
+      ],
+      "audioSrc": "/audio/小米掀翻蚂蚁市场/scene_6/scene_6.mp3",
+      "totalDurationFrames": 550
+    },
+    {
+      "sceneId": "scene_7",
+      "sceneName": "效率碾压",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "「不能只靠口号呼吁」对「只能靠先进效率碾压」为强对立纠偏，符合不是/而是式认知翻转。",
+          "content": [
+            {
+              "text": "淘汰落后产能，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "从来不能只靠口号呼吁。",
+              "startFrame": 41,
+              "durationFrames": 63
+            },
+            {
+              "text": "只能靠更先进的效率去无情碾压。",
+              "startFrame": 103,
+              "durationFrames": 85
+            }
+          ],
+          "order": 1,
+          "param": {
+            "notText": "口号呼吁",
+            "butText": "先进效率碾压",
+            "butSrc": "images/小米掀翻蚂蚁市场/scene_7_1.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2
+          },
+          "totalDurationFrames": 188
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "价值升华金句、纯文字排比收束，无需配图；用 TEXT_FOCUS 压信噪比，coreSentence 多行对齐口播节奏。",
+          "content": [
+            {
+              "text": "一家伟大的企业，不仅要自己赢。",
+              "startFrame": 0,
+              "durationFrames": 80
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              "一家伟大的企业，不仅要自己赢。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "伟大的企业",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "自己赢",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 80
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "价值升华金句、纯文字排比收束，无需配图；用 TEXT_FOCUS 压信噪比，coreSentence 多行对齐口播节奏。",
+          "content": [
+            {
+              "text": "更要让它走过的每一寸泥土，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "都能长出更繁茂的产业森林。",
+              "startFrame": 58,
+              "durationFrames": 73
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              "更要让它走过的每一寸泥土，",
+              "都能长出更繁茂的产业森林。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "长出",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "产业森林",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 132
+        }
+      ],
+      "audioSrc": "/audio/小米掀翻蚂蚁市场/scene_7/scene_7.mp3",
+      "totalDurationFrames": 402
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "小米掀翻蚂蚁市场",
+    "subtitle": "当年山寨横行的充电宝去哪了？一条鲶鱼把小家电行业全搅了！",
+    "themeColor": "#2563EB",
+    "badge": "认识自我 · 理性思考",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "觉察",
+      "归因",
+      "调整"
+    ],
+    "methodologyStepsEn": "TECH DEEP DIVE"
+  }
+}

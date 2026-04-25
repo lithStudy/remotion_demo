@@ -13,6 +13,8 @@ export {
 	type TemplateBaseProps,
 	type BeatStageItem,
 	type BeatStageTone,
+	type PeerInductPremiseItem,
+	type PeerInductConclusionItem,
 } from "./shared";
 export { BWImageBreath } from "./BWImageBreath";
 export type { BWImageBreathProps } from "./BWImageBreath";
@@ -35,15 +37,17 @@ export type { BWDosAndDontsProps } from "./DosAndDonts";
 export { BWMagnifyingGlass } from "./MagnifyingGlass";
 export type { BWMagnifyingGlassProps } from "./MagnifyingGlass";
 export { BWChatBubble } from "./ChatBubble";
-export type { BWChatBubbleProps } from "./ChatBubble";
+export type { BWChatBubbleProps, ChatBubbleRowParam } from "./ChatBubble";
 export { BWKpiHero } from "./KpiHero";
-export type { BWKpiHeroProps } from "./KpiHero";
+export type { BWKpiHeroProps, KpiHeroBlockItem } from "./KpiHero";
 export { BWStatCompare } from "./StatCompare";
-export type { BWStatCompareProps } from "./StatCompare";
+export type { BWStatCompareProps, StatCompareBarItem } from "./StatCompare";
 export { BWProgressRing } from "./ProgressRing";
-export type { BWProgressRingProps } from "./ProgressRing";
+export type { BWProgressRingProps, ProgressRingBlockItem } from "./ProgressRing";
 export { BWBeatSequence } from "./BeatSequence";
 export type { BWBeatSequenceProps } from "./BeatSequence";
+export { BWPeerInduct } from "./PeerInduct";
+export type { BWPeerInductProps } from "./PeerInduct";
 export { BWCognitiveShift } from "./CognitiveShift";
 export type { BWCognitiveShiftProps } from "./CognitiveShift";
 export { BWMethodStack } from "./MethodStack";
@@ -56,3 +60,5 @@ export { BWChecklistReveal } from "./ChecklistReveal";
 export type { BWChecklistRevealProps, ChecklistRowItem } from "./ChecklistReveal";
 export { BWPanelGrid } from "./PanelGrid";
 export type { BWPanelGridProps, PanelGridItem } from "./PanelGrid";
+export { BWDataTable } from "./DataTable";
+export type { BWDataTableProps, DataTableRowItem } from "./DataTable";

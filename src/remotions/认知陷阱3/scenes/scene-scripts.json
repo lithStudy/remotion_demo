@@ -1,0 +1,836 @@
+{
+  "topic": "为什么车祸视频下，没人关心死活？你只是在急着站队",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：车祸评论怪象",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，引出诡异现象，无特殊结构，使用默认的CENTER_FOCUS模板。字数43，预估时长9.6秒。",
+          "content": [
+            {
+              "text": "我今天刷了上百条车祸视频的评论，",
+              "startFrame": 0,
+              "durationFrames": 83
+            },
+            {
+              "text": "发现了一个极其诡异的现象：",
+              "startFrame": 82,
+              "durationFrames": 64
+            },
+            {
+              "text": "大家吵得不可开交，",
+              "startFrame": 146,
+              "durationFrames": 44
+            },
+            {
+              "text": "但没有一个人关心车里的人活没活着。",
+              "startFrame": 189,
+              "durationFrames": 89
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/认知陷阱3/scene_1_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "诡异现象",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 279
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CHAT_BUBBLE",
+          "reasoning": "前两句为评论区互怼式对话，后两句为旁白收束；用 CHAT_BUBBLE 左右气泡呈现对立言论，字幕仍走四条 content 时序。字数50，预估时长11.1秒。",
+          "content": [
+            {
+              "text": "“这一定是小米吧！”",
+              "startFrame": 0,
+              "durationFrames": 54
+            },
+            {
+              "text": "“肯定是某界！”",
+              "startFrame": 53,
+              "durationFrames": 61
+            },
+            {
+              "text": "当一段没有任何品牌标识的事故视频在全网疯传，",
+              "startFrame": 113,
+              "durationFrames": 108
+            },
+            {
+              "text": "评论区往往在三秒内沦为不同品牌粉丝的嗜血战场。",
+              "startFrame": 221,
+              "durationFrames": 119
+            }
+          ],
+          "order": 2,
+          "param": {
+            "bubbles": [
+              {
+                "bubbleText": "这一定是小米吧！",
+                "showFrom": 0,
+                "align": "left"
+              },
+              {
+                "bubbleText": "肯定是某界！",
+                "showFrom": 1,
+                "align": "right"
+              }
+            ]
+          },
+          "totalDurationFrames": 341
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "口播并列「没人在乎伤者」与「没人在乎前因后果」两类对象，适合左右对照的 SPLIT_COMPARE。字数33，预估时长7.3秒。",
+          "content": [
+            {
+              "text": "仔细观察你会发现：",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "根本没人在乎车祸中的伤者，",
+              "startFrame": 50,
+              "durationFrames": 64
+            },
+            {
+              "text": "也没人在乎事故的前因后果。",
+              "startFrame": 113,
+              "durationFrames": 62
+            }
+          ],
+          "order": 3,
+          "param": {
+            "leftSrc": "images/认知陷阱3/scene_1_3_left.png",
+            "rightSrc": "images/认知陷阱3/scene_1_3_right.png",
+            "leftLabel": "车祸伤者",
+            "rightLabel": "前因后果",
+            "leftShowFrom": 1,
+            "rightShowFrom": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 175
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "结论金句、强调「心照不宣的社交表演」，适合纯大字 TEXT_FOCUS。字数27，预估时长6秒。",
+          "content": [
+            {
+              "text": "他们急不可耐地敲下定论，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "本质上是在完成一场心照不宣的社交表演。",
+              "startFrame": 58,
+              "durationFrames": 96
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              "他们在完成一场心照不宣的社交表演"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "社交表演",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 155
+        }
+      ],
+      "audioSrc": "/audio/认知陷阱3/scene_1/scene_1.mp3",
+      "totalDurationFrames": 950
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析：互联网部落主义",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "铺垫互联网语境与消费品异化为身份图腾，单图收束；后续部落传导单独用 CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "在今天的互联网语境下，",
+              "startFrame": 0,
+              "durationFrames": 48
+            },
+            {
+              "text": "消费品早已异化为身份认同的图腾。",
+              "startFrame": 48,
+              "durationFrames": 91
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/认知陷阱3/scene_2_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "身份认同的图腾",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 139
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "从座驾、手机到部落归属的传导链条，口播分三环，适合 CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "你开什么车、",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "用什么手机，",
+              "startFrame": 30,
+              "durationFrames": 28
+            },
+            {
+              "text": "直接决定了你属于哪个“部落”。",
+              "startFrame": 57,
+              "durationFrames": 64
+            }
+          ],
+          "order": 2,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "开什么车",
+                "imageSrc": "images/认知陷阱3/scene_2_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "用什么手机",
+                "imageSrc": "images/认知陷阱3/scene_2_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "label": "部落归属",
+                "imageSrc": "images/认知陷阱3/scene_2_2_img2.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 122
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "先抛问再在几句内展开「不是聊产品而是部落战+投名状」，符合「观点标题 + 逐句解释」的 METHOD_STACK。",
+          "content": [
+            {
+              "text": "当人们在评论区里疯狂攻击某个品牌时，",
+              "startFrame": 0,
+              "durationFrames": 86
+            },
+            {
+              "text": "他们真的是在聊产品吗？",
+              "startFrame": 85,
+              "durationFrames": 53
+            },
+            {
+              "text": "不，他们是在向对立部落宣战，",
+              "startFrame": 137,
+              "durationFrames": 81
+            },
+            {
+              "text": "同时向自己的部落递交“投名状”以换取归属感。",
+              "startFrame": 218,
+              "durationFrames": 113
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "评论区攻击的真相",
+            "imageSrc": "images/认知陷阱3/scene_2_3.png",
+            "notes": [
+              {
+                "text": "实为向对立部落宣战",
+                "showFrom": 2
+              },
+              {
+                "text": "投名状换归属感",
+                "showFrom": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 331
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "进一步说明事故视频只是部落冲突的工具，选择CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "那段没头没尾的事故视频，",
+              "startFrame": 0,
+              "durationFrames": 68
+            },
+            {
+              "text": "不过是用来互相攻伐的廉价借口。",
+              "startFrame": 67,
+              "durationFrames": 67
+            },
+            {
+              "text": "社会学中的“内群体偏好与外群体贬损”，",
+              "startFrame": 134,
+              "durationFrames": 92
+            },
+            {
+              "text": "在这里展现得淋漓尽致：",
+              "startFrame": 225,
+              "durationFrames": 60
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/认知陷阱3/scene_2_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "廉价借口",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 286
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "对比自己支持的品牌和对立品牌出事后的不同反应，是典型的A vs B对比，选择SPLIT_COMPARE。",
+          "content": [
+            {
+              "text": "自己支持的品牌出了事，",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "那是“偶发个例”、",
+              "startFrame": 46,
+              "durationFrames": 45
+            },
+            {
+              "text": "“车主脚法不行”；",
+              "startFrame": 91,
+              "durationFrames": 48
+            },
+            {
+              "text": "对立品牌出了事，",
+              "startFrame": 139,
+              "durationFrames": 36
+            },
+            {
+              "text": "那就是“工业垃圾”、“早晚药丸”。",
+              "startFrame": 175,
+              "durationFrames": 69
+            }
+          ],
+          "order": 5,
+          "param": {
+            "leftSrc": "images/认知陷阱3/scene_2_5_left.png",
+            "rightSrc": "images/认知陷阱3/scene_2_5_right.png",
+            "leftLabel": "支持者",
+            "rightLabel": "反对者",
+            "leftShowFrom": 0,
+            "rightShowFrom": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 245
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "总结：事实被扭曲，沦为立场的附庸，是短促有力的结论，选择TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "在这里，",
+              "startFrame": 0,
+              "durationFrames": 20
+            },
+            {
+              "text": "事实早已被彻底扭曲，",
+              "startFrame": 19,
+              "durationFrames": 52
+            },
+            {
+              "text": "沦为立场的卑微附庸。",
+              "startFrame": 70,
+              "durationFrames": 50
+            }
+          ],
+          "order": 6,
+          "param": {
+            "coreSentence": [
+              "在这里，事实早已被彻底扭曲，",
+              "沦为立场的卑微附庸。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "彻底扭曲",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "卑微附庸",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 120
+        }
+      ],
+      "audioSrc": "/audio/认知陷阱3/scene_2/scene_2.mp3",
+      "totalDurationFrames": 1242
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "剖析：乌合之众的镜像",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "提出现象疑问，用于引出下文，无明显结构，适合用默认的居中展示。",
+          "content": [
+            {
+              "text": "为什么现实生活中温文尔雅的普通人，",
+              "startFrame": 0,
+              "durationFrames": 72
+            },
+            {
+              "text": "一进入网络评论区就会变得暴躁嗜血、",
+              "startFrame": 72,
+              "durationFrames": 77
+            },
+            {
+              "text": "急于定论？",
+              "startFrame": 148,
+              "durationFrames": 33
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/认知陷阱3/scene_3_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "暴躁嗜血",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 182
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用勒庞的观点，适合用引用模板。",
+          "content": [
+            {
+              "text": "勒庞在《乌合之众》中早有预言：",
+              "startFrame": 0,
+              "durationFrames": 70
+            },
+            {
+              "text": "当个人融入群体，",
+              "startFrame": 69,
+              "durationFrames": 38
+            },
+            {
+              "text": "匿名的面具会让他彻底丧失责任感。",
+              "startFrame": 106,
+              "durationFrames": 75
+            }
+          ],
+          "order": 2,
+          "param": {
+            "quoteSource": "勒庞《乌合之众》",
+            "quoteDisplayText": "当个人融入群体，匿名的面具会让他彻底丧失责任感。",
+            "showFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 182
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "现实当众恶语会立刻付出代价，与互联网上匿名稀释作恶成本形成强对错对照，适合 DOS_AND_DONTS。",
+          "content": [
+            {
+              "text": "在现实街头，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "如果你指着一个遭遇车祸的陌生人大喊“你活该起火”，",
+              "startFrame": 36,
+              "durationFrames": 113
+            },
+            {
+              "text": "大概率会挨一顿毒打；",
+              "startFrame": 148,
+              "durationFrames": 51
+            },
+            {
+              "text": "但在互联网上，",
+              "startFrame": 198,
+              "durationFrames": 34
+            },
+            {
+              "text": "当你化身为十万条评论中的一个像素点时，",
+              "startFrame": 232,
+              "durationFrames": 92
+            },
+            {
+              "text": "作恶的成本被无限稀释了。",
+              "startFrame": 324,
+              "durationFrames": 69
+            }
+          ],
+          "order": 3,
+          "param": {
+            "left": {
+              "label": "❌ 现实街头",
+              "src": "images/认知陷阱3/scene_3_3_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "🌐 匿名校场",
+              "src": "images/认知陷阱3/scene_3_3_right.png",
+              "showFrom": 3
+            }
+          },
+          "totalDurationFrames": 393
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "总结群体的特点，为后续的解释提供依据，使用默认模板。",
+          "content": [
+            {
+              "text": "群体从来不善于推理，",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "却极易被情绪裹挟。",
+              "startFrame": 45,
+              "durationFrames": 48
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/认知陷阱3/scene_3_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "情绪裹挟",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 94
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "描述情绪裹挟的过程，形成因果链，适合用因果链模板。",
+          "content": [
+            {
+              "text": "当评论区高赞的前十条都在疯狂输出同一种情绪时，",
+              "startFrame": 0,
+              "durationFrames": 120
+            },
+            {
+              "text": "后来者会不由自主地放弃独立思考，",
+              "startFrame": 120,
+              "durationFrames": 92
+            },
+            {
+              "text": "纵身跃入这场情绪的狂欢。",
+              "startFrame": 211,
+              "durationFrames": 67
+            }
+          ],
+          "order": 5,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "情绪输出",
+                "imageSrc": "images/认知陷阱3/scene_3_5_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "放弃思考",
+                "imageSrc": "images/认知陷阱3/scene_3_5_img1.png",
+                "showFrom": 1
+              },
+              {
+                "label": "情绪狂欢",
+                "imageSrc": "images/认知陷阱3/scene_3_5_img2.png",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 279
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述下定论快感带来的结果，使用默认模板。",
+          "content": [
+            {
+              "text": "那种急切下定论的快感，",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "能让人瞬间获得一种虚幻的道德制高点与智力优越感—",
+              "startFrame": 51,
+              "durationFrames": 116
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/认知陷阱3/scene_3_6.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "道德制高点",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 167
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "总结性的金句，适合用纯文字强调。",
+          "content": [
+            {
+              "text": "看，",
+              "startFrame": 0,
+              "durationFrames": 16
+            },
+            {
+              "text": "我一眼就看穿了真相，",
+              "startFrame": 15,
+              "durationFrames": 1
+            },
+            {
+              "text": "你们这些蠢货。",
+              "startFrame": 0,
+              "durationFrames": 870
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              "“看，我一眼就看穿了真相，你们这些蠢货。”"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "一眼就看穿了真相"
+              }
+            ]
+          },
+          "totalDurationFrames": 99
+        }
+      ],
+      "audioSrc": "/audio/认知陷阱3/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1394
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "召唤：警惕群体降智",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，描述评论区性质，无特殊结构，适合用默认的居中展示。",
+          "content": [
+            {
+              "text": "互联网评论区从来不是探寻真相的法庭，",
+              "startFrame": 0,
+              "durationFrames": 93
+            },
+            {
+              "text": "更不是严谨的实验室，",
+              "startFrame": 92,
+              "durationFrames": 49
+            },
+            {
+              "text": "它更像是一个情绪的排泄口与立场的罗马角斗场。",
+              "startFrame": 140,
+              "durationFrames": 111
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/认知陷阱3/scene_4_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "情绪排泄口",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "立场的罗马角斗场",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 251
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，提出警惕的观点，无特殊结构，适合用默认的居中展示。",
+          "content": [
+            {
+              "text": "当我们看透了这层荒诞的底色，",
+              "startFrame": 0,
+              "durationFrames": 60
+            },
+            {
+              "text": "就该对那些点赞极高、",
+              "startFrame": 59,
+              "durationFrames": 52
+            },
+            {
+              "text": "情绪极端的“断言”保持十二分的警惕。",
+              "startFrame": 111,
+              "durationFrames": 90
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/认知陷阱3/scene_4_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "情绪极端的“断言”",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 202
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片结尾的结论暴击，使用纯文字大屏高亮核心词，提升信噪比和冲击力",
+          "content": [
+            {
+              "text": "永远不要轻易加入任何一场网络讨伐，",
+              "startFrame": 0,
+              "durationFrames": 72
+            },
+            {
+              "text": "因为在群体的狂欢中，",
+              "startFrame": 72,
+              "durationFrames": 50
+            },
+            {
+              "text": "最先被推上祭坛的，",
+              "startFrame": 121,
+              "durationFrames": 46
+            },
+            {
+              "text": "往往是常识与理智。",
+              "startFrame": 166,
+              "durationFrames": 60
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              "任何一场网络讨伐狂欢",
+              "最先被推上祭坛的，往往是常识与理智"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "网络讨伐",
+                "color": "red"
+              },
+              {
+                "coreSentenceAnchor": "常识与理智",
+                "color": "red"
+              }
+            ]
+          },
+          "totalDurationFrames": 227
+        }
+      ],
+      "audioSrc": "/audio/认知陷阱3/scene_4/scene_4.mp3",
+      "totalDurationFrames": 681
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "群体动力学",
+    "subtitle": "评论区里的社交表演",
+    "themeColor": "#2563EB",
+    "badge": "认识自我 · 理性思考",
+    "seriesLabel": "认知心理学",
+    "seriesLabelEn": "COGNITIVE PSYCHOLOGY",
+    "methodologySteps": [
+      "觉察",
+      "归因",
+      "调整"
+    ],
+    "methodologyStepsEn": "OBSERVE · ATTRIBUTE · ADJUST"
+  }
+}

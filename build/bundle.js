@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 4185:
+/***/ 3809:
 /***/ ((__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) => {
 
 
@@ -57,6 +57,18 @@ var update = injectStylesIntoStyleTag_default()(cjs_js_src/* default */.A, optio
 
        /* harmony default export */ const src = (cjs_js_src/* default */.A && cjs_js_src/* default */.A.locals ? cjs_js_src/* default */.A.locals : undefined);
 
+// EXTERNAL MODULE: ./node_modules/react/index.js
+var react = __webpack_require__(6540);
+;// ./src/components/RemotionLayoutMetricsContext.tsx
+
+
+
+const RemotionLayoutMetricsContext = (0,react.createContext)(null);
+const RemotionLayoutMetricsProvider = ({ value, children }) => /* @__PURE__ */ (0,jsx_runtime.jsx)(RemotionLayoutMetricsContext.Provider, { value, children });
+function useRemotionLayoutMetricsOverride() {
+  return (0,react.useContext)(RemotionLayoutMetricsContext);
+}
+
 ;// ./src/components/templates/images/scene1_1.png
 const scene1_1_namespaceObject = __webpack_require__.p + "b69b40dc9495eb81.png";
 ;// ./src/components/templates/shared.ts
@@ -84,7 +96,12 @@ function getSafeImageSrc(src) {
 }
 const BW_BG = "#ffffff";
 const BW_TEXT = "#111111";
-function useImageEnterStyle(effect, frame, fps, width, height) {
+const BW_LAYOUT_WIDTH = 1920;
+const BW_LAYOUT_HEIGHT = 1080;
+function joinCssTransforms(parts) {
+  return parts.filter(Boolean).join(" ");
+}
+function useImageEnterStyle(effect, frame, fps, width, height, transformMode = "withCentering") {
   const enterSpring = (0,esm.spring)({
     frame,
     fps,
@@ -95,37 +112,73 @@ function useImageEnterStyle(effect, frame, fps, width, height) {
   const breathePhase = frame % breatheCycle;
   const breatheScale = (0,esm.interpolate)(
     breathePhase,
-    [0, 30, 75],
+    [0, 37, 74],
     [1, 1.08, 1],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
+  const c = transformMode === "withCentering" ? "translate(-50%, -50%)" : "";
   switch (effect) {
     case "slideLeft": {
       const tx = (0,esm.interpolate)(enterSpring, [0, 1], [width * 0.5, 0]);
-      return { transform: `translate(-50%, -50%) translateX(${tx}px)`, opacity: enterSpring };
+      return {
+        transform: joinCssTransforms([c, `translateX(${tx}px)`]),
+        opacity: enterSpring
+      };
     }
     case "slideBottom": {
       const ty = (0,esm.interpolate)(enterSpring, [0, 1], [height * 0.25, 0]);
-      return { transform: `translate(-50%, -50%) translateY(${ty}px)`, opacity: enterSpring };
+      return {
+        transform: joinCssTransforms([c, `translateY(${ty}px)`]),
+        opacity: enterSpring
+      };
     }
     case "zoomIn": {
       const sc = (0,esm.interpolate)(enterSpring, [0, 1], [0.5, 1]);
-      return { transform: `translate(-50%, -50%) scale(${sc})`, opacity: enterSpring };
+      return {
+        transform: joinCssTransforms([c, `scale(${sc})`]),
+        opacity: enterSpring
+      };
     }
     case "fadeIn": {
-      return { transform: "translate(-50%, -50%)", opacity: enterSpring };
+      return {
+        ...c ? { transform: c } : {},
+        opacity: enterSpring
+      };
     }
     case "breathe":
     default:
-      return { transform: `translate(-50%, -50%) scale(${breatheScale})` };
+      return {
+        transform: joinCssTransforms([c, `scale(${breatheScale})`])
+      };
   }
 }
 const ANCHOR_LIST_TOP_RATIO = 0.18;
-const ANCHOR_LIST_ROW_MIN_HEIGHT_PX = 64;
+const ANCHOR_LIST_ROW_MIN_HEIGHT_PX = 56;
 const ANCHOR_LIST_ROW_GAP_PX = 16;
 const SINGLE_IMAGE_CENTER_TOP_RATIO = 0.5;
-const SINGLE_IMAGE_MAX_HEIGHT_RATIO = 0.4;
-const SINGLE_IMAGE_ANCHOR_MIN_GAP_PX = 50;
+const SINGLE_IMAGE_MAX_HEIGHT_RATIO = 0.45;
+const SINGLE_IMAGE_BOX_MAX_WIDTH_RATIO = 0.82;
+const SINGLE_IMAGE_BOX_MAX_HEIGHT_RATIO = 0.35;
+const SINGLE_IMAGE_ANCHOR_MIN_GAP_PX = 48;
+const ANCHOR_LIST_THREE_ROWS_COMPACT_PX = 28;
+function getAnchorListTopRatio(visibleAnchorCount) {
+  if (visibleAnchorCount >= 3) return 0.11;
+  return ANCHOR_LIST_TOP_RATIO;
+}
+const ANCHOR_THREE_ROW_REFLOW_SPRING_CONFIG = {
+  damping: 14,
+  stiffness: 120,
+  mass: 0.85
+};
+const ANCHOR_THREE_ROW_REFLOW_DURATION_FRAMES = 26;
+function getAnchorThreeRowReflowProgress(frame, thirdAnchorStartFrame, fps) {
+  return (0,esm.spring)({
+    frame: frame - thirdAnchorStartFrame,
+    fps,
+    config: ANCHOR_THREE_ROW_REFLOW_SPRING_CONFIG,
+    durationInFrames: ANCHOR_THREE_ROW_REFLOW_DURATION_FRAMES
+  });
+}
 function getVisibleAnchorItems(content, anchors, frame) {
   const contentItems = content ?? [];
   const anchorItems = anchors ?? [];
@@ -139,17 +192,35 @@ function getVisibleAnchorItems(content, anchors, frame) {
     (item) => typeof item.startFrame === "number" && item.startFrame <= frame
   ).sort((a, b) => a.startFrame - b.startFrame);
 }
+function getSingleImageAnchorAvoidanceShiftFromLayout({
+  visibleAnchorCount,
+  height,
+  minGapPx,
+  topRatio,
+  verticalCompactPx
+}) {
+  if (visibleAnchorCount === 0) return 0;
+  const anchorBottomPx = height * topRatio + visibleAnchorCount * ANCHOR_LIST_ROW_MIN_HEIGHT_PX + Math.max(0, visibleAnchorCount - 1) * ANCHOR_LIST_ROW_GAP_PX - verticalCompactPx;
+  const imageTopPx = height * SINGLE_IMAGE_CENTER_TOP_RATIO - height * SINGLE_IMAGE_MAX_HEIGHT_RATIO / 2;
+  const gapPx = imageTopPx - anchorBottomPx;
+  const extraShiftTwoPlusPx = visibleAnchorCount >= 2 ? Math.round(height * 0.022) : 0;
+  const targetGap = minGapPx + extraShiftTwoPlusPx;
+  if (gapPx >= targetGap) return 0;
+  return targetGap - gapPx;
+}
 function getSingleImageAnchorAvoidanceShiftByCount({
   visibleAnchorCount,
   height,
   minGapPx
 }) {
   if (visibleAnchorCount === 0) return 0;
-  const anchorBottomPx = height * ANCHOR_LIST_TOP_RATIO + visibleAnchorCount * ANCHOR_LIST_ROW_MIN_HEIGHT_PX + Math.max(0, visibleAnchorCount - 1) * ANCHOR_LIST_ROW_GAP_PX;
-  const imageTopPx = height * SINGLE_IMAGE_CENTER_TOP_RATIO - height * SINGLE_IMAGE_MAX_HEIGHT_RATIO / 2;
-  const gapPx = imageTopPx - anchorBottomPx;
-  if (gapPx >= minGapPx) return 0;
-  return minGapPx - gapPx;
+  return getSingleImageAnchorAvoidanceShiftFromLayout({
+    visibleAnchorCount,
+    height,
+    minGapPx,
+    topRatio: getAnchorListTopRatio(visibleAnchorCount),
+    verticalCompactPx: visibleAnchorCount >= 3 ? ANCHOR_LIST_THREE_ROWS_COMPACT_PX : 0
+  });
 }
 function getSingleImageAnchorAvoidanceShiftPx({
   content,
@@ -175,17 +246,29 @@ function getSingleImageAnchorAvoidanceShiftAnimatedPx({
 }) {
   const visibleAnchors = getVisibleAnchorItems(content, anchors, frame);
   if (visibleAnchors.length === 0) return 0;
-  let animatedShiftPx = 0;
-  for (let i = 1; i <= visibleAnchors.length; i++) {
-    const prevShiftPx = getSingleImageAnchorAvoidanceShiftByCount({
+  const shift2Target = getSingleImageAnchorAvoidanceShiftFromLayout({
+    visibleAnchorCount: 2,
+    height,
+    minGapPx,
+    topRatio: ANCHOR_LIST_TOP_RATIO,
+    verticalCompactPx: 0
+  });
+  let twoDone = 0;
+  const nForTwoLoop = Math.min(visibleAnchors.length, 2);
+  for (let i = 1; i <= nForTwoLoop; i++) {
+    const prevShiftPx = getSingleImageAnchorAvoidanceShiftFromLayout({
       visibleAnchorCount: i - 1,
       height,
-      minGapPx
+      minGapPx,
+      topRatio: ANCHOR_LIST_TOP_RATIO,
+      verticalCompactPx: 0
     });
-    const currentShiftPx = getSingleImageAnchorAvoidanceShiftByCount({
+    const currentShiftPx = getSingleImageAnchorAvoidanceShiftFromLayout({
       visibleAnchorCount: i,
       height,
-      minGapPx
+      minGapPx,
+      topRatio: ANCHOR_LIST_TOP_RATIO,
+      verticalCompactPx: 0
     });
     const deltaShiftPx = Math.max(0, currentShiftPx - prevShiftPx);
     if (deltaShiftPx <= 0) continue;
@@ -200,9 +283,100 @@ function getSingleImageAnchorAvoidanceShiftAnimatedPx({
       extrapolateLeft: "clamp",
       extrapolateRight: "clamp"
     });
-    animatedShiftPx += animatedDeltaShiftPx;
+    twoDone += animatedDeltaShiftPx;
   }
-  return animatedShiftPx;
+  if (visibleAnchors.length < 3) {
+    return twoDone;
+  }
+  const p = getAnchorThreeRowReflowProgress(
+    frame,
+    visibleAnchors[2].startFrame,
+    fps
+  );
+  const shift3Start = getSingleImageAnchorAvoidanceShiftFromLayout({
+    visibleAnchorCount: 3,
+    height,
+    minGapPx,
+    topRatio: ANCHOR_LIST_TOP_RATIO,
+    verticalCompactPx: 0
+  });
+  const shift3End = getSingleImageAnchorAvoidanceShiftFromLayout({
+    visibleAnchorCount: 3,
+    height,
+    minGapPx,
+    topRatio: getAnchorListTopRatio(3),
+    verticalCompactPx: ANCHOR_LIST_THREE_ROWS_COMPACT_PX
+  });
+  const reflowExtra = (0,esm.interpolate)(p, [0, 1], [0, shift3End - shift3Start], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  });
+  return twoDone + (shift3Start - shift2Target) + reflowExtra;
+}
+const CENTER_FOCUS_ANCHOR_ROW_GAP_PX = 62;
+const CENTER_FOCUS_ANCHOR_IMAGE_GAP_PX = 10;
+const CENTER_FOCUS_STACK_SPRING_CONFIG = {
+  damping: 14,
+  stiffness: 120,
+  mass: 0.85
+};
+const CENTER_FOCUS_STACK_TRANSITION_FRAMES = 24;
+function computeCenterFocusEquilibrium(m, height, refY) {
+  const gRow = CENTER_FOCUS_ANCHOR_ROW_GAP_PX;
+  const gImg = CENTER_FOCUS_ANCHOR_IMAGE_GAP_PX;
+  const r = ANCHOR_LIST_ROW_MIN_HEIGHT_PX;
+  const imgHalf = height * SINGLE_IMAGE_MAX_HEIGHT_RATIO / 2;
+  const step = r + gRow;
+  if (m <= 0) {
+    return { anchorCenters: [], imageCenter: refY };
+  }
+  const c1 = refY - ((m - 1) * step + gImg + 2 * imgHalf) / 2;
+  const anchorCenters = [];
+  for (let k = 0; k < m; k++) {
+    anchorCenters.push(c1 + k * step);
+  }
+  const cImg = c1 + (m - 1) * step + r / 2 + gImg + imgHalf;
+  return { anchorCenters, imageCenter: cImg };
+}
+function getCenterFocusStackLayoutAtFrame({
+  content,
+  anchors,
+  frame,
+  fps,
+  height
+}) {
+  const refY = height * SINGLE_IMAGE_CENTER_TOP_RATIO;
+  const visible = getVisibleAnchorItems(content, anchors, frame);
+  const m = visible.length;
+  if (m === 0) {
+    return { anchorCenterYs: [], imageCenterY: refY };
+  }
+  const T = visible[m - 1].startFrame;
+  const p = (0,esm.spring)({
+    frame: frame - T,
+    fps,
+    config: CENTER_FOCUS_STACK_SPRING_CONFIG,
+    durationInFrames: CENTER_FOCUS_STACK_TRANSITION_FRAMES
+  });
+  const eqPrev = computeCenterFocusEquilibrium(m - 1, height, refY);
+  const eqNext = computeCenterFocusEquilibrium(m, height, refY);
+  const startAnchors = m === 1 ? [refY] : [...eqPrev.anchorCenters, refY];
+  const startImage = m === 1 ? refY : eqPrev.imageCenter;
+  const anchorCenterYs = startAnchors.map(
+    (s, i) => (0,esm.interpolate)(p, [0, 1], [s, eqNext.anchorCenters[i]], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp"
+    })
+  );
+  const imageCenterY = (0,esm.interpolate)(p, [0, 1], [startImage, eqNext.imageCenter], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  });
+  return { anchorCenterYs, imageCenterY };
+}
+function normalizeContent(content) {
+  if (!content) return [];
+  return content;
 }
 
 ;// ./src/components/templates/BWImageBreath.tsx
@@ -210,47 +384,98 @@ function getSingleImageAnchorAvoidanceShiftAnimatedPx({
 
 
 
+
 const BWImageBreath = ({
   src,
-  enterEffect = "breathe",
+  enterEffect = "fadeIn",
   content,
   anchors,
+  centerFocusStack = false,
   style
 }) => {
   const frame = (0,esm.useCurrentFrame)();
-  const { fps, width, height } = (0,esm.useVideoConfig)();
-  const enterStyle = useImageEnterStyle(enterEffect, frame, fps, width, height);
-  const { transform: enterTransform, ...restEnterStyle } = enterStyle;
-  const anchorAvoidanceShift = getSingleImageAnchorAvoidanceShiftAnimatedPx({
+  const { fps, width: compWidth, height: compHeight } = (0,esm.useVideoConfig)();
+  const layoutOverride = useRemotionLayoutMetricsOverride();
+  const width = (layoutOverride == null ? void 0 : layoutOverride.width) ?? compWidth;
+  const height = (layoutOverride == null ? void 0 : layoutOverride.height) ?? compHeight;
+  const breathePhase = frame % 60;
+  const breatheScale = (0,esm.interpolate)(
+    breathePhase,
+    [0, 30, 60],
+    [1, 1.08, 1],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  const safeEffect = enterEffect === "breathe" ? "fadeIn" : enterEffect;
+  const enterStyle = useImageEnterStyle(
+    safeEffect,
+    frame,
+    fps,
+    width,
+    height,
+    "effectOnly"
+  );
+  const stack = centerFocusStack ? getCenterFocusStackLayoutAtFrame({
+    content,
+    anchors,
+    frame,
+    fps,
+    height
+  }) : null;
+  const anchorAvoidanceShift = centerFocusStack ? 0 : getSingleImageAnchorAvoidanceShiftAnimatedPx({
     content,
     anchors,
     frame,
     fps,
     height
   });
-  const transform = `${enterTransform ?? "translate(-50%, -50%)"} translateY(${anchorAvoidanceShift}px)`;
   const safeSrc = getSafeImageSrc(src);
-  return /* @__PURE__ */ (0,jsx_runtime.jsx)(
-    esm.Img,
-    {
-      src: safeSrc,
-      style: {
-        position: "absolute",
-        left: "50%",
-        top: "50%",
-        maxWidth: "70%",
-        maxHeight: "40%",
-        objectFit: "contain",
-        ...restEnterStyle,
-        transform,
-        ...style
+  const topValue = stack ? `${stack.imageCenterY}px` : "45%";
+  const imageBoxW = width * SINGLE_IMAGE_BOX_MAX_WIDTH_RATIO;
+  const imageBoxH = height * SINGLE_IMAGE_BOX_MAX_HEIGHT_RATIO;
+  return (
+    // 外层：只负责定位（absolute 居中 + 锚点避让）
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          left: "50%",
+          top: topValue,
+          transform: `translate(-50%, -50%) translateY(${anchorAvoidanceShift}px)`
+        },
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+          "div",
+          {
+            style: {
+              transform: `scale(${breatheScale})`,
+              transformOrigin: "50% 50%",
+              width: `${imageBoxW}px`,
+              height: `${imageBoxH}px`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            },
+            children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+              esm.Img,
+              {
+                src: safeSrc,
+                style: {
+                  width: "100%",
+                  height: "100%",
+                  display: "block",
+                  objectFit: "contain",
+                  ...enterStyle,
+                  ...style
+                }
+              }
+            )
+          }
+        )
       }
-    }
+    )
   );
 };
 
-// EXTERNAL MODULE: ./node_modules/react/index.js
-var react = __webpack_require__(6540);
 ;// ./src/components/TextAnimations.tsx
 
 
@@ -680,7 +905,7 @@ const Stamp = ({
   );
 };
 
-;// ./src/components/BWPrimitives.tsx
+;// ./src/components/common/BWPrimitives.tsx
 
 
 
@@ -691,7 +916,7 @@ const BWAnchorWord = ({
   delay = 0,
   color = BWPrimitives_BW_TEXT,
   animStyle = "spring",
-  fontSize = 56,
+  fontSize = 72,
   style
 }) => {
   const frame = (0,esm.useCurrentFrame)();
@@ -703,10 +928,10 @@ const BWAnchorWord = ({
     config: { stiffness: 400, damping: 20 }
   });
   let animTransform = "";
-  let animOpacity = springVal;
+  const animOpacity = springVal;
   switch (animStyle) {
     case "slideUp": {
-      const ty = (0,esm.interpolate)(springVal, [0, 1], [40, 0], {
+      const ty = (0,esm.interpolate)(springVal, [0, 1], [36, 0], {
         extrapolateLeft: "clamp",
         extrapolateRight: "clamp"
       });
@@ -742,7 +967,7 @@ const BWAnchorWord = ({
         position: "absolute",
         left: 0,
         right: 0,
-        top: "22%",
+        top: "17%",
         display: "flex",
         justifyContent: "center",
         opacity: animOpacity,
@@ -767,10 +992,10 @@ const BWAnchorWord = ({
     }
   );
 };
+const SUBTITLE_FONT = '"PingFang SC", "Microsoft YaHei", "Source Han Sans SC", "Noto Sans SC", sans-serif';
 const BWSubtitle = ({
   text,
   startFrame = 0,
-  position = "bottom",
   style,
   durationFrames = 15
 }) => /* @__PURE__ */ (0,jsx_runtime.jsx)(
@@ -780,14 +1005,14 @@ const BWSubtitle = ({
       position: "absolute",
       left: 0,
       right: 0,
-      ...position === "top" ? { top: 0, bottom: "auto" } : { bottom: 0 },
-      height: "10%",
-      minHeight: 48,
+      bottom: 20,
+      height: "12%",
+      minHeight: 52,
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      padding: "8px 24px",
-      ...position === "top" ? { backgroundColor: "rgba(0, 0, 0, 0.55)" } : {},
+      padding: "12px 48px",
+      boxSizing: "border-box",
       ...style
     },
     children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
@@ -800,10 +1025,18 @@ const BWSubtitle = ({
           "span",
           {
             style: {
-              fontSize: 40,
-              fontWeight: 500,
-              color: "rgba(255, 255, 255, 0.95)",
-              fontFamily: '"Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", sans-serif'
+              display: "inline-block",
+              maxWidth: "96%",
+              fontSize: 58,
+              fontWeight: 900,
+              lineHeight: 1.42,
+              letterSpacing: "0.04em",
+              color: "#ffffff",
+              // 纯白字体
+              fontFamily: SUBTITLE_FONT,
+              textShadow: "-3px -3px 0 #000, 0 -3px 0 #000, 3px -3px 0 #000, 3px 0 0 #000, 3px 3px 0 #000, 0 3px 0 #000, -3px 3px 0 #000, -3px 0 0 #000, 0 6px 16px rgba(0,0,0,0.6)",
+              // 黑色粗描边 + 投影增强立体感
+              WebkitFontSmoothing: "antialiased"
             },
             children: text
           }
@@ -813,15 +1046,26 @@ const BWSubtitle = ({
   }
 );
 
-;// ./src/components/templates/TemplateContentRenderer.tsx
+;// ./src/components/templates/TemplateAnchorsLayer.tsx
 
 
 
 
-const AnchorWordList = ({ items }) => {
+
+
+const DefaultAnchorWordList = ({ items }) => {
   const frame = (0,esm.useCurrentFrame)();
+  const { fps } = (0,esm.useVideoConfig)();
   const visible = items.filter((item) => item.startFrame <= frame);
   if (visible.length === 0) return null;
+  const reflowP = visible.length >= 3 ? getAnchorThreeRowReflowProgress(frame, visible[2].startFrame, fps) : 0;
+  const topRatio = visible.length >= 3 ? (0,esm.interpolate)(
+    reflowP,
+    [0, 1],
+    [ANCHOR_LIST_TOP_RATIO, getAnchorListTopRatio(3)],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  ) : ANCHOR_LIST_TOP_RATIO;
+  const compactHalf = visible.length >= 3 ? ANCHOR_LIST_THREE_ROWS_COMPACT_PX / 2 * reflowP : 0;
   return /* @__PURE__ */ (0,jsx_runtime.jsx)(
     "div",
     {
@@ -829,29 +1073,77 @@ const AnchorWordList = ({ items }) => {
         position: "absolute",
         left: 0,
         right: 0,
-        top: "18%",
+        top: `${topRatio * 100}%`,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: 16
+        gap: ANCHOR_LIST_ROW_GAP_PX
       },
-      children: visible.map((item, i) => /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { minHeight: 64, display: "flex", alignItems: "center", justifyContent: "center" }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-        BWAnchorWord,
+      children: visible.map((item, i) => /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        "div",
         {
-          anchor: item.text,
-          delay: item.startFrame,
-          color: item.color || "#111111",
-          animStyle: item.anim || "spring",
-          style: { position: "relative", top: 0 }
-        }
-      ) }, i))
+          style: {
+            minHeight: ANCHOR_LIST_ROW_MIN_HEIGHT_PX,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: visible.length >= 3 && i < 2 ? -compactHalf : void 0
+          },
+          children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            BWAnchorWord,
+            {
+              anchor: item.text,
+              delay: item.startFrame,
+              color: item.color || "#111111",
+              animStyle: item.anim || "spring",
+              style: { position: "relative", top: 0 }
+            }
+          )
+        },
+        i
+      ))
     }
   );
 };
-function normalizeContent(content) {
-  if (!content) return [];
-  return content;
-}
+const TemplateDefaultAnchors = ({ content, anchors }) => {
+  const items = normalizeContent(content);
+  const anchorItems = (anchors ?? []).map((anchor) => {
+    var _a;
+    return {
+      ...anchor,
+      startFrame: (_a = items[anchor.showFrom]) == null ? void 0 : _a.startFrame
+    };
+  }).filter(
+    (item) => typeof item.startFrame === "number"
+  ).sort((a, b) => a.startFrame - b.startFrame);
+  if (anchorItems.length === 0) return null;
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(DefaultAnchorWordList, { items: anchorItems }),
+    (anchors ?? []).map((anchor) => {
+      var _a;
+      const startFrame = (_a = items[anchor.showFrom]) == null ? void 0 : _a.startFrame;
+      const name = anchor.audioEffect;
+      if (typeof startFrame !== "number" || !name) {
+        return null;
+      }
+      return /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: startFrame, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        esm.Audio,
+        {
+          src: (0,esm.staticFile)(`audio/effects/${name}.wav`),
+          volume: 0.2
+        }
+      ) }, `sfx-${anchor.showFrom}-${anchor.text}`);
+    })
+  ] });
+};
+
+;// ./src/components/templates/TemplateContentRenderer.tsx
+
+
+
+
+
+
 const WRAP_PAIRS = [
   { open: "\u201C", close: "\u201D" },
   { open: "\u2018", close: "\u2019" },
@@ -890,7 +1182,7 @@ function stripUnmatchedWrapPunctuation(text) {
   }
   return s;
 }
-const TemplateContentRenderer = ({ content, anchors, audioSrc, hideAnchors, hideSubtitles }) => {
+const TemplateContentRenderer = ({ content, audioSrc, hideSubtitles }) => {
   const items = normalizeContent(content);
   const sanitizeSubtitleText = (text) => {
     const trimmed = text.replace(/[\s\u00A0\u3000]+$/g, "");
@@ -903,38 +1195,17 @@ const TemplateContentRenderer = ({ content, anchors, audioSrc, hideAnchors, hide
       {
         from: item.startFrame,
         durationInFrames: item.durationFrames,
-        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { text: sanitizeSubtitleText(item.text), startFrame: 0, durationFrames: 1 })
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+          BWSubtitle,
+          {
+            text: sanitizeSubtitleText(item.text),
+            startFrame: 0,
+            durationFrames: 1
+          }
+        )
       },
       `sub-${i}`
     )),
-    !hideAnchors && (() => {
-      const anchorItems = (anchors ?? []).map((anchor) => {
-        var _a;
-        return {
-          ...anchor,
-          startFrame: (_a = items[anchor.showFrom]) == null ? void 0 : _a.startFrame
-        };
-      }).filter(
-        (item) => typeof item.startFrame === "number"
-      ).sort((a, b) => a.startFrame - b.startFrame);
-      if (anchorItems.length === 0) return null;
-      return /* @__PURE__ */ (0,jsx_runtime.jsx)(AnchorWordList, { items: anchorItems });
-    })(),
-    !hideAnchors && (anchors ?? []).map((anchor) => {
-      var _a;
-      const startFrame = (_a = items[anchor.showFrom]) == null ? void 0 : _a.startFrame;
-      const name = anchor.audioEffect;
-      if (typeof startFrame !== "number" || !name) {
-        return null;
-      }
-      return /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: startFrame, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-        esm.Audio,
-        {
-          src: (0,esm.staticFile)(`audio/effects/${name}.wav`),
-          volume: 0.2
-        }
-      ) }, `sfx-${anchor.showFrom}-${anchor.text}`);
-    }),
     audioSrc && /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { children: /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: audioSrc }) })
   ] });
 };
@@ -73239,6 +73510,7 @@ const FirefliesBackdrop = ({
 
 
 
+
 const templateMeta = {
   "name": "BEAT_SEQUENCE",
   "componentExport": "BWBeatSequence",
@@ -73488,7 +73760,8 @@ const BWBeatSequence = ({
         ]
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateDefaultAnchors, { content, anchors }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
     children
   ] });
 };
@@ -73502,7 +73775,7 @@ const BWBeatSequence = ({
 const MethodStack_templateMeta = {
   "name": "METHOD_STACK",
   "componentExport": "BWMethodStack",
-  "description": "\u9002\u7528\uFF1A\u5355\u4E2A item \u5185\u662F\u300C\u4E00\u4E2A\u6807\u9898\u5F0F\u6838\u5FC3 + \u89E3\u91CA\u5C55\u5F00\u300D\uFF0C\u4F8B\u5982\uFF1A\u4E00\u4E2A\u65B9\u6CD5/\u5EFA\u8BAE/\u89C2\u70B9/\u5356\u70B9/\u4EAE\u70B9/\u63A8\u8350\u7406\u7531\uFF0C\u540E\u9762\u7D27\u8DDF 2\uFF5E4 \u53E5\u8BF4\u660E\u3002\n\u5DEE\u5F02\uFF1A\u591A\u4E2A\u72EC\u7ACB\u6B65\u9AA4/\u5E76\u5217\u5206\u70B9\u7528 STEP_LIST \u6216 LIST_MULTI_GROUP\uFF1B\u591A\u6761\u4E0D\u540C\u65B9\u6CD5/\u4E0D\u540C\u5356\u70B9\u4E0D\u8981\u4E3A\u4E86\u5957\u6A21\u677F\u5F3A\u884C\u5408\u5E76\u5230\u540C\u4E00 item\u3002\n\u53C2\u6570\uFF1Atitle \u4E3A\u89C6\u89C9\u6807\u9898\uFF0CimageSrc \u4E3A\u5355\u5F20\u4E3B\u56FE\uFF0Cnotes \u4E3A\u6309\u8BB2\u89E3\u987A\u5E8F\u51FA\u73B0\u7684\u89E3\u91CA\u77ED\u8BED\u3002",
+  "description": "\u9002\u7528\uFF1A\u5355\u4E2A item \u5185\u662F\u300C\u4E00\u4E2A\u6807\u9898\u5F0F\u6838\u5FC3 + \u89E3\u91CA\u5C55\u5F00\u300D\uFF0C\u4F8B\u5982\uFF1A\u4E00\u4E2A\u65B9\u6CD5/\u5EFA\u8BAE/\u89C2\u70B9/\u5356\u70B9/\u4EAE\u70B9/\u63A8\u8350\u7406\u7531\uFF0C\u540E\u9762\u7D27\u8DDF 2\uFF5E4 \u53E5\u8BF4\u660E\u3002\n\u5DEE\u5F02\uFF1A\u591A\u4E2A\u72EC\u7ACB\u6B65\u9AA4/\u5E76\u5217\u5206\u70B9\u7528 STEP_LIST \u6216 PANEL_GRID\uFF1B\u591A\u6761\u4E0D\u540C\u65B9\u6CD5/\u4E0D\u540C\u5356\u70B9\u4E0D\u8981\u4E3A\u4E86\u5957\u6A21\u677F\u5F3A\u884C\u5408\u5E76\u5230\u540C\u4E00 item\u3002\n\u53C2\u6570\uFF1Atitle \u4E3A\u89C6\u89C9\u6807\u9898\uFF0CimageSrc \u4E3A\u5355\u5F20\u4E3B\u56FE\uFF0Cnotes \u4E3A\u6309\u8BB2\u89E3\u987A\u5E8F\u51FA\u73B0\u7684\u89E3\u91CA\u77ED\u8BED\u3002",
   "psychology": "\u805A\u7126\u89E3\u91CA",
   "image_count": 1,
   "param_schema": {
@@ -73559,7 +73832,6 @@ const BWMethodStack = ({
   imageSrc,
   notes = [],
   content,
-  anchors,
   audioSrc,
   children,
   style
@@ -73580,6 +73852,41 @@ const BWMethodStack = ({
     config: { damping: 18, stiffness: 120 },
     durationInFrames: 22
   });
+  const firstNoteStartFrame = visibleNotes.length > 0 ? getNoteStartFrame(visibleNotes[0], items) : null;
+  const LARGE_IMAGE_SCALE = 2;
+  const SHRINK_DURATION_FRAMES = 20;
+  const shrinkEaseOutBack = esm.Easing.out(esm.Easing.back(1.5));
+  const isShrinkPhase = firstNoteStartFrame !== null && firstNoteStartFrame > 0 && frame >= firstNoteStartFrame;
+  const shrinkFrame = isShrinkPhase ? frame - firstNoteStartFrame : 0;
+  const shrinkT = (0,esm.interpolate)(
+    shrinkFrame,
+    [0, SHRINK_DURATION_FRAMES],
+    [0, 1],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  const shrinkEase = shrinkEaseOutBack(shrinkT);
+  const imageScale = firstNoteStartFrame === null || firstNoteStartFrame <= 0 ? 1 : frame < firstNoteStartFrame ? LARGE_IMAGE_SCALE : Math.max(
+    0.985,
+    // 缩小过冲时允许的最小 scale，避免画面过小发虚
+    (0,esm.interpolate)(shrinkEase, [0, 1], [LARGE_IMAGE_SCALE, 1], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "extend"
+    })
+  );
+  const shrinkLiftPx = isShrinkPhase ? Math.max(
+    -22,
+    Math.min(
+      10,
+      (0,esm.interpolate)(shrinkEase, [0, 1], [-16, 0], {
+        extrapolateLeft: "clamp",
+        extrapolateRight: "extend"
+      })
+    )
+  ) : 0;
+  const imageTranslateY = (0,esm.interpolate)(imageEnter, [0, 1], [28, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  }) + shrinkLiftPx;
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style, children: [
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       "div",
@@ -73592,13 +73899,13 @@ const BWMethodStack = ({
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: 18
+          gap: 28
         },
         children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
           "div",
           {
             style: {
-              fontSize: 58,
+              fontSize: 88,
               fontWeight: 900,
               color: BW_TEXT,
               lineHeight: 1.2,
@@ -73620,15 +73927,15 @@ const BWMethodStack = ({
       {
         style: {
           position: "absolute",
-          left: "7%",
-          right: "7%",
+          left: "10%",
+          right: "10%",
           top: "28%",
           bottom: "18%",
           display: "flex",
           flexDirection: "column",
           alignItems: "stretch",
           justifyContent: "flex-start",
-          gap: 24
+          gap: 36
         },
         children: [
           /* @__PURE__ */ (0,jsx_runtime.jsx)(
@@ -73637,21 +73944,19 @@ const BWMethodStack = ({
               style: {
                 flex: "0 0 auto",
                 alignSelf: "center",
-                width: "clamp(160px, 22vw, 260px)",
-                maxHeight: "min(32vh, 320px)",
+                width: "clamp(260px, 24vw, 420px)",
+                maxHeight: "min(34vh, 440px)",
                 aspectRatio: "4 / 3",
-                borderRadius: 20,
+                borderRadius: 28,
                 backgroundColor: "#F8FAFC",
-                border: "2px solid #E5E7EB",
-                boxShadow: "0 10px 28px rgba(17, 24, 39, 0.06)",
+                border: "3px solid #E5E7EB",
+                boxShadow: "0 16px 40px rgba(17, 24, 39, 0.08)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 overflow: "hidden",
-                transform: `translateY(${(0,esm.interpolate)(imageEnter, [0, 1], [20, 0], {
-                  extrapolateLeft: "clamp",
-                  extrapolateRight: "clamp"
-                })}px)`,
+                transformOrigin: "center top",
+                transform: `translateY(${imageTranslateY}px) scale(${imageScale})`,
                 opacity: imageEnter
               },
               children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
@@ -73676,7 +73981,7 @@ const BWMethodStack = ({
                 minWidth: 0,
                 display: "flex",
                 flexDirection: "column",
-                gap: 22
+                gap: 32
               },
               children: visibleNotes.map((note, index) => {
                 const noteEnter = (0,esm.spring)({
@@ -73693,13 +73998,13 @@ const BWMethodStack = ({
                   "div",
                   {
                     style: {
-                      padding: "22px 28px",
-                      borderRadius: 20,
+                      padding: "20px 28px",
+                      borderRadius: 28,
                       backgroundColor: "#FFFFFF",
-                      border: "2px solid #E5E7EB",
-                      boxShadow: "0 12px 36px rgba(17, 24, 39, 0.07)",
+                      border: "3px solid #E5E7EB",
+                      boxShadow: "0 18px 48px rgba(17, 24, 39, 0.08)",
                       opacity: noteEnter,
-                      transform: `translateY(${(0,esm.interpolate)(noteEnter, [0, 1], [20, 0], {
+                      transform: `translateY(${(0,esm.interpolate)(noteEnter, [0, 1], [28, 0], {
                         extrapolateLeft: "clamp",
                         extrapolateRight: "clamp"
                       })}px)`
@@ -73708,10 +74013,11 @@ const BWMethodStack = ({
                       "div",
                       {
                         style: {
-                          fontSize: 34,
+                          fontSize: 42,
                           fontWeight: 800,
                           lineHeight: 1.45,
                           color: "#1F2937",
+                          letterSpacing: "0.1em",
                           textAlign: "center"
                         },
                         children: note.text
@@ -73726,7 +74032,344 @@ const BWMethodStack = ({
         ]
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
+    children
+  ] });
+};
+
+;// ./src/components/templates/CaseBreakdown.tsx
+
+
+
+
+
+
+const CaseBreakdown_templateMeta = {
+  "name": "CASE_BREAKDOWN",
+  "componentExport": "BWCaseBreakdown",
+  "description": "\u9002\u7528\uFF1A\u540C\u4E00\u955C\u5934\u5185\u8BB2\u900F\u4E00\u4E2A\u5C0F\u6848\u4F8B/\u5B50\u8BDD\u9898\uFF0C\u53E3\u64AD 4\uFF5E8 \u53E5\u5448\u300C\u4E2A\u6848\u73B0\u8C61\u2192\u63A8\u8BBA/\u8BEF\u5224\u2192\u7EA0\u504F\u2192\u6536\u675F\u300D\u53D9\u4E8B\u5F27\uFF1B\u5355\u5F20\u4E3B\u56FE\u8D2F\u7A7F\uFF0C\u53F3\u4FA7 2\uFF5E4 \u4E2A phaseLabel \u901A\u8FC7 showFrom \u5BF9\u9F50\u5230\u4EFB\u610F content \u4E0B\u6807\uFF08\u4E0D\u5FC5\u8FDE\u7EED\uFF09\u3002\n\u5E03\u5C40\uFF1A\u56FA\u5B9A\u5DE6\u4FA7\u4E3B\u56FE\u3001\u53F3\u4FA7\u81EA\u4E0A\u800C\u4E0B\u7684\u7AD6\u5411\u9636\u6BB5\u5217\u8868\uFF08\u4E0D\u968F\u6A2A\u7AD6\u5C4F\u5207\u6362\u7248\u5F0F\uFF09\u3002\n\u5DEE\u5F02\uFF1A\u5355\u6807\u9898+\u65B9\u6CD5\u8981\u70B9\u5806\u53E0\u4ECD\u7528 METHOD_STACK\uFF1B\u591A\u56FE\u968F\u8282\u62CD\u6362\u3001\u5F3A\u60C5\u7EEA\u9012\u8FDB\u7528 BEAT_SEQUENCE\uFF1B\u6BCF\u73AF\u4E00\u56FE\u7684\u673A\u5236\u4F20\u5BFC\u7528 CAUSE_CHAIN\u3002\n\u53C2\u6570\uFF1Atitle \u4E3A\u6848\u4F8B\u77ED\u6807\u9898\uFF1BimageSrc \u4E3A\u5355\u4E3B\u56FE\uFF1Bphases \u4E3A 2\uFF5E4 \u9879\uFF0C\u6BCF\u9879 phaseLabel\uFF08\u5B9C\u77ED\uFF09\u4E0E showFrom\uFF08content \u4E0B\u6807 0-based\uFF0C\u975E\u5E27\u53F7\uFF09\u3002",
+  "psychology": "\u6848\u4F8B\u53D9\u4E8B",
+  "image_count": 1,
+  "param_schema": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "description": "\u6848\u4F8B\u77ED\u6807\u9898\uFF0C\u5EFA\u8BAE 4\uFF5E12 \u5B57"
+      },
+      "imageSrc": {
+        "type": "string",
+        "format": "image_prompt",
+        "description": "\u5355\u5F20\u4E3B\u56FE\u63CF\u8FF0\uFF0C\u8D2F\u7A7F\u672C\u6848\u4F8B\u8BB2\u89E3"
+      },
+      "phases": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 4,
+        "description": "\u53D9\u4E8B\u9636\u6BB5\uFF1B\u6BCF\u9879\u542B phaseLabel \u4E0E showFrom\uFF1BshowFrom \u4E3A content \u4E0B\u6807\uFF080-based\uFF0C\u975E\u5E27\u6570\uFF09\uFF0C\u987B\u5728 0\uFF5E(content \u6761\u6570-1) \u5185",
+        "items": {
+          "type": "object",
+          "required": ["phaseLabel", "showFrom"],
+          "properties": {
+            "phaseLabel": {
+              "type": "string",
+              "description": "\u9636\u6BB5\u540D\uFF0C\u5982\u8868\u9762\u4E2A\u6848\u3001\u8BEF\u5224\u3001\u771F\u76F8\u3001\u6536\u675F"
+            },
+            "showFrom": {
+              "type": "integer",
+              "format": "content_index",
+              "description": "content \u6570\u7EC4\u4E0B\u6807\uFF080-based\uFF09\uFF0C\u975E\u5E27\u6570\uFF1B\u5408\u6CD5\u8303\u56F4 0\uFF5E(content \u6761\u6570-1)\uFF0C\u8D85\u51FA\u4F1A\u88AB\u6821\u9A8C\u4E22\u5F03"
+            }
+          }
+        }
+      }
+    },
+    "required": ["title", "imageSrc", "phases"]
+  },
+  "example": {
+    "template": "CASE_BREAKDOWN",
+    "param": {
+      "title": "\u957F\u5BFF\u6096\u8BBA",
+      "imageSrc": "\u4E00\u4F4D\u9762\u5E26\u5FAE\u7B11\u7684\u767E\u5C81\u8001\u4EBA\u6B63\u5728\u62BD\u70DF\uFF0C\u65C1\u8FB9\u653E\u7740\u4E00\u676F\u9152",
+      "phases": [
+        { "phaseLabel": "\u8868\u9762\u4E2A\u6848", "showFrom": 0 },
+        { "phaseLabel": "\u5E38\u89C1\u63A8\u8BBA", "showFrom": 1 },
+        { "phaseLabel": "\u771F\u76F8", "showFrom": 2 },
+        { "phaseLabel": "\u6536\u675F", "showFrom": 3 }
+      ]
+    }
+  },
+  "content_min_items": 4,
+  "content_max_items": 8
+};
+const getPhaseStartFrame = (phase, contentItems) => {
+  var _a;
+  return ((_a = contentItems[phase.showFrom]) == null ? void 0 : _a.startFrame) ?? 0;
+};
+const BWCaseBreakdown = ({
+  title,
+  imageSrc,
+  phases = [],
+  content,
+  audioSrc,
+  anchors,
+  children,
+  style
+}) => {
+  const frame = (0,esm.useCurrentFrame)();
+  const { fps } = (0,esm.useVideoConfig)();
+  const items = normalizeContent(content);
+  const visiblePhases = phases.filter((p) => typeof p.phaseLabel === "string" && p.phaseLabel.trim()).filter((p) => p.showFrom >= 0 && p.showFrom < items.length).slice(0, 4);
+  let activeIdx = -1;
+  for (let j = 0; j < visiblePhases.length; j++) {
+    if (frame >= getPhaseStartFrame(visiblePhases[j], items)) {
+      activeIdx = j;
+    }
+  }
+  const titleEnter = (0,esm.spring)({
+    frame,
+    fps,
+    config: { damping: 16, stiffness: 120 },
+    durationInFrames: 18
+  });
+  const imageEnter = (0,esm.spring)({
+    frame: frame - 6,
+    fps,
+    config: { damping: 18, stiffness: 120 },
+    durationInFrames: 22
+  });
+  const phaseRail = visiblePhases.length === 0 ? null : /* @__PURE__ */ (0,jsx_runtime.jsx)(
+    "div",
+    {
+      style: {
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        gap: 0,
+        width: "100%",
+        // maxWidth: 520,
+        minWidth: 0
+      },
+      children: visiblePhases.map((phase, index) => {
+        const startF = getPhaseStartFrame(phase, items);
+        const isDone = index < activeIdx;
+        const isCurrent = index === activeIdx;
+        const rel = frame - startF;
+        const pulse = (0,esm.spring)({
+          frame: rel,
+          fps,
+          config: { damping: 14, stiffness: 140 },
+          durationInFrames: 16
+        });
+        const dotScale = isCurrent ? (0,esm.interpolate)(pulse, [0, 1], [0.88, 1], {
+          extrapolateLeft: "clamp",
+          extrapolateRight: "clamp"
+        }) : 1;
+        const hasNext = index < visiblePhases.length - 1;
+        return /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+          "div",
+          {
+            style: {
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "stretch",
+              minHeight: hasNext ? 72 : 56
+            },
+            children: [
+              /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+                "div",
+                {
+                  style: {
+                    width: 36,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    flexShrink: 0
+                  },
+                  children: [
+                    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                      "div",
+                      {
+                        style: {
+                          width: 20,
+                          height: 20,
+                          borderRadius: "50%",
+                          backgroundColor: isDone || isCurrent ? BW_TEXT : "#E5E7EB",
+                          border: isCurrent ? "3px solid #111" : "2px solid #D1D5DB",
+                          transform: `scale(${dotScale})`,
+                          boxSizing: "content-box",
+                          marginTop: 18
+                        }
+                      }
+                    ),
+                    hasNext ? /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                      "div",
+                      {
+                        style: {
+                          flex: 1,
+                          width: 3,
+                          minHeight: 28,
+                          marginTop: 10,
+                          backgroundColor: isDone ? "#CBD5E1" : "#E5E7EB",
+                          borderRadius: 2
+                        }
+                      }
+                    ) : null
+                  ]
+                }
+              ),
+              /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                "div",
+                {
+                  style: {
+                    flex: 1,
+                    paddingLeft: 12,
+                    paddingBottom: hasNext ? 8 : 0,
+                    display: "flex",
+                    alignItems: "flex-start"
+                  },
+                  children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        fontSize: isCurrent ? 48 : 40,
+                        fontWeight: isCurrent ? 900 : isDone ? 800 : 600,
+                        color: isCurrent || isDone ? "#1F2937" : "#9CA3AF",
+                        lineHeight: 1.35,
+                        letterSpacing: "0.06em",
+                        fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif'
+                      },
+                      children: phase.phaseLabel
+                    }
+                  )
+                }
+              )
+            ]
+          },
+          `${phase.phaseLabel}-${index}`
+        );
+      })
+    }
+  );
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style, children: [
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          left: "6%",
+          right: "6%",
+          top: "12%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 20
+        },
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+          "div",
+          {
+            style: {
+              fontSize: 80,
+              fontWeight: 900,
+              color: BW_TEXT,
+              lineHeight: 1.2,
+              textAlign: "center",
+              maxWidth: "88%",
+              opacity: titleEnter,
+              transform: `scale(${(0,esm.interpolate)(titleEnter, [0, 1], [0.92, 1], {
+                extrapolateLeft: "clamp",
+                extrapolateRight: "clamp"
+              })})`,
+              fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif'
+            },
+            children: title
+          }
+        )
+      }
+    ),
+    /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          left: "12%",
+          right: "6%",
+          top: "26%",
+          bottom: "16%",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 32
+        },
+        children: [
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                flex: "0 0 40%",
+                maxWidth: 520,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                minWidth: 0
+              },
+              children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                "div",
+                {
+                  style: {
+                    width: "100%",
+                    maxWidth: 440,
+                    aspectRatio: "4 / 3",
+                    maxHeight: "min(42vh, 480px)",
+                    borderRadius: 28,
+                    // backgroundColor: "#F8FAFC",
+                    // border: "3px solid #E5E7EB",
+                    // boxShadow: "0 16px 40px rgba(17, 24, 39, 0.08)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    overflow: "hidden",
+                    transform: `translateY(${(0,esm.interpolate)(imageEnter, [0, 1], [20, 0], {
+                      extrapolateLeft: "clamp",
+                      extrapolateRight: "clamp"
+                    })}px)`,
+                    opacity: imageEnter
+                  },
+                  children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    esm.Img,
+                    {
+                      src: getSafeImageSrc(imageSrc),
+                      style: {
+                        maxWidth: "76%",
+                        maxHeight: "76%",
+                        objectFit: "contain"
+                      }
+                    }
+                  )
+                }
+              )
+            }
+          ),
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                flex: "1 1 0",
+                minWidth: 0,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                justifyContent: "center"
+              },
+              children: phaseRail
+            }
+          )
+        ]
+      }
+    ),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateDefaultAnchors, { content, anchors }),
     children
   ] });
 };
@@ -73737,10 +74380,13 @@ const BWMethodStack = ({
 
 
 
+
+
+
 const CenterFocus_templateMeta = {
   "name": "CENTER_FOCUS",
   "componentExport": "BWCenterFocus",
-  "description": "\u9002\u7528\uFF1A\u9ED8\u8BA4\u53D9\u4E8B\u5E95\u76D8\uFF1B\u5E73\u7F13\u8BB2\u4E8B\u5B9E\u3001\u4E0B\u5B9A\u4E49\u3001\u5F15\u5165\u8BDD\u9898\uFF1B\u5355\u56FE\u5C45\u4E2D\u3002\n\u5DEE\u5F02\uFF1A\u5F3A\u60C5\u7EEA/\u9707\u60CA\u53E5\u7528 TEXT_FOCUS\uFF1B\u4E13\u4E1A\u672F\u8BED\u5361\u7528 CONCEPT_CARD\uFF1B\u591A\u8981\u7D20\u540C\u65F6\u51FA\u73B0\u7528 LIST_MULTI_GROUP\u3002\n\u614E\u7528\uFF1A\u9700\u8981\u5DE6\u53F3\u5BF9\u6BD4\u6216\u6B65\u9AA4\u5217\u8868\u65F6\u8BF7\u6362 SPLIT_COMPARE / STEP_LIST \u7B49\u3002\n\u53C2\u6570\uFF1AenterEffect \u9ED8\u8BA4 breathe\uFF1Banchors \u53EF\u9009\uFF0CshowFrom \u4E3A content \u4E0B\u6807\uFF08\u975E\u5E27\u6570\uFF09\uFF0C\u951A\u70B9\u8BCD\u4F1A\u6309\u65F6\u95F4\u4F9D\u6B21\u51FA\u73B0\u5E76\u4FDD\u7559\u4E3A\u5217\u8868\u3002",
+  "description": "\u9002\u7528\uFF1A\u9ED8\u8BA4\u53D9\u4E8B\u5E95\u76D8\uFF1B\u5E73\u7F13\u8BB2\u4E8B\u5B9E\u3001\u4E0B\u5B9A\u4E49\u3001\u5F15\u5165\u8BDD\u9898\uFF1B\u5355\u56FE\u5C45\u4E2D\u3002\n\u5DEE\u5F02\uFF1A\u5F3A\u60C5\u7EEA/\u9707\u60CA\u53E5\u7528 TEXT_FOCUS\uFF1B\u4E13\u4E1A\u672F\u8BED\u5361\u7528 CONCEPT_CARD\uFF1B\u591A\u8981\u7D20\u540C\u65F6\u51FA\u73B0\u7528 PANEL_GRID\u3002\n\u614E\u7528\uFF1A\u9700\u8981\u5DE6\u53F3\u5BF9\u6BD4\u6216\u6B65\u9AA4\u5217\u8868\u65F6\u8BF7\u6362 SPLIT_COMPARE / STEP_LIST \u7B49\u3002\n\u53C2\u6570\uFF1A\u56FE\u7247\u59CB\u7EC8\u5E26\u547C\u5438\u6548\u679C\uFF1BenterEffect \u63A7\u5236\u5165\u573A\u65B9\u5F0F\uFF0C\u9ED8\u8BA4 fadeIn\uFF1Banchors \u53EF\u9009\uFF0CshowFrom \u4E3A content \u4E0B\u6807\uFF08\u975E\u5E27\u6570\uFF09\uFF0C\u951A\u70B9\u8BCD\u4F1A\u6309\u65F6\u95F4\u4F9D\u6B21\u51FA\u73B0\u5E76\u4FDD\u7559\u4E3A\u5217\u8868\u3002",
   "psychology": "\u89C6\u89C9\u4E2D\u5FC3\u7A33\u5B9A",
   "image_count": 1,
   "param_schema": {
@@ -73753,9 +74399,9 @@ const CenterFocus_templateMeta = {
       },
       "enterEffect": {
         "type": "string",
-        "enum": ["breathe", "slideLeft", "slideBottom", "zoomIn", "fadeIn"],
-        "default": "breathe",
-        "description": "\u5165\u573A\u6548\u679C"
+        "enum": ["fadeIn", "slideLeft", "slideBottom", "zoomIn"],
+        "default": "fadeIn",
+        "description": "\u56FE\u7247\u5165\u573A\u65B9\u5F0F\uFF08breathe \u547C\u5438\u6548\u679C\u59CB\u7EC8\u5E38\u9A7B\uFF0C\u65E0\u9700\u6307\u5B9A\uFF09"
       },
       "anchors": {
         "type": "array",
@@ -73789,22 +74435,111 @@ const CenterFocus_templateMeta = {
     "template": "CENTER_FOCUS",
     "param": {
       "imageSrc": "\u4E0A\u73ED\u65CF\u5750\u5728\u7535\u8111\u524D\u7684\u7B80\u7B14\u753B\u56FE\u6807",
-      "enterEffect": "breathe",
+      "enterEffect": "fadeIn",
       "anchors": [{ "text": "\u53EF\u5F97\u6027\u542F\u53D1", "showFrom": 0, "color": "red" }]
     }
   }
 };
+const CenterFocusAnchors = ({ content, anchors }) => {
+  const frame = (0,esm.useCurrentFrame)();
+  const { fps, height: compHeight } = (0,esm.useVideoConfig)();
+  const layoutOverride = useRemotionLayoutMetricsOverride();
+  const height = (layoutOverride == null ? void 0 : layoutOverride.height) ?? compHeight;
+  const { anchorCenterYs } = getCenterFocusStackLayoutAtFrame({
+    content,
+    anchors,
+    frame,
+    fps,
+    height
+  });
+  const visible = (anchors ?? []).map((anchor) => {
+    var _a;
+    return {
+      ...anchor,
+      startFrame: (_a = content[anchor.showFrom]) == null ? void 0 : _a.startFrame
+    };
+  }).filter(
+    (item) => typeof item.startFrame === "number" && item.startFrame <= frame
+  ).sort((a, b) => a.startFrame - b.startFrame);
+  const hasAnyAnchor = (anchors ?? []).some(
+    (a) => {
+      var _a;
+      return typeof ((_a = content[a.showFrom]) == null ? void 0 : _a.startFrame) === "number";
+    }
+  );
+  if (!hasAnyAnchor) return null;
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
+    visible.map((item, i) => /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: anchorCenterYs[i],
+          transform: "translateY(-50%)",
+          minHeight: ANCHOR_LIST_ROW_MIN_HEIGHT_PX,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        },
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+          BWAnchorWord,
+          {
+            anchor: item.text,
+            delay: item.startFrame,
+            color: item.color || "#111111",
+            animStyle: item.anim || "spring",
+            style: { position: "relative", top: 0, left: 0, right: 0 }
+          }
+        )
+      },
+      `${item.showFrom}-${item.text}-${i}`
+    )),
+    (anchors ?? []).map((anchor) => {
+      var _a;
+      const startFrame = (_a = content[anchor.showFrom]) == null ? void 0 : _a.startFrame;
+      const name = anchor.audioEffect;
+      if (typeof startFrame !== "number" || !name) {
+        return null;
+      }
+      return /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: startFrame, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        esm.Audio,
+        {
+          src: (0,esm.staticFile)(`audio/effects/${name}.wav`),
+          volume: 0.2
+        }
+      ) }, `sfx-${anchor.showFrom}-${anchor.text}`);
+    })
+  ] });
+};
 const BWCenterFocus = ({
   imageSrc,
-  enterEffect = "breathe",
+  enterEffect = "fadeIn",
   content,
   anchors,
   audioSrc,
   children,
   style
 }) => /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style, children: [
-  /* @__PURE__ */ (0,jsx_runtime.jsx)(BWImageBreath, { src: imageSrc, enterEffect, content, anchors }),
-  /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc }),
+  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+    BWImageBreath,
+    {
+      src: imageSrc,
+      enterEffect,
+      content,
+      anchors,
+      centerFocusStack: true
+    }
+  ),
+  /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
+  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+    CenterFocusAnchors,
+    {
+      content: normalizeContent(content),
+      anchors: anchors ?? []
+    }
+  ),
   children
 ] });
 
@@ -73814,19 +74549,19 @@ const BWCenterFocus = ({
 
 
 
+
 const ChatBubble_templateMeta = {
   "name": "CHAT_BUBBLE",
   "componentExport": "BWChatBubble",
-  "description": "\u9002\u7528\uFF1A\u663E\u5F0F\u5BF9\u8BDD/\u5F39\u5E55/\u8BC4\u8BBA\u4F53/\u7FA4\u804A\u4F53/\u89D2\u8272\u5316\u5410\u69FD\uFF08\u5982\u201C\u6211\uFF1A\u2026\u4F60\uFF1A\u2026\u201D\u3001\u201C\u7F51\u53CB\uFF1A\u2026\u201D\u3001\u201C\u8BC4\u8BBA\uFF1A\u2026\u201D\u3001\u201C\u6709\u4EBA\u8BF4\uFF1A\u2026\u201D\uFF09\u7684\u53E3\u543B\u8868\u8FBE\uFF0C\u9002\u5408\u505A\u5171\u9E23\u75DB\u70B9\u3001\u7528\u6237\u53CD\u9988\u3001\u53CD\u5BF9\u610F\u89C1\u3001\u73B0\u573A\u5BF9\u8BDD\u7B49\u3002\n\u4E0D\u9002\u7528\uFF1A\u4EC5\u201C\u4F60\u662F\u4E0D\u662F\u4E5F\u2026\u201D\u8FD9\u7C7B\u5355\u53E5\u53D1\u95EE\u4F46\u6574\u4F53\u4ECD\u662F\u5E73\u94FA\u53D9\u8FF0\u65F6\uFF08\u6B64\u65F6\u4F18\u5148 CENTER_FOCUS\uFF09\u3002\n\u5DEE\u5F02\uFF1A\u7EAF\u91D1\u53E5\u5927\u5B57\u65E0\u5BF9\u8BDD\u611F\u7528 TEXT_FOCUS\uFF1B\u9700\u914D\u56FE\u4F46\u975E\u6C14\u6CE1\u53E3\u5F84\u7528 CENTER_FOCUS\u3002\n\u53C2\u6570\uFF1AimageSrc \u4E3A\u4EBA\u7269/\u4FA7\u8138\u7B80\u7B14\u56FE\u6807\uFF1B\u53EF\u9009 bubbleText \u7528\u4E8E\u8986\u76D6\u6C14\u6CE1\u663E\u793A\u6587\u672C\uFF1B\u53EF\u9009 showFrom \u7528\u4E8E\u6307\u5B9A\u6C14\u6CE1\u5C55\u793A\u54EA\u4E00\u6761 content\uFF080-based\uFF09\u3002",
+  "description": "\u9002\u7528\uFF1A\u663E\u5F0F\u5BF9\u8BDD/\u5F39\u5E55/\u8BC4\u8BBA\u4F53/\u7FA4\u804A\u4F53/\u89D2\u8272\u5316\u5410\u69FD\uFF08\u5982\u201C\u6211\uFF1A\u2026\u4F60\uFF1A\u2026\u201D\u3001\u201C\u7F51\u53CB\uFF1A\u2026\u201D\u3001\u201C\u8BC4\u8BBA\uFF1A\u2026\u201D\u3001\u201C\u6709\u4EBA\u8BF4\uFF1A\u2026\u201D\uFF09\u7684\u53E3\u543B\u8868\u8FBE\uFF0C\u9002\u5408\u505A\u5171\u9E23\u75DB\u70B9\u3001\u7528\u6237\u53CD\u9988\u3001\u53CD\u5BF9\u610F\u89C1\u3001\u73B0\u573A\u5BF9\u8BDD\u7B49\u3002\n\u4E0D\u9002\u7528\uFF1A\u4EC5\u201C\u4F60\u662F\u4E0D\u662F\u4E5F\u2026\u201D\u8FD9\u7C7B\u5355\u53E5\u53D1\u95EE\u4F46\u6574\u4F53\u4ECD\u662F\u5E73\u94FA\u53D9\u8FF0\u65F6\uFF08\u6B64\u65F6\u4F18\u5148 CENTER_FOCUS\uFF09\u3002\n\u5DEE\u5F02\uFF1A\u7EAF\u91D1\u53E5\u5927\u5B57\u65E0\u5BF9\u8BDD\u611F\u7528 TEXT_FOCUS\uFF1B\u9700\u914D\u56FE\u4F46\u975E\u6C14\u6CE1\u53E3\u5F84\u7528 CENTER_FOCUS\u3002\n\u89C6\u89C9\uFF1A\u5DE6\u53F3\u8BF4\u8BDD\u8005\u5934\u50CF\u4E3A\u6A21\u677F\u5185\u7F6E\u77E2\u91CF SVG\uFF08align=left \u4E0E align=right \u5404\u4E00\u5957\uFF09\uFF0C\u4E0D\u52A0\u8F7D\u5916\u90E8\u56FE\u7247\u3002\u53EF\u9009 bubbleText \u8986\u76D6\u6C14\u6CE1\u5185\u6587\u6848\uFF1B\u53EF\u9009 showFrom \u7ED1\u5B9A content \u4E0B\u6807\uFF080-based\uFF09\u3002\u591A\u5BF9\u8BDD\uFF1A\u4F20 bubbles\uFF08\u6570\u7EC4\uFF09\uFF0C\u6BCF\u9879\u53EF\u542B bubbleText\u3001showFrom\u3001align\uFF1B\u6C14\u6CE1\u5728\u5BF9\u5E94 content \u6761\u76EE\u7684 startFrame \u5165\u573A\u5E76\u4FDD\u7559\u3002imageSrc \u4E3A\u53EF\u9009\u9057\u7559\u5B57\u6BB5\uFF0C\u4EC5\u5360\u4F4D/\u517C\u5BB9\u65E7\u811A\u672C\uFF0C\u4E0D\u53C2\u4E0E\u6E32\u67D3\u3002",
   "psychology": "\u793E\u4F1A\u6295\u5C04",
-  "image_count": 1,
+  "image_count": "0",
   "param_schema": {
     "type": "object",
     "properties": {
       "imageSrc": {
         "type": "string",
-        "format": "image_prompt",
-        "description": "\u4EBA\u7269\u56FE\u6807\u63CF\u8FF0\uFF08\u7528\u4E8E\u627F\u8F7D\u5BF9\u8BDD/\u5F39\u5E55\u7684\u201C\u8BF4\u8BDD\u8005\u201D\u5F62\u8C61\uFF09"
+        "description": "\u53EF\u9009\uFF1B\u517C\u5BB9\u65E7 scene-scripts\uFF0C\u4E0D\u53C2\u4E0E\u6E32\u67D3\u3002\u5934\u50CF\u56FA\u5B9A\u4E3A\u5185\u7F6E SVG\u3002"
       },
       "bubbleText": {
         "type": "string",
@@ -73836,53 +74571,335 @@ const ChatBubble_templateMeta = {
         "type": "integer",
         "format": "content_index",
         "description": "\u53EF\u9009\uFF1B\u6307\u5B9A\u6C14\u6CE1\u5C55\u793A\u7684 content \u4E0B\u6807\uFF080-based\uFF0C\u975E\u5E27\u6570\uFF09\u3002\u5408\u6CD5\u8303\u56F4 0\uFF5E(content \u6761\u6570-1)\uFF0C\u8D85\u51FA\u4F1A\u88AB\u5FFD\u7565\u5E76\u56DE\u9000\u4E3A\u6309\u65F6\u95F4\u8F74\u81EA\u52A8\u5207\u6362\u3002"
+      },
+      "bubbles": {
+        "type": "array",
+        "description": "\u53EF\u9009\uFF1B\u591A\u884C\u5BF9\u8BDD\u3002\u5B58\u5728\u4E14\u975E\u7A7A\u65F6\u6309\u591A\u6C14\u6CE1\u7EB5\u5411\u6392\u5217\uFF1B\u6BCF\u9879\u53EF\u542B bubbleText\u3001showFrom\u3001align\u3002",
+        "items": {
+          "type": "object",
+          "properties": {
+            "bubbleText": { "type": "string" },
+            "showFrom": { "type": "integer", "format": "content_index" },
+            "align": { "type": "string", "enum": ["left", "right"] }
+          }
+        }
       }
     },
-    "required": ["imageSrc"]
+    "required": []
   },
   "example": {
     "template": "CHAT_BUBBLE",
     "param": {
-      "imageSrc": "\u56F0\u60D1\u7684\u4EBA\u7B80\u7B14\u753B\u56FE\u6807",
-      "bubbleText": "\u6211\u771F\u7684\u5FEB\u88AB\u8FD9\u4E8B\u903C\u75AF\u4E86\u2026\u2026",
-      "showFrom": 0
+      "bubbles": [
+        { "bubbleText": "\u6211\u771F\u7684\u5FEB\u88AB\u8FD9\u4E8B\u903C\u75AF\u4E86\u2026\u2026", "showFrom": 0, "align": "left" },
+        { "bubbleText": "\u522B\u6025\uFF0C\u5148\u628A\u4E8B\u5B9E\u634B\u6E05\u3002", "showFrom": 1, "align": "right" }
+      ]
     }
   }
 };
+function clampIndex(index, length) {
+  if (length <= 0) return 0;
+  return Math.min(Math.max(0, Math.floor(index)), length - 1);
+}
+function rowEnterFrame(items, showFrom) {
+  var _a;
+  const idx = clampIndex(showFrom, items.length);
+  return ((_a = items[idx]) == null ? void 0 : _a.startFrame) ?? 0;
+}
+function estimateBubbleRowBlockPx(avatarPx, fontSize, rowGap) {
+  const textBlock = Math.min(fontSize * 1.4 * 2.4 + 72, 210);
+  return Math.min(Math.round(Math.max(avatarPx, textBlock + Math.round(avatarPx * 0.15)) + rowGap * 0.3), 308);
+}
+const MULTI_STACK_PAD_BONUS_PX = 12;
+function padForStackedRowCount(n, layoutMaxPx, rowEst, betweenRowsGap) {
+  if (n <= 0) return 0;
+  const total = n * rowEst + (n - 1) * betweenRowsGap;
+  const base = Math.max(0, (layoutMaxPx - total) * 0.25);
+  return base + (n >= 2 ? MULTI_STACK_PAD_BONUS_PX : 0);
+}
+function computeMultiBubblePadTop(args) {
+  const { frame, fps, rowEnterFrames, layoutMaxPx, rowEst, betweenRowsGap } = args;
+  let n = 0;
+  for (let i = 0; i < rowEnterFrames.length; i++) {
+    if (frame >= rowEnterFrames[i]) n++;
+  }
+  if (n <= 1) return padForStackedRowCount(1, layoutMaxPx, rowEst, betweenRowsGap);
+  const revealFrame = rowEnterFrames[n - 1];
+  const fromPad = padForStackedRowCount(n - 1, layoutMaxPx, rowEst, betweenRowsGap);
+  const toPad = padForStackedRowCount(n, layoutMaxPx, rowEst, betweenRowsGap);
+  const t = (0,esm.spring)({
+    frame: frame - revealFrame,
+    fps,
+    config: { damping: 26, stiffness: 180 },
+    durationInFrames: 22
+  });
+  return (0,esm.interpolate)(t, [0, 1], [fromPad, toPad], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+}
+const AVATAR_INK = "#111111";
+const AVATAR_PAPER = "#ffffff";
+function ChatBubbleAvatarSvgLeft({ sizePx }) {
+  const s = Math.round(sizePx * 0.58);
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)("svg", { width: s, height: s, viewBox: "0 0 100 100", style: { display: "block" }, "aria-hidden": true, children: [
+    /* @__PURE__ */ (0,jsx_runtime.jsx)("circle", { cx: "50", cy: "56", r: "28", fill: AVATAR_PAPER, stroke: AVATAR_INK, strokeWidth: "3" }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "path",
+      {
+        d: "M 28 50 Q 50 14 72 50",
+        fill: "none",
+        stroke: AVATAR_INK,
+        strokeWidth: "3",
+        strokeLinecap: "round"
+      }
+    ),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)("circle", { cx: "40", cy: "56", r: "4", fill: AVATAR_INK }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)("circle", { cx: "60", cy: "56", r: "4", fill: AVATAR_INK }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "path",
+      {
+        d: "M 38 70 Q 50 80 62 70",
+        fill: "none",
+        stroke: AVATAR_INK,
+        strokeWidth: "3",
+        strokeLinecap: "round"
+      }
+    )
+  ] });
+}
+function ChatBubbleAvatarSvgRight({ sizePx }) {
+  const s = Math.round(sizePx * 0.58);
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)("svg", { width: s, height: s, viewBox: "0 0 100 100", style: { display: "block" }, "aria-hidden": true, children: [
+    /* @__PURE__ */ (0,jsx_runtime.jsx)("circle", { cx: "50", cy: "56", r: "28", fill: AVATAR_PAPER, stroke: AVATAR_INK, strokeWidth: "3" }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "path",
+      {
+        d: "M 24 44 Q 50 30 76 44",
+        fill: "none",
+        stroke: AVATAR_INK,
+        strokeWidth: "3",
+        strokeLinecap: "round"
+      }
+    ),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)("rect", { x: "29", y: "49", width: "19", height: "13", rx: "3", fill: "none", stroke: AVATAR_INK, strokeWidth: "2.5" }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)("rect", { x: "52", y: "49", width: "19", height: "13", rx: "3", fill: "none", stroke: AVATAR_INK, strokeWidth: "2.5" }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)("line", { x1: "48", y1: "55", x2: "52", y2: "55", stroke: AVATAR_INK, strokeWidth: "2.5", strokeLinecap: "round" }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)("circle", { cx: "40", cy: "68", r: "3.5", fill: AVATAR_INK }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)("circle", { cx: "60", cy: "68", r: "3.5", fill: AVATAR_INK }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "path",
+      {
+        d: "M 40 76 Q 50 82 60 76",
+        fill: "none",
+        stroke: AVATAR_INK,
+        strokeWidth: "2.5",
+        strokeLinecap: "round"
+      }
+    )
+  ] });
+}
+function ChatBubbleRowVisual(props) {
+  const { frame, fps, enterFrame, align, fontSize, avatarPx, gap, horizontalPad, renderBubbleInner } = props;
+  const localFrame = frame - enterFrame;
+  const avatarSpring = (0,esm.spring)({
+    frame: localFrame,
+    fps,
+    config: { damping: 60, stiffness: 200 },
+    durationInFrames: 20
+  });
+  const avatarX = (0,esm.interpolate)(avatarSpring, [0, 1], [align === "left" ? -300 : 300, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  });
+  const bubbleSpring = (0,esm.spring)({
+    frame: localFrame - 8,
+    fps,
+    config: { damping: 60, stiffness: 200 },
+    durationInFrames: 20
+  });
+  const bubbleScale = (0,esm.interpolate)(bubbleSpring, [0, 1], [0.7, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  });
+  const isRight = align === "right";
+  const bubbleRadius = isRight ? "32px 32px 8px 32px" : "32px 32px 32px 8px";
+  const bubbleOrigin = isRight ? "bottom right" : "bottom left";
+  const avatarBlock = /* @__PURE__ */ (0,jsx_runtime.jsx)(
+    "div",
+    {
+      style: {
+        width: avatarPx,
+        height: avatarPx,
+        borderRadius: "50%",
+        backgroundColor: "#e0e4eb",
+        border: "5px solid #111111",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
+        transform: `translateX(${avatarX}px)`,
+        opacity: avatarSpring
+      },
+      children: align === "right" ? /* @__PURE__ */ (0,jsx_runtime.jsx)(ChatBubbleAvatarSvgRight, { sizePx: avatarPx }) : /* @__PURE__ */ (0,jsx_runtime.jsx)(ChatBubbleAvatarSvgLeft, { sizePx: avatarPx })
+    }
+  );
+  const bubbleBlock = /* @__PURE__ */ (0,jsx_runtime.jsx)(
+    "div",
+    {
+      style: {
+        flex: 1,
+        backgroundColor: "#ffffff",
+        border: "4px solid #111111",
+        borderRadius: bubbleRadius,
+        padding: "28px 40px",
+        boxShadow: "8px 8px 0 #111111",
+        transform: `scale(${bubbleScale})`,
+        transformOrigin: bubbleOrigin,
+        opacity: bubbleSpring,
+        minHeight: Math.round(avatarPx * 0.62)
+      },
+      children: /* @__PURE__ */ (0,jsx_runtime.jsx)("span", { style: { color: BW_TEXT, fontSize, fontWeight: 600, lineHeight: 1.4 }, children: renderBubbleInner() })
+    }
+  );
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+    "div",
+    {
+      style: {
+        display: "flex",
+        flexDirection: isRight ? "row-reverse" : "row",
+        alignItems: "flex-end",
+        gap,
+        padding: horizontalPad,
+        width: "100%"
+      },
+      children: [
+        avatarBlock,
+        bubbleBlock
+      ]
+    }
+  );
+}
 const BWChatBubble = ({
-  imageSrc,
   bubbleText,
   showFrom,
+  bubbles,
   content,
   audioSrc,
   children,
   style
 }) => {
   const frame = (0,esm.useCurrentFrame)();
-  const { fps } = (0,esm.useVideoConfig)();
+  const { fps, height } = (0,esm.useVideoConfig)();
   const items = normalizeContent(content);
   const activeIndex = items.findIndex((it) => frame >= it.startFrame && frame < it.startFrame + it.durationFrames);
   const safeActiveIndex = activeIndex >= 0 ? activeIndex : 0;
   const inRangeShowFrom = typeof showFrom === "number" && Number.isFinite(showFrom) && showFrom >= 0 && showFrom < items.length;
   const bubbleIndex = inRangeShowFrom ? showFrom : safeActiveIndex;
   const activeItem = items[bubbleIndex];
-  const avatarSpring = (0,esm.spring)({ frame, fps, config: { damping: 60, stiffness: 200 }, durationInFrames: 20 });
-  const avatarX = (0,esm.interpolate)(avatarSpring, [0, 1], [-300, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const bubbleSpring = (0,esm.spring)({ frame: frame - 8, fps, config: { damping: 60, stiffness: 200 }, durationInFrames: 20 });
-  const bubbleScale = (0,esm.interpolate)(bubbleSpring, [0, 1], [0.7, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const renderBubbleContent = () => {
+  const multiRows = (0,react.useMemo)(() => {
+    if (!bubbles || bubbles.length === 0) return null;
+    return bubbles.map((b, i) => {
+      const show = typeof b.showFrom === "number" && Number.isFinite(b.showFrom) ? Math.floor(b.showFrom) : i;
+      return {
+        key: i,
+        bubbleText: b.bubbleText,
+        showFrom: clampIndex(show, Math.max(items.length, 1)),
+        align: b.align === "right" ? "right" : "left"
+      };
+    });
+  }, [bubbles, items.length]);
+  const rowEnterFrames = (0,react.useMemo)(() => {
+    if (!multiRows) return [];
+    const it = normalizeContent(content);
+    return multiRows.map((row) => it.length > 0 ? rowEnterFrame(it, row.showFrom) : 0);
+  }, [multiRows, content]);
+  const rowCount = (multiRows == null ? void 0 : multiRows.length) ?? 1;
+  const fontSize = rowCount <= 1 ? 72 : rowCount === 2 ? 64 : 56;
+  const avatarPx = rowCount <= 1 ? 168 : 140;
+  const rowGap = rowCount <= 1 ? 32 : 22;
+  const betweenBubbleRowsGap = rowCount <= 1 ? 0 : rowCount === 2 ? 52 : 44;
+  const bubbleStackToSubtitleGap = 20;
+  const horizontalPad = "0 300px";
+  const layoutMaxPx = Math.round(height * (rowCount > 2 ? 0.78 : 0.68));
+  const rowBlockEstPx = estimateBubbleRowBlockPx(avatarPx, fontSize, rowGap);
+  const multiPadTop = multiRows && multiRows.length > 0 ? computeMultiBubblePadTop({
+    frame,
+    fps,
+    rowEnterFrames,
+    layoutMaxPx,
+    rowEst: rowBlockEstPx,
+    betweenRowsGap: betweenBubbleRowsGap
+  }) : 0;
+  const renderSingleBubbleContent = () => {
     if (bubbleText) {
       const triggerFrame = inRangeShowFrom ? items[showFrom].startFrame : (activeItem == null ? void 0 : activeItem.startFrame) ?? 0;
       if (frame < triggerFrame) return children;
-      const framesSince = frame - triggerFrame;
-      const chars = Math.max(0, Math.floor(framesSince / 2) + 1);
-      return bubbleText.slice(0, chars);
+      return bubbleText;
     }
     const textFromContent = activeItem == null ? void 0 : activeItem.text;
-    const text = textFromContent;
-    if (!text) return children;
-    return text;
+    if (!textFromContent) return children;
+    return textFromContent;
   };
+  if (multiRows && multiRows.length > 0) {
+    return /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+      esm.AbsoluteFill,
+      {
+        style: {
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          gap: bubbleStackToSubtitleGap,
+          paddingTop: "4%",
+          paddingBottom: rowCount > 2 ? 24 : 0,
+          boxSizing: "border-box",
+          ...style
+        },
+        children: [
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "stretch",
+                width: "100%",
+                height: layoutMaxPx,
+                maxHeight: layoutMaxPx,
+                boxSizing: "border-box",
+                overflow: "hidden",
+                paddingTop: multiPadTop,
+                gap: betweenBubbleRowsGap
+              },
+              children: multiRows.map((row) => {
+                const enterFrame = items.length > 0 ? rowEnterFrame(items, row.showFrom) : 0;
+                if (frame < enterFrame) return null;
+                const cue = items[row.showFrom];
+                const renderInner = () => {
+                  if (row.bubbleText) return row.bubbleText;
+                  return (cue == null ? void 0 : cue.text) ?? null;
+                };
+                return /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                  ChatBubbleRowVisual,
+                  {
+                    frame,
+                    fps,
+                    enterFrame,
+                    align: row.align,
+                    fontSize,
+                    avatarPx,
+                    gap: rowGap,
+                    horizontalPad,
+                    renderBubbleInner: renderInner
+                  },
+                  row.key
+                );
+              })
+            }
+          ),
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc })
+        ]
+      }
+    );
+  }
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(
     esm.AbsoluteFill,
     {
@@ -73890,38 +74907,37 @@ const BWChatBubble = ({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "flex-start",
+        paddingTop: "4%",
         ...style
       },
       children: [
-        /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "flex-end", gap: 20, padding: "0 48px", width: "100%", maxHeight: "65%" }, children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-            width: 110,
-            height: 110,
-            borderRadius: "50%",
-            backgroundColor: "#e0e4eb",
-            border: "4px solid #111111",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-            transform: `translateX(${avatarX}px)`,
-            opacity: avatarSpring
-          }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Img, { src: getSafeImageSrc(imageSrc), style: { width: "72%", height: "72%", objectFit: "contain" } }) }),
-          /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-            flex: 1,
-            backgroundColor: "#ffffff",
-            border: "3px solid #111111",
-            borderRadius: "24px 24px 24px 6px",
-            padding: "28px 36px",
-            boxShadow: "4px 4px 0 #111111",
-            transform: `scale(${bubbleScale})`,
-            transformOrigin: "bottom left",
-            opacity: bubbleSpring,
-            minHeight: 80
-          }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)("span", { style: { color: BW_TEXT, fontSize: 28, fontWeight: 600, lineHeight: 1.4 }, children: renderBubbleContent() }) })
-        ] }),
-        /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc, hideAnchors: true })
+        /* @__PURE__ */ (0,jsx_runtime.jsx)(
+          "div",
+          {
+            style: {
+              display: "flex",
+              alignItems: "flex-end",
+              width: "100%",
+              maxHeight: "68%"
+            },
+            children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+              ChatBubbleRowVisual,
+              {
+                frame,
+                fps,
+                enterFrame: 0,
+                align: "left",
+                fontSize,
+                avatarPx,
+                gap: rowGap,
+                horizontalPad,
+                renderBubbleInner: renderSingleBubbleContent
+              }
+            )
+          }
+        ),
+        /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc })
       ]
     }
   );
@@ -73982,7 +74998,6 @@ const BWCognitiveShift = ({
   notContentIndex = 0,
   butContentIndex = 1,
   content,
-  anchors,
   audioSrc,
   children,
   style
@@ -74014,7 +75029,7 @@ const BWCognitiveShift = ({
   const notOpacity = (0,esm.interpolate)(shiftProgress, [0, 1], [1, 0.3]);
   const notScale = (0,esm.interpolate)(shiftProgress, [0, 1], [1, 0.85]);
   const butScale = (0,esm.interpolate)(butEnter, [0, 1], [0.6, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const butY = (0,esm.interpolate)(butEnter, [0, 1], [40, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const butY = (0,esm.interpolate)(butEnter, [0, 1], [56, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style: { ...style }, children: [
     /* @__PURE__ */ (0,jsx_runtime.jsx)(FirefliesBackdrop, { opacity: firefliesOpacity, seed: `COGNITIVE_SHIFT-${notStartFrame}` }),
     /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: {
@@ -74022,27 +75037,27 @@ const BWCognitiveShift = ({
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
-      height: "85%",
+      height: "84%",
       // 留出底部字幕空间
-      padding: "0 40px"
+      padding: "0 96px"
     }, children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         opacity: notOpacity * notEnter,
-        transform: `scale(${notScale}) translateY(${(0,esm.interpolate)(notEnter, [0, 1], [20, 0])}px)`,
-        marginBottom: 40
-      }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { position: "relative" }, children: /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: { fontSize: 56, fontWeight: 900, color: BW_TEXT, position: "relative" }, children: [
+        transform: `scale(${notScale}) translateY(${(0,esm.interpolate)(notEnter, [0, 1], [28, 0])}px)`,
+        marginBottom: 56
+      }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { position: "relative" }, children: /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: { fontSize: 88, fontWeight: 900, color: BW_TEXT, position: "relative" }, children: [
         notText,
         /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
           position: "absolute",
           top: "55%",
           left: "-5%",
           width: `${strikeWidth}%`,
-          height: 8,
+          height: 12,
           backgroundColor: "#E53E3E",
-          borderRadius: 4,
+          borderRadius: 6,
           transform: "rotate(-2deg)"
         } })
       ] }) }) }),
@@ -74052,20 +75067,20 @@ const BWCognitiveShift = ({
         alignItems: "center",
         opacity: butEnter,
         transform: `scale(${butScale}) translateY(${butY}px)`,
-        marginTop: 20
+        marginTop: 36
       }, children: [
         /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-          fontSize: 88,
+          fontSize: 132,
           fontWeight: 900,
           color: BW_TEXT,
           textAlign: "center",
-          textShadow: "0 10px 20px rgba(0,0,0,0.1)",
+          textShadow: "0 14px 28px rgba(0,0,0,0.12)",
           lineHeight: 1.1
         }, children: butText }),
-        /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Img, { src: getSafeImageSrc(butSrc), style: { marginTop: 30, maxWidth: "70%", maxHeight: 280, objectFit: "contain", borderRadius: 20 } })
+        /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Img, { src: getSafeImageSrc(butSrc), style: { marginTop: 48, maxWidth: "68%", maxHeight: 420, objectFit: "contain", borderRadius: 28 } })
       ] })
     ] }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc, hideAnchors: true }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
     children
   ] });
 };
@@ -74106,7 +75121,6 @@ const BWConceptCard = ({
   imageSrc,
   conceptName = "",
   content,
-  anchors,
   audioSrc,
   children,
   style
@@ -74131,33 +75145,32 @@ const BWConceptCard = ({
         style: {
           position: "absolute",
           left: "50%",
-          top: "42%",
+          top: "44%",
           transform: `translate(-50%, -50%) scale(${scale})`,
           opacity: enterSpring,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          border: "4px solid #111111",
-          borderRadius: 28,
-          padding: "40px 60px 32px",
-          gap: 24,
+          border: "6px solid #111111",
+          borderRadius: 40,
+          padding: "10px 30px 20px",
           backgroundColor: "#ffffff",
-          boxShadow: "6px 6px 0 #111111",
-          minWidth: 360
+          boxShadow: "10px 10px 0 #111111",
+          minWidth: 720
         },
         children: [
           /* @__PURE__ */ (0,jsx_runtime.jsx)(
             esm.Img,
             {
               src: getSafeImageSrc(imageSrc),
-              style: { width: 320, height: 320, objectFit: "contain" }
+              style: { width: 400, height: 400, objectFit: "contain" }
             }
           ),
           conceptName && /* @__PURE__ */ (0,jsx_runtime.jsx)(
             "div",
             {
               style: {
-                fontSize: 60,
+                fontSize: 96,
                 fontWeight: 900,
                 color: BW_TEXT,
                 letterSpacing: "0.04em",
@@ -74181,45 +75194,88 @@ const BWConceptCard = ({
 
 
 
+
 const DosAndDonts_templateMeta = {
   "name": "DOS_AND_DONTS",
   "componentExport": "BWDosAndDonts",
-  "description": "\u9002\u7528\uFF1A\u660E\u786E\u300C\u522B\u8FD9\u6837\u505A vs \u5E94\u8BE5\u8FD9\u6837\u505A\u300D\u7684\u907F\u5751/\u89C4\u8303/\u6CE8\u610F\u4E8B\u9879\uFF08\u53EF\u7528\u4E8E\u6559\u7A0B\u3001\u4EA7\u54C1\u4F7F\u7528\u3001\u8FD0\u8425\u8BDD\u672F\u3001\u8BBE\u8BA1\u89C4\u8303\u3001\u804C\u573A\u5EFA\u8BAE\u7B49\uFF09\uFF1B\u5DE6\u53F3\u5BF9\u9519\u53D9\u4E8B\u3002\n\u5DEE\u5F02\uFF1A\u4E24\u79CD\u4E2D\u7ACB\u65B9\u6848\u5E76\u5217\u3001\u65E0\u5BF9\u9519\u6807\u7B7E\u7528 SPLIT_COMPARE\uFF1B\u82E5\u662F\u7EAF\u6570\u636E\u7684\u53CC\u6307\u6807\u5BF9\u6BD4\u7528 STAT_COMPARE\u3002\n\u53C2\u6570\uFF1AdontLabel/doLabel \u662F\u6781\u7B80\u7684\u5BF9\u9519\u6807\u7B7E\uFF08\u5982\uFF1A\u274C \u522B\u8FD9\u6837 vs \u2705 \u6B63\u786E\u505A\u6CD5\uFF09\uFF0C\u4E25\u7981\u4F7F\u7528\u957F\u53E5\u8BF4\u660E\uFF1B\u4E0E leftSrc/rightSrc \u8BED\u4E49\u4E00\u81F4\u3002",
+  "description": "\u9002\u7528\uFF1A\u660E\u786E\u300C\u522B\u8FD9\u6837\u505A vs \u5E94\u8BE5\u8FD9\u6837\u505A\u300D\u7684\u907F\u5751/\u89C4\u8303/\u6CE8\u610F\u4E8B\u9879\uFF08\u53EF\u7528\u4E8E\u6559\u7A0B\u3001\u4EA7\u54C1\u4F7F\u7528\u3001\u8FD0\u8425\u8BDD\u672F\u3001\u8BBE\u8BA1\u89C4\u8303\u3001\u804C\u573A\u5EFA\u8BAE\u7B49\uFF09\uFF1B\u5DE6\u53F3\u5BF9\u9519\u53D9\u4E8B\u3002\n\u5DEE\u5F02\uFF1A\u4E24\u79CD\u4E2D\u7ACB\u65B9\u6848\u5E76\u5217\u3001\u65E0\u5BF9\u9519\u6807\u7B7E\u7528 SPLIT_COMPARE\uFF1B\u82E5\u662F\u7EAF\u6570\u636E\u7684\u53CC\u6307\u6807\u5BF9\u6BD4\u7528 STAT_COMPARE\u3002\n\u53C2\u6570\uFF1A`left` / `right` \u5404\u542B `label`\u3001`src`\u3001\u53EF\u9009 `showFrom`\u3002`showFrom` \u8BED\u4E49\uFF1A\u5F53\u672C item \u7684 `content` \u5E26\u65F6\u95F4\u4FE1\u606F\uFF08startFrame \u6216 durationFrames\uFF09\u4E14 `showFrom` \u4E3A **0\uFF5E(content \u6761\u6570\u22121)** \u65F6\uFF0C\u8868\u793A **content \u4E0B\u6807**\uFF0C\u8BE5\u4FA7\u4ECE\u5BF9\u5E94\u6761\u7684 `startFrame` \u8D77\u505A\u6ED1\u5165\uFF1B\u5426\u5219\u8868\u793A **\u76F8\u5BF9\u672C item \u8D77\u70B9\u7684\u5E27\u53F7**\u3002\u7701\u7565\u65F6\uFF1A\u5DE6\u4FA7\u5BF9\u9F50\u7B2C 0 \u6761\uFF1B\u53F3\u4FA7\u82E5\u81F3\u5C11\u4E24\u6761\u53E3\u64AD\u5219\u5BF9\u9F50\u7B2C 1 \u6761\uFF0C\u5426\u5219\u5728\u5DE6\u4FA7\u8D77\u70B9\u540E\u518D\u5EF6\u8FDF 10 \u5E27\u3002",
   "psychology": "\u635F\u5931\u538C\u6076",
   "image_count": 2,
   "param_schema": {
     "type": "object",
     "properties": {
-      "leftSrc": {
-        "type": "string",
-        "format": "image_prompt",
-        "description": "\u9519\u8BEF\u505A\u6CD5\u56FE\u7247\u63CF\u8FF0"
+      "left": {
+        "type": "object",
+        "properties": {
+          "label": { "type": "string", "description": "\u8BE5\u4FA7\u6807\u9898\uFF08\u5DE6\uFF1A\u5982 \u274C \u522B\u8FD9\u6837\uFF1B\u53F3\uFF1A\u5982 \u2705 \u6B63\u786E\u505A\u6CD5\uFF09\uFF0C\u6781\u7B80\u77ED\u8BED" },
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "\u8BE5\u4FA7\u914D\u56FE\uFF08\u5DE6\uFF1A\u9519\u8BEF/\u8BEF\u533A\u793A\u610F\uFF1B\u53F3\uFF1A\u6B63\u786E\u505A\u6CD5\u793A\u610F\uFF09"
+          },
+          "showFrom": {
+            "type": "integer",
+            "description": "\u6709 content \u65F6\u95F4\u8F74\u4E14\u503C\u843D\u5728 [0, content.length) \u65F6\u4E3A content \u4E0B\u6807\uFF08\u53D6\u8BE5\u6761 startFrame\uFF09\uFF1B\u5426\u5219\u4E3A\u76F8\u5BF9 item \u8D77\u70B9\u7684\u5E27\u53F7\u3002\u7701\u7565\uFF1A\u5DE6 0\uFF1B\u53F3\u4E3A\u7B2C 1 \u6761\u6216\u5DE6\u8D77\u70B9+10 \u5E27"
+          }
+        },
+        "required": ["label", "src"]
       },
-      "rightSrc": {
-        "type": "string",
-        "format": "image_prompt",
-        "description": "\u6B63\u786E\u505A\u6CD5\u56FE\u7247\u63CF\u8FF0"
-      },
-      "dontLabel": { "type": "string", "description": "\u9519\u8BEF\u6807\u7B7E\uFF08\u5982 \u274C \u522B\u8FD9\u6837\uFF09" },
-      "doLabel": { "type": "string", "description": "\u6B63\u786E\u6807\u7B7E\uFF08\u5982 \u2705 \u6B63\u786E\u505A\u6CD5\uFF09" }
+      "right": {
+        "type": "object",
+        "properties": {
+          "label": { "type": "string", "description": "\u8BE5\u4FA7\u6807\u9898\uFF08\u5DE6\uFF1A\u5982 \u274C \u522B\u8FD9\u6837\uFF1B\u53F3\uFF1A\u5982 \u2705 \u6B63\u786E\u505A\u6CD5\uFF09\uFF0C\u6781\u7B80\u77ED\u8BED" },
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "\u8BE5\u4FA7\u914D\u56FE\uFF08\u5DE6\uFF1A\u9519\u8BEF/\u8BEF\u533A\u793A\u610F\uFF1B\u53F3\uFF1A\u6B63\u786E\u505A\u6CD5\u793A\u610F\uFF09"
+          },
+          "showFrom": {
+            "type": "integer",
+            "description": "\u6709 content \u65F6\u95F4\u8F74\u4E14\u503C\u843D\u5728 [0, content.length) \u65F6\u4E3A content \u4E0B\u6807\uFF08\u53D6\u8BE5\u6761 startFrame\uFF09\uFF1B\u5426\u5219\u4E3A\u76F8\u5BF9 item \u8D77\u70B9\u7684\u5E27\u53F7\u3002\u7701\u7565\uFF1A\u5DE6 0\uFF1B\u53F3\u4E3A\u7B2C 1 \u6761\u6216\u5DE6\u8D77\u70B9+10 \u5E27"
+          }
+        },
+        "required": ["label", "src"]
+      }
     },
-    "required": ["leftSrc", "rightSrc", "dontLabel", "doLabel"]
+    "required": ["left", "right"]
   },
   "example": {
     "template": "DOS_AND_DONTS",
     "param": {
-      "leftSrc": "\u76F2\u76EE\u8DDF\u98CE\u7684\u4EBA\u7B80\u7B14\u753B\u56FE\u6807",
-      "rightSrc": "\u7406\u6027\u5206\u6790\u56FE\u8868\u7684\u4EBA\u7B80\u7B14\u753B\u56FE\u6807",
-      "dontLabel": "\u274C \u522B\u8FD9\u6837",
-      "doLabel": "\u2705 \u6B63\u786E\u505A\u6CD5"
+      "left": { "label": "\u274C \u522B\u8FD9\u6837", "src": "\u76F2\u76EE\u8DDF\u98CE\u7684\u4EBA\u7B80\u7B14\u753B\u56FE\u6807", "showFrom": 0 },
+      "right": { "label": "\u2705 \u6B63\u786E\u505A\u6CD5", "src": "\u7406\u6027\u5206\u6790\u56FE\u8868\u7684\u4EBA\u7B80\u7B14\u753B\u56FE\u6807", "showFrom": 1 }
     }
   }
 };
+function contentHasTiming(items) {
+  return items.some(
+    (c) => typeof c.startFrame === "number" || typeof c.durationFrames === "number"
+  );
+}
+function resolveCueStartFrame(items, index) {
+  var _a;
+  if (items.length === 0) return 0;
+  const i = Math.min(Math.max(0, Math.floor(index)), items.length - 1);
+  const cue = items[i];
+  if (cue && typeof cue.startFrame === "number") return cue.startFrame;
+  let sum = 0;
+  for (let j = 0; j < i; j++) {
+    const d = (_a = items[j]) == null ? void 0 : _a.durationFrames;
+    sum += typeof d === "number" && d > 0 ? d : 0;
+  }
+  return sum;
+}
+function resolveDosSideStart(items, showFrom, frameFallback) {
+  if (showFrom === void 0) return Math.max(0, frameFallback);
+  const hasTiming = contentHasTiming(items);
+  if (hasTiming && items.length > 0 && showFrom >= 0 && showFrom < items.length) {
+    return resolveCueStartFrame(items, showFrom);
+  }
+  return Math.max(0, showFrom);
+}
 const BWDosAndDonts = ({
-  leftSrc,
-  rightSrc,
-  dontLabel = "\u274C \u9519\u8BEF",
-  doLabel = "\u2705 \u6B63\u786E",
+  left: leftIn,
+  right: rightIn,
   content,
   anchors,
   audioSrc,
@@ -74227,14 +75283,39 @@ const BWDosAndDonts = ({
   style
 }) => {
   const frame = (0,esm.useCurrentFrame)();
-  const { fps, width, height } = (0,esm.useVideoConfig)();
-  const half = width / 2;
-  const progressSafeArea = 40;
-  const subtitleSafeArea = Math.max(48, Math.round(height * 0.1));
-  const leftSpring = (0,esm.spring)({ frame, fps, config: { damping: 60, stiffness: 180 }, durationInFrames: 20 });
-  const rightSpring = (0,esm.spring)({ frame: frame - 10, fps, config: { damping: 60, stiffness: 180 }, durationInFrames: 20 });
-  const leftX = (0,esm.interpolate)(leftSpring, [0, 1], [-half, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const rightX = (0,esm.interpolate)(rightSpring, [0, 1], [half, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const { fps, width } = (0,esm.useVideoConfig)();
+  const items = normalizeContent(content);
+  const left = {
+    label: "\u274C \u9519\u8BEF",
+    ...leftIn
+  };
+  const right = {
+    label: "\u2705 \u6B63\u786E",
+    ...rightIn
+  };
+  const leftStart = resolveDosSideStart(items, left.showFrom, 0);
+  let rightStart;
+  if (right.showFrom !== void 0) {
+    rightStart = resolveDosSideStart(items, right.showFrom, leftStart + 10);
+  } else if (contentHasTiming(items) && items.length > 1) {
+    rightStart = resolveCueStartFrame(items, 1);
+  } else {
+    rightStart = leftStart + 10;
+  }
+  const leftSpring = (0,esm.spring)({
+    frame: Math.max(0, frame - leftStart),
+    fps,
+    config: { damping: 60, stiffness: 180 },
+    durationInFrames: 20
+  });
+  const rightSpring = (0,esm.spring)({
+    frame: Math.max(0, frame - rightStart),
+    fps,
+    config: { damping: 60, stiffness: 180 },
+    durationInFrames: 20
+  });
+  const leftX = (0,esm.interpolate)(leftSpring, [0, 1], [-width, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const rightX = (0,esm.interpolate)(rightSpring, [0, 1], [width, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style, children: [
     /* @__PURE__ */ (0,jsx_runtime.jsxs)(
       "div",
@@ -74242,8 +75323,8 @@ const BWDosAndDonts = ({
         style: {
           display: "flex",
           width: "100%",
-          height: `calc(100% - ${progressSafeArea}px - ${subtitleSafeArea}px)`,
-          marginTop: progressSafeArea
+          height: "100%",
+          overflow: "hidden"
         },
         children: [
           /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: {
@@ -74254,11 +75335,10 @@ const BWDosAndDonts = ({
             justifyContent: "center",
             gap: 24,
             transform: `translateX(${leftX}px)`,
-            backgroundColor: "rgba(229, 62, 62, 0.05)",
-            borderRight: "4px solid #E53E3E"
+            backgroundColor: "rgba(229, 62, 62, 0.05)"
           }, children: [
-            /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { fontSize: 40, fontWeight: 900, color: "#E53E3E", textAlign: "center", padding: "0 16px", fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif' }, children: dontLabel }),
-            /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Img, { src: getSafeImageSrc(leftSrc), style: { maxWidth: "55%", maxHeight: "38%", objectFit: "contain", opacity: 0.75 } })
+            /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { fontSize: 62, fontWeight: 900, color: "#E53E3E", textAlign: "center", padding: "0 28px", fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif' }, children: left.label }),
+            /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Img, { src: getSafeImageSrc(left.src), style: { maxWidth: "55%", maxHeight: "38%", objectFit: "contain", opacity: 0.75 } })
           ] }),
           /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: {
             flex: 1,
@@ -74270,13 +75350,14 @@ const BWDosAndDonts = ({
             transform: `translateX(${rightX}px)`,
             backgroundColor: "rgba(39, 103, 73, 0.05)"
           }, children: [
-            /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { fontSize: 40, fontWeight: 900, color: "#276749", textAlign: "center", padding: "0 16px", fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif' }, children: doLabel }),
-            /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Img, { src: getSafeImageSrc(rightSrc), style: { maxWidth: "55%", maxHeight: "38%", objectFit: "contain" } })
+            /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { fontSize: 62, fontWeight: 900, color: "#276749", textAlign: "center", padding: "0 28px", fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif' }, children: right.label }),
+            /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Img, { src: getSafeImageSrc(right.src), style: { maxWidth: "55%", maxHeight: "38%", objectFit: "contain" } })
           ] })
         ]
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateDefaultAnchors, { content, anchors }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
     children
   ] });
 };
@@ -74287,49 +75368,366 @@ const BWDosAndDonts = ({
 
 
 
+
+
+const resolveBlockEnterFrame = (showFrom, contentItems) => {
+  if (Number.isInteger(showFrom) && showFrom >= 0 && showFrom < contentItems.length) {
+    const cue = contentItems[showFrom];
+    if (cue && typeof cue.startFrame === "number") {
+      return cue.startFrame;
+    }
+  }
+  return 0;
+};
+const FONT_FOR_VISIBLE_COUNT = {
+  1: 168,
+  2: 132,
+  3: 102,
+  // 4 列时「数字 + 后缀」单行易超宽，略降主字号避免与邻列叠字
+  4: 72
+};
+const GAP_FOR_VISIBLE_COUNT = {
+  1: 0,
+  2: 36,
+  3: 22,
+  // 略减缝、把宽度还给单元格（总宽固定时增大每列 unitW）
+  4: 12
+};
+const LAYOUT_REFLOW_SPRING_FRAMES = 26;
+function clampColCount(n) {
+  return Math.min(Math.max(n, 1), 4);
+}
+function unitWAndGap(innerW, n) {
+  const g = GAP_FOR_VISIBLE_COUNT[n];
+  if (n === 1) {
+    return { unitW: innerW, g: 0 };
+  }
+  return { unitW: (innerW - (n - 1) * g) / n, g };
+}
+function leftEdgeForSlot(slot, n, innerW) {
+  const { unitW, g } = unitWAndGap(innerW, n);
+  return slot * (unitW + g);
+}
+function layoutReflowProgress(frame, fps, maxEnter, simultaneous) {
+  if (simultaneous) {
+    return 1;
+  }
+  return (0,esm.spring)({
+    frame: frame - maxEnter,
+    fps,
+    config: { damping: 18, stiffness: 200 },
+    durationInFrames: LAYOUT_REFLOW_SPRING_FRAMES
+  });
+}
+function computeAnimatedCellLayout(args) {
+  var _a;
+  const { slot, innerW, frame, fps, visibleEntries } = args;
+  const n = clampColCount(visibleEntries.length);
+  const enterFrames = visibleEntries.map((v) => v.enterFrame);
+  const maxEnter = Math.max(...enterFrames, 0);
+  const minEnter = Math.min(...enterFrames);
+  const simultaneous = visibleEntries.length > 1 && maxEnter === minEnter;
+  const nPrev = simultaneous ? n : Math.max(1, n - 1);
+  const p = layoutReflowProgress(frame, fps, maxEnter, simultaneous);
+  const { unitW: uwTo } = unitWAndGap(innerW, n);
+  const { unitW: uwFrom } = unitWAndGap(innerW, nPrev);
+  const ownEnter = ((_a = visibleEntries[slot]) == null ? void 0 : _a.enterFrame) ?? 0;
+  const newcomerSlots = visibleEntries.map((e, i) => e.enterFrame === maxEnter ? i : -1).filter((i) => i >= 0);
+  const isNewcomer = !simultaneous && n > 1 && newcomerSlots.length === 1 && slot === newcomerSlots[0] && ownEnter === maxEnter;
+  const widthTo = uwTo;
+  const widthFrom = isNewcomer ? uwTo : uwFrom;
+  const leftTo = leftEdgeForSlot(slot, n, innerW);
+  let leftFrom;
+  if (isNewcomer) {
+    leftFrom = innerW / 2 - uwTo / 2;
+  } else {
+    leftFrom = leftEdgeForSlot(slot, nPrev, innerW);
+  }
+  const sameRect = Math.abs(leftFrom - leftTo) < 0.5 && Math.abs(widthFrom - widthTo) < 0.5;
+  const progress = sameRect ? 1 : p;
+  return {
+    left: (0,esm.interpolate)(progress, [0, 1], [leftFrom, leftTo], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp"
+    }),
+    width: (0,esm.interpolate)(progress, [0, 1], [widthFrom, widthTo], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp"
+    })
+  };
+}
 const KpiHero_templateMeta = {
   "name": "KPI_HERO",
   "componentExport": "BWKpiHero",
-  "description": "\u9002\u7528\uFF1A\u53E3\u64AD\u5F3A\u8C03\u4E00\u4E2A\u6838\u5FC3\u6570\u5B57\u3001\u589E\u957F\u7387\u3001\u5360\u6BD4\u3001\u6392\u540D\uFF1B\u5355\u6307\u6807\u300C\u5927\u5B57\u62A5\u300D\u3002\n\u5DEE\u5F02\uFF1A\u4E24\u53E5\u5E76\u5217\u6307\u6807\u5BF9\u6BD4\u7528 STAT_COMPARE\uFF1B\u5B8C\u6210\u5EA6/\u8FDB\u5EA6\u611F\u7528 PROGRESS_RING\uFF1B\u7EAF\u91D1\u53E5\u65E0\u6570\u5B57\u7528 TEXT_FOCUS\u3002\n\u53C2\u6570\uFF1Avalue \u4E3A\u5C55\u793A\u7EC8\u503C\uFF1Bprefix/suffix \u5B9C\u77ED\uFF1Bheadline \u53EF\u4E00\u53E5\u6807\u9898\uFF1BcountDuration \u63A7\u5236\u6570\u5B57\u6EDA\u52A8\u5E27\u957F\u3002",
+  "description": "\u9002\u7528\uFF1A\u5355\u6307\u6807\u6216\u591A\u6307\u6807\uFF08\u6700\u591A 4 \u5217\uFF09\u5927\u5B57\u62A5\uFF1A\u5360\u6BD4\u3001\u6392\u540D\u3001\u7814\u53D1\u8D39\u7528\u7B49\uFF1B\u4E3B\u89C6\u89C9\u5728\u753B\u5E03\u5782\u76F4\u6C34\u5E73\u5C45\u4E2D\u3002\n\u5355\u6307\u6807\uFF1A\u4F20 value\uFF08\u6574\u6570\u6216\u5C0F\u6570\uFF09+ prefix/suffix/useGrouping\uFF0C\u53EF\u9009 label\u3001decimalPlaces\uFF08\u7F3A\u7701\u6309 value \u63A8\u65AD\u5C0F\u6570\u4F4D\uFF09\u3002\n\u591A\u6307\u6807\uFF1A\u4F20 blocks\uFF081\uFF5E4 \u9879\uFF09\uFF0C\u6BCF\u9879 value\u3001showFrom\uFF0C\u53EF\u9009 decimalPlaces\uFF1B\u5217\u6570\u53D8\u5316\u65F6\u5DF2\u6709\u5757 left/width \u5F39\u7C27\u8FC7\u6E21\u3002\n\u5DEE\u5F02\uFF1A\u67F1\u72B6\u5BF9\u6BD4\u7528 STAT_COMPARE\uFF1B\u73AF\u5F62\u8FDB\u5EA6\u7528 PROGRESS_RING\u3002\n\u53C2\u6570\uFF1AcountDuration \u4E3A\u6BCF\u5757\u6570\u5B57\u6EDA\u52A8 spring \u65F6\u957F\uFF08\u5E27\uFF09\u3002",
   "psychology": "\u951A\u5B9A\u6548\u5E94",
-  "image_count": "0-1",
+  "image_count": "0",
   "param_schema": {
     "type": "object",
     "properties": {
-      "value": { "type": "integer", "description": "\u5C55\u793A\u7684\u76EE\u6807\u6570\u5B57\uFF08\u6574\u6570\u6EDA\u52A8\u5230\u8BE5\u503C\uFF09" },
-      "prefix": { "type": "string", "description": "\u6570\u5B57\u524D\u7F00\uFF0C\u5982\u300C\xA5\u300D\u300C+\u300D" },
-      "suffix": { "type": "string", "description": "\u6570\u5B57\u540E\u7F00\uFF0C\u5982\u300C%\u300D\u300C\u4E07\u300D" },
-      "headline": { "type": "string", "description": "\u9876\u90E8\u77ED\u6807\u9898" },
-      "imageSrc": {
+      "value": {
+        "type": "number",
+        "description": "\u5355\u6307\u6807\u6A21\u5F0F\uFF1A\u6EDA\u52A8\u7EC8\u503C\uFF08\u6574\u6570\u6216\u5C0F\u6570\uFF09\uFF1B\u82E5\u63D0\u4F9B blocks \u5219\u53EF\u7701\u7565"
+      },
+      "prefix": { "type": "string", "description": "\u5355\u6307\u6807\uFF1A\u6570\u5B57\u5DE6\u4FA7" },
+      "suffix": { "type": "string", "description": "\u5355\u6307\u6807\uFF1A\u6570\u5B57\u53F3\u4FA7\u5355\u4F4D" },
+      "label": {
         "type": "string",
-        "format": "image_prompt",
-        "description": "\u53EF\u9009\u914D\u56FE\uFF08\u89D2\u843D\u5C0F\u56FE\uFF09"
+        "description": "\u5355\u6307\u6807\uFF1A\u6570\u5B57\u4E0A\u65B9\u6807\u7B7E\uFF08\u4E0E blocks[].label \u540C\u89C6\u89C9\u5C42\u7EA7\uFF09"
+      },
+      "useGrouping": { "type": "boolean", "description": "\u5355\u6307\u6807\uFF1A\u5343\u5206\u4F4D\uFF08\u5C0F\u6570\u65F6\u4F5C\u7528\u4E8E\u6574\u6570\u90E8\u5206\uFF09" },
+      "decimalPlaces": {
+        "type": "integer",
+        "description": "\u5355\u6307\u6807\uFF1A\u5C0F\u6570\u4F4D\u6570\uFF0C\u7F3A\u7701\u6309 value \u81EA\u52A8\u63A8\u65AD"
+      },
+      "blocks": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 4,
+        "description": "\u591A\u6307\u6807\uFF1A\u6BCF\u9879 value\u3001showFrom\uFF08content \u4E0B\u6807\uFF09\uFF1B\u53EF\u9009 prefix\u3001suffix\u3001label\u3001useGrouping",
+        "items": {
+          "type": "object",
+          "required": ["value", "showFrom"],
+          "properties": {
+            "value": { "type": "number", "description": "\u7EC8\u503C\uFF0C\u6574\u6570\u6216\u5C0F\u6570\uFF08\u5982 2.5 \u4E07\u4EBA\uFF09" },
+            "decimalPlaces": {
+              "type": "integer",
+              "description": "\u5C0F\u6570\u4F4D\u6570\uFF0C\u7F3A\u7701\u6309 value \u81EA\u52A8\u63A8\u65AD\uFF08\u5982 2.5\u21921\uFF09"
+            },
+            "showFrom": {
+              "type": "integer",
+              "format": "content_index",
+              "description": "\u8BE5\u5757\u51FA\u73B0\u65F6\u673A\uFF1Acontent \u4E0B\u6807\uFF0C\u53D6\u8BE5\u6761 startFrame"
+            },
+            "prefix": { "type": "string" },
+            "suffix": { "type": "string" },
+            "label": { "type": "string", "description": "\u6570\u5B57\u4E0A\u65B9\u6807\u7B7E\uFF08\u591A\u5217\u65F6\u5B57\u53F7\u5DF2\u52A0\u5927\uFF09" },
+            "useGrouping": { "type": "boolean" }
+          }
+        }
       },
       "countDuration": {
         "type": "integer",
-        "description": "\u6570\u5B57\u4ECE 0 \u6EDA\u5230 value \u7684 spring \u65F6\u957F\uFF08\u5E27\uFF09\uFF0C\u9ED8\u8BA4 28"
+        "description": "\u6570\u5B57\u4ECE 0 \u6EDA\u5230\u76EE\u6807\u503C\u7684 spring \u65F6\u957F\uFF08\u5E27\uFF09\uFF0C\u9ED8\u8BA4 28"
       }
     },
-    "required": ["value"]
+    "required": []
   },
   "example": {
     "template": "KPI_HERO",
     "param": {
-      "value": 87,
-      "prefix": "",
-      "suffix": "%",
-      "headline": "\u7528\u6237\u6EE1\u610F\u5EA6"
+      "blocks": [
+        { "value": 87, "suffix": "%", "label": "\u6EE1\u610F\u5EA6", "showFrom": 0 },
+        { "value": 62, "suffix": "%", "label": "\u7559\u5B58", "showFrom": 1 }
+      ]
     }
   }
 };
 const fontStack = '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif';
+const KPI_VALUE_RED = "#DC2626";
+const MAX_DECIMAL_PLACES = 8;
+function inferDecimalPlaces(value) {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+  const r = Math.round(value);
+  if (Math.abs(value - r) < 1e-9) {
+    return 0;
+  }
+  const s = String(value);
+  if (/[eE]/.test(s)) {
+    return inferDecimalPlaces(Number(value.toFixed(MAX_DECIMAL_PLACES)));
+  }
+  const dot = s.indexOf(".");
+  if (dot === -1) {
+    return 0;
+  }
+  return Math.min(MAX_DECIMAL_PLACES, Math.max(0, s.length - dot - 1));
+}
+function formatKpiNumber(n, useGrouping, decimalPlaces) {
+  if (!Number.isFinite(n)) {
+    return "0";
+  }
+  const rounded = Number(n.toFixed(Math.max(0, decimalPlaces)));
+  if (decimalPlaces <= 0) {
+    const v = Math.round(rounded);
+    if (!useGrouping) {
+      return String(v);
+    }
+    return v.toLocaleString("zh-CN", {
+      useGrouping: true,
+      maximumFractionDigits: 0
+    });
+  }
+  return rounded.toLocaleString("zh-CN", {
+    useGrouping,
+    minimumFractionDigits: decimalPlaces,
+    maximumFractionDigits: decimalPlaces
+  });
+}
+const KpiHeroValueCell = ({ block, enterFrame, frame, fps, countDuration, fontSize, layout }) => {
+  const localFrame = frame - enterFrame;
+  if (localFrame < 0) {
+    return null;
+  }
+  const entrance = (0,esm.spring)({
+    frame: localFrame,
+    fps,
+    config: { damping: 11, stiffness: 320 },
+    durationInFrames: 22
+  });
+  const countProgress = (0,esm.spring)({
+    frame: localFrame,
+    fps,
+    config: { damping: 80, stiffness: 200 },
+    durationInFrames: countDuration
+  });
+  const raw = (0,esm.interpolate)(countProgress, [0, 1], [0, block.value], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  });
+  const displayNumber = formatKpiNumber(
+    raw,
+    block.useGrouping,
+    block.decimalPlaces
+  );
+  const translateY = (0,esm.interpolate)(
+    entrance,
+    [0, 1],
+    [72, 0],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  const scale = (0,esm.interpolate)(
+    entrance,
+    [0, 1],
+    [0.5, 1],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  const rotate = (0,esm.interpolate)(
+    entrance,
+    [0, 1],
+    [-7, 0],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  const opacity = (0,esm.interpolate)(
+    entrance,
+    [0, 0.28],
+    [0, 1],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+  return /* @__PURE__ */ (0,jsx_runtime.jsx)(
+    "div",
+    {
+      style: {
+        position: "absolute",
+        left: layout.left,
+        width: layout.width,
+        bottom: 0,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        minWidth: 0,
+        boxSizing: "border-box",
+        // 单行 nowrap 时内容可能略超列宽，必须裁在列内，否则会与邻列叠字
+        overflowX: "hidden",
+        overflowY: "visible"
+      },
+      children: /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+        "div",
+        {
+          style: {
+            width: "100%",
+            maxWidth: "100%",
+            minWidth: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            opacity,
+            transform: `translateY(${translateY}px) scale(${scale}) rotate(${rotate}deg)`,
+            transformOrigin: "50% 80%",
+            fontFamily: fontStack
+          },
+          children: [
+            block.label ? /* @__PURE__ */ (0,jsx_runtime.jsx)(
+              "div",
+              {
+                style: {
+                  fontSize: Math.max(40, fontSize * 0.38),
+                  fontWeight: 800,
+                  color: BW_TEXT,
+                  marginBottom: 14,
+                  textAlign: "center",
+                  lineHeight: 1.25,
+                  padding: "0 6px",
+                  letterSpacing: "0.02em"
+                },
+                children: block.label
+              }
+            ) : null,
+            /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+              "div",
+              {
+                style: {
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "baseline",
+                  flexWrap: "nowrap",
+                  columnGap: "0.1em",
+                  maxWidth: "100%",
+                  minWidth: 0,
+                  boxSizing: "border-box",
+                  padding: "0 2px",
+                  fontSize,
+                  fontWeight: 900,
+                  letterSpacing: "0.01em",
+                  textAlign: "center",
+                  whiteSpace: "nowrap"
+                },
+                children: [
+                  block.prefix ? /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "0.42em",
+                        color: KPI_VALUE_RED
+                      },
+                      children: block.prefix
+                    }
+                  ) : null,
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)("span", { style: { color: KPI_VALUE_RED }, children: displayNumber }),
+                  block.suffix ? /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "span",
+                    {
+                      style: {
+                        fontSize: "0.42em",
+                        lineHeight: 1,
+                        color: BW_TEXT,
+                        fontWeight: 800
+                      },
+                      children: block.suffix
+                    }
+                  ) : null
+                ]
+              }
+            )
+          ]
+        }
+      )
+    }
+  );
+};
 const BWKpiHero = ({
   value,
   prefix = "",
   suffix = "",
-  headline,
-  imageSrc,
+  label,
+  useGrouping = false,
+  decimalPlaces: decimalPlacesProp,
   countDuration = 28,
+  blocks,
   content,
   anchors,
   audioSrc,
@@ -74337,98 +75735,106 @@ const BWKpiHero = ({
   style
 }) => {
   const frame = (0,esm.useCurrentFrame)();
-  const { fps } = (0,esm.useVideoConfig)();
-  const progress = (0,esm.spring)({
-    frame,
-    fps,
-    config: { damping: 80, stiffness: 200 },
-    durationInFrames: countDuration
-  });
-  const current = Math.round(
-    (0,esm.interpolate)(progress, [0, 1], [0, value], {
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp"
-    })
+  const { fps, width } = (0,esm.useVideoConfig)();
+  const contentItems = normalizeContent(content);
+  const normalizedBlocks = (0,react.useMemo)(() => {
+    if (blocks && blocks.length > 0) {
+      return blocks.slice(0, 4).map((b) => {
+        const dp = b.decimalPlaces !== void 0 && Number.isInteger(b.decimalPlaces) ? Math.min(MAX_DECIMAL_PLACES, Math.max(0, b.decimalPlaces)) : inferDecimalPlaces(b.value);
+        return {
+          value: b.value,
+          prefix: b.prefix ?? "",
+          suffix: b.suffix ?? "",
+          label: b.label,
+          showFrom: b.showFrom,
+          useGrouping: Boolean(b.useGrouping),
+          decimalPlaces: dp
+        };
+      });
+    }
+    if (value !== void 0 && value !== null) {
+      const dp = decimalPlacesProp !== void 0 && Number.isInteger(decimalPlacesProp) ? Math.min(MAX_DECIMAL_PLACES, Math.max(0, decimalPlacesProp)) : inferDecimalPlaces(value);
+      return [
+        {
+          value,
+          prefix,
+          suffix,
+          label,
+          showFrom: 0,
+          useGrouping,
+          decimalPlaces: dp
+        }
+      ];
+    }
+    return [];
+  }, [blocks, value, prefix, suffix, label, useGrouping, decimalPlacesProp]);
+  const visibleEntries = normalizedBlocks.map((block, index) => {
+    const enterFrame = resolveBlockEnterFrame(block.showFrom, contentItems);
+    return { block, index, enterFrame };
+  }).filter(({ enterFrame }) => frame >= enterFrame);
+  const visibleCount = Math.min(
+    Math.max(visibleEntries.length, 1),
+    4
   );
-  const blockOpacity = (0,esm.spring)({
-    frame,
-    fps,
-    config: { damping: 60, stiffness: 180 },
-    durationInFrames: 18
-  });
+  const fontSize = FONT_FOR_VISIBLE_COUNT[visibleCount];
+  const horizontalPad = 0.06;
+  const innerW = width * (1 - 2 * horizontalPad);
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style: { ...style }, children: [
-    headline ? /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          left: 0,
-          right: 0,
-          top: "12%",
-          textAlign: "center",
-          fontSize: 36,
-          fontWeight: 800,
-          color: BW_TEXT,
-          opacity: blockOpacity,
-          padding: "0 8%",
-          fontFamily: fontStack
-        },
-        children: headline
-      }
-    ) : null,
-    /* @__PURE__ */ (0,jsx_runtime.jsxs)(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          left: 0,
-          right: getSafeImageSrc(imageSrc) ? "28%" : 0,
-          top: "42%",
-          transform: "translateY(-50%)",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "baseline",
-          opacity: blockOpacity,
-          fontSize: 112,
-          fontWeight: 900,
-          color: BW_TEXT,
-          letterSpacing: "0.02em",
-          fontFamily: fontStack
-        },
-        children: [
-          prefix ? /* @__PURE__ */ (0,jsx_runtime.jsx)("span", { style: { fontSize: "0.45em", marginRight: 4 }, children: prefix }) : null,
-          /* @__PURE__ */ (0,jsx_runtime.jsx)("span", { children: current }),
-          suffix ? /* @__PURE__ */ (0,jsx_runtime.jsx)("span", { style: { fontSize: "0.45em", marginLeft: 4 }, children: suffix }) : null
-        ]
-      }
-    ),
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       "div",
       {
         style: {
           position: "absolute",
-          right: "6%",
-          top: "38%",
-          transform: "translateY(-50%)",
-          width: "22%",
-          maxWidth: 280,
-          opacity: blockOpacity
+          inset: 0,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: `0 ${horizontalPad * 100}%`,
+          boxSizing: "border-box"
         },
         children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-          esm.Img,
+          "div",
           {
-            src: getSafeImageSrc(imageSrc),
-            style: { width: "100%", objectFit: "contain" }
+            style: {
+              position: "relative",
+              width: innerW,
+              minHeight: 260,
+              maxWidth: "100%"
+            },
+            children: visibleEntries.map(({ block, index, enterFrame }, slot) => {
+              const layout = computeAnimatedCellLayout({
+                slot,
+                innerW,
+                frame,
+                fps,
+                visibleEntries
+              });
+              return /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                KpiHeroValueCell,
+                {
+                  block,
+                  enterFrame,
+                  frame,
+                  fps,
+                  countDuration,
+                  fontSize,
+                  layout
+                },
+                index
+              );
+            })
           }
         )
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateDefaultAnchors, { content, anchors }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
     children
   ] });
 };
 
 ;// ./src/components/templates/MagnifyingGlass.tsx
+
 
 
 
@@ -74584,294 +75990,8 @@ const BWMagnifyingGlass = ({
         )
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc }),
-    children
-  ] });
-};
-
-;// ./src/components/templates/ListMultiGroup.tsx
-
-
-
-
-
-
-
-
-
-const ListMultiGroup_templateMeta = {
-  "name": "LIST_MULTI_GROUP",
-  "componentExport": "BWMultiImage",
-  "description": "\u9002\u7528\uFF1A\u5F53\u524D item \u539F\u6587\u672C\u8EAB\u5C31\u660E\u786E\u5305\u542B 2\uFF5E5 \u4E2A\u5E76\u5217\u5206\u70B9/\u5E76\u5217\u4F8B\u5B50\u65F6\u4F7F\u7528\uFF0C\u56FE\u6587\u540C\u65F6\u5448\u73B0\u3002\n\u5DEE\u5F02\uFF1A\u6709\u65F6\u95F4\u5148\u540E/\u6F14\u8FDB\u7EBF\u7528 TIMELINE\uFF1B\u6709\u5E8F\u53EF\u6267\u884C\u6B65\u9AA4\uFF08\u7B2C\u4E00\u6B65\u2026\uFF09\u7528 STEP_LIST\uFF1B\u82E5\u53EA\u662F\u603B\u8D77\u53E5/\u5F15\u5BFC\u53E5\uFF08\u5982\u201C\u7ED9\u4F60\u4E24\u4E2A\u65B9\u6CD5\uFF1A\u201D\uFF09\u800C\u5177\u4F53\u5206\u70B9\u5DF2\u62C6\u5230\u540E\u7EED item\uFF0C\u7981\u6B62\u7528\u672C\u6A21\u677F\u3002\n\u53C2\u6570\uFF1A\u4EC5\u4F7F\u7528 groups\uFF1B\u7EC4\u6570=\u53D9\u4E8B\u5E76\u5217\u4E3B\u4F53\u6570\uFF08\u975E content \u884C\u6570\uFF09\u3002\u6BCF\u7EC4 textIndex \u4E3A\u8BE5\u4E3B\u4F53\u5728 content \u4E2D\u7684\u8D77\u59CB\u4E0B\u6807\uFF1B\u540C\u4E00\u4F53\u5185\u591A\u884C content \u5171\u7528\u540C\u4E00 textIndex\uFF1B\u5404\u7EC4\u987B\u5206\u6BB5\u8986\u76D6\u81F3\u6700\u540E\u4E00\u6761 content\u3002\n\u52A8\u753B\uFF1A\u9996\u7EC4\u56FE\u6587\u5C45\u4E2D\u5E76\u653E\u5927\u5165\u573A\uFF1B\u6BCF\u65B0\u589E\u4E00\u7EC4\u65F6\uFF0C\u5DF2\u51FA\u73B0\u7EC4\u4E0E\u65B0\u7EC4\u4E00\u8D77\u5E73\u6ED1\u91CD\u6392\u4E3A\u7EB5\u5411\u5747\u5206\u5E03\u5C40\uFF0C\u56FE\u7247\u4E0E\u6587\u5B57\u540C\u6B65\u52A8\u6001\u7F29\u653E\u3001\u5E76\u4FDD\u6301\u540C\u8F74\u5DE6\u56FE\u53F3\u6587\u5C55\u793A\u3002",
-  "psychology": "\u591A\u5DF4\u80FA\u523A\u6FC0",
-  "image_count": "2-5",
-  "param_schema": {
-    "type": "object",
-    "properties": {
-      "groups": {
-        "type": "array",
-        "minItems": 2,
-        "maxItems": 5,
-        "description": "\u552F\u4E00\u5408\u6CD5\u7ED3\u6784\uFF1A\u6BCF\u9879\u542B textIndex\u3001image\u3001\u53EF\u9009 anchor\uFF1B\u7EC4\u6570 2\uFF5E5\uFF0C\u987B\u4E0E\u53E3\u64AD\u5E76\u5217\u5206\u70B9/\u5E76\u5217\u4F8B\u5B50\u4E00\u81F4\uFF08\u5206\u70B9\u6216\u4F8B\u5B50\u7684\u6982\u62EC\uFF09\u3002textIndex \u4E3A\u8BE5\u5E76\u5217\u4E3B\u4F53\u5728 content \u4E2D\u7684\u8D77\u59CB\u4E0B\u6807\uFF080-based\uFF0C\u975E\u5E27\u6570\uFF09\uFF0C\u5408\u6CD5\u8303\u56F4 0\uFF5E(content \u6761\u6570-1)\uFF1B\u540C\u4E00\u4F53\u5185\u591A\u884C\u5171\u7528\u8D77\u59CB textIndex\uFF1B\u5404\u7EC4 textIndex \u5347\u5E8F\u987B\u5206\u6BB5\u8986\u76D6\u81F3\u6700\u540E\u4E00\u6761 content\u3002\u52FF\u4F7F\u7528\u9876\u5C42 anchors\u3002image.src \u4E3A\u914D\u56FE\u63D0\u793A\u8BCD\uFF1B\u65E0\u9AD8\u4EF7\u503C\u77ED\u8BED\u5219\u7701\u7565 anchor",
-        "items": {
-          "type": "object",
-          "required": ["textIndex", "image"],
-          "properties": {
-            "textIndex": {
-              "type": "integer",
-              "format": "content_index",
-              "description": "\u8BE5\u7EC4\u7ED1\u5B9A\u7684 content \u4E0B\u6807\uFF080-based\uFF09\uFF0C\u975E\u5E27\u6570\uFF1B\u987B\u5728 0\uFF5E(content \u6761\u6570-1) \u5185"
-            },
-            "image": {
-              "type": "object",
-              "required": ["src"],
-              "properties": {
-                "src": {
-                  "type": "string",
-                  "format": "image_prompt",
-                  "description": "\u8BE5\u7EC4\u914D\u56FE\u63D0\u793A\u8BCD"
-                },
-                "position": {
-                  "type": "string",
-                  "enum": ["center", "left", "right", "top", "bottom"],
-                  "description": "\u53EF\u9009\uFF0C\u5E03\u5C40\u5DF2\u5F31\u5316\u8BE5\u5B57\u6BB5"
-                },
-                "enterEffect": {
-                  "type": "string",
-                  "enum": ["breathe", "slideLeft", "slideBottom", "zoomIn", "fadeIn"],
-                  "default": "breathe"
-                }
-              }
-            },
-            "anchor": {
-              "type": "object",
-              "required": ["text"],
-              "properties": {
-                "text": { "type": "string", "description": "\u8BE5\u7EC4\u9AD8\u4EF7\u503C\u77ED\u8BED" },
-                "color": { "type": "string" },
-                "anim": {
-                  "type": "string",
-                  "enum": ["spring", "slideUp", "popIn", "highlight"]
-                },
-                "audioEffect": {
-                  "type": "string",
-                  "enum": ["impact_thud", "ping", "woosh"]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "required": ["groups"]
-  },
-  "example": {
-    "template": "LIST_MULTI_GROUP",
-    "content": ["\u6210\u529F\u662F\u6709\u524D\u63D0\u7684", "\u6210\u529F\u7684\u6838\u5FC3\u662F\u81EA\u5F8B", "\u6210\u529F\u7684\u6838\u5FC3\u662F\u8D44\u6E90", "\u53EA\u6709\u4E24\u8005\u642D\u914D\u624D\u80FD\u83B7\u5F97\u6210\u529F"],
-    "param": {
-      "groups": [
-        {
-          "textIndex": 1,
-          "image": { "src": "\u9F7F\u8F6E\u7B80\u7B14\u753B\u56FE\u6807" },
-          "anchor": { "text": "\u6838\u5FC3\u662F\u81EA\u5F8B", "audioEffect": "ping" }
-        },
-        {
-          "textIndex": 2,
-          "image": { "src": "\u949E\u7968\u7B80\u7B14\u753B\u56FE\u6807" },
-          "anchor": { "text": "\u6838\u5FC3\u662F\u8D44\u6E90", "audioEffect": "impact_thud" }
-        }
-      ]
-    }
-  }
-};
-const getFixedLayout = (count, order) => {
-  const safeCount = Math.min(Math.max(count, 1), 5);
-  const topMatrix = {
-    1: [50],
-    2: [40, 55],
-    3: [40, 50, 60],
-    4: [35, 45, 55, 65],
-    5: [30, 40, 50, 60, 70]
-  };
-  const sizeByCount = {
-    // 单组时尽可能放大；新增组出现时通过插值平滑缩小
-    1: { imageMaxWidth: 25, imageMaxHeight: 42, anchorFontSize: 52 },
-    2: { imageMaxWidth: 20, imageMaxHeight: 30, anchorFontSize: 50 },
-    3: { imageMaxWidth: 15, imageMaxHeight: 23, anchorFontSize: 45 },
-    4: { imageMaxWidth: 10, imageMaxHeight: 18, anchorFontSize: 42 },
-    5: { imageMaxWidth: 10, imageMaxHeight: 15, anchorFontSize: 40 }
-  };
-  const tops = topMatrix[safeCount];
-  const sizes = sizeByCount[safeCount];
-  const imageLeft = 20;
-  return {
-    imageLeft,
-    anchorLeft: imageLeft + sizes.imageMaxWidth + 12,
-    top: tops[order] ?? 50,
-    imageMaxWidth: sizes.imageMaxWidth,
-    imageMaxHeight: sizes.imageMaxHeight,
-    anchorFontSize: sizes.anchorFontSize
-  };
-};
-const BWMultiImage = ({
-  groups,
-  content,
-  audioSrc,
-  children,
-  style
-}) => {
-  const frame = (0,esm.useCurrentFrame)();
-  const { fps } = (0,esm.useVideoConfig)();
-  const normalizedContent = normalizeContent(content);
-  const normalizedGroups = (groups ?? []).slice(0, 5);
-  const resolvedGroups = normalizedGroups.map((group) => {
-    const img = group.image;
-    const textIndex = group.textIndex;
-    const hasValidTextIndex = typeof textIndex === "number" && Number.isInteger(textIndex) && textIndex >= 0 && textIndex < normalizedContent.length;
-    if (hasValidTextIndex) {
-      const contentItem = normalizedContent[textIndex];
-      return {
-        ...group,
-        image: {
-          ...img,
-          startFrame: contentItem.startFrame
-        }
-      };
-    }
-    return group;
-  });
-  const imageStates = resolvedGroups.map((group, index) => ({
-    index,
-    startFrame: group.image.startFrame ?? 0
-  }));
-  const earliestStartFrame = imageStates.length === 0 ? 0 : imageStates.reduce((min, s) => Math.min(min, s.startFrame), imageStates[0].startFrame);
-  const visibleStates = imageStates.filter((state) => frame >= state.startFrame).sort((a, b) => {
-    if (a.startFrame !== b.startFrame) return a.startFrame - b.startFrame;
-    return a.index - b.index;
-  });
-  const visibleCount = visibleStates.length;
-  const orderByIndex = /* @__PURE__ */ new Map();
-  visibleStates.forEach((state, order) => {
-    orderByIndex.set(state.index, order);
-  });
-  const latestVisibleStartFrame = visibleCount > 0 ? visibleStates[visibleCount - 1].startFrame : 0;
-  const transitionProgress = (0,esm.spring)({
-    frame: frame - latestVisibleStartFrame,
-    fps,
-    config: {
-      damping: 24,
-      stiffness: 130
-    },
-    durationInFrames: 22
-  });
-  const prevReflowStates = visibleStates.filter((s) => s.startFrame < latestVisibleStartFrame);
-  const firefliesOpacity = visibleCount > 0 || earliestStartFrame <= 0 ? 0 : (0,esm.interpolate)(frame, [0, earliestStartFrame, earliestStartFrame + 15], [1, 1, 0], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style, children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(FirefliesBackdrop, { opacity: firefliesOpacity, seed: `LIST_MULTI_GROUP-${earliestStartFrame}` }),
-    resolvedGroups.map((group, i) => {
-      const order = orderByIndex.get(i);
-      const isVisible = order !== void 0;
-      const anchorItem = group.anchor;
-      if (!isVisible || order === void 0) {
-        return null;
-      }
-      const startFrame = group.image.startFrame ?? 0;
-      const toLayout = getFixedLayout(visibleCount, order);
-      let fromLayout;
-      if (visibleCount <= 1) {
-        fromLayout = toLayout;
-      } else if (startFrame === latestVisibleStartFrame) {
-        fromLayout = getFixedLayout(1, 0);
-      } else {
-        const prevOrder = prevReflowStates.findIndex((s) => s.index === i);
-        const safePrevOrder = Math.max(0, prevOrder);
-        fromLayout = getFixedLayout(prevReflowStates.length, safePrevOrder);
-      }
-      const top = (0,esm.interpolate)(transitionProgress, [0, 1], [fromLayout.top, toLayout.top], {
-        extrapolateLeft: "clamp",
-        extrapolateRight: "clamp"
-      });
-      const imageLeft = (0,esm.interpolate)(transitionProgress, [0, 1], [fromLayout.imageLeft, toLayout.imageLeft], {
-        extrapolateLeft: "clamp",
-        extrapolateRight: "clamp"
-      });
-      const maxWidth = (0,esm.interpolate)(transitionProgress, [0, 1], [fromLayout.imageMaxWidth, toLayout.imageMaxWidth], {
-        extrapolateLeft: "clamp",
-        extrapolateRight: "clamp"
-      });
-      const maxHeight = (0,esm.interpolate)(transitionProgress, [0, 1], [fromLayout.imageMaxHeight, toLayout.imageMaxHeight], {
-        extrapolateLeft: "clamp",
-        extrapolateRight: "clamp"
-      });
-      const anchorFontSize = (0,esm.interpolate)(
-        transitionProgress,
-        [0, 1],
-        [fromLayout.anchorFontSize, toLayout.anchorFontSize],
-        {
-          extrapolateLeft: "clamp",
-          extrapolateRight: "clamp"
-        }
-      );
-      const enter = (0,esm.spring)({
-        frame: frame - startFrame,
-        fps,
-        config: {
-          damping: 18,
-          stiffness: 120
-        },
-        durationInFrames: 20
-      });
-      const translateY = (0,esm.interpolate)(enter, [0, 1], [56, 0], {
-        extrapolateLeft: "clamp",
-        extrapolateRight: "clamp"
-      });
-      const imageOpacity = (0,esm.interpolate)(enter, [0, 1], [0, 1], {
-        extrapolateLeft: "clamp",
-        extrapolateRight: "clamp"
-      });
-      return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
-        /* @__PURE__ */ (0,jsx_runtime.jsx)(
-          esm.Img,
-          {
-            src: getSafeImageSrc(group.image.src),
-            style: {
-              position: "absolute",
-              left: `${imageLeft}%`,
-              top: `${top}%`,
-              maxWidth: `${maxWidth}%`,
-              maxHeight: `${maxHeight}%`,
-              objectFit: "contain",
-              opacity: imageOpacity,
-              transform: `translate(-50%, -50%) translateY(${translateY}px)`
-            }
-          }
-        ),
-        anchorItem && frame >= startFrame && /* @__PURE__ */ (0,jsx_runtime.jsx)(
-          BWAnchorWord,
-          {
-            anchor: anchorItem.text,
-            delay: startFrame,
-            fontSize: anchorFontSize,
-            color: anchorItem.color || void 0,
-            animStyle: anchorItem.anim || "spring",
-            style: {
-              left: 350,
-              right: "2%",
-              top: `${top}%`,
-              transform: "translateY(-50%)",
-              opacity: imageOpacity,
-              justifyContent: "flex-start",
-              textAlign: "left",
-              paddingLeft: 12
-            }
-          }
-        )
-      ] }, i);
-    }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content: normalizedContent, audioSrc, hideAnchors: true }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateDefaultAnchors, { content, anchors }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
     children
   ] });
 };
@@ -74882,46 +76002,175 @@ const BWMultiImage = ({
 
 
 
+
+
+const ProgressRing_resolveBlockEnterFrame = (showFrom, contentItems) => {
+  if (Number.isInteger(showFrom) && showFrom >= 0 && showFrom < contentItems.length) {
+    const cue = contentItems[showFrom];
+    if (cue && typeof cue.startFrame === "number") {
+      return cue.startFrame;
+    }
+  }
+  return 0;
+};
+const ProgressRing_GAP_FOR_VISIBLE_COUNT = {
+  1: 0,
+  2: 36,
+  3: 22,
+  4: 16
+};
+const ProgressRing_LAYOUT_REFLOW_SPRING_FRAMES = 26;
+function ProgressRing_clampColCount(n) {
+  return Math.min(Math.max(n, 1), 4);
+}
+function ProgressRing_unitWAndGap(innerW, n) {
+  const g = ProgressRing_GAP_FOR_VISIBLE_COUNT[n];
+  if (n === 1) {
+    return { unitW: innerW, g: 0 };
+  }
+  return { unitW: (innerW - (n - 1) * g) / n, g };
+}
+function ProgressRing_leftEdgeForSlot(slot, n, innerW) {
+  const { unitW, g } = ProgressRing_unitWAndGap(innerW, n);
+  return slot * (unitW + g);
+}
+function ProgressRing_layoutReflowProgress(frame, fps, maxEnter, simultaneous) {
+  if (simultaneous) {
+    return 1;
+  }
+  return (0,esm.spring)({
+    frame: frame - maxEnter,
+    fps,
+    config: { damping: 18, stiffness: 200 },
+    durationInFrames: ProgressRing_LAYOUT_REFLOW_SPRING_FRAMES
+  });
+}
+function ProgressRing_computeAnimatedCellLayout(args) {
+  var _a;
+  const { slot, innerW, frame, fps, visibleEntries } = args;
+  const n = ProgressRing_clampColCount(visibleEntries.length);
+  const enterFrames = visibleEntries.map((v) => v.enterFrame);
+  const maxEnter = Math.max(...enterFrames, 0);
+  const minEnter = Math.min(...enterFrames);
+  const simultaneous = visibleEntries.length > 1 && maxEnter === minEnter;
+  const nPrev = simultaneous ? n : Math.max(1, n - 1);
+  const p = ProgressRing_layoutReflowProgress(frame, fps, maxEnter, simultaneous);
+  const { unitW: uwTo } = ProgressRing_unitWAndGap(innerW, n);
+  const { unitW: uwFrom } = ProgressRing_unitWAndGap(innerW, nPrev);
+  const ownEnter = ((_a = visibleEntries[slot]) == null ? void 0 : _a.enterFrame) ?? 0;
+  const newcomerSlots = visibleEntries.map((e, i) => e.enterFrame === maxEnter ? i : -1).filter((i) => i >= 0);
+  const isNewcomer = !simultaneous && n > 1 && newcomerSlots.length === 1 && slot === newcomerSlots[0] && ownEnter === maxEnter;
+  const widthTo = uwTo;
+  const widthFrom = isNewcomer ? uwTo : uwFrom;
+  const leftTo = ProgressRing_leftEdgeForSlot(slot, n, innerW);
+  let leftFrom;
+  if (isNewcomer) {
+    leftFrom = innerW / 2 - uwTo / 2;
+  } else {
+    leftFrom = ProgressRing_leftEdgeForSlot(slot, nPrev, innerW);
+  }
+  const sameRect = Math.abs(leftFrom - leftTo) < 0.5 && Math.abs(widthFrom - widthTo) < 0.5;
+  const progress = sameRect ? 1 : p;
+  return {
+    left: (0,esm.interpolate)(progress, [0, 1], [leftFrom, leftTo], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp"
+    }),
+    width: (0,esm.interpolate)(progress, [0, 1], [widthFrom, widthTo], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp"
+    })
+  };
+}
+const RING_SIZE = {
+  1: 280,
+  2: 240,
+  3: 200,
+  4: 168
+};
+const RING_STROKE = {
+  1: 18,
+  2: 16,
+  3: 14,
+  4: 12
+};
+const PCT_FONT = {
+  1: 78,
+  2: 64,
+  3: 54,
+  4: 44
+};
+const LABEL_FONT = {
+  1: 52,
+  2: 40,
+  3: 34,
+  4: 28
+};
+const SUBLABEL_FONT = {
+  1: 34,
+  2: 28,
+  3: 24,
+  4: 20
+};
+const DEFAULT_RING_COLOR = "#2B6CB0";
 const ProgressRing_templateMeta = {
   "name": "PROGRESS_RING",
   "componentExport": "BWProgressRing",
-  "description": "\u9002\u7528\uFF1A\u5B8C\u6210\u5EA6\u3001\u8FBE\u6210\u7387\u3001\u5360\u6BD4\u3001\u8FDB\u5EA6\u7ED3\u8BBA\uFF1B\u73AF\u5F62\u52A8\u6548\u5F3A\u5316\u300C\u8D70\u5230\u54EA\u4E00\u6B65\u300D\u3002\n\u5DEE\u5F02\uFF1A\u5355\u6570\u5B57\u5927\u5B57\u62A5\u7528 KPI_HERO\uFF1B\u4E24\u9879\u5BF9\u6BD4\u7528 STAT_COMPARE\u3002\n\u53C2\u6570\uFF1Apercent \u4E3A 0\u2013100\uFF1Blabel \u4E3A\u4E3B\u6587\u6848\uFF1BsubLabel \u53EF\u5199\u53E3\u5F84\u8BF4\u660E\u3002",
+  "description": "\u9002\u7528\uFF1A\u5B8C\u6210\u5EA6\u3001\u8FBE\u6210\u7387\u3001\u5360\u6BD4\u3001\u8FDB\u5EA6\u7ED3\u8BBA\uFF1B\u73AF\u5F62\u52A8\u6548\u5F3A\u5316\u300C\u8D70\u5230\u54EA\u4E00\u6B65\u300D\u3002\n\u5355\u7EC4\uFF1Apercent\uFF080\u2013100\uFF09+ label\uFF0C\u53EF\u9009 subLabel\u3002\n\u591A\u7EC4\uFF1Ablocks\uFF081\uFF5E4 \u9879\uFF09\uFF0C\u6BCF\u9879 percent\u3001label\u3001showFrom\uFF08content \u4E0B\u6807\uFF09\uFF0C\u53EF\u9009 subLabel\u3001ringColor\uFF1B\u5217\u6570\u53D8\u5316\u65F6\u5F39\u7C27\u8FC7\u6E21\u4E0E KPI_HERO \u4E00\u81F4\u3002\n\u5DEE\u5F02\uFF1A\u5355\u6570\u5B57\u5927\u5B57\u62A5\u7528 KPI_HERO\uFF1B\u4E24\u9879\u67F1\u72B6\u5BF9\u6BD4\u7528 STAT_COMPARE\u3002",
   "psychology": "\u76EE\u6807\u68AF\u5EA6",
   "image_count": 0,
   "param_schema": {
     "type": "object",
     "properties": {
-      "percent": { "type": "integer", "description": "\u8FDB\u5EA6\u767E\u5206\u6BD4 0\u2013100" },
-      "label": { "type": "string", "description": "\u4E3B\u6807\u9898\uFF08\u5982\u300C\u5E74\u5EA6\u76EE\u6807\u8FBE\u6210\u300D\uFF09" },
-      "subLabel": { "type": "string", "description": "\u526F\u6807\u9898\u6216\u53E3\u5F84\u8BF4\u660E" }
+      "percent": {
+        "type": "integer",
+        "description": "\u5355\u7EC4\u6A21\u5F0F\uFF1A\u8FDB\u5EA6\u767E\u5206\u6BD4 0\u2013100\uFF1B\u82E5\u63D0\u4F9B blocks \u5219\u53EF\u7701\u7565"
+      },
+      "label": { "type": "string", "description": "\u5355\u7EC4\uFF1A\u4E3B\u6807\u9898\uFF1B\u591A\u7EC4\u8BF7\u7528 blocks[].label" },
+      "subLabel": { "type": "string", "description": "\u5355\u7EC4\uFF1A\u526F\u6807\u9898\u6216\u53E3\u5F84\u8BF4\u660E" },
+      "blocks": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 4,
+        "description": "\u591A\u7EC4\uFF1A\u6BCF\u9879 percent\u3001label\u3001showFrom\uFF08content \u4E0B\u6807\uFF09\uFF1B\u53EF\u9009 subLabel\u3001ringColor",
+        "items": {
+          "type": "object",
+          "required": ["percent", "label", "showFrom"],
+          "properties": {
+            "percent": { "type": "integer", "description": "0\u2013100" },
+            "label": { "type": "string" },
+            "subLabel": { "type": "string" },
+            "ringColor": { "type": "string", "description": "\u73AF\u4E0E\u8FDB\u5EA6\u5F27\u989C\u8272\uFF0C\u9ED8\u8BA4 #2B6CB0" },
+            "showFrom": {
+              "type": "integer",
+              "format": "content_index",
+              "description": "\u8BE5\u5217\u51FA\u73B0\u65F6\u673A\uFF1Acontent \u4E0B\u6807\uFF0C\u53D6\u8BE5\u6761 startFrame"
+            }
+          }
+        }
+      }
     },
-    "required": ["percent", "label"]
+    "required": []
   },
   "example": {
     "template": "PROGRESS_RING",
     "param": {
-      "percent": 78,
-      "label": "\u9879\u76EE\u5B8C\u6210\u5EA6",
-      "subLabel": "\u622A\u81F3\u672C\u5B63\u5EA6"
+      "blocks": [
+        { "percent": 78, "label": "\u9879\u76EE\u5B8C\u6210\u5EA6", "subLabel": "Q1", "showFrom": 0 },
+        { "percent": 62, "label": "\u6D4B\u8BD5\u8986\u76D6", "ringColor": "#059669", "showFrom": 1 }
+      ]
     }
   }
 };
 const ProgressRing_fontStack = '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif';
-const BWProgressRing = ({
-  percent,
-  label,
-  subLabel,
-  content,
-  anchors,
-  audioSrc,
-  children,
-  style
-}) => {
-  const frame = (0,esm.useCurrentFrame)();
-  const { fps } = (0,esm.useVideoConfig)();
-  const clamped = Math.max(0, Math.min(100, percent));
+const ProgressRingCell = ({ block, enterFrame, frame, fps, layout, colCount }) => {
+  const localFrame = frame - enterFrame;
+  if (localFrame < 0) {
+    return null;
+  }
+  const clamped = Math.max(0, Math.min(100, block.percent));
   const ringSpring = (0,esm.spring)({
-    frame,
+    frame: localFrame,
     fps,
     config: { damping: 45, stiffness: 90 },
     durationInFrames: 40
@@ -74930,139 +76179,259 @@ const BWProgressRing = ({
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp"
   });
-  const size = 280;
-  const stroke = 18;
+  const size = RING_SIZE[colCount];
+  const stroke = RING_STROKE[colCount];
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
   const offset = c - animatedPct / 100 * c;
   const textOpacity = (0,esm.spring)({
-    frame: frame - 6,
+    frame: localFrame - 6,
     fps,
     config: { damping: 60, stiffness: 180 },
     durationInFrames: 16
   });
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style: { ...style }, children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsxs)(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          left: "50%",
-          top: "38%",
-          transform: "translate(-50%, -50%)",
-          width: size,
-          height: size
-        },
-        children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsxs)(
-            "svg",
-            {
+  const pctFont = PCT_FONT[colCount];
+  const labelFont = LABEL_FONT[colCount];
+  const subFont = SUBLABEL_FONT[colCount];
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+    "div",
+    {
+      style: {
+        position: "absolute",
+        left: layout.left,
+        width: layout.width,
+        top: "10%",
+        bottom: "14%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minWidth: 0,
+        boxSizing: "border-box"
+      },
+      children: [
+        /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+          "div",
+          {
+            style: {
+              position: "relative",
               width: size,
               height: size,
-              viewBox: `0 0 ${size} ${size}`,
-              style: { transform: "rotate(-90deg)" },
-              children: [
-                /* @__PURE__ */ (0,jsx_runtime.jsx)(
-                  "circle",
-                  {
-                    cx: size / 2,
-                    cy: size / 2,
-                    r,
-                    fill: "none",
-                    stroke: "rgba(0,0,0,0.08)",
-                    strokeWidth: stroke
-                  }
-                ),
-                /* @__PURE__ */ (0,jsx_runtime.jsx)(
-                  "circle",
-                  {
-                    cx: size / 2,
-                    cy: size / 2,
-                    r,
-                    fill: "none",
-                    stroke: "#2B6CB0",
-                    strokeWidth: stroke,
-                    strokeLinecap: "round",
-                    strokeDasharray: c,
-                    strokeDashoffset: offset
-                  }
-                )
-              ]
-            }
-          ),
-          /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            "div",
-            {
-              style: {
-                position: "absolute",
-                left: "50%",
-                top: "50%",
-                transform: "translate(-50%, -50%)",
-                textAlign: "center"
-              },
-              children: /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+              flexShrink: 0
+            },
+            children: [
+              /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+                "svg",
+                {
+                  width: size,
+                  height: size,
+                  viewBox: `0 0 ${size} ${size}`,
+                  style: { transform: "rotate(-90deg)" },
+                  children: [
+                    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                      "circle",
+                      {
+                        cx: size / 2,
+                        cy: size / 2,
+                        r,
+                        fill: "none",
+                        stroke: "rgba(0,0,0,0.08)",
+                        strokeWidth: stroke
+                      }
+                    ),
+                    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                      "circle",
+                      {
+                        cx: size / 2,
+                        cy: size / 2,
+                        r,
+                        fill: "none",
+                        stroke: block.ringColor,
+                        strokeWidth: stroke,
+                        strokeLinecap: "round",
+                        strokeDasharray: c,
+                        strokeDashoffset: offset
+                      }
+                    )
+                  ]
+                }
+              ),
+              /* @__PURE__ */ (0,jsx_runtime.jsx)(
                 "div",
                 {
                   style: {
-                    fontSize: 52,
-                    fontWeight: 900,
-                    color: BW_TEXT,
-                    fontFamily: ProgressRing_fontStack,
-                    lineHeight: 1.1
+                    position: "absolute",
+                    left: "50%",
+                    top: "50%",
+                    transform: "translate(-50%, -50%)",
+                    textAlign: "center"
                   },
-                  children: [
-                    Math.round(animatedPct),
-                    "%"
-                  ]
+                  children: /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+                    "div",
+                    {
+                      style: {
+                        fontSize: pctFont,
+                        fontWeight: 900,
+                        color: BW_TEXT,
+                        fontFamily: ProgressRing_fontStack,
+                        lineHeight: 1.1
+                      },
+                      children: [
+                        Math.round(animatedPct),
+                        "%"
+                      ]
+                    }
+                  )
                 }
               )
-            }
-          )
-        ]
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+            ]
+          }
+        ),
+        /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+          "div",
+          {
+            style: {
+              marginTop: 18,
+              textAlign: "center",
+              padding: "0 4px",
+              opacity: textOpacity,
+              width: "100%",
+              boxSizing: "border-box"
+            },
+            children: [
+              /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                "div",
+                {
+                  style: {
+                    fontSize: labelFont,
+                    fontWeight: 800,
+                    color: BW_TEXT,
+                    fontFamily: ProgressRing_fontStack,
+                    marginBottom: block.subLabel ? 8 : 0,
+                    lineHeight: 1.25
+                  },
+                  children: block.label
+                }
+              ),
+              block.subLabel ? /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                "div",
+                {
+                  style: {
+                    fontSize: subFont,
+                    fontWeight: 600,
+                    color: "rgba(17,17,17,0.65)",
+                    fontFamily: ProgressRing_fontStack,
+                    lineHeight: 1.3
+                  },
+                  children: block.subLabel
+                }
+              ) : null
+            ]
+          }
+        )
+      ]
+    }
+  );
+};
+const BWProgressRing = ({
+  percent,
+  label,
+  subLabel,
+  blocks,
+  content,
+  anchors,
+  audioSrc,
+  children,
+  style
+}) => {
+  const frame = (0,esm.useCurrentFrame)();
+  const { width, fps } = (0,esm.useVideoConfig)();
+  const contentItems = normalizeContent(content);
+  const normalizedBlocks = (0,react.useMemo)(() => {
+    if (blocks && blocks.length > 0) {
+      return blocks.slice(0, 4).map((b) => {
+        var _a;
+        return {
+          percent: b.percent,
+          label: b.label,
+          subLabel: b.subLabel,
+          ringColor: ((_a = b.ringColor) == null ? void 0 : _a.trim()) || DEFAULT_RING_COLOR,
+          showFrom: b.showFrom
+        };
+      });
+    }
+    if (percent !== void 0 && percent !== null && label) {
+      return [
+        {
+          percent,
+          label,
+          subLabel,
+          ringColor: DEFAULT_RING_COLOR,
+          showFrom: 0
+        }
+      ];
+    }
+    return [];
+  }, [blocks, percent, label, subLabel]);
+  const visibleEntries = normalizedBlocks.map((block, index) => {
+    const enterFrame = ProgressRing_resolveBlockEnterFrame(block.showFrom, contentItems);
+    return { block, index, enterFrame };
+  }).filter(({ enterFrame }) => frame >= enterFrame);
+  const visibleCount = Math.min(
+    Math.max(visibleEntries.length, 1),
+    4
+  );
+  const horizontalPad = 0.1;
+  const innerW = width * (1 - 2 * horizontalPad);
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style: { ...style }, children: [
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
       "div",
       {
         style: {
           position: "absolute",
-          left: 0,
-          right: 0,
-          top: "62%",
-          textAlign: "center",
-          padding: "0 10%",
-          opacity: textOpacity
+          inset: 0,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: `0 ${horizontalPad * 100}%`,
+          boxSizing: "border-box"
         },
-        children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            "div",
-            {
-              style: {
-                fontSize: 34,
-                fontWeight: 800,
-                color: BW_TEXT,
-                fontFamily: ProgressRing_fontStack,
-                marginBottom: subLabel ? 10 : 0
-              },
-              children: label
-            }
-          ),
-          subLabel ? /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            "div",
-            {
-              style: {
-                fontSize: 22,
-                fontWeight: 600,
-                color: "rgba(17,17,17,0.65)",
-                fontFamily: ProgressRing_fontStack
-              },
-              children: subLabel
-            }
-          ) : null
-        ]
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+          "div",
+          {
+            style: {
+              position: "relative",
+              width: innerW,
+              minHeight: 420,
+              maxWidth: "100%"
+            },
+            children: visibleEntries.map(({ block, index, enterFrame }, slot) => {
+              const layout = ProgressRing_computeAnimatedCellLayout({
+                slot,
+                innerW,
+                frame,
+                fps,
+                visibleEntries
+              });
+              return /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                ProgressRingCell,
+                {
+                  block,
+                  enterFrame,
+                  frame,
+                  fps,
+                  layout,
+                  colCount: visibleCount
+                },
+                index
+              );
+            })
+          }
+        )
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateDefaultAnchors, { content, anchors }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
     children
   ] });
 };
@@ -75076,7 +76445,7 @@ const BWProgressRing = ({
 const QuoteCitation_templateMeta = {
   "name": "QUOTE_CITATION",
   "componentExport": "BWQuoteCitation",
-  "description": "\u9002\u7528\uFF1A\u4EFB\u4F55\u201C\u5F15\u7528/\u6458\u5F55/\u8BC1\u8A00/\u80CC\u4E66\u201D\u4F53\u88C1\uFF08\u540D\u8A00\u3001\u8457\u4F5C\u3001\u7814\u7A76\u7ED3\u8BBA\u3001\u5A92\u4F53\u5F15\u7528\u3001\u7528\u6237\u8BC4\u4EF7\u3001\u5BA2\u6237\u8BC1\u8A00\u3001\u516C\u544A\u6458\u5F55\u7B49\uFF09\u3002\n\u63D0\u793A\uFF1A\u7248\u5FC3\u5F15\u7528\u6B63\u6587\u7684\u6253\u5B57\u5E95\u7A3F\u9ED8\u8BA4\u7531 content \u62FC\u63A5\uFF1B\u82E5\u9700\u4E0E\u753B\u5916/\u5B57\u5E55 content \u4E0D\u540C\u7684\u5C55\u793A\u6587\u6848\uFF0C\u8BF7\u4F20 quoteDisplayText\u3002\n\u5DEE\u5F02\uFF1A\u975E\u5F15\u7528\u7C7B\u666E\u901A\u53D9\u8FF0\u7528 CENTER_FOCUS\u3002\n\u53C2\u6570\uFF1AquoteSource \u5199\u6E05\u51FA\u5904\uFF08\u6765\u6E90/\u89D2\u8272/\u673A\u6784\uFF09\uFF1BquoteDisplayText \u53EF\u9009\uFF0C\u8986\u76D6\u7248\u5FC3\u6253\u5B57\u5185\u5BB9\u3002",
+  "description": "\u9002\u7528\uFF1A\u4EFB\u4F55\u201C\u5F15\u7528/\u6458\u5F55/\u8BC1\u8A00/\u80CC\u4E66\u201D\u4F53\u88C1\uFF08\u540D\u8A00\u3001\u8457\u4F5C\u3001\u7814\u7A76\u7ED3\u8BBA\u3001\u5A92\u4F53\u5F15\u7528\u3001\u7528\u6237\u8BC4\u4EF7\u3001\u5BA2\u6237\u8BC1\u8A00\u3001\u516C\u544A\u6458\u5F55\u7B49\uFF09\u3002\n\u63D0\u793A\uFF1A\u7248\u5FC3\u5F15\u7528\u6B63\u6587\u7684\u6253\u5B57\u5E95\u7A3F\u9ED8\u8BA4\u7531 content \u62FC\u63A5\uFF1B\u82E5\u9700\u4E0E\u753B\u5916/\u5B57\u5E55 content \u4E0D\u540C\u7684\u5C55\u793A\u6587\u6848\uFF0C\u8BF7\u4F20 quoteDisplayText\u3002\nshowFrom\uFF080-based\uFF09\u4EC5\u8BA9\u300C\u6253\u5B57\u6B63\u6587\u300D\u4ECE\u8BE5\u6761 content \u7684 startFrame \u8D77\u518D\u6DE1\u5165\u3001\u6253\u5B57\uFF1B\u5F00\u5F15\u53F7\u4E0E\u51FA\u5904\u4ECD\u4ECE\u672C item \u5F00\u5934\u5165\u573A\u3002\n\u4E0D\u4F20 quoteDisplayText \u65F6\u6B63\u6587\u4ECE\u8BE5\u6761\u8D77\u62FC\u63A5 content\u3002\n\u5DEE\u5F02\uFF1A\u975E\u5F15\u7528\u7C7B\u666E\u901A\u53D9\u8FF0\u7528 CENTER_FOCUS\u3002\n\u53C2\u6570\uFF1AquoteSource \u5199\u6E05\u51FA\u5904\uFF08\u6765\u6E90/\u89D2\u8272/\u673A\u6784\uFF09\uFF1BquoteDisplayText \u53EF\u9009\uFF0C\u8986\u76D6\u7248\u5FC3\u6253\u5B57\u5185\u5BB9\u3002",
   "psychology": "\u793E\u4F1A\u8BA4\u540C\u80CC\u4E66",
   "image_count": 0,
   "param_schema": {
@@ -75086,6 +76455,10 @@ const QuoteCitation_templateMeta = {
       "quoteDisplayText": {
         "type": "string",
         "description": "\u7248\u5FC3\u5F15\u7528\u6B63\u6587\uFF08\u6253\u5B57\u673A\u6548\u679C\uFF09\uFF1B\u4E0D\u4F20\u5219\u4F7F\u7528 content \u62FC\u63A5\u7ED3\u679C"
+      },
+      "showFrom": {
+        "type": "integer",
+        "description": "content \u4E0B\u6807\uFF080-based\uFF09\u3002\u4EC5\u6253\u5B57\u6B63\u6587\u4ECE\u8BE5\u6761 startFrame \u8D77\u518D\u5165\u573A\uFF1B\u5F00\u5F15\u53F7\u4E0E quoteSource \u4ECD\u4ECE item \u8D77\u70B9\u51FA\u73B0\u3002\u672A\u4F20 quoteDisplayText \u65F6\u6B63\u6587\u4ECE\u8BE5\u6761\u8D77\u62FC\u63A5"
       }
     },
     "required": ["quoteSource"]
@@ -75093,6 +76466,7 @@ const QuoteCitation_templateMeta = {
   "example": {
     "template": "QUOTE_CITATION",
     "param": {
+      "quoteDisplayText": "\u6211\u601D\u6545\u6211\u5728",
       "quoteSource": "\u300A\u601D\u8003\uFF0C\u5FEB\u4E0E\u6162\u300B"
     }
   }
@@ -75103,28 +76477,43 @@ function normalizeQuoteText(raw) {
 const BWQuoteCitation = ({
   quoteSource = "",
   quoteDisplayText,
+  showFrom = 0,
   content,
-  anchors,
   audioSrc,
   children,
   style
 }) => {
+  var _a;
   const frame = (0,esm.useCurrentFrame)();
   const { fps } = (0,esm.useVideoConfig)();
-  const opacity = (0,esm.spring)({
+  const useExplicitQuote = quoteDisplayText !== void 0 && quoteDisplayText !== null;
+  const startIdx = Math.max(
+    0,
+    Math.floor(Number.isFinite(showFrom) ? showFrom : 0)
+  );
+  const items = normalizeContent(content);
+  const alignIdx = Math.min(startIdx, Math.max(0, items.length - 1));
+  const alignFrame = items.length > 0 ? Math.max(0, Math.floor(((_a = items[alignIdx]) == null ? void 0 : _a.startFrame) ?? 0)) : 0;
+  const localFrame = Math.max(0, frame - alignFrame);
+  const beforeAlign = frame < alignFrame;
+  const chromeOpacity = (0,esm.spring)({
     frame,
     fps,
     config: { damping: 80, stiffness: 100 },
     durationInFrames: 30
   });
-  const fromContent = (content ?? []).map((c) => c.text.trim()).filter(Boolean).join("");
-  const quoteText = normalizeQuoteText(
-    quoteDisplayText !== void 0 && quoteDisplayText !== null ? quoteDisplayText : fromContent
-  );
+  const bodyOpacity = beforeAlign ? 0 : (0,esm.spring)({
+    frame: localFrame,
+    fps,
+    config: { damping: 80, stiffness: 100 },
+    durationInFrames: 30
+  });
+  const fromContent = (useExplicitQuote ? [] : (content ?? []).slice(startIdx)).map((c) => c.text.trim()).filter(Boolean).join("");
+  const quoteText = normalizeQuoteText(useExplicitQuote ? quoteDisplayText : fromContent);
   const hasQuoteText = quoteText.length > 0;
   const typingStart = 8;
   const typingDuration = 38;
-  const typingProgress = (0,esm.interpolate)(frame, [typingStart, typingStart + typingDuration], [0, 1], {
+  const typingProgress = beforeAlign ? 0 : (0,esm.interpolate)(localFrame, [typingStart, typingStart + typingDuration], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp"
   });
@@ -75139,21 +76528,21 @@ const BWQuoteCitation = ({
       {
         style: {
           position: "absolute",
-          left: "8%",
-          right: "8%",
-          top: "30%",
-          opacity
+          left: "18%",
+          right: "18%",
+          top: "30%"
         },
         children: [
           /* @__PURE__ */ (0,jsx_runtime.jsx)(
             "div",
             {
               style: {
-                fontSize: 50,
+                fontSize: 76,
                 lineHeight: 0.7,
                 color: BW_TEXT,
                 fontFamily: "Georgia, 'Times New Roman', serif",
-                fontWeight: 900
+                fontWeight: 900,
+                opacity: chromeOpacity
               },
               children: '"'
             }
@@ -75165,7 +76554,7 @@ const BWQuoteCitation = ({
                 marginTop: 12,
                 textAlign: "center",
                 color: BW_TEXT,
-                fontSize: 50,
+                fontSize: 76,
                 lineHeight: 1.22,
                 letterSpacing: 0.2,
                 fontWeight: 800,
@@ -75174,7 +76563,8 @@ const BWQuoteCitation = ({
                 display: "-webkit-box",
                 WebkitBoxOrient: "vertical",
                 WebkitLineClamp: 6,
-                overflow: "hidden"
+                overflow: "hidden",
+                opacity: bodyOpacity
               },
               children: typedQuoteText
             }
@@ -75184,13 +76574,14 @@ const BWQuoteCitation = ({
             {
               style: {
                 marginTop: 100,
-                fontSize: 30,
+                fontSize: 46,
                 color: "#555555",
                 fontStyle: "italic",
                 borderLeft: "4px solid #111111",
                 paddingLeft: 24,
                 lineHeight: 1.4,
-                fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif'
+                fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif',
+                opacity: chromeOpacity
               },
               children: [
                 "\u2014 ",
@@ -75201,7 +76592,7 @@ const BWQuoteCitation = ({
         ]
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
     children
   ] });
 };
@@ -75212,10 +76603,17 @@ const BWQuoteCitation = ({
 
 
 
+const resolveSideStartFrame = (showFrom, contentItems) => {
+  if (typeof showFrom === "number" && Number.isInteger(showFrom) && showFrom >= 0 && showFrom < contentItems.length) {
+    const cue = contentItems[showFrom];
+    if (cue && typeof cue.startFrame === "number") return cue.startFrame;
+  }
+  return 0;
+};
 const SplitCompare_templateMeta = {
   "name": "SPLIT_COMPARE",
   "componentExport": "BWSplitCompare",
-  "description": "\u9002\u7528\uFF1A\u4E24\u79CD\u65B9\u6848\u3001\u4E24\u6761\u8DEF\u5F84\u3001\u4E24\u65B9\u884C\u4E3A\u5BF9\u7167\uFF1B\u53E3\u64AD\u91CC\u5E38\u89C1\u300C\u4F60/\u6211\u2026\u4ED6/\u5BF9\u65B9\u2026\u300D\u5BF9\u4ED7\u6216\u5206\u53F7\uFF08\uFF1B\uFF09\u4E24\u4FA7\u5BF9\u7ACB\u53D9\u8FF0\u3002\n\u5DEE\u5F02\uFF1A\u660E\u786E\u9519/\u5BF9\u907F\u5751\u7528 DOS_AND_DONTS\uFF1B\u7EAF\u6570\u636E\u53CC\u6307\u6807\u5BF9\u6BD4\u7528 STAT_COMPARE\uFF1B\u591A\u8981\u7D20\u5E73\u94FA\u5217\u4E3E\u7528 LIST_MULTI_GROUP\u3002\n\u53C2\u6570\uFF1AleftLabel/rightLabel \u4E3A 2\uFF5E6 \u5B57\u77ED\u8BED\uFF0C\u4E0E\u5DE6\u53F3\u56FE\u8BED\u4E49\u4E00\u81F4\u3002",
+  "description": "\u9002\u7528\uFF1A\u4E24\u79CD\u65B9\u6848\u3001\u4E24\u6761\u8DEF\u5F84\u3001\u4E24\u65B9\u884C\u4E3A\u5BF9\u7167\uFF1B\u53E3\u64AD\u91CC\u5E38\u89C1\u300C\u4F60/\u6211\u2026\u4ED6/\u5BF9\u65B9\u2026\u300D\u5BF9\u4ED7\u6216\u5206\u53F7\uFF08\uFF1B\uFF09\u4E24\u4FA7\u5BF9\u7ACB\u53D9\u8FF0\u3002\n\u5DEE\u5F02\uFF1A\u660E\u786E\u9519/\u5BF9\u907F\u5751\u7528 DOS_AND_DONTS\uFF1B\u7EAF\u6570\u636E\u53CC\u6307\u6807\u5BF9\u6BD4\u7528 STAT_COMPARE\uFF1B\u591A\u8981\u7D20\u5E73\u94FA\u5217\u4E3E\u7528 PANEL_GRID\u3002\n\u53C2\u6570\uFF1AleftLabel/rightLabel \u4E3A 2\uFF5E6 \u5B57\u77ED\u8BED\uFF0C\u4E0E\u5DE6\u53F3\u56FE\u8BED\u4E49\u4E00\u81F4\uFF1B\u53EF\u9009 leftShowFrom/rightShowFrom \u4E3A content \u4E0B\u6807\uFF080-based\uFF09\uFF0C\u5165\u573A\u5E27\u53D6\u5BF9\u5E94\u6761\u7684 startFrame\uFF1B\u4EFB\u4E00\u4FA7\u7701\u7565\u6216\u7D22\u5F15\u65E0\u6548\u5219\u8BE5\u4FA7\u4ECE 0 \u5E27\u8D77\u3002",
   "psychology": "\u8BA4\u77E5\u5931\u8C03",
   "image_count": 2,
   "param_schema": {
@@ -75232,7 +76630,17 @@ const SplitCompare_templateMeta = {
         "description": "\u53F3\u4FA7\u56FE\u7247\u63CF\u8FF0"
       },
       "leftLabel": { "type": "string", "description": "\u5DE6\u4FA7\u6807\u7B7E\uFF082\uFF5E6 \u5B57\u4E3A\u5B9C\uFF09" },
-      "rightLabel": { "type": "string", "description": "\u53F3\u4FA7\u6807\u7B7E\uFF082\uFF5E6 \u5B57\u4E3A\u5B9C\uFF09" }
+      "rightLabel": { "type": "string", "description": "\u53F3\u4FA7\u6807\u7B7E\uFF082\uFF5E6 \u5B57\u4E3A\u5B9C\uFF09" },
+      "leftShowFrom": {
+        "type": "integer",
+        "format": "content_index",
+        "description": "\u5DE6\u4FA7\u56FE\u4E0E\u6807\u7B7E\u51FA\u73B0\u7684\u65F6\u523B\uFF1A\u53D6 content \u6570\u7EC4\u4E0B\u6807\uFF080-based\uFF09\uFF0C\u5165\u573A\u5E27\u4E3A\u8BE5\u6761\u7684 startFrame\uFF1B\u7701\u7565\u6216\u8D8A\u754C\u5219\u4ECE 0 \u5E27\u8D77"
+      },
+      "rightShowFrom": {
+        "type": "integer",
+        "format": "content_index",
+        "description": "\u53F3\u4FA7\u56FE\u4E0E\u6807\u7B7E\u51FA\u73B0\u7684\u65F6\u523B\uFF1A\u53D6 content \u6570\u7EC4\u4E0B\u6807\uFF080-based\uFF09\uFF0C\u5165\u573A\u5E27\u4E3A\u8BE5\u6761\u7684 startFrame\uFF1B\u7701\u7565\u6216\u8D8A\u754C\u5219\u4ECE 0 \u5E27\u8D77"
+      }
     },
     "required": ["leftSrc", "rightSrc", "leftLabel", "rightLabel"]
   },
@@ -75251,27 +76659,33 @@ const BWSplitCompare = ({
   rightLabel = "",
   leftSrc,
   rightSrc,
+  leftShowFrom,
+  rightShowFrom,
   content,
-  anchors,
   audioSrc,
   children,
   style
 }) => {
   const frame = (0,esm.useCurrentFrame)();
   const { width } = (0,esm.useVideoConfig)();
-  const half = width / 2;
-  const slideLeft = (0,esm.interpolate)(frame, [0, 12], [-half, 0], {
+  const off = width;
+  const contentItems = normalizeContent(content);
+  const leftStart = resolveSideStartFrame(leftShowFrom, contentItems);
+  const rightStart = resolveSideStartFrame(rightShowFrom, contentItems);
+  const slideLeft = (0,esm.interpolate)(frame, [leftStart, leftStart + 12], [-off, 0], {
     extrapolateRight: "clamp",
     extrapolateLeft: "clamp"
   });
-  const slideRight = (0,esm.interpolate)(frame, [0, 12], [half, 0], {
+  const slideRight = (0,esm.interpolate)(frame, [rightStart, rightStart + 12], [off, 0], {
     extrapolateRight: "clamp",
     extrapolateLeft: "clamp"
   });
-  const lineProgress = (0,esm.interpolate)(frame, [12, 20], [0, 1], {
+  const lineFrom = Math.max(leftStart, rightStart) + 12;
+  const lineProgress = (0,esm.interpolate)(frame, [lineFrom, lineFrom + 8], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp"
   });
+  const gutter = Math.round(width * 0.1);
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style, children: [
     /* @__PURE__ */ (0,jsx_runtime.jsxs)(
       "div",
@@ -75280,7 +76694,11 @@ const BWSplitCompare = ({
           display: "flex",
           width: "100%",
           height: "100%",
-          alignItems: "stretch"
+          boxSizing: "border-box",
+          paddingLeft: gutter,
+          paddingRight: gutter,
+          alignItems: "stretch",
+          overflow: "hidden"
         },
         children: [
           /* @__PURE__ */ (0,jsx_runtime.jsxs)(
@@ -75288,10 +76706,13 @@ const BWSplitCompare = ({
             {
               style: {
                 flex: 1,
+                minWidth: 0,
+                overflow: "hidden",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
+                paddingRight: Math.round(width * 0.02),
                 transform: `translateX(${slideLeft}px)`
               },
               children: [
@@ -75300,7 +76721,7 @@ const BWSplitCompare = ({
                   {
                     src: getSafeImageSrc(leftSrc),
                     style: {
-                      maxWidth: "80%",
+                      maxWidth: "72%",
                       maxHeight: "50%",
                       objectFit: "contain"
                     }
@@ -75311,7 +76732,7 @@ const BWSplitCompare = ({
                   {
                     style: {
                       marginTop: 16,
-                      fontSize: 36,
+                      fontSize: 56,
                       fontWeight: 700,
                       color: BW_TEXT
                     },
@@ -75326,10 +76747,13 @@ const BWSplitCompare = ({
             {
               style: {
                 flex: 1,
+                minWidth: 0,
+                overflow: "hidden",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
+                paddingLeft: Math.round(width * 0.02),
                 transform: `translateX(${slideRight}px)`
               },
               children: [
@@ -75338,7 +76762,7 @@ const BWSplitCompare = ({
                   {
                     src: getSafeImageSrc(rightSrc),
                     style: {
-                      maxWidth: "80%",
+                      maxWidth: "72%",
                       maxHeight: "50%",
                       objectFit: "contain"
                     }
@@ -75349,7 +76773,7 @@ const BWSplitCompare = ({
                   {
                     style: {
                       marginTop: 16,
-                      fontSize: 36,
+                      fontSize: 56,
                       fontWeight: 700,
                       color: BW_TEXT
                     },
@@ -75377,7 +76801,7 @@ const BWSplitCompare = ({
         }
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc, hideAnchors: true }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
     children
   ] });
 };
@@ -75388,161 +76812,259 @@ const BWSplitCompare = ({
 
 
 
+
+const resolveBarEnterFrame = (showFrom, contentItems) => {
+  if (Number.isInteger(showFrom) && showFrom >= 0 && showFrom < contentItems.length) {
+    const cue = contentItems[showFrom];
+    if (cue && typeof cue.startFrame === "number") {
+      return cue.startFrame;
+    }
+  }
+  return 0;
+};
+const BAR_COLORS = ["#C53030", "#276749", "#2B6CB0", "#DD6B20", "#805AD5", "#319795"];
+const BAR_ENTRANCE_SPRING_FRAMES = 22;
+const BAR_FILL_DELAY_FRAMES = 18;
+const BAR_FILL_SPRING_FRAMES = 42;
 const StatCompare_templateMeta = {
   "name": "STAT_COMPARE",
   "componentExport": "BWStatCompare",
-  "description": "\u9002\u7528\uFF1A\u4E24\u9879 KPI \u5E76\u5217\u5BF9\u6BD4\uFF08\u524D\u540E\u3001A/B\u3001\u6DA8\u8DCC\uFF09\uFF1B\u6761\u5F62\u9AD8\u5EA6\u53CD\u6620\u76F8\u5BF9\u5927\u5C0F\u3002\n\u5DEE\u5F02\uFF1A\u5DE6\u53F3\u573A\u666F\u56FE\u5BF9\u6BD4\u7528 SPLIT_COMPARE\uFF1B\u5355\u6570\u5B57\u5F3A\u8C03\u7528 KPI_HERO\uFF1B\u82E5\u5F3A\u8C03\u5B8C\u6210\u5EA6/\u8FDB\u5EA6\u95ED\u73AF\u611F\u7528 PROGRESS_RING\u3002\n\u53C2\u6570\uFF1AleftValue/rightValue \u4E3A\u975E\u8D1F\u6574\u6570\uFF1B\u6807\u7B7E\u5B9C\u77ED\u3002",
+  "description": "\u9002\u7528\uFF1A2\uFF5E6 \u9879 KPI \u5E76\u5217\u5BF9\u6BD4\uFF1B\u6761\u5F62\u9AD8\u5EA6\u53CD\u6620\u76F8\u5BF9\u5927\u5C0F\uFF1Bbars \u6BCF\u6761\u5FC5\u586B showFrom\uFF08content \u4E0B\u6807\uFF09\uFF0C\u4ECE\u5BF9\u5E94\u53E3\u64AD\u53E5\u7684 startFrame \u8D77\u663E\u793A\u8BE5\u67F1\uFF0C\u5DF2\u51FA\u73B0\u7684\u67F1\u4F53\u4F5C\u4E3A\u4E00\u7EC4\u59CB\u7EC8\u753B\u5E03\u6C34\u5E73\u5C45\u4E2D\u3002\n\u5DEE\u5F02\uFF1A\u5DE6\u53F3\u573A\u666F\u56FE\u5BF9\u6BD4\u7528 SPLIT_COMPARE\uFF1B\u5355\u6570\u5B57\u5F3A\u8C03\u7528 KPI_HERO\u3002\n\u53C2\u6570\uFF1Abars\uFF082\uFF5E6 \u6761\uFF1Alabel\u3001value\u3001showFrom\uFF09\uFF1B\u53EF\u9009 anchors\uFF08\u4E0E bars.showFrom \u540C\u4E3A content \u4E0B\u6807\uFF09\uFF1B\u517C\u5BB9\u65E7\u7248 leftValue/rightValue/leftLabel/rightLabel\uFF08\u4E24\u67F1\u540C\u5E27\u5165\u573A\uFF09\u3002",
   "psychology": "\u5BF9\u6BD4\u6548\u5E94",
-  "image_count": "0-2",
+  "image_count": "0",
   "param_schema": {
     "type": "object",
     "properties": {
-      "leftValue": { "type": "integer", "description": "\u5DE6\u4FA7\u6570\u503C\uFF08\u975E\u8D1F\u6574\u6570\uFF09" },
-      "rightValue": { "type": "integer", "description": "\u53F3\u4FA7\u6570\u503C\uFF08\u975E\u8D1F\u6574\u6570\uFF09" },
+      "bars": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 6,
+        "description": "\u591A\u6761\u67F1\u72B6\u5BF9\u6BD4\uFF1B\u6BCF\u9879\u987B\u542B label\u3001value\uFF08\u975E\u8D1F\u6574\u6570\uFF09\u3001showFrom\uFF08content \u4E0B\u6807\uFF09\uFF0C\u4ECE\u8BE5\u6761 startFrame \u8D77\u663E\u793A\u672C\u67F1",
+        "items": {
+          "type": "object",
+          "required": ["label", "value", "showFrom"],
+          "properties": {
+            "label": { "type": "string", "description": "\u77ED\u6807\u7B7E" },
+            "value": { "type": "integer", "description": "\u6570\u503C\uFF08\u975E\u8D1F\u6574\u6570\uFF09" },
+            "showFrom": {
+              "type": "integer",
+              "format": "content_index",
+              "description": "\u8BE5\u67F1\u51FA\u73B0\u65F6\u673A\uFF1Acontent \u6570\u7EC4\u4E0B\u6807\uFF080-based\uFF09\uFF0C\u53D6\u8BE5\u6761 startFrame \u4F5C\u4E3A\u5165\u573A\u8D77\u70B9"
+            }
+          }
+        }
+      },
+      "leftValue": { "type": "integer", "description": "\u5DE6\u4FA7\u6570\u503C\uFF08\u975E\u8D1F\u6574\u6570\uFF09\uFF0C\u65E7\u7248\u4E24\u67F1\u6A21\u5F0F" },
+      "rightValue": { "type": "integer", "description": "\u53F3\u4FA7\u6570\u503C\uFF08\u975E\u8D1F\u6574\u6570\uFF09\uFF0C\u65E7\u7248\u4E24\u67F1\u6A21\u5F0F" },
       "leftLabel": { "type": "string", "description": "\u5DE6\u4FA7\u6807\u7B7E" },
       "rightLabel": { "type": "string", "description": "\u53F3\u4FA7\u6807\u7B7E" },
-      "leftSrc": {
-        "type": "string",
-        "format": "image_prompt",
-        "description": "\u5DE6\u4FA7\u5C0F\u56FE\u6807"
-      },
-      "rightSrc": {
-        "type": "string",
-        "format": "image_prompt",
-        "description": "\u53F3\u4FA7\u5C0F\u56FE\u6807"
+      "anchors": {
+        "type": "array",
+        "description": "\u53EF\u9009\uFF1B\u9876\u90E8\u951A\u70B9\u8BCD\u5217\u8868\uFF0CshowFrom \u4E3A content \u4E0B\u6807\uFF08\u53D6\u8BE5\u6761 startFrame\uFF09\uFF0C\u4E0E KPI_HERO / DATA_TABLE \u4E00\u81F4",
+        "items": {
+          "type": "object",
+          "required": ["text", "showFrom"],
+          "properties": {
+            "text": { "type": "string", "description": "\u951A\u70B9\u8BCD\u6587\u6848" },
+            "showFrom": {
+              "type": "integer",
+              "format": "content_index",
+              "description": "content \u4E0B\u6807\uFF080-based\uFF09\uFF0C\u975E\u5E27\u6570"
+            },
+            "color": { "type": "string" },
+            "anim": {
+              "type": "string",
+              "enum": ["spring", "slideUp", "popIn", "highlight"]
+            },
+            "audioEffect": {
+              "type": "string",
+              "enum": ["impact_thud", "ping", "woosh"]
+            }
+          }
+        }
       }
     },
-    "required": ["leftValue", "rightValue", "leftLabel", "rightLabel"]
+    "required": []
   },
   "example": {
     "template": "STAT_COMPARE",
     "param": {
-      "leftValue": 32,
-      "rightValue": 68,
-      "leftLabel": "\u53BB\u5E74",
-      "rightLabel": "\u4ECA\u5E74"
+      "bars": [
+        { "label": "\u53BB\u5E74", "value": 32, "showFrom": 0 },
+        { "label": "\u4ECA\u5E74", "value": 68, "showFrom": 1 }
+      ]
     }
   }
 };
 const StatCompare_fontStack = '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif';
-const BWStatCompare = ({
-  leftValue,
-  rightValue,
-  leftLabel = "",
-  rightLabel = "",
-  leftSrc,
-  rightSrc,
-  content,
-  anchors,
-  audioSrc,
-  children,
-  style
-}) => {
+function buildResolvedBars(props) {
+  const { bars, leftValue = 0, rightValue = 0, leftLabel = "", rightLabel = "" } = props;
+  if (bars && Array.isArray(bars) && bars.length >= 2) {
+    return bars.slice(0, 6).map((b, i) => ({
+      label: typeof b.label === "string" ? b.label : "",
+      value: Math.max(0, Math.round(Number(b.value) || 0)),
+      showFrom: typeof b.showFrom === "number" && Number.isInteger(b.showFrom) ? b.showFrom : 0,
+      color: BAR_COLORS[i % BAR_COLORS.length]
+    }));
+  }
+  return [
+    {
+      label: leftLabel,
+      value: Math.max(0, Math.round(Number(leftValue) || 0)),
+      color: BAR_COLORS[0],
+      legacySimultaneous: true
+    },
+    {
+      label: rightLabel,
+      value: Math.max(0, Math.round(Number(rightValue) || 0)),
+      color: BAR_COLORS[1],
+      legacySimultaneous: true
+    }
+  ];
+}
+function getBarEnterFrame(b, contentItems) {
+  if (b.legacySimultaneous) {
+    return 0;
+  }
+  const idx = typeof b.showFrom === "number" && Number.isInteger(b.showFrom) ? b.showFrom : 0;
+  return resolveBarEnterFrame(idx, contentItems);
+}
+const BWStatCompare = (props) => {
+  const { content, anchors, audioSrc, children, style } = props;
   const frame = (0,esm.useCurrentFrame)();
   const { fps, width } = (0,esm.useVideoConfig)();
-  const barSpring = (0,esm.spring)({
-    frame: frame - 8,
-    fps,
-    config: { damping: 55, stiffness: 120 },
-    durationInFrames: 32
-  });
-  const maxVal = Math.max(1, leftValue, rightValue);
-  const leftH = (0,esm.interpolate)(barSpring, [0, 1], [0, leftValue / maxVal * 100], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const rightH = (0,esm.interpolate)(barSpring, [0, 1], [0, rightValue / maxVal * 100], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const numSpring = (0,esm.spring)({
-    frame: frame - 8,
-    fps,
-    config: { damping: 80, stiffness: 200 },
-    durationInFrames: 30
-  });
-  const leftShown = Math.round(
-    (0,esm.interpolate)(numSpring, [0, 1], [0, leftValue], {
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp"
-    })
+  const contentItems = normalizeContent(content);
+  const model = buildResolvedBars(props);
+  const maxVal = Math.max(1, ...model.map((b) => b.value));
+  const visibleBars = model.map((b, origIndex) => ({
+    ...b,
+    origIndex,
+    enterFrame: getBarEnterFrame(b, contentItems)
+  })).filter((b) => frame >= b.enterFrame);
+  const nVis = visibleBars.length;
+  const maxGap = width * 0.06;
+  const gap = Math.max(12, Math.min(maxGap, width * 0.034));
+  const colW = Math.min(
+    300,
+    Math.max(88, (width * 0.9 - Math.max(0, nVis - 1) * gap) / Math.max(1, nVis))
   );
-  const rightShown = Math.round(
-    (0,esm.interpolate)(numSpring, [0, 1], [0, rightValue], {
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp"
-    })
-  );
-  const colW = Math.min(200, width * 0.28);
+  const barTrackWidthRatio = 0.58;
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style: { ...style }, children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
       "div",
       {
         style: {
           position: "absolute",
           left: "50%",
-          top: "40%",
+          top: "50%",
           transform: "translate(-50%, -50%)",
           display: "flex",
           flexDirection: "row",
           alignItems: "flex-end",
           justifyContent: "center",
-          gap: width * 0.12,
-          width: "90%"
+          gap,
+          width: "92%",
+          minHeight: 400
         },
-        children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+        children: visibleBars.map((b) => {
+          const localFrame = frame - b.enterFrame;
+          const entranceP = (0,esm.spring)({
+            frame: localFrame,
+            fps,
+            config: { damping: 9, stiffness: 210, mass: 0.62 },
+            durationInFrames: BAR_ENTRANCE_SPRING_FRAMES
+          });
+          const liftPx = (0,esm.interpolate)(entranceP, [0, 1], [88, 0], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp"
+          });
+          const punchScale = (0,esm.interpolate)(entranceP, [0, 0.5, 1], [0.48, 1.12, 1], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp"
+          });
+          const tiltDeg = (0,esm.interpolate)(entranceP, [0, 1], [-6, 0], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp"
+          });
+          const wrapOpacity = (0,esm.interpolate)(entranceP, [0, 0.22], [0, 1], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp"
+          });
+          const fillT = localFrame - BAR_FILL_DELAY_FRAMES;
+          const fillP = (0,esm.spring)({
+            frame: fillT,
+            fps,
+            config: { damping: 14, stiffness: 92, mass: 0.88 },
+            durationInFrames: BAR_FILL_SPRING_FRAMES
+          });
+          const targetHPct = b.value / maxVal * 100;
+          const barH = fillT < 0 ? 0 : (0,esm.interpolate)(fillP, [0, 1], [0, targetHPct], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp"
+          });
+          const shown = fillT < 0 ? 0 : Math.round(
+            (0,esm.interpolate)(fillP, [0, 1], [0, b.value], {
+              extrapolateLeft: "clamp",
+              extrapolateRight: "clamp"
+            })
+          );
+          const labelOpacity = (0,esm.interpolate)(entranceP, [0.35, 0.88], [0, 1], {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp"
+          });
+          return /* @__PURE__ */ (0,jsx_runtime.jsxs)(
             "div",
             {
               style: {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                gap: 16,
-                width: colW
+                gap: 20,
+                width: colW,
+                flexShrink: 0,
+                opacity: wrapOpacity,
+                transform: `translateY(${liftPx}px) scale(${punchScale}) rotate(${tiltDeg}deg)`,
+                transformOrigin: "50% 100%"
               },
               children: [
                 /* @__PURE__ */ (0,jsx_runtime.jsx)(
                   "div",
                   {
                     style: {
-                      fontSize: 44,
+                      fontSize: nVis >= 5 ? 48 : 60,
                       fontWeight: 900,
                       color: BW_TEXT,
-                      fontFamily: StatCompare_fontStack
+                      fontFamily: StatCompare_fontStack,
+                      fontVariantNumeric: "tabular-nums"
                     },
-                    children: leftShown
-                  }
-                ),
-                /* @__PURE__ */ (0,jsx_runtime.jsx)(
-                  esm.Img,
-                  {
-                    src: getSafeImageSrc(leftSrc),
-                    style: { width: 72, height: 72, objectFit: "contain" }
+                    children: shown
                   }
                 ),
                 /* @__PURE__ */ (0,jsx_runtime.jsx)(
                   "div",
                   {
                     style: {
-                      width: "100%",
-                      height: 220,
+                      width: `${barTrackWidthRatio * 100}%`,
+                      maxWidth: Math.round(colW * barTrackWidthRatio),
+                      height: 280,
                       backgroundColor: "rgba(0,0,0,0.06)",
-                      borderRadius: 12,
+                      borderRadius: 16,
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "flex-end",
-                      overflow: "hidden"
+                      overflow: "hidden",
+                      alignSelf: "center"
                     },
                     children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
                       "div",
                       {
                         style: {
                           width: "100%",
-                          height: `${leftH}%`,
-                          minHeight: 8,
-                          backgroundColor: "#C53030",
-                          borderRadius: "0 0 12px 12px"
+                          height: `${barH}%`,
+                          minHeight: barH > 0.8 ? 6 : 0,
+                          backgroundColor: b.color,
+                          borderRadius: "0 0 16px 16px",
+                          boxShadow: fillT >= 0 && fillP > 0.08 && fillP < 0.95 ? `0 0 ${Math.round(18 * (1 - fillP))}px ${b.color}55` : void 0
                         }
                       }
                     )
@@ -75552,95 +77074,26 @@ const BWStatCompare = ({
                   "div",
                   {
                     style: {
-                      fontSize: 26,
+                      fontSize: nVis >= 5 ? 30 : 36,
                       fontWeight: 700,
                       color: BW_TEXT,
                       textAlign: "center",
-                      fontFamily: StatCompare_fontStack
+                      fontFamily: StatCompare_fontStack,
+                      lineHeight: 1.15,
+                      opacity: labelOpacity
                     },
-                    children: leftLabel
+                    children: b.label
                   }
                 )
               ]
-            }
-          ),
-          /* @__PURE__ */ (0,jsx_runtime.jsxs)(
-            "div",
-            {
-              style: {
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 16,
-                width: colW
-              },
-              children: [
-                /* @__PURE__ */ (0,jsx_runtime.jsx)(
-                  "div",
-                  {
-                    style: {
-                      fontSize: 44,
-                      fontWeight: 900,
-                      color: BW_TEXT,
-                      fontFamily: StatCompare_fontStack
-                    },
-                    children: rightShown
-                  }
-                ),
-                /* @__PURE__ */ (0,jsx_runtime.jsx)(
-                  esm.Img,
-                  {
-                    src: getSafeImageSrc(rightSrc),
-                    style: { width: 72, height: 72, objectFit: "contain" }
-                  }
-                ),
-                /* @__PURE__ */ (0,jsx_runtime.jsx)(
-                  "div",
-                  {
-                    style: {
-                      width: "100%",
-                      height: 220,
-                      backgroundColor: "rgba(0,0,0,0.06)",
-                      borderRadius: 12,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "flex-end",
-                      overflow: "hidden"
-                    },
-                    children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-                      "div",
-                      {
-                        style: {
-                          width: "100%",
-                          height: `${rightH}%`,
-                          minHeight: 8,
-                          backgroundColor: "#276749",
-                          borderRadius: "0 0 12px 12px"
-                        }
-                      }
-                    )
-                  }
-                ),
-                /* @__PURE__ */ (0,jsx_runtime.jsx)(
-                  "div",
-                  {
-                    style: {
-                      fontSize: 26,
-                      fontWeight: 700,
-                      color: BW_TEXT,
-                      textAlign: "center",
-                      fontFamily: StatCompare_fontStack
-                    },
-                    children: rightLabel
-                  }
-                )
-              ]
-            }
-          )
-        ]
+            },
+            b.origIndex
+          );
+        })
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateDefaultAnchors, { content, anchors }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
     children
   ] });
 };
@@ -75652,10 +77105,11 @@ const BWStatCompare = ({
 
 
 
+
 const StepList_templateMeta = {
   "name": "STEP_LIST",
   "componentExport": "BWStepList",
-  "description": "\u9002\u7528\uFF1A\u53EF\u6267\u884C\u6B65\u9AA4\u3001\u64CD\u4F5C\u6D41\u7A0B\u3001\u77ED\u5206\u70B9\u6E05\u5355\uFF08\u7B2C\u4E00\u6B65/\u7B2C\u4E8C\u6B65\u2026\uFF09\uFF0C\u65E0\u914D\u56FE\uFF0C\u6BCF\u4E2A\u5206\u70B9\u5FC5\u987B\u9650\u5236\u572810\u4E2A\u5B57\u7B26\u4EE5\u5185\u3002\n\u5DEE\u5F02\uFF1A\u82E5\u6BCF\u6761\u65B9\u6CD5\u540E\u8FD8\u8DDF\u8F83\u957F\u89E3\u91CA\u3001\u8FFD\u95EE\u6216\u8865\u5145\u53E5\uFF0C\u4F18\u5148\u7528 METHOD_STACK\uFF1B\u65E0\u6B65\u9AA4\u611F\u7684\u5E76\u5217\u8981\u70B9\u7528 LIST_MULTI_GROUP \u6216 CENTER_FOCUS\u3002\n\u53C2\u6570\uFF1Asteps \u53EF\u4E3A\u5B57\u7B26\u4E32\u6570\u7EC4\uFF0C\u6216 { text, showFrom? }\uFF1BshowFrom \u4E3A content \u6570\u7EC4\u7684\u4E0B\u6807\uFF080-based\uFF09\uFF0C\u4E0E anchors \u4E00\u81F4\uFF0C\u5165\u573A\u65F6\u523B\u53D6\u8BE5\u6761 content \u7684 startFrame\uFF1B\u4E0D\u4F20 steps \u5219\u4ECE content \u63D0\u53D6\uFF1B\u672A\u5199 showFrom \u65F6\u6309 staggerDelay \u4E0E\u5E8F\u53F7\u4EA4\u9519\u3002",
+  "description": "\u9002\u7528\uFF1A\u53EF\u6267\u884C\u6B65\u9AA4\u3001\u64CD\u4F5C\u6D41\u7A0B\u3001\u77ED\u5206\u70B9\u6E05\u5355\uFF08\u7B2C\u4E00\u6B65/\u7B2C\u4E8C\u6B65\u2026\uFF09\uFF0C\u65E0\u914D\u56FE\uFF0C\u6BCF\u4E2A\u5206\u70B9\u5FC5\u987B\u9650\u5236\u572810\u4E2A\u5B57\u7B26\u4EE5\u5185\u3002\n\u5DEE\u5F02\uFF1A\u82E5\u6BCF\u6761\u65B9\u6CD5\u540E\u8FD8\u8DDF\u8F83\u957F\u89E3\u91CA\u3001\u8FFD\u95EE\u6216\u8865\u5145\u53E5\uFF0C\u4F18\u5148\u7528 METHOD_STACK\uFF1B\u65E0\u6B65\u9AA4\u611F\u7684\u5E76\u5217\u8981\u70B9\u7528 PANEL_GRID \u6216 CENTER_FOCUS\u3002\n\u53C2\u6570\uFF1Asteps \u53EF\u4E3A\u5B57\u7B26\u4E32\u6570\u7EC4\uFF0C\u6216 { text, showFrom? }\uFF1BshowFrom \u4E3A content \u6570\u7EC4\u7684\u4E0B\u6807\uFF080-based\uFF09\uFF0C\u4E0E anchors \u4E00\u81F4\uFF0C\u5165\u573A\u65F6\u523B\u53D6\u8BE5\u6761 content \u7684 startFrame\uFF1B\u4E0D\u4F20 steps \u5219\u4ECE content \u63D0\u53D6\uFF1B\u672A\u5199 showFrom \u65F6\u6309 staggerDelay \u4E0E\u5E8F\u53F7\u4EA4\u9519\u3002",
   "content_min_items": 2,
   "content_max_items": 6,
   "psychology": "\u964D\u4F4E\u8BA4\u77E5\u8D1F\u8377",
@@ -75737,8 +77191,8 @@ const BWStepList = ({
       {
         style: {
           position: "absolute",
-          left: 48,
-          right: 48,
+          left: 200,
+          right: 200,
           top: "50%",
           transform: "translateY(-50%)"
         },
@@ -75751,11 +77205,11 @@ const BWStepList = ({
                 style: {
                   display: "flex",
                   alignItems: "center",
-                  gap: 16,
-                  padding: "12px 20px",
+                  gap: 24,
+                  padding: "18px 32px",
                   backgroundColor: i % 2 === 0 ? "#f0f0f0" : "#fff",
-                  borderLeft: "4px solid #111",
-                  fontSize: 32,
+                  borderLeft: "6px solid #111",
+                  fontSize: 48,
                   fontWeight: 600,
                   color: BW_TEXT
                 },
@@ -75775,7 +77229,8 @@ const BWStepList = ({
         )
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateDefaultAnchors, { content, anchors }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
     children
   ] });
 };
@@ -75788,7 +77243,7 @@ const BWStepList = ({
 const TextFocus_templateMeta = {
   "name": "TEXT_FOCUS",
   "componentExport": "BWTextFocus",
-  "description": "\u9002\u7528\uFF1A\u5168\u7247\u6700\u5F3A\u91D1\u53E5\u3001\u7ED3\u8BBA\u66B4\u51FB\uFF1B0 \u56FE\u7EAF\u5927\u5B57\u3002\n\u5DEE\u5F02\uFF1A\u9700\u8981\u914D\u56FE\u951A\u5B9A\u7528 CENTER_FOCUS\uFF1B\u6A21\u62DF\u8BFB\u8005\u5410\u69FD\u53E3\u543B\u7528 CHAT_BUBBLE\u3002\n\u614E\u7528\uFF1Acontent \u5EFA\u8BAE\u4E0D\u8D85\u8FC7 3 \u6761\u4EE5\u4FDD\u6301\u51B2\u51FB\uFF1B\u82E5\u53E3\u64AD/\u5B57\u5E55\u5FC5\u987B\u4FDD\u7559\u957F content\uFF0C\u53EF\u586B coreSentence \u4EC5\u7528\u4E8E\u5927\u5C4F\u4E00\u53E5\u5C55\u793A\u3002",
+  "description": "\u9002\u7528\uFF1A\u5168\u7247\u6700\u5F3A\u91D1\u53E5\u3001\u7ED3\u8BBA\u66B4\u51FB\uFF1B0 \u56FE\u7EAF\u5927\u5B57\u3002\n\u5DEE\u5F02\uFF1A\u9700\u8981\u914D\u56FE\u951A\u5B9A\u7528 CENTER_FOCUS\uFF1B\u6A21\u62DF\u8BFB\u8005\u5410\u69FD\u53E3\u543B\u7528 CHAT_BUBBLE\u3002\n\u614E\u7528\uFF1Acontent \u5EFA\u8BAE\u4E0D\u8D85\u8FC7 3 \u6761\u4EE5\u4FDD\u6301\u51B2\u51FB\uFF1B\u82E5\u53E3\u64AD/\u5B57\u5E55\u5FC5\u987B\u4FDD\u7559\u957F content\uFF0C\u53EF\u586B coreSentence\uFF08string[]\uFF0C\u4E00\u884C\u6216\u591A\u884C\uFF09\u4F5C\u4E3A\u5927\u5C4F\u4E3B\u6587\u6848\u3002",
   "content_max_items": 3,
   "psychology": "\u4FE1\u566A\u6BD4\u6781\u81F4\u5316",
   "image_count": 0,
@@ -75796,17 +77251,22 @@ const TextFocus_templateMeta = {
     "type": "object",
     "properties": {
       "coreSentence": {
-        "type": "string",
-        "description": "\u7CBE\u70BC\u6838\u5FC3\u53E5\uFF0C\u4E0D\u8D85\u8FC725\u4E2A\u5B57"
+        "type": "array",
+        "minItems": 1,
+        "items": { "type": "string" },
+        "description": "\u5927\u5C4F\u6838\u5FC3\u6587\u6848\uFF1A\u975E\u7A7A\u5B57\u7B26\u4E32\u6570\u7EC4\uFF0C\u6BCF\u5143\u7D20\u4E00\u884C\uFF1B\u951A\u70B9\u6821\u9A8C\u65F6\u6309\u987A\u5E8F\u76F4\u63A5\u62FC\u63A5\uFF08\u65E0\u5206\u9694\u7B26\uFF09\u3002"
       },
       "coreSentenceAnchors": {
         "type": "array",
-        "description": "\u53EF\u9009\uFF1B\u5728 coreSentence \u5185\u6309\u987A\u5E8F\u9AD8\u4EAE\u5B50\u4E32\u3002\u6BCF\u9879 coreSentenceAnchor \u987B\u4E3A coreSentence \u7684\u5B50\u4E32\uFF0C\u5426\u5219\u4F1A\u88AB\u6821\u9A8C\u4E22\u5F03",
+        "description": "\u53EF\u9009\uFF1B\u5728 coreSentence \u5404\u6BB5\u62FC\u63A5\u540E\u7684\u5168\u6587\u5185\u6309\u987A\u5E8F\u9AD8\u4EAE\u5B50\u4E32\u3002\u6BCF\u9879 coreSentenceAnchor \u987B\u4E3A\u8BE5\u62FC\u63A5\u4E32\u7684\u5B50\u4E32\uFF0C\u5426\u5219\u4F1A\u88AB\u6821\u9A8C\u4E22\u5F03",
         "items": {
           "type": "object",
           "required": ["coreSentenceAnchor"],
           "properties": {
-            "coreSentenceAnchor": { "type": "string", "description": "\u8981\u9AD8\u4EAE\u7684\u5B50\u4E32\uFF0C\u987B\u51FA\u73B0\u5728 coreSentence \u5185" },
+            "coreSentenceAnchor": {
+              "type": "string",
+              "description": "\u8981\u9AD8\u4EAE\u7684\u5B50\u4E32\uFF0C\u987B\u51FA\u73B0\u5728\u5404 coreSentence \u6BB5\u62FC\u63A5\u540E\u7684\u5168\u6587\u5185"
+            },
             "color": { "type": "string", "description": "\u9AD8\u4EAE\u989C\u8272\uFF0C\u7701\u7565\u65F6\u9ED8\u8BA4\u5F3A\u8C03\u8272" }
           }
         }
@@ -75817,54 +77277,19 @@ const TextFocus_templateMeta = {
   "example": {
     "template": "TEXT_FOCUS",
     "param": {
-      "coreSentence": "\u627F\u8BA4\u81EA\u5DF1\u201C\u53EF\u80FD\u9519\u4E86\u201D\u5E76\u4E0D\u662F\u4E00\u79CD\u8F6F\u5F31",
+      "coreSentence": ["\u627F\u8BA4\u81EA\u5DF1\u201C\u53EF\u80FD\u9519\u4E86\u201D\u5E76\u4E0D\u662F\u4E00\u79CD\u8F6F\u5F31"],
       "coreSentenceAnchors": [{ "coreSentenceAnchor": "\u53EF\u80FD\u9519\u4E86", "color": "red" }]
     }
   }
 };
-const BWTextFocus = ({
-  content,
-  coreSentence,
-  coreSentenceAnchors,
-  audioSrc,
-  style,
-  children
-}) => {
-  const frame = (0,esm.useCurrentFrame)();
-  const { fps } = (0,esm.useVideoConfig)();
-  const fadeIn = (0,esm.interpolate)(frame, [0, 10], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const scaleSpring = (0,esm.spring)({
-    frame,
-    fps,
-    config: { damping: 12, stiffness: 200 },
-    durationInFrames: 20
-  });
-  const scale = (0,esm.interpolate)(scaleSpring, [0, 1], [0.6, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const breathe = frame > 20 ? 1 + Math.sin((frame - 20) * 0.06) * 0.015 : 1;
-  const mainText = coreSentence == null ? void 0 : coreSentence.trim();
-  const headlineForSizing = mainText || (content ?? []).map((item) => item.text).join("").trim();
-  const charCount = Math.max(1, [...headlineForSizing].length);
-  const titleFontSize = (0,esm.interpolate)(
-    charCount,
-    // 字符数
-    [6, 12, 18, 26, 36],
-    // 不同字符长度的区间
-    [88, 76, 62, 52, 42],
-    // 对应区间字号（单位：px），字符越多字号越小
-    {
-      extrapolateLeft: "clamp",
-      // 小于最小区间时，字号不会进一步变大
-      extrapolateRight: "clamp"
-      // 超过最大区间时，字号不会进一步变小
-    }
-  );
-  const highlightedText = (coreSentenceAnchors ?? []).reduce(
+function normalizeCoreSentenceLines(coreSentence) {
+  if (coreSentence == null || !Array.isArray(coreSentence)) {
+    return [];
+  }
+  return coreSentence.map((s) => typeof s === "string" ? s.trim() : String(s).trim()).filter(Boolean);
+}
+function applyCoreSentenceAnchorsToLine(line, coreSentenceAnchors, lineKeyPrefix) {
+  return (coreSentenceAnchors ?? []).reduce(
     (nodes, item, anchorIdx) => {
       var _a;
       const phrase = (_a = item.coreSentenceAnchor) == null ? void 0 : _a.trim();
@@ -75890,7 +77315,7 @@ const BWTextFocus = ({
                   style: { color: item.color || "#E53E3E" },
                   children: phrase
                 },
-                `csa-${anchorIdx}-${nodeIdx}-${i}`
+                `${lineKeyPrefix}-csa-${anchorIdx}-${nodeIdx}-${i}`
               )
             );
           }
@@ -75898,8 +77323,61 @@ const BWTextFocus = ({
         return mappedParts;
       });
     },
-    [mainText]
+    [line]
   );
+}
+const BWTextFocus = ({
+  content,
+  coreSentence,
+  coreSentenceAnchors,
+  audioSrc,
+  style,
+  children
+}) => {
+  const frame = (0,esm.useCurrentFrame)();
+  const { fps } = (0,esm.useVideoConfig)();
+  const fadeIn = (0,esm.interpolate)(frame, [0, 10], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  });
+  const scaleSpring = (0,esm.spring)({
+    frame,
+    fps,
+    config: { damping: 12, stiffness: 200 },
+    durationInFrames: 20
+  });
+  const scale = (0,esm.interpolate)(scaleSpring, [0, 1], [0.6, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  });
+  const breathe = frame > 20 ? 1 + Math.sin((frame - 20) * 0.06) * 0.015 : 1;
+  const mainLines = normalizeCoreSentenceLines(coreSentence);
+  const contentJoin = (content ?? []).map((item) => item.text).join("").trim();
+  const displayLines = mainLines.length > 0 ? mainLines : contentJoin ? [contentJoin] : [];
+  const headlineForSizing = displayLines.length > 0 ? displayLines.reduce(
+    (longest, line) => [...line].length > [...longest].length ? line : longest,
+    displayLines[0]
+  ) : "";
+  const charCount = Math.max(1, [...headlineForSizing].length);
+  const titleFontSize = (0,esm.interpolate)(
+    charCount,
+    // 字符数
+    [6, 12, 18, 26, 36],
+    // 不同字符长度的区间
+    [128, 110, 90, 76, 62],
+    // 对应区间字号（单位：px），字符越多字号越小
+    {
+      extrapolateLeft: "clamp",
+      // 小于最小区间时，字号不会进一步变大
+      extrapolateRight: "clamp"
+      // 超过最大区间时，字号不会进一步变小
+    }
+  );
+  const highlightedBlock = displayLines.length > 0 ? displayLines.map((line, li) => /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { children: applyCoreSentenceAnchorsToLine(
+    line,
+    mainLines.length > 0 ? coreSentenceAnchors : void 0,
+    `L${li}`
+  ) }, `cs-line-${li}`)) : null;
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(
     esm.AbsoluteFill,
     {
@@ -75917,26 +77395,23 @@ const BWTextFocus = ({
             style: {
               transform: `scale(${scale * breathe})`,
               transformOrigin: "center center",
-              padding: "0 60px",
+              padding: "0 96px",
               textAlign: "center",
               fontSize: titleFontSize,
               fontWeight: 900,
               color: "#111111",
               lineHeight: 1.3,
               letterSpacing: "0.04em",
-              fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif'
+              fontFamily: '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: displayLines.length > 1 ? "0.35em" : 0
             },
-            children: highlightedText
+            children: highlightedBlock
           }
         ),
-        /* @__PURE__ */ (0,jsx_runtime.jsx)(
-          TemplateContentRenderer,
-          {
-            content,
-            audioSrc,
-            hideAnchors: true
-          }
-        ),
+        /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
         children
       ]
     }
@@ -75953,7 +77428,7 @@ const BWTextFocus = ({
 const CauseChain_templateMeta = {
   "name": "CAUSE_CHAIN",
   "componentExport": "BWCauseChain",
-  "description": "\u9002\u7528\uFF1A\u540C\u4E00\u955C\u5934\u5185\u8BB2\u6E05\u300C\u56E0\u2192\u679C\u2192\u518D\u679C\u300D\u4F20\u5BFC\u3001\u673A\u5236\u94FE\u6761\uFF1B\u6BCF\u6BB5\u53E3\u64AD\u5BF9\u5E94\u94FE\u4E0A\u4E00\u73AF\u3002\n\u5DEE\u5F02\uFF1A\u6709\u65F6\u95F4\u523B\u5EA6/\u5E74\u4EE3\u6F14\u8FDB\u7528 TIMELINE\uFF1B\u5355\u6807\u9898+\u591A\u53E5\u89E3\u91CA\u7528 METHOD_STACK\uFF1B\u5DE6\u53F3\u5BF9\u7167\u7528 SPLIT_COMPARE\uFF1B\u60C5\u7EEA\u9012\u8FDB\u6362\u56FE\u7528 BEAT_SEQUENCE\u3002\n\u53C2\u6570\uFF1Anodes 2\uFF5E4 \u9879\uFF0C\u6BCF\u9879 label\uFF08\u77ED\u6807\u7B7E\uFF09\u3001imageSrc\u3001showFrom\uFF08content \u4E0B\u6807 0-based\uFF0C\u975E\u5E27\u6570\uFF09\uFF1B\u53EF\u9009 layout \u4E3A vertical\uFF08\u9ED8\u8BA4\uFF0C\u9002\u914D\u7AD6\u5C4F\uFF09\u6216 horizontal\u3002",
+  "description": "\u9002\u7528\uFF1A\u540C\u4E00\u955C\u5934\u5185\u8BB2\u6E05\u300C\u56E0\u2192\u679C\u2192\u518D\u679C\u300D\u4F20\u5BFC\u3001\u673A\u5236\u94FE\u6761\uFF1B\u6BCF\u6BB5\u53E3\u64AD\u5BF9\u5E94\u94FE\u4E0A\u4E00\u73AF\u3002\n\u5DEE\u5F02\uFF1A\u6709\u65F6\u95F4\u523B\u5EA6/\u5E74\u4EE3\u6F14\u8FDB\u7528 TIMELINE\uFF1B\u5355\u6807\u9898+\u591A\u53E5\u89E3\u91CA\u7528 METHOD_STACK\uFF1B\u5DE6\u53F3\u5BF9\u7167\u7528 SPLIT_COMPARE\uFF1B\u60C5\u7EEA\u9012\u8FDB\u6362\u56FE\u7528 BEAT_SEQUENCE\u3002\n\u53C2\u6570\uFF1Anodes 2\uFF5E4 \u9879\uFF0C\u6BCF\u9879 label\uFF08\u77ED\u6807\u7B7E\uFF09\u3001imageSrc\u3001showFrom\uFF08content \u4E0B\u6807 0-based\uFF0C\u975E\u5E27\u6570\uFF09\uFF1B\u53EF\u9009 layout \u4E3A horizontal\uFF08\u9ED8\u8BA4\uFF0C\u5DE6\u2192\u53F3\u94FE\uFF09\u6216 vertical\uFF08\u7AD6\u5411\u5806\u53E0\uFF0C\u9002\u914D\u7AD6\u5C4F\uFF09\u3002",
   "psychology": "\u56E0\u679C\u53EF\u89C6\u5316",
   "image_count": "2-4",
   "content_min_items": 2,
@@ -75963,9 +77438,9 @@ const CauseChain_templateMeta = {
     "properties": {
       "layout": {
         "type": "string",
-        "enum": ["vertical", "horizontal"],
-        "default": "vertical",
-        "description": "\u94FE\u7684\u6392\u5E03\u65B9\u5411\uFF0C\u7AD6\u5C4F\u5EFA\u8BAE vertical"
+        "enum": ["horizontal", "vertical"],
+        "default": "horizontal",
+        "description": "\u94FE\u7684\u6392\u5E03\u65B9\u5411\uFF1B\u6A2A\u5C4F/\u5E38\u89C4\u53D9\u4E8B\u9ED8\u8BA4 horizontal\uFF0C\u7AD6\u5C4F\u53EF\u8BBE vertical"
       },
       "nodes": {
         "type": "array",
@@ -76001,7 +77476,7 @@ const CauseChain_templateMeta = {
   "example": {
     "template": "CAUSE_CHAIN",
     "param": {
-      "layout": "vertical",
+      "layout": "horizontal",
       "nodes": [
         { "label": "\u523A\u6FC0", "imageSrc": "\u95EA\u7535\u51FB\u4E2D\u5927\u8111\u7684\u7B80\u7B14\u753B", "showFrom": 0 },
         { "label": "\u89E3\u8BFB", "imageSrc": "\u653E\u5927\u955C\u770B\u4FE1\u606F\u7684\u7B80\u7B14\u753B", "showFrom": 1 },
@@ -76017,7 +77492,7 @@ const resolveNodeStartFrame = (showFrom, nodeIndex, contentItems, staggerFallbac
   }
   return nodeIndex * staggerFallback;
 };
-const CauseChainNodeCard = ({ node, startFrame, isVertical, maxImgH, maxImgW }) => {
+const CauseChainNodeCard = ({ node, startFrame, isVertical, maxImgH, maxImgW, labelFontSize }) => {
   const frame = (0,esm.useCurrentFrame)();
   const { fps, width, height } = (0,esm.useVideoConfig)();
   const rel = frame - startFrame;
@@ -76046,7 +77521,7 @@ const CauseChainNodeCard = ({ node, startFrame, isVertical, maxImgH, maxImgW }) 
         flexDirection: "column",
         alignItems: "center",
         opacity,
-        gap: 8,
+        gap: isVertical ? 12 : 14,
         flex: isVertical ? "0 0 auto" : "1 1 0",
         minWidth: isVertical ? void 0 : 0
       },
@@ -76080,7 +77555,7 @@ const CauseChainNodeCard = ({ node, startFrame, isVertical, maxImgH, maxImgW }) 
           "div",
           {
             style: {
-              fontSize: 26,
+              fontSize: labelFontSize,
               fontWeight: 700,
               color: BW_TEXT,
               textAlign: "center",
@@ -76111,8 +77586,8 @@ const ChainArrow = ({ frame, fps, startNext, vertical }) => {
       "div",
       {
         style: {
-          width: 3,
-          height: 28 * len,
+          width: 5,
+          height: 44 * len,
           background: `linear-gradient(to bottom, ${BW_TEXT}, ${BW_TEXT}88)`,
           borderRadius: 2,
           flexShrink: 0
@@ -76124,8 +77599,8 @@ const ChainArrow = ({ frame, fps, startNext, vertical }) => {
     "div",
     {
       style: {
-        height: 3,
-        width: 24 * len,
+        height: 5,
+        width: 44 * len,
         background: `linear-gradient(to right, ${BW_TEXT}, ${BW_TEXT}88)`,
         borderRadius: 2,
         flexShrink: 0
@@ -76135,9 +77610,8 @@ const ChainArrow = ({ frame, fps, startNext, vertical }) => {
 };
 const BWCauseChain = ({
   nodes,
-  layout = "vertical",
+  layout = "horizontal",
   content,
-  anchors,
   audioSrc,
   children,
   style
@@ -76147,25 +77621,30 @@ const BWCauseChain = ({
   const items = normalizeContent(content);
   const chain = (nodes ?? []).slice(0, 4);
   const stagger = 18;
-  const starts = chain.map((n, i) => resolveNodeStartFrame(n.showFrom, i, items, stagger));
+  const starts = chain.map((n2, i) => resolveNodeStartFrame(n2.showFrom, i, items, stagger));
   const isVertical = layout === "vertical";
-  const maxImgH = isVertical ? Math.min(140, height * 0.14) : Math.min(120, height * 0.12);
-  const maxImgW = isVertical ? width * 0.42 : width * 0.22;
+  const n = chain.length;
+  const maxImgH = isVertical ? Math.min(195, height * 0.195) : Math.min(220, height * 0.22);
+  const maxImgW = isVertical ? width * 0.5 : Math.min(
+    width * 0.38,
+    (width - 48 - Math.max(0, n - 1) * 52) / Math.max(n, 1) - 6
+  );
+  const labelFontSize = isVertical ? 50 : 60;
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style, children: [
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       "div",
       {
         style: {
           position: "absolute",
-          left: 24,
-          right: 24,
-          top: "22%",
-          bottom: "26%",
+          left: 140,
+          right: 140,
+          top: "12%",
+          bottom: "18%",
           display: "flex",
           flexDirection: isVertical ? "column" : "row",
           alignItems: "center",
           justifyContent: "center",
-          gap: isVertical ? 8 : 12
+          gap: isVertical ? 14 : 22
         },
         children: chain.map((node, i) => /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
           /* @__PURE__ */ (0,jsx_runtime.jsx)(
@@ -76175,7 +77654,8 @@ const BWCauseChain = ({
               startFrame: starts[i] ?? 0,
               isVertical,
               maxImgH,
-              maxImgW
+              maxImgW,
+              labelFontSize
             }
           ),
           i < chain.length - 1 ? /* @__PURE__ */ (0,jsx_runtime.jsx)(
@@ -76190,7 +77670,7 @@ const BWCauseChain = ({
         ] }, i))
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
     children
   ] });
 };
@@ -76201,12 +77681,13 @@ const BWCauseChain = ({
 
 
 
+
 const ChecklistReveal_templateMeta = {
   "name": "CHECKLIST_REVEAL",
   "componentExport": "BWChecklistReveal",
-  "description": "\u9002\u7528\uFF1A\u6536\u675F\u6BB5\u3001\u884C\u52A8\u6E05\u5355\u3001\u8981\u70B9\u590D\u8BF5\uFF1B\u53E3\u64AD\u9010\u6761\u5BF9\u5E94\u6E05\u5355\u884C\uFF0C\u884C\u968F content \u65F6\u95F4\u663E\u73B0\u5E76\u6253\u52FE\u3002\n\u5DEE\u5F02\uFF1A\u53EF\u6267\u884C\u300C\u7B2C\u4E00\u6B65/\u7B2C\u4E8C\u6B65\u300D\u77ED\u6B65\u9AA4\u7528 STEP_LIST\uFF1B\u5E76\u5217\u591A\u7EC4\u5927\u56FE\u7528 LIST_MULTI_GROUP\uFF1B\u7EAF\u53D9\u8FF0\u5355\u56FE\u7528 CENTER_FOCUS\u3002\n\u53C2\u6570\uFF1Arows 2\uFF5E6 \u9879\uFF0C\u6BCF\u9879 text\uFF08\u77ED\u6807\u7B7E\uFF09\u3001showFrom\uFF08content \u4E0B\u6807\uFF09\uFF1B\u53EF\u9009 title\uFF1B\u53EF\u9009 imageSrc \u4E3A\u89D2\u843D\u88C5\u9970\u5C0F\u56FE\uFF08\u975E\u4E3B\u53D9\u4E8B\u56FE\u65F6\u53EF\u7701\u7565\uFF09\u3002",
+  "description": "\u9002\u7528\uFF1A\u6536\u675F\u6BB5\u3001\u884C\u52A8\u6E05\u5355\u3001\u8981\u70B9\u590D\u8BF5\uFF1B\u53E3\u64AD\u9010\u6761\u5BF9\u5E94\u6E05\u5355\u884C\uFF0C\u884C\u968F content \u65F6\u95F4\u663E\u73B0\u5E76\u6253\u52FE\u3002\n\u5DEE\u5F02\uFF1A\u53EF\u6267\u884C\u300C\u7B2C\u4E00\u6B65/\u7B2C\u4E8C\u6B65\u300D\u77ED\u6B65\u9AA4\u7528 STEP_LIST\uFF1B\u5E76\u5217\u591A\u7EC4\u5927\u56FE\u7528 PANEL_GRID\uFF1B\u7EAF\u53D9\u8FF0\u5355\u56FE\u7528 CENTER_FOCUS\u3002\n\u53C2\u6570\uFF1Arows 2\uFF5E6 \u9879\uFF0C\u6BCF\u9879 text\uFF08\u77ED\u6807\u7B7E\uFF09\u3001showFrom\uFF08content \u4E0B\u6807\uFF09\uFF1B\u53EF\u9009 title\u3002",
   "psychology": "\u95ED\u73AF\u4E0E\u53EF\u6267\u884C\u611F",
-  "image_count": "0-1",
+  "image_count": "0",
   "content_min_items": 2,
   "content_max_items": 8,
   "param_schema": {
@@ -76215,11 +77696,6 @@ const ChecklistReveal_templateMeta = {
       "title": {
         "type": "string",
         "description": "\u53EF\u9009\uFF1B\u6E05\u5355\u4E0A\u65B9\u6807\u9898\uFF0C\u5EFA\u8BAE 4\uFF5E14 \u5B57"
-      },
-      "imageSrc": {
-        "type": "string",
-        "format": "image_prompt",
-        "description": "\u53EF\u9009\uFF1B\u53F3\u4E0A\u89D2\u5C0F\u88C5\u9970\u56FE\uFF0C\u4E0D\u9700\u8981\u53EF\u7701\u7565"
       },
       "rows": {
         "type": "array",
@@ -76318,7 +77794,7 @@ const CheckRow = ({ text, startFrame }) => {
               "span",
               {
                 style: {
-                  fontSize: 22,
+                  fontSize: 34,
                   fontWeight: 800,
                   color: "#16a34a",
                   transform: `scale(${checkScale})`,
@@ -76333,7 +77809,7 @@ const CheckRow = ({ text, startFrame }) => {
           "div",
           {
             style: {
-              fontSize: 28,
+              fontSize: 44,
               fontWeight: 600,
               color: BW_TEXT,
               lineHeight: 1.35,
@@ -76349,54 +77825,24 @@ const CheckRow = ({ text, startFrame }) => {
 const BWChecklistReveal = ({
   rows,
   title,
-  imageSrc,
   content,
   anchors,
   audioSrc,
   children,
   style
 }) => {
-  const frame = (0,esm.useCurrentFrame)();
-  const { fps } = (0,esm.useVideoConfig)();
   const items = normalizeContent(content);
   const list = (rows ?? []).slice(0, 6);
   const stagger = 16;
   const starts = list.map((r, i) => resolveRowStartFrame(r.showFrom, i, items, stagger));
-  const decorIn = (0,esm.spring)({
-    frame,
-    fps,
-    config: { damping: 80, stiffness: 120 },
-    durationInFrames: 20
-  });
-  const decorOpacity = imageSrc ? (0,esm.interpolate)(decorIn, [0, 1], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) : 0;
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style, children: [
-    imageSrc ? /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          right: 32,
-          top: "20%",
-          width: 72,
-          height: 72,
-          opacity: decorOpacity
-        },
-        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-          esm.Img,
-          {
-            src: getSafeImageSrc(imageSrc),
-            style: { width: "100%", height: "100%", objectFit: "contain" }
-          }
-        )
-      }
-    ) : null,
     /* @__PURE__ */ (0,jsx_runtime.jsxs)(
       "div",
       {
         style: {
           position: "absolute",
-          left: 40,
-          right: imageSrc ? 120 : 40,
+          left: 200,
+          right: 200,
           top: title ? "26%" : "28%",
           bottom: "24%",
           display: "flex",
@@ -76408,7 +77854,7 @@ const BWChecklistReveal = ({
             "div",
             {
               style: {
-                fontSize: 32,
+                fontSize: 48,
                 fontWeight: 800,
                 color: BW_TEXT,
                 marginBottom: 4,
@@ -76421,7 +77867,8 @@ const BWChecklistReveal = ({
         ]
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateDefaultAnchors, { content, anchors }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
     children
   ] });
 };
@@ -76432,10 +77879,11 @@ const BWChecklistReveal = ({
 
 
 
+
 const PanelGrid_templateMeta = {
   "name": "PANEL_GRID",
   "componentExport": "BWPanelGrid",
-  "description": "\u9002\u7528\uFF1A\u540C\u4E00\u955C\u5934\u5185\u5E76\u5217 2\uFF5E4 \u4E2A\u4E3B\u9898\u5757\uFF08\u5982\u4E09\u4E2A\u8BEF\u533A\u3001\u56DB\u4E2A\u68C0\u67E5\u9879\uFF09\uFF0C\u6BCF\u5757\u4E00\u56FE\uFF0C\u968F\u5BF9\u5E94\u53E3\u64AD\u6761\u663E\u73B0\u3002\n\u5DEE\u5F02\uFF1A\u7EB5\u5411\u5DE6\u56FE\u53F3\u6587\u3001\u7EC4\u95F4\u91CD\u6392\u7528 LIST_MULTI_GROUP\uFF1B\u65F6\u95F4\u6F14\u8FDB\u7528 TIMELINE\uFF1B\u8282\u62CD\u6362\u56FE\u7528 BEAT_SEQUENCE\u3002\n\u53C2\u6570\uFF1Apanels 2\uFF5E4 \u9879\uFF0C\u7ED3\u6784\u4E0E TIMELINE \u7684 images \u7C7B\u4F3C\uFF1Asrc\uFF08image_prompt\uFF09\u3001showFrom\uFF08content \u4E0B\u6807\uFF09\u3001\u53EF\u9009 enterEffect\u3001position\uFF08\u5E03\u5C40\u5F31\u63D0\u793A\uFF0C\u53EF\u7701\u7565\uFF09\u3002",
+  "description": "\u9002\u7528\uFF1A\u540C\u4E00\u955C\u5934\u5185\u5E76\u5217 2\uFF5E4 \u4E2A\u4E3B\u9898\u5757\uFF08\u5982\u4E09\u4E2A\u8BEF\u533A\u3001\u56DB\u4E2A\u68C0\u67E5\u9879\uFF09\uFF0C\u6BCF\u5757\u4E00\u56FE\uFF0C\u968F\u5BF9\u5E94\u53E3\u64AD\u6761\u663E\u73B0\u3002\n\u5DEE\u5F02\uFF1A\u65F6\u95F4\u6F14\u8FDB\u7528 TIMELINE\uFF1B\u8282\u62CD\u6362\u56FE\u7528 BEAT_SEQUENCE\u3002\n\u53C2\u6570\uFF1Apanels 2\uFF5E4 \u9879\uFF0C\u7ED3\u6784\u4E0E TIMELINE \u7684 images \u7C7B\u4F3C\uFF1Asrc\uFF08image_prompt\uFF09\u3001showFrom\uFF08content \u4E0B\u6807\uFF09\u3001\u53EF\u9009 enterEffect\u3001position\uFF08\u5E03\u5C40\u5F31\u63D0\u793A\uFF0C\u53EF\u7701\u7565\uFF09\u3002",
   "psychology": "\u7ED3\u6784\u5E76\u5217",
   "image_count": "2-4",
   "content_min_items": 2,
@@ -76496,27 +77944,100 @@ const resolvePanelStartFrame = (showFrom, panelIndex, contentItems, staggerFallb
   }
   return panelIndex * staggerFallback;
 };
-const PanelCell = ({ panel, startFrame, maxH, spanFullWidth }) => {
+const getGridContentMetrics = (width, height) => {
+  const marginX = Math.min(32, width * 0.04);
+  const gW = width - 2 * marginX;
+  const gH = height * (1 - 0.22 - 0.26);
+  return { gW, gH };
+};
+const getPanelCenterTravelOffset = (n, index, width, height) => {
+  const { gW, gH } = getGridContentMetrics(width, height);
+  const cx = gW / 2;
+  const cy = gH / 2;
+  if (n === 2) {
+    const gap2 = 20;
+    const cw2 = (gW - gap2) / 2;
+    const cellCx = index === 0 ? cw2 / 2 : cw2 + gap2 + cw2 / 2;
+    return { dx: cx - cellCx, dy: cy - gH / 2 };
+  }
+  if (n === 3) {
+    const gap2 = 16;
+    const cw2 = (gW - gap2) / 2;
+    const rowH = (gH - gap2) / 2;
+    if (index === 0) {
+      return { dx: cx - cw2 / 2, dy: cy - rowH / 2 };
+    }
+    if (index === 1) {
+      return { dx: cx - (cw2 + gap2 + cw2 / 2), dy: cy - rowH / 2 };
+    }
+    return { dx: cx - gW / 2, dy: cy - (rowH + gap2 + rowH / 2) };
+  }
+  const gap = 16;
+  const cw = (gW - gap) / 2;
+  const ch = (gH - gap) / 2;
+  const cellCenters = [
+    [cw / 2, ch / 2],
+    [cw + gap + cw / 2, ch / 2],
+    [cw / 2, ch + gap + ch / 2],
+    [cw + gap + cw / 2, ch + gap + ch / 2]
+  ];
+  const [ccx, ccy] = cellCenters[index] ?? [cx, cy];
+  return { dx: cx - ccx, dy: cy - ccy };
+};
+const PanelCell = ({
+  panel,
+  startFrame,
+  maxH,
+  spanFullWidth,
+  panelIndex,
+  panelCount,
+  layoutWidth,
+  layoutHeight
+}) => {
   const frame = (0,esm.useCurrentFrame)();
   const { fps, width, height } = (0,esm.useVideoConfig)();
   const rel = frame - startFrame;
   const appear = (0,esm.spring)({
     frame: rel,
     fps,
-    config: { damping: 72, stiffness: 170 },
+    config: {
+      damping: 72,
+      stiffness: 170
+    },
     durationInFrames: 22
+  });
+  const travel = (0,esm.spring)({
+    frame: rel,
+    fps,
+    config: {
+      damping: 78,
+      stiffness: 240
+    },
+    durationInFrames: 18
   });
   const opacity = (0,esm.interpolate)(appear, [0, 1], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp"
   });
-  const imgStyle = useImageEnterStyle(
+  const { dx, dy } = getPanelCenterTravelOffset(panelCount, panelIndex, layoutWidth, layoutHeight);
+  const ox = (0,esm.interpolate)(travel, [0, 1], [dx, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  });
+  const oy = (0,esm.interpolate)(travel, [0, 1], [dy, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  });
+  const effectStyle = useImageEnterStyle(
     panel.enterEffect ?? "fadeIn",
     Math.max(0, rel),
     fps,
     width,
-    height
+    height,
+    "effectOnly"
   );
+  const effectTransform = typeof effectStyle.transform === "string" && effectStyle.transform.length > 0 ? effectStyle.transform : "";
+  const imgTransform = `translate(-50%, -50%) translate(${ox}px, ${oy}px)${effectTransform ? ` ${effectTransform}` : ""}`;
   return /* @__PURE__ */ (0,jsx_runtime.jsx)(
     "div",
     {
@@ -76528,7 +78049,7 @@ const PanelCell = ({ panel, startFrame, maxH, spanFullWidth }) => {
         minHeight: maxH,
         gridColumn: spanFullWidth ? "1 / -1" : void 0
       },
-      children: /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { position: "relative", width: "88%", height: maxH }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      children: /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { position: "relative", width: "96%", height: maxH }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
         esm.Img,
         {
           src: getSafeImageSrc(panel.src),
@@ -76539,7 +78060,7 @@ const PanelCell = ({ panel, startFrame, maxH, spanFullWidth }) => {
             maxWidth: "100%",
             maxHeight: "100%",
             objectFit: "contain",
-            ...imgStyle
+            transform: imgTransform
           }
         }
       ) })
@@ -76560,7 +78081,7 @@ const BWPanelGrid = ({
   const n = list.length;
   const stagger = 15;
   const starts = list.map((p, i) => resolvePanelStartFrame(p.showFrom, i, items, stagger));
-  const maxH = n <= 2 ? Math.min(height * 0.22, 220) : n === 3 ? Math.min(height * 0.18, 180) : Math.min(height * 0.16, 160);
+  const maxH = n <= 2 ? Math.min(height * 0.3, 320) : n === 3 ? Math.min(height * 0.26, 280) : Math.min(height * 0.24, 280);
   const gridStyle = n === 2 ? {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
@@ -76597,13 +78118,271 @@ const BWPanelGrid = ({
             panel,
             startFrame: starts[i] ?? 0,
             maxH,
-            spanFullWidth: n === 3 && i === 2
+            spanFullWidth: n === 3 && i === 2,
+            panelIndex: i,
+            panelCount: n,
+            layoutWidth: width,
+            layoutHeight: height
           },
           i
         ))
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateDefaultAnchors, { content, anchors }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
+    children
+  ] });
+};
+
+;// ./src/components/templates/DataTable.tsx
+
+
+
+
+
+
+const DataTable_templateMeta = {
+  "name": "DATA_TABLE",
+  "componentExport": "BWDataTable",
+  "description": "\u9002\u7528\uFF1A\u89C4\u683C\u5BF9\u7167\u3001\u591A\u7EF4\u5EA6\u53C2\u6570\u3001\u7248\u672C\u5DEE\u5F02\u3001\u4EF7\u76EE/\u6863\u4F4D\u5E76\u5217\u7B49\u9700\u8981\u300C\u884C\u5217\u7ED3\u6784\u300D\u4E00\u76EE\u4E86\u7136\u7684\u6BB5\u843D\u3002\n\u5DEE\u5F02\uFF1A\u7EAF\u4E24\u9879\u6574\u6570\u5BF9\u6BD4\u7528 STAT_COMPARE\uFF1B\u65E0\u8868\u683C\u7ED3\u6784\u7684\u8981\u70B9\u6E05\u5355\u7528 CHECKLIST_REVEAL \u6216 STEP_LIST\u3002\n\u53C2\u6570\uFF1Acolumns \u4E3A\u8868\u5934\uFF082\uFF5E5 \u5217\u77ED\u6587\u6848\uFF09\uFF1Brows \u6BCF\u9879 cells \u957F\u5EA6\u5E94\u4E0E\u5217\u6570\u4E00\u81F4\uFF08\u4E0D\u8DB3\u8865\u7A7A\u3001\u8D85\u51FA\u622A\u65AD\uFF09\uFF0CshowFrom \u4E3A content \u4E0B\u6807\uFF0C\u4ECE\u8BE5\u6761 startFrame \u8D77\u8BE5\u884C\u5165\u573A\u3002",
+  "psychology": "\u7ED3\u6784\u5316\u5BF9\u6BD4\u4E0E\u53EF\u4FE1\u5EA6",
+  "image_count": "0",
+  "content_min_items": 2,
+  "content_max_items": 12,
+  "param_schema": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "description": "\u53EF\u9009\uFF1B\u8868\u4E0A\u65B9\u6807\u9898\uFF0C\u5EFA\u8BAE 4\uFF5E18 \u5B57"
+      },
+      "columns": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 5,
+        "description": "\u8868\u5934\u6587\u6848\uFF0C\u4ECE\u5DE6\u5230\u53F3",
+        "items": { "type": "string", "description": "\u5217\u6807\u9898\uFF0C\u5EFA\u8BAE 2\uFF5E8 \u5B57" }
+      },
+      "rows": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 8,
+        "description": "\u6570\u636E\u884C\uFF1Bcells \u4E3A\u5355\u5143\u683C\u6587\u6848\uFF08\u987A\u5E8F\u4E0E columns \u4E00\u81F4\uFF09\uFF1BshowFrom \u4E3A content \u4E0B\u6807\uFF080-based\uFF09",
+        "items": {
+          "type": "object",
+          "required": ["cells", "showFrom"],
+          "properties": {
+            "cells": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 5,
+              "items": { "type": "string", "description": "\u5355\u5143\u683C\u77ED\u6587\u6848" }
+            },
+            "showFrom": {
+              "type": "integer",
+              "format": "content_index",
+              "description": "\u8BE5\u884C\u51FA\u73B0\u65F6\u673A\uFF1Acontent \u6570\u7EC4\u4E0B\u6807\uFF0C\u53D6\u8BE5\u6761 startFrame"
+            }
+          }
+        }
+      }
+    },
+    "required": ["columns", "rows"]
+  },
+  "example": {
+    "template": "DATA_TABLE",
+    "param": {
+      "title": "\u4E09\u6863\u5BF9\u6BD4",
+      "columns": ["\u6863\u4F4D", "\u7EED\u822A", "\u4EF7\u683C"],
+      "rows": [
+        { "cells": ["\u6807\u51C6", "\u4E00\u5929", "1999"], "showFrom": 0 },
+        { "cells": ["Pro", "\u4E00\u5929\u534A", "2699"], "showFrom": 1 },
+        { "cells": ["Ultra", "\u4E24\u5929", "3999"], "showFrom": 2 }
+      ]
+    }
+  }
+};
+const DataTable_fontStack = '"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif';
+const DataTable_resolveRowStartFrame = (showFrom, rowIndex, contentItems, staggerFallback) => {
+  if (typeof showFrom === "number" && Number.isInteger(showFrom) && showFrom >= 0 && showFrom < contentItems.length) {
+    const cue = contentItems[showFrom];
+    if (cue && typeof cue.startFrame === "number") return cue.startFrame;
+  }
+  return rowIndex * staggerFallback;
+};
+function padCells(cells, colCount) {
+  const raw = Array.isArray(cells) ? cells.map((c) => typeof c === "string" ? c : "") : [];
+  if (raw.length >= colCount) return raw.slice(0, colCount);
+  return [...raw, ...Array(colCount - raw.length).fill("")];
+}
+const DataTableRowView = ({ cells, startFrame, isStriped, fontSize }) => {
+  const frame = (0,esm.useCurrentFrame)();
+  const { fps } = (0,esm.useVideoConfig)();
+  const rel = frame - startFrame;
+  const rowIn = (0,esm.spring)({
+    frame: rel,
+    fps,
+    config: { damping: 78, stiffness: 200 },
+    durationInFrames: 20
+  });
+  const opacity = (0,esm.interpolate)(rowIn, [0, 1], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  });
+  const slideY = (0,esm.interpolate)(rowIn, [0, 1], [14, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  });
+  return /* @__PURE__ */ (0,jsx_runtime.jsx)(
+    "div",
+    {
+      style: {
+        display: "grid",
+        gridTemplateColumns: `repeat(${cells.length}, 1fr)`,
+        backgroundColor: isStriped ? "#f4f4f5" : "#ffffff",
+        opacity,
+        transform: `translateY(${slideY}px)`
+      },
+      children: cells.map((text, i) => /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        "div",
+        {
+          style: {
+            padding: "16px 14px",
+            fontSize,
+            fontWeight: i === 0 ? 700 : 600,
+            color: BW_TEXT,
+            fontFamily: DataTable_fontStack,
+            lineHeight: 1.35,
+            borderTop: "1px solid rgba(17,17,17,0.14)",
+            borderRight: i < cells.length - 1 ? "1px solid rgba(17,17,17,0.1)" : void 0
+          },
+          children: text
+        },
+        i
+      ))
+    }
+  );
+};
+const BWDataTable = ({
+  columns,
+  rows,
+  title,
+  content,
+  anchors,
+  audioSrc,
+  children,
+  style
+}) => {
+  const frame = (0,esm.useCurrentFrame)();
+  const { fps } = (0,esm.useVideoConfig)();
+  const items = normalizeContent(content);
+  const slice = (columns ?? []).slice(0, 5).map((c) => typeof c === "string" ? c : "");
+  const colCount = Math.max(2, Math.min(5, slice.length));
+  const effectiveCols = Array.from({ length: colCount }, (_, i) => {
+    var _a;
+    return ((_a = slice[i]) == null ? void 0 : _a.trim()) || "\u2014";
+  });
+  const list = (rows ?? []).slice(0, 8);
+  const stagger = 14;
+  const starts = list.map(
+    (r, i) => DataTable_resolveRowStartFrame(r.showFrom ?? 0, i, items, stagger)
+  );
+  const headerIn = (0,esm.spring)({
+    frame,
+    fps,
+    config: { damping: 80, stiffness: 200 },
+    durationInFrames: 18
+  });
+  const headerOpacity = (0,esm.interpolate)(headerIn, [0, 1], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  });
+  const headerFont = colCount >= 5 ? 30 : colCount === 2 ? 40 : 34;
+  const cellFont = colCount >= 5 ? 28 : colCount === 2 ? 36 : 32;
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style, children: [
+    /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          left: 300,
+          right: 300,
+          top: title ? "20%" : "22%",
+          bottom: "22%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "stretch"
+        },
+        children: [
+          title ? /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                fontSize: 46,
+                fontWeight: 800,
+                color: BW_TEXT,
+                marginBottom: 40,
+                textAlign: "center",
+                fontFamily: DataTable_fontStack
+              },
+              children: title
+            }
+          ) : null,
+          /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+            "div",
+            {
+              style: {
+                borderRadius: 14,
+                border: `2px solid ${BW_TEXT}`,
+                overflow: "hidden",
+                boxShadow: "0 10px 36px rgba(0,0,0,0.06)",
+                opacity: headerOpacity
+              },
+              children: [
+                /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                  "div",
+                  {
+                    style: {
+                      display: "grid",
+                      gridTemplateColumns: `repeat(${colCount}, 1fr)`,
+                      backgroundColor: BW_TEXT,
+                      color: "#ffffff"
+                    },
+                    children: effectiveCols.map((h, i) => /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                      "div",
+                      {
+                        style: {
+                          padding: "16px 14px",
+                          fontSize: headerFont,
+                          fontWeight: 800,
+                          fontFamily: DataTable_fontStack,
+                          lineHeight: 1.25,
+                          borderRight: i < colCount - 1 ? "1px solid rgba(255,255,255,0.22)" : void 0
+                        },
+                        children: h
+                      },
+                      i
+                    ))
+                  }
+                ),
+                list.map((row, i) => /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                  DataTableRowView,
+                  {
+                    cells: padCells(row.cells, colCount),
+                    startFrame: starts[i] ?? 0,
+                    isStriped: i % 2 === 0,
+                    fontSize: cellFont
+                  },
+                  i
+                ))
+              ]
+            }
+          )
+        ]
+      }
+    ),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateDefaultAnchors, { content, anchors }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
     children
   ] });
 };
@@ -76615,10 +78394,11 @@ const BWPanelGrid = ({
 
 
 
+
 const Timeline_templateMeta = {
   "name": "TIMELINE",
   "componentExport": "BWTimeline",
-  "description": "\u9002\u7528\uFF1A\u5386\u53F2\u6F14\u8FDB\u3001\u65F6\u95F4\u987A\u5E8F\u3001\u524D\u540E\u5BF9\u6BD4\u5E26\u660E\u786E\u65F6\u95F4\u8F74\u3002\n\u5DEE\u5F02\uFF1A\u65E0\u65F6\u95F4\u7EBF\u7684\u5E76\u5217\u8981\u70B9\u7528 LIST_MULTI_GROUP\uFF1B\u64CD\u4F5C\u6B65\u9AA4\u7528 STEP_LIST\u3002\n\u53C2\u6570\uFF1Aimages 2\uFF5E3 \u9879\uFF0Cposition \u5E38 left/right \u4EE5\u914D\u5408\u8F74\u7EBF\u3002",
+  "description": "\u9002\u7528\uFF1A\u5386\u53F2\u6F14\u8FDB\u3001\u65F6\u95F4\u987A\u5E8F\u3001\u524D\u540E\u5BF9\u6BD4\u5E26\u660E\u786E\u65F6\u95F4\u8F74\u3002\n\u5DEE\u5F02\uFF1A\u65E0\u65F6\u95F4\u7EBF\u7684\u5E76\u5217\u8981\u70B9\u7528 PANEL_GRID\uFF1B\u64CD\u4F5C\u6B65\u9AA4\u7528 STEP_LIST\u3002\n\u53C2\u6570\uFF1Aimages 2\uFF5E3 \u9879\uFF0Cposition \u5E38 left/right \u4EE5\u914D\u5408\u8F74\u7EBF\u3002",
   "psychology": "\u53D9\u4E8B\u8FDE\u8D2F\u6027",
   "image_count": "2-3",
   "param_schema": {
@@ -76687,7 +78467,7 @@ const BWTimeline = ({
     [0, 80],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
-  const timelineY = 45;
+  const timelineY = 50;
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style, children: [
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       "div",
@@ -76697,9 +78477,9 @@ const BWTimeline = ({
           left: "10%",
           width: "80%",
           top: `${timelineY}%`,
-          height: 6,
+          height: 9,
           backgroundColor: "#e0e0e0",
-          borderRadius: 3
+          borderRadius: 5
         }
       }
     ),
@@ -76711,9 +78491,9 @@ const BWTimeline = ({
           left: "10%",
           width: `${lineProgress}%`,
           top: `${timelineY}%`,
-          height: 6,
+          height: 9,
           backgroundColor: BW_TEXT,
-          borderRadius: 3
+          borderRadius: 5
         }
       }
     ),
@@ -76740,12 +78520,12 @@ const BWTimeline = ({
               left: `${xFrac * 100}%`,
               top: `${timelineY}%`,
               transform: "translate(-50%, -50%)",
-              width: 24,
-              height: 24,
+              width: 36,
+              height: 36,
               borderRadius: "50%",
               backgroundColor: BW_TEXT,
-              border: "4px solid #fff",
-              boxShadow: "0 0 0 2px #111",
+              border: "6px solid #fff",
+              boxShadow: "0 0 0 3px #111",
               opacity: visible ? nodeSpring : 0,
               zIndex: 2
             }
@@ -76760,8 +78540,8 @@ const BWTimeline = ({
               left: `${xFrac * 100}%`,
               top: iconTop,
               transform: `translate(-50%, 0) scale(${visible ? nodeSpring : 0.5})`,
-              width: 140,
-              height: 140,
+              width: 200,
+              height: 200,
               objectFit: "contain",
               opacity: visible ? nodeSpring : 0
             }
@@ -76769,7 +78549,8 @@ const BWTimeline = ({
         )
       ] }, i);
     }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, anchors, audioSrc }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateDefaultAnchors, { content, anchors }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(TemplateContentRenderer, { content, audioSrc }),
     children
   ] });
 };
@@ -76779,18 +78560,92 @@ const BWTimeline = ({
 
 
 
-const SEGMENT_FRAMES = 75;
+const SHOWCASE_FALLBACK_FRAMES = 75;
 const img = (path) => (0,esm.staticFile)(path);
+const durationFromContent = (items) => items.length === 0 ? SHOWCASE_FALLBACK_FRAMES : Math.max(...items.map((c) => c.startFrame + c.durationFrames));
+const durationAfterLastStagger = (lastEntryDelay, settleFrames = 20, tailFrames = 40) => lastEntryDelay + settleFrames + tailFrames;
+const durationForTimelineShowcase = (maxImageStart, lineSpringFrames = 50, nodeSettleFrames = 22, tailFrames = 28) => Math.max(lineSpringFrames, maxImageStart + nodeSettleFrames) + tailFrames;
+const SC_BEAT_CONTENT = [
+  { text: "\u770B\u5230\u89C4\u5F8B\u5C31\u7B49\u4E8E\u8D22\u5BCC\u5BC6\u7801\uFF1F", startFrame: 0, durationFrames: 28 },
+  { text: "\u90A3\u662F\u5E7B\u89C9\u3002", startFrame: 28, durationFrames: 22 },
+  { text: "\u6301\u7EED\u8BEF\u89E3\u5C31\u662F\u6162\u6027\u81EA\u6740\u3002", startFrame: 50, durationFrames: 25 }
+];
+const SC_METHOD_CONTENT = [
+  { text: "\u7B2C\u4E00\uFF0C\u8B66\u60D5\u60C5\u7EEA\u753B\u9762\u3002", startFrame: 0, durationFrames: 22 },
+  { text: "\u5148\u8BC6\u522B\u8FD9\u662F\u5728\u717D\u52A8\u60C5\u7EEA\u3002", startFrame: 22, durationFrames: 20 },
+  { text: "\u522B\u8BA9\u6781\u7AEF\u753B\u9762\u76F4\u63A5\u63A5\u7BA1\u5224\u65AD\u3002", startFrame: 42, durationFrames: 20 },
+  { text: "\u518D\u95EE\u5B83\u5230\u5E95\u666E\u904D\uFF0C\u8FD8\u662F\u79BB\u5947\u3002", startFrame: 62, durationFrames: 13 }
+];
+const SC_CASE_CONTENT = [
+  { text: "\u67D0\u4E2A\u767E\u5C81\u8001\u4EBA\u6BCF\u5929\u62BD\u70DF\u559D\u9152\uFF0C", startFrame: 0, durationFrames: 18 },
+  { text: "\u5927\u5BB6\u5C31\u89C9\u5F97\u517B\u751F\u6CA1\u7528\u3002", startFrame: 18, durationFrames: 16 },
+  { text: "\u5176\u5B9E\u90A3\u53EA\u662F\u56E0\u4E3A\u4ED6\u57FA\u56E0\u9006\u5929\uFF0C", startFrame: 34, durationFrames: 16 },
+  { text: "\u800C\u90A3\u4E9B\u5B66\u4ED6\u62BD\u70DF\u559D\u9152\u7684\u4EBA\uFF0C", startFrame: 50, durationFrames: 14 },
+  { text: "\u5927\u591A\u6CA1\u6D3B\u5230\u80FD\u63A5\u53D7\u91C7\u8BBF\u7684\u5E74\u7EAA\u3002", startFrame: 64, durationFrames: 11 }
+];
+const SC_COGNITIVE_CONTENT = [
+  { text: "\u4F60\u4EE5\u4E3A\u7ED3\u679C\u53EA\u53D6\u51B3\u4E8E\u52AA\u529B\u7A0B\u5EA6\u3002", startFrame: 0, durationFrames: 32 },
+  { text: "\u771F\u6B63\u62C9\u5F00\u5DEE\u8DDD\u7684\u662F\u8BA4\u77E5\u548C\u9009\u62E9\u3002", startFrame: 32, durationFrames: 43 }
+];
+const SC_CHAT_BUBBLE_CONTENT = [
+  { text: "\u8FD9\u6570\u636E\u8D8A\u770B\u8D8A\u7126\u8651\uFF0C\u6211\u662F\u4E0D\u662F\u8BE5\u8DDF\u7740\u614C\uFF1F", startFrame: 0, durationFrames: 36 },
+  { text: "\u5148\u628A\u53E3\u5F84\u548C\u6837\u672C\u91CF\u6838\u5BF9\u6E05\u695A\uFF0C\u518D\u51B3\u5B9A\u8981\u4E0D\u8981\u88AB\u60C5\u7EEA\u5E26\u7740\u8D70\u3002", startFrame: 36, durationFrames: 44 }
+];
+const SC_KPI_HERO_CONTENT = [
+  { text: "\u6EE1\u610F\u5EA6\u7A33\u5C45\u9AD8\u4F4D", startFrame: 0, durationFrames: 45 },
+  { text: "\u7559\u5B58\u540C\u6837\u624E\u5B9E", startFrame: 45, durationFrames: 45 },
+  { text: "\u8F6C\u5316\u8FD8\u5728\u653E\u5927", startFrame: 90, durationFrames: 45 }
+];
+const SC_MAGNIFY_CONTENT = [
+  { text: "\u672C\u8D28\u662F\u4F9B\u9700\u5931\u8861\u5728\u8D77\u4F5C\u7528", startFrame: 0, durationFrames: 40 }
+];
+const SC_PROGRESS_CONTENT = [
+  { text: "\u6574\u4F53\u8FDB\u5EA6\u5DF2\u7ECF\u8D70\u5230\u8FD1\u516B\u6210\u3002", startFrame: 0, durationFrames: 42 },
+  { text: "\u6838\u5FC3\u6A21\u5757\u7684\u6D4B\u8BD5\u8986\u76D6\u4E5F\u8FC7\u534A\u3002", startFrame: 42, durationFrames: 42 },
+  { text: "\u6587\u6863\u4E0E\u4EA4\u4ED8\u8282\u594F\u548C\u91CC\u7A0B\u7891\u5BF9\u9F50\u3002", startFrame: 84, durationFrames: 42 }
+];
+const SC_STAT_CONTENT = [
+  { text: "\u53BB\u5E74\u57FA\u6570\u8FD8\u504F\u4F4E\u3002", startFrame: 0, durationFrames: 60 },
+  { text: "\u4ECA\u5E74\u660E\u663E\u62AC\u5347\u3002", startFrame: 60, durationFrames: 60 },
+  { text: "\u660E\u5E74\u51B2\u523A\u66F4\u9AD8\u76EE\u6807\u3002", startFrame: 120, durationFrames: 60 }
+];
+const SC_CAUSE_CONTENT = [
+  { text: "\u5916\u754C\u5148\u7ED9\u4F60\u4E00\u4E2A\u523A\u6FC0", startFrame: 0, durationFrames: 24 },
+  { text: "\u5927\u8111\u518D\u7528\u504F\u89C1\u53BB\u52A0\u5DE5", startFrame: 24, durationFrames: 26 },
+  { text: "\u6700\u540E\u5F97\u5230\u504F\u79BB\u4E8B\u5B9E\u7684\u5224\u65AD", startFrame: 50, durationFrames: 25 }
+];
+const SC_CHECKLIST_CONTENT = [
+  { text: "\u5148\u628A\u4E8B\u5B9E\u5199\u6E05\u695A", startFrame: 0, durationFrames: 24 },
+  { text: "\u518D\u628A\u63A8\u65AD\u5206\u5F00\u5199", startFrame: 24, durationFrames: 25 },
+  { text: "\u6700\u540E\u4FDD\u8BC1\u53EF\u8FFD\u6EAF", startFrame: 49, durationFrames: 26 }
+];
+const SC_PANEL_CONTENT = [
+  { text: "\u7B2C\u4E00\u5757\u62FC\u56FE\u662F\u8F93\u5165", startFrame: 0, durationFrames: 24 },
+  { text: "\u7B2C\u4E8C\u5757\u662F\u5904\u7406\u673A\u5236", startFrame: 24, durationFrames: 26 },
+  { text: "\u7B2C\u4E09\u5757\u662F\u8F93\u51FA\u884C\u4E3A", startFrame: 50, durationFrames: 25 }
+];
+const SC_DATA_TABLE_CONTENT = [
+  { text: "\u5148\u770B\u6807\u51C6\u7248\u5B9A\u4F4D", startFrame: 0, durationFrames: 26 },
+  { text: "\u518D\u770B Pro \u7684\u5347\u7EA7\u70B9", startFrame: 26, durationFrames: 26 },
+  { text: "\u6700\u540E Ultra \u62C9\u6EE1\u4F53\u9A8C", startFrame: 52, durationFrames: 28 }
+];
+const SC_STEP_LIST_START = 0;
+const SC_STEP_LIST_STAGGER = 12;
+const SC_STEP_LIST_STEP_COUNT = 3;
+const SC_STEP_LIST_LAST_DELAY = SC_STEP_LIST_START + (SC_STEP_LIST_STEP_COUNT - 1) * SC_STEP_LIST_STAGGER;
+const SC_TIMELINE_MAX_IMAGE_START = 30;
 const SHOWCASE_SEGMENTS = [
   {
     key: "image-breath",
+    durationInFrames: SHOWCASE_FALLBACK_FRAMES,
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWImageBreath, { src: img("images/template/scene1_1.png"), enterEffect: "breathe" }),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWImageBreath, { src: img("images/template/scene1_1.png") }),
       /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "BWImageBreath \xB7 \u5355\u56FE\u5165\u573A\u57FA\u5143\uFF08breathe\uFF09", startFrame: 0 })
     ] })
   },
   {
     key: "beat-sequence",
+    durationInFrames: durationFromContent(SC_BEAT_CONTENT),
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         BWBeatSequence,
@@ -76800,23 +78655,7 @@ const SHOWCASE_SEGMENTS = [
             { imageSrc: img("images/template/scene6_15.png"), enterEffect: "slideBottom" },
             { imageSrc: img("images/template/scene2_1.png"), enterEffect: "slideBottom" }
           ],
-          content: [
-            {
-              text: "\u770B\u5230\u89C4\u5F8B\u5C31\u7B49\u4E8E\u8D22\u5BCC\u5BC6\u7801\uFF1F",
-              startFrame: 0,
-              durationFrames: 28
-            },
-            {
-              text: "\u90A3\u662F\u5E7B\u89C9\u3002",
-              startFrame: 28,
-              durationFrames: 22
-            },
-            {
-              text: "\u6301\u7EED\u8BEF\u89E3\u5C31\u662F\u6162\u6027\u81EA\u6740\u3002",
-              startFrame: 50,
-              durationFrames: 25
-            }
-          ],
+          content: SC_BEAT_CONTENT,
           anchors: [{ text: "\u8D22\u5BCC\u5BC6\u7801", showFrom: 0, color: "#FF8C00", anim: "popIn" }]
         }
       ),
@@ -76825,6 +78664,7 @@ const SHOWCASE_SEGMENTS = [
   },
   {
     key: "method-stack",
+    durationInFrames: durationFromContent(SC_METHOD_CONTENT),
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         BWMethodStack,
@@ -76835,45 +78675,70 @@ const SHOWCASE_SEGMENTS = [
             { text: "\u5148\u8BC6\u522B\u8FD9\u662F\u4E0D\u662F\u60C5\u7EEA\u523A\u6FC0", showFrom: 1 },
             { text: "\u518D\u5224\u65AD\u5B83\u662F\u5426\u53EA\u662F\u79BB\u5947\u4E2A\u6848", showFrom: 3 }
           ],
-          content: [
-            { text: "\u7B2C\u4E00\uFF0C\u8B66\u60D5\u60C5\u7EEA\u753B\u9762\u3002", startFrame: 0, durationFrames: 22 },
-            { text: "\u5148\u8BC6\u522B\u8FD9\u662F\u5728\u717D\u52A8\u60C5\u7EEA\u3002", startFrame: 22, durationFrames: 20 },
-            { text: "\u522B\u8BA9\u6781\u7AEF\u753B\u9762\u76F4\u63A5\u63A5\u7BA1\u5224\u65AD\u3002", startFrame: 42, durationFrames: 20 },
-            { text: "\u518D\u95EE\u5B83\u5230\u5E95\u666E\u904D\uFF0C\u8FD8\u662F\u79BB\u5947\u3002", startFrame: 62, durationFrames: 13 }
-          ]
+          content: SC_METHOD_CONTENT
         }
       ),
       /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "METHOD_STACK \xB7 \u5355\u6807\u9898\u89E3\u91CA\u5C55\u5F00", startFrame: 0 })
     ] })
   },
   {
-    key: "center-focus",
+    key: "case-breakdown",
+    durationInFrames: durationFromContent(SC_CASE_CONTENT),
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { imageSrc: img("images/template/scene1_1.png"), enterEffect: "breathe" }),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        BWCaseBreakdown,
+        {
+          title: "\u957F\u5BFF\u6096\u8BBA",
+          imageSrc: img("images/template/scene1_1.png"),
+          phases: [
+            { phaseLabel: "\u8868\u9762\u4E2A\u6848", showFrom: 0 },
+            { phaseLabel: "\u5E38\u89C1\u63A8\u8BBA", showFrom: 1 },
+            { phaseLabel: "\u771F\u76F8", showFrom: 2 },
+            { phaseLabel: "\u6536\u675F", showFrom: 4 }
+          ],
+          content: SC_CASE_CONTENT,
+          anchors: []
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "CASE_BREAKDOWN \xB7 \u6848\u4F8B/\u5B50\u8BDD\u9898\u8BE6\u89E3", startFrame: 0 })
+    ] })
+  },
+  {
+    key: "center-focus",
+    durationInFrames: SHOWCASE_FALLBACK_FRAMES,
+    content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { imageSrc: img("images/template/scene1_1.png") }),
       /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "CENTER_FOCUS \xB7 \u89C6\u89C9\u4E2D\u5FC3\u7A33\u5B9A", startFrame: 0 })
     ] })
   },
   {
     key: "chat-bubble",
+    durationInFrames: durationFromContent(SC_CHAT_BUBBLE_CONTENT),
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWChatBubble, { imageSrc: img("images/template/scene1_1.png"), children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-        "div",
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        BWChatBubble,
         {
-          style: {
-            fontSize: 36,
-            fontWeight: 600,
-            color: "#111",
-            fontFamily: '"Microsoft YaHei", "PingFang SC", sans-serif',
-            lineHeight: 1.4
-          },
-          children: "\u7528\u6237\u5FC3\u58F0 / \u5E38\u89C1\u7591\u95EE"
+          content: SC_CHAT_BUBBLE_CONTENT,
+          bubbles: [
+            {
+              bubbleText: "\u8FD9\u6570\u636E\u8D8A\u770B\u8D8A\u7126\u8651\uFF0C\u6211\u662F\u4E0D\u662F\u8BE5\u8DDF\u7740\u614C\uFF1F",
+              showFrom: 0,
+              align: "left"
+            },
+            {
+              bubbleText: "\u5148\u628A\u53E3\u5F84\u548C\u6837\u672C\u91CF\u6838\u5BF9\u6E05\u695A\uFF0C\u518D\u51B3\u5B9A\u8981\u4E0D\u8981\u88AB\u60C5\u7EEA\u5E26\u7740\u8D70\u3002",
+              showFrom: 1,
+              align: "right"
+            }
+          ]
         }
-      ) }),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "CHAT_BUBBLE \xB7 \u793E\u4F1A\u6295\u5C04", startFrame: 0 })
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "CHAT_BUBBLE \xB7 \u591A\u6C14\u6CE1 / \u5DE6\u53F3\u5BF9\u804A", startFrame: 0 })
     ] })
   },
   {
     key: "cognitive-shift",
+    durationInFrames: durationFromContent(SC_COGNITIVE_CONTENT),
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         BWCognitiveShift,
@@ -76881,18 +78746,7 @@ const SHOWCASE_SEGMENTS = [
           notText: "\u4E0D\u662F\u66F4\u52AA\u529B\u5C31\u66F4\u5FEB\u6210\u529F",
           butText: "\u800C\u662F\u66F4\u7CBE\u51C6\u5730\u505A\u9009\u62E9",
           butSrc: img("images/template/scene5_2.png"),
-          content: [
-            {
-              text: "\u4F60\u4EE5\u4E3A\u7ED3\u679C\u53EA\u53D6\u51B3\u4E8E\u52AA\u529B\u7A0B\u5EA6\u3002",
-              startFrame: 0,
-              durationFrames: 32
-            },
-            {
-              text: "\u771F\u6B63\u62C9\u5F00\u5DEE\u8DDD\u7684\u662F\u8BA4\u77E5\u548C\u9009\u62E9\u3002",
-              startFrame: 32,
-              durationFrames: 43
-            }
-          ],
+          content: SC_COGNITIVE_CONTENT,
           anchors: [
             { text: "\u52AA\u529B\u7A0B\u5EA6", showFrom: 0, color: "#D64545", anim: "popIn" },
             { text: "\u8BA4\u77E5\u548C\u9009\u62E9", showFrom: 1, color: "#111111", anim: "highlight" }
@@ -76904,21 +78758,21 @@ const SHOWCASE_SEGMENTS = [
   },
   {
     key: "concept-card",
+    durationInFrames: SHOWCASE_FALLBACK_FRAMES,
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWConceptCard, { imageSrc: img("images/template/scene1_1.png"), conceptName: "\u4E13\u4E1A\u672F\u8BED" }),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWConceptCard, { imageSrc: img("images/template/scene1_1.png"), conceptName: "\u53EF\u5F97\u6027\u542F\u53D1fasdfasdfs" }),
       /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "CONCEPT_CARD \xB7 \u672F\u8BED\u951A\u5B9A", startFrame: 0 })
     ] })
   },
   {
     key: "dos-and-donts",
+    durationInFrames: SHOWCASE_FALLBACK_FRAMES,
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         BWDosAndDonts,
         {
-          leftSrc: img("images/template/scene5_1.png"),
-          rightSrc: img("images/template/scene5_2.png"),
-          dontLabel: "\u9519\u8BEF\u793A\u8303",
-          doLabel: "\u6B63\u786E\u505A\u6CD5"
+          left: { label: "\u9519\u8BEF\u793A\u8303", src: img("images/template/scene5_1.png"), showFrom: 0 },
+          right: { label: "\u6B63\u786E\u505A\u6CD5", src: img("images/template/scene5_2.png"), showFrom: 10 }
         }
       ),
       /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "DOS_AND_DONTS \xB7 \u907F\u5751\u5BF9\u6BD4", startFrame: 0 })
@@ -76926,36 +78780,30 @@ const SHOWCASE_SEGMENTS = [
   },
   {
     key: "kpi-hero",
+    durationInFrames: durationFromContent(SC_KPI_HERO_CONTENT),
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         BWKpiHero,
         {
-          value: 87,
-          suffix: "%",
-          headline: "\u7528\u6237\u6EE1\u610F\u5EA6",
-          imageSrc: img("images/template/scene1_1.png"),
-          content: [
-            { text: "\u6EE1\u610F\u5EA6\u540C\u6BD4\u5927\u5E45\u63D0\u5347", startFrame: 0, durationFrames: 36 },
-            { text: "\u8BF4\u660E\u4EA7\u54C1\u4F53\u9A8C\u5728\u53D8\u597D", startFrame: 36, durationFrames: 39 }
-          ]
+          blocks: [
+            { value: 87, suffix: "%", label: "\u6EE1\u610F\u5EA6", showFrom: 0 },
+            { value: 62, suffix: "%", label: "\u6B21\u6708\u7559\u5B58", showFrom: 1 },
+            { value: 3, suffix: "\u500D", label: "\u8F6C\u5316\u653E\u5927", showFrom: 2 }
+          ],
+          content: SC_KPI_HERO_CONTENT
         }
       ),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "KPI_HERO \xB7 \u5355\u6307\u6807\u5927\u5B57\u62A5", startFrame: 0 })
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "KPI_HERO \xB7 \u591A\u6307\u6807\u5E76\u5217", startFrame: 0 })
     ] })
   },
   {
     key: "magnifying-glass",
+    durationInFrames: durationFromContent(SC_MAGNIFY_CONTENT),
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         BWMagnifyingGlass,
         {
-          content: [
-            {
-              text: "\u672C\u8D28\u662F\u4F9B\u9700\u5931\u8861\u5728\u8D77\u4F5C\u7528",
-              startFrame: 0,
-              durationFrames: 40
-            }
-          ],
+          content: SC_MAGNIFY_CONTENT,
           anchors: [{ text: "\u4F9B\u9700\u5931\u8861", showFrom: 0, color: "#111111", anim: "popIn" }]
         }
       ),
@@ -76963,44 +78811,43 @@ const SHOWCASE_SEGMENTS = [
     ] })
   },
   {
-    key: "multi-image",
-    content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(
-        BWMultiImage,
-        {
-          groups: [
-            {
-              image: { src: img("images/template/scene3_1.png"), position: "left" }
-            },
-            {
-              image: { src: img("images/template/scene3_2.png"), position: "right" }
-            }
-          ]
-        }
-      ),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "LIST_MULTI_GROUP \xB7 \u591A\u8981\u7D20\u5E76\u5217", startFrame: 0 })
-    ] })
-  },
-  {
     key: "progress-ring",
+    durationInFrames: durationFromContent(SC_PROGRESS_CONTENT),
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         BWProgressRing,
         {
-          percent: 78,
-          label: "\u9879\u76EE\u5B8C\u6210\u5EA6",
-          subLabel: "\u622A\u81F3\u672C\u5B63\u5EA6",
-          content: [
-            { text: "\u5DF2\u7ECF\u5B8C\u6210\u8FD1\u516B\u6210", startFrame: 0, durationFrames: 36 },
-            { text: "\u5269\u4E0B\u90E8\u5206\u96C6\u4E2D\u653B\u575A", startFrame: 36, durationFrames: 39 }
-          ]
+          blocks: [
+            {
+              percent: 78,
+              label: "\u9879\u76EE\u5B8C\u6210\u5EA6",
+              subLabel: "\u622A\u81F3\u672C\u5B63\u5EA6",
+              showFrom: 0
+            },
+            {
+              percent: 62,
+              label: "\u6D4B\u8BD5\u8986\u76D6",
+              subLabel: "\u6838\u5FC3\u6A21\u5757",
+              ringColor: "#059669",
+              showFrom: 1
+            },
+            {
+              percent: 88,
+              label: "\u6587\u6863\u540C\u6B65",
+              subLabel: "\u4E0E\u91CC\u7A0B\u7891\u5BF9\u9F50",
+              ringColor: "#7C3AED",
+              showFrom: 2
+            }
+          ],
+          content: SC_PROGRESS_CONTENT
         }
       ),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "PROGRESS_RING \xB7 \u73AF\u5F62\u8FDB\u5EA6", startFrame: 0 })
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "PROGRESS_RING \xB7 \u591A\u7EC4\u73AF\u5F62", startFrame: 0 })
     ] })
   },
   {
     key: "quote-citation",
+    durationInFrames: SHOWCASE_FALLBACK_FRAMES,
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         BWQuoteCitation,
@@ -77014,6 +78861,7 @@ const SHOWCASE_SEGMENTS = [
   },
   {
     key: "split-compare",
+    durationInFrames: SHOWCASE_FALLBACK_FRAMES,
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         BWSplitCompare,
@@ -77029,19 +78877,32 @@ const SHOWCASE_SEGMENTS = [
   },
   {
     key: "stat-compare",
+    durationInFrames: durationFromContent(SC_STAT_CONTENT),
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWStatCompare, { leftValue: 32, rightValue: 68, leftLabel: "\u53BB\u5E74", rightLabel: "\u4ECA\u5E74" }),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "STAT_COMPARE \xB7 \u53CC\u6307\u6807\u5BF9\u6BD4", startFrame: 0 })
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        BWStatCompare,
+        {
+          bars: [
+            { label: "\u53BB\u5E74", value: 32, showFrom: 0 },
+            { label: "\u4ECA\u5E74", value: 68, showFrom: 1 },
+            { label: "\u76EE\u6807", value: 85, showFrom: 2 }
+          ],
+          content: SC_STAT_CONTENT
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "STAT_COMPARE \xB7 \u591A\u67F1 KPI\uFF08bars + showFrom\uFF09", startFrame: 0 })
     ] })
   },
   {
     key: "step-list",
+    durationInFrames: durationAfterLastStagger(SC_STEP_LIST_LAST_DELAY),
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         BWStepList,
         {
           steps: ["\u7B2C\u4E00\u6B65\uFF1A\u6253\u5F00\u601D\u8DEF", "\u7B2C\u4E8C\u6B65\uFF1A\u9009\u62E9\u65B9\u6848", "\u7B2C\u4E09\u6B65\uFF1A\u6267\u884C\u9A8C\u8BC1"],
-          startFrame: 0
+          startFrame: SC_STEP_LIST_START,
+          staggerDelay: SC_STEP_LIST_STAGGER
         }
       ),
       /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "STEP_LIST \xB7 \u6B65\u9AA4/\u6D41\u7A0B", startFrame: 0 })
@@ -77049,6 +78910,7 @@ const SHOWCASE_SEGMENTS = [
   },
   {
     key: "text-focus",
+    durationInFrames: SHOWCASE_FALLBACK_FRAMES,
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
         "div",
@@ -77074,6 +78936,7 @@ const SHOWCASE_SEGMENTS = [
   },
   {
     key: "cause-chain",
+    durationInFrames: durationFromContent(SC_CAUSE_CONTENT),
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         BWCauseChain,
@@ -77083,11 +78946,7 @@ const SHOWCASE_SEGMENTS = [
             { label: "\u52A0\u5DE5", imageSrc: img("images/template/scene2_1.png"), showFrom: 1 },
             { label: "\u7ED3\u679C", imageSrc: img("images/template/scene6_15.png"), showFrom: 2 }
           ],
-          content: [
-            { text: "\u5916\u754C\u5148\u7ED9\u4F60\u4E00\u4E2A\u523A\u6FC0", startFrame: 0, durationFrames: 24 },
-            { text: "\u5927\u8111\u518D\u7528\u504F\u89C1\u53BB\u52A0\u5DE5", startFrame: 24, durationFrames: 26 },
-            { text: "\u6700\u540E\u5F97\u5230\u504F\u79BB\u4E8B\u5B9E\u7684\u5224\u65AD", startFrame: 50, durationFrames: 25 }
-          ]
+          content: SC_CAUSE_CONTENT
         }
       ),
       /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "CAUSE_CHAIN \xB7 \u56E0\u679C\u94FE", startFrame: 0 })
@@ -77095,6 +78954,7 @@ const SHOWCASE_SEGMENTS = [
   },
   {
     key: "checklist-reveal",
+    durationInFrames: durationFromContent(SC_CHECKLIST_CONTENT),
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         BWChecklistReveal,
@@ -77105,11 +78965,7 @@ const SHOWCASE_SEGMENTS = [
             { text: "\u63A8\u65AD\u5206\u5F00\u5199", showFrom: 1 },
             { text: "\u7559\u75D5\u53EF\u8FFD\u6EAF", showFrom: 2 }
           ],
-          content: [
-            { text: "\u5148\u628A\u4E8B\u5B9E\u5199\u6E05\u695A", startFrame: 0, durationFrames: 24 },
-            { text: "\u518D\u628A\u63A8\u65AD\u5206\u5F00\u5199", startFrame: 24, durationFrames: 25 },
-            { text: "\u6700\u540E\u4FDD\u8BC1\u53EF\u8FFD\u6EAF", startFrame: 49, durationFrames: 26 }
-          ]
+          content: SC_CHECKLIST_CONTENT
         }
       ),
       /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "CHECKLIST_REVEAL \xB7 \u6E05\u5355\u6253\u52FE", startFrame: 0 })
@@ -77117,6 +78973,7 @@ const SHOWCASE_SEGMENTS = [
   },
   {
     key: "panel-grid",
+    durationInFrames: durationFromContent(SC_PANEL_CONTENT),
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         BWPanelGrid,
@@ -77126,18 +78983,35 @@ const SHOWCASE_SEGMENTS = [
             { src: img("images/template/scene4_2.png"), showFrom: 1 },
             { src: img("images/template/scene4_3.png"), showFrom: 2 }
           ],
-          content: [
-            { text: "\u7B2C\u4E00\u5757\u62FC\u56FE\u662F\u8F93\u5165", startFrame: 0, durationFrames: 24 },
-            { text: "\u7B2C\u4E8C\u5757\u662F\u5904\u7406\u673A\u5236", startFrame: 24, durationFrames: 26 },
-            { text: "\u7B2C\u4E09\u5757\u662F\u8F93\u51FA\u884C\u4E3A", startFrame: 50, durationFrames: 25 }
-          ]
+          content: SC_PANEL_CONTENT
         }
       ),
       /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "PANEL_GRID \xB7 \u5BAB\u683C\u5E76\u5217", startFrame: 0 })
     ] })
   },
   {
+    key: "data-table",
+    durationInFrames: durationFromContent(SC_DATA_TABLE_CONTENT),
+    content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        BWDataTable,
+        {
+          title: "\u673A\u578B\u5BF9\u7167",
+          columns: ["\u6863\u4F4D", "\u7EED\u822A", "\u8D77\u552E\u4EF7"],
+          rows: [
+            { cells: ["\u6807\u51C6", "\u5168\u5929", "1999 \u8D77"], showFrom: 0 },
+            { cells: ["Pro", "\u4E00\u5929\u534A", "2699 \u8D77"], showFrom: 1 },
+            { cells: ["Ultra", "\u4E24\u5929", "3999 \u8D77"], showFrom: 2 }
+          ],
+          content: SC_DATA_TABLE_CONTENT
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSubtitle, { position: "top", text: "DATA_TABLE \xB7 \u8868\u683C\u5BF9\u7167", startFrame: 0 })
+    ] })
+  },
+  {
     key: "timeline",
+    durationInFrames: durationForTimelineShowcase(SC_TIMELINE_MAX_IMAGE_START),
     content: /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         BWTimeline,
@@ -77154,13 +79028,14 @@ const SHOWCASE_SEGMENTS = [
   }
 ];
 const TEMPLATE_SHOWCASE_SEGMENTS = SHOWCASE_SEGMENTS.length;
-const TOTAL_DURATION_TEMPLATE_SHOWCASE = SHOWCASE_SEGMENTS.length * SEGMENT_FRAMES;
+const TOTAL_DURATION_TEMPLATE_SHOWCASE = SHOWCASE_SEGMENTS.reduce(
+  (sum, seg) => sum + seg.durationInFrames,
+  0
+);
 const TemplateShowcase = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.AbsoluteFill, { style: { backgroundColor: "#fff" }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Series, { children: SHOWCASE_SEGMENTS.map((seg) => /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Series.Sequence, { durationInFrames: SEGMENT_FRAMES, children: seg.content }, seg.key)) }) });
+  return /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.AbsoluteFill, { style: { backgroundColor: "#fff" }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Series, { children: SHOWCASE_SEGMENTS.map((seg) => /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Series.Sequence, { durationInFrames: seg.durationInFrames, children: seg.content }, seg.key)) }) });
 };
 
-// EXTERNAL MODULE: ./node_modules/zod/lib/index.mjs
-var lib = __webpack_require__(4476);
 // EXTERNAL MODULE: ./node_modules/remotion/dist/esm/no-react.mjs
 var no_react = __webpack_require__(9382);
 ;// ./node_modules/@remotion/transitions/dist/esm/index.mjs
@@ -77588,44 +79463,537 @@ var fade = (props) => {
 };
 
 
-;// ./src/components/StaticCover.tsx
+;// ./node_modules/@remotion/layout-utils/dist/esm/index.mjs
+// src/layouts/measure-text.ts
+var wordCache = new Map;
+var takeMeasurement = ({
+  text,
+  fontFamily,
+  fontSize,
+  fontWeight,
+  letterSpacing,
+  fontVariantNumeric,
+  additionalStyles,
+  textTransform
+}) => {
+  if (typeof document === "undefined") {
+    throw new Error("measureText() can only be called in a browser.");
+  }
+  const node = document.createElement("span");
+  if (fontFamily) {
+    node.style.fontFamily = fontFamily;
+  }
+  node.style.display = "inline-block";
+  node.style.position = "absolute";
+  node.style.top = `-10000px`;
+  node.style.whiteSpace = "pre";
+  node.style.fontSize = typeof fontSize === "string" ? fontSize : `${fontSize}px`;
+  if (additionalStyles) {
+    for (const key of Object.keys(additionalStyles)) {
+      node.style[key] = additionalStyles[key];
+    }
+  }
+  if (fontWeight) {
+    node.style.fontWeight = fontWeight.toString();
+  }
+  if (letterSpacing) {
+    node.style.letterSpacing = letterSpacing;
+  }
+  if (fontVariantNumeric) {
+    node.style.fontVariantNumeric = fontVariantNumeric;
+  }
+  if (textTransform) {
+    node.style.textTransform = textTransform;
+  }
+  node.innerText = text;
+  document.body.appendChild(node);
+  const computedFontFamily = window.getComputedStyle(node).fontFamily;
+  const boundingBox = node.getBoundingClientRect();
+  document.body.removeChild(node);
+  return {
+    boundingBox,
+    computedFontFamily
+  };
+};
+var measureText = ({
+  text,
+  fontFamily,
+  fontSize,
+  fontWeight,
+  letterSpacing,
+  fontVariantNumeric,
+  validateFontIsLoaded,
+  additionalStyles,
+  textTransform
+}) => {
+  const key = `${text}-${fontFamily}-${fontWeight}-${fontSize}-${letterSpacing}-${textTransform}-${JSON.stringify(additionalStyles)}`;
+  if (wordCache.has(key)) {
+    return wordCache.get(key);
+  }
+  const { boundingBox, computedFontFamily } = takeMeasurement({
+    fontFamily,
+    fontSize,
+    text,
+    fontVariantNumeric,
+    fontWeight,
+    letterSpacing,
+    additionalStyles,
+    textTransform
+  });
+  if (validateFontIsLoaded && text.trim().length > 0) {
+    const {
+      boundingBox: boundingBoxOfFallbackFont,
+      computedFontFamily: computedFallback
+    } = takeMeasurement({
+      fontFamily: null,
+      fontSize,
+      text,
+      fontVariantNumeric,
+      fontWeight,
+      letterSpacing,
+      additionalStyles,
+      textTransform
+    });
+    const sameAsFallbackFont = boundingBox.height === boundingBoxOfFallbackFont.height && boundingBox.width === boundingBoxOfFallbackFont.width;
+    if (sameAsFallbackFont && computedFallback !== computedFontFamily && new Set(text).size > 4) {
+      const err = [
+        `Called measureText() with "fontFamily": ${JSON.stringify(fontFamily)} but it looks like the font is not loaded at the time of calling.`,
+        `A measurement with the fallback font ${computedFallback} was taken and had the same dimensions, indicating that the browser used the fallback font.`,
+        "See https://remotion.dev/docs/layout-utils/best-practices for best practices."
+      ];
+      throw new Error(err.join(`
+`));
+    }
+  }
+  const result = { height: boundingBox.height, width: boundingBox.width };
+  wordCache.set(key, result);
+  return result;
+};
+
+// src/layouts/fill-text-box.ts
+var fillTextBox = ({
+  maxBoxWidth,
+  maxLines
+}) => {
+  const lines = new Array(maxLines).fill(0).map(() => []);
+  return {
+    add: ({
+      text,
+      fontFamily,
+      fontWeight,
+      fontSize,
+      letterSpacing,
+      fontVariantNumeric,
+      validateFontIsLoaded,
+      textTransform,
+      additionalStyles
+    }) => {
+      const lastLineIndex = lines.reduceRight((acc, curr, index) => {
+        if (acc === -1 && curr.length > 0) {
+          return index;
+        }
+        return acc;
+      }, -1);
+      const currentlyAt = lastLineIndex === -1 ? 0 : lastLineIndex;
+      const lineToUse = lines[currentlyAt];
+      const lineWithWord = [
+        ...lineToUse,
+        {
+          text,
+          fontFamily,
+          fontWeight,
+          fontSize,
+          letterSpacing,
+          fontVariantNumeric,
+          validateFontIsLoaded,
+          textTransform,
+          additionalStyles
+        }
+      ];
+      const widths = lineWithWord.map((w) => measureText(w).width);
+      const lineWidthWithWordAdded = widths.reduce((a, b) => a + b, 0);
+      if (Math.ceil(lineWidthWithWordAdded) < maxBoxWidth) {
+        lines[currentlyAt].push({
+          text: lines[currentlyAt].length === 0 ? text.trimStart() : text,
+          fontFamily,
+          fontWeight,
+          fontSize,
+          letterSpacing,
+          textTransform,
+          fontVariantNumeric
+        });
+        return { exceedsBox: false, newLine: false };
+      }
+      if (currentlyAt === maxLines - 1) {
+        return { exceedsBox: true, newLine: false };
+      }
+      lines[currentlyAt + 1] = [
+        {
+          text: text.trimStart(),
+          fontFamily,
+          fontWeight,
+          fontSize,
+          letterSpacing,
+          textTransform,
+          fontVariantNumeric
+        }
+      ];
+      return { exceedsBox: false, newLine: true };
+    }
+  };
+};
+// src/layouts/fit-text.ts
+var sampleSize = 100;
+var fitText = ({
+  text,
+  withinWidth,
+  fontFamily,
+  fontVariantNumeric,
+  fontWeight,
+  letterSpacing,
+  validateFontIsLoaded,
+  additionalStyles,
+  textTransform
+}) => {
+  const estimate = measureText({
+    text,
+    fontFamily,
+    fontSize: sampleSize,
+    fontWeight,
+    fontVariantNumeric,
+    letterSpacing,
+    validateFontIsLoaded,
+    textTransform,
+    additionalStyles
+  });
+  return { fontSize: withinWidth / estimate.width * sampleSize };
+};
+// src/layouts/fit-text-on-n-lines.ts
+var PRECISION = 100;
+var fitTextOnNLines = ({
+  text,
+  maxLines,
+  maxBoxWidth,
+  fontFamily,
+  fontWeight,
+  letterSpacing,
+  fontVariantNumeric,
+  validateFontIsLoaded,
+  textTransform,
+  additionalStyles,
+  maxFontSize
+}) => {
+  const minFontSize = 0.1;
+  let left = Math.floor(minFontSize * PRECISION);
+  let right = Math.floor((maxFontSize ?? 2000) * PRECISION);
+  let optimalFontSize = minFontSize;
+  let optimalLines = [];
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    const fontSize = mid / PRECISION;
+    const textBox = fillTextBox({
+      maxBoxWidth,
+      maxLines
+    });
+    const words = text.split(" ");
+    let exceedsBox = false;
+    let currentLine = 0;
+    const lines = [""];
+    for (const word of words) {
+      const result = textBox.add({
+        text: lines[currentLine].length === 0 ? word : " " + word,
+        fontFamily,
+        fontWeight,
+        fontSize,
+        letterSpacing,
+        fontVariantNumeric,
+        validateFontIsLoaded,
+        textTransform,
+        additionalStyles
+      });
+      if (result.exceedsBox) {
+        exceedsBox = true;
+        break;
+      }
+      if (result.newLine) {
+        lines.push("");
+        currentLine++;
+      }
+      lines[currentLine] += word + " ";
+    }
+    if (!exceedsBox && currentLine < maxLines) {
+      optimalFontSize = fontSize;
+      optimalLines = lines;
+      left = mid + 1;
+    } else {
+      right = mid - 1;
+    }
+  }
+  for (let i = 0;i < optimalLines.length; i++) {
+    optimalLines[i] = optimalLines[i].trimEnd();
+  }
+  return {
+    fontSize: optimalFontSize,
+    lines: optimalLines
+  };
+};
+
+
+// EXTERNAL MODULE: ./node_modules/zod/lib/index.mjs
+var lib = __webpack_require__(4476);
+;// ./src/components/CoverPosterCore.tsx
 
 
 
 
 
-const FONT_STACK = '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
 const StaticCoverSchema = lib.z.object({
   title: lib.z.string(),
   subtitle: lib.z.string(),
   themeColor: lib.z.string().optional(),
-  /** 右上角系列名（如「科学方法论」）；不传则用默认值 */
+  /** 系列名（如「科学方法论」）；不传则用默认值 */
   seriesLabel: lib.z.string().optional(),
-  /** 角标下英文副标题 */
+  /** 标签下英文副标题 */
   seriesLabelEn: lib.z.string().optional(),
-  /** 方法论行中文词序列（如观察/假设/验证）；空数组则回退默认 */
+  /** 方法论行中文词序列（如观察/假设/验证）；封面核心块不展示，保留以兼容既有 props */
   methodologySteps: lib.z.array(lib.z.string()).optional(),
   /** 方法论行英文整行 */
   methodologyStepsEn: lib.z.string().optional(),
-  /** 可选角标文案；不传则不显示 */
-  badge: lib.z.string().optional()
+  /** 可选角标文案；封面核心块不展示，保留以兼容既有 props */
+  badge: lib.z.string().optional(),
+  /** 为 true 时主标题单行排版，字号在不超过设计上限的前提下随文案长度缩放 */
+  titleFitSingleLine: lib.z.boolean().optional(),
+  /** 浅色底用 light；深蓝渐变壳层用 dark，主副标题与分隔线随表面反色 */
+  surface: lib.z.enum(["light", "dark"]).optional()
 });
+const FONT_STACK = '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
+const MONO_STACK = '"JetBrains Mono", "Cascadia Code", "SF Mono", Consolas, monospace';
+const DESIGN_REF_W = 1920;
+const DESIGN_REF_H = 1440;
+const THUMB_READABILITY_MULT = 1.65;
 const DEFAULT_THEME = "#1d4ed8";
 const DEFAULT_SERIES_LABEL = "\u79D1\u5B66\u65B9\u6CD5\u8BBA";
-const DEFAULT_SERIES_LABEL_EN = "SCIENTIFIC METHODOLOGY";
-const DEFAULT_METHODOLOGY_STEPS = ["\u89C2\u5BDF", "\u5047\u8BBE", "\u9A8C\u8BC1"];
-const DEFAULT_METHODOLOGY_STEPS_EN = "OBSERVE \xB7 HYPOTHESIZE \xB7 TEST";
-const StaticCover = ({
+const CoverPosterCore = ({
   title,
   subtitle,
   themeColor = DEFAULT_THEME,
   seriesLabel = DEFAULT_SERIES_LABEL,
-  seriesLabelEn = DEFAULT_SERIES_LABEL_EN,
-  methodologySteps,
-  methodologyStepsEn = DEFAULT_METHODOLOGY_STEPS_EN,
-  badge
+  seriesLabelEn,
+  titleFitSingleLine = false,
+  surface = "light"
 }) => {
-  const resolvedMethodologySteps = methodologySteps && methodologySteps.length > 0 ? methodologySteps : [...DEFAULT_METHODOLOGY_STEPS];
+  const isDark = surface === "dark";
+  const { width, height } = (0,esm.useVideoConfig)();
+  const scale = Math.min(width / DESIGN_REF_W, height / DESIGN_REF_H);
+  const u = (px) => Math.round(px * scale);
+  const uf = (px) => Math.round(px * scale * THUMB_READABILITY_MULT);
+  const titleHorizontalPadding = u(110);
+  const titleMaxFontSize = uf(170);
+  const titleLetterSpacingPx = uf(2);
+  const titleAvailableWidth = Math.max(0, width - 2 * titleHorizontalPadding - 4);
+  let titleFontSize = titleMaxFontSize;
+  if (titleFitSingleLine && title.trim().length > 0 && titleAvailableWidth > 0) {
+    const { fontSize: fitted } = fitText({
+      text: title,
+      withinWidth: titleAvailableWidth,
+      fontFamily: FONT_STACK,
+      fontWeight: 900,
+      letterSpacing: `${titleLetterSpacingPx}px`
+    });
+    if (Number.isFinite(fitted) && fitted > 0) {
+      titleFontSize = Math.min(titleMaxFontSize, fitted);
+    }
+  }
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+    "div",
+    {
+      style: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: u(52),
+        padding: `0 ${u(110)}px`,
+        boxSizing: "border-box",
+        textAlign: "center",
+        width: "100%",
+        fontFamily: FONT_STACK
+      },
+      children: [
+        /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+          "div",
+          {
+            style: {
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: u(14)
+            },
+            children: [
+              /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                "div",
+                {
+                  style: {
+                    display: "inline-flex",
+                    alignItems: "center",
+                    padding: `${u(14)}px ${u(36)}px`,
+                    borderRadius: u(6),
+                    background: themeColor,
+                    boxShadow: isDark ? "none" : `0 ${u(4)}px ${u(24)}px ${themeColor}44`,
+                    border: isDark ? `${u(1)}px solid rgba(255,255,255,0.18)` : void 0
+                  },
+                  children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "span",
+                    {
+                      style: {
+                        fontSize: uf(50),
+                        fontWeight: 900,
+                        color: "#ffffff",
+                        letterSpacing: uf(4),
+                        lineHeight: 1.15
+                      },
+                      children: seriesLabel
+                    }
+                  )
+                }
+              ),
+              seriesLabelEn ? /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                "span",
+                {
+                  style: {
+                    fontFamily: MONO_STACK,
+                    fontSize: uf(16),
+                    fontWeight: 600,
+                    color: isDark ? "#cbd5e1" : themeColor,
+                    letterSpacing: uf(3),
+                    opacity: isDark ? 0.95 : 0.65
+                  },
+                  children: seriesLabelEn
+                }
+              ) : null
+            ]
+          }
+        ),
+        /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: u(18), width: "100%" }, children: [
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                flex: 1,
+                height: u(1),
+                background: isDark ? "rgba(148,163,184,0.35)" : `${themeColor}44`
+              }
+            }
+          ),
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                width: u(8),
+                height: u(8),
+                borderRadius: "50%",
+                background: isDark ? "#94a3b8" : themeColor,
+                opacity: isDark ? 0.55 : 0.45
+              }
+            }
+          ),
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                flex: 1,
+                height: u(1),
+                background: isDark ? "rgba(148,163,184,0.35)" : `${themeColor}44`
+              }
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0,jsx_runtime.jsx)(
+          "h1",
+          {
+            style: {
+              margin: 0,
+              padding: 0,
+              fontSize: titleFontSize,
+              fontWeight: 900,
+              lineHeight: 1.1,
+              letterSpacing: titleLetterSpacingPx,
+              color: isDark ? "#f8fafc" : "#0f172a",
+              wordBreak: titleFitSingleLine ? "keep-all" : "break-word",
+              whiteSpace: titleFitSingleLine ? "nowrap" : "normal",
+              maxWidth: "100%"
+            },
+            children: title
+          }
+        ),
+        /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: u(18), width: "100%" }, children: [
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                flex: 1,
+                height: u(1),
+                background: isDark ? "rgba(148,163,184,0.35)" : `${themeColor}44`
+              }
+            }
+          ),
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                width: u(8),
+                height: u(8),
+                borderRadius: "50%",
+                background: isDark ? "#94a3b8" : themeColor,
+                opacity: isDark ? 0.55 : 0.45
+              }
+            }
+          ),
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                flex: 1,
+                height: u(1),
+                background: isDark ? "rgba(148,163,184,0.35)" : `${themeColor}44`
+              }
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0,jsx_runtime.jsx)(
+          "p",
+          {
+            style: {
+              margin: 0,
+              fontSize: uf(75),
+              fontWeight: 600,
+              lineHeight: 1.6,
+              letterSpacing: uf(1),
+              color: isDark ? "#cbd5e1" : "#334155"
+            },
+            children: subtitle
+          }
+        )
+      ]
+    }
+  );
+};
+
+;// ./src/components/CoverPosterLandscape.tsx
+
+
+
+
+const CoverPosterLandscape_DEFAULT_THEME = "#1d4ed8";
+const COVER_SOLID_BG = "#f1f5f9";
+const COVER_DARK_SOLID = "#0f172a";
+const MONO_FOOTER = '"JetBrains Mono", "Cascadia Code", "SF Mono", Consolas, monospace';
+const LandscapeCoverPoster = ({
+  themeColor = CoverPosterLandscape_DEFAULT_THEME,
+  surface = "light",
+  seriesLabelEn,
+  ...coreProps
+}) => {
+  const isDark = surface === "dark";
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style: { overflow: "hidden" }, children: [
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       "div",
@@ -77633,48 +80001,7 @@ const StaticCover = ({
         style: {
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(168deg, #f8fafc 0%, #f1f5f9 42%, #e8eef5 100%)"
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          inset: "-4%",
-          pointerEvents: "none",
-          opacity: 0.38,
-          background: `radial-gradient(circle at 14% 20%, rgba(148, 163, 184, 0.22), transparent 40%),
-						radial-gradient(circle at 78% 55%, rgba(29, 78, 216, 0.12), transparent 45%),
-						radial-gradient(circle at 48% 92%, rgba(51, 65, 85, 0.08), transparent 48%)`
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          inset: 0,
-          pointerEvents: "none",
-          opacity: 0.045,
-          backgroundImage: `linear-gradient(90deg, #64748b 1px, transparent 1px),
-						linear-gradient(#64748b 1px, transparent 1px)`,
-          backgroundSize: "48px 48px"
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          inset: 0,
-          pointerEvents: "none",
-          opacity: 0.1,
-          backgroundImage: `radial-gradient(${themeColor} 1.5px, transparent 1.5px)`,
-          backgroundSize: "28px 28px"
+          background: isDark ? COVER_DARK_SOLID : COVER_SOLID_BG
         }
       }
     ),
@@ -77689,7 +80016,7 @@ const StaticCover = ({
           height: "1200px",
           borderRadius: "50%",
           border: `1.5px dashed ${themeColor}`,
-          opacity: 0.07,
+          opacity: isDark ? 0.16 : 0.07,
           pointerEvents: "none"
         }
       }
@@ -77704,8 +80031,8 @@ const StaticCover = ({
           width: "600px",
           height: "600px",
           borderRadius: "50%",
-          border: `1px solid ${themeColor}`,
-          opacity: 0.1,
+          border: `1px solid ${isDark ? `${themeColor}99` : themeColor}`,
+          opacity: isDark ? 0.22 : 0.1,
           pointerEvents: "none"
         }
       }
@@ -77715,210 +80042,20 @@ const StaticCover = ({
       {
         style: {
           position: "absolute",
-          right: "15%",
-          top: "20%",
-          width: "200px",
-          height: "200px",
-          borderRadius: "50%",
-          background: themeColor,
-          filter: "blur(120px)",
-          opacity: 0.15,
-          pointerEvents: "none"
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsxs)(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          top: 40,
-          right: 60,
-          zIndex: 2,
-          padding: "14px 26px 14px 22px",
-          borderRadius: 8,
-          backgroundColor: "#0a1628",
-          borderLeft: `7px solid ${themeColor}`,
-          boxShadow: `0 6px 28px rgba(15,23,42,0.55), 0 0 0 1px rgba(255,255,255,0.06)`,
-          pointerEvents: "none"
-        },
-        children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            "div",
-            {
-              style: {
-                fontFamily: FONT_STACK,
-                fontSize: 44,
-                fontWeight: 900,
-                lineHeight: 1.1,
-                color: "#f1f5f9",
-                letterSpacing: 3,
-                textShadow: "0 1px 4px rgba(0,0,0,0.6)"
-              },
-              children: seriesLabel
-            }
-          ),
-          /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            "div",
-            {
-              style: {
-                marginTop: 7,
-                fontFamily: '"JetBrains Mono", "Cascadia Code", Consolas, monospace',
-                fontSize: 15,
-                fontWeight: 600,
-                color: themeColor,
-                letterSpacing: 2,
-                opacity: 0.9
-              },
-              children: seriesLabelEn
-            }
-          )
-        ]
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsxs)(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          left: 72,
-          right: 72,
-          top: 0,
-          bottom: 0,
-          paddingTop: 160,
-          paddingBottom: 160,
+          inset: 0,
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "flex-start",
-          gap: 44
+          alignItems: "center",
+          justifyContent: "center"
         },
-        children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 18 }, children: [
-            /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 18 }, children: [
-              badge && /* @__PURE__ */ (0,jsx_runtime.jsx)(
-                "div",
-                {
-                  style: {
-                    padding: "9px 20px",
-                    borderRadius: 5,
-                    fontFamily: FONT_STACK,
-                    fontSize: 28,
-                    fontWeight: 800,
-                    color: "#fff",
-                    backgroundColor: themeColor,
-                    letterSpacing: 2,
-                    boxShadow: `0 4px 16px ${themeColor}50`,
-                    whiteSpace: "nowrap"
-                  },
-                  children: badge
-                }
-              ),
-              /* @__PURE__ */ (0,jsx_runtime.jsx)(
-                "div",
-                {
-                  style: {
-                    height: 3,
-                    width: badge ? 48 : 72,
-                    background: `linear-gradient(90deg, ${themeColor}, transparent)`,
-                    borderRadius: 2
-                  }
-                }
-              )
-            ] }),
-            /* @__PURE__ */ (0,jsx_runtime.jsxs)(
-              "div",
-              {
-                style: {
-                  fontFamily: '"JetBrains Mono", "Cascadia Code", "SF Mono", Consolas, monospace',
-                  fontSize: 20,
-                  color: "#475569",
-                  letterSpacing: 2.5
-                },
-                children: [
-                  resolvedMethodologySteps.map((step, i) => /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
-                    i > 0 && /* @__PURE__ */ (0,jsx_runtime.jsx)("span", { style: { margin: "0 10px", opacity: 0.3 }, children: "\xB7" }),
-                    /* @__PURE__ */ (0,jsx_runtime.jsx)("span", { style: { color: themeColor, fontWeight: 700 }, children: step })
-                  ] }, `${i}-${step}`)),
-                  /* @__PURE__ */ (0,jsx_runtime.jsx)("span", { style: { margin: "0 16px", opacity: 0.2 }, children: "|" }),
-                  /* @__PURE__ */ (0,jsx_runtime.jsx)("span", { style: { opacity: 0.45, letterSpacing: 1.5, fontSize: 18 }, children: methodologyStepsEn })
-                ]
-              }
-            )
-          ] }),
-          /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 28 }, children: [
-            /* @__PURE__ */ (0,jsx_runtime.jsx)(
-              "h1",
-              {
-                style: {
-                  margin: 0,
-                  padding: 0,
-                  fontFamily: FONT_STACK,
-                  fontSize: 108,
-                  fontWeight: 900,
-                  lineHeight: 1.18,
-                  letterSpacing: 3,
-                  color: "transparent",
-                  backgroundClip: "text",
-                  WebkitBackgroundClip: "text",
-                  backgroundImage: `linear-gradient(135deg, #0f172a 0%, #1e3a5f 55%, ${themeColor} 100%)`,
-                  wordBreak: "break-word"
-                },
-                children: title
-              }
-            ),
-            /* @__PURE__ */ (0,jsx_runtime.jsxs)(
-              "div",
-              {
-                style: {
-                  display: "flex",
-                  alignItems: "stretch",
-                  gap: 22,
-                  // maxWidth: "min(92%, 1400px)",
-                  padding: "14px 18px 16px 18px",
-                  marginLeft: -18,
-                  borderRadius: 10,
-                  /* 轻衬底弱化背后轨道/点阵对笔画的干扰，不形成第二视觉主角 */
-                  background: "linear-gradient(105deg, rgba(255,255,255,0.88) 0%, rgba(248,250,252,0.72) 45%, rgba(241,245,249,0.35) 78%, transparent 90%)",
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.95)"
-                },
-                children: [
-                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
-                    "div",
-                    {
-                      style: {
-                        width: 5,
-                        minHeight: 56,
-                        alignSelf: "stretch",
-                        background: `linear-gradient(180deg, ${themeColor} 0%, ${themeColor}44 100%)`,
-                        borderRadius: 3,
-                        flexShrink: 0
-                      }
-                    }
-                  ),
-                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
-                    "p",
-                    {
-                      style: {
-                        margin: 0,
-                        fontFamily: FONT_STACK,
-                        fontSize: 44,
-                        fontWeight: 580,
-                        lineHeight: 1.68,
-                        letterSpacing: 1.5,
-                        color: "#0f172a",
-                        /* 极轻描边式阴影：缩小时笔画与背景分离，肉眼不加粗观感 */
-                        textShadow: "0 0 1px rgba(255,255,255,0.9), 0 1px 2px rgba(248,250,252,0.95)",
-                        WebkitFontSmoothing: "antialiased"
-                      },
-                      children: subtitle
-                    }
-                  )
-                ]
-              }
-            )
-          ] })
-        ]
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+          CoverPosterCore,
+          {
+            themeColor,
+            surface,
+            seriesLabelEn,
+            ...coreProps
+          }
+        )
       }
     ),
     /* @__PURE__ */ (0,jsx_runtime.jsxs)(
@@ -77927,17 +80064,16 @@ const StaticCover = ({
         style: {
           position: "absolute",
           bottom: 50,
-          left: 72,
-          right: 72,
+          left: 200,
+          right: 200,
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          borderTop: `1px solid ${themeColor}28`,
           paddingTop: 22,
           pointerEvents: "none"
         },
         children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12 }, children: [
+          (seriesLabelEn == null ? void 0 : seriesLabelEn.trim()) ? /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12 }, children: [
             /* @__PURE__ */ (0,jsx_runtime.jsx)(
               "div",
               {
@@ -77946,7 +80082,7 @@ const StaticCover = ({
                   height: 7,
                   background: themeColor,
                   transform: "rotate(45deg)",
-                  opacity: 0.55
+                  opacity: isDark ? 0.85 : 0.55
                 }
               }
             ),
@@ -77954,21 +80090,54 @@ const StaticCover = ({
               "div",
               {
                 style: {
-                  fontFamily: '"JetBrains Mono", "Cascadia Code", Consolas, monospace',
-                  fontSize: 17,
+                  fontFamily: MONO_FOOTER,
+                  fontSize: 22,
                   fontWeight: 600,
-                  color: themeColor,
+                  color: isDark ? "#e2e8f0" : themeColor,
                   letterSpacing: 3.5,
-                  opacity: 0.55
+                  opacity: isDark ? 0.88 : 0.55
                 },
-                children: "KNOWLEDGE EXPLORATION"
+                children: seriesLabelEn.trim()
               }
             )
-          ] }),
+          ] }) : /* @__PURE__ */ (0,jsx_runtime.jsx)("div", {}),
           /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
-            /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { width: 36, height: 4, background: themeColor, borderRadius: 2, opacity: 0.6 } }),
-            /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { width: 10, height: 4, background: themeColor, borderRadius: 2, opacity: 0.22 } }),
-            /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { width: 10, height: 4, background: themeColor, borderRadius: 2, opacity: 0.22 } })
+            /* @__PURE__ */ (0,jsx_runtime.jsx)(
+              "div",
+              {
+                style: {
+                  width: 36,
+                  height: 4,
+                  background: themeColor,
+                  borderRadius: 2,
+                  opacity: isDark ? 0.75 : 0.6
+                }
+              }
+            ),
+            /* @__PURE__ */ (0,jsx_runtime.jsx)(
+              "div",
+              {
+                style: {
+                  width: 10,
+                  height: 4,
+                  background: themeColor,
+                  borderRadius: 2,
+                  opacity: isDark ? 0.35 : 0.22
+                }
+              }
+            ),
+            /* @__PURE__ */ (0,jsx_runtime.jsx)(
+              "div",
+              {
+                style: {
+                  width: 10,
+                  height: 4,
+                  background: themeColor,
+                  borderRadius: 2,
+                  opacity: isDark ? 0.35 : 0.22
+                }
+              }
+            )
           ] })
         ]
       }
@@ -77976,1600 +80145,104 @@ const StaticCover = ({
   ] });
 };
 
-;// ./src/remotions/可证伪性/scenes/Scene1.tsx
+;// ./src/remotions/小米核心技术/scenes/Scene1.tsx
 
 
 
 
-const SCENE_DURATION = 470 + 155 + 183 + 281;
+const SCENE_DURATION = 208;
 const calculateScene1Duration = () => {
   return SCENE_DURATION;
 };
 const Scene1 = () => {
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 470, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4ECA\u5929\u6211\u4EEC\u8BB2\u8BB2\u4EC0\u4E48\u624D\u662F\u771F\u6B63\u7684\u79D1\u5B66\uFF0C", "startFrame": 0, "durationFrames": 76 }, { "text": "\u4F60\u6709\u6CA1\u6709\u8FC7\u8FD9\u6837\u7684\u7ECF\u5386\uFF1F", "startFrame": 75, "durationFrames": 52 }, { "text": "\u5C31\u6BD4\u5982\u4F60\u751F\u4E86\u4E00\u573A\u5C0F\u75C5\uFF0C", "startFrame": 126, "durationFrames": 47 }, { "text": "\u627E\u4E86\u67D0\u4E2A\u504F\u65B9\u6216\u8005\u5927\u5E08\uFF0C", "startFrame": 173, "durationFrames": 51 }, { "text": "\u7ED3\u679C\u75C5\u6CA1\u597D\uFF0C", "startFrame": 223, "durationFrames": 35 }, { "text": "\u5BF9\u65B9\u5374\u8BED\u91CD\u5FC3\u957F\u5730\u5BF9\u4F60\u8BF4\uFF0C", "startFrame": 258, "durationFrames": 53 }, { "text": "\u6CA1\u6548\u679C\u662F\u56E0\u4E3A\u4F60\u5FC3\u4E0D\u8BDA\uFF0C", "startFrame": 310, "durationFrames": 53 }, { "text": "\u6216\u8005\u4F60\u4F53\u8D28\u592A\u7279\u6B8A\uFF0C", "startFrame": 363, "durationFrames": 39 }, { "text": "\u518D\u6216\u8005\u662F\u4F60\u5403\u836F\u7684\u65F6\u673A\u4E0D\u5BF9\u3002", "startFrame": 401, "durationFrames": 58 }], totalDurationFrames: 470, imageSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_1_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u504F\u65B9", "showFrom": 3, "color": "#EF4444", "anim": "popIn", "audioEffect": "woosh" }, { "text": "\u5FC3\u4E0D\u8BDA", "showFrom": 6, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }, { "text": "\u4F53\u8D28\u7279\u6B8A", "showFrom": 7, "color": "#EF4444", "anim": "highlight", "audioEffect": "woosh" }, { "text": "\u5403\u836F\u7684\u65F6\u673A\u4E0D\u5BF9", "showFrom": 8, "color": "#EF4444", "anim": "highlight", "audioEffect": "woosh" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 470, durationInFrames: 155, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4F60\u660E\u660E\u662F\u62B1\u7740\u89E3\u51B3\u95EE\u9898\u7684\u521D\u8877\u53BB\u7684\uFF0C", "startFrame": 0, "durationFrames": 77 }, { "text": "\u53EF\u5230\u5934\u6765\uFF0C", "startFrame": 76, "durationFrames": 28 }, { "text": "\u6240\u6709\u7684\u9505\u90FD\u5F97\u4F60\u4E00\u4E2A\u4EBA\u80CC\u3002", "startFrame": 103, "durationFrames": 52 }], totalDurationFrames: 155, imageSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_1_2.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u80CC\u9505", "showFrom": 2, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 625, durationInFrames: 183, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4F60\u53D1\u73B0\u8FD9\u4E8B\u513F\u9677\u5165\u4E86\u4E00\u4E2A\u6B7B\u5FAA\u73AF\uFF1A", "startFrame": 0, "durationFrames": 70 }, { "text": "\u53EA\u8981\u6709\u6548\u5C31\u662F\u4ED6\u7684\u529F\u52B3\uFF0C", "startFrame": 69, "durationFrames": 56 }, { "text": "\u53EA\u8981\u6CA1\u6548\u5C31\u662F\u4F60\u7684\u95EE\u9898\u3002", "startFrame": 125, "durationFrames": 58 }], totalDurationFrames: 183, imageSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_1_3.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u6B7B\u5FAA\u73AF", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 808, durationInFrames: 281, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWConceptCard, { content: [{ "text": "\u8FD9\u79CD\u201C\u6C38\u8FDC\u7ACB\u4E8E\u4E0D\u8D25\u4E4B\u5730\u201D\u7684\u8BDD\u672F\uFF0C", "startFrame": 0, "durationFrames": 66 }, { "text": "\u4ECE\u6765\u4E0D\u662F\u56E0\u4E3A\u5BF9\u65B9\u638C\u63E1\u4E86\u771F\u7406\uFF0C", "startFrame": 65, "durationFrames": 62 }, { "text": "\u4F60\u4E5F\u4E0D\u662F\u4EC0\u4E48\u5012\u9709\u86CB\uFF0C", "startFrame": 126, "durationFrames": 40 }, { "text": "\u4F60\u53EA\u662F\u88AB\u4E00\u79CD\u53EB\u505A\u201C\u4E0D\u53EF\u8BC1\u4F2A\u201D\u7684\u903B\u8F91\u9677\u9631\u7ED9\u7ED5\u8FDB\u53BB\u4E86\u3002", "startFrame": 165, "durationFrames": 115 }], totalDurationFrames: 281, imageSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_1_4.png"), conceptName: "\u4E0D\u53EF\u8BC1\u4F2A\u7684\u903B\u8F91\u9677\u9631", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u53EF\u8BC1\u4F2A\u6027/scene_1/scene_1.mp3") })
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 208, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWBeatSequence, { content: [{ "text": "\u4E89\u8BBA\u5C0F\u7C73\u6709\u6CA1\u6709\u6838\u5FC3\u6280\u672F\u7684\u4EBA\uFF0C", "startFrame": 0, "durationFrames": 65 }, { "text": "\u4E0D\u4EC5\u6CA1\u641E\u61C2\u5230\u5E95\u4EC0\u4E48\u53EB\u6838\u5FC3\u6280\u672F\uFF0C", "startFrame": 64, "durationFrames": 68 }, { "text": "\u66F4\u5BF9\u5B83\u7684\u6050\u6016\u7814\u53D1\u5E95\u724C\u4E00\u65E0\u6240\u77E5\u3002", "startFrame": 132, "durationFrames": 76 }], totalDurationFrames: 208, stages: [{ imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_1_1_img0.png"), enterEffect: "fadeIn", tone: "calm" }, { imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_1_1_img1.png"), enterEffect: "slideBottom", tone: "alert", showFrom: 1 }, { imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_1_1_img2.png"), enterEffect: "zoomIn", tone: "alert", showFrom: 2 }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_1/scene_1.mp3") })
   ] });
 };
 
-;// ./src/remotions/可证伪性/scenes/Scene2.tsx
+;// ./src/remotions/小米核心技术/scenes/Scene2.tsx
 
 
 
 
-const Scene2_SCENE_DURATION = 240 + 235 + 295 + 203;
+const Scene2_SCENE_DURATION = 408 + 219 + 227 + 254 + 196 + 205;
 const calculateScene2Duration = () => {
   return Scene2_SCENE_DURATION;
 };
 const Scene2 = () => {
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 240, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8BF4\u771F\u7684\uFF0C", "startFrame": 0, "durationFrames": 27 }, { "text": "\u8FD9\u771F\u4E0D\u80FD\u602A\u6211\u4EEC\u5E73\u65F6\u903B\u8F91\u4E0D\u591F\u7528\uFF0C", "startFrame": 26, "durationFrames": 69 }, { "text": "\u56E0\u4E3A\u8FD9\u5957\u8BF4\u8F9E\u80CC\u540E\uFF0C", "startFrame": 94, "durationFrames": 48 }, { "text": "\u5229\u7528\u7684\u662F\u4EBA\u7C7B\u5927\u8111\u5E95\u5C42\u5BF9\u201C\u786E\u5B9A\u6027\u201D\u7684\u6781\u5EA6\u6E34\u671B\u3002", "startFrame": 142, "durationFrames": 98 }], totalDurationFrames: 240, imageSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_2_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u786E\u5B9A\u6027", "showFrom": 3, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 240, durationInFrames: 235, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u6211\u4EEC\u666E\u901A\u4EBA\u9762\u5BF9\u672A\u77E5\u548C\u75BE\u75C5\u65F6\uFF0C", "startFrame": 0, "durationFrames": 68 }, { "text": "\u5929\u7136\u5C31\u60F3\u6293\u5230\u4E00\u6839\u6551\u547D\u7A3B\u8349\uFF0C", "startFrame": 67, "durationFrames": 58 }, { "text": "\u800C\u8FD9\u79CD\u201C\u6C38\u8FDC\u6B63\u786E\u201D\u7684\u8BDD\u672F\uFF0C", "startFrame": 125, "durationFrames": 54 }, { "text": "\u7CBE\u51C6\u5730\u586B\u8865\u4E86\u8FD9\u79CD\u5FC3\u7406\u7126\u8651\u3002", "startFrame": 178, "durationFrames": 57 }], totalDurationFrames: 235, imageSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_2_2.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u6551\u547D\u7A3B\u8349", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u5FC3\u7406\u7126\u8651", "showFrom": 3, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 475, durationInFrames: 295, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8FD9\u4E9B\u5957\u8DEF\u5F80\u5F80\u628A\u81EA\u5DF1\u5305\u88C5\u6210", "startFrame": 0, "durationFrames": 55 }, { "text": "\u67D0\u79CD\u9AD8\u6DF1\u83AB\u6D4B\u7684\u4F20\u7EDF\u667A\u6167\u6216\u8005\u7EDD\u5BF9\u771F\u7406\uFF0C", "startFrame": 55, "durationFrames": 92 }, { "text": "\u8BA9\u4F60\u89C9\u5F97\u5982\u679C\u6562\u6000\u7591\uFF0C", "startFrame": 147, "durationFrames": 53 }, { "text": "\u5C31\u662F\u4F60\u6CA1\u6587\u5316\u3001", "startFrame": 199, "durationFrames": 30 }, { "text": "\u6CA1\u60C5\u6000\uFF0C", "startFrame": 229, "durationFrames": 23 }, { "text": "\u751A\u81F3\u662F\u4E0D\u7231\u56FD\u3002", "startFrame": 251, "durationFrames": 43 }], totalDurationFrames: 295, imageSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_2_3.png"), enterEffect: "zoomIn", anchors: [{ "text": "\u60C5\u611F\u7ED1\u67B6", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u4E0D\u7231\u56FD", "showFrom": 4, "color": "#EF4444", "anim": "popIn", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 770, durationInFrames: 203, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u5B83\u628A\u539F\u672C\u5E94\u8BE5\u4E25\u8C28\u8BA8\u8BBA\u7684\u77E5\u8BC6\uFF0C", "startFrame": 0, "durationFrames": 70 }, { "text": "\u53D8\u6210\u4E86\u4E00\u79CD\u60C5\u611F\u7ED1\u67B6\uFF0C", "startFrame": 69, "durationFrames": 51 }, { "text": "\u628A\u6211\u4EEC\u548C\u7406\u6027\u7684\u771F\u76F8\u5F3A\u884C\u9694\u79BB\u5F00\u6765\u3002", "startFrame": 120, "durationFrames": 83 }], totalDurationFrames: 203, notText: "\u4E25\u8C28\u8BA8\u8BBA\u7684\u77E5\u8BC6", butText: "\u60C5\u611F\u7ED1\u67B6", butSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_2_4.png"), notContentIndex: 0, butContentIndex: 1, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u53EF\u8BC1\u4F2A\u6027/scene_2/scene_2.mp3") })
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 408, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u6211\u4EEC\u5148\u8BF4\u8BF4\u4EC0\u4E48\u53EB\u6838\u5FC3\u6280\u672F\u3002", "startFrame": 0, "durationFrames": 62 }, { "text": "\u5F88\u591A\u4EBA\u8BA4\u4E3A\uFF0C\u5FC5\u987B\u4ECE\u96F6\u5F00\u59CB\u9020\u8F6E\u5B50\uFF0C", "startFrame": 61, "durationFrames": 89 }, { "text": "\u67B6\u6784\u8981\u81EA\u5DF1\u753B\uFF0C\u5149\u523B\u673A\u8981\u81EA\u5DF1\u9020\uFF0C\u82AF\u7247\u4E5F\u8981\u81EA\u5DF1\u751F\u4EA7\uFF0C", "startFrame": 149, "durationFrames": 123 }, { "text": "\u624D\u914D\u5F97\u5230\u4E00\u53E5\u7F51\u6C11\u7684\u80AF\u5B9A\u3002", "startFrame": 271, "durationFrames": 63 }, { "text": "\u4F46\u8FD9\u4E0D\u8FC7\u662F\u843D\u540E\u7684\u8001\u519C\u79CD\u5730\u601D\u7EF4\u3002", "startFrame": 333, "durationFrames": 75 }], totalDurationFrames: 408, title: "\u4EC0\u4E48\u53EB\u6838\u5FC3\u6280\u672F", imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_2_1.png"), notes: [{ "text": "\u4ECE\u96F6\u9020\u8F6E\u5B50", "showFrom": 1 }, { "text": "\u5168\u6808\u81EA\u7814\u60F3\u8C61", "showFrom": 2 }, { "text": "\u8001\u519C\u79CD\u5730\u601D\u7EF4", "showFrom": 4 }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 408, durationInFrames: 219, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u5728\u9AD8\u5EA6\u5206\u5DE5\u7684\u73B0\u4EE3\u5546\u4E1A\u91CC\uFF0C", "startFrame": 0, "durationFrames": 55 }, { "text": "\u6700\u6DF1\u7684\u62A4\u57CE\u6CB3\uFF0C\u65E9\u5C31\u4E0D\u662F\u5355\u70B9\u7A81\u7834\u3002", "startFrame": 54, "durationFrames": 80 }, { "text": "\u800C\u662F\u5BF9\u8D85\u7EA7\u4F9B\u5E94\u94FE\u7684\u6050\u6016\u6574\u5408\u80FD\u529B\u3002", "startFrame": 133, "durationFrames": 86 }], totalDurationFrames: 219, notText: "\u5355\u70B9\u7A81\u7834", butText: "\u4F9B\u5E94\u94FE\u6574\u5408", butSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_2_2.png"), notContentIndex: 1, butContentIndex: 2 }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 627, durationInFrames: 227, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4F60\u53EF\u4EE5\u8BD5\u7740\u7EC4\u88C5\u4E00\u53F0\u624B\u673A\u770B\u770B\uFF0C", "startFrame": 0, "durationFrames": 62 }, { "text": "\u628A\u6700\u597D\u7684\u82AF\u7247\u3001\u5C4F\u5E55\u548C\u955C\u5934\uFF0C", "startFrame": 61, "durationFrames": 62 }, { "text": "\u51D1\u5728\u4E00\u5757\u5F3A\u884C\u8DD1\u4E2A\u5206\u3002", "startFrame": 122, "durationFrames": 54 }, { "text": "\u7ED3\u679C\u4E00\u5B9A\u662F\u4E00\u573A\u707E\u96BE\u3002", "startFrame": 175, "durationFrames": 52 }], totalDurationFrames: 227, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_2_3.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u707E\u96BE", "showFrom": 3, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 854, durationInFrames: 254, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWBeatSequence, { content: [{ "text": "\u786C\u4EF6\u5E95\u5C42\u7684\u901A\u8BAF\u600E\u4E48\u6253\u901A\uFF1F", "startFrame": 0, "durationFrames": 64 }, { "text": "\u529F\u8017\u5982\u4F55\u69A8\u53D6\u5230\u6781\u9650\uFF1F", "startFrame": 63, "durationFrames": 59 }, { "text": "\u5982\u4F55\u5728\u5343\u4E07\u7EA7\u91CF\u4EA7\u4E0B\uFF0C", "startFrame": 122, "durationFrames": 55 }, { "text": "\u628A\u826F\u54C1\u7387\u54AC\u6B7B\u5728\u767E\u5206\u4E4B\u4E5D\u5341\u4E5D\u4EE5\u4E0A\uFF1F", "startFrame": 176, "durationFrames": 78 }], totalDurationFrames: 254, stages: [{ imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_2_4_img0.png"), enterEffect: "slideBottom", tone: "calm", showFrom: 0 }, { imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_2_4_img1.png"), enterEffect: "slideBottom", tone: "alert", showFrom: 1 }, { imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_2_4_img2.png"), enterEffect: "slideBottom", tone: "alert", showFrom: 2 }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 1108, durationInFrames: 196, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCauseChain, { content: [{ "text": "\u8FD9\u80CC\u540E\u9700\u8981\u6D77\u91CF\u7684\u7B97\u6CD5\u8C03\u4F18\u3002", "startFrame": 0, "durationFrames": 66 }, { "text": "\u5C0F\u7C73\u80FD\u8BA9\u5168\u7403\u6700\u9876\u5C16\u7684\u4F9B\u5E94\u5546\uFF0C", "startFrame": 65, "durationFrames": 74 }, { "text": "\u5FC3\u7518\u60C5\u613F\u914D\u5408\u5B83\u7684\u8282\u594F\u3002", "startFrame": 138, "durationFrames": 57 }], totalDurationFrames: 196, layout: "horizontal", nodes: [{ label: "\u7B97\u6CD5\u8C03\u4F18", imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_2_5_img0.png"), showFrom: 0, enterEffect: "fadeIn" }, { label: "\u9876\u5C16\u4F9B\u5E94\u5546", imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_2_5_img1.png"), showFrom: 1, enterEffect: "slideLeft" }, { label: "\u8282\u594F\u534F\u540C", imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_2_5_img2.png"), showFrom: 2, enterEffect: "zoomIn" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 1304, durationInFrames: 205, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5728\u8FD9\u65E0\u6570\u4E2A\u786C\u4EF6\u5B64\u5C9B\u91CC\uFF0C", "startFrame": 0, "durationFrames": 53 }, { "text": "\u786C\u751F\u751F\u8E5A\u51FA\u4E00\u6761\u6F8E\u6E43\u7CFB\u7EDF\u7684\u9AD8\u901F\u516C\u8DEF\u3002", "startFrame": 52, "durationFrames": 87 }, { "text": "\u8FD9\u5C31\u662F\u522B\u4EBA\u6284\u4E0D\u8D70\u7684\u7CFB\u7EDF\u80FD\u529B\u3002", "startFrame": 138, "durationFrames": 67 }], totalDurationFrames: 205, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_2_6.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u786C\u4EF6\u5B64\u5C9B", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u7CFB\u7EDF\u80FD\u529B", "showFrom": 2, "color": "#2563EB", "anim": "popIn", "audioEffect": "ping" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_2/scene_2.mp3") })
   ] });
 };
 
-;// ./src/remotions/可证伪性/scenes/Scene3.tsx
+;// ./src/remotions/小米核心技术/scenes/Scene3.tsx
 
 
 
 
-const Scene3_SCENE_DURATION = 221 + 185 + 397 + 208 + 293;
+const Scene3_SCENE_DURATION = 166 + 269 + 203 + 106 + 320 + 288;
 const calculateScene3Duration = () => {
   return Scene3_SCENE_DURATION;
 };
 const Scene3 = () => {
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 221, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4F46\u5728\u79D1\u5B66\u754C\uFF0C", "startFrame": 0, "durationFrames": 27 }, { "text": "\u5224\u65AD\u4E00\u4E2A\u4E1C\u897F\u5230\u5E95\u9760\u4E0D\u9760\u8C31\uFF0C", "startFrame": 26, "durationFrames": 58 }, { "text": "\u5176\u5B9E\u6709\u4E00\u628A\u6700\u786C\u7684\u6807\u5C3A\u3002", "startFrame": 84, "durationFrames": 62 }, { "text": "\u5728\u79D1\u5B66\u54F2\u5B66\u4E0A\uFF0C", "startFrame": 145, "durationFrames": 35 }, { "text": "\u8FD9\u53EB\u4F5C\u8BC1\u4F2A\u6027\u3002", "startFrame": 180, "durationFrames": 41 }], totalDurationFrames: 221, imageSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_3_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u8BC1\u4F2A\u6027", "showFrom": 4, "color": "#000000", "anim": "spring", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 221, durationInFrames: 185, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWConceptCard, { content: [{ "text": "\u7B80\u5355\u6765\u8BF4\uFF0C", "startFrame": 0, "durationFrames": 28 }, { "text": "\u4E00\u4E2A\u7406\u8BBA\u5982\u679C\u662F\u79D1\u5B66\u7684\uFF0C", "startFrame": 27, "durationFrames": 56 }, { "text": "\u5B83\u5FC5\u987B\u6562\u4E8E\u544A\u8BC9\u5927\u5BB6\uFF1A", "startFrame": 82, "durationFrames": 46 }, { "text": "\u5728\u4EC0\u4E48\u60C5\u51B5\u4E0B\uFF0C", "startFrame": 128, "durationFrames": 31 }, { "text": "\u6211\u662F\u9519\u7684\u3002", "startFrame": 159, "durationFrames": 26 }], totalDurationFrames: 185, imageSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_3_2.png"), conceptName: "\u8BC1\u4F2A\u6027", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 406, durationInFrames: 397, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSplitCompare, { content: [{ "text": "\u8FD9\u542C\u8D77\u6765\u53EF\u80FD\u6709\u70B9\u53CD\u76F4\u89C9\uFF0C", "startFrame": 0, "durationFrames": 52 }, { "text": "\u4F46\u4F60\u4ED4\u7EC6\u60F3\u60F3\uFF0C", "startFrame": 51, "durationFrames": 35 }, { "text": "\u8FD9\u5C31\u50CF\u6211\u4EEC\u53BB\u76F8\u4EB2\uFF0C", "startFrame": 86, "durationFrames": 45 }, { "text": "\u5BF9\u65B9\u5982\u679C\u8BF4\u201C\u6211\u8FD9\u4EBA\u6027\u683C\u597D\u201D\uFF0C", "startFrame": 130, "durationFrames": 64 }, { "text": "\u8FD9\u6CA1\u6CD5\u9A8C\u8BC1\uFF1B", "startFrame": 194, "durationFrames": 33 }, { "text": "\u4F46\u5982\u679C\u4ED6\u8BF4\u201C\u6211\u4ECE\u6765\u4E0D\u8FDF\u5230\u201D\uFF0C", "startFrame": 226, "durationFrames": 57 }, { "text": "\u8FD9\u5C31\u662F\u53EF\u8BC1\u4F2A\u7684\uFF0C", "startFrame": 283, "durationFrames": 39 }, { "text": "\u53EA\u8981\u4ED6\u8FDF\u5230\u4E00\u6B21\uFF0C", "startFrame": 321, "durationFrames": 34 }, { "text": "\u6211\u4EEC\u5C31\u77E5\u9053\u4ED6\u5728\u6492\u8C0E\u3002", "startFrame": 355, "durationFrames": 42 }], totalDurationFrames: 397, leftSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_3_3_left.png"), rightSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_3_3_right.png"), leftLabel: "\u4E3B\u89C2", rightLabel: "\u5BA2\u89C2", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 803, durationInFrames: 208, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u771F\u6B63\u7684\u79D1\u5B66\u4E0D\u662F\u4E3A\u4E86\u8BC1\u660E\u81EA\u5DF1\u6C38\u8FDC\u6B63\u786E\uFF0C", "startFrame": 0, "durationFrames": 87 }, { "text": "\u800C\u662F\u901A\u8FC7\u4E0D\u65AD\u8BC1\u660E\u81EA\u5DF1\u201C\u54EA\u91CC\u9519\u4E86\u201D\u6765\u903C\u8FD1\u771F\u76F8\u3002", "startFrame": 86, "durationFrames": 122 }], totalDurationFrames: 208, notText: "\u8BC1\u660E\u81EA\u5DF1\u6C38\u8FDC\u6B63\u786E", butText: "\u8BC1\u660E\u54EA\u91CC\u9519\u4E86", butSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_3_4.png"), notContentIndex: 0, butContentIndex: 1, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 1011, durationInFrames: 293, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5982\u679C\u4E00\u4E2A\u8BF4\u6CD5\u65E0\u8BBA\u53D1\u751F\u4EC0\u4E48\u3001", "startFrame": 0, "durationFrames": 57 }, { "text": "\u65E0\u8BBA\u7ED3\u679C\u5982\u4F55\uFF0C", "startFrame": 56, "durationFrames": 38 }, { "text": "\u90FD\u80FD\u903B\u8F91\u81EA\u6D3D\u5730\u89E3\u91CA\u901A\uFF0C", "startFrame": 93, "durationFrames": 57 }, { "text": "\u90A3\u5B83\u5728\u79D1\u5B66\u773C\u91CC\u5176\u5B9E\u5C31\u662F\u4E00\u53E5\u5E9F\u8BDD\uFF0C", "startFrame": 150, "durationFrames": 82 }, { "text": "\u8DDF\u661F\u5EA7\u7B97\u547D\u6CA1\u4EC0\u4E48\u533A\u522B\u3002", "startFrame": 232, "durationFrames": 61 }], totalDurationFrames: 293, imageSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_3_5.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u903B\u8F91\u81EA\u6D3D", "showFrom": 2, "color": "#000000", "anim": "spring", "audioEffect": "ping" }, { "text": "\u4E00\u53E5\u5E9F\u8BDD", "showFrom": 3, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u53EF\u8BC1\u4F2A\u6027/scene_3/scene_3.mp3") })
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 166, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWQuoteCitation, { content: [{ "text": "\u6211\u4EEC\u518D\u8BB2\u8BB2\u5C0F\u7C73\u7684\u7814\u53D1\u5E95\u724C\u3002", "startFrame": 0, "durationFrames": 82 }, { "text": "\u5C0F\u7C73\u4E0D\u4EC5\u662F\u505A\u6574\u5408\uFF0C\u8FD8\u5728\u6B7B\u78D5\u81EA\u7814\u3002", "startFrame": 81, "durationFrames": 84 }], totalDurationFrames: 166, quoteSource: "\u6574\u5408 & \u7814\u53D1", quoteDisplayText: "\u5C0F\u7C73\u4E0D\u4EC5\u662F\u505A\u6574\u5408\uFF0C\u8FD8\u5728\u6B7B\u78D5\u81EA\u7814\u3002", showFrom: 1 }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 166, durationInFrames: 269, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWKpiHero, { content: [{ "text": "\u7FFB\u5F00\u5C0F\u7C73\u6700\u65B0\u7684\u8D22\u62A5\u6570\u636E\u3002", "startFrame": 0, "durationFrames": 77 }, { "text": "\u8FC7\u53BB\u4E00\u5E74\u7814\u53D1\u6295\u5165\u5DF2\u8FBE\u5230331\u4EBF\u5143\u3002", "startFrame": 76, "durationFrames": 106 }, { "text": "\u7814\u53D1\u4EBA\u5458\u89C4\u6A21\u4E5F\u5DF2\u8D85\u8FC72.5\u4E07\u4EBA\u3002", "startFrame": 182, "durationFrames": 87 }], totalDurationFrames: 269, blocks: [{ "value": 331, "suffix": "\u4EBF\u5143", "label": "\u7814\u53D1\u6295\u5165", "showFrom": 1 }, { "value": 2.5, "suffix": "\u4E07\u4EBA", "label": "\u7814\u53D1\u4EBA\u5458\u89C4\u6A21", "showFrom": 2, "useGrouping": true }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 435, durationInFrames: 203, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWDosAndDonts, { content: [{ "text": "\u8FD9\u53EF\u662F\u4E0A\u5E02\u516C\u53F8\u6709\u5BA1\u8BA1\u7684\u516C\u5F00\u6570\u636E\u3002", "startFrame": 0, "durationFrames": 80 }, { "text": "\u4E0D\u662F\u67D0\u4E9B\u628A\u516C\u5173\u8425\u9500\u8D39\u7528\u90FD\u7B97\u5728\u7814\u53D1\u91CC\u7684\u516C\u53F8\u6240\u80FD\u6BD4\u62DF\u7684\u3002", "startFrame": 79, "durationFrames": 123 }], totalDurationFrames: 203, left: { label: "\u53EF\u4FE1\u53E3\u5F84", src: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_3_3_left.png"), showFrom: 0 }, right: { label: "\u63BA\u6C34\u5BF9\u6BD4", src: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_3_3_right.png"), showFrom: 0 } }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 638, durationInFrames: 106, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWKpiHero, { content: [{ "text": "\u8FD9\u4E2A\u6570\u636E\u5DF2\u7ECF\u8D85\u8FC7\u4E86\u5168\u4E16\u754C\u4E5D\u6210\u4EE5\u4E0A\u7684\u9AD8\u79D1\u6280\u4F01\u4E1A\u3002", "startFrame": 0, "durationFrames": 106 }], totalDurationFrames: 106, value: 90, prefix: "", suffix: "%", label: "\u8D85\u8D8A\u5168\u7403\u4E5D\u6210\u9AD8\u79D1\u4F01\u4E1A" }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 744, durationInFrames: 320, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u9020\u8F66\u65B9\u9762\uFF0C", "startFrame": 0, "durationFrames": 32 }, { "text": "\u81EA\u7814\u8D85\u7EA7\u7535\u673A\uFF0C\u78BE\u538B\u884C\u4E1A\u91CF\u4EA7\u5929\u82B1\u677F\u3002", "startFrame": 31, "durationFrames": 103 }, { "text": "SiC \u7535\u63A7\uFF0C\u8F6C\u6362\u6548\u7387\u9AD8\u8FBE99.85%", "startFrame": 134, "durationFrames": 110 }, { "text": "\u4E00\u4F53\u5316\u538B\u94F8\uFF0C\u5DF2\u8FBE\u4E07\u5428\u7EA7\u3002", "startFrame": 243, "durationFrames": 77 }], totalDurationFrames: 320, title: "\u9020\u8F66", imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_3_5.png"), notes: [{ "text": "\u81EA\u7814\u8D85\u7EA7\u7535\u673A", "showFrom": 1 }, { "text": "SiC \u7535\u63A7", "showFrom": 2 }, { "text": "\u4E00\u4F53\u5316\u538B\u94F8", "showFrom": 3 }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 1064, durationInFrames: 288, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u5728AI\u667A\u80FD\u9886\u57DF\uFF0C", "startFrame": 0, "durationFrames": 39 }, { "text": "\u81EA\u7814\u6A21\u578BMiMo\uFF0C\u4E16\u754C\u7B2C\u4E00\u68AF\u961F\u7684\u667A\u80FD\u4F53\u9A8C\u3002", "startFrame": 38, "durationFrames": 92 }, { "text": "\u5E76\u5728\u63A8\u7406\u901F\u5EA6\u4E0E\u7B97\u529B\u6210\u672C\u63A7\u5236\u4E0A\u8868\u73B0\u51FA\u65AD\u5D16\u5F0F\u7684\u9886\u5148\u4F18\u52BF", "startFrame": 130, "durationFrames": 158 }], totalDurationFrames: 288, title: "AI \u667A\u80FD", imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_3_7.png"), notes: [{ "text": "\u4E16\u754C\u7B2C\u4E00\u68AF\u961F\u7684\u667A\u80FD\u4F53\u9A8C", "showFrom": 1 }, { "text": "\u65AD\u5D16\u9886\u5148\u7684\u63A8\u7406\u901F\u5EA6\u4E0E\u7B97\u529B\u6210\u672C\u63A7\u5236", "showFrom": 2 }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_3/scene_3.mp3") })
   ] });
 };
 
-;// ./src/remotions/可证伪性/scenes/Scene4.tsx
+;// ./src/remotions/小米核心技术/scenes/Scene4.tsx
 
 
 
 
-const Scene4_SCENE_DURATION = 155 + 175 + 161 + 122 + 177 + 128 + 136 + 135;
+const Scene4_SCENE_DURATION = 156 + 156 + 166 + 358 + 216;
 const calculateScene4Duration = () => {
   return Scene4_SCENE_DURATION;
 };
 const Scene4 = () => {
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 155, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u6240\u4EE5\uFF0C", "startFrame": 0, "durationFrames": 19 }, { "text": "\u4E0B\u6B21\u5F53\u4F60\u518D\u542C\u5230\u90A3\u4E9B\u795E\u4E4E\u5176\u795E\u7684\u7406\u8BBA\u65F6\uFF0C", "startFrame": 18, "durationFrames": 79 }, { "text": "\u6211\u9001\u4F60\u4E09\u4E2A\u9632\u5FA1\u9526\u56CA\u3002", "startFrame": 97, "durationFrames": 58 }], totalDurationFrames: 155, imageSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_4_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u9632\u5FA1\u9526\u56CA", "showFrom": 2, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 155, durationInFrames: 175, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u7B2C\u4E00\uFF0C", "startFrame": 0, "durationFrames": 18 }, { "text": "\u770B\u5B83\u6709\u6CA1\u6709\u8FB9\u754C\u3002", "startFrame": 17, "durationFrames": 38 }, { "text": "\u4E00\u4E2A\u5305\u6CBB\u767E\u75C5\u3001", "startFrame": 54, "durationFrames": 35 }, { "text": "\u5BF9\u8C01\u90FD\u7BA1\u7528\u7684\u4E1C\u897F\uFF0C", "startFrame": 89, "durationFrames": 40 }, { "text": "\u5F80\u5F80\u5BF9\u8C01\u90FD\u6CA1\u7528\u3002", "startFrame": 128, "durationFrames": 46 }], totalDurationFrames: 175, title: "\u8FA8\u522B\u7406\u8BBA\u8FB9\u754C", imageSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_4_2.png"), notes: [{ "text": "\u770B\u5B83\u6709\u6CA1\u6709\u8FB9\u754C", "showFrom": 1 }, { "text": "\u5305\u6CBB\u767E\u75C5\u5F80\u5F80\u6CA1\u7528", "showFrom": 2 }, { "text": "\u5BF9\u8C01\u90FD\u7BA1\u7528\u5F80\u5F80\u6CA1\u7528", "showFrom": 3 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 330, durationInFrames: 161, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u7B2C\u4E8C\uFF0C", "startFrame": 0, "durationFrames": 15 }, { "text": "\u95EE\u5B83\u4E00\u4E2A\u95EE\u9898\uFF1A", "startFrame": 14, "durationFrames": 36 }, { "text": "\u5982\u679C\u8FD9\u4E2A\u65B9\u6CD5\u5931\u6548\u4E86\uFF0C", "startFrame": 50, "durationFrames": 46 }, { "text": "\u4F60\u80FD\u63A5\u53D7\u662F\u56E0\u4E3A\u4F60\u7684\u7406\u8BBA\u9519\u4E86\u5417\uFF1F", "startFrame": 96, "durationFrames": 65 }], totalDurationFrames: 161, title: "\u53CD\u601D\u7406\u8BBA", imageSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_4_3.png"), notes: [{ "text": "\u5982\u679C\u65B9\u6CD5\u5931\u6548", "showFrom": 2 }, { "text": "\u80FD\u5426\u63A5\u53D7\u7406\u8BBA\u9519\u8BEF", "showFrom": 3 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 491, durationInFrames: 122, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5982\u679C\u5BF9\u65B9\u53EA\u4F1A\u627E\u501F\u53E3\u8BF4\u662F\u4F60\u64CD\u4F5C\u4E0D\u5F53\uFF0C", "startFrame": 0, "durationFrames": 77 }, { "text": "\u90A3\u5C31\u8D76\u7D27\u8F6C\u8EAB\u79BB\u5F00\u3002", "startFrame": 76, "durationFrames": 45 }], totalDurationFrames: 122, imageSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_4_4.png"), enterEffect: "slideLeft", anchors: [{ "text": "\u627E\u501F\u53E3", "showFrom": 0, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }, { "text": "\u8F6C\u8EAB\u79BB\u5F00", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "woosh" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 613, durationInFrames: 177, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u7B2C\u4E09\uFF0C", "startFrame": 0, "durationFrames": 21 }, { "text": "\u5206\u6E05\u60C5\u6000\u548C\u4E8B\u5B9E\u3002", "startFrame": 20, "durationFrames": 54 }, { "text": "\u6211\u4EEC\u53EF\u4EE5\u5C0A\u91CD\u6587\u5316\u4F20\u7EDF\uFF0C", "startFrame": 74, "durationFrames": 56 }, { "text": "\u4F46\u4E0D\u80FD\u7528\u60C5\u6000\u4EE3\u66FF\u5B9E\u8BC1\u3002", "startFrame": 129, "durationFrames": 47 }], totalDurationFrames: 177, title: "\u5206\u6E05\u60C5\u6000\u4E8B\u5B9E", imageSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_4_5.png"), notes: [{ "text": "\u5C0A\u91CD\u6587\u5316\u4F20\u7EDF", "showFrom": 2 }, { "text": "\u7528\u5B9E\u8BC1\u4EE3\u66FF\u60C5\u6000", "showFrom": 3 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 790, durationInFrames: 128, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u6211\u4EEC\u8981\u7684\u662F\u80FD\u89E3\u51B3\u95EE\u9898\u7684\u6B66\u5668\uFF0C", "startFrame": 0, "durationFrames": 67 }, { "text": "\u800C\u4E0D\u662F\u4E00\u4E2A\u6C38\u8FDC\u53EB\u4E0D\u9192\u7684\u5E7B\u89C9\u3002", "startFrame": 66, "durationFrames": 62 }], totalDurationFrames: 128, notText: "\u89E3\u51B3\u95EE\u9898\u7684", butText: "\u53EB\u4E0D\u9192\u7684", butSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_4_6.png"), notContentIndex: 0, butContentIndex: 1, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 918, durationInFrames: 136, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u79D1\u5B66\u7684\u5C0A\u4E25\u4E0D\u5728\u4E8E\u5B83\u4ECE\u4E0D\u72AF\u9519\uFF0C", "startFrame": 0, "durationFrames": 79 }, { "text": "\u800C\u5728\u4E8E\u5B83\u6562\u4E8E\u627F\u8BA4\u9519\u8BEF\u3002", "startFrame": 78, "durationFrames": 57 }], totalDurationFrames: 136, notText: "\u4ECE\u4E0D\u72AF\u9519", butText: "\u6562\u4E8E\u627F\u8BA4\u9519\u8BEF", butSrc: (0,esm.staticFile)("images/\u53EF\u8BC1\u4F2A\u6027/scene_4_7.png"), notContentIndex: 0, butContentIndex: 1, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 1054, durationInFrames: 135, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u505A\u4E00\u4E2A\u6E05\u9192\u7684\u666E\u901A\u4EBA\uFF0C", "startFrame": 0, "durationFrames": 46 }, { "text": "\u5C31\u662F\u4ECE\u5B66\u4F1A\u8D28\u7591\u90A3\u4E9B\u201C\u6C38\u8FDC\u6B63\u786E\u201D\u7684\u9B3C\u8BDD\u5F00\u59CB\u3002", "startFrame": 45, "durationFrames": 89 }], totalDurationFrames: 135, coreSentence: "\u505A\u4E00\u4E2A\u6E05\u9192\u7684\u666E\u901A\u4EBA\uFF0C\u4ECE\u5B66\u4F1A\u8D28\u7591\u5F00\u59CB", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u8D28\u7591", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u53EF\u8BC1\u4F2A\u6027/scene_4/scene_4.mp3") })
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 156, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u90A3\u4E9B\u6210\u5929\u5632\u7B11\u5B83\u662F\u7EC4\u88C5\u5382\u7684\u4EBA\uFF0C", "startFrame": 0, "durationFrames": 86 }, { "text": "\u9677\u5165\u4E86\u6781\u5EA6\u53CC\u6807\u7684\u6280\u672F\u6D01\u7656\u3002", "startFrame": 85, "durationFrames": 71 }], totalDurationFrames: 156, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_4_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u53CC\u6807", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 156, durationInFrames: 156, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSplitCompare, { content: [{ "text": "\u5BF9\u56FD\u5916\u5DE8\u5934\u91C7\u8D2D\u786C\u4EF6\u89C6\u800C\u4E0D\u89C1\u3002", "startFrame": 0, "durationFrames": 78 }, { "text": "\u5BF9\u81EA\u5DF1\u4EBA\u5374\u62B1\u7740\u83AB\u987B\u6709\u7684\u803B\u8FB1\u611F\u3002", "startFrame": 77, "durationFrames": 79 }], totalDurationFrames: 156, leftSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_4_2_left.png"), rightSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_4_2_right.png"), leftLabel: "\u5BF9\u56FD\u5916", rightLabel: "\u5BF9\u81EA\u5DF1\u4EBA" }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 312, durationInFrames: 166, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSplitCompare, { content: [{ "text": "\u5BF9\u8D26\u672C\u4E0A\u7684\u767E\u4EBF\u7814\u53D1\u89C6\u800C\u4E0D\u89C1\u3002", "startFrame": 0, "durationFrames": 77 }, { "text": "\u5374\u5BF9\u5341\u5E74\u524D\u7684\u9648\u8BCD\u6EE5\u8C03\u5012\u80CC\u5982\u6D41\u3002", "startFrame": 76, "durationFrames": 90 }], totalDurationFrames: 166, leftSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_4_3_left.png"), rightSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_4_3_right.png"), leftLabel: "\u767E\u4EBF\u7814\u53D1", rightLabel: "\u9648\u65E7\u504F\u89C1" }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 478, durationInFrames: 358, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWBeatSequence, { content: [{ "text": "\u53EF\u662F\u4F60\u60F3\u8FC7\u6CA1\u6709\uFF1F", "startFrame": 0, "durationFrames": 43 }, { "text": "\u6CA1\u6709\u8FD9\u6837\u50CF\u9CB6\u9C7C\u4E00\u6837\u7684\u4F01\u4E1A\u5728\u524D\u9762\u6495\u54AC\u3002", "startFrame": 42, "durationFrames": 83 }, { "text": "\u903C\u7740\u4EA7\u4E1A\u94FE\u628A\u6210\u672C\u6253\u5230\u5730\u677F\u4EF7\u3002", "startFrame": 125, "durationFrames": 86 }, { "text": "\u4F60\u4ECA\u5929\u4E70\u4E00\u90E8\u597D\u7528\u7684\u667A\u80FD\u8BBE\u5907\uFF0C", "startFrame": 210, "durationFrames": 74 }, { "text": "\u81F3\u5C11\u8FD8\u8981\u591A\u638F\u4E00\u534A\u7684\u51A4\u6789\u94B1\u3002", "startFrame": 283, "durationFrames": 75 }], totalDurationFrames: 358, stages: [{ imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_4_4_img0.png"), enterEffect: "breathe", tone: "calm" }, { imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_4_4_img1.png"), enterEffect: "slideBottom", tone: "alert", showFrom: 2 }, { imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_4_4_img2.png"), enterEffect: "zoomIn", tone: "alert", showFrom: 3 }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 836, durationInFrames: 216, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u952E\u76D8\u4FA0\u4EAB\u53D7\u522B\u4EBA\u6253\u4E0B\u7684\u4EF7\u683C\u5E95\u7EBF\uFF0C", "startFrame": 0, "durationFrames": 80 }, { "text": "\u5374\u5728\u9119\u89C6\u90A3\u4E2A\u628A\u5E95\u7EBF\u7838\u7A7F\u7684\u4EBA\u3002", "startFrame": 79, "durationFrames": 71 }, { "text": "\u8FD9\u5C31\u53EB\u5403\u6C34\u8FD8\u8981\u9A82\u6316\u4E95\u7684\u4EBA\u3002", "startFrame": 150, "durationFrames": 65 }], totalDurationFrames: 216, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_4_6.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u5403\u6C34\u9A82\u4E95", "showFrom": 2, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_4/scene_4.mp3") })
   ] });
 };
 
-;// ./src/remotions/可证伪性/可证伪性.tsx
+;// ./src/remotions/小米核心技术/scenes/Scene5.tsx
 
 
 
 
-
-
-
-
-
-
-
-
-const \u53EF\u8BC1\u4F2A\u6027Schema = lib.z.object({});
-const TRANSITION_DURATION = 15;
-const SCENE_END_PADDING = 20;
-const COVER_DURATION_FRAMES = 5;
-const sceneConfigs = [
-  { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "\u5F15\u51FA\u73B0\u8C61\uFF1A\u4E0D\u53EF\u8BC1\u4F2A\u7684\u903B\u8F91\u9677\u9631" },
-  { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "\u5256\u6790\u539F\u56E0\uFF1A\u4EBA\u7C7B\u5BF9\u786E\u5B9A\u6027\u7684\u6E34\u671B" },
-  { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "\u79D1\u5B66\u7684\u5B9A\u4E49\uFF1A\u53EF\u8BC1\u4F2A\u6027" },
-  { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "\u9632\u5FA1\u9526\u56CA\uFF1A\u5982\u4F55\u907F\u514D\u88AB\u5FFD\u60A0" }
-];
-const MAIN_DURATION_\u53EF\u8BC1\u4F2A\u6027 = sceneConfigs.reduce((total, c) => total + c.duration, 0) - (sceneConfigs.length - 1) * TRANSITION_DURATION;
-const TOTAL_DURATION_\u53EF\u8BC1\u4F2A\u6027 = COVER_DURATION_FRAMES + MAIN_DURATION_\u53EF\u8BC1\u4F2A\u6027;
-const ProgressBar = () => {
-  var _a;
-  const frame = (0,esm.useCurrentFrame)();
-  if (frame < COVER_DURATION_FRAMES) {
-    return null;
-  }
-  const contentFrame = frame - COVER_DURATION_FRAMES;
-  let currentStart = 0;
-  const segments = sceneConfigs.map((c, i) => {
-    const isLast = i === sceneConfigs.length - 1;
-    const segmentDuration = isLast ? c.duration : c.duration - TRANSITION_DURATION;
-    const segment = { start: currentStart, duration: segmentDuration };
-    currentStart += segmentDuration;
-    return segment;
-  });
-  const activeIndex = segments.findIndex((seg) => contentFrame >= seg.start && contentFrame < seg.start + seg.duration);
-  const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
-  const activeLabel = ((_a = sceneConfigs[validActiveIndex]) == null ? void 0 : _a.label) || "";
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: {
-    position: "absolute",
-    top: 40,
-    left: 40,
-    right: 40,
-    display: "flex",
-    flexDirection: "column",
-    gap: 16,
-    zIndex: 100
-  }, children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, height: 8 }, children: segments.map((seg, i) => {
-      const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));
-      const isActive = i === validActiveIndex;
-      return /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        flex: 1,
-        backgroundColor: isActive ? "rgba(34, 43, 69, 0.18)" : "rgba(34, 43, 69, 0.1)",
-        borderRadius: 999,
-        overflow: "hidden",
-        border: isActive ? "1px solid rgba(34, 43, 69, 0.32)" : "1px solid rgba(34, 43, 69, 0.2)",
-        boxShadow: isActive ? "0 3px 10px rgba(31, 41, 55, 0.12)" : "0 1px 4px rgba(31, 41, 55, 0.08)"
-      }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        width: `${progress * 100}%`,
-        height: "100%",
-        background: isActive ? "linear-gradient(90deg, rgba(29, 78, 216, 0.95), rgba(56, 189, 248, 0.92))" : "rgba(30, 41, 59, 0.72)",
-        boxShadow: isActive ? "0 0 12px rgba(37, 99, 235, 0.35)" : "none"
-      } }) }, i);
-    }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-      fontSize: 30,
-      fontWeight: 700,
-      fontFamily: '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif',
-      letterSpacing: 0.4,
-      color: "rgba(17, 24, 39, 0.95)",
-      textAlign: "left",
-      textShadow: "0 1px 2px rgba(255,255,255,0.45)",
-      padding: "6px 14px",
-      backgroundColor: "rgba(255, 255, 255, 0.58)",
-      border: "1px solid rgba(17, 24, 39, 0.12)",
-      borderRadius: 10,
-      alignSelf: "flex-start",
-      backdropFilter: "blur(6px)",
-      boxShadow: "0 6px 20px rgba(15, 23, 42, 0.12)"
-    }, children: activeLabel })
-  ] });
-};
-const \u53EF\u8BC1\u4F2A\u6027 = () => {
-  const frame = (0,esm.useCurrentFrame)();
-  const bgShiftX = (0,esm.interpolate)(frame % 240, [0, 120, 240], [-4, 4, -4], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const bgShiftY = (0,esm.interpolate)(frame % 180, [0, 90, 180], [-3, 3, -3], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const bgBreathOpacity = (0,esm.interpolate)(frame % 150, [0, 75, 150], [0.22, 0.34, 0.22], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      esm.Audio,
-      {
-        src: (0,esm.staticFile)("audio/effects/Seven_Measured_Breaths.mp3"),
-        loop: true,
-        volume: 0.22,
-        name: "Background music"
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          height: "100%",
-          width: "100%",
-          background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)"
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          inset: "-6%",
-          pointerEvents: "none",
-          opacity: bgBreathOpacity,
-          transform: `translate(${bgShiftX}px, ${bgShiftY}px)`,
-          background: "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)"
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { durationInFrames: COVER_DURATION_FRAMES, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      StaticCover,
-      {
-        title: "\u53EF\u8BC1\u4F2A\u6027",
-        subtitle: "\u5982\u4F55\u8BC6\u522B\u548C\u907F\u514D\u201C\u4E0D\u53EF\u8BC1\u4F2A\u201D\u7684\u903B\u8F91\u9677\u9631",
-        themeColor: "#2563EB",
-        badge: "\u5982\u4F55\u8BC6\u522B\u4F2A\u79D1\u5B66"
-      }
-    ) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: COVER_DURATION_FRAMES, durationInFrames: MAIN_DURATION_\u53EF\u8BC1\u4F2A\u6027, children: /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(
-        "div",
-        {
-          style: {
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "10%",
-            minHeight: 48,
-            backgroundColor: "rgba(0,0,0,0.5)"
-          }
-        }
-      ),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries, { children: sceneConfigs.map((config, index) => {
-        const SceneComp = config.component;
-        const isLast = index === sceneConfigs.length - 1;
-        return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries.Sequence, { durationInFrames: config.duration, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(SceneComp, {}) }),
-          !isLast && /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            TransitionSeries.Transition,
-            {
-              timing: linearTiming({ durationInFrames: TRANSITION_DURATION }),
-              presentation: fade()
-            }
-          )
-        ] }, config.name);
-      }) })
-    ] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(ProgressBar, {})
-  ] });
-};
-
-;// ./src/remotions/双盲实验/scenes/Scene1.tsx
-
-
-
-
-const Scene1_SCENE_DURATION = 296 + 246 + 303 + 377 + 228 + 177;
-const Scene1_calculateScene1Duration = () => {
-  return Scene1_SCENE_DURATION;
-};
-const Scene1_Scene1 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 296, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u660E\u660E\u6628\u5929\u8FD8\u54B3\u5F97\u6495\u5FC3\u88C2\u80BA\uFF0C", "startFrame": 0, "durationFrames": 52 }, { "text": "\u4ECA\u5929\u559D\u4E86\u90A3\u7897\u82E6\u5F97\u8981\u547D\u7684\u6C64\u836F\uFF0C", "startFrame": 51, "durationFrames": 63 }, { "text": "\u75C7\u72B6\u7ADF\u7136\u771F\u51CF\u8F7B\u4E86\u3002", "startFrame": 113, "durationFrames": 59 }, { "text": "\u4E8E\u662F\u6211\u4EEC\u8D76\u7D27\u53D1\u4E2A\u670B\u53CB\u5708\uFF0C", "startFrame": 172, "durationFrames": 45 }, { "text": "\u611F\u6168\u4E00\u53E5\u8001\u7956\u5B97\u7684\u4E1C\u897F\u5C31\u662F\u795E\uFF01", "startFrame": 217, "durationFrames": 79 }], totalDurationFrames: 296, imageSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_1_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u54B3\u5F97\u6495\u5FC3\u88C2\u80BA", "showFrom": 0, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }, { "text": "\u8001\u7956\u5B97\u5C31\u662F\u795E\uFF01", "showFrom": 4, "color": "#000000", "anim": "slideUp", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 296, durationInFrames: 246, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4F46\u5F88\u591A\u65F6\u5019\uFF0C", "startFrame": 0, "durationFrames": 39 }, { "text": "\u4F60\u53EF\u80FD\u662F\u6389\u8FDB\u4E86\u4E00\u4E2A\u6E29\u67D4\u7684\u9677\u9631\uFF1A", "startFrame": 38, "durationFrames": 65 }, { "text": "\u6211\u4EEC\u4E60\u60EF\u4E8E\u628A\u597D\u8F6C\u7684\u529F\u52B3\uFF0C", "startFrame": 102, "durationFrames": 70 }, { "text": "\u5168\u90E8\u5F52\u7ED3\u4E8E\u90A3\u7897\u521A\u521A\u559D\u4E0B\u7684\u6C34\uFF0C", "startFrame": 172, "durationFrames": 74 }], totalDurationFrames: 246, imageSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_1_2.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u6E29\u67D4\u7684\u9677\u9631", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 542, durationInFrames: 303, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u5374\u5FFD\u7565\u4E86\u4E00\u4E2A\u6700\u624E\u5FC3\u7684\u4E8B\u5B9E\u2014\u2014", "startFrame": 0, "durationFrames": 67 }, { "text": "\u5373\u4FBF\u4F60\u8FD9\u4E00\u5929\u53EA\u662F\u8EBA\u5E73\u3001", "startFrame": 66, "durationFrames": 50 }, { "text": "\u559D\u767D\u5F00\u6C34\uFF0C", "startFrame": 115, "durationFrames": 26 }, { "text": "\u751A\u81F3\u4EC0\u4E48\u90FD\u4E0D\u505A\uFF0C", "startFrame": 140, "durationFrames": 41 }, { "text": "\u4F60\u7684\u8EAB\u4F53\u672C\u5C31\u4F1A\u5F00\u542F\u90A3\u5957\u6F14\u5316\u4E86\u6570\u767E\u4E07\u5E74\u7684\u81EA\u6211\u4FEE\u590D\u7A0B\u5E8F\u3002", "startFrame": 181, "durationFrames": 122 }], totalDurationFrames: 303, notText: "\u836F\u6548", butText: "\u81EA\u6211\u4FEE\u590D", butSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_1_3.png"), notContentIndex: 1, butContentIndex: 4, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 845, durationInFrames: 377, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u6211\u4EEC\u666E\u901A\u4EBA\u4E4B\u6240\u4EE5\u7ECF\u5E38\u88AB\u5404\u79CD\u795E\u836F\u3001", "startFrame": 0, "durationFrames": 77 }, { "text": "\u504F\u65B9\u6216\u8005\u6240\u8C13\u7684\u5927\u5E08\u6536\u5272\uFF0C", "startFrame": 76, "durationFrames": 67 }, { "text": "\u771F\u7684\u4E0D\u662F\u56E0\u4E3A\u6211\u4EEC\u4E0D\u591F\u806A\u660E\uFF0C", "startFrame": 142, "durationFrames": 56 }, { "text": "\u800C\u662F\u56E0\u4E3A\u6211\u4EEC\u7684\u5927\u8111\u5929\u751F\u5C31\u6709\u4E00\u4E2A\u5E95\u5C42Bug\uFF1A", "startFrame": 198, "durationFrames": 88 }, { "text": "\u6781\u5EA6\u6E34\u671B\u7ED9\u7ED3\u679C\u627E\u4E00\u4E2A\u7ACB\u7AFF\u89C1\u5F71\u7684\u56E0\u679C\u5173\u7CFB\u3002", "startFrame": 285, "durationFrames": 91 }], totalDurationFrames: 377, notText: "\u4E0D\u591F\u806A\u660E", butText: "\u5E95\u5C42Bug", butSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_1_4.png"), notContentIndex: 0, butContentIndex: 3, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 1222, durationInFrames: 228, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u7B97\u6CD5\u6B63\u662F\u5229\u7528\u4E86\u8FD9\u79CD\u8BA4\u77E5\u672C\u80FD\uFF0C", "startFrame": 0, "durationFrames": 69 }, { "text": "\u6BCF\u5929\u5728\u4FE1\u606F\u8327\u623F\u91CC\u7ED9\u6211\u4EEC\u6295\u5582\u65E0\u6570\u4E2A\u6211\u5403\u4E86\u8FD9\u4E2A\u836F\u3001", "startFrame": 68, "durationFrames": 110 }, { "text": "\u8EAB\u4F53\u53D8\u597D\u4E86\u7684\u5B64\u4F8B\u3002", "startFrame": 177, "durationFrames": 51 }], totalDurationFrames: 228, imageSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_1_5.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u8BA4\u77E5\u672C\u80FD", "showFrom": 0, "color": "#000000", "anim": "highlight", "audioEffect": "ping" }, { "text": "\u4FE1\u606F\u8327\u623F", "showFrom": 1, "color": "#000000", "anim": "highlight", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 1450, durationInFrames: 177, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u5728\u8FD9\u79CD\u5355\u5411\u7684\u53D9\u4E8B\u56F4\u730E\u4E0B\uFF0C", "startFrame": 0, "durationFrames": 58 }, { "text": "\u6211\u4EEC\u5F88\u96BE\u5BDF\u89C9\uFF0C", "startFrame": 57, "durationFrames": 41 }, { "text": "\u81EA\u5DF1\u5176\u5B9E\u6B63\u5904\u4E8E\u4E00\u79CD\u667A\u529B\u4E0A\u7684\u76F2\u533A\u3002", "startFrame": 98, "durationFrames": 79 }], totalDurationFrames: 177, coreSentence: "\u6211\u4EEC\u6B63\u5904\u4E8E\u4E00\u79CD\u667A\u529B\u4E0A\u7684\u76F2\u533A", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u667A\u529B\u4E0A\u7684\u76F2\u533A", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u53CC\u76F2\u5B9E\u9A8C/scene_1/scene_1.mp3") })
-  ] });
-};
-
-;// ./src/remotions/双盲实验/scenes/Scene2.tsx
-
-
-
-
-const scenes_Scene2_SCENE_DURATION = 178 + 196 + 151 + 234 + 152 + 153 + 234 + 238 + 154;
-const Scene2_calculateScene2Duration = () => {
-  return scenes_Scene2_SCENE_DURATION;
-};
-const Scene2_Scene2 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 178, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5728\u79D1\u5B66\u65B9\u6CD5\u8BBA\u4E0A\uFF0C", "startFrame": 0, "durationFrames": 38 }, { "text": "\u8981\u62C6\u89E3\u8FD9\u79CD\u8FF7\u601D\uFF0C", "startFrame": 37, "durationFrames": 45 }, { "text": "\u5176\u5B9E\u53EA\u9700\u8981\u4E00\u4E2A\u786C\u6838\u6982\u5FF5\uFF0C", "startFrame": 81, "durationFrames": 70 }, { "text": "\u53EB\u4F5C\u5BF9\u7167\u7EC4\u3002", "startFrame": 151, "durationFrames": 27 }], totalDurationFrames: 178, imageSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_2_1.png"), enterEffect: "breathe", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 178, durationInFrames: 196, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWDosAndDonts, { content: [{ "text": "\u7B80\u5355\u6765\u8BF4\uFF0C", "startFrame": 0, "durationFrames": 26 }, { "text": "\u5982\u679C\u6CA1\u6709\u5BF9\u7167\u7EC4\uFF0C", "startFrame": 25, "durationFrames": 35 }, { "text": "\u4F60\u6C38\u8FDC\u65E0\u6CD5\u8BC1\u660E\u662F\u4F60\u7684\u5E72\u9884\u6709\u6548\uFF0C", "startFrame": 60, "durationFrames": 66 }, { "text": "\u8FD8\u662F\u56E0\u4E3A\u4F60\u547D\u5927\u6216\u8005\u8EAB\u4F53\u597D\u3002", "startFrame": 125, "durationFrames": 70 }], totalDurationFrames: 196, leftSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_2_2_left.png"), rightSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_2_2_right.png"), dontLabel: "\u5E72\u9884\u6709\u6548", doLabel: "\u547D\u8DB3\u591F\u5927" }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 374, durationInFrames: 151, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWConceptCard, { content: [{ "text": "\u5728\u5FC3\u7406\u5B66\u548C\u4F20\u64AD\u5B66\u91CC\uFF0C", "startFrame": 0, "durationFrames": 44 }, { "text": "\u8FD9\u901A\u5E38\u6D89\u53CA\u4E00\u4E2A\u8457\u540D\u7684\u5FC3\u7406\u6697\u793A\uFF0C", "startFrame": 43, "durationFrames": 59 }, { "text": "\u53EB\u4F5C\u5B89\u6170\u5242\u6548\u5E94\u3002", "startFrame": 102, "durationFrames": 48 }], totalDurationFrames: 151, imageSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_2_3.png"), conceptName: "\u5B89\u6170\u5242\u6548\u5E94", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 525, durationInFrames: 234, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5C31\u50CF\u5C0F\u65F6\u5019\u5988\u5988\u5728\u4F24\u53E3\u4E0A\u5439\u7684\u90A3\u53E3\u6C14\uFF0C", "startFrame": 0, "durationFrames": 74 }, { "text": "\u6C14\u672C\u8EAB\u4E0D\u6CBB\u75C5\uFF0C", "startFrame": 73, "durationFrames": 36 }, { "text": "\u4F46\u4F60\u7684\u5927\u8111\u89C9\u5F97\u5B83\u6CBB\u75C5\uFF0C", "startFrame": 109, "durationFrames": 50 }, { "text": "\u4E8E\u662F\u5206\u6CCC\u4E86\u5185\u5561\u80BD\u5E2E\u4F60\u6B62\u75DB\u3002", "startFrame": 158, "durationFrames": 76 }], totalDurationFrames: 234, imageSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_2_4.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u5B89\u6170\u5242\u6548\u5E94", "showFrom": 2, "color": "#000000", "anim": "spring", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 759, durationInFrames: 152, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWConceptCard, { content: [{ "text": "\u4E3A\u4E86\u5F7B\u5E95\u6392\u9664\u8FD9\u79CD\u5E72\u6270\uFF0C", "startFrame": 0, "durationFrames": 52 }, { "text": "\u79D1\u5B66\u5BB6\u53D1\u660E\u4E86\u4E00\u79CD\u53EB\u4F5C\u53CC\u76F2\u5B9E\u9A8C\u7684\u6B66\u5668\u3002", "startFrame": 51, "durationFrames": 101 }], totalDurationFrames: 152, imageSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_2_5.png"), conceptName: "\u53CC\u76F2\u5B9E\u9A8C", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 911, durationInFrames: 153, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u610F\u601D\u5C31\u662F\uFF0C", "startFrame": 0, "durationFrames": 26 }, { "text": "\u5B9E\u9A8C\u7684\u4EBA\u548C\u88AB\u8BD5\u7684\u4EBA\uFF0C", "startFrame": 25, "durationFrames": 51 }, { "text": "\u8C01\u90FD\u4E0D\u77E5\u9053\u624B\u91CC\u62FF\u7684\u662F\u771F\u836F\u8FD8\u662F\u7CD6\u7247\u3002", "startFrame": 75, "durationFrames": 78 }], totalDurationFrames: 153, imageSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_2_8.png"), enterEffect: "fadeIn" }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 1064, durationInFrames: 234, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4E3A\u4EC0\u4E48\u8981\u8FD9\u4E48\u9EBB\u70E6\uFF1F", "startFrame": 0, "durationFrames": 47 }, { "text": "\u56E0\u4E3A\u53EA\u8981\u533B\u751F\u4E00\u4E2A\u773C\u795E\u3001", "startFrame": 46, "durationFrames": 45 }, { "text": "\u4E00\u4E2A\u6697\u793A\uFF0C", "startFrame": 91, "durationFrames": 26 }, { "text": "\u6216\u8005\u75C5\u4EBA\u4E00\u4E2A\u5148\u5165\u4E3A\u4E3B\u7684\u5FF5\u5934\uFF0C", "startFrame": 116, "durationFrames": 67 }, { "text": "\u5C31\u80FD\u5E72\u6270\u5B9E\u9A8C\u7ED3\u679C\u3002", "startFrame": 183, "durationFrames": 51 }], totalDurationFrames: 234, imageSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_2_7.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u5B89\u6170\u5242\u6548\u5E94", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 1298, durationInFrames: 238, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u53EA\u6709\u5F53\u771F\u836F\u7EC4\u7684\u6548\u679C\uFF0C", "startFrame": 0, "durationFrames": 46 }, { "text": "\u663E\u8457\u597D\u4E8E\u90A3\u4E2A\u4EC0\u4E48\u90FD\u4E0D\u542B\u7684\u5BF9\u7167\u7EC4\u65F6\uFF0C", "startFrame": 45, "durationFrames": 84 }, { "text": "\u6211\u4EEC\u624D\u80FD\u633A\u76F4\u8170\u677F\u8BF4\uFF0C", "startFrame": 129, "durationFrames": 51 }, { "text": "\u8FD9\u4E2A\u836F\u662F\u771F\u7684\u6709\u6548\u3002", "startFrame": 180, "durationFrames": 58 }], totalDurationFrames: 238, imageSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_2_8.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u7528\u836F\u7EC4\u597D\u4E8E\u5BF9\u7167\u7EC4", "showFrom": 0, "color": null, "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u771F\u6709\u6548", "showFrom": 2, "color": "#EF4444", "anim": "highlight", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 1536, durationInFrames: 154, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5982\u679C\u6CA1\u6709\u8FD9\u4E2A\u903B\u8F91\u95ED\u73AF\uFF0C", "startFrame": 0, "durationFrames": 45 }, { "text": "\u6240\u6709\u7684\u5EB7\u590D\u90FD\u53EA\u662F\u4E00\u573A\u6982\u7387\u8BBA\u91CC\u7684\u5E78\u5B58\u8005\u504F\u5DEE\u3002", "startFrame": 44, "durationFrames": 109 }], totalDurationFrames: 154, imageSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_2_9.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u5E78\u5B58\u8005\u504F\u5DEE", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u53CC\u76F2\u5B9E\u9A8C/scene_2/scene_2.mp3") })
-  ] });
-};
-
-;// ./src/remotions/双盲实验/scenes/Scene3.tsx
-
-
-
-
-const scenes_Scene3_SCENE_DURATION = 225 + 299 + 190 + 163;
-const Scene3_calculateScene3Duration = () => {
-  return scenes_Scene3_SCENE_DURATION;
-};
-const Scene3_Scene3 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 225, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4E3A\u4E86\u4FDD\u62A4\u6211\u4EEC\u81EA\u5DF1\u7684\u94B1\u5305\u548C\u667A\u5546\uFF0C", "startFrame": 0, "durationFrames": 59 }, { "text": "\u4E0B\u6B21\u518D\u9762\u5BF9\u90A3\u4E9B\u5439\u5F97\u5929\u82B1\u4E71\u5760\u7684\u504F\u65B9\u65F6\uFF0C", "startFrame": 58, "durationFrames": 88 }, { "text": "\u6211\u4EEC\u53EF\u4EE5\u8BD5\u7740\u88C5\u4E0A\u4E24\u4EF6\u9632\u5FA1\u6B66\u88C5\u3002", "startFrame": 146, "durationFrames": 79 }], totalDurationFrames: 225, imageSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_3_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u4FDD\u62A4\u667A\u5546", "showFrom": 0, "color": "#EF4444", "anim": "highlight", "audioEffect": "ping" }, { "text": "\u9632\u8303\u504F\u65B9", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 225, durationInFrames: 299, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u7B2C\u4E00\uFF0C\u6C38\u8FDC\u591A\u95EE\u4E00\u53E5\uFF1A", "startFrame": 0, "durationFrames": 58 }, { "text": "\u6709\u6CA1\u6709\u5927\u89C4\u6A21\u7684\u53CC\u76F2\u5BF9\u7167\u5B9E\u9A8C\u6570\u636E\u652F\u6491\uFF1F", "startFrame": 57, "durationFrames": 93 }, { "text": "\u5982\u679C\u5BF9\u65B9\u53EA\u8DDF\u4F60\u8BB2\u6211\u4E8C\u53D4\u5403\u4E86\u6548\u679C\u597D\uFF0C", "startFrame": 150, "durationFrames": 76 }, { "text": "\u90A3\u8FD9\u672C\u8D28\u4E0A\u53EA\u662F\u4E2A\u6545\u4E8B\uFF0C\u4E0D\u662F\u8BC1\u636E\u3002", "startFrame": 225, "durationFrames": 74 }], totalDurationFrames: 299, title: "\u53CC\u76F2\u5BF9\u7167", imageSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_3_2.png"), notes: [{ "text": "\u53CC\u76F2\u6570\u636E", "showFrom": 1 }, { "text": "\u4E2A\u4F8B\u4E0D\u662F\u8BC1\u636E", "showFrom": 3 }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 524, durationInFrames: 190, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u7B2C\u4E8C\uFF0C", "startFrame": 0, "durationFrames": 14 }, { "text": "\u5B66\u4F1A\u533A\u5206\u76F8\u5173\u6027\u4E0E\u56E0\u679C\u5173\u7CFB\u3002", "startFrame": 13, "durationFrames": 79 }, { "text": "\u611F\u5192\u597D\u4E86\u662F\u56E0\u4E3A\u5403\u836F\uFF0C", "startFrame": 91, "durationFrames": 43 }, { "text": "\u8FD8\u662F\u56E0\u4E3A\u71AC\u8FC7\u4E86\u90A3\u4E2A\u5468\u671F\uFF1F", "startFrame": 134, "durationFrames": 56 }], totalDurationFrames: 190, title: "\u533A\u5206\u76F8\u5173\u4E0E\u56E0\u679C", imageSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_3_3.png"), notes: [{ "text": "\u5148\u540E\u51FA\u73B0\u4E0D\u7B49\u4E8E\u5FC5\u7136\u56E0\u679C", "showFrom": 1 }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 714, durationInFrames: 163, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u8FD9\u79CD\u903B\u8F91\u4E0A\u7684\u5BA1\u89C6\uFF0C", "startFrame": 0, "durationFrames": 44 }, { "text": "\u662F\u6211\u4EEC\u5728\u8FD9\u4E2A\u5145\u6EE1\u4FE1\u606F\u8FF7\u96FE\u7684\u65F6\u4EE3\uFF0C", "startFrame": 43, "durationFrames": 70 }, { "text": "\u6700\u57FA\u7840\u7684\u81EA\u4FDD\u624B\u6BB5\u3002", "startFrame": 113, "durationFrames": 50 }], totalDurationFrames: 163, coreSentence: "\u903B\u8F91\u5BA1\u89C6\uFF0C\u662F\u65F6\u4EE3\u81EA\u4FDD\u624B\u6BB5", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u903B\u8F91\u5BA1\u89C6", "color": "#000000" }, { "coreSentenceAnchor": "\u81EA\u4FDD\u624B\u6BB5", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u53CC\u76F2\u5B9E\u9A8C/scene_3/scene_3.mp3") })
-  ] });
-};
-
-;// ./src/remotions/双盲实验/scenes/Scene4.tsx
-
-
-
-
-const scenes_Scene4_SCENE_DURATION = 278 + 173 + 152;
-const Scene4_calculateScene4Duration = () => {
-  return scenes_Scene4_SCENE_DURATION;
-};
-const Scene4_Scene4 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 278, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u6211\u4EEC\u4E4B\u6240\u4EE5\u8FFD\u6C42\u903B\u8F91\u4E0E\u7406\u6027\uFF0C", "startFrame": 0, "durationFrames": 60 }, { "text": "\u5E76\u4E0D\u662F\u4E3A\u4E86\u5426\u5B9A\u67D0\u79CD\u4F20\u7EDF\u6216\u60C5\u611F\uFF0C", "startFrame": 60, "durationFrames": 69 }, { "text": "\u800C\u662F\u4E3A\u4E86\u5728\u8FD9\u4E2A\u5145\u6EE1\u5957\u8DEF\u7684\u4E16\u754C\u91CC\uFF0C", "startFrame": 128, "durationFrames": 69 }, { "text": "\u62E5\u6709\u4E00\u4EFD\u4E0D\u88AB\u968F\u610F\u64CD\u7EB5\u7684\u6E05\u9192\u3002", "startFrame": 197, "durationFrames": 80 }], totalDurationFrames: 278, notText: "\u5426\u5B9A\u4F20\u7EDF\u60C5\u611F", butText: "\u62E5\u62B1\u6E05\u9192\u8BA4\u77E5", butSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_4_1.png"), notContentIndex: 1, butContentIndex: 3, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 278, durationInFrames: 173, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u8BB0\u4F4F\uFF0C", "startFrame": 0, "durationFrames": 18 }, { "text": "\u771F\u6B63\u7684\u79D1\u5B66\u4ECE\u6765\u4E0D\u6015\u8D28\u7591\uFF0C", "startFrame": 17, "durationFrames": 64 }, { "text": "\u800C\u90A3\u4E9B\u5BB3\u6015\u4F60\u63D0\u95EE\u7684\uFF0C", "startFrame": 80, "durationFrames": 44 }, { "text": "\u5F80\u5F80\u5C31\u662F\u60F3\u6536\u5272\u4F60\u7684\u3002", "startFrame": 124, "durationFrames": 48 }], totalDurationFrames: 173, notText: "\u5BB3\u6015\u4F60\u63D0\u95EE", butText: "\u63A5\u53D7\u8D28\u7591", butSrc: (0,esm.staticFile)("images/\u53CC\u76F2\u5B9E\u9A8C/scene_4_2.png"), notContentIndex: 2, butContentIndex: 1, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 451, durationInFrames: 152, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u8BA9\u6211\u4EEC\u4ECE\u8FD9\u4E00\u523B\u8D77\uFF0C", "startFrame": 0, "durationFrames": 43 }, { "text": "\u628A\u8BC4\u4EF7\u4E8B\u7269\u7684\u5C3A\u5B50\uFF0C", "startFrame": 42, "durationFrames": 47 }, { "text": "\u4ECE\u6211\u89C9\u5F97\uFF0C", "startFrame": 89, "durationFrames": 28 }, { "text": "\u4EA4\u8FD8\u7ED9\u8BC1\u636E\u3002", "startFrame": 116, "durationFrames": 35 }], totalDurationFrames: 152, coreSentence: "\u628A\u8BC4\u4EF7\u4E8B\u7269\u7684\u5C3A\u5B50\uFF0C\u4EA4\u8FD8\u7ED9\u8BC1\u636E", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u4EA4\u8FD8\u7ED9\u8BC1\u636E" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u53CC\u76F2\u5B9E\u9A8C/scene_4/scene_4.mp3") })
-  ] });
-};
-
-;// ./src/remotions/双盲实验/双盲实验.tsx
-
-
-
-
-
-
-
-
-
-
-
-
-const \u53CC\u76F2\u5B9E\u9A8CSchema = lib.z.object({});
-const _TRANSITION_DURATION = 15;
-const _SCENE_END_PADDING = 20;
-const _COVER_DURATION_FRAMES = 5;
-const _sceneConfigs = [
-  { name: "scene1", duration: Scene1_calculateScene1Duration() + _SCENE_END_PADDING, component: Scene1_Scene1, label: "\u201C\u795E\u836F\u201D\u7684\u9677\u9631" },
-  { name: "scene2", duration: Scene2_calculateScene2Duration() + _SCENE_END_PADDING, component: Scene2_Scene2, label: "\u5BF9\u7167\u7EC4\u7684\u91CD\u8981\u6027" },
-  { name: "scene3", duration: Scene3_calculateScene3Duration() + _SCENE_END_PADDING, component: Scene3_Scene3, label: "\u9632\u5FA1\u6027\u601D\u7EF4" },
-  { name: "scene4", duration: Scene4_calculateScene4Duration() + _SCENE_END_PADDING, component: Scene4_Scene4, label: "\u7406\u6027\u4E0E\u6E05\u9192" }
-];
-const MAIN_DURATION_\u53CC\u76F2\u5B9E\u9A8C = _sceneConfigs.reduce((total, c) => total + c.duration, 0) - (_sceneConfigs.length - 1) * _TRANSITION_DURATION;
-const TOTAL_DURATION_\u53CC\u76F2\u5B9E\u9A8C = _COVER_DURATION_FRAMES + MAIN_DURATION_\u53CC\u76F2\u5B9E\u9A8C;
-const _ProgressBar = () => {
-  var _a;
-  const frame = (0,esm.useCurrentFrame)();
-  if (frame < _COVER_DURATION_FRAMES) {
-    return null;
-  }
-  const contentFrame = frame - _COVER_DURATION_FRAMES;
-  let currentStart = 0;
-  const segments = _sceneConfigs.map((c, i) => {
-    const isLast = i === _sceneConfigs.length - 1;
-    const segmentDuration = isLast ? c.duration : c.duration - _TRANSITION_DURATION;
-    const segment = { start: currentStart, duration: segmentDuration };
-    currentStart += segmentDuration;
-    return segment;
-  });
-  const activeIndex = segments.findIndex((seg) => contentFrame >= seg.start && contentFrame < seg.start + seg.duration);
-  const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
-  const activeLabel = ((_a = _sceneConfigs[validActiveIndex]) == null ? void 0 : _a.label) || "";
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: {
-    position: "absolute",
-    top: 40,
-    left: 40,
-    right: 40,
-    display: "flex",
-    flexDirection: "column",
-    gap: 16,
-    zIndex: 100
-  }, children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, height: 8 }, children: segments.map((seg, i) => {
-      const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));
-      const isActive = i === validActiveIndex;
-      return /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        flex: 1,
-        backgroundColor: isActive ? "rgba(34, 43, 69, 0.18)" : "rgba(34, 43, 69, 0.1)",
-        borderRadius: 999,
-        overflow: "hidden",
-        border: isActive ? "1px solid rgba(34, 43, 69, 0.32)" : "1px solid rgba(34, 43, 69, 0.2)",
-        boxShadow: isActive ? "0 3px 10px rgba(31, 41, 55, 0.12)" : "0 1px 4px rgba(31, 41, 55, 0.08)"
-      }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        width: `${progress * 100}%`,
-        height: "100%",
-        background: isActive ? "linear-gradient(90deg, rgba(29, 78, 216, 0.95), rgba(56, 189, 248, 0.92))" : "rgba(30, 41, 59, 0.72)",
-        boxShadow: isActive ? "0 0 12px rgba(37, 99, 235, 0.35)" : "none"
-      } }) }, i);
-    }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-      fontSize: 30,
-      fontWeight: 700,
-      fontFamily: '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif',
-      letterSpacing: 0.4,
-      color: "rgba(17, 24, 39, 0.95)",
-      textAlign: "left",
-      textShadow: "0 1px 2px rgba(255,255,255,0.45)",
-      padding: "6px 14px",
-      backgroundColor: "rgba(255, 255, 255, 0.58)",
-      border: "1px solid rgba(17, 24, 39, 0.12)",
-      borderRadius: 10,
-      alignSelf: "flex-start",
-      backdropFilter: "blur(6px)",
-      boxShadow: "0 6px 20px rgba(15, 23, 42, 0.12)"
-    }, children: activeLabel })
-  ] });
-};
-const \u53CC\u76F2\u5B9E\u9A8C = () => {
-  const frame = (0,esm.useCurrentFrame)();
-  const bgShiftX = (0,esm.interpolate)(frame % 240, [0, 120, 240], [-4, 4, -4], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const bgShiftY = (0,esm.interpolate)(frame % 180, [0, 90, 180], [-3, 3, -3], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const bgBreathOpacity = (0,esm.interpolate)(frame % 150, [0, 75, 150], [0.22, 0.34, 0.22], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      esm.Audio,
-      {
-        src: (0,esm.staticFile)("audio/effects/Seven_Measured_Breaths.mp3"),
-        loop: true,
-        volume: 0.22,
-        name: "Background music"
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          height: "100%",
-          width: "100%",
-          background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)"
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          inset: "-6%",
-          pointerEvents: "none",
-          opacity: bgBreathOpacity,
-          transform: `translate(${bgShiftX}px, ${bgShiftY}px)`,
-          background: "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)"
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { durationInFrames: _COVER_DURATION_FRAMES, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      StaticCover,
-      {
-        title: "\u53CC\u76F2\u5B9E\u9A8C",
-        subtitle: "\u6CA1\u6709\u5BF9\u7167\u7EC4\uFF0C\u4F60\u65E0\u6CD5\u77E5\u9053\u6548\u679C\u662F\u6765\u81EA\u4F60\u7684\u5E72\u9884\uFF0C\u8FD8\u662F\u6765\u81EA\u5176\u4ED6\u56E0\u7D20",
-        themeColor: "#2563EB",
-        badge: "\u5982\u4F55\u8BC6\u522B\u4F2A\u79D1\u5B66"
-      }
-    ) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: _COVER_DURATION_FRAMES, durationInFrames: MAIN_DURATION_\u53CC\u76F2\u5B9E\u9A8C, children: /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(
-        "div",
-        {
-          style: {
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "10%",
-            minHeight: 48,
-            backgroundColor: "rgba(0,0,0,0.5)"
-          }
-        }
-      ),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries, { children: _sceneConfigs.map((config, index) => {
-        const SceneComp = config.component;
-        const isLast = index === _sceneConfigs.length - 1;
-        return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries.Sequence, { durationInFrames: config.duration, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(SceneComp, {}) }),
-          !isLast && /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            TransitionSeries.Transition,
-            {
-              timing: linearTiming({ durationInFrames: _TRANSITION_DURATION }),
-              presentation: fade()
-            }
-          )
-        ] }, config.name);
-      }) })
-    ] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(_ProgressBar, {})
-  ] });
-};
-
-;// ./src/remotions/样本偏差/scenes/Scene1.tsx
-
-
-
-
-const scenes_Scene1_SCENE_DURATION = 95 + 232 + 278;
-const scenes_Scene1_calculateScene1Duration = () => {
-  return scenes_Scene1_SCENE_DURATION;
-};
-const scenes_Scene1_Scene1 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 95, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u6DF1\u591C\u5341\u4E00\u70B9\u534A\uFF0C", "startFrame": 0, "durationFrames": 38 }, { "text": "\u4F60\u4E60\u60EF\u6027\u5730\u5F80\u4E0B\u5212\u7740\u5C4F\u5E55\u3002", "startFrame": 37, "durationFrames": 58 }], totalDurationFrames: 95, imageSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_1_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u6DF1\u591C", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 95, durationInFrames: 232, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u6EE1\u773C\u770B\u8FC7\u53BB\uFF0C", "startFrame": 0, "durationFrames": 39 }, { "text": "\u90FD\u662F\u4E8C\u5341\u591A\u5C81\u5C31\u80CC\u7740\u7231\u9A6C\u4ED5\u5F00\u7740\u4FDD\u65F6\u6377\u7684\u5E74\u8F7B\u4EBA\uFF0C", "startFrame": 38, "durationFrames": 93 }, { "text": "\u8981\u4E0D\u5C31\u662F\u521A\u6BD5\u4E1A\u5C31\u62FF\u4E0B\u5927\u5382\u767E\u4E07\u5E74\u85AA\u7684\u804C\u573A\u7CBE\u82F1\u3002", "startFrame": 130, "durationFrames": 101 }], totalDurationFrames: 232, imageSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_1_2.png"), enterEffect: "slideBottom", anchors: [{ "text": "\u7231\u9A6C\u4ED5\u3001\u4FDD\u65F6\u6377", "showFrom": 1, "color": "#EF4444", "anim": "popIn", "audioEffect": "ping" }, { "text": "\u767E\u4E07\u5E74\u85AA", "showFrom": 2, "color": "#EF4444", "anim": "popIn", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 327, durationInFrames: 278, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4F60\u8F6C\u5934\u770B\u770B\u81EA\u5DF1\u8EAB\u4E0A\u90A3\u4EF6\u6D17\u5F97\u5FAE\u5FAE\u892A\u8272\u7684\u8D77\u7403\u7761\u8863\uFF0C", "startFrame": 0, "durationFrames": 116 }, { "text": "\u518D\u770B\u770B\u4E0B\u4E2A\u6708\u53C8\u8981\u8FD8\u7684\u8D26\u5355\uFF0C", "startFrame": 115, "durationFrames": 68 }, { "text": "\u5FC3\u91CC\u7A81\u7136\u6D8C\u8D77\u4E00\u9635\u8BA9\u4EBA\u7A92\u606F\u7684\u5DE8\u5927\u5931\u8D25\u611F\u3002", "startFrame": 183, "durationFrames": 95 }], totalDurationFrames: 278, imageSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_1_3.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u5931\u8D25\u611F", "showFrom": 2, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u6837\u672C\u504F\u5DEE/scene_1/scene_1.mp3") })
-  ] });
-};
-
-;// ./src/remotions/样本偏差/scenes/Scene2.tsx
-
-
-
-
-const _scenes_Scene2_SCENE_DURATION = 131 + 273 + 269;
-const scenes_Scene2_calculateScene2Duration = () => {
-  return _scenes_Scene2_SCENE_DURATION;
-};
-const scenes_Scene2_Scene2 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 131, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8BF7\u7ACB\u523B\u505C\u4E0B\u6765\uFF0C", "startFrame": 0, "durationFrames": 35 }, { "text": "\u4E0D\u8981\u518D\u7528\u8FD9\u79CD\u7CBE\u5FC3\u5305\u88C5\u7684\u5E7B\u89C9\u6765\u60E9\u7F5A\u4F60\u81EA\u5DF1\u4E86\u3002", "startFrame": 34, "durationFrames": 96 }], totalDurationFrames: 131, imageSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_2_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u505C\u4E0B\u6765", "showFrom": 0, "color": null, "anim": "spring", "audioEffect": "ping" }, { "text": "\u5E7B\u89C9", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 131, durationInFrames: 273, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u6211\u4EEC\u6BCF\u5929\u90FD\u5728\u906D\u53D7\u7740\u5E73\u53F0\u7B97\u6CD5\u6781\u5176\u9690\u853D\u7684\u89C6\u89C9\u9738\u51CC\uFF0C", "startFrame": 0, "durationFrames": 113 }, { "text": "\u4E0D\u77E5\u4E0D\u89C9\u5730\u9519\u628A\u4E92\u8054\u7F51\u7CBE\u51C6\u6295\u5582\u7684\u4FE1\u606F\u8327\u623F\uFF0C", "startFrame": 112, "durationFrames": 105 }, { "text": "\u5F53\u6210\u4E86\u5916\u9762\u771F\u5B9E\u7684\u5168\u4E16\u754C\u3002", "startFrame": 217, "durationFrames": 56 }], totalDurationFrames: 273, notText: "\u89C6\u89C9\u9738\u51CC", butText: "\u771F\u5B9E\u5168\u4E16\u754C", butSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_2_2.png"), notContentIndex: 0, butContentIndex: 2, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 404, durationInFrames: 269, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u5176\u5B9E\u6839\u672C\u4E0D\u662F\u6211\u4EEC\u6DF7\u5F97\u592A\u5DEE\uFF0C", "startFrame": 0, "durationFrames": 52 }, { "text": "\u800C\u662F\u90A3\u4E9B\u6536\u5272\u6CE8\u610F\u529B\u7684\u8D44\u672C\u548C\u7F51\u7EA2\uFF0C", "startFrame": 51, "durationFrames": 72 }, { "text": "\u8054\u5408\u8D77\u6765\u523B\u610F\u5236\u9020\u4E86\u8FD9\u79CD\u7FA4\u4F53\u6027\u7684\u751F\u5B58\u7126\u8651\uFF0C", "startFrame": 123, "durationFrames": 90 }, { "text": "\u4EE5\u6B64\u6765\u638F\u7A7A\u6211\u4EEC\u7684\u53E3\u888B\u3002", "startFrame": 212, "durationFrames": 57 }], totalDurationFrames: 269, notText: "\u6211\u4EEC\u6DF7\u5F97\u592A\u5DEE", butText: "\u8D44\u672C\u7F51\u7EA2\u6536\u5272", butSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_2_3.png"), notContentIndex: 0, butContentIndex: 1, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u6837\u672C\u504F\u5DEE/scene_2/scene_2.mp3") })
-  ] });
-};
-
-;// ./src/remotions/样本偏差/scenes/Scene3.tsx
-
-
-
-
-const _scenes_Scene3_SCENE_DURATION = 146 + 249 + 100 + 310 + 103 + 256;
-const scenes_Scene3_calculateScene3Duration = () => {
-  return _scenes_Scene3_SCENE_DURATION;
-};
-const scenes_Scene3_Scene3 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 146, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWConceptCard, { content: [{ "text": "\u5728\u793E\u4F1A\u7EDF\u8BA1\u5B66\u4E0A\uFF0C", "startFrame": 0, "durationFrames": 47 }, { "text": "\u8FD9\u79CD\u6B8B\u5FCD\u7684\u9519\u89C9\u53EB\u505A\u6837\u672C\u4EE3\u8868\u6027\u7F3A\u5931", "startFrame": 46, "durationFrames": 99 }], totalDurationFrames: 146, imageSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_3_1.png"), conceptName: "\u6837\u672C\u4EE3\u8868\u6027\u7F3A\u5931", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 146, durationInFrames: 249, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4F60\u5FC5\u987B\u660E\u767D\u4E00\u4E2A\u786C\u6838\u771F\u76F8\uFF0C", "startFrame": 0, "durationFrames": 63 }, { "text": "\u60F3\u8981\u4E86\u89E3\u4E00\u4E2A\u7FA4\u4F53\u7684\u771F\u5B9E\u9762\u8C8C\uFF0C", "startFrame": 62, "durationFrames": 70 }, { "text": "\u4F60\u62BD\u6837\u51FA\u6765\u7684\u6837\u672C\u5FC5\u987B\u662F\u6574\u4F53\u793E\u4F1A\u7684\u5B8C\u7F8E\u5FAE\u7F29\u6A21\u578B\u3002", "startFrame": 131, "durationFrames": 117 }], totalDurationFrames: 249, imageSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_3_2.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u786C\u6838\u771F\u76F8", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u771F\u5B9E\u9762\u8C8C", "showFrom": 1, "color": "#000000", "anim": "slideUp", "audioEffect": null }, { "text": "\u5FAE\u7F29\u6A21\u578B", "showFrom": 2, "color": "#000000", "anim": "popIn", "audioEffect": null }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 395, durationInFrames: 100, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4F46\u793E\u4EA4\u5A92\u4F53\u7684\u5C55\u793A\u673A\u5236\u4ECE\u6765\u5C31\u4E0D\u662F\u968F\u673A\u62BD\u6837\u7684\u3002", "startFrame": 0, "durationFrames": 100 }], totalDurationFrames: 100, imageSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_3_3.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u5E76\u975E\u968F\u673A\u62BD\u6837", "showFrom": 0, "color": "#000000", "anim": "highlight", "audioEffect": null }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 495, durationInFrames: 310, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u90A3\u4E9B\u6BCF\u5929\u8D77\u65E9\u8D2A\u9ED1\u6324\u7740\u6C99\u4E01\u9C7C\u7F50\u5934\u822C\u7684\u5730\u94C1\u3001", "startFrame": 0, "durationFrames": 95 }, { "text": "\u5403\u7740\u5341\u51E0\u5757\u94B1\u8DEF\u8FB9\u644A\u3001", "startFrame": 94, "durationFrames": 52 }, { "text": "\u4E3A\u4E86\u51E0\u5343\u5757\u5168\u52E4\u5956\u7CBE\u6253\u7EC6\u7B97\u7684\u6C89\u9ED8\u5927\u591A\u6570\uFF0C", "startFrame": 146, "durationFrames": 107 }, { "text": "\u4ED6\u4EEC\u6839\u672C\u6CA1\u6709\u7CBE\u529B\u53BB\u53D1\u5E16\u3002", "startFrame": 253, "durationFrames": 57 }], totalDurationFrames: 310, imageSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_3_4.png"), enterEffect: "slideBottom", anchors: [{ "text": "\u793E\u755C", "showFrom": 2, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 805, durationInFrames: 103, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5C31\u7B97\u53D1\u4E86\uFF0C", "startFrame": 0, "durationFrames": 29 }, { "text": "\u4E5F\u4F1A\u88AB\u7B97\u6CD5\u6781\u5176\u65E0\u60C5\u5730\u6C89\u5165\u6D77\u5E95\u3002", "startFrame": 28, "durationFrames": 74 }], totalDurationFrames: 103, imageSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_3_5.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u7B97\u6CD5", "showFrom": 1, "color": "#000000", "anim": "popIn", "audioEffect": "ping" }, { "text": "\u6C89\u5165\u6D77\u5E95", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 908, durationInFrames: 256, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u4F60\u6BCF\u5929\u6240\u770B\u5230\u7684\uFF0C", "startFrame": 0, "durationFrames": 41 }, { "text": "\u538B\u6839\u4E0D\u662F\u751F\u6D3B\u7684\u5E38\u6001\uFF0C", "startFrame": 40, "durationFrames": 62 }, { "text": "\u800C\u662F\u4E00\u573A\u7ECF\u8FC7\u6781\u5EA6\u6EE4\u955C\u8FC7\u6EE4\u3001", "startFrame": 101, "durationFrames": 68 }, { "text": "\u751A\u81F3\u9760\u62FC\u5355\u4F2A\u9020\u51FA\u6765\u7684\u6781\u7AEF\u8D22\u5BCC\u5C55\u89C8\u3002", "startFrame": 169, "durationFrames": 87 }], totalDurationFrames: 256, notText: "\u751F\u6D3B\u7684\u5E38\u6001", butText: "\u8D22\u5BCC\u5C55\u89C8", butSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_3_6.png"), notContentIndex: 0, butContentIndex: 2, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u6837\u672C\u504F\u5DEE/scene_3/scene_3.mp3") })
-  ] });
-};
-
-;// ./src/remotions/样本偏差/scenes/Scene4.tsx
-
-
-
-
-const _scenes_Scene4_SCENE_DURATION = 161 + 251 + 209 + 174 + 214;
-const scenes_Scene4_calculateScene4Duration = () => {
-  return _scenes_Scene4_SCENE_DURATION;
-};
-const scenes_Scene4_Scene4 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 161, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u60F3\u8981\u5F7B\u5E95\u6253\u7834\u8FD9\u79CD\u6BD2\u836F\u822C\u7684\u7CBE\u795E\u5185\u8017\uFF0C", "startFrame": 0, "durationFrames": 82 }, { "text": "\u8BF7\u7ED9\u81EA\u5DF1\u914D\u5907\u4E24\u4E2A\u9632\u5FA1\u52A8\u4F5C\u3002", "startFrame": 81, "durationFrames": 79 }], totalDurationFrames: 161, imageSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_4_1.png"), enterEffect: "slideBottom", anchors: [{ "text": "\u7CBE\u795E\u5185\u8017", "showFrom": 0, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }, { "text": "\u9632\u5FA1\u52A8\u4F5C", "showFrom": 1, "color": "#000000", "anim": "slideUp", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 161, durationInFrames: 251, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u7B2C\u4E00\uFF0C", "startFrame": 0, "durationFrames": 21 }, { "text": "\u4E3B\u52A8\u53BB\u56FD\u5BB6\u7EDF\u8BA1\u5C40\u7684\u5B98\u7F51\u770B\u770B\u771F\u5B9E\u7684\u56FD\u6C11\u6536\u5165\u57FA\u5EA7\uFF0C", "startFrame": 20, "durationFrames": 123 }, { "text": "\u53BB\u4EB2\u624B\u627E\u56DE\u90A3\u4E2A\u88AB\u4E92\u8054\u7F51\u9690\u85CF\u8D77\u6765\u7684\u5E9E\u5927\u5206\u6BCD\u3002", "startFrame": 142, "durationFrames": 108 }], totalDurationFrames: 251, title: "\u4E86\u89E3\u6570\u636E\u771F\u76F8", imageSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_4_2.png"), notes: [{ "text": "\u67E5\u770B\u5B98\u65B9\u6570\u636E", "showFrom": 1 }, { "text": "\u627E\u56DE\u771F\u5B9E\u8BA4\u77E5", "showFrom": 2 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 412, durationInFrames: 209, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u7B2C\u4E8C\uFF0C", "startFrame": 0, "durationFrames": 19 }, { "text": "\u6C38\u8FDC\u8981\u5728\u5FC3\u91CC\u9ED8\u5FF5\uFF0C", "startFrame": 18, "durationFrames": 51 }, { "text": "\u7B97\u6CD5\u552E\u5356\u7684\u662F\u4F60\u7684\u773C\u7403\u548C\u7126\u8651\uFF0C", "startFrame": 68, "durationFrames": 86 }, { "text": "\u800C\u4E0D\u662F\u5BA2\u89C2\u4E16\u754C\u7684\u771F\u76F8\u3002", "startFrame": 153, "durationFrames": 55 }], totalDurationFrames: 209, title: "\u9ED8\u5FF5\u7B97\u6CD5\u4E0E\u771F\u76F8", imageSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_4_3.png"), notes: [{ "text": "\u9ED8\u5FF5\u7B97\u6CD5\u5728\u641E\u4E8B", "showFrom": 1 }, { "text": "\u800C\u975E\u5BA2\u89C2\u4E16\u754C\u771F\u76F8", "showFrom": 2 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 621, durationInFrames: 174, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u7EDD\u4E0D\u8981\u7528\u522B\u4EBA\u7CBE\u5FC3\u4FEE\u9970\u8FC7\u3001", "startFrame": 0, "durationFrames": 54 }, { "text": "\u751A\u81F3\u9020\u5047\u7684\u5206\u5B50\uFF0C", "startFrame": 53, "durationFrames": 44 }, { "text": "\u6765\u4E08\u91CF\u4F60\u771F\u5B9E\u4E14\u591A\u7EF4\u7684\u4EBA\u751F\u3002", "startFrame": 97, "durationFrames": 77 }], totalDurationFrames: 174, imageSrc: (0,esm.staticFile)("images/\u6837\u672C\u504F\u5DEE/scene_4_4.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u7CBE\u5FC3\u4FEE\u9970", "showFrom": 0, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }, { "text": "\u9020\u5047", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }, { "text": "\u4E08\u91CF\u4EBA\u751F", "showFrom": 2, "color": "#000000", "anim": "slideUp", "audioEffect": null }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 795, durationInFrames: 214, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u771F\u6B63\u7684\u6E05\u9192\uFF0C", "startFrame": 0, "durationFrames": 33 }, { "text": "\u662F\u8E0F\u5B9E\u5730\u8E29\u5728\u81EA\u5DF1\u6CE5\u6CDE\u4F46\u575A\u56FA\u7684\u751F\u6D3B\u5750\u6807\u4E0A\uFF0C", "startFrame": 32, "durationFrames": 105 }, { "text": "\u62D2\u7EDD\u4E3A\u865A\u5047\u7684\u7EDF\u8BA1\u5B66\u5E7B\u5F71\u4E70\u5355\u3002", "startFrame": 137, "durationFrames": 77 }], totalDurationFrames: 214, coreSentence: "\u62D2\u7EDD\u4E3A\u865A\u5047\u7684\u7EDF\u8BA1\u5B66\u5E7B\u5F71\u4E70\u5355", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u7EDF\u8BA1\u5B66\u5E7B\u5F71", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u6837\u672C\u504F\u5DEE/scene_4/scene_4.mp3") })
-  ] });
-};
-
-;// ./src/remotions/样本偏差/样本偏差.tsx
-
-
-
-
-
-
-
-
-
-
-
-
-const \u6837\u672C\u504F\u5DEESchema = lib.z.object({});
-const remotions_TRANSITION_DURATION = 15;
-const remotions_SCENE_END_PADDING = 20;
-const remotions_COVER_DURATION_FRAMES = 5;
-const remotions_sceneConfigs = [
-  { name: "scene1", duration: scenes_Scene1_calculateScene1Duration() + remotions_SCENE_END_PADDING, component: scenes_Scene1_Scene1, label: "\u6DF1\u591C\u5237\u5C4F\u7684\u7126\u8651" },
-  { name: "scene2", duration: scenes_Scene2_calculateScene2Duration() + remotions_SCENE_END_PADDING, component: scenes_Scene2_Scene2, label: "\u7B97\u6CD5\u7684\u89C6\u89C9\u9738\u51CC" },
-  { name: "scene3", duration: scenes_Scene3_calculateScene3Duration() + remotions_SCENE_END_PADDING, component: scenes_Scene3_Scene3, label: "\u7EDF\u8BA1\u5B66\u4E0A\u7684\u504F\u5DEE" },
-  { name: "scene4", duration: scenes_Scene4_calculateScene4Duration() + remotions_SCENE_END_PADDING, component: scenes_Scene4_Scene4, label: "\u9632\u5FA1\u52A8\u4F5C" }
-];
-const MAIN_DURATION_\u6837\u672C\u504F\u5DEE = remotions_sceneConfigs.reduce((total, c) => total + c.duration, 0) - (remotions_sceneConfigs.length - 1) * remotions_TRANSITION_DURATION;
-const TOTAL_DURATION_\u6837\u672C\u504F\u5DEE = remotions_COVER_DURATION_FRAMES + MAIN_DURATION_\u6837\u672C\u504F\u5DEE;
-const remotions_ProgressBar = () => {
-  var _a;
-  const frame = (0,esm.useCurrentFrame)();
-  if (frame < remotions_COVER_DURATION_FRAMES) {
-    return null;
-  }
-  const contentFrame = frame - remotions_COVER_DURATION_FRAMES;
-  let currentStart = 0;
-  const segments = remotions_sceneConfigs.map((c, i) => {
-    const isLast = i === remotions_sceneConfigs.length - 1;
-    const segmentDuration = isLast ? c.duration : c.duration - remotions_TRANSITION_DURATION;
-    const segment = { start: currentStart, duration: segmentDuration };
-    currentStart += segmentDuration;
-    return segment;
-  });
-  const activeIndex = segments.findIndex((seg) => contentFrame >= seg.start && contentFrame < seg.start + seg.duration);
-  const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
-  const activeLabel = ((_a = remotions_sceneConfigs[validActiveIndex]) == null ? void 0 : _a.label) || "";
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: {
-    position: "absolute",
-    top: 40,
-    left: 40,
-    right: 40,
-    display: "flex",
-    flexDirection: "column",
-    gap: 16,
-    zIndex: 100
-  }, children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, height: 8 }, children: segments.map((seg, i) => {
-      const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));
-      const isActive = i === validActiveIndex;
-      return /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        flex: 1,
-        backgroundColor: isActive ? "rgba(34, 43, 69, 0.18)" : "rgba(34, 43, 69, 0.1)",
-        borderRadius: 999,
-        overflow: "hidden",
-        border: isActive ? "1px solid rgba(34, 43, 69, 0.32)" : "1px solid rgba(34, 43, 69, 0.2)",
-        boxShadow: isActive ? "0 3px 10px rgba(31, 41, 55, 0.12)" : "0 1px 4px rgba(31, 41, 55, 0.08)"
-      }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        width: `${progress * 100}%`,
-        height: "100%",
-        background: isActive ? "linear-gradient(90deg, rgba(29, 78, 216, 0.95), rgba(56, 189, 248, 0.92))" : "rgba(30, 41, 59, 0.72)",
-        boxShadow: isActive ? "0 0 12px rgba(37, 99, 235, 0.35)" : "none"
-      } }) }, i);
-    }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-      fontSize: 30,
-      fontWeight: 700,
-      fontFamily: '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif',
-      letterSpacing: 0.4,
-      color: "rgba(17, 24, 39, 0.95)",
-      textAlign: "left",
-      textShadow: "0 1px 2px rgba(255,255,255,0.45)",
-      padding: "6px 14px",
-      backgroundColor: "rgba(255, 255, 255, 0.58)",
-      border: "1px solid rgba(17, 24, 39, 0.12)",
-      borderRadius: 10,
-      alignSelf: "flex-start",
-      backdropFilter: "blur(6px)",
-      boxShadow: "0 6px 20px rgba(15, 23, 42, 0.12)"
-    }, children: activeLabel })
-  ] });
-};
-const \u6837\u672C\u504F\u5DEE = () => {
-  const frame = (0,esm.useCurrentFrame)();
-  const bgShiftX = (0,esm.interpolate)(frame % 240, [0, 120, 240], [-4, 4, -4], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const bgShiftY = (0,esm.interpolate)(frame % 180, [0, 90, 180], [-3, 3, -3], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const bgBreathOpacity = (0,esm.interpolate)(frame % 150, [0, 75, 150], [0.22, 0.34, 0.22], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      esm.Audio,
-      {
-        src: (0,esm.staticFile)("audio/effects/Seven_Measured_Breaths.mp3"),
-        loop: true,
-        volume: 0.22,
-        name: "Background music"
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          height: "100%",
-          width: "100%",
-          background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)"
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          inset: "-6%",
-          pointerEvents: "none",
-          opacity: bgBreathOpacity,
-          transform: `translate(${bgShiftX}px, ${bgShiftY}px)`,
-          background: "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)"
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { durationInFrames: remotions_COVER_DURATION_FRAMES, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      StaticCover,
-      {
-        title: "\u6837\u672C\u504F\u5DEE",
-        subtitle: "\u7834\u9664\u793E\u4EA4\u5A92\u4F53\u5236\u9020\u7684\u7126\u8651",
-        themeColor: "#2563EB",
-        badge: "\u7EDF\u8BA1\u7D20\u517B \xB7 \u7406\u6027\u601D\u8003"
-      }
-    ) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: remotions_COVER_DURATION_FRAMES, durationInFrames: MAIN_DURATION_\u6837\u672C\u504F\u5DEE, children: /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(
-        "div",
-        {
-          style: {
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "10%",
-            minHeight: 48,
-            backgroundColor: "rgba(0,0,0,0.5)"
-          }
-        }
-      ),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries, { children: remotions_sceneConfigs.map((config, index) => {
-        const SceneComp = config.component;
-        const isLast = index === remotions_sceneConfigs.length - 1;
-        return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries.Sequence, { durationInFrames: config.duration, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(SceneComp, {}) }),
-          !isLast && /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            TransitionSeries.Transition,
-            {
-              timing: linearTiming({ durationInFrames: remotions_TRANSITION_DURATION }),
-              presentation: fade()
-            }
-          )
-        ] }, config.name);
-      }) })
-    ] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(remotions_ProgressBar, {})
-  ] });
-};
-
-;// ./src/remotions/数据可视化陷阱/scenes/Scene1.tsx
-
-
-
-
-const _scenes_Scene1_SCENE_DURATION = 247 + 363;
-const _scenes_Scene1_calculateScene1Duration = () => {
-  return _scenes_Scene1_SCENE_DURATION;
-};
-const _scenes_Scene1_Scene1 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 247, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u770B\u7740\u5927\u5C4F\u5E55\u4E0A\u90A3\u6761\u51E0\u4E4E\u5782\u76F4\u51B2\u5411\u4E91\u9704\u7684\u4E1A\u7EE9\u589E\u957F\u7EA2\u7EBF\uFF0C", "startFrame": 0, "durationFrames": 127 }, { "text": "\u53F0\u4E0B\u7684\u6295\u8D44\u8005\u4EEC\u70ED\u8840\u6CB8\u817E\uFF0C", "startFrame": 126, "durationFrames": 60 }, { "text": "\u54CD\u8D77\u4E86\u96F7\u9E23\u822C\u7684\u638C\u58F0\u3002", "startFrame": 186, "durationFrames": 60 }], totalDurationFrames: 247, imageSrc: (0,esm.staticFile)("images/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_1_1.png"), enterEffect: "slideBottom", anchors: [{ "text": "\u4E1A\u7EE9\u589E\u957F", "showFrom": 0, "color": "#000000", "anim": "slideUp", "audioEffect": "ping" }, { "text": "\u70ED\u8840\u6CB8\u817E", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 247, durationInFrames: 363, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWBeatSequence, { content: [{ "text": "\u5C4F\u5E55\u4E0A\u5145\u6EE1\u89C6\u89C9\u5F20\u529B\u7684\u56FE\u8868\uFF0C", "startFrame": 0, "durationFrames": 68 }, { "text": "\u770B\u8D77\u6765\u662F\u5982\u6B64\u7684\u9707\u64BC\u548C\u96C4\u8FA9\uFF0C", "startFrame": 67, "durationFrames": 70 }, { "text": "\u4EE5\u81F3\u4E8E\u5728\u573A\u6839\u672C\u6CA1\u6709\u4E00\u4E2A\u4EBA\u53BB\u4ED4\u7EC6\u770B\u4E00\u773C\uFF0C", "startFrame": 137, "durationFrames": 88 }, { "text": "\u56FE\u8868\u8FB9\u7F18\u90A3\u4E2A\u88AB\u5077\u5077\u505A\u8FC7\u624B\u811A\u3001", "startFrame": 224, "durationFrames": 83 }, { "text": "\u523B\u610F\u622A\u65AD\u4E86\u7684\u7EB5\u5750\u6807\u3002", "startFrame": 307, "durationFrames": 56 }], totalDurationFrames: 363, stages: [{ imageSrc: (0,esm.staticFile)("images/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_1_2_img0.png"), enterEffect: "breathe", tone: "calm", showFrom: 0 }, { imageSrc: (0,esm.staticFile)("images/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_1_2_img1.png"), enterEffect: "slideLeft", tone: "alert", showFrom: 2 }, { imageSrc: (0,esm.staticFile)("images/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_1_2_img2.png"), enterEffect: "zoomIn", tone: "alert", showFrom: 3 }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_1/scene_1.mp3") })
-  ] });
-};
-
-;// ./src/remotions/数据可视化陷阱/scenes/Scene2.tsx
-
-
-
-
-const remotions_scenes_Scene2_SCENE_DURATION = 117 + 177 + 231 + 219;
-const _scenes_Scene2_calculateScene2Duration = () => {
-  return remotions_scenes_Scene2_SCENE_DURATION;
-};
-const _scenes_Scene2_Scene2 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 117, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u6211\u4EEC\u666E\u901A\u4EBA\u5B9E\u5728\u592A\u5BB9\u6613\u88AB\u4E00\u5F20\u82B1\u54E8\u7684\u56FE\u8868\u7275\u7740\u9F3B\u5B50\u8D70\u4E86\u3002", "startFrame": 0, "durationFrames": 117 }], totalDurationFrames: 117, imageSrc: (0,esm.staticFile)("images/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_2_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u82B1\u54E8\u56FE\u8868", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 117, durationInFrames: 177, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWQuoteCitation, { content: [{ "text": "\u79D1\u5B66\u7814\u7A76\u8868\u660E\uFF0C", "startFrame": 0, "durationFrames": 34 }, { "text": "\u4EBA\u7C7B\u5927\u8111\u5904\u7406\u56FE\u50CF\u7684\u901F\u5EA6\u6BD4\u5904\u7406\u5E72\u762A\u7684\u6587\u5B57\u5FEB\u4E86\u51E0\u4E07\u500D\u3002", "startFrame": 33, "durationFrames": 143 }], totalDurationFrames: 177, quoteSource: "\u79D1\u5B66\u7814\u7A76", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 294, durationInFrames: 231, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u8FD9\u610F\u5473\u7740\u5728\u4F60\u7684\u7406\u6027\u903B\u8F91\u9632\u7EBF\uFF0C", "startFrame": 0, "durationFrames": 70 }, { "text": "\u8FD8\u6CA1\u6709\u5B8C\u5168\u542F\u52A8\u7684\u65F6\u5019\uFF0C", "startFrame": 69, "durationFrames": 47 }, { "text": "\u90A3\u79CD\u72C2\u70ED\u7684\u89C6\u89C9\u51B2\u51FB\uFF0C", "startFrame": 116, "durationFrames": 53 }, { "text": "\u5C31\u5DF2\u7ECF\u63D0\u524D\u5B8C\u6210\u4E86\u5BF9\u4F60\u7684\u6D17\u8111\u3002", "startFrame": 169, "durationFrames": 62 }], totalDurationFrames: 231, notText: "\u7406\u6027\u903B\u8F91\u9632\u7EBF", butText: "\u89C6\u89C9\u51B2\u51FB\u6D17\u8111", butSrc: (0,esm.staticFile)("images/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_2_3.png"), notContentIndex: 0, butContentIndex: 2, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 525, durationInFrames: 219, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u8FD9\u4E0D\u662F\u4F60\u6211\u4E0D\u591F\u806A\u660E\uFF0C", "startFrame": 0, "durationFrames": 51 }, { "text": "\u800C\u662F\u90A3\u4E9B\u522B\u6709\u7528\u5FC3\u7684\u5546\u4E1A\u9A97\u5B50\u548C\u8425\u9500\u53F7\uFF0C", "startFrame": 50, "durationFrames": 80 }, { "text": "\u5BF9\u6211\u4EEC\u53D1\u52A8\u7684\u4E00\u573A\u6BEB\u4E0D\u7559\u60C5\u7684\u89C6\u89C9\u964D\u7EF4\u6253\u51FB\u3002", "startFrame": 129, "durationFrames": 89 }], totalDurationFrames: 219, notText: "\u4F60\u6211\u4E0D\u591F\u806A\u660E", butText: "\u89C6\u89C9\u964D\u7EF4\u6253\u51FB", butSrc: (0,esm.staticFile)("images/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_2_4.png"), notContentIndex: 0, butContentIndex: 2, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_2/scene_2.mp3") })
-  ] });
-};
-
-;// ./src/remotions/数据可视化陷阱/scenes/Scene3.tsx
-
-
-
-
-const remotions_scenes_Scene3_SCENE_DURATION = 164 + 79 + 436 + 345 + 161;
-const _scenes_Scene3_calculateScene3Duration = () => {
-  return remotions_scenes_Scene3_SCENE_DURATION;
-};
-const _scenes_Scene3_Scene3 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 164, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5728\u6570\u636E\u53EF\u89C6\u5316\u4E0E\u4F20\u64AD\u5B66\u4E2D\uFF0C", "startFrame": 0, "durationFrames": 66 }, { "text": "\u8FD9\u5176\u5B9E\u662F\u4E00\u5957\u6781\u5176\u9634\u9669\u7684\u51E0\u4F55\u9A97\u5C40\u3002", "startFrame": 65, "durationFrames": 99 }], totalDurationFrames: 164, imageSrc: (0,esm.staticFile)("images/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_3_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u51E0\u4F55\u9A97\u5C40", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 164, durationInFrames: 79, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4ED6\u4EEC\u6700\u5E38\u89C1\u7684\u624B\u6CD5\u5C31\u662F\u622A\u65ADY\u8F74\u3002", "startFrame": 0, "durationFrames": 79 }], totalDurationFrames: 79, imageSrc: (0,esm.staticFile)("images/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_3_2.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u622A\u65ADY\u8F74", "showFrom": 0, "color": "#EF4444", "anim": "highlight", "audioEffect": null }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 243, durationInFrames: 436, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSplitCompare, { content: [{ "text": "\u6B63\u5E38\u7684\u6570\u636E\u8D77\u4F0F\u5982\u679C\u4ECE\u96F6\u5F00\u59CB\u753B\uFF0C", "startFrame": 0, "durationFrames": 78 }, { "text": "\u53EF\u80FD\u53EA\u662F\u4E00\u6761\u5E73\u7F13\u7684\u6CE2\u6D6A\u3002", "startFrame": 77, "durationFrames": 51 }, { "text": "\u4F46\u5982\u679C\u4ED6\u4EEC\u628A\u5750\u6807\u8D77\u70B9\u76F4\u63A5\u6539\u6210\u4E5D\u5341\uFF0C", "startFrame": 127, "durationFrames": 106 }, { "text": "\u90A3\u4E48\u539F\u672C\u53EA\u6709\u767E\u5206\u4E4B\u4E00\u7684\u5FAE\u5C0F\u6CE2\u52A8\uFF0C", "startFrame": 233, "durationFrames": 92 }, { "text": "\u5728\u56FE\u8868\u4E0A\u5C31\u4F1A\u77AC\u95F4\u53D8\u6210\u62D4\u5730\u800C\u8D77\u7684\u9661\u5CED\u5C71\u5CF0\u3002", "startFrame": 325, "durationFrames": 111 }], totalDurationFrames: 436, leftSrc: (0,esm.staticFile)("images/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_3_3_left.png"), rightSrc: (0,esm.staticFile)("images/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_3_3_right.png"), leftLabel: "\u5FAE\u5C0F\u6CE2\u52A8", rightLabel: "\u9661\u5CED\u5C71\u5CF0" }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 679, durationInFrames: 345, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u53E6\u5916\uFF0C", "startFrame": 0, "durationFrames": 17 }, { "text": "\u4ED6\u4EEC\u8FD8\u4F1A\u719F\u7EC3\u5730\u73A9\u5F04\u6A31\u6843\u91C7\u6458\u7684\u6E38\u620F\uFF0C", "startFrame": 16, "durationFrames": 90 }, { "text": "\u53EA\u622A\u53D6\u6570\u636E\u731B\u70C8\u4E0A\u5347\u7684\u90A3\u51E0\u4E2A\u7279\u5B9A\u6708\u4EFD\u7ED9\u4F60\u770B\uFF0C", "startFrame": 105, "durationFrames": 111 }, { "text": "\u628A\u8FDE\u5E74\u5DE8\u989D\u4E8F\u635F\u7684\u4E11\u964B\u771F\u76F8\u6B7B\u6B7B\u63A9\u76D6\u5728\u753B\u6846\u4E4B\u5916\u3002", "startFrame": 216, "durationFrames": 129 }], totalDurationFrames: 345, imageSrc: (0,esm.staticFile)("images/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_3_4.png"), enterEffect: "slideBottom", anchors: [{ "text": "\u6A31\u6843\u91C7\u6458", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }, { "text": "\u63A9\u76D6\u771F\u76F8", "showFrom": 3, "color": "#EF4444", "anim": "spring", "audioEffect": "woosh" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 1024, durationInFrames: 161, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8FD9\u5C31\u597D\u6BD4\u6545\u610F\u5207\u6389\u7167\u7247\u91CC\u6EE1\u5730\u5783\u573E\u7684\u80CC\u666F\uFF0C", "startFrame": 0, "durationFrames": 84 }, { "text": "\u53EA\u7ED9\u4F60\u770B\u4E00\u5F20\u64E6\u5F97\u9503\u4EAE\u7684\u5E72\u51C0\u684C\u9762\u3002", "startFrame": 84, "durationFrames": 77 }], totalDurationFrames: 161, imageSrc: (0,esm.staticFile)("images/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_3_5.png"), enterEffect: "zoomIn", anchors: [{ "text": "\u5E72\u51C0\u684C\u9762", "showFrom": 1, "color": "#000000", "anim": "popIn", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_3/scene_3.mp3") })
-  ] });
-};
-
-;// ./src/remotions/数据可视化陷阱/scenes/Scene4.tsx
-
-
-
-
-const remotions_scenes_Scene4_SCENE_DURATION = 379 + 135 + 201;
-const _scenes_Scene4_calculateScene4Duration = () => {
-  return remotions_scenes_Scene4_SCENE_DURATION;
-};
-const _scenes_Scene4_Scene4 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 379, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u4E0B\u6B21\u518D\u770B\u5230\u4EFB\u4F55\u8BA9\u4EBA\u5FC3\u6F6E\u6F8E\u6E43\u6216\u8005\u6050\u614C\u7684\u8D8B\u52BF\u56FE\u65F6\uFF0C", "startFrame": 0, "durationFrames": 115 }, { "text": "\u5148\u51B7\u9759\u4E00\u4E0B\uFF0C\u7ED9\u5B83\u505A\u4E2A\u56FE\u8868\u5BA1\u8BA1\uFF1A", "startFrame": 114, "durationFrames": 82 }, { "text": "Y\u8F74\u662F\u4ECE0\u5F00\u59CB\u7684\u5417\uFF1F", "startFrame": 196, "durationFrames": 55 }, { "text": "\u65F6\u95F4\u8303\u56F4\u6709\u88AB\u9009\u62E9\u6027\u622A\u53D6\u5417\uFF1F", "startFrame": 250, "durationFrames": 67 }, { "text": "\u5C3A\u5EA6\u6BD4\u4F8B\u6709\u88AB\u523B\u610F\u626D\u66F2\u5417\uFF1F", "startFrame": 317, "durationFrames": 62 }], totalDurationFrames: 379, title: "\u56FE\u8868\u5BA1\u8BA1\u4E09\u95EE", imageSrc: (0,esm.staticFile)("images/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_4_1.png"), notes: [{ "text": "Y\u8F74\u4ECE0\u5F00\u59CB\u5417\uFF1F", "showFrom": 2 }, { "text": "\u65F6\u95F4\u8303\u56F4\u88AB\u622A\u53D6\u5417\uFF1F", "showFrom": 3 }, { "text": "\u5C3A\u5EA6\u6BD4\u4F8B\u88AB\u626D\u66F2\u5417\uFF1F", "showFrom": 4 }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 379, durationInFrames: 135, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWQuoteCitation, { content: [{ "text": "\u67AF\u71E5\u7684\u6570\u636E\u4E5F\u8BB8\u4E0D\u4F1A\u76F4\u63A5\u8BF4\u8C0E\uFF0C", "startFrame": 0, "durationFrames": 62 }, { "text": "\u4F46\u624B\u91CC\u62FF\u7740\u753B\u7B14\u753B\u56FE\u8868\u7684\u4EBA\u4E00\u5B9A\u4F1A\u3002", "startFrame": 61, "durationFrames": 74 }], totalDurationFrames: 135, quoteSource: "\u6570\u636E\u5206\u6790\u5E08\u7684\u804C\u573A\u7BB4\u8A00", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 514, durationInFrames: 201, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u4E00\u4E2A\u5177\u5907\u73B0\u4EE3\u516C\u6C11\u7D20\u517B\u7684\u72EC\u7ACB\u601D\u8003\u8005\uFF0C", "startFrame": 0, "durationFrames": 76 }, { "text": "\u6C38\u8FDC\u8981\u628A\u5BF9\u8FD9\u4E2A\u4E16\u754C\u7684\u89C6\u89C9\u89E3\u91CA\u6743\uFF0C", "startFrame": 75, "durationFrames": 71 }, { "text": "\u7262\u7262\u593A\u56DE\u81EA\u5DF1\u624B\u91CC\u3002", "startFrame": 146, "durationFrames": 55 }], totalDurationFrames: 201, coreSentence: "\u593A\u56DE\u5BF9\u4E16\u754C\u7684\u89C6\u89C9\u89E3\u91CA\u6743", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u89C6\u89C9\u89E3\u91CA\u6743", "color": "red" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631/scene_4/scene_4.mp3") })
-  ] });
-};
-
-;// ./src/remotions/数据可视化陷阱/数据可视化陷阱.tsx
-
-
-
-
-
-
-
-
-
-
-
-
-const \u6570\u636E\u53EF\u89C6\u5316\u9677\u9631Schema = lib.z.object({});
-const src_remotions_TRANSITION_DURATION = 15;
-const src_remotions_SCENE_END_PADDING = 20;
-const src_remotions_COVER_DURATION_FRAMES = 5;
-const src_remotions_sceneConfigs = [
-  { name: "scene1", duration: _scenes_Scene1_calculateScene1Duration() + src_remotions_SCENE_END_PADDING, component: _scenes_Scene1_Scene1, label: "\u53D1\u5E03\u4F1A\u73B0\u573A\u7684\u89C6\u89C9\u9677\u9631" },
-  { name: "scene2", duration: _scenes_Scene2_calculateScene2Duration() + src_remotions_SCENE_END_PADDING, component: _scenes_Scene2_Scene2, label: "\u89C6\u89C9\u51B2\u51FB\u4E0E\u6D17\u8111" },
-  { name: "scene3", duration: _scenes_Scene3_calculateScene3Duration() + src_remotions_SCENE_END_PADDING, component: _scenes_Scene3_Scene3, label: "\u51E0\u4F55\u9A97\u5C40\u7684\u5E38\u89C1\u624B\u6CD5" },
-  { name: "scene4", duration: _scenes_Scene4_calculateScene4Duration() + src_remotions_SCENE_END_PADDING, component: _scenes_Scene4_Scene4, label: "\u5982\u4F55\u8FDB\u884C\u56FE\u8868\u5BA1\u8BA1" }
-];
-const MAIN_DURATION_\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631 = src_remotions_sceneConfigs.reduce((total, c) => total + c.duration, 0) - (src_remotions_sceneConfigs.length - 1) * src_remotions_TRANSITION_DURATION;
-const TOTAL_DURATION_\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631 = src_remotions_COVER_DURATION_FRAMES + MAIN_DURATION_\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631;
-const src_remotions_ProgressBar = () => {
-  var _a;
-  const frame = (0,esm.useCurrentFrame)();
-  if (frame < src_remotions_COVER_DURATION_FRAMES) {
-    return null;
-  }
-  const contentFrame = frame - src_remotions_COVER_DURATION_FRAMES;
-  let currentStart = 0;
-  const segments = src_remotions_sceneConfigs.map((c, i) => {
-    const isLast = i === src_remotions_sceneConfigs.length - 1;
-    const segmentDuration = isLast ? c.duration : c.duration - src_remotions_TRANSITION_DURATION;
-    const segment = { start: currentStart, duration: segmentDuration };
-    currentStart += segmentDuration;
-    return segment;
-  });
-  const activeIndex = segments.findIndex((seg) => contentFrame >= seg.start && contentFrame < seg.start + seg.duration);
-  const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
-  const activeLabel = ((_a = src_remotions_sceneConfigs[validActiveIndex]) == null ? void 0 : _a.label) || "";
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: {
-    position: "absolute",
-    top: 40,
-    left: 40,
-    right: 40,
-    display: "flex",
-    flexDirection: "column",
-    gap: 16,
-    zIndex: 100
-  }, children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, height: 8 }, children: segments.map((seg, i) => {
-      const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));
-      const isActive = i === validActiveIndex;
-      return /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        flex: 1,
-        backgroundColor: isActive ? "rgba(34, 43, 69, 0.18)" : "rgba(34, 43, 69, 0.1)",
-        borderRadius: 999,
-        overflow: "hidden",
-        border: isActive ? "1px solid rgba(34, 43, 69, 0.32)" : "1px solid rgba(34, 43, 69, 0.2)",
-        boxShadow: isActive ? "0 3px 10px rgba(31, 41, 55, 0.12)" : "0 1px 4px rgba(31, 41, 55, 0.08)"
-      }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        width: `${progress * 100}%`,
-        height: "100%",
-        background: isActive ? "linear-gradient(90deg, rgba(29, 78, 216, 0.95), rgba(56, 189, 248, 0.92))" : "rgba(30, 41, 59, 0.72)",
-        boxShadow: isActive ? "0 0 12px rgba(37, 99, 235, 0.35)" : "none"
-      } }) }, i);
-    }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-      fontSize: 30,
-      fontWeight: 700,
-      fontFamily: '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif',
-      letterSpacing: 0.4,
-      color: "rgba(17, 24, 39, 0.95)",
-      textAlign: "left",
-      textShadow: "0 1px 2px rgba(255,255,255,0.45)",
-      padding: "6px 14px",
-      backgroundColor: "rgba(255, 255, 255, 0.58)",
-      border: "1px solid rgba(17, 24, 39, 0.12)",
-      borderRadius: 10,
-      alignSelf: "flex-start",
-      backdropFilter: "blur(6px)",
-      boxShadow: "0 6px 20px rgba(15, 23, 42, 0.12)"
-    }, children: activeLabel })
-  ] });
-};
-const \u6570\u636E\u53EF\u89C6\u5316\u9677\u9631 = () => {
-  const frame = (0,esm.useCurrentFrame)();
-  const bgShiftX = (0,esm.interpolate)(frame % 240, [0, 120, 240], [-4, 4, -4], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const bgShiftY = (0,esm.interpolate)(frame % 180, [0, 90, 180], [-3, 3, -3], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const bgBreathOpacity = (0,esm.interpolate)(frame % 150, [0, 75, 150], [0.22, 0.34, 0.22], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      esm.Audio,
-      {
-        src: (0,esm.staticFile)("audio/effects/Seven_Measured_Breaths.mp3"),
-        loop: true,
-        volume: 0.22,
-        name: "Background music"
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          height: "100%",
-          width: "100%",
-          background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)"
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          inset: "-6%",
-          pointerEvents: "none",
-          opacity: bgBreathOpacity,
-          transform: `translate(${bgShiftX}px, ${bgShiftY}px)`,
-          background: "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)"
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { durationInFrames: src_remotions_COVER_DURATION_FRAMES, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      StaticCover,
-      {
-        title: "\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631",
-        subtitle: "\u8B66\u60D5\u6570\u636E\u56FE\u8868\u7684\u89C6\u89C9\u6B3A\u9A97",
-        themeColor: "#2563EB",
-        badge: "\u7EDF\u8BA1\u7D20\u517B \xB7 \u7406\u6027\u601D\u8003"
-      }
-    ) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: src_remotions_COVER_DURATION_FRAMES, durationInFrames: MAIN_DURATION_\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631, children: /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(
-        "div",
-        {
-          style: {
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "10%",
-            minHeight: 48,
-            backgroundColor: "rgba(0,0,0,0.5)"
-          }
-        }
-      ),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries, { children: src_remotions_sceneConfigs.map((config, index) => {
-        const SceneComp = config.component;
-        const isLast = index === src_remotions_sceneConfigs.length - 1;
-        return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries.Sequence, { durationInFrames: config.duration, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(SceneComp, {}) }),
-          !isLast && /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            TransitionSeries.Transition,
-            {
-              timing: linearTiming({ durationInFrames: src_remotions_TRANSITION_DURATION }),
-              presentation: fade()
-            }
-          )
-        ] }, config.name);
-      }) })
-    ] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(src_remotions_ProgressBar, {})
-  ] });
-};
-
-;// ./src/remotions/平均数陷阱/scenes/Scene1.tsx
-
-
-
-
-const remotions_scenes_Scene1_SCENE_DURATION = 202 + 256 + 85 + 226 + 146 + 291;
-const remotions_scenes_Scene1_calculateScene1Duration = () => {
-  return remotions_scenes_Scene1_SCENE_DURATION;
-};
-const remotions_scenes_Scene1_Scene1 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 202, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4E00\u6761\u52A0\u7C97\u98D8\u7EA2\u7684\u70ED\u641C\u76F4\u63A5\u5F39\u5230\u4F60\u773C\u524D\uFF1A", "startFrame": 0, "durationFrames": 94 }, { "text": "\u4EBA\u5747\u53EF\u652F\u914D\u6536\u5165\u53C8\u7A81\u7834\u4E86\u51E0\u4E07\u7F8E\u5143\u5927\u5173\u3002", "startFrame": 93, "durationFrames": 108 }], totalDurationFrames: 202, imageSrc: (0,esm.staticFile)("images/\u5E73\u5747\u6570\u9677\u9631/scene_1_1.png"), enterEffect: "slideBottom", anchors: [{ "text": "\u70ED\u641C", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "ping" }, { "text": "\u4EBA\u574710\u4E07", "showFrom": 1, "color": "#000000", "anim": "slideUp", "audioEffect": "woosh" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 202, durationInFrames: 256, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWChatBubble, { content: [{ "text": "\u4F60\u6C89\u9ED8\u7740\u70B9\u5F00\u624B\u673A\u94F6\u884C\u67E5\u4E86\u67E5\u4EC5\u5269\u7684\u4F59\u989D\uFF0C", "startFrame": 0, "durationFrames": 98 }, { "text": "\u82E6\u7B11\u7740\u5728\u8BC4\u8BBA\u533A\u6572\u4E0B\u4E00\u884C\u5B57:", "startFrame": 97, "durationFrames": 75 }, { "text": "\u5BF9\u4E0D\u8D77\u5927\u5BB6\uFF0C", "startFrame": 171, "durationFrames": 27 }, { "text": "\u6211\u53C8\u4E00\u6B21\u628A\u5927\u817F\u90FD\u7ED9\u62D6\u65AD\u4E86\u3002", "startFrame": 197, "durationFrames": 58 }], totalDurationFrames: 256, bubbleText: "\u5BF9\u4E0D\u8D77\u5927\u5BB6\uFF0C\u6211\u53C8\u4E00\u6B21\u628A\u5927\u817F\u90FD\u7ED9\u62D6\u65AD\u4E86\u3002", showFrom: 2, imageSrc: (0,esm.staticFile)("images/\u5E73\u5747\u6570\u9677\u9631/scene_1_2.png") }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 458, durationInFrames: 85, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u8BF7\u9A6C\u4E0A\u505C\u6B62\u8FD9\u79CD\u6BEB\u65E0\u610F\u4E49\u7684\u81EA\u8D23\u4E0E\u5185\u759A\u3002", "startFrame": 0, "durationFrames": 85 }], totalDurationFrames: 85, coreSentence: "\u8BF7\u9A6C\u4E0A\u505C\u6B62\u81EA\u8D23\u4E0E\u5185\u759A", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u81EA\u8D23\u4E0E\u5185\u759A", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 543, durationInFrames: 226, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWBeatSequence, { content: [{ "text": "\u6211\u4EEC\u5DF2\u7ECF\u65E0\u6570\u6B21\uFF0C", "startFrame": 0, "durationFrames": 42 }, { "text": "\u5728\u5B8F\u5927\u7684\u5E73\u5747\u6570\u9762\u524D\u611F\u5230\u6DF1\u6DF1\u7684\u81EA\u5351\uFF0C", "startFrame": 41, "durationFrames": 80 }, { "text": "\u4F46\u6700\u51B7\u9177\u7684\u771F\u76F8\u662F\uFF0C", "startFrame": 121, "durationFrames": 46 }, { "text": "\u4F60\u4ECE\u6765\u90FD\u6CA1\u6709\u62D6\u8FC7\u8C01\u7684\u540E\u817F\u3002", "startFrame": 166, "durationFrames": 59 }], totalDurationFrames: 226, stages: [{ imageSrc: (0,esm.staticFile)("images/\u5E73\u5747\u6570\u9677\u9631/scene_1_4_None.png"), enterEffect: "zoomIn", showFrom: 0 }, { imageSrc: (0,esm.staticFile)("images/\u5E73\u5747\u6570\u9677\u9631/scene_2_5.png"), enterEffect: "zoomIn", showFrom: 2 }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 769, durationInFrames: 146, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u6211\u4EEC\u6240\u6709\u4EBA\uFF0C", "startFrame": 0, "durationFrames": 36 }, { "text": "\u90FD\u53EA\u662F\u88AB\u4E00\u79CD\u6781\u5176\u72E1\u733E\u7684\u6570\u5B66\u969C\u773C\u6CD5\u7ED9\u5F7B\u5E95\u8499\u853D\u4E86\u3002", "startFrame": 36, "durationFrames": 110 }], totalDurationFrames: 146, imageSrc: (0,esm.staticFile)("images/\u5E73\u5747\u6570\u9677\u9631/scene_1_5.png"), enterEffect: "zoomIn", anchors: [{ "text": "\u6570\u5B66\u969C\u773C\u6CD5", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 915, durationInFrames: 291, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8FD9\u79CD\u969C\u773C\u6CD5\u552F\u4E00\u7684\u4F5C\u7528\uFF0C", "startFrame": 0, "durationFrames": 54 }, { "text": "\u5C31\u662F\u7528\u7EB8\u9762\u4E0A\u7684\u865A\u5047\u7E41\u8363\u7C89\u9970\u592A\u5E73\uFF0C", "startFrame": 53, "durationFrames": 90 }, { "text": "\u987A\u4FBF\u8F7B\u98D8\u98D8\u5730\uFF0C", "startFrame": 142, "durationFrames": 39 }, { "text": "\u62B9\u9664\u4E86\u5343\u5343\u4E07\u4E07\u4E2A\u666E\u901A\u4EBA\u6700\u771F\u5B9E\u7684\u751F\u5B58\u91CD\u91CF\u3002", "startFrame": 181, "durationFrames": 110 }], totalDurationFrames: 291, imageSrc: (0,esm.staticFile)("images/\u5E73\u5747\u6570\u9677\u9631/scene_1_6.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u7C89\u9970\u592A\u5E73", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }, { "text": "\u62B9\u9664\u751F\u5B58\u91CD\u91CF", "showFrom": 3, "color": "#000000", "anim": "slideUp", "audioEffect": "woosh" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u5E73\u5747\u6570\u9677\u9631/scene_1/scene_1.mp3") })
-  ] });
-};
-
-;// ./src/remotions/平均数陷阱/scenes/Scene2.tsx
-
-
-
-
-const src_remotions_scenes_Scene2_SCENE_DURATION = 150 + 200 + 129 + 219 + 130 + 377;
-const remotions_scenes_Scene2_calculateScene2Duration = () => {
-  return src_remotions_scenes_Scene2_SCENE_DURATION;
-};
-const remotions_scenes_Scene2_Scene2 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 150, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWConceptCard, { content: [{ "text": "\u5728\u57FA\u7840\u7EDF\u8BA1\u5B66\u91CC\uFF0C", "startFrame": 0, "durationFrames": 42 }, { "text": "\u8FD9\u5C31\u662F\u6700\u7ECF\u5178\u3001", "startFrame": 41, "durationFrames": 35 }, { "text": "\u4E5F\u662F\u6700\u4F1A\u9A97\u4EBA\u7684\u7B97\u672F\u5E73\u5747\u6570\u9677\u9631\u3002", "startFrame": 76, "durationFrames": 74 }], totalDurationFrames: 150, imageSrc: (0,esm.staticFile)("images/\u5E73\u5747\u6570\u9677\u9631/scene_2_1.png"), conceptName: "\u7B97\u672F\u5E73\u5747\u6570\u9677\u9631" }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 150, durationInFrames: 200, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5F53\u4E00\u4E2A\u793E\u4F1A\u7684\u8D22\u5BCC\u6570\u636E\u5206\u5E03\u6781\u5176\u4E0D\u5747\u5300\u7684\u65F6\u5019\uFF0C", "startFrame": 0, "durationFrames": 99 }, { "text": "\u5E73\u5747\u6570\u5C31\u662F\u4E00\u4E2A\u5B8C\u5168\u5931\u53BB\u7075\u9B42\u7684\u9A97\u4EBA\u6307\u6807\u3002", "startFrame": 98, "durationFrames": 102 }], totalDurationFrames: 200, imageSrc: (0,esm.staticFile)("images/\u5E73\u5747\u6570\u9677\u9631/scene_2_2.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u5E73\u5747\u6570", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 350, durationInFrames: 129, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u6700\u5178\u578B\u7684\u4F8B\u5B50\u5C31\u662F\uFF0C", "startFrame": 0, "durationFrames": 42 }, { "text": "\u628A\u9A6C\u4E91\u548C\u4F60\u4E00\u5E73\u5747\uFF0C", "startFrame": 41, "durationFrames": 47 }, { "text": "\u4F60\u4E5F\u80FD\u662F\u4EBF\u4E07\u5BCC\u7FC1\u3002", "startFrame": 88, "durationFrames": 41 }], totalDurationFrames: 129, imageSrc: (0,esm.staticFile)("images/\u5E73\u5747\u6570\u9677\u9631/scene_2_3.png"), enterEffect: "slideBottom", anchors: [{ "text": "\u4EBF\u4E07\u5BCC\u7FC1", "showFrom": 2, "color": "#EF4444", "anim": "popIn", "audioEffect": "woosh" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 479, durationInFrames: 219, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u90A3\u4E9B\u6781\u7AEF\u7684\u5934\u90E8\u8D22\u5BCC\u6570\u503C\uFF0C", "startFrame": 0, "durationFrames": 59 }, { "text": "\u786C\u751F\u751F\u628A\u5E73\u5747\u7EBF\u62C9\u5230\u4E86\u666E\u901A\u4EBA\u5C31\u7B97\u57AB\u7740\u811A\u3001", "startFrame": 58, "durationFrames": 94 }, { "text": "\u751A\u81F3\u642D\u7740\u68AF\u5B50\u90FD\u591F\u4E0D\u5230\u7684\u4E91\u7AEF\u3002", "startFrame": 152, "durationFrames": 66 }], totalDurationFrames: 219, imageSrc: (0,esm.staticFile)("images/\u5E73\u5747\u6570\u9677\u9631/scene_2_4.png"), enterEffect: "slideBottom", anchors: [{ "text": "\u8D22\u5BCC\u6570\u503C", "showFrom": 0, "color": "#000000", "anim": "slideUp", "audioEffect": "ping" }, { "text": "\u5E73\u5747\u7EBF", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 698, durationInFrames: 130, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u76F8\u6BD4\u4E4B\u4E0B\uFF0C", "startFrame": 0, "durationFrames": 26 }, { "text": "\u6211\u4EEC\u771F\u6B63\u5E94\u8BE5\u6B7B\u6B7B\u76EF\u4F4F\u7684\u6307\u6807\u53EB\u505A\u4E2D\u4F4D\u6570\u3002", "startFrame": 25, "durationFrames": 105 }], totalDurationFrames: 130, notText: "\u7B97\u672F\u5E73\u5747\u6570", butText: "\u4E2D\u4F4D\u6570", butSrc: (0,esm.staticFile)("images/\u5E73\u5747\u6570\u9677\u9631/scene_2_5.png"), notContentIndex: 0, butContentIndex: 1, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 828, durationInFrames: 377, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5982\u679C\u628A\u5168\u56FD\u6240\u6709\u7684\u4EBA\uFF0C", "startFrame": 0, "durationFrames": 46 }, { "text": "\u6309\u6536\u5165\u4ECE\u4F4E\u5230\u9AD8\u6392\u6210\u4E00\u6761\u957F\u957F\u7684\u961F\u4F0D\uFF0C", "startFrame": 45, "durationFrames": 94 }, { "text": "\u7AD9\u5728\u6700\u4E2D\u95F4\u90A3\u4E2A\u4F4D\u7F6E\u7684\u4EBA\uFF0C", "startFrame": 139, "durationFrames": 59 }, { "text": "\u6BCF\u4E2A\u6708\u5230\u5E95\u8D5A\u591A\u5C11\u94B1\uFF0C", "startFrame": 198, "durationFrames": 47 }, { "text": "\u90A3\u624D\u662F\u6700\u80FD\u4EE3\u8868\u8FD9\u4E2A\u56FD\u5BB6\u666E\u7F57\u5927\u4F17\u7684\u6700\u771F\u5B9E\u7684\u793E\u4F1A\u5207\u9762\u3002", "startFrame": 245, "durationFrames": 132 }], totalDurationFrames: 377, imageSrc: (0,esm.staticFile)("images/\u5E73\u5747\u6570\u9677\u9631/scene_2_6.png"), enterEffect: "slideBottom", anchors: [{ "text": "\u4E2D\u4F4D\u6570", "showFrom": 2, "color": "#EF4444", "anim": "popIn", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u5E73\u5747\u6570\u9677\u9631/scene_2/scene_2.mp3") })
-  ] });
-};
-
-;// ./src/remotions/平均数陷阱/scenes/Scene3.tsx
-
-
-
-
-const src_remotions_scenes_Scene3_SCENE_DURATION = 151 + 141 + 196 + 174;
-const remotions_scenes_Scene3_calculateScene3Duration = () => {
-  return src_remotions_scenes_Scene3_SCENE_DURATION;
-};
-const remotions_scenes_Scene3_Scene3 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 151, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4EE5\u540E\u5982\u679C\u518D\u770B\u5230\u4EFB\u4F55\u5B8F\u5927\u53D9\u4E8B\u4E0B\u7684\u5E73\u5747\u6570\uFF0C", "startFrame": 0, "durationFrames": 86 }, { "text": "\u8BF7\u52A1\u5FC5\u4FDD\u6301\u6700\u51B7\u9177\u7684\u8B66\u60D5\u3002", "startFrame": 85, "durationFrames": 66 }], totalDurationFrames: 151, imageSrc: (0,esm.staticFile)("images/\u5E73\u5747\u6570\u9677\u9631/scene_3_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u5B8F\u5927\u53D9\u4E8B", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u5E73\u5747\u6570", "showFrom": 0, "color": "#000000", "anim": "popIn", "audioEffect": null }, { "text": "\u8B66\u60D5", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": null }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 151, durationInFrames: 141, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4E0D\u8981\u518D\u4E3A\u90A3\u4E9B\uFF0C", "startFrame": 0, "durationFrames": 35 }, { "text": "\u6839\u672C\u65E0\u6CD5\u4EE3\u8868\u4F60\u751F\u6D3B\u8F68\u8FF9\u7684\u865A\u9AD8\u6570\u636E\u611F\u5230\u4EFB\u4F55\u62B1\u6B49\u3002", "startFrame": 34, "durationFrames": 106 }], totalDurationFrames: 141, imageSrc: (0,esm.staticFile)("images/\u5E73\u5747\u6570\u9677\u9631/scene_3_2.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u865A\u9AD8\u6570\u636E", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 292, durationInFrames: 196, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u6211\u4EEC\u8981\u660E\u767D\uFF0C", "startFrame": 0, "durationFrames": 28 }, { "text": "\u771F\u6B63\u7684\u793E\u4F1A\u8FDB\u6B65\u548C\u6587\u660E\u5E95\u7EBF\uFF0C", "startFrame": 27, "durationFrames": 72 }, { "text": "\u7EDD\u4E0D\u4EC5\u4EC5\u662F\u6781\u5C11\u6570\u6743\u8D35\u7684\u5929\u82B1\u677F\u88AB\u65E0\u9650\u62C9\u9AD8\uFF0C", "startFrame": 99, "durationFrames": 96 }], totalDurationFrames: 196, coreSentence: "\u793E\u4F1A\u8FDB\u6B65\u4E0D\u662F\u6743\u8D35\u5929\u82B1\u677F\u88AB\u62C9\u9AD8" }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 488, durationInFrames: 174, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u800C\u662F\u5927\u591A\u6570\u666E\u901A\u4EBA\u811A\u8E29\u7740\u7684\u90A3\u5757\u6CE5\u6CDE\u5730\u677F\uFF0C", "startFrame": 0, "durationFrames": 102 }, { "text": "\u80FD\u88AB\u575A\u5B9A\u800C\u7A33\u7A33\u5730\u6258\u8D77\u3002", "startFrame": 101, "durationFrames": 72 }], totalDurationFrames: 174, coreSentence: "\u800C\u662F\u591A\u6570\u4EBA\u7684\u6CE5\u6CDE\u5730\u677F\u88AB\u6258\u8D77" }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u5E73\u5747\u6570\u9677\u9631/scene_3/scene_3.mp3") })
-  ] });
-};
-
-;// ./src/remotions/平均数陷阱/平均数陷阱.tsx
-
-
-
-
-
-
-
-
-
-
-
-const \u5E73\u5747\u6570\u9677\u9631Schema = lib.z.object({});
-const src_remotions_TRANSITION_DURATION_0 = 15;
-const src_remotions_SCENE_END_PADDING_0 = 20;
-const src_remotions_COVER_DURATION_FRAMES_0 = 5;
-const src_remotions_sceneConfigs_0 = [
-  { name: "scene1", duration: remotions_scenes_Scene1_calculateScene1Duration() + src_remotions_SCENE_END_PADDING_0, component: remotions_scenes_Scene1_Scene1, label: "\u70ED\u641C\u5F15\u53D1\u7684\u81EA\u5351" },
-  { name: "scene2", duration: remotions_scenes_Scene2_calculateScene2Duration() + src_remotions_SCENE_END_PADDING_0, component: remotions_scenes_Scene2_Scene2, label: "\u5E73\u5747\u6570\u9677\u9631\u4E0E\u4E2D\u4F4D\u6570" },
-  { name: "scene3", duration: remotions_scenes_Scene3_calculateScene3Duration() + src_remotions_SCENE_END_PADDING_0, component: remotions_scenes_Scene3_Scene3, label: "\u5173\u6CE8\u771F\u5B9E\u7684\u793E\u4F1A\u8FDB\u6B65" }
-];
-const MAIN_DURATION_\u5E73\u5747\u6570\u9677\u9631 = src_remotions_sceneConfigs_0.reduce((total, c) => total + c.duration, 0) - (src_remotions_sceneConfigs_0.length - 1) * src_remotions_TRANSITION_DURATION_0;
-const TOTAL_DURATION_\u5E73\u5747\u6570\u9677\u9631 = src_remotions_COVER_DURATION_FRAMES_0 + MAIN_DURATION_\u5E73\u5747\u6570\u9677\u9631;
-const src_remotions_ProgressBar_0 = () => {
-  var _a;
-  const frame = (0,esm.useCurrentFrame)();
-  if (frame < src_remotions_COVER_DURATION_FRAMES_0) {
-    return null;
-  }
-  const contentFrame = frame - src_remotions_COVER_DURATION_FRAMES_0;
-  let currentStart = 0;
-  const segments = src_remotions_sceneConfigs_0.map((c, i) => {
-    const isLast = i === src_remotions_sceneConfigs_0.length - 1;
-    const segmentDuration = isLast ? c.duration : c.duration - src_remotions_TRANSITION_DURATION_0;
-    const segment = { start: currentStart, duration: segmentDuration };
-    currentStart += segmentDuration;
-    return segment;
-  });
-  const activeIndex = segments.findIndex((seg) => contentFrame >= seg.start && contentFrame < seg.start + seg.duration);
-  const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
-  const activeLabel = ((_a = src_remotions_sceneConfigs_0[validActiveIndex]) == null ? void 0 : _a.label) || "";
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: {
-    position: "absolute",
-    top: 40,
-    left: 40,
-    right: 40,
-    display: "flex",
-    flexDirection: "column",
-    gap: 16,
-    zIndex: 100
-  }, children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, height: 8 }, children: segments.map((seg, i) => {
-      const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));
-      const isActive = i === validActiveIndex;
-      return /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        flex: 1,
-        backgroundColor: isActive ? "rgba(34, 43, 69, 0.18)" : "rgba(34, 43, 69, 0.1)",
-        borderRadius: 999,
-        overflow: "hidden",
-        border: isActive ? "1px solid rgba(34, 43, 69, 0.32)" : "1px solid rgba(34, 43, 69, 0.2)",
-        boxShadow: isActive ? "0 3px 10px rgba(31, 41, 55, 0.12)" : "0 1px 4px rgba(31, 41, 55, 0.08)"
-      }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        width: `${progress * 100}%`,
-        height: "100%",
-        background: isActive ? "linear-gradient(90deg, rgba(29, 78, 216, 0.95), rgba(56, 189, 248, 0.92))" : "rgba(30, 41, 59, 0.72)",
-        boxShadow: isActive ? "0 0 12px rgba(37, 99, 235, 0.35)" : "none"
-      } }) }, i);
-    }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-      fontSize: 30,
-      fontWeight: 700,
-      fontFamily: '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif',
-      letterSpacing: 0.4,
-      color: "rgba(17, 24, 39, 0.95)",
-      textAlign: "left",
-      textShadow: "0 1px 2px rgba(255,255,255,0.45)",
-      padding: "6px 14px",
-      backgroundColor: "rgba(255, 255, 255, 0.58)",
-      border: "1px solid rgba(17, 24, 39, 0.12)",
-      borderRadius: 10,
-      alignSelf: "flex-start",
-      backdropFilter: "blur(6px)",
-      boxShadow: "0 6px 20px rgba(15, 23, 42, 0.12)"
-    }, children: activeLabel })
-  ] });
-};
-const \u5E73\u5747\u6570\u9677\u9631 = () => {
-  const frame = (0,esm.useCurrentFrame)();
-  const bgShiftX = (0,esm.interpolate)(frame % 240, [0, 120, 240], [-4, 4, -4], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const bgShiftY = (0,esm.interpolate)(frame % 180, [0, 90, 180], [-3, 3, -3], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const bgBreathOpacity = (0,esm.interpolate)(frame % 150, [0, 75, 150], [0.22, 0.34, 0.22], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      esm.Audio,
-      {
-        src: (0,esm.staticFile)("audio/effects/Seven_Measured_Breaths.mp3"),
-        loop: true,
-        volume: 0.22,
-        name: "Background music"
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          height: "100%",
-          width: "100%",
-          background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)"
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          inset: "-6%",
-          pointerEvents: "none",
-          opacity: bgBreathOpacity,
-          transform: `translate(${bgShiftX}px, ${bgShiftY}px)`,
-          background: "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)"
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { durationInFrames: src_remotions_COVER_DURATION_FRAMES_0, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      StaticCover,
-      {
-        title: "\u5E73\u5747\u6570\u9677\u9631",
-        subtitle: "\u5E73\u5747\u6570\u9677\u9631\u4E0E\u4E2D\u4F4D\u6570\u7684\u91CD\u8981\u6027",
-        themeColor: "#2563EB",
-        badge: "\u7EDF\u8BA1\u7D20\u517B \xB7 \u7406\u6027\u601D\u8003"
-      }
-    ) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: src_remotions_COVER_DURATION_FRAMES_0, durationInFrames: MAIN_DURATION_\u5E73\u5747\u6570\u9677\u9631, children: /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(
-        "div",
-        {
-          style: {
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "10%",
-            minHeight: 48,
-            backgroundColor: "rgba(0,0,0,0.5)"
-          }
-        }
-      ),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries, { children: src_remotions_sceneConfigs_0.map((config, index) => {
-        const SceneComp = config.component;
-        const isLast = index === src_remotions_sceneConfigs_0.length - 1;
-        return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries.Sequence, { durationInFrames: config.duration, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(SceneComp, {}) }),
-          !isLast && /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            TransitionSeries.Transition,
-            {
-              timing: linearTiming({ durationInFrames: src_remotions_TRANSITION_DURATION_0 }),
-              presentation: fade()
-            }
-          )
-        ] }, config.name);
-      }) })
-    ] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(src_remotions_ProgressBar_0, {})
-  ] });
-};
-
-;// ./src/remotions/相关不等于因果/scenes/Scene1.tsx
-
-
-
-
-const src_remotions_scenes_Scene1_SCENE_DURATION = 351 + 268 + 139 + 226 + 354 + 146;
-const src_remotions_scenes_Scene1_calculateScene1Duration = () => {
-  return src_remotions_scenes_Scene1_SCENE_DURATION;
-};
-const src_remotions_scenes_Scene1_Scene1 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 351, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4F60\u634F\u7740\u9F3B\u5B50\u704C\u4E0B\u4E00\u5927\u7897\u82E6\u6DA9\u53D1\u9ED1\u7684\u6C64\u836F\uFF0C", "startFrame": 0, "durationFrames": 96 }, { "text": "\u5FCD\u53D7\u7740\u80C3\u91CC\u7684\u7FFB\u6C5F\u5012\u6D77\u3002", "startFrame": 96, "durationFrames": 63 }, { "text": "\u4E09\u5929\u540E\u75C5\u7EC8\u4E8E\u597D\u4E86\uFF0C", "startFrame": 158, "durationFrames": 70 }, { "text": "\u4F60\u7ACB\u523B\u5728\u670B\u53CB\u5708\u53D1\u4E86\u6761\u957F\u6587\uFF0C", "startFrame": 228, "durationFrames": 58 }, { "text": "\u611F\u6168\u8001\u7956\u5B97\u7684\u667A\u6167\u5C31\u662F\u725B", "startFrame": 285, "durationFrames": 65 }], totalDurationFrames: 351, imageSrc: (0,esm.staticFile)("images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_1_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u8001\u7956\u5B97\u7684\u667A\u6167", "showFrom": 4, "color": "#000000", "anim": "spring", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 351, durationInFrames: 268, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4F46\u4F60\u6839\u672C\u770B\u4E0D\u89C1\uFF0C", "startFrame": 0, "durationFrames": 38 }, { "text": "\u5728\u4F60\u660F\u7761\u53D1\u6C57\u7684\u65F6\u5019\uFF0C", "startFrame": 37, "durationFrames": 48 }, { "text": "\u4F60\u4F53\u5185\u90A3\u5957\u5F3A\u5927\u7684\u514D\u75AB\u7CFB\u7EDF\uFF0C", "startFrame": 85, "durationFrames": 69 }, { "text": "\u662F\u5982\u4F55\u4E0D\u7720\u4E0D\u4F11\u5730\u75AF\u72C2\u640F\u6740\uFF0C", "startFrame": 153, "durationFrames": 64 }, { "text": "\u624D\u5E2E\u4F60\u593A\u56DE\u4E86\u5065\u5EB7\u7684\u9635\u5730\u3002", "startFrame": 216, "durationFrames": 51 }], totalDurationFrames: 268, imageSrc: (0,esm.staticFile)("images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_1_2.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u514D\u75AB\u7CFB\u7EDF", "showFrom": 2, "color": "#000000", "anim": "spring", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 619, durationInFrames: 139, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u6211\u4EEC\u6240\u6709\u4EBA\uFF0C", "startFrame": 0, "durationFrames": 29 }, { "text": "\u90FD\u6781\u5176\u5BB9\u6613\u6389\u8FDB\u8FD9\u79CD\u770B\u4F3C\u76F8\u5173\u7684\u56E0\u679C\u9519\u89C9\u91CC\u3002", "startFrame": 28, "durationFrames": 111 }], totalDurationFrames: 139, coreSentence: "\u6211\u4EEC\u5BB9\u6613\u6389\u8FDB\u770B\u4F3C\u76F8\u5173\u7684\u56E0\u679C\u9519\u89C9\u91CC", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u770B\u4F3C\u76F8\u5173", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 758, durationInFrames: 226, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u5343\u4E07\u4E0D\u8981\u89C9\u5F97\u8FD9\u662F\u56E0\u4E3A\u6211\u4EEC\u7F3A\u4E4F\u5E38\u8BC6\uFF0C", "startFrame": 0, "durationFrames": 78 }, { "text": "\u8FD9\u5176\u5B9E\u662F\u4EBA\u7C7B\u5927\u8111\u5728\u51E0\u767E\u4E07\u5E74\u8FDB\u5316\u4E2D\uFF0C", "startFrame": 77, "durationFrames": 75 }, { "text": "\u6B7B\u6B7B\u70D9\u5370\u5728\u57FA\u56E0\u91CC\u7684\u8865\u4E01\u7F3A\u9677\u3002", "startFrame": 151, "durationFrames": 75 }], totalDurationFrames: 226, notText: "\u7F3A\u4E4F\u5E38\u8BC6", butText: "\u57FA\u56E0\u7684\u8865\u4E01\u7F3A\u9677", butSrc: (0,esm.staticFile)("images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_1_4.png"), notContentIndex: 0, butContentIndex: 2, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 984, durationInFrames: 354, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5728\u8FDC\u53E4\u65F6\u4EE3\uFF0C", "startFrame": 0, "durationFrames": 34 }, { "text": "\u8349\u4E1B\u4E00\u52A8\u54EA\u6015\u53EA\u662F\u4E00\u9635\u98CE\uFF0C", "startFrame": 33, "durationFrames": 71 }, { "text": "\u6211\u4EEC\u7684\u5927\u8111\u4E5F\u88AB\u8BBE\u5B9A\u4E3A\u5FC5\u987B\u9A6C\u4E0A\u8054\u60F3\u5230\u8001\u864E\uFF0C", "startFrame": 104, "durationFrames": 98 }, { "text": "\u56E0\u4E3A\u53EA\u6709\u5F3A\u884C\u628A\u5148\u540E\u53D1\u751F\u7684\u4E8B\u60C5\u5EFA\u7ACB\u56E0\u679C\u8054\u7CFB\uFF0C", "startFrame": 201, "durationFrames": 98 }, { "text": "\u6211\u4EEC\u7684\u7956\u5148\u624D\u80FD\u4FDD\u547D\u3002", "startFrame": 298, "durationFrames": 55 }], totalDurationFrames: 354, imageSrc: (0,esm.staticFile)("images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_1_5.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u8FDC\u53E4\u65F6\u4EE3", "showFrom": 0, "color": "#000000", "anim": "spring", "audioEffect": "ping" }, { "text": "\u8349\u4E1B\u4E00\u52A8", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }, { "text": "\u8054\u60F3\u8001\u864E", "showFrom": 2, "color": "#EF4444", "anim": "spring", "audioEffect": "woosh" }, { "text": "\u4FDD\u547D", "showFrom": 4, "color": "#000000", "anim": "popIn", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 1338, durationInFrames: 146, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u4F46\u5728\u590D\u6742\u7684\u73B0\u4EE3\u793E\u4F1A\uFF0C", "startFrame": 0, "durationFrames": 48 }, { "text": "\u8FD9\u79CD\u751F\u5B58\u672C\u80FD\u53CD\u800C\u6210\u4E86\u88AB\u522B\u4EBA\u6536\u5272\u7684\u9570\u5200\u3002", "startFrame": 48, "durationFrames": 98 }], totalDurationFrames: 146, coreSentence: "\u751F\u5B58\u672C\u80FD\u6210\u4E86\u88AB\u6536\u5272\u7684\u9570\u5200", coreSentenceAnchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_1/scene_1.mp3") })
-  ] });
-};
-
-;// ./src/remotions/相关不等于因果/scenes/Scene2.tsx
-
-
-
-
-const src_remotions_scenes_Scene2_SCENE_DURATION_0 = 173 + 189 + 224 + 107 + 168 + 188;
-const src_remotions_scenes_Scene2_calculateScene2Duration = () => {
-  return src_remotions_scenes_Scene2_SCENE_DURATION_0;
-};
-const src_remotions_scenes_Scene2_Scene2 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 173, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSplitCompare, { content: [{ "text": "\u5728\u7EDF\u8BA1\u5B66\u548C\u79D1\u5B66\u54F2\u5B66\u7684\u6846\u67B6\u91CC\uFF0C", "startFrame": 0, "durationFrames": 79 }, { "text": "\u8FD9\u5176\u5B9E\u53EB\u4F5C\u6DF7\u6DC6\u4E86\u76F8\u5173\u6027\u4E0E\u56E0\u679C\u6027\u3002", "startFrame": 78, "durationFrames": 94 }], totalDurationFrames: 173, leftSrc: (0,esm.staticFile)("images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_2_1_left.png"), rightSrc: (0,esm.staticFile)("images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_2_1_right.png"), leftLabel: "\u76F8\u5173\u6027", rightLabel: "\u56E0\u679C\u6027" }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 173, durationInFrames: 189, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u4E24\u4EF6\u4E8B\u60C5\u51D1\u5DE7\u540C\u65F6\u53D1\u751F\uFF0C", "startFrame": 0, "durationFrames": 60 }, { "text": "\u6216\u8005\u4E00\u524D\u4E00\u540E\u53D1\u751F\uFF0C", "startFrame": 60, "durationFrames": 51 }, { "text": "\u7EDD\u5BF9\u4E0D\u4EE3\u8868\u662F\u524D\u8005\u5BFC\u81F4\u4E86\u540E\u8005\u3002", "startFrame": 110, "durationFrames": 79 }], totalDurationFrames: 189, notText: "\u524D\u8005\u5BFC\u81F4\u540E\u8005", butText: "\u5B58\u5728\u5176\u4ED6\u53D8\u91CF", butSrc: (0,esm.staticFile)("images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_2_2.png"), notContentIndex: 2, butContentIndex: 1, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 362, durationInFrames: 224, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8FD9\u4E2D\u95F4\u5F80\u5F80\u9690\u85CF\u7740\u4E00\u4E2A\u770B\u4E0D\u89C1\u7684\u7B2C\u4E09\u53D8\u91CF\uFF0C", "startFrame": 0, "durationFrames": 92 }, { "text": "\u6BD4\u5982\u4F60\u5728\u559D\u504F\u65B9\u7684\u540C\u65F6\uFF0C", "startFrame": 91, "durationFrames": 57 }, { "text": "\u662F\u4E0D\u662F\u4E5F\u8BF7\u4E86\u5047\u589E\u52A0\u4E86\u7761\u7720\u65F6\u95F4\uFF1F", "startFrame": 148, "durationFrames": 76 }], totalDurationFrames: 224, imageSrc: (0,esm.staticFile)("images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_2_3.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u7B2C\u4E09\u53D8\u91CF", "showFrom": 0, "color": "#000000", "anim": "spring", "audioEffect": "ping" }, { "text": "\u559D\u504F\u65B9", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": null }, { "text": "\u7761\u7720\u65F6\u95F4", "showFrom": 2, "color": "#000000", "anim": "slideUp", "audioEffect": null }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 586, durationInFrames: 107, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u66F4\u81F4\u547D\u7684\u662F\uFF0C", "startFrame": 0, "durationFrames": 28 }, { "text": "\u6211\u4EEC\u6C38\u8FDC\u7F3A\u4E4F\u4E00\u4E2A\u4E25\u8C28\u7684\u5BF9\u7167\u5B9E\u9A8C\u3002", "startFrame": 27, "durationFrames": 80 }], totalDurationFrames: 107, imageSrc: (0,esm.staticFile)("images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_2_4.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u5BF9\u7167\u5B9E\u9A8C", "showFrom": 1, "color": "#000000", "anim": "highlight", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 693, durationInFrames: 168, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5982\u679C\u6CA1\u6709\u4E00\u4E2A\u5E74\u9F84\u3001", "startFrame": 0, "durationFrames": 37 }, { "text": "\u4F53\u8D28\u3001", "startFrame": 36, "durationFrames": 19 }, { "text": "\u75C5\u60C5\u548C\u4F60\u5B8C\u5168\u4E00\u6837\uFF0C", "startFrame": 54, "durationFrames": 46 }, { "text": "\u4F46\u4EC0\u4E48\u504F\u65B9\u90FD\u6CA1\u5403\u7684\u4EBA\u4F5C\u4E3A\u53C2\u7167\u7269\uFF0C", "startFrame": 100, "durationFrames": 68 }], totalDurationFrames: 168, imageSrc: (0,esm.staticFile)("images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_2_5.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u53C2\u7167\u7269", "showFrom": 3, "color": "#000000", "anim": "highlight", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 861, durationInFrames: 188, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWDosAndDonts, { content: [{ "text": "\u4F60\u6839\u672C\u6CA1\u6709\u529E\u6CD5\u5728\u903B\u8F91\u4E0A\u6392\u9664\uFF0C", "startFrame": 0, "durationFrames": 64 }, { "text": "\u8FD9\u7A76\u7ADF\u662F\u795E\u79D8\u8349\u836F\u7684\u6CD5\u529B\uFF0C", "startFrame": 63, "durationFrames": 53 }, { "text": "\u8FD8\u662F\u4F60\u8EAB\u4F53\u786C\u625B\u8FC7\u53BB\u7684\u81EA\u53D1\u75CA\u6108\u3002", "startFrame": 115, "durationFrames": 73 }], totalDurationFrames: 188, leftSrc: (0,esm.staticFile)("images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_2_6_left.png"), rightSrc: (0,esm.staticFile)("images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_2_6_right.png"), dontLabel: "\u274C \u504F\u65B9\u795E\u529B", doLabel: "\u2705 \u81EA\u53D1\u75CA\u6108" }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_2/scene_2.mp3") })
-  ] });
-};
-
-;// ./src/remotions/相关不等于因果/scenes/Scene3.tsx
-
-
-
-
-const src_remotions_scenes_Scene3_SCENE_DURATION_0 = 201 + 264 + 154 + 164;
-const src_remotions_scenes_Scene3_calculateScene3Duration = () => {
-  return src_remotions_scenes_Scene3_SCENE_DURATION_0;
-};
-const src_remotions_scenes_Scene3_Scene3 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 201, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u6240\u4EE5\uFF0C", "startFrame": 0, "durationFrames": 24 }, { "text": "\u4E0B\u6B21\u518D\u6709\u4EFB\u4F55\u4EBA\u7528\u4EB2\u8EAB\u7ECF\u5386\u5411\u4F60\u515C\u552E\u67D0\u79CD\u795E\u6548\u504F\u65B9\u65F6\uFF0C", "startFrame": 24, "durationFrames": 118 }, { "text": "\u8BF7\u5728\u5FC3\u91CC\u8C28\u8BB0\u4E09\u4E2A\u51C6\u5219\uFF1A", "startFrame": 141, "durationFrames": 59 }], totalDurationFrames: 201, imageSrc: (0,esm.staticFile)("images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_3_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u4EB2\u8EAB\u7ECF\u5386", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }, { "text": "\u795E\u6548\u504F\u65B9", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "woosh" }, { "text": "\u4E09\u4E2A\u51C6\u5219", "showFrom": 2, "color": "#000000", "anim": "slideUp", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 201, durationInFrames: 264, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMultiImage, { content: [{ "text": "1.\u76F8\u5173\u53EA\u662F\u7EBF\u7D22\uFF0C", "startFrame": 0, "durationFrames": 54 }, { "text": "\u4E0D\u662F\u5B9A\u8BBA\uFF1B", "startFrame": 53, "durationFrames": 26 }, { "text": "2.\u68C0\u67E5\u7B2C\u4E09\u53D8\u91CF\u548C\u53CD\u5411\u56E0\u679C\uFF1B", "startFrame": 78, "durationFrames": 90 }, { "text": "3.\u771F\u6B63\u7684\u56E0\u679C\u9700\u8981\u53CC\u76F2\u5B9E\u9A8C\u8BC1\u660E\u3002", "startFrame": 168, "durationFrames": 96 }], totalDurationFrames: 264, groups: [{ "textIndex": 0, "image": { "src": "images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_3_2_img0.png" }, "anchor": { "text": "\u76F8\u5173\u53EA\u662F\u7EBF\u7D22", "color": "#000000", "anim": "popIn", "audioEffect": "ping" } }, { "textIndex": 2, "image": { "src": "images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_3_2_img1.png" }, "anchor": { "text": "\u68C0\u67E5\u7B2C\u4E09\u53D8\u91CF", "color": "#000000", "anim": "popIn", "audioEffect": "ping" } }, { "textIndex": 3, "image": { "src": "images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_3_2_img2.png" }, "anchor": { "text": "\u53CC\u76F2\u5B9E\u9A8C", "color": "#000000", "anim": "popIn", "audioEffect": "ping" } }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 465, durationInFrames: 154, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u771F\u6B63\u7684\u5C0A\u91CD\u4F20\u7EDF\uFF0C", "startFrame": 0, "durationFrames": 43 }, { "text": "\u7EDD\u4E0D\u662F\u76F2\u4ECE\uFF0C", "startFrame": 42, "durationFrames": 31 }, { "text": "\u800C\u662F\u7528\u73B0\u4EE3\u903B\u8F91\u53BB\u795B\u9B45\u548C\u9A8C\u8BC1\u3002", "startFrame": 73, "durationFrames": 81 }], totalDurationFrames: 154, notText: "\u76F2\u4ECE", butText: "\u903B\u8F91\u795B\u9B45\u548C\u9A8C\u8BC1", butSrc: (0,esm.staticFile)("images/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_3_3.png"), notContentIndex: 1, butContentIndex: 2, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 619, durationInFrames: 164, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u4F60\u5B9D\u8D35\u7684\u5065\u5EB7\u548C\u94B1\u5305\uFF0C", "startFrame": 0, "durationFrames": 48 }, { "text": "\u503C\u5F97\u4EA4\u4ED8\u7ED9\u4E25\u8C28\u7684\u8BC1\u636E\uFF0C", "startFrame": 48, "durationFrames": 55 }, { "text": "\u800C\u4E0D\u662F\u4E00\u6B21\u5076\u7136\u7684\u5DE7\u5408\u3002", "startFrame": 102, "durationFrames": 62 }], totalDurationFrames: 164, coreSentence: "\u4F60\u5B9D\u8D35\u7684\u5065\u5EB7\u548C\u94B1\u5305\uFF0C\u503C\u5F97\u4EA4\u4ED8\u7ED9\u4E25\u8C28\u8BC1\u636E\uFF0C\u800C\u975E\u5076\u7136\u5DE7\u5408", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u4E25\u8C28\u8BC1\u636E", "color": "#EF4444" }, { "coreSentenceAnchor": "\u5076\u7136\u5DE7\u5408", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C/scene_3/scene_3.mp3") })
-  ] });
-};
-
-;// ./src/remotions/相关不等于因果/相关不等于因果.tsx
-
-
-
-
-
-
-
-
-
-
-
-const \u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679CSchema = lib.z.object({});
-const src_remotions_TRANSITION_DURATION_1 = 15;
-const src_remotions_SCENE_END_PADDING_1 = 20;
-const src_remotions_COVER_DURATION_FRAMES_1 = 5;
-const src_remotions_sceneConfigs_1 = [
-  { name: "scene1", duration: src_remotions_scenes_Scene1_calculateScene1Duration() + src_remotions_SCENE_END_PADDING_1, component: src_remotions_scenes_Scene1_Scene1, label: "\u559D\u836F\u75CA\u6108\u7684\u9519\u89C9" },
-  { name: "scene2", duration: src_remotions_scenes_Scene2_calculateScene2Duration() + src_remotions_SCENE_END_PADDING_1, component: src_remotions_scenes_Scene2_Scene2, label: "\u76F8\u5173\u6027\u4E0E\u56E0\u679C\u6027\u7684\u6DF7\u6DC6" },
-  { name: "scene3", duration: src_remotions_scenes_Scene3_calculateScene3Duration() + src_remotions_SCENE_END_PADDING_1, component: src_remotions_scenes_Scene3_Scene3, label: "\u7406\u6027\u770B\u5F85\u504F\u65B9\u4E0E\u4F20\u7EDF" }
-];
-const MAIN_DURATION_\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C = src_remotions_sceneConfigs_1.reduce((total, c) => total + c.duration, 0) - (src_remotions_sceneConfigs_1.length - 1) * src_remotions_TRANSITION_DURATION_1;
-const TOTAL_DURATION_\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C = src_remotions_COVER_DURATION_FRAMES_1 + MAIN_DURATION_\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C;
-const src_remotions_ProgressBar_1 = () => {
-  var _a;
-  const frame = (0,esm.useCurrentFrame)();
-  if (frame < src_remotions_COVER_DURATION_FRAMES_1) {
-    return null;
-  }
-  const contentFrame = frame - src_remotions_COVER_DURATION_FRAMES_1;
-  let currentStart = 0;
-  const segments = src_remotions_sceneConfigs_1.map((c, i) => {
-    const isLast = i === src_remotions_sceneConfigs_1.length - 1;
-    const segmentDuration = isLast ? c.duration : c.duration - src_remotions_TRANSITION_DURATION_1;
-    const segment = { start: currentStart, duration: segmentDuration };
-    currentStart += segmentDuration;
-    return segment;
-  });
-  const activeIndex = segments.findIndex((seg) => contentFrame >= seg.start && contentFrame < seg.start + seg.duration);
-  const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
-  const activeLabel = ((_a = src_remotions_sceneConfigs_1[validActiveIndex]) == null ? void 0 : _a.label) || "";
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: {
-    position: "absolute",
-    top: 40,
-    left: 40,
-    right: 40,
-    display: "flex",
-    flexDirection: "column",
-    gap: 16,
-    zIndex: 100
-  }, children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, height: 8 }, children: segments.map((seg, i) => {
-      const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));
-      const isActive = i === validActiveIndex;
-      return /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        flex: 1,
-        backgroundColor: isActive ? "rgba(34, 43, 69, 0.18)" : "rgba(34, 43, 69, 0.1)",
-        borderRadius: 999,
-        overflow: "hidden",
-        border: isActive ? "1px solid rgba(34, 43, 69, 0.32)" : "1px solid rgba(34, 43, 69, 0.2)",
-        boxShadow: isActive ? "0 3px 10px rgba(31, 41, 55, 0.12)" : "0 1px 4px rgba(31, 41, 55, 0.08)"
-      }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        width: `${progress * 100}%`,
-        height: "100%",
-        background: isActive ? "linear-gradient(90deg, rgba(29, 78, 216, 0.95), rgba(56, 189, 248, 0.92))" : "rgba(30, 41, 59, 0.72)",
-        boxShadow: isActive ? "0 0 12px rgba(37, 99, 235, 0.35)" : "none"
-      } }) }, i);
-    }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-      fontSize: 30,
-      fontWeight: 700,
-      fontFamily: '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif',
-      letterSpacing: 0.4,
-      color: "rgba(17, 24, 39, 0.95)",
-      textAlign: "left",
-      textShadow: "0 1px 2px rgba(255,255,255,0.45)",
-      padding: "6px 14px",
-      backgroundColor: "rgba(255, 255, 255, 0.58)",
-      border: "1px solid rgba(17, 24, 39, 0.12)",
-      borderRadius: 10,
-      alignSelf: "flex-start",
-      backdropFilter: "blur(6px)",
-      boxShadow: "0 6px 20px rgba(15, 23, 42, 0.12)"
-    }, children: activeLabel })
-  ] });
-};
-const \u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C = () => {
-  const frame = (0,esm.useCurrentFrame)();
-  const bgShiftX = (0,esm.interpolate)(frame % 240, [0, 120, 240], [-4, 4, -4], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const bgShiftY = (0,esm.interpolate)(frame % 180, [0, 90, 180], [-3, 3, -3], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  const bgBreathOpacity = (0,esm.interpolate)(frame % 150, [0, 75, 150], [0.22, 0.34, 0.22], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp"
-  });
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      esm.Audio,
-      {
-        src: (0,esm.staticFile)("audio/effects/Seven_Measured_Breaths.mp3"),
-        loop: true,
-        volume: 0.22,
-        name: "Background music"
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          height: "100%",
-          width: "100%",
-          background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)"
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      "div",
-      {
-        style: {
-          position: "absolute",
-          inset: "-6%",
-          pointerEvents: "none",
-          opacity: bgBreathOpacity,
-          transform: `translate(${bgShiftX}px, ${bgShiftY}px)`,
-          background: "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)"
-        }
-      }
-    ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { durationInFrames: src_remotions_COVER_DURATION_FRAMES_1, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      StaticCover,
-      {
-        title: "\u76F8\u5173\u2260\u56E0\u679C",
-        subtitle: "\u907F\u514D\u56E0\u679C\u9519\u89C9\uFF0C\u7406\u6027\u770B\u5F85\u7ECF\u9A8C\u4E0E\u4F20\u7EDF",
-        themeColor: "#2563EB",
-        badge: "\u7EDF\u8BA1\u7D20\u517B \xB7 \u7406\u6027\u601D\u8003"
-      }
-    ) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: src_remotions_COVER_DURATION_FRAMES_1, durationInFrames: MAIN_DURATION_\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C, children: /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(
-        "div",
-        {
-          style: {
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "10%",
-            minHeight: 48,
-            backgroundColor: "rgba(0,0,0,0.5)"
-          }
-        }
-      ),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries, { children: src_remotions_sceneConfigs_1.map((config, index) => {
-        const SceneComp = config.component;
-        const isLast = index === src_remotions_sceneConfigs_1.length - 1;
-        return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries.Sequence, { durationInFrames: config.duration, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(SceneComp, {}) }),
-          !isLast && /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            TransitionSeries.Transition,
-            {
-              timing: linearTiming({ durationInFrames: src_remotions_TRANSITION_DURATION_1 }),
-              presentation: fade()
-            }
-          )
-        ] }, config.name);
-      }) })
-    ] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(src_remotions_ProgressBar_1, {})
-  ] });
-};
-
-;// ./src/remotions/认知偏见_确认偏误/scenes/Scene1.tsx
-
-
-
-
-const src_remotions_scenes_Scene1_SCENE_DURATION_0 = 77 + 182 + 66 + 52;
-const src_remotions_scenes_Scene1_calculateScene1Duration_0 = () => {
-  return src_remotions_scenes_Scene1_SCENE_DURATION_0;
-};
-const src_remotions_scenes_Scene1_Scene1_0 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 77, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u76EF\u7740\u6EE1\u5C4F\u5435\u5F97\u4E0D\u53EF\u5F00\u4EA4\u7684\u5F39\u5E55\u3002", "startFrame": 0, "durationFrames": 77 }], totalDurationFrames: 77, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_1_1.png"), enterEffect: "breathe", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 77, durationInFrames: 182, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWBeatSequence, { content: [{ "text": "\u4F60\u731B\u5730\u4E00\u62CD\u5927\u817F\u3002", "startFrame": 0, "durationFrames": 37 }, { "text": "\u5634\u91CC\u561F\u56D4\u7740\u6211\u5C31\u77E5\u9053\u4F1A\u8FD9\u6837\u3002", "startFrame": 36, "durationFrames": 81 }, { "text": "\u4F60\u770B\u679C\u7136\u53C8\u662F\u8FD9\u7FA4\u4EBA\u641E\u7684\u9B3C\u3002", "startFrame": 116, "durationFrames": 65 }], totalDurationFrames: 182, stages: [{ imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_1_2_img0.png"), enterEffect: "breathe", tone: "calm" }, { imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_1_2_img1.png"), enterEffect: "slideBottom" }, { imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_1_2_img2.png"), enterEffect: "slideBottom" }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 259, durationInFrames: 66, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8FD9\u79CD\u4F17\u4EBA\u7686\u9189\u6211\u72EC\u9192\u7684\u5FEB\u611F\u3002", "startFrame": 0, "durationFrames": 66 }], totalDurationFrames: 66, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_1_3.png"), enterEffect: "zoomIn", anchors: [{ "text": "\u72EC\u9192", "showFrom": 0, "color": "#EF4444", "anim": "highlight", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 325, durationInFrames: 52, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u662F\u4E0D\u662F\u8BA9\u4F60\u89C9\u5F97\u975E\u5E38\u723D\u5FEB\u3002", "startFrame": 0, "durationFrames": 52 }], totalDurationFrames: 52, coreSentence: "\u662F\u4E0D\u662F\u8BA9\u4F60\u89C9\u5F97\u975E\u5E38\u723D\u5FEB\u3002", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u975E\u5E38\u723D\u5FEB", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_1/scene_1.mp3") })
-  ] });
-};
-
-;// ./src/remotions/认知偏见_确认偏误/scenes/Scene2.tsx
-
-
-
-
-const src_remotions_scenes_Scene2_SCENE_DURATION_1 = 219 + 142 + 278;
-const src_remotions_scenes_Scene2_calculateScene2Duration_0 = () => {
-  return src_remotions_scenes_Scene2_SCENE_DURATION_1;
-};
-const src_remotions_scenes_Scene2_Scene2_0 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 219, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u6211\u4EEC\u603B\u4EE5\u4E3A\u81EA\u5DF1\u6709\u4E00\u53CC\u6167\u773C\u3002", "startFrame": 0, "durationFrames": 63 }, { "text": "\u80FD\u770B\u900F\u4E92\u8054\u7F51\u4E0A\u7684\u8747\u8425\u72D7\u72D7\u3002", "startFrame": 62, "durationFrames": 73 }, { "text": "\u4F46\u5176\u5B9E\u6211\u4EEC\u90FD\u88AB\u81EA\u5DF1\u7684\u5927\u8111\u9A97\u4E86\u3002", "startFrame": 134, "durationFrames": 84 }], totalDurationFrames: 219, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_2_1.png"), enterEffect: "slideBottom", anchors: [{ "text": "\u4E00\u53CC\u6167\u773C", "showFrom": 0, "color": "#000000", "anim": "spring", "audioEffect": "ping" }, { "text": "\u5927\u8111\u9A97\u4E86", "showFrom": 2, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 219, durationInFrames: 142, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u8FD9\u4E0D\u662F\u56E0\u4E3A\u6211\u4EEC\u7F3A\u4E4F\u5224\u65AD\u529B\u3002", "startFrame": 0, "durationFrames": 59 }, { "text": "\u800C\u662F\u5927\u8111\u4E3A\u4E86\u5077\u61D2\u7559\u4E0B\u7684\u8FDB\u5316\u6F0F\u6D1E\u3002", "startFrame": 58, "durationFrames": 83 }], totalDurationFrames: 142, notText: "\u7F3A\u4E4F\u5224\u65AD\u529B", butText: "\u5927\u8111\u4E3A\u4E86\u5077\u61D2", butSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_2_2.png"), notContentIndex: 0, butContentIndex: 1, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 361, durationInFrames: 278, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTimeline, { content: [{ "text": "\u5404\u5927\u5E73\u53F0\u65E9\u5C31\u628A\u8FD9\u4E2A\u6F0F\u6D1E\u73A9\u660E\u767D\u4E86\u3002", "startFrame": 0, "durationFrames": 75 }, { "text": "\u4ED6\u4EEC\u7CBE\u51C6\u6295\u5582\u4F60\u7231\u770B\u7684\u89C2\u70B9\u3002", "startFrame": 74, "durationFrames": 70 }, { "text": "\u628A\u4F60\u5708\u517B\u5728\u8212\u9002\u7684\u8327\u623F\u91CC\u3002", "startFrame": 144, "durationFrames": 61 }, { "text": "\u8BA9\u4F60\u8BEF\u4EE5\u4E3A\u5168\u4E16\u754C\u90FD\u548C\u4F60\u60F3\u7684\u4E00\u6837\u3002", "startFrame": 204, "durationFrames": 73 }], totalDurationFrames: 278, images: [{ src: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_2_3_img0.png"), position: "left", enterEffect: "slideLeft", textIndex: 0 }, { src: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_2_3_img1.png"), position: "center", enterEffect: "fadeIn", textIndex: 1 }, { src: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_2_3_img2.png"), position: "right", enterEffect: "slideLeft", textIndex: 2 }], anchors: [{ "text": "\u5927\u8111\u6F0F\u6D1E", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u6295\u5582\u89C2\u70B9", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u4FE1\u606F\u8327\u623F", "showFrom": 2, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_2/scene_2.mp3") })
-  ] });
-};
-
-;// ./src/remotions/认知偏见_确认偏误/scenes/Scene3.tsx
-
-
-
-
-const src_remotions_scenes_Scene3_SCENE_DURATION_1 = 232 + 213 + 142;
-const src_remotions_scenes_Scene3_calculateScene3Duration_0 = () => {
-  return src_remotions_scenes_Scene3_SCENE_DURATION_1;
-};
-const src_remotions_scenes_Scene3_Scene3_0 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 232, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWConceptCard, { content: [{ "text": "\u7FFB\u5F00\u884C\u4E3A\u7ECF\u6D4E\u5B66\u7684\u4E66\u4F60\u4F1A\u53D1\u73B0\u3002", "startFrame": 0, "durationFrames": 64 }, { "text": "\u8FD9\u79CD\u5957\u8DEF\u53EB\u4F5C\u786E\u8BA4\u504F\u8BEF\u3002", "startFrame": 63, "durationFrames": 78 }, { "text": "\u901A\u4FD7\u70B9\u8BF4\u5C31\u662F\u53EA\u770B\u81EA\u5DF1\u60F3\u770B\u7684\u3002", "startFrame": 140, "durationFrames": 91 }], totalDurationFrames: 232, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_3_2.png"), conceptName: "\u786E\u8BA4\u504F\u8BEF", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 232, durationInFrames: 213, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8FD9\u5C31\u50CF\u662F\u6211\u4EEC\u6234\u7740\u4E00\u526F\u6709\u8272\u773C\u955C\u3002", "startFrame": 0, "durationFrames": 64 }, { "text": "\u53EA\u53BB\u641C\u5BFB\u548C\u8BB0\u5FC6\u7B26\u5408\u65E2\u6709\u4FE1\u5FF5\u7684\u4FE1\u606F\u3002", "startFrame": 63, "durationFrames": 91 }, { "text": "\u800C\u5BF9\u53CD\u9762\u8BC1\u636E\u89C6\u800C\u4E0D\u89C1\u3002", "startFrame": 153, "durationFrames": 59 }], totalDurationFrames: 213, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_3_4.png"), enterEffect: "breathe", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 445, durationInFrames: 142, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u54EA\u6015\u771F\u76F8\u5C31\u786C\u751F\u751F\u5730\u6446\u5728\u773C\u524D\u3002", "startFrame": 0, "durationFrames": 66 }, { "text": "\u6211\u4EEC\u4E5F\u4F1A\u672C\u80FD\u5730\u53BB\u8D2C\u4F4E\u5B83\u5FFD\u7565\u5B83\u3002", "startFrame": 65, "durationFrames": 77 }], totalDurationFrames: 142, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_3_7.png"), enterEffect: "fadeIn", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_3/scene_3.mp3") })
-  ] });
-};
-
-;// ./src/remotions/认知偏见_确认偏误/scenes/Scene4.tsx
-
-
-
-
-const src_remotions_scenes_Scene4_SCENE_DURATION = 135 + 233 + 210;
-const remotions_scenes_Scene4_calculateScene4Duration = () => {
-  return src_remotions_scenes_Scene4_SCENE_DURATION;
-};
-const remotions_scenes_Scene4_Scene4 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 135, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8FD9\u5C31\u89E3\u91CA\u4E86\u4E3A\u4EC0\u4E48\u70ED\u641C\u53CD\u8F6C\u524D\u3002", "startFrame": 0, "durationFrames": 60 }, { "text": "\u90A3\u4E48\u591A\u4EBA\u4F1A\u8A00\u4E4B\u51FF\u51FF\u5730\u7AD9\u961F\u3002", "startFrame": 60, "durationFrames": 75 }], totalDurationFrames: 135, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_4_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u70ED\u641C\u53CD\u8F6C", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u8A00\u4E4B\u51FF\u51FF", "showFrom": 1, "color": "#000000", "anim": "slideUp", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 135, durationInFrames: 233, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8FD9\u5C31\u50CF\u5728\u6F06\u9ED1\u7684\u623F\u95F4\u91CC\u6253\u624B\u7535\u7B52\u3002", "startFrame": 0, "durationFrames": 74 }, { "text": "\u4F60\u53EA\u4F1A\u7167\u4EAE\u4F60\u65E9\u5C31\u76F8\u4FE1\u7684\u90A3\u4E2A\u89D2\u843D\u3002", "startFrame": 73, "durationFrames": 76 }, { "text": "\u81F3\u4E8E\u5269\u4E0B\u7684\u5E7F\u9614\u7A7A\u95F4\u4F60\u6839\u672C\u4E0D\u5728\u4E4E\u3002", "startFrame": 148, "durationFrames": 84 }], totalDurationFrames: 233, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_4_3.png"), enterEffect: "breathe" }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 368, durationInFrames: 210, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u5F53\u4F60\u8BA8\u538C\u4E00\u4E2A\u4EBA\u65F6\u8FDE\u4ED6\u7684\u547C\u5438\u90FD\u662F\u9519\u7684\u3002", "startFrame": 0, "durationFrames": 86 }, { "text": "\u56E0\u4E3A\u6211\u4EEC\u5176\u5B9E\u6839\u672C\u4E0D\u9700\u8981\u5BA2\u89C2\u771F\u76F8\u3002", "startFrame": 85, "durationFrames": 65 }, { "text": "\u6211\u4EEC\u53EA\u9700\u8981\u88AB\u8FCE\u5408\u88AB\u80AF\u5B9A\u3002", "startFrame": 149, "durationFrames": 60 }], totalDurationFrames: 210, coreSentence: "\u6211\u4EEC\u9700\u8981\u7684\u4E0D\u662F\u5BA2\u89C2\u771F\u76F8\uFF0C\u800C\u662F\u88AB\u80AF\u5B9A", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u5BA2\u89C2\u771F\u76F8", "color": "#000000" }, { "coreSentenceAnchor": "\u88AB\u80AF\u5B9A", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_4/scene_4.mp3") })
-  ] });
-};
-
-;// ./src/remotions/认知偏见_确认偏误/scenes/Scene5.tsx
-
-
-
-
-const Scene5_SCENE_DURATION = 179 + 221 + 149 + 130 + 121;
+const Scene5_SCENE_DURATION = 147 + 81 + 177 + 77;
 const calculateScene5Duration = () => {
   return Scene5_SCENE_DURATION;
 };
 const Scene5 = () => {
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 179, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8981\u60F3\u8DF3\u51FA\u8FD9\u4E2A\u88AB\u7CBE\u5FC3\u7F16\u7EC7\u7684\u903B\u8F91\u9677\u9631\u3002", "startFrame": 0, "durationFrames": 98 }, { "text": "\u4F60\u9700\u8981\u7ACB\u523B\u7ED9\u81EA\u5DF1\u88C5\u4E0A\u9632\u8EAB\u6B66\u5668\u3002", "startFrame": 97, "durationFrames": 82 }], totalDurationFrames: 179, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_5_1.png"), enterEffect: "zoomIn", anchors: [{ "text": "\u903B\u8F91\u9677\u9631", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u9632\u8EAB\u6B66\u5668", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 179, durationInFrames: 221, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u7B2C\u4E00\u6B65\u662F\u4E3B\u52A8\u5236\u9020\u8BA4\u77E5\u6469\u64E6\u3002", "startFrame": 0, "durationFrames": 84 }, { "text": "\u53BB\u5173\u6CE8\u51E0\u4E2A\u4F60\u5E73\u65F6\u5F88\u8BA8\u538C\u7684\u535A\u4E3B\u3002", "startFrame": 83, "durationFrames": 77 }, { "text": "\u770B\u770B\u4ED6\u4EEC\u662F\u600E\u4E48\u770B\u5F85\u95EE\u9898\u7684\u3002", "startFrame": 160, "durationFrames": 60 }], totalDurationFrames: 221, title: "\u4E3B\u52A8\u5236\u9020\u8BA4\u77E5\u6469\u64E6", imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_5_2.png"), notes: [{ "text": "\u5173\u6CE8\u5E73\u65F6\u8BA8\u538C\u7684\u535A\u4E3B", "showFrom": 1 }, { "text": "\u770B\u4ED6\u4EEC\u5982\u4F55\u770B\u95EE\u9898", "showFrom": 2 }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 400, durationInFrames: 149, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u7B2C\u4E8C\u6B65\u662F\u5047\u8BBE\u771F\u76F8\u5B8C\u5168\u76F8\u53CD\u3002", "startFrame": 0, "durationFrames": 81 }, { "text": "\u4F1A\u6709\u4EC0\u4E48\u6837\u7684\u8BC1\u636E\u652F\u6301\u5B83\u3002", "startFrame": 80, "durationFrames": 68 }], totalDurationFrames: 149, title: "\u5BFB\u627E\u76F8\u53CD\u8BC1\u636E", imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_5_3.png"), notes: [{ "text": "\u5047\u8BBE\u771F\u76F8\u5B8C\u5168\u76F8\u53CD", "showFrom": 0 }, { "text": "\u4F1A\u6709\u4EC0\u4E48\u6837\u7684\u8BC1\u636E\u652F\u6301\u5B83\u3002", "showFrom": 1 }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 549, durationInFrames: 130, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u5F53\u4F60\u5F00\u59CB\u5B66\u7740\u548C\u4E0D\u540C\u7684\u58F0\u97F3\u5171\u5904\u3002", "startFrame": 0, "durationFrames": 71 }, { "text": "\u4F60\u5C31\u62FF\u56DE\u4E86\u72EC\u7ACB\u601D\u8003\u7684\u6743\u529B\u3002", "startFrame": 70, "durationFrames": 59 }], totalDurationFrames: 130, coreSentence: "\u548C\u4E0D\u540C\u7684\u58F0\u97F3\u5171\u5904\uFF0C\u4F60\u5C31\u62FF\u56DE\u4E86\u72EC\u7ACB\u601D\u8003\u7684\u6743\u529B\u3002", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u4E0D\u540C\u7684\u58F0\u97F3", "color": "#EF4444" }, { "coreSentenceAnchor": "\u72EC\u7ACB\u601D\u8003", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 679, durationInFrames: 121, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u7406\u6027\u4ECE\u6765\u4E0D\u662F\u6C38\u8FDC\u6B63\u786E\u3002", "startFrame": 0, "durationFrames": 51 }, { "text": "\u800C\u662F\u6562\u4E8E\u4EB2\u624B\u6253\u788E\u81EA\u5DF1\u7684\u6EE4\u955C\u3002", "startFrame": 50, "durationFrames": 70 }], totalDurationFrames: 121, coreSentence: "\u7406\u6027\u4E0D\u662F\u6C38\u8FDC\u6B63\u786E\uFF0C\u800C\u662F\u6562\u4E8E\u4EB2\u624B\u6253\u788E\u81EA\u5DF1\u7684\u6EE4\u955C", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u6253\u788E\u81EA\u5DF1\u7684\u6EE4\u955C", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF/scene_5/scene_5.mp3") })
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 147, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4E0D\u8981\u518D\u7528\u65E7\u65F6\u4EE3\u7684\u6709\u8272\u773C\u955C\uFF0C", "startFrame": 0, "durationFrames": 59 }, { "text": "\u53BB\u8BC4\u5224\u4E00\u4E2A\u9AD8\u901F\u8FDB\u5316\u7684\u4E2D\u56FD\u4F01\u4E1A\u3002", "startFrame": 58, "durationFrames": 88 }], totalDurationFrames: 147, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_5_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u9AD8\u901F\u8FDB\u5316", "showFrom": 1, "color": "#2563EB", "anim": "slideUp", "audioEffect": "ping" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 147, durationInFrames: 81, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWQuoteCitation, { content: [{ "text": "\u6570\u636E\u4E0D\u4F1A\u6492\u8C0E\uFF0C", "startFrame": 0, "durationFrames": 40 }, { "text": "\u4E13\u5229\u66F4\u4E0D\u4F1A\u9A97\u4EBA\u3002", "startFrame": 39, "durationFrames": 42 }], totalDurationFrames: 81, quoteSource: "\u7247\u5185\u7ACB\u8BBA", quoteDisplayText: "\u6570\u636E\u4E0D\u4F1A\u6492\u8C0E\uFF0C\u4E13\u5229\u66F4\u4E0D\u4F1A\u9A97\u4EBA\u3002" }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 228, durationInFrames: 177, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWBeatSequence, { content: [{ "text": "\u5982\u679C\u4E00\u5BB6\u820D\u5F97\u7838\u767E\u4EBF\u6B7B\u78D5\u5E95\u5C42\u7CFB\u7EDF\u7684\u516C\u53F8\u6CA1\u6709\u6838\u5FC3\u6280\u672F\uFF0C", "startFrame": 0, "durationFrames": 121 }, { "text": "\u90A3\u4EC0\u4E48\u53EB\u6709\u6838\u5FC3\u6280\u672F\uFF1F", "startFrame": 120, "durationFrames": 57 }], totalDurationFrames: 177, stages: [{ imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_5_3_img0.png"), enterEffect: "breathe", tone: "calm" }, { imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_5_3_img1.png"), enterEffect: "slideBottom", tone: "alert", showFrom: 1 }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 405, durationInFrames: 77, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u60F3\u5FC5\uFF0C\u4E00\u5B9A\u4E0D\u662F\u88AB\u6390\u8116\u5B50\u7684\u6280\u672F\u5427\uFF01", "startFrame": 0, "durationFrames": 77 }], totalDurationFrames: 77, coreSentence: ["\u60F3\u5FC5\u4E00\u5B9A\u4E0D\u662F\u88AB\u6390\u8116\u5B50\u7684\u6280\u672F\u5427\uFF01"], coreSentenceAnchors: [{ "coreSentenceAnchor": "\u6390\u8116\u5B50", "color": "#EF4444" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u5C0F\u7C73\u6838\u5FC3\u6280\u672F/scene_5/scene_5.mp3") })
   ] });
 };
 
-;// ./src/remotions/认知偏见_确认偏误/认知偏见确认偏误.tsx
+;// ./src/remotions/小米核心技术/小米核心技术Constants.ts
 
 
 
@@ -79577,89 +80250,80 @@ const Scene5 = () => {
 
 
 
-
-
-
-
-
-
-const \u8BA4\u77E5\u504F\u89C1\u786E\u8BA4\u504F\u8BEFSchema = lib.z.object({});
-const src_remotions_TRANSITION_DURATION_2 = 15;
-const src_remotions_SCENE_END_PADDING_2 = 20;
-const src_remotions_COVER_DURATION_FRAMES_2 = 15;
-const src_remotions_sceneConfigs_2 = [
-  { name: "scene1", duration: src_remotions_scenes_Scene1_calculateScene1Duration_0() + src_remotions_SCENE_END_PADDING_2, component: src_remotions_scenes_Scene1_Scene1_0, label: "\u5F15\u51FA\u73B0\u8C61\uFF1A\u5F39\u5E55\u4E89\u5435\u4E0E\u81EA\u6211\u4F18\u8D8A\u611F" },
-  { name: "scene2", duration: src_remotions_scenes_Scene2_calculateScene2Duration_0() + src_remotions_SCENE_END_PADDING_2, component: src_remotions_scenes_Scene2_Scene2_0, label: "\u63ED\u793A\u672C\u8D28\uFF1A\u5927\u8111\u7684\u8BA4\u77E5\u504F\u8BEF" },
-  { name: "scene3", duration: src_remotions_scenes_Scene3_calculateScene3Duration_0() + src_remotions_SCENE_END_PADDING_2, component: src_remotions_scenes_Scene3_Scene3_0, label: "\u7406\u8BBA\u89E3\u91CA\uFF1A\u786E\u8BA4\u504F\u8BEF\u7684\u6982\u5FF5" },
-  { name: "scene4", duration: remotions_scenes_Scene4_calculateScene4Duration() + src_remotions_SCENE_END_PADDING_2, component: remotions_scenes_Scene4_Scene4, label: "\u6848\u4F8B\u5206\u6790\uFF1A\u70ED\u641C\u53CD\u8F6C\u4E0E\u4E3B\u89C2\u8BA4\u77E5" },
-  { name: "scene5", duration: calculateScene5Duration() + src_remotions_SCENE_END_PADDING_2, component: Scene5, label: "\u89E3\u51B3\u65B9\u6848\uFF1A\u6253\u7834\u8BA4\u77E5\u9677\u9631" }
+const \u5C0F\u7C73\u6838\u5FC3\u6280\u672FSchema = lib.z.object({});
+const TRANSITION_DURATION = 15;
+const SCENE_END_PADDING = 20;
+const COVER_DURATION_FRAMES = 5;
+const sceneConfigs = [
+  { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "\u5F15\u5165" },
+  { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "\u5256\u6790" },
+  { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "\u7814\u53D1\u5E95\u724C" },
+  { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "\u53CC\u6807" },
+  { name: "scene5", duration: calculateScene5Duration() + SCENE_END_PADDING, component: Scene5, label: "\u603B\u7ED3" }
 ];
-const MAIN_DURATION_\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF = src_remotions_sceneConfigs_2.reduce((total, c) => total + c.duration, 0) - (src_remotions_sceneConfigs_2.length - 1) * src_remotions_TRANSITION_DURATION_2;
-const TOTAL_DURATION_\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF = src_remotions_COVER_DURATION_FRAMES_2 + MAIN_DURATION_\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF;
-const src_remotions_ProgressBar_2 = () => {
-  var _a;
-  const frame = (0,esm.useCurrentFrame)();
-  if (frame < src_remotions_COVER_DURATION_FRAMES_2) {
-    return null;
-  }
-  const contentFrame = frame - src_remotions_COVER_DURATION_FRAMES_2;
-  let currentStart = 0;
-  const segments = src_remotions_sceneConfigs_2.map((c, i) => {
-    const isLast = i === src_remotions_sceneConfigs_2.length - 1;
-    const segmentDuration = isLast ? c.duration : c.duration - src_remotions_TRANSITION_DURATION_2;
-    const segment = { start: currentStart, duration: segmentDuration };
-    currentStart += segmentDuration;
-    return segment;
-  });
-  const activeIndex = segments.findIndex((seg) => contentFrame >= seg.start && contentFrame < seg.start + seg.duration);
-  const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
-  const activeLabel = ((_a = src_remotions_sceneConfigs_2[validActiveIndex]) == null ? void 0 : _a.label) || "";
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: {
-    position: "absolute",
-    top: 40,
-    left: 40,
-    right: 40,
-    display: "flex",
-    flexDirection: "column",
-    gap: 16,
-    zIndex: 100
-  }, children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, height: 8 }, children: segments.map((seg, i) => {
-      const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));
-      const isActive = i === validActiveIndex;
-      return /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        flex: 1,
-        backgroundColor: isActive ? "rgba(34, 43, 69, 0.18)" : "rgba(34, 43, 69, 0.1)",
-        borderRadius: 999,
-        overflow: "hidden",
-        border: isActive ? "1px solid rgba(34, 43, 69, 0.32)" : "1px solid rgba(34, 43, 69, 0.2)",
-        boxShadow: isActive ? "0 3px 10px rgba(31, 41, 55, 0.12)" : "0 1px 4px rgba(31, 41, 55, 0.08)"
-      }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        width: `${progress * 100}%`,
-        height: "100%",
-        background: isActive ? "linear-gradient(90deg, rgba(29, 78, 216, 0.95), rgba(56, 189, 248, 0.92))" : "rgba(30, 41, 59, 0.72)",
-        boxShadow: isActive ? "0 0 12px rgba(37, 99, 235, 0.35)" : "none"
-      } }) }, i);
-    }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-      fontSize: 30,
-      fontWeight: 700,
-      fontFamily: '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif',
-      letterSpacing: 0.4,
-      color: "rgba(17, 24, 39, 0.95)",
-      textAlign: "left",
-      textShadow: "0 1px 2px rgba(255,255,255,0.45)",
-      padding: "6px 14px",
-      backgroundColor: "rgba(255, 255, 255, 0.58)",
-      border: "1px solid rgba(17, 24, 39, 0.12)",
-      borderRadius: 10,
-      alignSelf: "flex-start",
-      backdropFilter: "blur(6px)",
-      boxShadow: "0 6px 20px rgba(15, 23, 42, 0.12)"
-    }, children: activeLabel })
-  ] });
-};
-const \u8BA4\u77E5\u504F\u89C1\u786E\u8BA4\u504F\u8BEF = () => {
+const MAIN_DURATION_\u5C0F\u7C73\u6838\u5FC3\u6280\u672F = sceneConfigs.reduce((total, c) => total + c.duration, 0) - (sceneConfigs.length - 1) * TRANSITION_DURATION;
+const TOTAL_DURATION_\u5C0F\u7C73\u6838\u5FC3\u6280\u672F = COVER_DURATION_FRAMES + MAIN_DURATION_\u5C0F\u7C73\u6838\u5FC3\u6280\u672F;
+const DESIGN_W = 1920;
+const DESIGN_H = 1080;
+const LANDSCAPE_W = 1920;
+const LANDSCAPE_H = 1080;
+const LANDSCAPE_CONTAIN_SCALE = Math.min(LANDSCAPE_W / DESIGN_W, LANDSCAPE_H / DESIGN_H);
+const VERTICAL_CANVAS_W = 1080;
+const VERTICAL_CANVAS_H = 1920;
+const VERTICAL_PLAY_W = VERTICAL_CANVAS_W;
+const VERTICAL_PLAY_H = Math.round(VERTICAL_CANVAS_W * 9 / 16);
+const VERTICAL_PLAY_TOP = Math.round((VERTICAL_CANVAS_H - VERTICAL_PLAY_H) / 2);
+const VERTICAL_PLAY_PROGRESS_GAP = 4;
+const VERTICAL_CONTENT_SCALE = VERTICAL_PLAY_H / DESIGN_H;
+const VERTICAL_BOTTOM_BRAND_OFFSET = 400;
+
+;// ./src/remotions/小米核心技术/小米核心技术MainBody.tsx
+
+
+
+
+
+
+
+
+const \u5C0F\u7C73\u6838\u5FC3\u6280\u672FMainBody = () => /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
+  /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { durationInFrames: COVER_DURATION_FRAMES, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+    LandscapeCoverPoster,
+    {
+      title: "\u5C0F\u7C73\u6838\u5FC3\u6280\u672F",
+      subtitle: "\u641E\u61C2\u4EC0\u4E48\u53EB\u6838\u5FC3\u6280\u672F\uFF0C\u770B\u6E05\u767E\u4EBF\u7814\u53D1\u3001\u4E13\u5229\u4E0E\u91CF\u4EA7\u80CC\u540E\u7684\u786C\u5B9E\u529B",
+      themeColor: "#2563EB",
+      badge: "\u6DF1\u5EA6\u89E3\u8BFB \xB7 \u6570\u636E\u4E0E\u4E8B\u5B9E",
+      seriesLabel: "\u79D1\u6280\u70ED\u70B9\u6DF1\u8BFB",
+      seriesLabelEn: "TECH DEEP DIVE",
+      methodologySteps: ["\u4E89\u8BAE", "\u6570\u636E", "\u7ED3\u8BBA"],
+      methodologyStepsEn: "DEBATE \xB7 DATA \xB7 VERDICT"
+    }
+  ) }),
+  /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: COVER_DURATION_FRAMES, durationInFrames: MAIN_DURATION_小米核心技术, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.AbsoluteFill, { children: /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries, { children: sceneConfigs.map((config, index) => {
+    const SceneComp = config.component;
+    const isLast = index === sceneConfigs.length - 1;
+    return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries.Sequence, { durationInFrames: config.duration, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(SceneComp, {}) }),
+      !isLast && /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        TransitionSeries.Transition,
+        {
+          timing: linearTiming({ durationInFrames: TRANSITION_DURATION }),
+          presentation: fade()
+        }
+      )
+    ] }, config.name);
+  }) }) }) })
+] });
+
+;// ./src/remotions/小米核心技术/小米核心技术Landscape.tsx
+
+
+
+
+
+
+const \u5C0F\u7C73\u6838\u5FC3\u6280\u672FLandscape = () => {
   const frame = (0,esm.useCurrentFrame)();
   const bgShiftX = (0,esm.interpolate)(frame % 240, [0, 120, 240], [-4, 4, -4], {
     extrapolateLeft: "clamp",
@@ -79673,13 +80337,13 @@ const \u8BA4\u77E5\u504F\u89C1\u786E\u8BA4\u504F\u8BEF = () => {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp"
   });
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style: { background: "#0f172a" }, children: [
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Audio,
       {
         src: (0,esm.staticFile)("audio/effects/Seven_Measured_Breaths.mp3"),
         loop: true,
-        volume: 0.22,
+        volume: 0.1,
         name: "Background music"
       }
     ),
@@ -79689,7 +80353,7 @@ const \u8BA4\u77E5\u504F\u89C1\u786E\u8BA4\u504F\u8BEF = () => {
         style: {
           height: "100%",
           width: "100%",
-          background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)"
+          background: "linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #e2e8f0 100%)"
         }
       }
     ),
@@ -79702,146 +80366,997 @@ const \u8BA4\u77E5\u504F\u89C1\u786E\u8BA4\u504F\u8BEF = () => {
           pointerEvents: "none",
           opacity: bgBreathOpacity,
           transform: `translate(${bgShiftX}px, ${bgShiftY}px)`,
-          background: "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)"
+          background: "radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08), transparent 40%), radial-gradient(circle at 80% 60%, rgba(56, 189, 248, 0.12), transparent 45%), radial-gradient(circle at 40% 80%, rgba(148, 163, 184, 0.15), transparent 50%)"
         }
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { durationInFrames: src_remotions_COVER_DURATION_FRAMES_2, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      StaticCover,
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(RemotionLayoutMetricsProvider, { value: { width: DESIGN_W, height: DESIGN_H }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      esm.AbsoluteFill,
       {
-        title: "\u786E\u8BA4\u504F\u8BEF",
-        subtitle: "\u4F60\u4E0D\u662F\u7F3A\u5224\u65AD\u529B\uFF0C\u662F\u5927\u8111\u53EA\u8BA9\u4F60\u770B\u89C1\u60F3\u770B\u89C1\u7684",
-        themeColor: "#2563EB",
-        badge: "\u8BA4\u8BC6\u81EA\u6211 \xB7 \u7406\u6027\u601D\u8003",
-        seriesLabel: "\u8BA4\u77E5\u5FC3\u7406\u5B66",
-        seriesLabelEn: "COGNITIVE BIAS",
-        methodologySteps: ["\u89C9\u5BDF", "\u5F52\u56E0", "\u8C03\u6574"],
-        methodologyStepsEn: "OBSERVE \xB7 ATTRIBUTE \xB7 ADJUST"
+        style: {
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden"
+        },
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+          "div",
+          {
+            style: {
+              width: DESIGN_W,
+              height: DESIGN_H,
+              flexShrink: 0,
+              transform: `scale(${LANDSCAPE_CONTAIN_SCALE})`,
+              transformOrigin: "center center"
+            },
+            children: /* @__PURE__ */ (0,jsx_runtime.jsx)(小米核心技术MainBody, {})
+          }
+        )
       }
-    ) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: src_remotions_COVER_DURATION_FRAMES_2, durationInFrames: MAIN_DURATION_\u8BA4\u77E5\u504F\u89C1_\u786E\u8BA4\u504F\u8BEF, children: /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
+    ) })
+  ] });
+};
+
+;// ./src/components/common/verticalShared.ts
+
+const VERTICAL_SHELL_BG = "#0d1117";
+
+;// ./src/components/templates/images/logo.svg
+const logo_namespaceObject = __webpack_require__.p + "e17d014f1d92b2e9.svg";
+;// ./src/components/common/VerticalBottomBrandBar.tsx
+
+
+
+
+const DEFAULT_FONT_STACK = '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
+const VerticalBottomBrandBar = ({
+  canvasW,
+  brandName = "\u6C90\u65F6\u601D\u7EF4",
+  barHeight = 112,
+  fontStack = DEFAULT_FONT_STACK
+}) => /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+  "div",
+  {
+    style: {
+      width: canvasW,
+      height: barHeight,
+      boxSizing: "border-box",
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 16,
+      padding: "10px 36px 14px",
+      background: "linear-gradient(180deg, transparent 0%, rgba(13, 17, 23, 0.9) 32%, rgba(13, 17, 23, 1) 100%)"
+    },
+    children: [
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        "div",
+        {
+          style: {
+            flexShrink: 0,
+            padding: 8,
+            boxSizing: "border-box",
+            borderRadius: 12,
+            border: "1px solid rgba(255, 255, 255, 0.12)"
+            // background:
+            // 	"linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(129, 140, 246, 0.15))",
+          },
+          children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            esm.Img,
+            {
+              src: logo_namespaceObject,
+              alt: "",
+              style: { width: 28, height: 28, objectFit: "contain", display: "block" }
+            }
+          )
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        "span",
+        {
+          style: {
+            fontFamily: fontStack,
+            fontSize: 28,
+            fontWeight: 500,
+            color: "#f0f9ff",
+            letterSpacing: "0.20em",
+            lineHeight: 1.15,
+            textShadow: "0 2px 12px rgba(56, 189, 248, 0.25)",
+            whiteSpace: "nowrap"
+          },
+          children: brandName
+        }
+      )
+    ]
+  }
+);
+
+;// ./src/components/common/VerticalSegmentedProgressBar.tsx
+
+
+
+const VerticalSegmentedProgressBar_DEFAULT_FONT_STACK = '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
+function buildSegments(sceneConfigs, transitionDuration) {
+  let currentStart = 0;
+  return sceneConfigs.map((c, i) => {
+    const isLast = i === sceneConfigs.length - 1;
+    const segmentDuration = isLast ? c.duration : c.duration - transitionDuration;
+    const segment = { start: currentStart, duration: segmentDuration };
+    currentStart += segmentDuration;
+    return segment;
+  });
+}
+const VerticalSegmentedProgressBar = ({
+  frame,
+  coverDurationFrames,
+  sceneConfigs,
+  transitionDuration,
+  fontStack = VerticalSegmentedProgressBar_DEFAULT_FONT_STACK
+}) => {
+  if (frame < coverDurationFrames) {
+    return null;
+  }
+  const contentFrame = frame - coverDurationFrames;
+  const segments = buildSegments(sceneConfigs, transitionDuration);
+  const activeIndex = segments.findIndex(
+    (seg) => contentFrame >= seg.start && contentFrame < seg.start + seg.duration
+  );
+  const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
+  const labelFontSize = 20;
+  const dividerStyle = {
+    width: 1,
+    flexShrink: 0,
+    alignSelf: "stretch",
+    backgroundColor: "rgba(255, 255, 255, 0.28)"
+  };
+  const completedSegmentFill = "rgb(203, 213, 225)";
+  const activeSegmentFill = "rgb(37, 99, 235)";
+  return /* @__PURE__ */ (0,jsx_runtime.jsx)(
+    "div",
+    {
+      style: {
+        width: "100%",
+        minWidth: 0,
+        boxSizing: "border-box",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "stretch",
+        borderRadius: 0,
+        overflow: "hidden",
+        backgroundColor: "rgba(255, 255, 255, 0.12)"
+      },
+      children: segments.map((seg, i) => {
+        var _a;
+        const isActive = i === validActiveIndex;
+        const isCompleted = contentFrame >= seg.start + seg.duration;
+        const progress = isCompleted ? 1 : isActive ? Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration)) : 0;
+        const label = ((_a = sceneConfigs[i]) == null ? void 0 : _a.label) ?? "";
+        return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
+          i > 0 ? /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: dividerStyle, "aria-hidden": true }) : null,
+          /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+            "div",
+            {
+              style: {
+                flexGrow: Math.max(seg.duration, 1),
+                flexShrink: 1,
+                flexBasis: 0,
+                minWidth: 0,
+                position: "relative",
+                minHeight: 44
+              },
+              children: [
+                /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                  "div",
+                  {
+                    style: {
+                      position: "absolute",
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: `${progress * 100}%`,
+                      background: isCompleted ? completedSegmentFill : activeSegmentFill
+                    }
+                  }
+                ),
+                /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                  "div",
+                  {
+                    style: {
+                      position: "relative",
+                      zIndex: 1,
+                      boxSizing: "border-box",
+                      width: "100%",
+                      minWidth: 0,
+                      minHeight: 40,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "6px 6px"
+                    },
+                    children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                      "span",
+                      {
+                        title: label,
+                        style: {
+                          display: "block",
+                          width: "100%",
+                          minWidth: 0,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          textAlign: "center",
+                          fontSize: labelFontSize,
+                          fontWeight: isActive ? 700 : 600,
+                          fontFamily: fontStack,
+                          letterSpacing: isCompleted ? 0.12 : 0.2,
+                          lineHeight: 1.35,
+                          ...isCompleted ? {
+                            color: "rgb(15, 23, 42)",
+                            opacity: 1,
+                            textShadow: "none"
+                          } : isActive ? {
+                            color: "rgba(255, 255, 255, 0.98)",
+                            opacity: 1,
+                            textShadow: "0 1px 2px rgba(0, 0, 0, 0.45), 0 0 12px rgba(0, 0, 0, 0.25)"
+                          } : {
+                            color: "rgb(241, 245, 249)",
+                            opacity: 0.88,
+                            textShadow: "0 1px 3px rgba(0, 0, 0, 0.85), 0 0 1px rgba(0, 0, 0, 1)"
+                          }
+                        },
+                        children: label
+                      }
+                    )
+                  }
+                )
+              ]
+            }
+          )
+        ] }, i);
+      })
+    }
+  );
+};
+
+;// ./src/remotions/小米核心技术/小米核心技术VerticalChrome.tsx
+
+
+
+
+
+const _VerticalChrome_FONT_STACK = '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
+const STATIC_HEADLINE = "\u5C0F\u7C73\u6838\u5FC3\u6280\u672F";
+const STATIC_HEADLINE_SUB = "\u79D1\u6280\u70ED\u70B9\u6DF1\u8BFB";
+const STATIC_HEADLINE_SUB_EN = "TECH DEEP DIVE";
+const THEME_ACCENT = "#2563EB";
+const THEME_ACCENT_SOFT = "#2563EBD9";
+const \u5C0F\u7C73\u6838\u5FC3\u6280\u672FTopStaticHeadline = ({ canvasW, topBandH }) => /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+  "div",
+  {
+    style: {
+      position: "absolute",
+      left: 0,
+      top: 0,
+      width: canvasW,
+      height: topBandH,
+      overflow: "hidden",
+      boxSizing: "border-box",
+      pointerEvents: "none"
+    },
+    children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         "div",
         {
           style: {
             position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "10%",
-            minHeight: 48,
-            backgroundColor: "rgba(0,0,0,0.5)"
+            inset: 0,
+            background: "radial-gradient(ellipse 72% 85% at 50% 48%, rgba(37, 99, 235, 0.14) 0%, transparent 58%), radial-gradient(ellipse 50% 40% at 50% 100%, rgba(56, 189, 248, 0.08) 0%, transparent 50%)"
           }
         }
       ),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries, { children: src_remotions_sceneConfigs_2.map((config, index) => {
-        const SceneComp = config.component;
-        const isLast = index === src_remotions_sceneConfigs_2.length - 1;
-        return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries.Sequence, { durationInFrames: config.duration, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(SceneComp, {}) }),
-          !isLast && /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            TransitionSeries.Transition,
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        "div",
+        {
+          style: {
+            position: "absolute",
+            left: "12%",
+            right: "12%",
+            bottom: 0,
+            height: 1,
+            background: "linear-gradient(90deg, transparent 0%, rgba(226, 232, 240, 0.45) 45%, rgba(226, 232, 240, 0.45) 55%, transparent 100%)"
+          }
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        "div",
+        {
+          style: {
+            position: "absolute",
+            left: 36,
+            top: 36,
+            width: 40,
+            height: 40,
+            borderLeft: "2px solid rgba(248, 250, 252, 0.22)",
+            borderTop: "2px solid rgba(248, 250, 252, 0.22)",
+            borderRadius: "2px 0 0 0"
+          }
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        "div",
+        {
+          style: {
+            position: "absolute",
+            right: 36,
+            top: 36,
+            width: 40,
+            height: 40,
+            borderRight: "2px solid rgba(248, 250, 252, 0.22)",
+            borderTop: "2px solid rgba(248, 250, 252, 0.22)",
+            borderRadius: "0 2px 0 0"
+          }
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+        "div",
+        {
+          style: {
+            position: "relative",
+            zIndex: 1,
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "0 56px",
+            boxSizing: "border-box"
+          },
+          children: [
+            /* @__PURE__ */ (0,jsx_runtime.jsx)(
+              "div",
+              {
+                style: {
+                  width: 56,
+                  height: 4,
+                  borderRadius: 999,
+                  background: `linear-gradient(90deg, ${THEME_ACCENT_SOFT}, rgba(56, 189, 248, 0.95))`,
+                  boxShadow: "0 0 22px rgba(37, 99, 235, 0.45)",
+                  marginBottom: 22
+                }
+              }
+            ),
+            /* @__PURE__ */ (0,jsx_runtime.jsx)(
+              "div",
+              {
+                style: {
+                  fontSize: 80,
+                  fontWeight: 800,
+                  fontFamily: _VerticalChrome_FONT_STACK,
+                  color: "#fafafa",
+                  letterSpacing: "0.14em",
+                  textAlign: "center",
+                  lineHeight: 1.08,
+                  textShadow: "0 1px 0 rgba(255,255,255,0.12), 0 4px 36px rgba(0,0,0,0.55), 0 0 48px rgba(37, 99, 235, 0.25)"
+                },
+                children: STATIC_HEADLINE
+              }
+            ),
+            /* @__PURE__ */ (0,jsx_runtime.jsx)(
+              "div",
+              {
+                style: {
+                  marginTop: 10,
+                  fontSize: 15,
+                  fontWeight: 600,
+                  fontFamily: 'ui-sans-serif, "Segoe UI", sans-serif',
+                  color: "rgba(148, 163, 184, 0.95)",
+                  letterSpacing: "0.42em",
+                  textAlign: "center"
+                },
+                children: STATIC_HEADLINE_SUB_EN
+              }
+            ),
+            /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+              "div",
+              {
+                style: {
+                  marginTop: 20,
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 20,
+                  width: "100%",
+                  maxWidth: 520
+                },
+                children: [
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        flex: 1,
+                        height: 1,
+                        background: "linear-gradient(90deg, transparent, rgba(248, 250, 252, 0.38))"
+                      }
+                    }
+                  ),
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        width: 7,
+                        height: 7,
+                        transform: "rotate(45deg)",
+                        background: `linear-gradient(135deg, ${THEME_ACCENT}, rgba(56, 189, 248, 0.9))`,
+                        boxShadow: "0 0 12px rgba(37, 99, 235, 0.5)",
+                        flexShrink: 0
+                      }
+                    }
+                  ),
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        fontSize: 26,
+                        fontWeight: 600,
+                        fontFamily: _VerticalChrome_FONT_STACK,
+                        color: "rgba(248, 250, 252, 0.88)",
+                        letterSpacing: "0.42em",
+                        textAlign: "center",
+                        flexShrink: 0
+                      },
+                      children: STATIC_HEADLINE_SUB
+                    }
+                  ),
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        width: 7,
+                        height: 7,
+                        transform: "rotate(45deg)",
+                        background: `linear-gradient(135deg, ${THEME_ACCENT}, rgba(56, 189, 248, 0.9))`,
+                        boxShadow: "0 0 12px rgba(37, 99, 235, 0.5)",
+                        flexShrink: 0
+                      }
+                    }
+                  ),
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        flex: 1,
+                        height: 1,
+                        background: "linear-gradient(270deg, transparent, rgba(248, 250, 252, 0.38))"
+                      }
+                    }
+                  )
+                ]
+              }
+            )
+          ]
+        }
+      )
+    ]
+  }
+);
+const \u5C0F\u7C73\u6838\u5FC3\u6280\u672FProgressBar = () => {
+  const frame = (0,esm.useCurrentFrame)();
+  return /* @__PURE__ */ (0,jsx_runtime.jsx)(
+    VerticalSegmentedProgressBar,
+    {
+      frame,
+      coverDurationFrames: COVER_DURATION_FRAMES,
+      sceneConfigs: sceneConfigs,
+      transitionDuration: TRANSITION_DURATION,
+      fontStack: _VerticalChrome_FONT_STACK
+    }
+  );
+};
+
+;// ./src/remotions/小米核心技术/小米核心技术Vertical.tsx
+
+
+
+
+
+
+
+const \u5C0F\u7C73\u6838\u5FC3\u6280\u672FVertical = () => {
+  const frame = (0,esm.useCurrentFrame)();
+  const bgShiftX = (0,esm.interpolate)(frame % 240, [0, 120, 240], [-4, 4, -4], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  });
+  const bgShiftY = (0,esm.interpolate)(frame % 180, [0, 90, 180], [-3, 3, -3], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  });
+  const bgBreathOpacity = (0,esm.interpolate)(frame % 150, [0, 75, 150], [0.22, 0.34, 0.22], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp"
+  });
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style: { background: VERTICAL_SHELL_BG }, children: [
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      esm.Audio,
+      {
+        src: (0,esm.staticFile)("audio/effects/Seven_Measured_Breaths.mp3"),
+        loop: true,
+        volume: 0.1,
+        name: "Background music"
+      }
+    ),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(小米核心技术TopStaticHeadline, { canvasW: VERTICAL_CANVAS_W, topBandH: VERTICAL_PLAY_TOP }),
+    /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          left: 0,
+          top: VERTICAL_PLAY_TOP,
+          width: VERTICAL_PLAY_W,
+          height: VERTICAL_PLAY_H,
+          overflow: "hidden"
+        },
+        children: [
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
             {
-              timing: linearTiming({ durationInFrames: src_remotions_TRANSITION_DURATION_2 }),
-              presentation: fade()
+              style: {
+                height: "100%",
+                width: "100%",
+                background: "linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #e2e8f0 100%)"
+              }
+            }
+          ),
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                position: "absolute",
+                inset: "-6%",
+                pointerEvents: "none",
+                opacity: bgBreathOpacity,
+                transform: `translate(${bgShiftX}px, ${bgShiftY}px)`,
+                background: "radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08), transparent 40%), radial-gradient(circle at 80% 60%, rgba(56, 189, 248, 0.12), transparent 45%), radial-gradient(circle at 40% 80%, rgba(148, 163, 184, 0.15), transparent 50%)"
+              }
+            }
+          ),
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                position: "absolute",
+                left: 0,
+                right: 0,
+                top: 0,
+                height: VERTICAL_PLAY_H,
+                overflow: "hidden",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-start"
+              },
+              children: /* @__PURE__ */ (0,jsx_runtime.jsx)(RemotionLayoutMetricsProvider, { value: { width: DESIGN_W, height: DESIGN_H }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                "div",
+                {
+                  style: {
+                    width: DESIGN_W,
+                    height: DESIGN_H,
+                    flexShrink: 0,
+                    transform: `scale(${VERTICAL_CONTENT_SCALE})`,
+                    transformOrigin: "top center"
+                  },
+                  children: /* @__PURE__ */ (0,jsx_runtime.jsx)(小米核心技术MainBody, {})
+                }
+              ) })
             }
           )
-        ] }, config.name);
-      }) })
-    ] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(src_remotions_ProgressBar_2, {})
+        ]
+      }
+    ),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          left: 0,
+          top: VERTICAL_PLAY_TOP,
+          width: VERTICAL_PLAY_W,
+          height: VERTICAL_PLAY_H,
+          border: "1px solid rgba(255, 255, 255, 0.07)",
+          boxSizing: "border-box",
+          pointerEvents: "none",
+          zIndex: 20
+        }
+      }
+    ),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          left: 0,
+          top: VERTICAL_PLAY_TOP + VERTICAL_PLAY_H + VERTICAL_PLAY_PROGRESS_GAP,
+          width: VERTICAL_CANVAS_W,
+          boxSizing: "border-box",
+          pointerEvents: "none"
+        },
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(小米核心技术ProgressBar, {})
+      }
+    ),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          left: 0,
+          bottom: VERTICAL_BOTTOM_BRAND_OFFSET,
+          width: VERTICAL_CANVAS_W,
+          boxSizing: "border-box",
+          pointerEvents: "none",
+          zIndex: 18
+        },
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(VerticalBottomBrandBar, { canvasW: VERTICAL_CANVAS_W })
+      }
+    )
   ] });
 };
 
-;// ./src/remotions/认知偏见_可得性启发/scenes/Scene1.tsx
+;// ./src/components/CoverPosterVertical.tsx
 
 
 
 
-const src_remotions_scenes_Scene1_SCENE_DURATION_1 = 199 + 330;
-const src_remotions_scenes_Scene1_calculateScene1Duration_1 = () => {
-  return src_remotions_scenes_Scene1_SCENE_DURATION_1;
+const CoverPosterVertical_FONT_STACK = '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
+const VERTICAL_COVER_POSTER_W = 1080;
+const VERTICAL_COVER_POSTER_H = 1440;
+const SCALE = VERTICAL_COVER_POSTER_W / 1920;
+const u = (px) => Math.round(px * SCALE);
+const CoverPosterVertical_DEFAULT_THEME = "#1d4ed8";
+const CoverPosterVertical_COVER_SOLID_BG = "#f1f5f9";
+const CoverPosterVertical_COVER_DARK_SOLID = "#0f172a";
+const CornerBracket = ({ color, size, thickness, corner, opacity = 1 }) => {
+  const isTop = corner === "tl" || corner === "tr";
+  const isLeft = corner === "tl" || corner === "bl";
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+    "div",
+    {
+      style: {
+        position: "absolute",
+        ...isTop ? { top: 0 } : { bottom: 0 },
+        ...isLeft ? { left: 0 } : { right: 0 },
+        width: size,
+        height: size,
+        opacity,
+        pointerEvents: "none"
+      },
+      children: [
+        /* @__PURE__ */ (0,jsx_runtime.jsx)(
+          "div",
+          {
+            style: {
+              position: "absolute",
+              ...isTop ? { top: 0 } : { bottom: 0 },
+              ...isLeft ? { left: 0 } : { right: 0 },
+              width: size,
+              height: thickness,
+              background: color,
+              borderRadius: thickness
+            }
+          }
+        ),
+        /* @__PURE__ */ (0,jsx_runtime.jsx)(
+          "div",
+          {
+            style: {
+              position: "absolute",
+              ...isTop ? { top: 0 } : { bottom: 0 },
+              ...isLeft ? { left: 0 } : { right: 0 },
+              width: thickness,
+              height: size,
+              background: color,
+              borderRadius: thickness
+            }
+          }
+        )
+      ]
+    }
+  );
 };
-const src_remotions_scenes_Scene1_Scene1_1 = () => {
+const VerticalCoverPoster = ({
+  themeColor = CoverPosterVertical_DEFAULT_THEME,
+  surface = "light",
+  ...coreProps
+}) => {
+  const isDark = surface === "dark";
+  const lineColor = isDark ? `${themeColor}aa` : `${themeColor}55`;
+  const bracketOpacity = 0.7;
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style: { overflow: "hidden", fontFamily: CoverPosterVertical_FONT_STACK }, children: [
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          inset: 0,
+          background: isDark ? CoverPosterVertical_COVER_DARK_SOLID : CoverPosterVertical_COVER_SOLID_BG
+        }
+      }
+    ),
+    isDark ? /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          left: 0,
+          top: u(120),
+          bottom: u(120),
+          width: u(5),
+          background: themeColor,
+          opacity: 0.45,
+          pointerEvents: "none"
+        }
+      }
+    ) : null,
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          top: u(48),
+          left: u(64),
+          right: u(64),
+          height: u(2),
+          background: lineColor,
+          borderRadius: u(1),
+          pointerEvents: "none"
+        }
+      }
+    ),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          bottom: u(48),
+          left: u(64),
+          right: u(64),
+          height: u(2),
+          background: lineColor,
+          borderRadius: u(1),
+          pointerEvents: "none"
+        }
+      }
+    ),
+    !isDark ? /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: { position: "absolute", inset: u(48), pointerEvents: "none" }, children: [
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        CornerBracket,
+        {
+          color: themeColor,
+          size: u(56),
+          thickness: u(3),
+          corner: "tl",
+          opacity: bracketOpacity
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        CornerBracket,
+        {
+          color: themeColor,
+          size: u(56),
+          thickness: u(3),
+          corner: "tr",
+          opacity: bracketOpacity
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        CornerBracket,
+        {
+          color: themeColor,
+          size: u(56),
+          thickness: u(3),
+          corner: "bl",
+          opacity: bracketOpacity
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        CornerBracket,
+        {
+          color: themeColor,
+          size: u(56),
+          thickness: u(3),
+          corner: "br",
+          opacity: bracketOpacity
+        }
+      )
+    ] }) : null,
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          inset: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        },
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+          CoverPosterCore,
+          {
+            themeColor,
+            surface,
+            ...coreProps,
+            titleFitSingleLine: true
+          }
+        )
+      }
+    )
+  ] });
+};
+
+;// ./src/remotions/小米核心技术/小米核心技术CoverProps.ts
+
+const \u5C0F\u7C73\u6838\u5FC3\u6280\u672F_STATIC_COVER_PROPS = {
+  title: "\u5C0F\u7C73\u6838\u5FC3\u6280\u672F",
+  subtitle: "\u6C89\u6D78\u5728\u8D2C\u4F4E\u5C0F\u7C73\u7684\u5FEB\u611F\u91CC\uFF0C\u628A\u504F\u89C1\u5F53\u6D1E\u89C1\uFF0C\u628A\u65E0\u77E5\u5F53\u6E05\u9192",
+  themeColor: "#FF6900",
+  surface: "light",
+  badge: "\u6DF1\u5EA6\u89E3\u8BFB \xB7 \u6570\u636E\u4E0E\u4E8B\u5B9E",
+  seriesLabel: "\u79D1\u6280\u70ED\u70B9\u6DF1\u8BFB",
+  seriesLabelEn: "TECH DEEP DIVE",
+  methodologySteps: ["\u4E89\u8BAE", "\u6570\u636E", "\u7ED3\u8BBA"],
+  methodologyStepsEn: "DEBATE \xB7 DATA \xB7 VERDICT"
+};
+
+;// ./src/remotions/小米核心技术/小米核心技术CoverStills.tsx
+
+
+
+
+const \u5C0F\u7C73\u6838\u5FC3\u6280\u672F\u5C01\u9762\u6A2A\u5C4F = () => /* @__PURE__ */ (0,jsx_runtime.jsx)(LandscapeCoverPoster, { ...小米核心技术_STATIC_COVER_PROPS });
+const \u5C0F\u7C73\u6838\u5FC3\u6280\u672F\u5C01\u9762\u7AD6\u5C4F = () => /* @__PURE__ */ (0,jsx_runtime.jsx)(VerticalCoverPoster, { ...小米核心技术_STATIC_COVER_PROPS });
+
+;// ./src/remotions/小米平权/scenes/Scene1.tsx
+
+
+
+
+const Scene1_SCENE_DURATION = 54 + 164;
+const Scene1_calculateScene1Duration = () => {
+  return Scene1_SCENE_DURATION;
+};
+const Scene1_Scene1 = () => {
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 199, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u76EF\u7740\u90A3\u6761\u7A7A\u96BE\u4E0A\u70ED\u641C\u7684\u5F39\u7A97\u65B0\u95FB\u3002", "startFrame": 0, "durationFrames": 101 }, { "text": "\u4F60\u9ED8\u9ED8\u628A\u4E0B\u5468\u7684\u822A\u73ED\u6539\u6210\u4E86\u9AD8\u94C1\u3002", "startFrame": 100, "durationFrames": 99 }], totalDurationFrames: 199, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_1_1.png"), enterEffect: "breathe", anchors: [{ "text": "\u7A7A\u96BE", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 199, durationInFrames: 330, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u660E\u77E5\u8DEF\u4E0A\u8981\u591A\u8017\u5927\u534A\u5929\u3001", "startFrame": 0, "durationFrames": 53 }, { "text": "\u6362\u4E58\u4E5F\u66F4\u6298\u817E\u3002", "startFrame": 52, "durationFrames": 56 }, { "text": "\u5FC3\u91CC\u5374\u89C9\u5F97\u8FD8\u662F\u5728\u5730\u4E0A\u8DD1\u66F4\u5B89\u5168\u3002", "startFrame": 107, "durationFrames": 86 }, { "text": "\u8FD9\u79CD\u5B81\u53EF\u591A\u82B1\u65F6\u95F4\u4E5F\u8981\u907F\u9669\u7684\u5FC3\u6001\u3002", "startFrame": 193, "durationFrames": 80 }, { "text": "\u662F\u4E0D\u662F\u8BA9\u4F60\u89C9\u5F97\u975E\u5E38\u8E0F\u5B9E\u3002", "startFrame": 272, "durationFrames": 58 }], totalDurationFrames: 330, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_1_2.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u6298\u817E", "showFrom": 1, "color": "#000000", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u907F\u9669\u5FC3\u6001", "showFrom": 3, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_1/scene_1.mp3") })
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 54, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5168\u7F51\u5632\u7B11\u5C0F\u7C73\u201C\u5EC9\u4EF7\u201D\u3002", "startFrame": 0, "durationFrames": 54 }], totalDurationFrames: 54, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_1_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u5EC9\u4EF7", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 54, durationInFrames: 164, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWQuoteCitation, { content: [{ "text": "\u6709\u6CA1\u6709\u4EBA\u60F3\u8FC7\u2014\u2014", "startFrame": 0, "durationFrames": 38 }, { "text": "\u662F\u8C01\uFF0C", "startFrame": 37, "durationFrames": 26 }, { "text": "\u5728\u5E0C\u671B\u4F60\u89C9\u5F97\u4E70\u5F97\u8D77\u597D\u4E1C\u897F\u662F\u4E00\u4EF6\u4E22\u8138\u7684\u4E8B\uFF1F", "startFrame": 62, "durationFrames": 102 }], totalDurationFrames: 164, quoteSource: "\u601D\u8003", quoteDisplayText: "\u4E70\u5F97\u8D77\u597D\u4E1C\u897F\u662F\u4E00\u4EF6\u4E22\u8138\u7684\u4E8B\u5417\uFF1F", showFrom: 1 }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u5C0F\u7C73\u5E73\u6743/scene_1/scene_1.mp3") })
   ] });
 };
 
-;// ./src/remotions/认知偏见_可得性启发/scenes/Scene2.tsx
+;// ./src/remotions/小米平权/scenes/Scene2.tsx
 
 
 
 
-const src_remotions_scenes_Scene2_SCENE_DURATION_2 = 144 + 146 + 273;
-const src_remotions_scenes_Scene2_calculateScene2Duration_1 = () => {
-  return src_remotions_scenes_Scene2_SCENE_DURATION_2;
+const scenes_Scene2_SCENE_DURATION = 127 + 266 + 80 + 153 + 187 + 199 + 67;
+const Scene2_calculateScene2Duration = () => {
+  return scenes_Scene2_SCENE_DURATION;
 };
-const src_remotions_scenes_Scene2_Scene2_1 = () => {
+const Scene2_Scene2 = () => {
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 144, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWDosAndDonts, { content: [{ "text": "\u6211\u4EEC\u603B\u4EE5\u4E3A\u8FD9\u662F\u51FA\u4E8E\u8C28\u614E\u7684\u7406\u6027\u9009\u62E9\u3002", "startFrame": 0, "durationFrames": 86 }, { "text": "\u4F46\u5176\u5B9E\u6211\u4EEC\u53C8\u88AB\u6050\u60E7\u60C5\u7EEA\u52AB\u6301\u4E86\u3002", "startFrame": 85, "durationFrames": 59 }], totalDurationFrames: 144, leftSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_2_1_left.png"), rightSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_2_1_right.png"), dontLabel: "\u274C \u4EE5\u4E3A\u7406\u6027", doLabel: "\u2705 \u6050\u60E7\u52AB\u6301" }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 144, durationInFrames: 146, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWDosAndDonts, { content: [{ "text": "\u8FD9\u4E0D\u662F\u56E0\u4E3A\u6211\u4EEC\u80C6\u5C0F\u6015\u4E8B\u3002", "startFrame": 0, "durationFrames": 47 }, { "text": "\u800C\u662F\u539F\u59CB\u57FA\u56E0\u523B\u5728\u9AA8\u5B50\u91CC\u7684\u751F\u5B58\u672C\u80FD\u3002", "startFrame": 46, "durationFrames": 99 }], totalDurationFrames: 146, leftSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_2_2_left.png"), rightSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_2_2_right.png"), dontLabel: "\u274C \u80C6\u5C0F\u6015\u4E8B", doLabel: "\u2705 \u751F\u5B58\u672C\u80FD" }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 290, durationInFrames: 273, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5728\u8FD9\u4E2A\u6D41\u91CF\u4E3A\u738B\u7684\u7126\u8E81\u65F6\u4EE3\u3002", "startFrame": 0, "durationFrames": 55 }, { "text": "\u5A92\u4F53\u6700\u559C\u6B22\u653E\u5927\u7684\u5C31\u662F\u7F55\u89C1\u6781\u7AEF\u4E8B\u4EF6\u3002", "startFrame": 54, "durationFrames": 91 }, { "text": "\u8FD9\u4E9B\u65B0\u95FB\u50CF\u75C5\u6BD2\u4E00\u6837\u9738\u5360\u5C4F\u5E55\u3002", "startFrame": 145, "durationFrames": 63 }, { "text": "\u8BA9\u6211\u4EEC\u8BEF\u4EE5\u4E3A\u8FD9\u4E2A\u4E16\u754C\u6781\u5EA6\u5371\u9669\u3002", "startFrame": 207, "durationFrames": 66 }], totalDurationFrames: 273, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_2_3.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u6D41\u91CF\u4E3A\u738B", "showFrom": 0, "color": "#EF4444", "anim": "popIn", "audioEffect": "woosh" }, { "text": "\u7F55\u89C1\u6781\u7AEF\u4E8B\u4EF6", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": null }, { "text": "\u6781\u5EA6\u5371\u9669", "showFrom": 3, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_2/scene_2.mp3") })
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 127, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "2011\u5E74\u524D\uFF0C", "startFrame": 0, "durationFrames": 39 }, { "text": "\u666E\u901A\u4EBA\u60F3\u7528\u4E0A\u667A\u80FD\u624B\u673A\uFF0C", "startFrame": 38, "durationFrames": 53 }, { "text": "\u5230\u5E95\u6709\u591A\u96BE\uFF1F", "startFrame": 90, "durationFrames": 37 }], totalDurationFrames: 127, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_2_1.png"), enterEffect: "fadeIn" }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 127, durationInFrames: 266, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWStatCompare, { content: [{ "text": "\u4E00\u90E8\u4E09\u661F\u624B\u673A\u8981\u56DB\u5343\u591A\uFF0C", "startFrame": 0, "durationFrames": 62 }, { "text": "\u4E00\u90E8HTC\u624B\u673A\u8981\u4E09\u5343\u591A\u3002", "startFrame": 61, "durationFrames": 74 }, { "text": "\u666E\u901A\u4E0A\u73ED\u65CF\u6708\u85AA\u4E24\u4E09\u5343\uFF0C", "startFrame": 134, "durationFrames": 63 }, { "text": "\u4E70\u4E00\u90E8\u624B\u673A\u7B49\u4E8E\u4E00\u4E24\u4E2A\u6708\u5DE5\u8D44\u3002", "startFrame": 196, "durationFrames": 69 }], totalDurationFrames: 266, bars: [{ "label": "\u4E09\u661F", "value": 4999, "showFrom": 0 }, { "label": "HTC", "value": 3e3, "showFrom": 1 }], anchors: [{ "text": "\u4E00\u4E24\u4E2A\u6708\u5DE5\u8D44", "showFrom": 2, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 393, durationInFrames: 80, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4E70\u4E0D\u8D77\u6B63\u54C1\uFF0C", "startFrame": 0, "durationFrames": 35 }, { "text": "\u53EA\u80FD\u53BB\u4E70\u5C71\u5BE8\u673A\u3002", "startFrame": 34, "durationFrames": 45 }], totalDurationFrames: 80, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_2_4.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u5C71\u5BE8\u673A", "showFrom": 1, "color": "#EF4444", "anim": "highlight" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 473, durationInFrames: 153, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWPanelGrid, { content: [{ "text": "\u90A3\u4E9B\u5C71\u5BE8\u673A\uFF0C", "startFrame": 0, "durationFrames": 31 }, { "text": "\u5C4F\u5E55\u4E00\u78B0\u5C31\u788E\uFF0C", "startFrame": 30, "durationFrames": 38 }, { "text": "\u7CFB\u7EDF\u5361\u5F97\u8981\u6B7B\uFF0C", "startFrame": 67, "durationFrames": 38 }, { "text": "\u4FE1\u53F7\u5DEE\u5F97\u7ECF\u5E38\u6389\u7EBF\u3002", "startFrame": 104, "durationFrames": 48 }], totalDurationFrames: 153, panels: [{ src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_2_5_img0.png"), showFrom: 1 }, { src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_2_5_img1.png"), showFrom: 2 }, { src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_2_5_img2.png"), showFrom: 3 }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 626, durationInFrames: 187, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5F88\u591A\u6253\u5DE5\u4ED4\u3001", "startFrame": 0, "durationFrames": 32 }, { "text": "\u5B66\u751F\u3001", "startFrame": 31, "durationFrames": 11 }, { "text": "\u8001\u4EBA\uFF0C", "startFrame": 42, "durationFrames": 18 }, { "text": "\u8F9B\u8F9B\u82E6\u82E6\u6512\u94B1\u4E70\u4E00\u53F0\uFF0C", "startFrame": 60, "durationFrames": 55 }, { "text": "\u5374\u8FDE\u57FA\u672C\u7684\u667A\u80FD\u529F\u80FD\u90FD\u7528\u4E0D\u4E86\u3002", "startFrame": 114, "durationFrames": 72 }], totalDurationFrames: 187, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_2_6.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u6253\u5DE5\u4ED4", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u5B66\u751F", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u8001\u4EBA", "showFrom": 2, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 813, durationInFrames: 199, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u90A3\u65F6\u5019\u5FAE\u4FE1\u521A\u521A\u8D77\u6B65\uFF0C", "startFrame": 0, "durationFrames": 59 }, { "text": "\u652F\u4ED8\u5B9D\u4E3B\u8981\u5728\u7535\u8111\u4E0A\u7528\uFF0C", "startFrame": 58, "durationFrames": 56 }, { "text": "\u5927\u591A\u6570\u666E\u901A\u4EBA\u6839\u672C\u6CA1\u6CD5\u987A\u7545\u79FB\u52A8\u652F\u4ED8\u3002", "startFrame": 114, "durationFrames": 84 }], totalDurationFrames: 199, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_2_7.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u5FAE\u4FE1\u8D77\u6B65", "showFrom": 0, "color": "#000000", "anim": "slideUp" }, { "text": "\u79FB\u52A8\u652F\u4ED8", "showFrom": 2, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 1012, durationInFrames: 67, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u95E8\u69DB\u4E0D\u662F\u8F6F\u4EF6\uFF0C", "startFrame": 0, "durationFrames": 38 }, { "text": "\u662F\u624B\u673A\u3002", "startFrame": 37, "durationFrames": 30 }], totalDurationFrames: 67, coreSentence: ["\u95E8\u69DB\u4E0D\u662F\u8F6F\u4EF6", "\u662F\u624B\u673A"], coreSentenceAnchors: [{ "coreSentenceAnchor": "\u662F\u624B\u673A", "color": "#EF4444" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u5C0F\u7C73\u5E73\u6743/scene_2/scene_2.mp3") })
   ] });
 };
 
-;// ./src/remotions/认知偏见_可得性启发/scenes/Scene3.tsx
+;// ./src/remotions/小米平权/scenes/Scene3.tsx
 
 
 
 
-const src_remotions_scenes_Scene3_SCENE_DURATION_2 = 134 + 310;
-const src_remotions_scenes_Scene3_calculateScene3Duration_1 = () => {
-  return src_remotions_scenes_Scene3_SCENE_DURATION_2;
+const scenes_Scene3_SCENE_DURATION = 225 + 151 + 64 + 239 + 178 + 132;
+const Scene3_calculateScene3Duration = () => {
+  return scenes_Scene3_SCENE_DURATION;
 };
-const src_remotions_scenes_Scene3_Scene3_1 = () => {
+const Scene3_Scene3 = () => {
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 134, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWConceptCard, { content: [{ "text": "\u5B66\u672F\u754C\u7ED9\u8FD9\u79CD\u5927\u8111\u7684\u9519\u89C9\u8D77\u4E86\u4E2A\u540D\u5B57\u3002", "startFrame": 0, "durationFrames": 79 }, { "text": "\u53EB\u505A\u53EF\u5F97\u6027\u542F\u53D1\u3002", "startFrame": 78, "durationFrames": 55 }], totalDurationFrames: 134, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_3_1.png"), conceptName: "\u53EF\u5F97\u6027\u542F\u53D1", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 134, durationInFrames: 310, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8BF4\u767D\u4E86\u5C31\u662F\u5927\u8111\u5728\u6781\u5EA6\u5077\u61D2\u3002", "startFrame": 0, "durationFrames": 75 }, { "text": "\u6211\u4EEC\u5728\u5224\u65AD\u4E00\u4EF6\u4E8B\u60C5\u53D1\u751F\u7684\u6982\u7387\u65F6\u3002", "startFrame": 74, "durationFrames": 67 }, { "text": "\u5F80\u5F80\u4E0D\u53BB\u770B\u67AF\u71E5\u771F\u5B9E\u7684\u7EDF\u8BA1\u6570\u636E\u3002", "startFrame": 140, "durationFrames": 82 }, { "text": "\u800C\u662F\u770B\u8FD9\u4EF6\u4E8B\u5728\u8111\u5B50\u91CC\u60F3\u8D77\u6765\u6709\u591A\u5BB9\u6613\u3002", "startFrame": 222, "durationFrames": 88 }], totalDurationFrames: 310, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_3_2.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u6781\u5EA6\u5077\u61D2", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u4E0D\u770B\u7EDF\u8BA1\u6570\u636E", "showFrom": 2, "color": "#000000", "anim": "slideUp", "audioEffect": "ping" }, { "text": "\u60F3\u8D77\u6765\u6709\u591A\u5BB9\u6613", "showFrom": 3, "color": "#000000", "anim": "slideUp", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_3/scene_3.mp3") })
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 225, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWKpiHero, { content: [{ "text": "2011\u5E748\u6708\uFF0C", "startFrame": 0, "durationFrames": 39 }, { "text": "\u5C0F\u7C731\u6765\u4E86\u3002", "startFrame": 38, "durationFrames": 38 }, { "text": "1999\u5143\uFF0C", "startFrame": 75, "durationFrames": 45 }, { "text": "\u9876\u914D\u5904\u7406\u5668\u3002", "startFrame": 120, "durationFrames": 36 }, { "text": "790\u4E07\u53F0\u77AC\u95F4\u62A2\u5149\u3002", "startFrame": 156, "durationFrames": 69 }], totalDurationFrames: 225, blocks: [{ "value": 2011, "label": "\u5E74\u4EFD", "showFrom": 0 }, { "value": 1, "label": "\u5C0F\u7C73", "showFrom": 1 }, { "value": 1999, "suffix": "\u5143", "label": "\u4EF7\u683C", "showFrom": 2 }, { "value": 790, "suffix": "\u4E07\u53F0", "label": "\u9500\u91CF", "showFrom": 4, "useGrouping": true }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 225, durationInFrames: 151, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWKpiHero, { content: [{ "text": "\u4E24\u5E74\u540E\u7EA2\u7C73799\u5143\u6740\u51FA\uFF0C", "startFrame": 0, "durationFrames": 74 }, { "text": "\u6700\u7EC8\u5356\u51FA4460\u4E07\u53F0\u3002", "startFrame": 73, "durationFrames": 78 }], totalDurationFrames: 151, blocks: [{ "value": 799, "suffix": "\u5143", "showFrom": 0 }, { "value": 4460, "suffix": "\u4E07\u53F0", "showFrom": 1 }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 376, durationInFrames: 64, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u8FD94460\u4E07\u53F0\u610F\u5473\u7740\u4EC0\u4E48\uFF1F", "startFrame": 0, "durationFrames": 64 }], totalDurationFrames: 64, coreSentence: ["\u8FD94460\u4E07\u53F0\u610F\u5473\u7740\u4EC0\u4E48\uFF1F"] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 440, durationInFrames: 239, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWBeatSequence, { content: [{ "text": "\u662F\u4E09\u56DB\u7EBF\u57CE\u5E02\u7684\u5DE5\u4EBA\u3001", "startFrame": 0, "durationFrames": 53 }, { "text": "\u521A\u4E0A\u5927\u5B66\u7684\u519C\u6751\u5B66\u751F\u3001", "startFrame": 52, "durationFrames": 54 }, { "text": "\u7B2C\u4E00\u6B21\u6478\u667A\u80FD\u624B\u673A\u7684\u5927\u7237\u5927\u5988\uFF0C", "startFrame": 105, "durationFrames": 60 }, { "text": "\u7EC8\u4E8E\u7528\u4E0A\u4E86\u548C\u57CE\u91CC\u4EBA\u4E00\u6837\u7684\u624B\u673A\u3002", "startFrame": 165, "durationFrames": 74 }], totalDurationFrames: 239, stages: [{ imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_3_4_img0.png"), enterEffect: "fadeIn", tone: "calm" }, { imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_3_4_img1.png"), enterEffect: "slideBottom", tone: "alert", showFrom: 1 }, { imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_3_4_img2.png"), enterEffect: "slideBottom", tone: "alert", showFrom: 2 }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 679, durationInFrames: 178, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCauseChain, { content: [{ "text": "\u79FB\u52A8\u4E92\u8054\u7F51\u771F\u6B63\u4E0B\u6C89\u4E86\uFF0C", "startFrame": 0, "durationFrames": 65 }, { "text": "\u5FAE\u4FE1\u3001", "startFrame": 64, "durationFrames": 15 }, { "text": "\u652F\u4ED8\u5B9D\u624D\u8DDF\u7740\u8FD9\u4E9B\u624B\u673A\uFF0C", "startFrame": 78, "durationFrames": 50 }, { "text": "\u8D70\u8FDB\u4E86\u5343\u5BB6\u4E07\u6237\u3002", "startFrame": 127, "durationFrames": 51 }], totalDurationFrames: 178, layout: "horizontal", nodes: [{ label: "\u79FB\u52A8\u4E92\u8054", imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_3_5_img0.png"), showFrom: 0, enterEffect: "slideLeft" }, { label: "\u5FAE\u4FE1\u652F\u4ED8\u5B9D", imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_3_5_img1.png"), showFrom: 1, enterEffect: "zoomIn" }, { label: "\u8D70\u8FDB\u751F\u6D3B", imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_3_5_img2.png"), showFrom: 2, enterEffect: "slideBottom" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 857, durationInFrames: 132, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWKpiHero, { content: [{ "text": "\u4EE5\u524D\u6A2A\u884C\u76841.45\u4EBF\u53F0\u5C71\u5BE8\u673A\uFF0C", "startFrame": 0, "durationFrames": 86 }, { "text": "\u9010\u6E10\u88AB\u5F7B\u5E95\u6DD8\u6C70\u3002", "startFrame": 85, "durationFrames": 47 }], totalDurationFrames: 132, blocks: [{ "value": 1.45, "suffix": "\u4EBF\u53F0", "label": "\u5C71\u5BE8\u673A", "showFrom": 0 }, { "value": 0, "label": "\u88AB\u6DD8\u6C70", "showFrom": 1 }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u5C0F\u7C73\u5E73\u6743/scene_3/scene_3.mp3") })
   ] });
 };
 
-;// ./src/remotions/认知偏见_可得性启发/scenes/Scene4.tsx
+;// ./src/remotions/小米平权/scenes/Scene4.tsx
 
 
 
 
-const src_remotions_scenes_Scene4_SCENE_DURATION_0 = 334 + 224 + 251;
-const src_remotions_scenes_Scene4_calculateScene4Duration = () => {
-  return src_remotions_scenes_Scene4_SCENE_DURATION_0;
+const scenes_Scene4_SCENE_DURATION = 33 + 251 + 116 + 133 + 396 + 321 + 218 + 283;
+const Scene4_calculateScene4Duration = () => {
+  return scenes_Scene4_SCENE_DURATION;
 };
-const src_remotions_scenes_Scene4_Scene4 = () => {
+const Scene4_Scene4 = () => {
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 334, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTimeline, { content: [{ "text": "\u56E0\u4E3A\u7A7A\u96BE\u6781\u5176\u60E8\u70C8\u4E14\u88AB\u75AF\u72C2\u62A5\u9053\u3002", "startFrame": 0, "durationFrames": 88 }, { "text": "\u6240\u4EE5\u5B83\u5728\u4F60\u7684\u8BB0\u5FC6\u5E93\u91CC\u7279\u522B\u9C9C\u6D3B\u3002", "startFrame": 87, "durationFrames": 77 }, { "text": "\u4F60\u7684\u5927\u8111\u4E00\u79D2\u949F\u5C31\u80FD\u8C03\u53D6\u6050\u6016\u753B\u9762\u3002", "startFrame": 163, "durationFrames": 76 }, { "text": "\u4E8E\u662F\u7ACB\u523B\u5F97\u51FA\u5750\u98DE\u673A\u968F\u65F6\u4F1A\u6389\u7684\u7ED3\u8BBA\u3002", "startFrame": 238, "durationFrames": 95 }], totalDurationFrames: 334, images: [{ src: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_4_1_img0.png"), position: "left", enterEffect: "fadeIn", textIndex: 0 }, { src: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_4_1_img1.png"), position: "center", enterEffect: "slideBottom", textIndex: 1 }, { src: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_4_1_img2.png"), position: "right", enterEffect: "fadeIn", textIndex: 3 }], anchors: [{ "text": "\u60E8\u70C8", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u8BB0\u5FC6\u6DF1\u523B", "showFrom": 1, "color": "#000000", "anim": "popIn", "audioEffect": "ping" }, { "text": "\u5760\u6BC1\u7ED3\u8BBA", "showFrom": 3, "color": "#000000", "anim": "popIn", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 334, durationInFrames: 224, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4F46\u4E8B\u5B9E\u4E0A\u8F66\u7978\u7684\u6B7B\u4EA1\u4EBA\u6570\u8981\u591A\u5F97\u591A\u3002", "startFrame": 0, "durationFrames": 81 }, { "text": "\u53EA\u56E0\u4E3A\u8F66\u7978\u592A\u5E38\u89C1\u4E0A\u4E0D\u4E86\u5934\u6761\u3002", "startFrame": 80, "durationFrames": 74 }, { "text": "\u4F60\u7684\u5927\u8111\u5C31\u81EA\u52A8\u5FFD\u7565\u4E86\u5B83\u7684\u5371\u9669\u6027\u3002", "startFrame": 153, "durationFrames": 70 }], totalDurationFrames: 224, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_4_2.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u8F66\u7978", "showFrom": 0, "color": "#000000", "anim": "popIn", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 558, durationInFrames: 251, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWStatCompare, { content: [{ "text": "\u540C\u7406\u7F8E\u56FD\u67AA\u51FB\u6848\u65B0\u95FB\u9891\u53D1\u4F1A\u8BA9\u4F60\u89C9\u5F97\u7F8E\u56FD\u6CBB\u5B89\u6781\u5DEE\u3002", "startFrame": 0, "durationFrames": 123 }, { "text": "\u5374\u6CA1\u60F3\u8FC7\u968F\u673A\u67AA\u51FB\u6B7B\u4EA1\u7387\u6BD4\u8F66\u7978\u6B7B\u4EA1\u7387\u4F4E\u7684\u591A\u5F97\u591A\u3002", "startFrame": 122, "durationFrames": 128 }], totalDurationFrames: 251, leftValue: 1, rightValue: 12, leftLabel: "\u968F\u673A\u67AA\u51FB", rightLabel: "\u8F66\u7978" }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_4/scene_4.mp3") })
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 33, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u4E0D\u6B62\u624B\u673A\u3002", "startFrame": 0, "durationFrames": 33 }], totalDurationFrames: 33, coreSentence: ["\u4E0D\u6B62\u624B\u673A\u3002"] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 33, durationInFrames: 251, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "2014\u5E74\u4E4B\u524D\uFF0C\u624B\u73AF\u7C7B\u4EA7\u54C1\u52A8\u8F84\u4E03\u767E\u591A\u516B\u767E\u591A\uFF0C", "startFrame": 0, "durationFrames": 115 }, { "text": "\u529F\u80FD\u4E5F\u53EA\u6709\u8FD0\u52A8\u76D1\u6D4B\u800C\u5DF2\u3002", "startFrame": 114, "durationFrames": 64 }, { "text": "\u90A3\u662F\u53EA\u6709\u6709\u94B1\u4EBA\u624D\u80FD\u4E70\u5F97\u8D77\u7684\u73A9\u5177\u3002", "startFrame": 177, "durationFrames": 74 }], totalDurationFrames: 251, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_4_2.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u6602\u8D35\u7684\u624B\u73AF", "showFrom": 0, "color": "#000000", "anim": "spring", "audioEffect": "ping" }, { "text": "\u6709\u94B1\u4EBA\u7684\u73A9\u5177", "showFrom": 2, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 284, durationInFrames: 116, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u7136\u540E\u5C0F\u7C73\u8FDB\u6765\u4E86\uFF0C79\u5143\u3002", "startFrame": 0, "durationFrames": 67 }, { "text": "\u4E00\u5E74\u53561000\u4E07\u6761\uFF0C", "startFrame": 66, "durationFrames": 50 }], totalDurationFrames: 116, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_4_3.png"), enterEffect: "fadeIn", anchors: [{ "text": "79\u5143", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "1000\u4E07\u6761", "showFrom": 1, "color": "#000000", "anim": "highlight", "audioEffect": "ping" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 400, durationInFrames: 133, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWStatCompare, { content: [{ "text": "\u5BF9\u6807\u54C1\u724C\u7B2C\u4E8C\u5929\u5C31\u628A670\u5143\u7684\u4EA7\u54C1\uFF0C", "startFrame": 0, "durationFrames": 89 }, { "text": "\u76F4\u63A5\u964D\u523099\u5143\u3002", "startFrame": 88, "durationFrames": 44 }], totalDurationFrames: 133, bars: [{ "label": "\u5BF9\u6807\u539F\u4EF7", "value": 670, "showFrom": 0 }, { "label": "\u6B21\u65E5\u6807\u4EF7", "value": 99, "showFrom": 1 }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 533, durationInFrames: 396, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWDosAndDonts, { content: [{ "text": "\u7A7A\u6C14\u51C0\u5316\u5668\uFF0C", "startFrame": 0, "durationFrames": 46 }, { "text": "\u4EE5\u524D\u98DE\u5229\u6D66\u53567999\u5143\uFF0C", "startFrame": 45, "durationFrames": 78 }, { "text": "\u7C7B\u4F3C\u6548\u679C\u7684\u4EA7\u54C1\u6700\u4FBF\u5B9C\u4E5F\u89814500\u591A\u3002", "startFrame": 123, "durationFrames": 95 }, { "text": "\u5C0F\u7C73899\u5143\u8FDB\u6765\uFF0C", "startFrame": 218, "durationFrames": 59 }, { "text": "\u666E\u901A\u5BB6\u5EAD\u7EC8\u4E8E\u80FD\u7528\u4E0A\u9760\u8C31\u51C0\u5316\u5668\uFF0C", "startFrame": 277, "durationFrames": 71 }, { "text": "\u4E0D\u7528\u6BCF\u5929\u5438\u96FE\u973E\u3002", "startFrame": 348, "durationFrames": 48 }], totalDurationFrames: 396, left: { label: "\u274C \u9AD8\u4EF7\u95E8\u69DB", src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_4_5_left.png"), showFrom: 1 }, right: { label: "\u2705 \u5E73\u4EF7\u7528\u4E0A", src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_4_5_right.png"), showFrom: 3 } }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 929, durationInFrames: 321, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWDosAndDonts, { content: [{ "text": "\u667A\u80FD\u7535\u89C6\uFF0C", "startFrame": 0, "durationFrames": 29 }, { "text": "\u4EE5\u524D\u5927\u5C3A\u5BF8\u516D\u4E03\u5343\u8D77\u6B65\u3002", "startFrame": 28, "durationFrames": 68 }, { "text": "2013\u5E74\uFF0C\u5C0F\u7C73\u6765\u4E86\uFF0C47\u5BF8\u53EA\u8981\u4E24\u5343\u4E5D\u767E\u4E5D\u5341\u4E5D\u5143\u3002", "startFrame": 96, "durationFrames": 128 }, { "text": "\u9996\u62793000\u53F0\uFF0C1\u520658\u79D2\u5C31\u5356\u5B8C\u4E86\u3002", "startFrame": 223, "durationFrames": 98 }], totalDurationFrames: 321, left: { label: "\u274C \u9AD8\u4EF7\u5927\u5C4F", src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_4_7_left.png"), showFrom: 1 }, right: { label: "\u2705 \u5C0F\u7C73\u5B9A\u4EF7", src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_4_7_right.png"), showFrom: 2 } }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 1250, durationInFrames: 218, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWPanelGrid, { content: [{ "text": "\u4E4B\u540E\u6D77\u4FE1\u3001", "startFrame": 0, "durationFrames": 32 }, { "text": "TCL\u3001", "startFrame": 31, "durationFrames": 19 }, { "text": "\u521B\u7EF4\uFF0C", "startFrame": 50, "durationFrames": 22 }, { "text": "\u88AB\u8FEB\u5168\u7EBF\u964D\u4EF7\u3002", "startFrame": 72, "durationFrames": 56 }, { "text": "\u666E\u901A\u5BB6\u5EAD\u7B2C\u4E00\u6B21\u80FD\u7528\u4E0A\u5927\u5C4F\u667A\u80FD\u7535\u89C6", "startFrame": 127, "durationFrames": 90 }], totalDurationFrames: 218, panels: [{ src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_4_9_img0.png"), showFrom: 0, enterEffect: "fadeIn" }, { src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_4_9_img1.png"), showFrom: 1, enterEffect: "slideLeft" }, { src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_4_9_img2.png"), showFrom: 2, enterEffect: "slideBottom" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 1468, durationInFrames: 283, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCauseChain, { content: [{ "text": "\u79D1\u6280\u4EA7\u54C1\u7684\u6BCF\u4E2A\u54C1\u7C7B\u7684\u903B\u8F91\u90FD\u4E00\u6837\uFF1A", "startFrame": 0, "durationFrames": 74 }, { "text": "\u4EE5\u524D\u6709\u4EBA\u9760\u6CA1\u6709\u7ADE\u4E89\u7684\u9AD8\u6EA2\u4EF7\u6536\u5272\u4F60\uFF0C", "startFrame": 73, "durationFrames": 84 }, { "text": "\u5C0F\u7C73\u8FDB\u6765\uFF0C\u628A\u4EF7\u683C\u6253\u4E0B\u6765\uFF0C", "startFrame": 157, "durationFrames": 62 }, { "text": "\u628A\u79D1\u6280\u771F\u6B63\u4EA4\u5230\u666E\u901A\u4EBA\u624B\u91CC\u3002", "startFrame": 218, "durationFrames": 65 }], totalDurationFrames: 283, layout: "horizontal", nodes: [{ label: "\u9AD8\u6EA2\u4EF7\u6536\u5272", imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_4_10_img0.png"), showFrom: 1, enterEffect: "slideLeft" }, { label: "\u5C0F\u7C73\u964D\u4EF7", imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_4_10_img1.png"), showFrom: 2, enterEffect: "zoomIn" }, { label: "\u79D1\u6280\u5230\u624B", imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_4_10_img2.png"), showFrom: 3, enterEffect: "slideBottom" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u5C0F\u7C73\u5E73\u6743/scene_4/scene_4.mp3") })
   ] });
 };
 
-;// ./src/remotions/认知偏见_可得性启发/scenes/Scene5.tsx
+;// ./src/remotions/小米平权/scenes/Scene5.tsx
 
 
 
 
-const scenes_Scene5_SCENE_DURATION = 168 + 258 + 167;
+const scenes_Scene5_SCENE_DURATION = 51 + 210 + 119 + 128 + 165 + 256;
 const Scene5_calculateScene5Duration = () => {
   return scenes_Scene5_SCENE_DURATION;
 };
 const Scene5_Scene5 = () => {
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 168, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u9762\u5BF9\u8FD9\u79CD\u88AB\u5A92\u4F53\u548C\u672C\u80FD\u53CC\u91CD\u626D\u66F2\u7684\u73B0\u5B9E\u3002", "startFrame": 0, "durationFrames": 99 }, { "text": "\u6211\u4EEC\u8BE5\u5982\u4F55\u4FDD\u62A4\u81EA\u5DF1\u7684\u5224\u65AD\u529B\u5462\u3002", "startFrame": 98, "durationFrames": 70 }], totalDurationFrames: 168, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_5_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u53CC\u91CD\u626D\u66F2", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u4FDD\u62A4\u5224\u65AD\u529B", "showFrom": 1, "color": "#000000", "anim": "popIn", "audioEffect": null }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 168, durationInFrames: 258, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWStepList, { content: [{ "text": "\u8BB0\u4F4F\u8FD9\u51E0\u4E2A\u51C6\u5219\u3002", "startFrame": 0, "durationFrames": 42 }, { "text": "\u4E0A\u70ED\u641C\u4E0D\u7B49\u4E8E\u5F88\u5E38\u89C1\u3002", "startFrame": 41, "durationFrames": 68 }, { "text": "\u5BB9\u6613\u60F3\u8D77\u6765\u4E0D\u7B49\u4E8E\u771F\u7684\u91CD\u8981\u3002", "startFrame": 109, "durationFrames": 62 }, { "text": "\u7528\u6570\u636E\u6821\u51C6\u4F60\u88AB\u5A92\u4F53\u626D\u66F2\u7684\u76F4\u89C9\u3002", "startFrame": 170, "durationFrames": 88 }], totalDurationFrames: 258, steps: [{ "text": "\u4E0A\u70ED\u641C \u4E0D\u7B49\u4E8E \u5F88\u5E38\u89C1", "showFrom": 1 }, { "text": "\u5BB9\u6613\u60F3\u8D77\u6765 \u4E0D\u7B49\u4E8E \u771F\u7684\u91CD\u8981", "showFrom": 2 }, { "text": "\u7528\u6570\u636E\u6821\u51C6\u4F60\u88AB\u5A92\u4F53\u626D\u66F2\u7684\u76F4\u89C9", "showFrom": 3 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 426, durationInFrames: 167, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u8BB0\u4F4F\uFF0C", "startFrame": 0, "durationFrames": 18 }, { "text": "\u53EA\u6709\u7528\u771F\u5B9E\u7684\u6570\u636E\u5BF9\u6297\u5E26\u6709\u504F\u89C1\u7684\u76F4\u89C9\uFF0C", "startFrame": 17, "durationFrames": 88 }, { "text": "\u4F60\u624D\u80FD\u771F\u6B63\u770B\u6E05\u4E16\u754C\u7684\u5168\u8C8C\u3002", "startFrame": 104, "durationFrames": 62 }], totalDurationFrames: 167, coreSentence: "\u53EA\u6709\u7528\u6570\u636E\u5BF9\u6297\u76F4\u89C9\uFF0C\u4F60\u624D\u80FD\u771F\u6B63\u770B\u6E05\u4E16\u754C\u7684\u5168\u8C8C\u3002", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u770B\u6E05\u4E16\u754C\u7684\u5168\u8C8C", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1/scene_5/scene_5.mp3") })
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 51, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMagnifyingGlass, { content: [{ "text": "\u800C\u6700\u786C\u7684\u8BC1\u636E\u8FD8\u5728\u540E\u9762\u3002", "startFrame": 0, "durationFrames": 51 }], totalDurationFrames: 51, anchors: [{ "text": "\u6700\u786C\u7684\u8BC1\u636E", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 51, durationInFrames: 210, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "2018\u5E74\uFF0C", "startFrame": 0, "durationFrames": 29 }, { "text": "\u96F7\u519B\u5728\u6B66\u6C49\u5927\u5B66\u5F53\u7740\u5168\u7403\u5A92\u4F53\u7ACB\u4E0B\u8463\u4E8B\u4F1A\u51B3\u8BAE\u2014\u2014", "startFrame": 28, "durationFrames": 94 }, { "text": "\u6574\u4F53\u786C\u4EF6\u5229\u6DA6\u7387\u6C38\u4E0D\u8D855%\u3002", "startFrame": 122, "durationFrames": 88 }], totalDurationFrames: 210, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_5_2.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u8463\u4E8B\u4F1A\u51B3\u8BAE", "showFrom": 1, "color": "#000000", "anim": "spring", "audioEffect": "ping" }, { "text": "\u6C38\u4E0D\u8D855%", "showFrom": 2, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 261, durationInFrames: 119, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8D85\u51FA\u90E8\u5206\uFF0C", "startFrame": 0, "durationFrames": 24 }, { "text": "\u5168\u989D\u8FD4\u8FD8\u7528\u6237\u3002", "startFrame": 23, "durationFrames": 42 }, { "text": "\u8FD9\u662F\u7B7E\u4E86\u5B57\u7684\u6CD5\u5F8B\u5951\u7EA6\u3002", "startFrame": 65, "durationFrames": 54 }], totalDurationFrames: 119, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_5_3.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u5168\u989D\u8FD4\u8FD8", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u6CD5\u5F8B\u5951\u7EA6", "showFrom": 2, "color": "#000000", "anim": "slideUp" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 380, durationInFrames: 128, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWProgressRing, { content: [{ "text": "2018\u5E74\u5B9E\u9645\u8D22\u62A5\u663E\u793A\uFF0C", "startFrame": 0, "durationFrames": 56 }, { "text": "\u4ED6\u4EEC\u786C\u4EF6\u51C0\u5229\u7387\u53EA\u6709\u4E0D\u52301%\u3002", "startFrame": 55, "durationFrames": 72 }], totalDurationFrames: 128, blocks: [{ "percent": 1, "label": "\u786C\u4EF6\u51C0\u5229\u7387", "subLabel": "2018 \u8D22\u62A5 \xB7 \u4E0D\u5230 1%", "showFrom": 1, "ringColor": "#2B6CB0" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 508, durationInFrames: 165, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u4ED6\u4EEC\u5B8C\u5168\u53EF\u4EE5\u628A\u4EF7\u683C\u518D\u63D0\u51E0\u767E\u5757\uFF0C", "startFrame": 0, "durationFrames": 69 }, { "text": "\u591A\u8D5A\u51E0\u500D\u5229\u6DA6\uFF0C", "startFrame": 68, "durationFrames": 52 }, { "text": "\u5374\u4E3B\u52A8\u514B\u5236\u4F4F\u4E86\u3002", "startFrame": 120, "durationFrames": 45 }], totalDurationFrames: 165, notText: "\u63D0\u4EF7", butText: "\u4E3B\u52A8\u514B\u5236\u4F4F", butSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_5_5.png"), notContentIndex: 0, butContentIndex: 2 }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 673, durationInFrames: 256, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWPanelGrid, { content: [{ "text": "\u8FD9\u4EFD\u514B\u5236\uFF0C", "startFrame": 0, "durationFrames": 28 }, { "text": "\u8BA9\u666E\u901A\u5BB6\u5EAD\u90FD\u80FD\u4E70\u5F97\u8D77", "startFrame": 27, "durationFrames": 59 }, { "text": "\u597D\u624B\u673A\u3001", "startFrame": 86, "durationFrames": 20 }, { "text": "\u597D\u7535\u89C6\u3001", "startFrame": 105, "durationFrames": 18 }, { "text": "\u597D\u624B\u73AF\uFF0C", "startFrame": 123, "durationFrames": 19 }, { "text": "\u4EE5\u53CA\u66F4\u591A\u7684\u4EA7\u54C1\uFF0C", "startFrame": 141, "durationFrames": 36 }, { "text": "\u8BA9\u6211\u4EEC\u771F\u6B63\u4EAB\u53D7\u5230\u79D1\u6280\u5E26\u6765\u7684\u4FBF\u5229\u3002", "startFrame": 177, "durationFrames": 78 }], totalDurationFrames: 256, panels: [{ src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_5_6_img0.png"), showFrom: 2, enterEffect: "slideLeft" }, { src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_5_6_img1.png"), showFrom: 3, enterEffect: "slideBottom" }, { src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_5_6_img2.png"), showFrom: 4, enterEffect: "zoomIn" }, { src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_5_6_img3.png"), showFrom: 5, enterEffect: "zoomIn" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u5C0F\u7C73\u5E73\u6743/scene_5/scene_5.mp3") })
   ] });
 };
 
-;// ./src/remotions/认知偏见_可得性启发/认知偏见可得性启发.tsx
+;// ./src/remotions/小米平权/scenes/Scene6.tsx
+
+
+
+
+const Scene6_SCENE_DURATION = 89 + 226 + 260 + 69;
+const calculateScene6Duration = () => {
+  return Scene6_SCENE_DURATION;
+};
+const Scene6 = () => {
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 89, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u201C\u5EC9\u4EF7\u201D\u8FD9\u4E24\u4E2A\u5B57\uFF0C", "startFrame": 0, "durationFrames": 39 }, { "text": "\u4ECE\u6765\u4E0D\u662F\u4EA7\u54C1\u7684\u95EE\u9898\u3002", "startFrame": 39, "durationFrames": 50 }], totalDurationFrames: 89, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_6_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u4EA7\u54C1\u95EE\u9898", "showFrom": 1, "color": "#000000", "anim": "slideUp" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 89, durationInFrames: 226, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCauseChain, { content: [{ "text": "\u5B83\u662F\u4E00\u5957\u7CBE\u5FC3\u8BBE\u8BA1\u7684\u8BDD\u8BED\u6B66\u5668\uFF0C", "startFrame": 0, "durationFrames": 71 }, { "text": "\u8BA9\u4F60\u5ACC\u5F03\u81EA\u5DF1\u4E70\u5F97\u8D77\u7684\u4E1C\u897F\uFF0C", "startFrame": 70, "durationFrames": 68 }, { "text": "\u8BA9\u4F60\u7EE7\u7EED\u5FC3\u7518\u60C5\u613F\u88AB\u9AD8\u6EA2\u4EF7\u6536\u5272\u3002", "startFrame": 138, "durationFrames": 88 }], totalDurationFrames: 226, layout: "horizontal", nodes: [{ label: "\u8BDD\u8BED\u6B66\u5668", imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_6_2_img0.png"), showFrom: 0, enterEffect: "slideLeft" }, { label: "\u5ACC\u5F03\u81EA\u8EAB", imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_6_2_img1.png"), showFrom: 1, enterEffect: "zoomIn" }, { label: "\u9AD8\u6EA2\u4EF7\u6536\u5272", imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_6_2_img2.png"), showFrom: 2, enterEffect: "slideBottom" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 315, durationInFrames: 260, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTimeline, { content: [{ "text": "\u800C\u5C0F\u7C73\u505A\u7684\uFF0C", "startFrame": 0, "durationFrames": 36 }, { "text": "\u6070\u6070\u76F8\u53CD\u3002", "startFrame": 36, "durationFrames": 43 }, { "text": "\u5B83\u7528\u6781\u81F4\u7684\u514B\u5236\uFF0C", "startFrame": 78, "durationFrames": 41 }, { "text": "\u628A\u79D1\u6280\u4ECE\u5C11\u6570\u4EBA\u7684\u5962\u4F88\u54C1\uFF0C", "startFrame": 118, "durationFrames": 66 }, { "text": "\u53D8\u6210\u4E86\u6BCF\u4E2A\u666E\u901A\u4EBA\u90FD\u80FD\u4EAB\u6709\u7684\u6743\u5229\u3002", "startFrame": 184, "durationFrames": 76 }], totalDurationFrames: 260, images: [{ src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_6_4_img0.png"), position: "left", enterEffect: "slideLeft", textIndex: 0 }, { src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_6_4_img1.png"), position: "center", enterEffect: "fadeIn", textIndex: 2 }, { src: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_6_4_img2.png"), position: "right", enterEffect: "zoomIn", textIndex: 4 }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 575, durationInFrames: 69, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u8FD9\uFF0C", "startFrame": 0, "durationFrames": 16 }, { "text": "\u624D\u662F\u771F\u6B63\u7684\u79D1\u6280\u5E73\u6743\u3002", "startFrame": 15, "durationFrames": 54 }], totalDurationFrames: 69, coreSentence: ["\u8FD9\uFF0C\u624D\u662F\u771F\u6B63\u7684\u79D1\u6280\u5E73\u6743\u3002"], coreSentenceAnchors: [{ "coreSentenceAnchor": "\u79D1\u6280\u5E73\u6743", "color": "#EF4444" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u5C0F\u7C73\u5E73\u6743/scene_6/scene_6.mp3") })
+  ] });
+};
+
+;// ./src/remotions/小米平权/scenes/Scene7.tsx
+
+
+
+
+const Scene7_SCENE_DURATION = 65 + 320;
+const calculateScene7Duration = () => {
+  return Scene7_SCENE_DURATION;
+};
+const Scene7 = () => {
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 65, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5E02\u573A\u4E0A\u4ECE\u6765\u4E0D\u7F3A\u5356\u8D35\u7684\u4E1C\u897F\u3002", "startFrame": 0, "durationFrames": 65 }], totalDurationFrames: 65, imageSrc: (0,esm.staticFile)("images/\u5C0F\u7C73\u5E73\u6743/scene_7_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u6602\u8D35", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 65, durationInFrames: 320, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u771F\u6B63\u7A00\u7F3A\u7684\uFF0C", "startFrame": 0, "durationFrames": 39 }, { "text": "\u662F\u613F\u610F\u628A\u79D1\u6280\u7EA2\u5229\u8BA9\u6E21\u7ED9\u666E\u901A\u4EBA\u7684\u516C\u53F8\u3002", "startFrame": 38, "durationFrames": 86 }, { "text": "\u8BA9\u66F4\u591A\u4EBA\u4E70\u5F97\u8D77\u597D\u79D1\u6280\u3001", "startFrame": 123, "durationFrames": 57 }, { "text": "\u7528\u5F97\u4E0A\u597D\u79D1\u6280\uFF0C", "startFrame": 180, "durationFrames": 36 }, { "text": "\u8FD9\u6BD4\u5236\u9020\u4E00\u5806\u9AD8\u7AEF\u5D07\u62DC\uFF0C", "startFrame": 216, "durationFrames": 53 }, { "text": "\u96BE\u5F97\u591A\uFF0C", "startFrame": 268, "durationFrames": 20 }, { "text": "\u4E5F\u8D35\u91CD\u5F97\u591A\u3002", "startFrame": 288, "durationFrames": 32 }], totalDurationFrames: 320, coreSentence: ["\u8BA9\u66F4\u591A\u4EBA\u4E70\u5F97\u8D77\u3001\u7528\u5F97\u4E0A\u597D\u79D1\u6280", "\u6BD4\u5236\u9020\u4E00\u5806\u9AD8\u7AEF\u5D07\u62DC\u8D35\u91CD\u5F97\u591A"], coreSentenceAnchors: [{ "coreSentenceAnchor": "\u4E70\u5F97\u8D77\u3001\u7528\u5F97\u4E0A", "color": "#EF4444" }, { "coreSentenceAnchor": "\u8D35\u91CD\u5F97\u591A", "color": "#EF4444" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u5C0F\u7C73\u5E73\u6743/scene_7/scene_7.mp3") })
+  ] });
+};
+
+;// ./src/remotions/小米平权/小米平权Constants.ts
 
 
 
@@ -79851,87 +81366,83 @@ const Scene5_Scene5 = () => {
 
 
 
-
-
-
-
-const \u8BA4\u77E5\u504F\u89C1\u53EF\u5F97\u6027\u542F\u53D1Schema = lib.z.object({});
-const src_remotions_TRANSITION_DURATION_3 = 15;
-const src_remotions_SCENE_END_PADDING_3 = 20;
-const src_remotions_COVER_DURATION_FRAMES_3 = 5;
-const src_remotions_sceneConfigs_3 = [
-  { name: "scene1", duration: src_remotions_scenes_Scene1_calculateScene1Duration_1() + src_remotions_SCENE_END_PADDING_3, component: src_remotions_scenes_Scene1_Scene1_1, label: "\u5F15\u5165\xB7\u7A7A\u96BE\u7126\u8651\u4E0E\u907F\u9669" },
-  { name: "scene2", duration: src_remotions_scenes_Scene2_calculateScene2Duration_1() + src_remotions_SCENE_END_PADDING_3, component: src_remotions_scenes_Scene2_Scene2_1, label: "\u5256\u6790\xB7\u6050\u60E7\u52AB\u6301\u4E0E\u672C\u80FD" },
-  { name: "scene3", duration: src_remotions_scenes_Scene3_calculateScene3Duration_1() + src_remotions_SCENE_END_PADDING_3, component: src_remotions_scenes_Scene3_Scene3_1, label: "\u547D\u540D\xB7\u53EF\u5F97\u6027\u542F\u53D1" },
-  { name: "scene4", duration: src_remotions_scenes_Scene4_calculateScene4Duration() + src_remotions_SCENE_END_PADDING_3, component: src_remotions_scenes_Scene4_Scene4, label: "\u53CD\u8F6C\xB7\u8F66\u7978\u4E0E\u6162\u6027\u75C5" },
-  { name: "scene5", duration: Scene5_calculateScene5Duration() + src_remotions_SCENE_END_PADDING_3, component: Scene5_Scene5, label: "\u53EC\u5524\xB7\u6570\u636E\u4E0E\u964D\u7EA7" }
+const \u5C0F\u7C73\u5E73\u6743Schema = lib.z.object({});
+const _Constants_TRANSITION_DURATION = 15;
+const _Constants_SCENE_END_PADDING = 20;
+const _Constants_COVER_DURATION_FRAMES = 5;
+const _Constants_sceneConfigs = [
+  { name: "scene1", duration: Scene1_calculateScene1Duration() + _Constants_SCENE_END_PADDING, component: Scene1_Scene1, label: "\u5F15\u5165\uFF1A\u5C0F\u7C73\u4E0E\u5EC9\u4EF7\u7684\u771F\u76F8" },
+  { name: "scene2", duration: Scene2_calculateScene2Duration() + _Constants_SCENE_END_PADDING, component: Scene2_Scene2, label: "\u5256\u6790\uFF1A\u667A\u80FD\u624B\u673A\u5E73\u6C11\u5316\u56F0\u5883" },
+  { name: "scene3", duration: Scene3_calculateScene3Duration() + _Constants_SCENE_END_PADDING, component: Scene3_Scene3, label: "\u53D9\u8FF0\uFF1A\u5C0F\u7C731\u6A2A\u7A7A\u51FA\u4E16" },
+  { name: "scene4", duration: Scene4_calculateScene4Duration() + _Constants_SCENE_END_PADDING, component: Scene4_Scene4, label: "\u5256\u6790\uFF1A\u5C0F\u7C73\u6A21\u5F0F\u7684\u964D\u7EF4\u6253\u51FB" },
+  { name: "scene5", duration: Scene5_calculateScene5Duration() + _Constants_SCENE_END_PADDING, component: Scene5_Scene5, label: "\u53CD\u8F6C\uFF1A\u786C\u4EF6\u5229\u6DA6\u7387\u7684\u514B\u5236" },
+  { name: "scene6", duration: calculateScene6Duration() + _Constants_SCENE_END_PADDING, component: Scene6, label: "\u547D\u540D\uFF1A\u79D1\u6280\u5E73\u6743" },
+  { name: "scene7", duration: calculateScene7Duration() + _Constants_SCENE_END_PADDING, component: Scene7, label: "\u53EC\u5524\uFF1A\u547C\u5524\u79D1\u6280\u7EA2\u5229" }
 ];
-const MAIN_DURATION_\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1 = src_remotions_sceneConfigs_3.reduce((total, c) => total + c.duration, 0) - (src_remotions_sceneConfigs_3.length - 1) * src_remotions_TRANSITION_DURATION_3;
-const TOTAL_DURATION_\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1 = src_remotions_COVER_DURATION_FRAMES_3 + MAIN_DURATION_\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1;
-const src_remotions_ProgressBar_3 = () => {
-  var _a;
-  const frame = (0,esm.useCurrentFrame)();
-  if (frame < src_remotions_COVER_DURATION_FRAMES_3) {
-    return null;
-  }
-  const contentFrame = frame - src_remotions_COVER_DURATION_FRAMES_3;
-  let currentStart = 0;
-  const segments = src_remotions_sceneConfigs_3.map((c, i) => {
-    const isLast = i === src_remotions_sceneConfigs_3.length - 1;
-    const segmentDuration = isLast ? c.duration : c.duration - src_remotions_TRANSITION_DURATION_3;
-    const segment = { start: currentStart, duration: segmentDuration };
-    currentStart += segmentDuration;
-    return segment;
-  });
-  const activeIndex = segments.findIndex((seg) => contentFrame >= seg.start && contentFrame < seg.start + seg.duration);
-  const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
-  const activeLabel = ((_a = src_remotions_sceneConfigs_3[validActiveIndex]) == null ? void 0 : _a.label) || "";
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: {
-    position: "absolute",
-    top: 40,
-    left: 40,
-    right: 40,
-    display: "flex",
-    flexDirection: "column",
-    gap: 16,
-    zIndex: 100
-  }, children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, height: 8 }, children: segments.map((seg, i) => {
-      const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));
-      const isActive = i === validActiveIndex;
-      return /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        flex: 1,
-        backgroundColor: isActive ? "rgba(34, 43, 69, 0.18)" : "rgba(34, 43, 69, 0.1)",
-        borderRadius: 999,
-        overflow: "hidden",
-        border: isActive ? "1px solid rgba(34, 43, 69, 0.32)" : "1px solid rgba(34, 43, 69, 0.2)",
-        boxShadow: isActive ? "0 3px 10px rgba(31, 41, 55, 0.12)" : "0 1px 4px rgba(31, 41, 55, 0.08)"
-      }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        width: `${progress * 100}%`,
-        height: "100%",
-        background: isActive ? "linear-gradient(90deg, rgba(29, 78, 216, 0.95), rgba(56, 189, 248, 0.92))" : "rgba(30, 41, 59, 0.72)",
-        boxShadow: isActive ? "0 0 12px rgba(37, 99, 235, 0.35)" : "none"
-      } }) }, i);
-    }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-      fontSize: 30,
-      fontWeight: 700,
-      fontFamily: '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif',
-      letterSpacing: 0.4,
-      color: "rgba(17, 24, 39, 0.95)",
-      textAlign: "left",
-      textShadow: "0 1px 2px rgba(255,255,255,0.45)",
-      padding: "6px 14px",
-      backgroundColor: "rgba(255, 255, 255, 0.58)",
-      border: "1px solid rgba(17, 24, 39, 0.12)",
-      borderRadius: 10,
-      alignSelf: "flex-start",
-      backdropFilter: "blur(6px)",
-      boxShadow: "0 6px 20px rgba(15, 23, 42, 0.12)"
-    }, children: activeLabel })
-  ] });
-};
-const \u8BA4\u77E5\u504F\u89C1\u53EF\u5F97\u6027\u542F\u53D1 = () => {
+const MAIN_DURATION_\u5C0F\u7C73\u5E73\u6743 = _Constants_sceneConfigs.reduce((total, c) => total + c.duration, 0) - (_Constants_sceneConfigs.length - 1) * _Constants_TRANSITION_DURATION;
+const TOTAL_DURATION_\u5C0F\u7C73\u5E73\u6743 = _Constants_COVER_DURATION_FRAMES + MAIN_DURATION_\u5C0F\u7C73\u5E73\u6743;
+const _Constants_DESIGN_W = 1920;
+const _Constants_DESIGN_H = 1080;
+const _Constants_LANDSCAPE_W = 1920;
+const _Constants_LANDSCAPE_H = 1080;
+const _Constants_LANDSCAPE_CONTAIN_SCALE = Math.min(_Constants_LANDSCAPE_W / _Constants_DESIGN_W, _Constants_LANDSCAPE_H / _Constants_DESIGN_H);
+const _Constants_VERTICAL_CANVAS_W = 1080;
+const _Constants_VERTICAL_CANVAS_H = 1920;
+const _Constants_VERTICAL_PLAY_W = _Constants_VERTICAL_CANVAS_W;
+const _Constants_VERTICAL_PLAY_H = Math.round(_Constants_VERTICAL_CANVAS_W * 9 / 16);
+const _Constants_VERTICAL_PLAY_TOP = Math.round((_Constants_VERTICAL_CANVAS_H - _Constants_VERTICAL_PLAY_H) / 2);
+const _Constants_VERTICAL_PLAY_PROGRESS_GAP = 4;
+const _Constants_VERTICAL_CONTENT_SCALE = _Constants_VERTICAL_PLAY_H / _Constants_DESIGN_H;
+const _Constants_VERTICAL_BOTTOM_BRAND_OFFSET = 400;
+
+;// ./src/remotions/小米平权/小米平权MainBody.tsx
+
+
+
+
+
+
+
+
+const \u5C0F\u7C73\u5E73\u6743MainBody = () => /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
+  /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { durationInFrames: _Constants_COVER_DURATION_FRAMES, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+    LandscapeCoverPoster,
+    {
+      title: "\u5C0F\u7C73\u7684\u79D1\u6280\u5E73\u6743",
+      subtitle: "\u8C01\u5728\u6084\u6084\u628A\u300C\u4E70\u5F97\u8D77\u597D\u4E1C\u897F\u300D\u8BF4\u6210\u4E22\u8138\uFF1F",
+      themeColor: "#FF6900",
+      surface: "light",
+      badge: "\u6DF1\u5EA6\u89E3\u8BFB \xB7 \u6570\u636E\u4E0E\u4E8B\u5B9E",
+      seriesLabel: "\u79D1\u6280\u70ED\u70B9\u6DF1\u8BFB",
+      seriesLabelEn: "TECH DEEP DIVE",
+      methodologySteps: ["\u4E89\u8BAE", "\u6570\u636E", "\u7ED3\u8BBA"],
+      methodologyStepsEn: "DEBATE \xB7 DATA \xB7 VERDICT"
+    }
+  ) }),
+  /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: _Constants_COVER_DURATION_FRAMES, durationInFrames: MAIN_DURATION_小米平权, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.AbsoluteFill, { children: /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries, { children: _Constants_sceneConfigs.map((config, index) => {
+    const SceneComp = config.component;
+    const isLast = index === _Constants_sceneConfigs.length - 1;
+    return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries.Sequence, { durationInFrames: config.duration, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(SceneComp, {}) }),
+      !isLast && /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        TransitionSeries.Transition,
+        {
+          timing: linearTiming({ durationInFrames: _Constants_TRANSITION_DURATION }),
+          presentation: fade()
+        }
+      )
+    ] }, config.name);
+  }) }) }) })
+] });
+
+;// ./src/remotions/小米平权/小米平权Landscape.tsx
+
+
+
+
+
+
+const \u5C0F\u7C73\u5E73\u6743Landscape = () => {
   const frame = (0,esm.useCurrentFrame)();
   const bgShiftX = (0,esm.interpolate)(frame % 240, [0, 120, 240], [-4, 4, -4], {
     extrapolateLeft: "clamp",
@@ -79945,13 +81456,13 @@ const \u8BA4\u77E5\u504F\u89C1\u53EF\u5F97\u6027\u542F\u53D1 = () => {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp"
   });
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style: { background: "#0f172a" }, children: [
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Audio,
       {
         src: (0,esm.staticFile)("audio/effects/Seven_Measured_Breaths.mp3"),
         loop: true,
-        volume: 0.22,
+        volume: 0.1,
         name: "Background music"
       }
     ),
@@ -79961,7 +81472,7 @@ const \u8BA4\u77E5\u504F\u89C1\u53EF\u5F97\u6027\u542F\u53D1 = () => {
         style: {
           height: "100%",
           width: "100%",
-          background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)"
+          background: "linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #e2e8f0 100%)"
         }
       }
     ),
@@ -79974,225 +81485,282 @@ const \u8BA4\u77E5\u504F\u89C1\u53EF\u5F97\u6027\u542F\u53D1 = () => {
           pointerEvents: "none",
           opacity: bgBreathOpacity,
           transform: `translate(${bgShiftX}px, ${bgShiftY}px)`,
-          background: "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)"
+          background: "radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08), transparent 40%), radial-gradient(circle at 80% 60%, rgba(56, 189, 248, 0.12), transparent 45%), radial-gradient(circle at 40% 80%, rgba(148, 163, 184, 0.15), transparent 50%)"
         }
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { durationInFrames: src_remotions_COVER_DURATION_FRAMES_3, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      StaticCover,
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(RemotionLayoutMetricsProvider, { value: { width: _Constants_DESIGN_W, height: _Constants_DESIGN_H }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      esm.AbsoluteFill,
       {
-        title: "\u53EF\u5F97\u6027\u542F\u53D1",
-        subtitle: "\u7F8E\u56FD\u5F88\u5371\u9669\uFF0C\u5230\u5904\u88AB\u67AA\u51FB\uFF01",
-        coverDurationInFrames: src_remotions_COVER_DURATION_FRAMES_3,
-        themeColor: "#2563EB",
-        badge: "\u8BA4\u8BC6\u81EA\u6211 \xB7 \u7406\u6027\u601D\u8003",
-        seriesLabel: "\u8BA4\u77E5\u5FC3\u7406\u5B66",
-        seriesLabelEn: "COGNITIVE PSYCHOLOGY",
-        methodologySteps: ["\u89C9\u5BDF", "\u5F52\u56E0", "\u8C03\u6574"],
-        methodologyStepsEn: "OBSERVE \xB7 ATTRIBUTE \xB7 ADJUST"
+        style: {
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden"
+        },
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+          "div",
+          {
+            style: {
+              width: _Constants_DESIGN_W,
+              height: _Constants_DESIGN_H,
+              flexShrink: 0,
+              transform: `scale(${_Constants_LANDSCAPE_CONTAIN_SCALE})`,
+              transformOrigin: "center center"
+            },
+            children: /* @__PURE__ */ (0,jsx_runtime.jsx)(小米平权MainBody, {})
+          }
+        )
       }
-    ) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: src_remotions_COVER_DURATION_FRAMES_3, durationInFrames: MAIN_DURATION_\u8BA4\u77E5\u504F\u89C1_\u53EF\u5F97\u6027\u542F\u53D1, children: /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
+    ) })
+  ] });
+};
+
+;// ./src/remotions/小米平权/小米平权VerticalChrome.tsx
+
+
+
+
+
+const remotions_VerticalChrome_FONT_STACK = '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
+const _VerticalChrome_STATIC_HEADLINE = "\u5C0F\u7C73\u7684\u79D1\u6280\u5E73\u6743";
+const _VerticalChrome_STATIC_HEADLINE_SUB = "\u79D1\u6280\u70ED\u70B9\u6DF1\u8BFB";
+const _VerticalChrome_STATIC_HEADLINE_SUB_EN = "TECH DEEP DIVE";
+const _VerticalChrome_THEME_ACCENT = "#FF6900";
+const _VerticalChrome_THEME_ACCENT_SOFT = "#FF6900D9";
+const \u5C0F\u7C73\u5E73\u6743TopStaticHeadline = ({ canvasW, topBandH }) => /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+  "div",
+  {
+    style: {
+      position: "absolute",
+      left: 0,
+      top: 0,
+      width: canvasW,
+      height: topBandH,
+      overflow: "hidden",
+      boxSizing: "border-box",
+      pointerEvents: "none"
+    },
+    children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         "div",
         {
           style: {
             position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "10%",
-            minHeight: 48,
-            backgroundColor: "rgba(0,0,0,0.5)"
+            inset: 0,
+            background: "radial-gradient(ellipse 72% 85% at 50% 48%, rgba(37, 99, 235, 0.14) 0%, transparent 58%), radial-gradient(ellipse 50% 40% at 50% 100%, rgba(56, 189, 248, 0.08) 0%, transparent 50%)"
           }
         }
       ),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries, { children: src_remotions_sceneConfigs_3.map((config, index) => {
-        const SceneComp = config.component;
-        const isLast = index === src_remotions_sceneConfigs_3.length - 1;
-        return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries.Sequence, { durationInFrames: config.duration, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(SceneComp, {}) }),
-          !isLast && /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            TransitionSeries.Transition,
-            {
-              timing: linearTiming({ durationInFrames: src_remotions_TRANSITION_DURATION_3 }),
-              presentation: fade()
-            }
-          )
-        ] }, config.name);
-      }) })
-    ] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(src_remotions_ProgressBar_3, {})
-  ] });
-};
-
-;// ./src/remotions/认知偏见_锚定效应/scenes/Scene1.tsx
-
-
-
-
-const src_remotions_scenes_Scene1_SCENE_DURATION_2 = 460 + 223 + 154 + 248;
-const src_remotions_scenes_Scene1_calculateScene1Duration_2 = () => {
-  return src_remotions_scenes_Scene1_SCENE_DURATION_2;
-};
-const src_remotions_scenes_Scene1_Scene1_2 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 460, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u770B\u7740\u76F4\u64AD\u95F4\u91CC\u88AB\u5212\u6389\u7684999\u5143\uFF0C", "startFrame": 0, "durationFrames": 84 }, { "text": "\u518D\u770B\u770B\u65C1\u8FB9\u95EA\u70C1\u768499\u5143\u9650\u65F6\u79D2\u6740\uFF0C", "startFrame": 84, "durationFrames": 89 }, { "text": "\u4F60\u6BEB\u4E0D\u72B9\u8C6B\u5730\u6309\u4E0B\u4E86\u4ED8\u6B3E\u6309\u94AE\uFF0C", "startFrame": 172, "durationFrames": 65 }, { "text": "\u5FC3\u91CC\u6FC0\u52A8\u5730\u60F3\u7740\u4ECA\u5929\u771F\u662F\u8D5A\u7FFB\u4E86\u3002", "startFrame": 236, "durationFrames": 103 }, { "text": "\u8FD9\u79CD\u6361\u5230\u7EDD\u4E16\u5927\u4FBF\u5B9C\u7684\u72C2\u559C\uFF0C", "startFrame": 339, "durationFrames": 67 }, { "text": "\u662F\u4E0D\u662F\u8BA9\u4F60\u89C9\u5F97\u7279\u522B\u6709\u6210\u5C31\u611F\uFF1F", "startFrame": 405, "durationFrames": 54 }], totalDurationFrames: 460, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_1_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u9650\u65F6\u79D2\u6740", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "ping" }, { "text": "\u8D5A\u7FFB\u4E86", "showFrom": 3, "color": "#EF4444", "anim": "highlight", "audioEffect": "woosh" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 460, durationInFrames: 223, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u6211\u4EEC\u603B\u4EE5\u4E3A\u81EA\u5DF1\u662F\u4E2A\u7CBE\u660E\u7684\u6D88\u8D39\u8005\uFF0C", "startFrame": 0, "durationFrames": 65 }, { "text": "\u80FD\u7CBE\u51C6\u6355\u6349\u5230\u5546\u5BB6\u7684\u6BCF\u4E00\u6B21\u201C\u5927\u653E\u8840\u201D\uFF0C", "startFrame": 64, "durationFrames": 82 }, { "text": "\u4F46\u5176\u5B9E\u6211\u4EEC\u65E9\u5C31\u6389\u8FDB\u4E86\u8D44\u672C\u7684\u9677\u9631\u3002", "startFrame": 146, "durationFrames": 77 }], totalDurationFrames: 223, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_1_2.png"), enterEffect: "fadeIn", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 683, durationInFrames: 154, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u8FD9\u4E0D\u662F\u56E0\u4E3A\u6211\u4EEC\u8D2A\u56FE\u5C0F\u4FBF\u5B9C\uFF0C", "startFrame": 0, "durationFrames": 57 }, { "text": "\u800C\u662F\u5927\u8111\u5904\u7406\u4FE1\u606F\u65F6\u5B58\u5728\u81F4\u547D\u5F31\u70B9\u3002", "startFrame": 56, "durationFrames": 97 }], totalDurationFrames: 154, notText: "\u8D2A\u56FE\u5C0F\u4FBF\u5B9C", butText: "\u81F4\u547D\u5F31\u70B9", butSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_1_3.png"), notContentIndex: 0, butContentIndex: 1, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 837, durationInFrames: 248, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8D44\u672C\u5BB6\u65E9\u5C31\u628A\u4EBA\u6027\u7814\u7A76\u900F\u5F7B\u4E86\uFF0C", "startFrame": 0, "durationFrames": 77 }, { "text": "\u4ED6\u4EEC\u7CBE\u51C6\u5730\u5728\u4F60\u7684\u6F5C\u610F\u8BC6\u91CC\u690D\u5165\u4E00\u6839\u201C\u9488\u201D\uFF0C", "startFrame": 76, "durationFrames": 79 }, { "text": "\u8BA9\u4F60\u5FC3\u7518\u60C5\u613F\u5730\u638F\u7A7A\u94B1\u5305\u8FD8\u611F\u6069\u6234\u5FB7\u3002", "startFrame": 154, "durationFrames": 93 }], totalDurationFrames: 248, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_1_4.png"), enterEffect: "slideBottom", anchors: [{ "text": "\u6F5C\u610F\u8BC6", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u638F\u7A7A\u94B1\u5305", "showFrom": 2, "color": "#EF4444", "anim": "slideUp", "audioEffect": "woosh" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_1/scene_1.mp3") })
-  ] });
-};
-
-;// ./src/remotions/认知偏见_锚定效应/scenes/Scene2.tsx
-
-
-
-
-const src_remotions_scenes_Scene2_SCENE_DURATION_3 = 286 + 405 + 169 + 283;
-const src_remotions_scenes_Scene2_calculateScene2Duration_2 = () => {
-  return src_remotions_scenes_Scene2_SCENE_DURATION_3;
-};
-const src_remotions_scenes_Scene2_Scene2_2 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 286, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWConceptCard, { content: [{ "text": "\u8FD9\u5728\u5FC3\u7406\u5B66\u4E2D\u53EB\u505A\u201C\u951A\u5B9A\u6548\u5E94\u201D\uFF1A", "startFrame": 0, "durationFrames": 70 }, { "text": "\u4EBA\u4EEC\u5728\u505A\u5224\u65AD\u65F6\uFF0C", "startFrame": 69, "durationFrames": 41 }, { "text": "\u4F1A\u8FC7\u5EA6\u4F9D\u8D56\u6700\u5148\u63A5\u89E6\u5230\u7684\u4FE1\u606F\uFF08\u201C\u951A\u201D\uFF09\uFF0C", "startFrame": 110, "durationFrames": 94 }, { "text": "\u5373\u4F7F\u8FD9\u4E2A\u4FE1\u606F\u6BEB\u65E0\u610F\u4E49\u6216\u8BEF\u5BFC\u6027\u6781\u5F3A\u3002", "startFrame": 204, "durationFrames": 82 }], totalDurationFrames: 286, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_2_1.png"), conceptName: "\u951A\u5B9A\u6548\u5E94", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 286, durationInFrames: 405, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u90A3\u4E2A999\u5143\u7684\u539F\u4EF7\u5C31\u662F\u4E00\u4E2A\u6C89\u91CD\u7684\u201C\u951A\u201D\uFF0C", "startFrame": 0, "durationFrames": 96 }, { "text": "\u5B83\u50CF\u4E00\u6839\u65E0\u5F62\u7684\u94C1\u94FE\u6B7B\u6B7B\u9501\u4F4F\u4F60\u3002", "startFrame": 96, "durationFrames": 76 }, { "text": "\u4E00\u65E6\u4F60\u7684\u5927\u8111\u63A5\u53D7\u4E86\u8FD9\u4E2A\u5929\u4EF7\u8BBE\u5B9A\uFF0C", "startFrame": 171, "durationFrames": 78 }, { "text": "\u540E\u9762\u65E0\u8BBA\u4EF7\u683C\u600E\u4E48\u53D8\uFF0C", "startFrame": 248, "durationFrames": 57 }, { "text": "\u53EA\u8981\u4F4E\u4E8E\u8FD9\u4E2A\u6570\u5B57\uFF0C", "startFrame": 305, "durationFrames": 44 }, { "text": "\u4F60\u90FD\u4F1A\u89C9\u5F97\u662F\u4F18\u60E0\u3002", "startFrame": 349, "durationFrames": 56 }], totalDurationFrames: 405, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_2_2.png"), enterEffect: "slideBottom", anchors: [{ "text": "999\u5143\u7684\u951A", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u63A5\u53D7\u8BBE\u5B9A", "showFrom": 2, "color": "#000000", "anim": "slideUp", "audioEffect": "ping" }, { "text": "\u4F18\u60E0\u611F", "showFrom": 5, "color": "#000000", "anim": "slideUp", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 691, durationInFrames: 169, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u54EA\u6015\u8FD9\u4EF6\u4E1C\u897F\u7684\u6210\u672C\u53EA\u6709\u533A\u533A\u5341\u5757\u94B1\uFF0C", "startFrame": 0, "durationFrames": 87 }, { "text": "\u4F60\u4F9D\u7136\u4F1A\u4E3A99\u5143\u7684\u4EF7\u683C\u6B22\u547C\u96C0\u8DC3\u3002", "startFrame": 86, "durationFrames": 82 }], totalDurationFrames: 169, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_2_3.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u6210\u672C10\u5757", "showFrom": 0, "color": "#000000", "anim": "highlight", "audioEffect": "ping" }, { "text": "\u4FC3\u950099", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "woosh" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 860, durationInFrames: 283, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8FD9\u5C31\u597D\u6BD4\u76F8\u4EB2\u65F6\u5148\u7ED9\u4F60\u770B\u5F20\u6781\u4E11\u7684\u7167\u7247\uFF0C", "startFrame": 0, "durationFrames": 95 }, { "text": "\u540E\u9762\u518D\u51FA\u6765\u4E2A\u666E\u901A\u4EBA\uFF0C", "startFrame": 94, "durationFrames": 47 }, { "text": "\u4F60\u4E5F\u89C9\u5F97\u7709\u6E05\u76EE\u79C0\u3002", "startFrame": 141, "durationFrames": 43 }, { "text": "\u6211\u4EEC\u81EA\u4EE5\u4E3A\u7684\u7406\u6027\u8BA1\u7B97\uFF0C", "startFrame": 184, "durationFrames": 47 }, { "text": "\u65E9\u5C31\u88AB\u8BBE\u5B9A\u4E86\u8D77\u8DD1\u7EBF\u3002", "startFrame": 231, "durationFrames": 51 }], totalDurationFrames: 283, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_2_4.png"), enterEffect: "breathe", anchors: [{ "text": "\u8D77\u8DD1\u7EBF", "showFrom": 4, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_2/scene_2.mp3") })
-  ] });
-};
-
-;// ./src/remotions/认知偏见_锚定效应/scenes/Scene3.tsx
-
-
-
-
-const src_remotions_scenes_Scene3_SCENE_DURATION_3 = 94 + 195 + 359 + 470;
-const src_remotions_scenes_Scene3_calculateScene3Duration_2 = () => {
-  return src_remotions_scenes_Scene3_SCENE_DURATION_3;
-};
-const src_remotions_scenes_Scene3_Scene3_2 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 94, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u5B9E\u9645\u4E0A\uFF0C", "startFrame": 0, "durationFrames": 21 }, { "text": "\u951A\u5B9A\u6548\u5E94\u4E0D\u53EA\u662F\u51FA\u73B0\u5728\u8D2D\u7269\u4E0A\u3002", "startFrame": 20, "durationFrames": 74 }], totalDurationFrames: 94, coreSentence: "\u951A\u5B9A\u6548\u5E94\u4E0D\u53EA\u662F\u51FA\u73B0\u5728\u8D2D\u7269\u4E0A", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u4E0D\u53EA\u662F", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 94, durationInFrames: 195, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u804C\u573A\u8C08\u85AA\u65F6\uFF0C", "startFrame": 0, "durationFrames": 36 }, { "text": "\u8001\u677F\u5148\u7ED9\u4F60\u4E00\u4E2A\u4EBA\u5747\u4E94\u5343\u7684\u951A\uFF0C", "startFrame": 36, "durationFrames": 60 }, { "text": "\u7B49\u6700\u540E\u843D\u5230\u201C\u5DE5\u8D44\u516D\u5343\u201D\u65F6\uFF0C", "startFrame": 96, "durationFrames": 53 }, { "text": "\u4F60\u7ADF\u7136\u89C9\u5F97\u8FD8\u771F\u4E0D\u9519\u5462\u3002", "startFrame": 148, "durationFrames": 46 }], totalDurationFrames: 195, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_3_2.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u4EBA\u5747\u4E94\u5343", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }, { "text": "\u80FD\u62FF\u516D\u5343", "showFrom": 2, "color": "#000000", "anim": "popIn", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 289, durationInFrames: 359, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u53BB\u996D\u5E97\u70B9\u83DC\uFF0C", "startFrame": 0, "durationFrames": 35 }, { "text": "\u83DC\u5355\u7B2C\u4E00\u9875\u8EBA\u7740\u51E0\u9053\u51E0\u5343\u5757\u7684\u6FB3\u6D32\u5927\u9F99\u867E", "startFrame": 34, "durationFrames": 112 }, { "text": "\u5B83\u4EEC\u5B58\u5728\u7684\u610F\u4E49\u6839\u672C\u4E0D\u662F\u4E3A\u4E86\u88AB\u5356\u6389\uFF0C", "startFrame": 146, "durationFrames": 83 }, { "text": "\u800C\u662F\u4E3A\u4E86\u8BA9\u4F60\u89C9\u5F97\u540E\u9762\u90A3\u905398\u5143\u7684\u7EA2\u70E7\u8089", "startFrame": 229, "durationFrames": 86 }, { "text": "\u201C\u7B80\u76F4\u592A\u4EB2\u6C11\u4E86\u201D\u3002", "startFrame": 314, "durationFrames": 45 }], totalDurationFrames: 359, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_3_3.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u9996\u9875\u951A\u5B9A", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }, { "text": "\u4EF7\u683C\u4EB2\u6C11", "showFrom": 3, "color": "#22C55E", "anim": "popIn", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 648, durationInFrames: 470, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u751A\u81F3\u5728\u623F\u5730\u4EA7\u552E\u697C\u5904\uFF0C", "startFrame": 0, "durationFrames": 51 }, { "text": "\u9500\u552E\u6C38\u8FDC\u4F1A\u5148\u5E26\u4F60\u770B\u90A3\u5957\u5730\u6BB5\u5DEE\u3001", "startFrame": 50, "durationFrames": 72 }, { "text": "\u6237\u578B\u70C2\u3001", "startFrame": 122, "durationFrames": 24 }, { "text": "\u4EF7\u683C\u8FD8\u8D35\u7684\u201C\u5783\u573E\u623F\u201D\uFF0C", "startFrame": 146, "durationFrames": 55 }, { "text": "\u7B49\u4F60\u5FEB\u5D29\u6E83\u65F6\uFF0C", "startFrame": 200, "durationFrames": 40 }, { "text": "\u4ED6\u518D\u638F\u51FA\u90A3\u5957\u6240\u8C13\u7684\u201C\u4FDD\u7559\u623F\u6E90\u201D\uFF0C", "startFrame": 240, "durationFrames": 76 }, { "text": "\u5373\u4FBF\u5B83\u4F9D\u7136\u6EA2\u4EF7\u4E25\u91CD\uFF0C", "startFrame": 315, "durationFrames": 53 }, { "text": "\u4F60\u4E5F\u4F1A\u50CF\u6293\u4F4F\u4E86\u6551\u547D\u7A3B\u8349\u4E00\u6837\u8D76\u7D27\u7B7E\u5408\u540C\u3002", "startFrame": 367, "durationFrames": 102 }], totalDurationFrames: 470, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_3_4.png"), enterEffect: "slideBottom", anchors: [{ "text": "\u5783\u573E\u623F", "showFrom": 3, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u4FDD\u7559\u623F\u6E90", "showFrom": 5, "color": "#000000", "anim": "popIn", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_3/scene_3.mp3") })
-  ] });
-};
-
-;// ./src/remotions/认知偏见_锚定效应/scenes/Scene4.tsx
-
-
-
-
-const src_remotions_scenes_Scene4_SCENE_DURATION_1 = 132 + 142 + 144 + 119 + 216 + 110;
-const src_remotions_scenes_Scene4_calculateScene4Duration_0 = () => {
-  return src_remotions_scenes_Scene4_SCENE_DURATION_1;
-};
-const src_remotions_scenes_Scene4_Scene4_0 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 132, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8981\u60F3\u4E0D\u8BA9\u4F60\u7684\u5224\u65AD\u88AB\u201C\u951A\u201D\u6240\u52AB\u6301\uFF0C", "startFrame": 0, "durationFrames": 74 }, { "text": "\u4F60\u6700\u597D\u8BB0\u4F4F\u8FD9\u4E09\u4E2A\u6838\u5FC3\u5FC3\u6CD5", "startFrame": 73, "durationFrames": 59 }], totalDurationFrames: 132, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_4_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u72EC\u7ACB\u5224\u65AD", "showFrom": 3, "color": "#EF4444", "anim": "spring", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 132, durationInFrames: 142, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "1. \u5148\u95EE\u81EA\u5DF1\uFF1A", "startFrame": 0, "durationFrames": 41 }, { "text": "\u4E0D\u770B\u6807\u4EF7/\u4E0D\u542C\u8BC4\u4EF7\uFF0C", "startFrame": 40, "durationFrames": 55 }, { "text": "\u6211\u81EA\u5DF1\u7684\u5224\u65AD\u662F\u4EC0\u4E48\uFF1F", "startFrame": 94, "durationFrames": 47 }], totalDurationFrames: 142, title: "\u72EC\u7ACB\u5224\u65AD", imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_4_2.png"), notes: [{ "text": "\u4E0D\u88AB\u7B2C\u4E00\u5370\u8C61\u5DE6\u53F3", "showFrom": 1 }, { "text": "\u907F\u514D\u5148\u5165\u4E3A\u4E3B", "showFrom": 2 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 274, durationInFrames: 144, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "2. \u591A\u7EF4\u53C2\u7167\uFF1A", "startFrame": 0, "durationFrames": 46 }, { "text": "\u6536\u96C6\u591A\u4E2A\u72EC\u7ACB\u4FE1\u606F\u6E90\uFF0C", "startFrame": 45, "durationFrames": 55 }, { "text": "\u800C\u975E\u53EA\u770B\u7B2C\u4E00\u4E2A\u3002", "startFrame": 100, "durationFrames": 44 }], totalDurationFrames: 144, title: "\u591A\u7EF4\u4FE1\u606F\u53C2\u7167", imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_4_3.png"), notes: [{ "text": "\u6536\u96C6\u591A\u4E2A\u72EC\u7ACB\u4FE1\u606F\u6E90", "showFrom": 1 }, { "text": "\u800C\u975E\u53EA\u770B\u7B2C\u4E00\u4E2A", "showFrom": 2 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 418, durationInFrames: 119, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "3. \u8B66\u60D5\u5148\u5165\u4E3A\u4E3B\uFF1A", "startFrame": 0, "durationFrames": 56 }, { "text": '\u610F\u8BC6\u5230"\u7B2C\u4E00\u5370\u8C61"\u7684\u5DE8\u5927\u5F71\u54CD\u529B\u3002', "startFrame": 55, "durationFrames": 63 }], totalDurationFrames: 119, title: "\u8B66\u60D5\u5148\u5165\u4E3A\u4E3B", imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_4_4.png"), notes: [{ "text": "\u610F\u8BC6\u5230\u201C\u7B2C\u4E00\u5370\u8C61\u201D\u7684\u5DE8\u5927\u5F71\u54CD\u529B", "showFrom": 1 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 537, durationInFrames: 216, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5728\u8FD9\u4E2A\u5230\u5904\u90FD\u662F\u201C\u94A9\u5B50\u201D\u7684\u4E16\u754C\u91CC\uFF0C", "startFrame": 0, "durationFrames": 68 }, { "text": "\u5982\u679C\u4F60\u4E0D\u4E3B\u52A8\u8BBE\u5B9A\u81EA\u5DF1\u7684\u201C\u951A\u201D\uFF0C", "startFrame": 67, "durationFrames": 62 }, { "text": "\u4F60\u5C31\u53EA\u80FD\u5728\u522B\u4EBA\u7684\u9C7C\u5858\u91CC\u5F53\u4E00\u6761\u5F85\u5BB0\u7684\u9C7C\u3002", "startFrame": 128, "durationFrames": 88 }], totalDurationFrames: 216, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_4_5.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u94A9\u5B50", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u81EA\u5DF1\u7684\u951A", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 753, durationInFrames: 110, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u6C38\u8FDC\u8BB0\u4F4F\uFF0C", "startFrame": 0, "durationFrames": 23 }, { "text": "\u4F60\u7684\u4EF7\u503C\u7531\u4F60\u5B9A\u4E49\uFF0C", "startFrame": 22, "durationFrames": 43 }, { "text": "\u4E0D\u7531\u5BF9\u65B9\u7684\u201C\u951A\u201D\u5B9A\u4E49\u3002", "startFrame": 65, "durationFrames": 45 }], totalDurationFrames: 110, coreSentence: "\u4F60\u7684\u4EF7\u503C\u7531\u4F60\u5B9A\u4E49\uFF0C\u4E0D\u7531\u5BF9\u65B9\u7684\u951A\u5B9A\u4E49\u3002", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u7531\u4F60\u5B9A\u4E49", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94/scene_4/scene_4.mp3") })
-  ] });
-};
-
-;// ./src/remotions/认知偏见_锚定效应/认知偏见锚定效应.tsx
-
-
-
-
-
-
-
-
-
-
-
-
-const \u8BA4\u77E5\u504F\u89C1\u951A\u5B9A\u6548\u5E94Schema = lib.z.object({});
-const src_remotions_TRANSITION_DURATION_4 = 15;
-const src_remotions_SCENE_END_PADDING_4 = 20;
-const src_remotions_COVER_DURATION_FRAMES_4 = 5;
-const src_remotions_sceneConfigs_4 = [
-  { name: "scene1", duration: src_remotions_scenes_Scene1_calculateScene1Duration_2() + src_remotions_SCENE_END_PADDING_4, component: src_remotions_scenes_Scene1_Scene1_2, label: "\u5F15\u5165\uFF1A\u951A\u5B9A\u6548\u5E94\u4E0E\u5360\u4FBF\u5B9C\u5FC3\u7406" },
-  { name: "scene2", duration: src_remotions_scenes_Scene2_calculateScene2Duration_2() + src_remotions_SCENE_END_PADDING_4, component: src_remotions_scenes_Scene2_Scene2_2, label: "\u547D\u540D\uFF1A\u951A\u5B9A\u6548\u5E94\u7684\u5B9A\u4E49\u4E0E\u5F71\u54CD" },
-  { name: "scene3", duration: src_remotions_scenes_Scene3_calculateScene3Duration_2() + src_remotions_SCENE_END_PADDING_4, component: src_remotions_scenes_Scene3_Scene3_2, label: "\u5256\u6790\uFF1A\u951A\u5B9A\u6548\u5E94\u7684\u5E94\u7528\u573A\u666F" },
-  { name: "scene4", duration: src_remotions_scenes_Scene4_calculateScene4Duration_0() + src_remotions_SCENE_END_PADDING_4, component: src_remotions_scenes_Scene4_Scene4_0, label: "\u53EC\u5524\uFF1A\u5982\u4F55\u907F\u514D\u951A\u5B9A\u6548\u5E94" }
-];
-const MAIN_DURATION_\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94 = src_remotions_sceneConfigs_4.reduce((total, c) => total + c.duration, 0) - (src_remotions_sceneConfigs_4.length - 1) * src_remotions_TRANSITION_DURATION_4;
-const TOTAL_DURATION_\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94 = src_remotions_COVER_DURATION_FRAMES_4 + MAIN_DURATION_\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94;
-const src_remotions_ProgressBar_4 = () => {
-  var _a;
-  const frame = (0,esm.useCurrentFrame)();
-  if (frame < src_remotions_COVER_DURATION_FRAMES_4) {
-    return null;
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        "div",
+        {
+          style: {
+            position: "absolute",
+            left: "12%",
+            right: "12%",
+            bottom: 0,
+            height: 1,
+            background: "linear-gradient(90deg, transparent 0%, rgba(226, 232, 240, 0.45) 45%, rgba(226, 232, 240, 0.45) 55%, transparent 100%)"
+          }
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        "div",
+        {
+          style: {
+            position: "absolute",
+            left: 36,
+            top: 36,
+            width: 40,
+            height: 40,
+            borderLeft: "2px solid rgba(248, 250, 252, 0.22)",
+            borderTop: "2px solid rgba(248, 250, 252, 0.22)",
+            borderRadius: "2px 0 0 0"
+          }
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        "div",
+        {
+          style: {
+            position: "absolute",
+            right: 36,
+            top: 36,
+            width: 40,
+            height: 40,
+            borderRight: "2px solid rgba(248, 250, 252, 0.22)",
+            borderTop: "2px solid rgba(248, 250, 252, 0.22)",
+            borderRadius: "0 2px 0 0"
+          }
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+        "div",
+        {
+          style: {
+            position: "relative",
+            zIndex: 1,
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "0 56px",
+            boxSizing: "border-box"
+          },
+          children: [
+            /* @__PURE__ */ (0,jsx_runtime.jsx)(
+              "div",
+              {
+                style: {
+                  width: 56,
+                  height: 4,
+                  borderRadius: 999,
+                  background: `linear-gradient(90deg, ${_VerticalChrome_THEME_ACCENT_SOFT}, rgba(56, 189, 248, 0.95))`,
+                  boxShadow: "0 0 22px rgba(37, 99, 235, 0.45)",
+                  marginBottom: 22
+                }
+              }
+            ),
+            /* @__PURE__ */ (0,jsx_runtime.jsx)(
+              "div",
+              {
+                style: {
+                  fontSize: 80,
+                  fontWeight: 800,
+                  fontFamily: remotions_VerticalChrome_FONT_STACK,
+                  color: "#fafafa",
+                  letterSpacing: "0.14em",
+                  textAlign: "center",
+                  lineHeight: 1.08,
+                  textShadow: "0 1px 0 rgba(255,255,255,0.12), 0 4px 36px rgba(0,0,0,0.55), 0 0 48px rgba(37, 99, 235, 0.25)"
+                },
+                children: _VerticalChrome_STATIC_HEADLINE
+              }
+            ),
+            /* @__PURE__ */ (0,jsx_runtime.jsx)(
+              "div",
+              {
+                style: {
+                  marginTop: 10,
+                  fontSize: 15,
+                  fontWeight: 600,
+                  fontFamily: 'ui-sans-serif, "Segoe UI", sans-serif',
+                  color: "rgba(148, 163, 184, 0.95)",
+                  letterSpacing: "0.42em",
+                  textAlign: "center"
+                },
+                children: _VerticalChrome_STATIC_HEADLINE_SUB_EN
+              }
+            ),
+            /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+              "div",
+              {
+                style: {
+                  marginTop: 20,
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 20,
+                  width: "100%",
+                  maxWidth: 520
+                },
+                children: [
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        flex: 1,
+                        height: 1,
+                        background: "linear-gradient(90deg, transparent, rgba(248, 250, 252, 0.38))"
+                      }
+                    }
+                  ),
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        width: 7,
+                        height: 7,
+                        transform: "rotate(45deg)",
+                        background: `linear-gradient(135deg, ${_VerticalChrome_THEME_ACCENT}, rgba(56, 189, 248, 0.9))`,
+                        boxShadow: "0 0 12px rgba(37, 99, 235, 0.5)",
+                        flexShrink: 0
+                      }
+                    }
+                  ),
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        fontSize: 26,
+                        fontWeight: 600,
+                        fontFamily: remotions_VerticalChrome_FONT_STACK,
+                        color: "rgba(248, 250, 252, 0.88)",
+                        letterSpacing: "0.42em",
+                        textAlign: "center",
+                        flexShrink: 0
+                      },
+                      children: _VerticalChrome_STATIC_HEADLINE_SUB
+                    }
+                  ),
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        width: 7,
+                        height: 7,
+                        transform: "rotate(45deg)",
+                        background: `linear-gradient(135deg, ${_VerticalChrome_THEME_ACCENT}, rgba(56, 189, 248, 0.9))`,
+                        boxShadow: "0 0 12px rgba(37, 99, 235, 0.5)",
+                        flexShrink: 0
+                      }
+                    }
+                  ),
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        flex: 1,
+                        height: 1,
+                        background: "linear-gradient(270deg, transparent, rgba(248, 250, 252, 0.38))"
+                      }
+                    }
+                  )
+                ]
+              }
+            )
+          ]
+        }
+      )
+    ]
   }
-  const contentFrame = frame - src_remotions_COVER_DURATION_FRAMES_4;
-  let currentStart = 0;
-  const segments = src_remotions_sceneConfigs_4.map((c, i) => {
-    const isLast = i === src_remotions_sceneConfigs_4.length - 1;
-    const segmentDuration = isLast ? c.duration : c.duration - src_remotions_TRANSITION_DURATION_4;
-    const segment = { start: currentStart, duration: segmentDuration };
-    currentStart += segmentDuration;
-    return segment;
-  });
-  const activeIndex = segments.findIndex((seg) => contentFrame >= seg.start && contentFrame < seg.start + seg.duration);
-  const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
-  const activeLabel = ((_a = src_remotions_sceneConfigs_4[validActiveIndex]) == null ? void 0 : _a.label) || "";
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: {
-    position: "absolute",
-    top: 40,
-    left: 40,
-    right: 40,
-    display: "flex",
-    flexDirection: "column",
-    gap: 16,
-    zIndex: 100
-  }, children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, height: 8 }, children: segments.map((seg, i) => {
-      const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));
-      const isActive = i === validActiveIndex;
-      return /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        flex: 1,
-        backgroundColor: isActive ? "rgba(34, 43, 69, 0.18)" : "rgba(34, 43, 69, 0.1)",
-        borderRadius: 999,
-        overflow: "hidden",
-        border: isActive ? "1px solid rgba(34, 43, 69, 0.32)" : "1px solid rgba(34, 43, 69, 0.2)",
-        boxShadow: isActive ? "0 3px 10px rgba(31, 41, 55, 0.12)" : "0 1px 4px rgba(31, 41, 55, 0.08)"
-      }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        width: `${progress * 100}%`,
-        height: "100%",
-        background: isActive ? "linear-gradient(90deg, rgba(29, 78, 216, 0.95), rgba(56, 189, 248, 0.92))" : "rgba(30, 41, 59, 0.72)",
-        boxShadow: isActive ? "0 0 12px rgba(37, 99, 235, 0.35)" : "none"
-      } }) }, i);
-    }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-      fontSize: 30,
-      fontWeight: 700,
-      fontFamily: '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif',
-      letterSpacing: 0.4,
-      color: "rgba(17, 24, 39, 0.95)",
-      textAlign: "left",
-      textShadow: "0 1px 2px rgba(255,255,255,0.45)",
-      padding: "6px 14px",
-      backgroundColor: "rgba(255, 255, 255, 0.58)",
-      border: "1px solid rgba(17, 24, 39, 0.12)",
-      borderRadius: 10,
-      alignSelf: "flex-start",
-      backdropFilter: "blur(6px)",
-      boxShadow: "0 6px 20px rgba(15, 23, 42, 0.12)"
-    }, children: activeLabel })
-  ] });
+);
+const \u5C0F\u7C73\u5E73\u6743ProgressBar = () => {
+  const frame = (0,esm.useCurrentFrame)();
+  return /* @__PURE__ */ (0,jsx_runtime.jsx)(
+    VerticalSegmentedProgressBar,
+    {
+      frame,
+      coverDurationFrames: _Constants_COVER_DURATION_FRAMES,
+      sceneConfigs: _Constants_sceneConfigs,
+      transitionDuration: _Constants_TRANSITION_DURATION,
+      fontStack: remotions_VerticalChrome_FONT_STACK
+    }
+  );
 };
-const \u8BA4\u77E5\u504F\u89C1\u951A\u5B9A\u6548\u5E94 = () => {
+
+;// ./src/remotions/小米平权/小米平权Vertical.tsx
+
+
+
+
+
+
+
+const \u5C0F\u7C73\u5E73\u6743Vertical = () => {
   const frame = (0,esm.useCurrentFrame)();
   const bgShiftX = (0,esm.interpolate)(frame % 240, [0, 120, 240], [-4, 4, -4], {
     extrapolateLeft: "clamp",
@@ -80206,23 +81774,97 @@ const \u8BA4\u77E5\u504F\u89C1\u951A\u5B9A\u6548\u5E94 = () => {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp"
   });
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style: { background: VERTICAL_SHELL_BG }, children: [
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Audio,
       {
         src: (0,esm.staticFile)("audio/effects/Seven_Measured_Breaths.mp3"),
         loop: true,
-        volume: 0.22,
+        volume: 0.1,
         name: "Background music"
+      }
+    ),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(小米平权TopStaticHeadline, { canvasW: _Constants_VERTICAL_CANVAS_W, topBandH: _Constants_VERTICAL_PLAY_TOP }),
+    /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          left: 0,
+          top: _Constants_VERTICAL_PLAY_TOP,
+          width: _Constants_VERTICAL_PLAY_W,
+          height: _Constants_VERTICAL_PLAY_H,
+          overflow: "hidden"
+        },
+        children: [
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                height: "100%",
+                width: "100%",
+                background: "linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #e2e8f0 100%)"
+              }
+            }
+          ),
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                position: "absolute",
+                inset: "-6%",
+                pointerEvents: "none",
+                opacity: bgBreathOpacity,
+                transform: `translate(${bgShiftX}px, ${bgShiftY}px)`,
+                background: "radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08), transparent 40%), radial-gradient(circle at 80% 60%, rgba(56, 189, 248, 0.12), transparent 45%), radial-gradient(circle at 40% 80%, rgba(148, 163, 184, 0.15), transparent 50%)"
+              }
+            }
+          ),
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                position: "absolute",
+                left: 0,
+                right: 0,
+                top: 0,
+                height: _Constants_VERTICAL_PLAY_H,
+                overflow: "hidden",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-start"
+              },
+              children: /* @__PURE__ */ (0,jsx_runtime.jsx)(RemotionLayoutMetricsProvider, { value: { width: _Constants_DESIGN_W, height: _Constants_DESIGN_H }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                "div",
+                {
+                  style: {
+                    width: _Constants_DESIGN_W,
+                    height: _Constants_DESIGN_H,
+                    flexShrink: 0,
+                    transform: `scale(${_Constants_VERTICAL_CONTENT_SCALE})`,
+                    transformOrigin: "top center"
+                  },
+                  children: /* @__PURE__ */ (0,jsx_runtime.jsx)(小米平权MainBody, {})
+                }
+              ) })
+            }
+          )
+        ]
       }
     ),
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       "div",
       {
         style: {
-          height: "100%",
-          width: "100%",
-          background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)"
+          position: "absolute",
+          left: 0,
+          top: _Constants_VERTICAL_PLAY_TOP,
+          width: _Constants_VERTICAL_PLAY_W,
+          height: _Constants_VERTICAL_PLAY_H,
+          border: "1px solid rgba(255, 255, 255, 0.07)",
+          boxSizing: "border-box",
+          pointerEvents: "none",
+          zIndex: 20
         }
       }
     ),
@@ -80231,233 +81873,212 @@ const \u8BA4\u77E5\u504F\u89C1\u951A\u5B9A\u6548\u5E94 = () => {
       {
         style: {
           position: "absolute",
-          inset: "-6%",
-          pointerEvents: "none",
-          opacity: bgBreathOpacity,
-          transform: `translate(${bgShiftX}px, ${bgShiftY}px)`,
-          background: "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)"
-        }
+          left: 0,
+          top: _Constants_VERTICAL_PLAY_TOP + _Constants_VERTICAL_PLAY_H + _Constants_VERTICAL_PLAY_PROGRESS_GAP,
+          width: _Constants_VERTICAL_CANVAS_W,
+          boxSizing: "border-box",
+          pointerEvents: "none"
+        },
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(小米平权ProgressBar, {})
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { durationInFrames: src_remotions_COVER_DURATION_FRAMES_4, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      StaticCover,
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "div",
       {
-        title: "\u951A\u5B9A\u6548\u5E94",
-        subtitle: "\u7B2C\u4E00\u5370\u8C61\u662F\u600E\u4E48\u64CD\u63A7\u4F60\u7684\u5224\u65AD\u7684\uFF1F",
-        coverDurationInFrames: src_remotions_COVER_DURATION_FRAMES_4,
-        themeColor: "#2563EB",
-        badge: "\u8BA4\u8BC6\u81EA\u6211 \xB7 \u7406\u6027\u601D\u8003",
-        seriesLabel: "\u8BA4\u77E5\u5FC3\u7406\u5B66",
-        seriesLabelEn: "COGNITIVE PSYCHOLOGY",
-        methodologySteps: ["\u89C9\u5BDF", "\u5F52\u56E0", "\u8C03\u6574"],
-        methodologyStepsEn: "OBSERVE \xB7 ATTRIBUTE \xB7 ADJUST"
+        style: {
+          position: "absolute",
+          left: 0,
+          bottom: _Constants_VERTICAL_BOTTOM_BRAND_OFFSET,
+          width: _Constants_VERTICAL_CANVAS_W,
+          boxSizing: "border-box",
+          pointerEvents: "none",
+          zIndex: 18
+        },
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(VerticalBottomBrandBar, { canvasW: _Constants_VERTICAL_CANVAS_W })
       }
-    ) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: src_remotions_COVER_DURATION_FRAMES_4, durationInFrames: MAIN_DURATION_\u8BA4\u77E5\u504F\u89C1_\u951A\u5B9A\u6548\u5E94, children: /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(
-        "div",
-        {
-          style: {
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "10%",
-            minHeight: 48,
-            backgroundColor: "rgba(0,0,0,0.5)"
-          }
-        }
-      ),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries, { children: src_remotions_sceneConfigs_4.map((config, index) => {
-        const SceneComp = config.component;
-        const isLast = index === src_remotions_sceneConfigs_4.length - 1;
-        return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries.Sequence, { durationInFrames: config.duration, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(SceneComp, {}) }),
-          !isLast && /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            TransitionSeries.Transition,
-            {
-              timing: linearTiming({ durationInFrames: src_remotions_TRANSITION_DURATION_4 }),
-              presentation: fade()
-            }
-          )
-        ] }, config.name);
-      }) })
-    ] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(src_remotions_ProgressBar_4, {})
+    )
   ] });
 };
 
-;// ./src/remotions/认知偏见_后视偏见/scenes/Scene1.tsx
+;// ./src/remotions/小米平权/小米平权CoverProps.ts
 
-
-
-
-const src_remotions_scenes_Scene1_SCENE_DURATION_3 = 148 + 180 + 133 + 249 + 148 + 230;
-const src_remotions_scenes_Scene1_calculateScene1Duration_3 = () => {
-  return src_remotions_scenes_Scene1_SCENE_DURATION_3;
+const \u5C0F\u7C73\u5E73\u6743_STATIC_COVER_PROPS = {
+  title: "\u5C0F\u7C73\u7684\u79D1\u6280\u5E73\u6743",
+  subtitle: "\u8C01\u5728\u6084\u6084\u628A\u300C\u4E70\u5F97\u8D77\u597D\u4E1C\u897F\u300D\u8BF4\u6210\u4E22\u8138\uFF1F",
+  themeColor: "#FF6900",
+  surface: "light",
+  badge: "\u6DF1\u5EA6\u89E3\u8BFB \xB7 \u6570\u636E\u4E0E\u4E8B\u5B9E",
+  seriesLabel: "\u79D1\u6280\u70ED\u70B9\u6DF1\u8BFB",
+  seriesLabelEn: "TECH DEEP DIVE",
+  methodologySteps: ["\u4E89\u8BAE", "\u6570\u636E", "\u7ED3\u8BBA"],
+  methodologyStepsEn: "DEBATE \xB7 DATA \xB7 VERDICT"
 };
-const src_remotions_scenes_Scene1_Scene1_3 = () => {
+
+;// ./src/remotions/小米平权/小米平权CoverStills.tsx
+
+
+
+
+const \u5C0F\u7C73\u5E73\u6743\u5C01\u9762\u6A2A\u5C4F = () => /* @__PURE__ */ (0,jsx_runtime.jsx)(LandscapeCoverPoster, { ...小米平权_STATIC_COVER_PROPS });
+const \u5C0F\u7C73\u5E73\u6743\u5C01\u9762\u7AD6\u5C4F = () => /* @__PURE__ */ (0,jsx_runtime.jsx)(VerticalCoverPoster, { ...小米平权_STATIC_COVER_PROPS });
+
+;// ./src/remotions/认知陷阱3/scenes/Scene1.tsx
+
+
+
+
+const scenes_Scene1_SCENE_DURATION = 132 + 159 + 90 + 72;
+const scenes_Scene1_calculateScene1Duration = () => {
+  return scenes_Scene1_SCENE_DURATION;
+};
+const scenes_Scene1_Scene1 = () => {
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 148, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u770B\u7740\u6EE1\u5C4F\u7EFF\u6CB9\u6CB9\u7684\u66B4\u8DCC\u57FA\u91D1\uFF0C", "startFrame": 0, "durationFrames": 71 }, { "text": "\u4F60\u53F9\u4E86\u53E3\u6C14\uFF0C", "startFrame": 70, "durationFrames": 30 }, { "text": "\u9ED8\u9ED8\u9000\u51FA\u4E86\u4EA4\u6613\u8F6F\u4EF6\u3002", "startFrame": 100, "durationFrames": 47 }], totalDurationFrames: 148, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_1_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u66B4\u8DCC\u57FA\u91D1", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 148, durationInFrames: 180, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWQuoteCitation, { content: [{ "text": "\u7136\u540E\u8DDF\u670B\u53CB\u62B1\u6028\u8BF4\uFF1A", "startFrame": 0, "durationFrames": 43 }, { "text": "\u201C\u6211\u65E9\u5C31\u77E5\u9053\u4F1A\u8DCC\uFF0C", "startFrame": 42, "durationFrames": 60 }, { "text": "\u6628\u5929\u90A3\u4E2A\u653F\u7B56\u4E00\u51FA\u6211\u5C31\u89C9\u5F97\u4E0D\u5BF9\u52B2\u3002\u201D", "startFrame": 102, "durationFrames": 78 }], totalDurationFrames: 180, quoteDisplayText: "\u201C\u6211\u65E9\u5C31\u77E5\u9053\u4F1A\u8DCC\uFF0C\u6628\u5929\u90A3\u4E2A\u653F\u7B56\u4E00\u51FA\u6211\u5C31\u89C9\u5F97\u4E0D\u5BF9\u52B2\u3002", quoteSource: "\u8BF8\u845B\u4EAE", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 328, durationInFrames: 133, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8FD9\u79CD\u201C\u4E8B\u540E\u8BF8\u845B\u4EAE\u201D\u5F0F\u7684\u5148\u89C1\u4E4B\u660E\uFF0C", "startFrame": 0, "durationFrames": 76 }, { "text": "\u662F\u4E0D\u662F\u8BA9\u4F60\u5FC3\u91CC\u7A0D\u5FAE\u597D\u53D7\u4E86\u4E00\u70B9\uFF1F", "startFrame": 75, "durationFrames": 58 }], totalDurationFrames: 133, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_1_3.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u4E8B\u540E\u8BF8\u845B\u4EAE", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 461, durationInFrames: 249, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u6211\u4EEC\u603B\u559C\u6B22\u5728\u5C18\u57C3\u843D\u5B9A\u540E\u6307\u70B9\u6C5F\u5C71\uFF0C", "startFrame": 0, "durationFrames": 78 }, { "text": "\u89C9\u5F97\u81EA\u5DF1\u6709\u4E00\u773C\u770B\u900F\u672C\u8D28\u7684\u8D85\u80FD\u529B\u3002", "startFrame": 77, "durationFrames": 80 }, { "text": "\u4F46\u5176\u5B9E\u8FD9\u53EA\u662F\u4E00\u79CD\u81EA\u6211\u5B89\u6170\u7684\u865A\u5047\u7E41\u8363\u3002", "startFrame": 157, "durationFrames": 92 }], totalDurationFrames: 249, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_1_4.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u6307\u70B9\u6C5F\u5C71", "showFrom": 0, "color": "#000000", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u81EA\u6211\u5B89\u6170", "showFrom": 2, "color": "#EF4444", "anim": "popIn", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 710, durationInFrames: 148, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u8FD9\u4E0D\u662F\u56E0\u4E3A\u6211\u4EEC\u771F\u7684\u6599\u4E8B\u5982\u795E\uFF0C", "startFrame": 0, "durationFrames": 62 }, { "text": "\u800C\u662F\u6211\u4EEC\u7684\u5927\u8111\u6839\u672C\u65E0\u6CD5\u5FCD\u53D7\u4E0D\u786E\u5B9A\u6027\u3002", "startFrame": 61, "durationFrames": 87 }], totalDurationFrames: 148, notText: "\u6599\u4E8B\u5982\u795E", butText: "\u65E0\u6CD5\u5FCD\u53D7\u4E0D\u786E\u5B9A\u6027", butSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_1_6.png"), notContentIndex: 0, butContentIndex: 1, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 858, durationInFrames: 230, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4E3A\u4E86\u5728\u6DF7\u4E71\u7684\u5B87\u5B99\u4E2D\u627E\u56DE\u4E00\u70B9\u5B89\u5168\u611F\uFF0C", "startFrame": 0, "durationFrames": 72 }, { "text": "\u5927\u8111\u5F3A\u884C\u7F16\u9020\u4E86\u5B8C\u7F8E\u7684\u56E0\u679C\u5173\u7CFB\uFF0C", "startFrame": 72, "durationFrames": 71 }, { "text": "\u8BA9\u6211\u4EEC\u8BEF\u4EE5\u4E3A\u4E00\u5207\u60B2\u5267\u90FD\u662F\u53EF\u4EE5\u907F\u514D\u7684\u3002", "startFrame": 142, "durationFrames": 87 }], totalDurationFrames: 230, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_1_7.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u4E3A\u4E86\u5B89\u5168\u611F", "showFrom": 0, "color": "#000000", "anim": "spring", "audioEffect": "ping" }, { "text": "\u7F16\u9020\u56E0\u679C\u5173\u7CFB", "showFrom": 1, "color": "#000000", "anim": "spring", "audioEffect": "ping" }, { "text": "\u81EA\u6211\u5B89\u6170", "showFrom": 2, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_1/scene_1.mp3") })
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 132, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u6211\u4ECA\u5929\u5237\u4E86\u4E0A\u767E\u6761\u8F66\u7978\u89C6\u9891\u7684\u8BC4\u8BBA\uFF0C", "startFrame": 0, "durationFrames": 35 }, { "text": "\u53D1\u73B0\u4E86\u4E00\u4E2A\u6781\u5176\u8BE1\u5F02\u7684\u73B0\u8C61\uFF1A", "startFrame": 35, "durationFrames": 30 }, { "text": "\u5927\u5BB6\u5435\u5F97\u4E0D\u53EF\u5F00\u4EA4\uFF0C", "startFrame": 65, "durationFrames": 30 }, { "text": "\u4F46\u6CA1\u6709\u4E00\u4E2A\u4EBA\u5173\u5FC3\u8F66\u91CC\u7684\u4EBA\u6D3B\u6CA1\u6D3B\u7740\u3002", "startFrame": 95, "durationFrames": 37 }], totalDurationFrames: 132, imageSrc: (0,esm.staticFile)("\u4E00\u4E2A\u4EBA\u770B\u7740\u5F88\u591A\u8F66\u7978\u89C6\u9891\u8BC4\u8BBA\u7684\u573A\u666F"), enterEffect: "fadeIn", anchors: [{ "text": "\u8BE1\u5F02\u73B0\u8C61", "showFrom": 1, "color": "#EF4444", "anim": "popIn", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 132, durationInFrames: 159, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWChatBubble, { content: [{ "text": "\u201C\u8FD9\u4E00\u5B9A\u662F\u5C0F\u7C73\u5427\uFF01\u201D", "startFrame": 0, "durationFrames": 30 }, { "text": "\u201C\u80AF\u5B9A\u662F\u67D0\u754C\uFF01\u201D", "startFrame": 30, "durationFrames": 30 }, { "text": "\u5F53\u4E00\u6BB5\u6CA1\u6709\u4EFB\u4F55\u54C1\u724C\u6807\u8BC6\u7684\u4E8B\u6545\u89C6\u9891\u5728\u5168\u7F51\u75AF\u4F20\uFF0C", "startFrame": 60, "durationFrames": 48 }, { "text": "\u8BC4\u8BBA\u533A\u5F80\u5F80\u5728\u4E09\u79D2\u5185\u6CA6\u4E3A\u4E0D\u540C\u54C1\u724C\u7C89\u4E1D\u7684\u55DC\u8840\u6218\u573A\u3002", "startFrame": 108, "durationFrames": 51 }], totalDurationFrames: 159, bubbles: [{ bubbleText: "\u8FD9\u4E00\u5B9A\u662F\u5C0F\u7C73\u5427\uFF01", showFrom: 0, align: "left" }, { bubbleText: "\u80AF\u5B9A\u662F\u67D0\u754C\uFF01", showFrom: 1, align: "right" }], anchors: [] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 291, durationInFrames: 90, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSplitCompare, { content: [{ "text": "\u4ED4\u7EC6\u89C2\u5BDF\u4F60\u4F1A\u53D1\u73B0\uFF1A", "startFrame": 0, "durationFrames": 30 }, { "text": "\u6839\u672C\u6CA1\u4EBA\u5728\u4E4E\u8F66\u7978\u4E2D\u7684\u4F24\u8005\uFF0C", "startFrame": 30, "durationFrames": 30 }, { "text": "\u4E5F\u6CA1\u4EBA\u5728\u4E4E\u4E8B\u6545\u7684\u524D\u56E0\u540E\u679C\u3002", "startFrame": 60, "durationFrames": 30 }], totalDurationFrames: 90, leftSrc: (0,esm.staticFile)("\u8F66\u7978\u73B0\u573A\u53D7\u4F24\u8005\u8EBA\u5728\u5730\u4E0A\uFF0C\u5468\u56F4\u4EBA\u7FA4\u51B7\u6F20\u8D70\u8FC7\u65E0\u4EBA\u65BD\u6551"), rightSrc: (0,esm.staticFile)("\u4E8B\u6545\u8C03\u67E5\u62A5\u544A\u4E0E\u884C\u8F66\u8BB0\u5F55\u4EEA\u753B\u9762\u88AB\u6401\u7F6E\u5728\u89D2\u843D\u65E0\u4EBA\u95EE\u6D25"), leftLabel: "\u8F66\u7978\u4F24\u8005", rightLabel: "\u524D\u56E0\u540E\u679C", leftShowFrom: 1, rightShowFrom: 2, anchors: [] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 381, durationInFrames: 72, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u4ED6\u4EEC\u6025\u4E0D\u53EF\u8010\u5730\u6572\u4E0B\u5B9A\u8BBA\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u672C\u8D28\u4E0A\u662F\u5728\u5B8C\u6210\u4E00\u573A\u5FC3\u7167\u4E0D\u5BA3\u7684\u793E\u4EA4\u8868\u6F14\u3002", "startFrame": 30, "durationFrames": 42 }], totalDurationFrames: 72, coreSentence: ["\u4ED6\u4EEC\u5728\u5B8C\u6210\u4E00\u573A\u5FC3\u7167\u4E0D\u5BA3\u7684\u793E\u4EA4\u8868\u6F14\u3002"], coreSentenceAnchors: [{ "coreSentenceAnchor": "\u793E\u4EA4\u8868\u6F14", "color": "#EF4444" }] }) })
   ] });
 };
 
-;// ./src/remotions/认知偏见_后视偏见/scenes/Scene2.tsx
+;// ./src/remotions/认知陷阱3/scenes/Scene2.tsx
 
 
 
 
-const src_remotions_scenes_Scene2_SCENE_DURATION_4 = 267 + 168 + 185 + 259 + 111;
-const src_remotions_scenes_Scene2_calculateScene2Duration_3 = () => {
-  return src_remotions_scenes_Scene2_SCENE_DURATION_4;
+const _3_scenes_Scene2_SCENE_DURATION = 158 + 70 + 108 + 135 + 180 + 90;
+const scenes_Scene2_calculateScene2Duration = () => {
+  return _3_scenes_Scene2_SCENE_DURATION;
 };
-const src_remotions_scenes_Scene2_Scene2_3 = () => {
+const scenes_Scene2_Scene2 = () => {
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 267, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWConceptCard, { content: [{ "text": "\u8FD9\u5728\u5FC3\u7406\u5B66\u4E2D\u53EB\u505A\u201C\u540E\u89C6\u504F\u89C1\u201D\uFF1A", "startFrame": 0, "durationFrames": 77 }, { "text": "\u5F53\u4E00\u4EF6\u4E8B\u60C5\u7684\u7ED3\u679C\u5DF2\u7ECF\u53D1\u751F\uFF0C", "startFrame": 76, "durationFrames": 53 }, { "text": "\u6211\u4EEC\u4F1A\u81EA\u52A8\u4E14\u65E0\u610F\u8BC6\u5730\u91CD\u6784\u8BB0\u5FC6\uFF0C", "startFrame": 128, "durationFrames": 74 }, { "text": "\u8BA4\u4E3A\u81EA\u5DF1\u65E9\u5C31\u80FD\u51C6\u786E\u9884\u89C1\u7ED3\u679C\u3002", "startFrame": 201, "durationFrames": 65 }], totalDurationFrames: 267, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_2_1.png"), conceptName: "\u540E\u89C6\u504F\u89C1", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 267, durationInFrames: 168, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u90A3\u4E2A\u5DF2\u7ECF\u53D1\u751F\u7684\u7ED3\u679C\u5C31\u662F\u4E00\u4E2A\u201C\u786E\u5B9A\u6027\u7684\u6EE4\u955C\u201D\uFF0C", "startFrame": 0, "durationFrames": 90 }, { "text": "\u5B83\u4F1A\u81EA\u52A8\u8FC7\u6EE4\u6389\u4E4B\u524D\u6240\u6709\u5E72\u6270\u4F60\u7684\u4FE1\u606F\u3002", "startFrame": 89, "durationFrames": 79 }], totalDurationFrames: 168, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_2_2.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u786E\u5B9A\u6027\u6EE4\u955C", "showFrom": 0, "color": "#000000", "anim": "spring", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 435, durationInFrames: 185, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4E00\u65E6\u7ED3\u679C\u51FA\u6765\u4E86\uFF0C", "startFrame": 0, "durationFrames": 36 }, { "text": "\u4F60\u4F1A\u89C9\u5F97\u903B\u8F91\u94FE\u6761\u94C1\u8BC1\u5982\u5C71\uFF0C", "startFrame": 36, "durationFrames": 84 }, { "text": "\u4EFF\u4F5B\u5F53\u521D\u53EA\u6709\u8FD9\u4E00\u6761\u8DEF\u53EF\u8D70\u3002", "startFrame": 120, "durationFrames": 65 }], totalDurationFrames: 185, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_2_3.png"), enterEffect: "slideBottom", anchors: [{ "text": "\u94C1\u8BC1\u5982\u5C71", "showFrom": 1, "color": "#EF4444", "anim": "popIn", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 620, durationInFrames: 259, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSplitCompare, { content: [{ "text": "\u54EA\u6015\u5728\u4E8B\u60C5\u53D1\u751F\u524D\uFF0C", "startFrame": 0, "durationFrames": 46 }, { "text": "\u4F60\u9762\u5BF9\u6D77\u91CF\u77DB\u76FE\u7684\u4FE1\u606F\u65F6\u6839\u672C\u4E0D\u6562\u4E0B\u6CE8\uFF0C", "startFrame": 45, "durationFrames": 91 }, { "text": "\u4F46\u5728\u4E8B\u540E\uFF0C", "startFrame": 136, "durationFrames": 28 }, { "text": "\u4F60\u4F9D\u7136\u4F1A\u89C9\u5F97\u90A3\u4E9B\u8D70\u9519\u8DEF\u7684\u4EBA\u201C\u8822\u5F97\u53EF\u7B11\u201D\u3002", "startFrame": 163, "durationFrames": 95 }], totalDurationFrames: 259, leftSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_2_4_left.png"), rightSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_2_4_right.png"), leftLabel: "\u4E8B\u524D\u8FF7\u832B", rightLabel: "\u4E8B\u540E\u7B03\u5B9A" }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 879, durationInFrames: 111, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u6211\u4EEC\u81EA\u4EE5\u4E3A\u7684\u672A\u96E8\u7EF8\u7F2A\uFF0C", "startFrame": 0, "durationFrames": 46 }, { "text": "\u5176\u5B9E\u5168\u662F\u590D\u76D8\u65F6\u7684\u81EA\u6211\u6B3A\u9A97\u3002", "startFrame": 45, "durationFrames": 65 }], totalDurationFrames: 111, coreSentence: "\u6211\u4EEC\u81EA\u4EE5\u4E3A\u7684\u672A\u96E8\u7EF8\u7F2A\uFF0C\u5168\u662F\u81EA\u6211\u6B3A\u9A97", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u672A\u96E8\u7EF8\u7F2A", "color": "#EF4444" }, { "coreSentenceAnchor": "\u81EA\u6211\u6B3A\u9A97", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_2/scene_2.mp3") })
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 158, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5728\u4ECA\u5929\u7684\u4E92\u8054\u7F51\u8BED\u5883\u4E0B\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u6D88\u8D39\u54C1\u65E9\u5DF2\u5F02\u5316\u4E3A\u8EAB\u4EFD\u8BA4\u540C\u7684\u56FE\u817E\u3002", "startFrame": 30, "durationFrames": 35 }, { "text": "\u4F60\u5F00\u4EC0\u4E48\u8F66\u3001", "startFrame": 65, "durationFrames": 30 }, { "text": "\u7528\u4EC0\u4E48\u624B\u673A\uFF0C", "startFrame": 95, "durationFrames": 30 }, { "text": "\u76F4\u63A5\u51B3\u5B9A\u4E86\u4F60\u5C5E\u4E8E\u54EA\u4E2A\u201C\u90E8\u843D\u201D\u3002", "startFrame": 125, "durationFrames": 33 }], totalDurationFrames: 158, imageSrc: (0,esm.staticFile)("\u4E92\u8054\u7F51\u4FE1\u606F\u6D41\u7684\u62BD\u8C61\u56FE\u666F"), enterEffect: "fadeIn", anchors: [{ "text": "\u8EAB\u4EFD\u8BA4\u540C\u7684\u56FE\u817E", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 158, durationInFrames: 70, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5F53\u4EBA\u4EEC\u5728\u8BC4\u8BBA\u533A\u91CC\u75AF\u72C2\u653B\u51FB\u67D0\u4E2A\u54C1\u724C\u65F6\uFF0C", "startFrame": 0, "durationFrames": 40 }, { "text": "\u4ED6\u4EEC\u771F\u7684\u662F\u5728\u804A\u4EA7\u54C1\u5417\uFF1F", "startFrame": 40, "durationFrames": 30 }], totalDurationFrames: 70, imageSrc: (0,esm.staticFile)("\u4EBA\u4EEC\u5728\u8BC4\u8BBA\u533A\u91CC\u4E89\u8BBA\u7684\u753B\u9762"), enterEffect: "fadeIn", anchors: [{ "text": "\u804A\u4EA7\u54C1\u5417", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 228, durationInFrames: 108, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4E0D\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u4ED6\u4EEC\u662F\u5728\u5411\u5BF9\u7ACB\u90E8\u843D\u5BA3\u6218\uFF0C", "startFrame": 30, "durationFrames": 30 }, { "text": "\u540C\u65F6\u5411\u81EA\u5DF1\u7684\u90E8\u843D\u9012\u4EA4\u201C\u6295\u540D\u72B6\u201D\u4EE5\u6362\u53D6\u5F52\u5C5E\u611F\u3002", "startFrame": 60, "durationFrames": 48 }], totalDurationFrames: 108, imageSrc: (0,esm.staticFile)("\u90E8\u843D\u51B2\u7A81\u7684\u5361\u901A\u573A\u666F"), enterEffect: "slideBottom", anchors: [{ "text": "\u5BA3\u6218", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u6295\u540D\u72B6", "showFrom": 2, "color": "#000000", "anim": "popIn", "audioEffect": "ping" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 336, durationInFrames: 135, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u90A3\u6BB5\u6CA1\u5934\u6CA1\u5C3E\u7684\u4E8B\u6545\u89C6\u9891\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u4E0D\u8FC7\u662F\u7528\u6765\u4E92\u76F8\u653B\u4F10\u7684\u5EC9\u4EF7\u501F\u53E3\u3002", "startFrame": 30, "durationFrames": 33 }, { "text": "\u793E\u4F1A\u5B66\u4E2D\u7684\u201C\u5185\u7FA4\u4F53\u504F\u597D\u4E0E\u5916\u7FA4\u4F53\u8D2C\u635F\u201D\uFF0C", "startFrame": 63, "durationFrames": 42 }, { "text": "\u5728\u8FD9\u91CC\u5C55\u73B0\u5F97\u6DCB\u6F13\u5C3D\u81F4\uFF1A", "startFrame": 105, "durationFrames": 30 }], totalDurationFrames: 135, imageSrc: (0,esm.staticFile)("\u4E00\u6BB5\u6A21\u7CCA\u7684\u4E8B\u6545\u89C6\u9891"), enterEffect: "fadeIn", anchors: [{ "text": "\u5EC9\u4EF7\u501F\u53E3", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 471, durationInFrames: 180, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSplitCompare, { content: [{ "text": "\u81EA\u5DF1\u652F\u6301\u7684\u54C1\u724C\u51FA\u4E86\u4E8B\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u90A3\u662F\u201C\u5076\u53D1\u4E2A\u4F8B\u201D\u3001", "startFrame": 30, "durationFrames": 30 }, { "text": "\u201C\u8F66\u4E3B\u811A\u6CD5\u4E0D\u884C\u201D\uFF1B", "startFrame": 60, "durationFrames": 30 }, { "text": "\u5BF9\u7ACB\u54C1\u724C\u51FA\u4E86\u4E8B\uFF0C", "startFrame": 90, "durationFrames": 30 }, { "text": "\u90A3\u5C31\u662F\u201C\u5DE5\u4E1A\u5783\u573E\u201D\u3001", "startFrame": 120, "durationFrames": 30 }, { "text": "\u201C\u65E9\u665A\u836F\u4E38\u201D\u3002", "startFrame": 150, "durationFrames": 30 }], totalDurationFrames: 180, leftSrc: (0,esm.staticFile)("\u4E00\u7FA4\u4EBA\u652F\u6301\u67D0\u4E2A\u54C1\u724C"), rightSrc: (0,esm.staticFile)("\u53E6\u4E00\u7FA4\u4EBA\u53CD\u5BF9\u8BE5\u54C1\u724C"), leftLabel: "\u652F\u6301\u8005", rightLabel: "\u53CD\u5BF9\u8005", leftShowFrom: 1, rightShowFrom: 4, anchors: [] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 651, durationInFrames: 90, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u5728\u8FD9\u91CC\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u4E8B\u5B9E\u65E9\u5DF2\u88AB\u5F7B\u5E95\u626D\u66F2\uFF0C", "startFrame": 30, "durationFrames": 30 }, { "text": "\u6CA6\u4E3A\u7ACB\u573A\u7684\u5351\u5FAE\u9644\u5EB8\u3002", "startFrame": 60, "durationFrames": 30 }], totalDurationFrames: 90, coreSentence: ["\u5728\u8FD9\u91CC\uFF0C\u4E8B\u5B9E\u65E9\u5DF2\u88AB\u5F7B\u5E95\u626D\u66F2\uFF0C", "\u6CA6\u4E3A\u7ACB\u573A\u7684\u5351\u5FAE\u9644\u5EB8\u3002"], coreSentenceAnchors: [{ "coreSentenceAnchor": "\u5F7B\u5E95\u626D\u66F2", "color": "#EF4444" }, { "coreSentenceAnchor": "\u5351\u5FAE\u9644\u5EB8", "color": "#EF4444" }] }) })
   ] });
 };
 
-;// ./src/remotions/认知偏见_后视偏见/scenes/Scene3.tsx
+;// ./src/remotions/认知陷阱3/scenes/Scene3.tsx
 
 
 
 
-const src_remotions_scenes_Scene3_SCENE_DURATION_4 = 103 + 269 + 257 + 252 + 192;
-const src_remotions_scenes_Scene3_calculateScene3Duration_3 = () => {
-  return src_remotions_scenes_Scene3_SCENE_DURATION_4;
+const _3_scenes_Scene3_SCENE_DURATION = 104 + 98 + 115 + 102 + 60 + 116 + 83 + 90;
+const scenes_Scene3_calculateScene3Duration = () => {
+  return _3_scenes_Scene3_SCENE_DURATION;
 };
-const src_remotions_scenes_Scene3_Scene3_3 = () => {
+const scenes_Scene3_Scene3 = () => {
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 103, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5B9E\u9645\u4E0A\uFF0C", "startFrame": 0, "durationFrames": 22 }, { "text": "\u540E\u89C6\u504F\u89C1\u7684\u9677\u9631\u5728\u751F\u6D3B\u4E2D\u65E0\u5904\u4E0D\u5728\uFF1A", "startFrame": 21, "durationFrames": 81 }], totalDurationFrames: 103, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_3_1.png"), enterEffect: "fadeIn" }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 103, durationInFrames: 269, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "- \u804C\u573A\u590D\u76D8\u65F6\uFF1A", "startFrame": 0, "durationFrames": 41 }, { "text": "\u9879\u76EE\u641E\u7838\u4E86\uFF0C", "startFrame": 40, "durationFrames": 34 }, { "text": "\u9886\u5BFC\u62CD\u7740\u684C\u5B50\u8BF4\u201C\u6211\u5F53\u521D\u5C31\u77E5\u9053\u8FD9\u65B9\u6848\u4E0D\u884C\u201D\u3002", "startFrame": 74, "durationFrames": 94 }, { "text": "\u53EF\u5F53\u65B9\u6848\u9012\u4E0A\u53BB\u65F6\uFF0C", "startFrame": 168, "durationFrames": 47 }, { "text": "\u4ED6\u660E\u660E\u4E5F\u70B9\u4E86\u70B9\u5934\u3002", "startFrame": 214, "durationFrames": 54 }], totalDurationFrames: 269, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_3_2.png"), enterEffect: "slideBottom", anchors: [{ "text": "\u804C\u573A\u590D\u76D8", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u9A6C\u540E\u70AE", "showFrom": 2, "color": "#000000", "anim": "highlight", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 372, durationInFrames: 257, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "- \u604B\u7231\u5435\u67B6\u65F6\uFF1A", "startFrame": 0, "durationFrames": 34 }, { "text": "\u5BF9\u65B9\u6307\u7740\u4F60\u7684\u9F3B\u5B50\u8BF4\u201C\u6211\u7B2C\u4E00\u773C\u770B\u4F60\u5C31\u89C9\u5F97\u4F60\u9760\u4E0D\u4F4F\u201D\u3002", "startFrame": 33, "durationFrames": 95 }, { "text": "\u5982\u679C\u771F\u662F\u8FD9\u6837\uFF0C", "startFrame": 128, "durationFrames": 41 }, { "text": "\u5F53\u521D\u90A3\u573A\u6D6A\u6F2B\u7684\u6C42\u5A5A\u53C8\u662F\u6F14\u7ED9\u8C01\u770B\u7684\uFF1F", "startFrame": 168, "durationFrames": 89 }], totalDurationFrames: 257, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_3_3.png"), enterEffect: "slideBottom", anchors: [{ "text": "\u9760\u4E0D\u4F4F", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u6D6A\u6F2B\u6C42\u5A5A", "showFrom": 3, "color": "#000000", "anim": "popIn", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 629, durationInFrames: 252, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "- \u6307\u8D23\u53D7\u5BB3\u8005\u65F6\uFF1A", "startFrame": 0, "durationFrames": 52 }, { "text": "\u770B\u5230\u522B\u4EBA\u88AB\u9A97\u6216\u906D\u9047\u610F\u5916\uFF0C", "startFrame": 51, "durationFrames": 70 }, { "text": "\u8BC4\u8BBA\u533A\u603B\u6709\u4EBA\u8BF4\u201C\u8FD9\u79CD\u5957\u8DEF\u4E5F\u80FD\u4E0A\u5F53\uFF1F", "startFrame": 121, "durationFrames": 88 }, { "text": "\u6362\u6211\u65E9\u5C31\u8BC6\u7834\u4E86\u201D\u3002", "startFrame": 208, "durationFrames": 44 }], totalDurationFrames: 252, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_3_4.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u6307\u8D23\u53D7\u5BB3\u8005", "showFrom": 0, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 881, durationInFrames: 192, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8FD9\u79CD\u4E0A\u5E1D\u89C6\u89D2\uFF0C", "startFrame": 0, "durationFrames": 40 }, { "text": "\u4E0D\u8FC7\u662F\u5229\u7528\u5DF2\u77E5\u7ED3\u679C\u5728\u4ED6\u4EBA\u4F24\u53E3\u4E0A\u6492\u76D0\uFF0C", "startFrame": 39, "durationFrames": 92 }, { "text": "\u4EE5\u6B64\u6362\u53D6\u4E00\u70B9\u865A\u5984\u7684\u5B89\u5168\u611F\u3002", "startFrame": 130, "durationFrames": 61 }], totalDurationFrames: 192, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_3_5.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u4F24\u53E3\u6492\u76D0", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u5B89\u5168\u611F", "showFrom": 2, "color": "#000000", "anim": "popIn", "audioEffect": null }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_3/scene_3.mp3") })
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 104, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4E3A\u4EC0\u4E48\u73B0\u5B9E\u751F\u6D3B\u4E2D\u6E29\u6587\u5C14\u96C5\u7684\u666E\u901A\u4EBA\uFF0C", "startFrame": 0, "durationFrames": 37 }, { "text": "\u4E00\u8FDB\u5165\u7F51\u7EDC\u8BC4\u8BBA\u533A\u5C31\u4F1A\u53D8\u5F97\u66B4\u8E81\u55DC\u8840\u3001", "startFrame": 37, "durationFrames": 37 }, { "text": "\u6025\u4E8E\u5B9A\u8BBA\uFF1F", "startFrame": 74, "durationFrames": 30 }], totalDurationFrames: 104, imageSrc: (0,esm.staticFile)("\u4E00\u7FA4\u4EBA\u5728\u7535\u8111\u524D\u6FC0\u70C8\u7684\u8BA8\u8BBA"), enterEffect: "fadeIn", anchors: [{ "text": "\u7F51\u7EDC\u8BC4\u8BBA\u533A", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u66B4\u8E81\u55DC\u8840", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 104, durationInFrames: 98, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWQuoteCitation, { content: [{ "text": "\u52D2\u5E9E\u5728\u300A\u4E4C\u5408\u4E4B\u4F17\u300B\u4E2D\u65E9\u6709\u9884\u8A00\uFF1A", "startFrame": 0, "durationFrames": 33 }, { "text": "\u5F53\u4E2A\u4EBA\u878D\u5165\u7FA4\u4F53\uFF0C", "startFrame": 33, "durationFrames": 30 }, { "text": "\u533F\u540D\u7684\u9762\u5177\u4F1A\u8BA9\u4ED6\u5F7B\u5E95\u4E27\u5931\u8D23\u4EFB\u611F\u3002", "startFrame": 63, "durationFrames": 35 }], totalDurationFrames: 98, quoteSource: "\u52D2\u5E9E\u300A\u4E4C\u5408\u4E4B\u4F17\u300B", quoteDisplayText: "\u52D2\u5E9E\u5728\u300A\u4E4C\u5408\u4E4B\u4F17\u300B\u4E2D\u65E9\u6709\u9884\u8A00\uFF1A\u5F53\u4E2A\u4EBA\u878D\u5165\u7FA4\u4F53\uFF0C\u533F\u540D\u7684\u9762\u5177\u4F1A\u8BA9\u4ED6\u5F7B\u5E95\u4E27\u5931\u8D23\u4EFB\u611F\u3002", showFrom: 0, anchors: [] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 202, durationInFrames: 115, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5728\u73B0\u5B9E\u8857\u5934\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u5982\u679C\u4F60\u6307\u7740\u4E00\u4E2A\u906D\u9047\u8F66\u7978\u7684\u964C\u751F\u4EBA\u5927\u558A\u201C\u4F60\u6D3B\u8BE5\u8D77\u706B\u201D\uFF0C", "startFrame": 30, "durationFrames": 55 }, { "text": "\u5927\u6982\u7387\u4F1A\u6328\u4E00\u987F\u6BD2\u6253\uFF1B", "startFrame": 85, "durationFrames": 30 }], totalDurationFrames: 115, imageSrc: (0,esm.staticFile)("\u771F\u5B9E\u7684\u8857\u5934\u573A\u666F\uFF0C\u4E00\u4E2A\u4EBA\u6307\u7740\u53E6\u4E00\u8F86\u906D\u9047\u8F66\u7978\u7684\u6C7D\u8F66\u5927\u558A"), enterEffect: "fadeIn", anchors: [{ "text": "\u6D3B\u8BE5\u8D77\u706B", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 317, durationInFrames: 102, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWSplitCompare, { content: [{ "text": "\u4F46\u5728\u4E92\u8054\u7F51\u4E0A\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u5F53\u4F60\u5316\u8EAB\u4E3A\u5341\u4E07\u6761\u8BC4\u8BBA\u4E2D\u7684\u4E00\u4E2A\u50CF\u7D20\u70B9\u65F6\uFF0C", "startFrame": 30, "durationFrames": 42 }, { "text": "\u4F5C\u6076\u7684\u6210\u672C\u88AB\u65E0\u9650\u7A00\u91CA\u4E86\u3002", "startFrame": 72, "durationFrames": 30 }], totalDurationFrames: 102, leftSrc: (0,esm.staticFile)("\u771F\u5B9E\u7684\u8857\u5934\u573A\u666F\uFF0C\u4E00\u4E2A\u4EBA\u6307\u7740\u53E6\u4E00\u8F86\u906D\u9047\u8F66\u7978\u7684\u6C7D\u8F66\u5927\u558A"), rightSrc: (0,esm.staticFile)("\u4E92\u8054\u7F51\u8BC4\u8BBA\u533A\u573A\u666F\uFF0C\u65E0\u6570\u533F\u540D\u5934\u50CF\u6D8C\u52A8"), leftLabel: "\u73B0\u5B9E\u8857\u5934", rightLabel: "\u4E92\u8054\u7F51", leftShowFrom: 0, rightShowFrom: 1, anchors: [] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 419, durationInFrames: 60, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u7FA4\u4F53\u4ECE\u6765\u4E0D\u5584\u4E8E\u63A8\u7406\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u5374\u6781\u6613\u88AB\u60C5\u7EEA\u88F9\u631F\u3002", "startFrame": 30, "durationFrames": 30 }], totalDurationFrames: 60, imageSrc: (0,esm.staticFile)("\u4E00\u7FA4\u4EBA\u88AB\u7EF3\u5B50\u7F20\u7ED5\uFF0C\u6323\u624E\u7684\u526A\u5F71"), enterEffect: "fadeIn", anchors: [{ "text": "\u60C5\u7EEA\u88F9\u631F", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 479, durationInFrames: 116, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCauseChain, { content: [{ "text": "\u5F53\u8BC4\u8BBA\u533A\u9AD8\u8D5E\u7684\u524D\u5341\u6761\u90FD\u5728\u75AF\u72C2\u8F93\u51FA\u540C\u4E00\u79CD\u60C5\u7EEA\u65F6\uFF0C", "startFrame": 0, "durationFrames": 51 }, { "text": "\u540E\u6765\u8005\u4F1A\u4E0D\u7531\u81EA\u4E3B\u5730\u653E\u5F03\u72EC\u7ACB\u601D\u8003\uFF0C", "startFrame": 51, "durationFrames": 35 }, { "text": "\u7EB5\u8EAB\u8DC3\u5165\u8FD9\u573A\u60C5\u7EEA\u7684\u72C2\u6B22\u3002", "startFrame": 86, "durationFrames": 30 }], totalDurationFrames: 116, layout: "horizontal", nodes: [{ label: "\u60C5\u7EEA\u8F93\u51FA", imageSrc: (0,esm.staticFile)("\u4E00\u7FA4\u4EBA\u5BF9\u7740\u5C4F\u5E55\u5450\u558A\u7684\u7B80\u7B14\u753B"), showFrom: 0 }, { label: "\u653E\u5F03\u601D\u8003", imageSrc: (0,esm.staticFile)("\u4E00\u4E2A\u5927\u8111\u505C\u6B62\u8FD0\u8F6C\u7684\u7B80\u7B14\u753B"), showFrom: 1 }, { label: "\u60C5\u7EEA\u72C2\u6B22", imageSrc: (0,esm.staticFile)("\u4E00\u7FA4\u4EBA\u5728\u821E\u53F0\u4E0A\u72C2\u6B22\u7684\u7B80\u7B14\u753B"), showFrom: 2 }], anchors: [] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 595, durationInFrames: 83, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u90A3\u79CD\u6025\u5207\u4E0B\u5B9A\u8BBA\u7684\u5FEB\u611F\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u80FD\u8BA9\u4EBA\u77AC\u95F4\u83B7\u5F97\u4E00\u79CD\u865A\u5E7B\u7684\u9053\u5FB7\u5236\u9AD8\u70B9\u4E0E\u667A\u529B\u4F18\u8D8A\u611F\u2014", "startFrame": 30, "durationFrames": 53 }], totalDurationFrames: 83, imageSrc: (0,esm.staticFile)("\u5927\u8111\u4E2D\u77E5\u8BC6\u548C\u60F3\u6CD5\u5FEB\u901F\u95EA\u73B0\u7684\u62BD\u8C61\u6982\u5FF5\u56FE"), enterEffect: "fadeIn", anchors: [{ "text": "\u9053\u5FB7\u5236\u9AD8\u70B9", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 678, durationInFrames: 90, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u201C\u770B\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u6211\u4E00\u773C\u5C31\u770B\u7A7F\u4E86\u771F\u76F8\uFF0C", "startFrame": 30, "durationFrames": 30 }, { "text": "\u4F60\u4EEC\u8FD9\u4E9B\u8822\u8D27\u3002\u201D", "startFrame": 60, "durationFrames": 30 }], totalDurationFrames: 90, coreSentence: ["\u201C\u770B\uFF0C\u6211\u4E00\u773C\u5C31\u770B\u7A7F\u4E86\u771F\u76F8\uFF0C\u4F60\u4EEC\u8FD9\u4E9B\u8822\u8D27\u3002\u201D"], coreSentenceAnchors: [{ "coreSentenceAnchor": "\u4E00\u773C\u5C31\u770B\u7A7F\u4E86\u771F\u76F8" }] }) })
   ] });
 };
 
-;// ./src/remotions/认知偏见_后视偏见/scenes/Scene4.tsx
+;// ./src/remotions/认知陷阱3/scenes/Scene4.tsx
 
 
 
 
-const src_remotions_scenes_Scene4_SCENE_DURATION_2 = 129 + 236 + 203 + 222 + 190 + 187;
-const src_remotions_scenes_Scene4_calculateScene4Duration_1 = () => {
-  return src_remotions_scenes_Scene4_SCENE_DURATION_2;
+const _3_scenes_Scene4_SCENE_DURATION = 118 + 101 + 127;
+const scenes_Scene4_calculateScene4Duration = () => {
+  return _3_scenes_Scene4_SCENE_DURATION;
 };
-const src_remotions_scenes_Scene4_Scene4_1 = () => {
+const scenes_Scene4_Scene4 = () => {
   return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 129, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8981\u60F3\u4E0D\u88AB\u8FD9\u79CD\u201C\u4E8B\u540E\u806A\u660E\u201D\u8499\u853D\u53CC\u773C\uFF0C", "startFrame": 0, "durationFrames": 69 }, { "text": "\u4F60\u6700\u597D\u8BB0\u4F4F\u8FD9\u4E09\u4E2A\u6838\u5FC3\u5FC3\u6CD5\uFF1A", "startFrame": 68, "durationFrames": 60 }], totalDurationFrames: 129, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_4_1.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u6838\u5FC3\u5FC3\u6CD5", "showFrom": 1, "color": "#000000", "anim": "slideUp", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 129, durationInFrames: 236, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "1. \u5EFA\u7ACB\u51B3\u7B56\u65E5\u8BB0\uFF1A", "startFrame": 0, "durationFrames": 54 }, { "text": "\u5728\u505A\u51B3\u5B9A\u65F6\u8BB0\u5F55\u4E0B\u5F53\u65F6\u7684\u771F\u5B9E\u60F3\u6CD5\u548C\u6A21\u7CCA\u4FE1\u606F\uFF0C", "startFrame": 53, "durationFrames": 103 }, { "text": "\u7B49\u7ED3\u679C\u51FA\u6765\u540E\u518D\u53BB\u65E0\u60C5\u5730\u5BF9\u7167\u3002", "startFrame": 156, "durationFrames": 80 }], totalDurationFrames: 236, title: "\u5EFA\u7ACB\u51B3\u7B56\u65E5\u8BB0", imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_4_2.png"), notes: [{ "text": "\u8BB0\u5F55\u771F\u5B9E\u60F3\u6CD5\u548C\u6A21\u7CCA\u4FE1\u606F", "showFrom": 1 }, { "text": "\u4E8B\u540E\u65E0\u60C5\u5BF9\u7167", "showFrom": 2 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 365, durationInFrames: 203, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "2. \u627F\u8BA4\u968F\u673A\u6027\uFF1A", "startFrame": 0, "durationFrames": 47 }, { "text": "\u63A5\u53D7\u4E16\u754C\u662F\u590D\u6742\u7684\u3001", "startFrame": 46, "durationFrames": 43 }, { "text": "\u751A\u81F3\u662F\u6DF7\u4E71\u7684\uFF0C", "startFrame": 89, "durationFrames": 34 }, { "text": "\u5F88\u591A\u7ED3\u679C\u7684\u53D1\u751F\u53EA\u662F\u6982\u7387\uFF0C", "startFrame": 123, "durationFrames": 54 }, { "text": "\u800C\u975E\u5FC5\u7136\u3002", "startFrame": 176, "durationFrames": 26 }], totalDurationFrames: 203, title: "\u627F\u8BA4\u968F\u673A\u6027", imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_4_3.png"), notes: [{ "text": "\u4E16\u754C\u5145\u6EE1\u590D\u6742\u6027", "showFrom": 1 }, { "text": "\u7ED3\u679C\u53EF\u80FD\u53EA\u662F\u6982\u7387", "showFrom": 3 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 568, durationInFrames: 222, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "3. \u8B66\u60D5\u201C\u603B\u7ED3\u7656\u201D\uFF1A", "startFrame": 0, "durationFrames": 62 }, { "text": "\u542C\u5230\u522B\u4EBA\uFF08\u6216\u8005\u4F60\u81EA\u5DF1\uFF09\u9AD8\u8C08\u9614\u8BBA\u201C\u6211\u65E9\u5C31\u77E5\u9053\u201D\u65F6\uFF0C", "startFrame": 61, "durationFrames": 119 }, { "text": "\u5728\u5FC3\u91CC\u6253\u4E2A\u95EE\u53F7\u3002", "startFrame": 180, "durationFrames": 42 }], totalDurationFrames: 222, title: "\u8B66\u60D5\u201C\u603B\u7ED3\u7656\u201D", imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_4_4.png"), notes: [{ "text": "\u542C\u5230\u522B\u4EBA\u9AD8\u8C08\u9614\u8BBA\u201C\u6211\u65E9\u5C31\u77E5\u9053\u201D\u65F6", "showFrom": 1 }, { "text": "\u5728\u5FC3\u91CC\u6253\u4E2A\u95EE\u53F7", "showFrom": 2 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 790, durationInFrames: 190, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5728\u8FD9\u4E2A\u5145\u6EE1\u672A\u77E5\u7684\u4E16\u754C\u91CC\uFF0C", "startFrame": 0, "durationFrames": 53 }, { "text": "\u5982\u679C\u4F60\u4E0D\u656C\u754F\u8FC7\u53BB\u7684\u771F\u5B9E\uFF0C", "startFrame": 52, "durationFrames": 56 }, { "text": "\u4F60\u5C31\u6C38\u8FDC\u65E0\u6CD5\u5728\u672A\u6765\u505A\u51FA\u7406\u6027\u7684\u5224\u65AD\u3002", "startFrame": 108, "durationFrames": 82 }], totalDurationFrames: 190, imageSrc: (0,esm.staticFile)("images/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_4_5.png"), enterEffect: "fadeIn", anchors: [{ "text": "\u656C\u754F\u8FC7\u53BB\u7684\u771F\u5B9E", "showFrom": 1, "color": "#EF4444", "anim": "slideUp", "audioEffect": null }, { "text": "\u7406\u6027\u5224\u65AD", "showFrom": 2, "color": "#000000", "anim": "popIn", "audioEffect": null }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 980, durationInFrames: 187, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u6C38\u8FDC\u8BB0\u4F4F\uFF0C", "startFrame": 0, "durationFrames": 29 }, { "text": "\u771F\u6B63\u7684\u667A\u6167\u662F\u9884\u89C1\u672A\u77E5\u7684\u98CE\u9669\uFF0C", "startFrame": 28, "durationFrames": 74 }, { "text": "\u800C\u4E0D\u662F\u5728\u5E9F\u589F\u4E0A\u5BA3\u79F0\u81EA\u5DF1\u65E9\u6709\u9884\u8C0B\u3002", "startFrame": 101, "durationFrames": 85 }], totalDurationFrames: 187, coreSentence: "\u771F\u6B63\u7684\u667A\u6167\u662F\u9884\u89C1\u672A\u77E5\u7684\u98CE\u9669", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u9884\u89C1\u672A\u77E5\u7684\u98CE\u9669", "color": "#EF4444" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Audio, { src: (0,esm.staticFile)("/audio/\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1/scene_4/scene_4.mp3") })
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 118, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4E92\u8054\u7F51\u8BC4\u8BBA\u533A\u4ECE\u6765\u4E0D\u662F\u63A2\u5BFB\u771F\u76F8\u7684\u6CD5\u5EAD\uFF0C", "startFrame": 0, "durationFrames": 40 }, { "text": "\u66F4\u4E0D\u662F\u4E25\u8C28\u7684\u5B9E\u9A8C\u5BA4\uFF0C", "startFrame": 40, "durationFrames": 30 }, { "text": "\u5B83\u66F4\u50CF\u662F\u4E00\u4E2A\u60C5\u7EEA\u7684\u6392\u6CC4\u53E3\u4E0E\u7ACB\u573A\u7684\u7F57\u9A6C\u89D2\u6597\u573A\u3002", "startFrame": 70, "durationFrames": 48 }], totalDurationFrames: 118, imageSrc: (0,esm.staticFile)("\u4E00\u7FA4\u4EBA\u5728\u7F51\u7EDC\u4E0A\u6FC0\u70C8\u4E89\u8BBA\u7684\u573A\u666F"), enterEffect: "fadeIn", anchors: [{ "text": "\u60C5\u7EEA\u6392\u6CC4\u53E3", "showFrom": 2, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u7F57\u9A6C\u89D2\u6597\u573A", "showFrom": 2, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 118, durationInFrames: 101, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5F53\u6211\u4EEC\u770B\u900F\u4E86\u8FD9\u5C42\u8352\u8BDE\u7684\u5E95\u8272\uFF0C", "startFrame": 0, "durationFrames": 31 }, { "text": "\u5C31\u8BE5\u5BF9\u90A3\u4E9B\u70B9\u8D5E\u6781\u9AD8\u3001", "startFrame": 31, "durationFrames": 30 }, { "text": "\u60C5\u7EEA\u6781\u7AEF\u7684\u201C\u65AD\u8A00\u201D\u4FDD\u6301\u5341\u4E8C\u5206\u7684\u8B66\u60D5\u3002", "startFrame": 61, "durationFrames": 40 }], totalDurationFrames: 101, imageSrc: (0,esm.staticFile)("\u4E00\u7FA4\u4EBA\u56F4\u89C2\u4E89\u5435\u7684\u5361\u901A\u573A\u666F"), enterEffect: "fadeIn", anchors: [{ "text": "\u8352\u8BDE", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u65AD\u8A00", "showFrom": 2, "color": "#000000", "anim": "slideUp", "audioEffect": "ping" }] }) }),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 219, durationInFrames: 127, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWDosAndDonts, { content: [{ "text": "\u6C38\u8FDC\u4E0D\u8981\u8F7B\u6613\u52A0\u5165\u4EFB\u4F55\u4E00\u573A\u7F51\u7EDC\u8BA8\u4F10\uFF0C", "startFrame": 0, "durationFrames": 37 }, { "text": "\u56E0\u4E3A\u5728\u7FA4\u4F53\u7684\u72C2\u6B22\u4E2D\uFF0C", "startFrame": 37, "durationFrames": 30 }, { "text": "\u6700\u5148\u88AB\u63A8\u4E0A\u796D\u575B\u7684\uFF0C", "startFrame": 67, "durationFrames": 30 }, { "text": "\u5F80\u5F80\u662F\u5E38\u8BC6\u4E0E\u7406\u667A\u3002", "startFrame": 97, "durationFrames": 30 }], totalDurationFrames: 127, left: { label: "\u274C \u76F2\u76EE\u7AD9\u961F", src: (0,esm.staticFile)("\u4E00\u7FA4\u4EBA\u4E3E\u7740\u65D7\u5E1C\u51B2\u950B\u7684\u7B80\u7B14\u753B\uFF0C\u65D7\u5E1C\u4E0A\u753B\u7740\u95EE\u53F7"), showFrom: 0 }, right: { label: "\u2705 \u72EC\u7ACB\u601D\u8003", src: (0,esm.staticFile)("\u4E00\u4E2A\u4EBA\u5750\u5728\u4E66\u684C\u524D\uFF0C\u601D\u8003\u7684\u7B80\u7B14\u753B"), showFrom: 1 }, anchors: [] }) })
   ] });
 };
 
-;// ./src/remotions/认知偏见_后视偏见/认知偏见后视偏见.tsx
+;// ./src/remotions/认知陷阱3/认知陷阱3Constants.ts
 
 
 
 
 
 
-
-
-
-
-
-
-const \u8BA4\u77E5\u504F\u89C1\u540E\u89C6\u504F\u89C1Schema = lib.z.object({});
-const src_remotions_TRANSITION_DURATION_5 = 15;
-const src_remotions_SCENE_END_PADDING_5 = 20;
-const src_remotions_COVER_DURATION_FRAMES_5 = 5;
-const src_remotions_sceneConfigs_5 = [
-  { name: "scene1", duration: src_remotions_scenes_Scene1_calculateScene1Duration_3() + src_remotions_SCENE_END_PADDING_5, component: src_remotions_scenes_Scene1_Scene1_3, label: "\u5F15\u5165\uFF1A\u540E\u89C6\u504F\u89C1" },
-  { name: "scene2", duration: src_remotions_scenes_Scene2_calculateScene2Duration_3() + src_remotions_SCENE_END_PADDING_5, component: src_remotions_scenes_Scene2_Scene2_3, label: "\u547D\u540D\uFF1A\u5FC3\u7406\u5B66\u6982\u5FF5" },
-  { name: "scene3", duration: src_remotions_scenes_Scene3_calculateScene3Duration_3() + src_remotions_SCENE_END_PADDING_5, component: src_remotions_scenes_Scene3_Scene3_3, label: "\u5256\u6790\uFF1A\u751F\u6D3B\u5B9E\u4F8B" },
-  { name: "scene4", duration: src_remotions_scenes_Scene4_calculateScene4Duration_1() + src_remotions_SCENE_END_PADDING_5, component: src_remotions_scenes_Scene4_Scene4_1, label: "\u53EC\u5524\uFF1A\u5E94\u5BF9\u5FC3\u6CD5" }
+const \u8BA4\u77E5\u9677\u96313Schema = lib.z.object({});
+const _3Constants_TRANSITION_DURATION = 15;
+const _3Constants_SCENE_END_PADDING = 20;
+const _3Constants_COVER_DURATION_FRAMES = 5;
+const _3Constants_sceneConfigs = [
+  { name: "scene1", duration: scenes_Scene1_calculateScene1Duration() + _3Constants_SCENE_END_PADDING, component: scenes_Scene1_Scene1, label: "\u5F15\u5165\uFF1A\u8F66\u7978\u8BC4\u8BBA\u602A\u8C61" },
+  { name: "scene2", duration: scenes_Scene2_calculateScene2Duration() + _3Constants_SCENE_END_PADDING, component: scenes_Scene2_Scene2, label: "\u5256\u6790\uFF1A\u4E92\u8054\u7F51\u90E8\u843D\u4E3B\u4E49" },
+  { name: "scene3", duration: scenes_Scene3_calculateScene3Duration() + _3Constants_SCENE_END_PADDING, component: scenes_Scene3_Scene3, label: "\u5256\u6790\uFF1A\u4E4C\u5408\u4E4B\u4F17\u7684\u955C\u50CF" },
+  { name: "scene4", duration: scenes_Scene4_calculateScene4Duration() + _3Constants_SCENE_END_PADDING, component: scenes_Scene4_Scene4, label: "\u53EC\u5524\uFF1A\u8B66\u60D5\u7FA4\u4F53\u964D\u667A" }
 ];
-const MAIN_DURATION_\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1 = src_remotions_sceneConfigs_5.reduce((total, c) => total + c.duration, 0) - (src_remotions_sceneConfigs_5.length - 1) * src_remotions_TRANSITION_DURATION_5;
-const TOTAL_DURATION_\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1 = src_remotions_COVER_DURATION_FRAMES_5 + MAIN_DURATION_\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1;
-const src_remotions_ProgressBar_5 = () => {
-  var _a;
-  const frame = (0,esm.useCurrentFrame)();
-  if (frame < src_remotions_COVER_DURATION_FRAMES_5) {
-    return null;
-  }
-  const contentFrame = frame - src_remotions_COVER_DURATION_FRAMES_5;
-  let currentStart = 0;
-  const segments = src_remotions_sceneConfigs_5.map((c, i) => {
-    const isLast = i === src_remotions_sceneConfigs_5.length - 1;
-    const segmentDuration = isLast ? c.duration : c.duration - src_remotions_TRANSITION_DURATION_5;
-    const segment = { start: currentStart, duration: segmentDuration };
-    currentStart += segmentDuration;
-    return segment;
-  });
-  const activeIndex = segments.findIndex((seg) => contentFrame >= seg.start && contentFrame < seg.start + seg.duration);
-  const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
-  const activeLabel = ((_a = src_remotions_sceneConfigs_5[validActiveIndex]) == null ? void 0 : _a.label) || "";
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: {
-    position: "absolute",
-    top: 40,
-    left: 40,
-    right: 40,
-    display: "flex",
-    flexDirection: "column",
-    gap: 16,
-    zIndex: 100
-  }, children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, height: 8 }, children: segments.map((seg, i) => {
-      const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));
-      const isActive = i === validActiveIndex;
-      return /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        flex: 1,
-        backgroundColor: isActive ? "rgba(34, 43, 69, 0.18)" : "rgba(34, 43, 69, 0.1)",
-        borderRadius: 999,
-        overflow: "hidden",
-        border: isActive ? "1px solid rgba(34, 43, 69, 0.32)" : "1px solid rgba(34, 43, 69, 0.2)",
-        boxShadow: isActive ? "0 3px 10px rgba(31, 41, 55, 0.12)" : "0 1px 4px rgba(31, 41, 55, 0.08)"
-      }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        width: `${progress * 100}%`,
-        height: "100%",
-        background: isActive ? "linear-gradient(90deg, rgba(29, 78, 216, 0.95), rgba(56, 189, 248, 0.92))" : "rgba(30, 41, 59, 0.72)",
-        boxShadow: isActive ? "0 0 12px rgba(37, 99, 235, 0.35)" : "none"
-      } }) }, i);
-    }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-      fontSize: 30,
-      fontWeight: 700,
-      fontFamily: '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif',
-      letterSpacing: 0.4,
-      color: "rgba(17, 24, 39, 0.95)",
-      textAlign: "left",
-      textShadow: "0 1px 2px rgba(255,255,255,0.45)",
-      padding: "6px 14px",
-      backgroundColor: "rgba(255, 255, 255, 0.58)",
-      border: "1px solid rgba(17, 24, 39, 0.12)",
-      borderRadius: 10,
-      alignSelf: "flex-start",
-      backdropFilter: "blur(6px)",
-      boxShadow: "0 6px 20px rgba(15, 23, 42, 0.12)"
-    }, children: activeLabel })
-  ] });
-};
-const \u8BA4\u77E5\u504F\u89C1\u540E\u89C6\u504F\u89C1 = () => {
+const MAIN_DURATION_\u8BA4\u77E5\u9677\u96313 = _3Constants_sceneConfigs.reduce((total, c) => total + c.duration, 0) - (_3Constants_sceneConfigs.length - 1) * _3Constants_TRANSITION_DURATION;
+const TOTAL_DURATION_\u8BA4\u77E5\u9677\u96313 = _3Constants_COVER_DURATION_FRAMES + MAIN_DURATION_\u8BA4\u77E5\u9677\u96313;
+const _3Constants_DESIGN_W = 1920;
+const _3Constants_DESIGN_H = 1080;
+const _3Constants_LANDSCAPE_W = 1920;
+const _3Constants_LANDSCAPE_H = 1080;
+const _3Constants_LANDSCAPE_CONTAIN_SCALE = Math.min(_3Constants_LANDSCAPE_W / _3Constants_DESIGN_W, _3Constants_LANDSCAPE_H / _3Constants_DESIGN_H);
+const _3Constants_VERTICAL_CANVAS_W = 1080;
+const _3Constants_VERTICAL_CANVAS_H = 1920;
+const _3Constants_VERTICAL_PLAY_W = _3Constants_VERTICAL_CANVAS_W;
+const _3Constants_VERTICAL_PLAY_H = Math.round(_3Constants_VERTICAL_CANVAS_W * 9 / 16);
+const _3Constants_VERTICAL_PLAY_TOP = Math.round((_3Constants_VERTICAL_CANVAS_H - _3Constants_VERTICAL_PLAY_H) / 2);
+const _3Constants_VERTICAL_PLAY_PROGRESS_GAP = 4;
+const _3Constants_VERTICAL_CONTENT_SCALE = _3Constants_VERTICAL_PLAY_H / _3Constants_DESIGN_H;
+const _3Constants_VERTICAL_BOTTOM_BRAND_OFFSET = 400;
+
+;// ./src/remotions/认知陷阱3/认知陷阱3MainBody.tsx
+
+
+
+
+
+
+
+
+const \u8BA4\u77E5\u9677\u96313MainBody = () => /* @__PURE__ */ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, { children: [
+  /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { durationInFrames: _3Constants_COVER_DURATION_FRAMES, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+    LandscapeCoverPoster,
+    {
+      title: "\u8BA4\u77E5\u9677\u96313",
+      subtitle: "\u4E3A\u4EC0\u4E48\u8F66\u7978\u89C6\u9891\u4E0B\uFF0C\u6CA1\u4EBA\u5173\u5FC3\u6B7B\u6D3B\uFF1F\u4F60\u53EA\u662F\u5728\u6025\u7740\u7AD9\u961F",
+      themeColor: "#2563EB",
+      badge: "\u8BA4\u8BC6\u81EA\u6211 \xB7 \u7406\u6027\u601D\u8003",
+      seriesLabel: "\u8BA4\u77E5\u5FC3\u7406\u5B66",
+      seriesLabelEn: "COGNITIVE PSYCHOLOGY",
+      methodologySteps: ["\u89C9\u5BDF", "\u5F52\u56E0", "\u8C03\u6574"],
+      methodologyStepsEn: "OBSERVE \xB7 ATTRIBUTE \xB7 ADJUST"
+    }
+  ) }),
+  /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: _3Constants_COVER_DURATION_FRAMES, durationInFrames: MAIN_DURATION_认知陷阱3, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.AbsoluteFill, { children: /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries, { children: _3Constants_sceneConfigs.map((config, index) => {
+    const SceneComp = config.component;
+    const isLast = index === _3Constants_sceneConfigs.length - 1;
+    return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries.Sequence, { durationInFrames: config.duration, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(SceneComp, {}) }),
+      !isLast && /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        TransitionSeries.Transition,
+        {
+          timing: linearTiming({ durationInFrames: _3Constants_TRANSITION_DURATION }),
+          presentation: fade()
+        }
+      )
+    ] }, config.name);
+  }) }) }) })
+] });
+
+;// ./src/remotions/认知陷阱3/认知陷阱3Landscape.tsx
+
+
+
+
+
+
+const \u8BA4\u77E5\u9677\u96313Landscape = () => {
   const frame = (0,esm.useCurrentFrame)();
   const bgShiftX = (0,esm.interpolate)(frame % 240, [0, 120, 240], [-4, 4, -4], {
     extrapolateLeft: "clamp",
@@ -80471,13 +82092,13 @@ const \u8BA4\u77E5\u504F\u89C1\u540E\u89C6\u504F\u89C1 = () => {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp"
   });
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style: { background: "#0f172a" }, children: [
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Audio,
       {
         src: (0,esm.staticFile)("audio/effects/Seven_Measured_Breaths.mp3"),
         loop: true,
-        volume: 0.22,
+        volume: 0.1,
         name: "Background music"
       }
     ),
@@ -80487,7 +82108,7 @@ const \u8BA4\u77E5\u504F\u89C1\u540E\u89C6\u504F\u89C1 = () => {
         style: {
           height: "100%",
           width: "100%",
-          background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)"
+          background: "linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #e2e8f0 100%)"
         }
       }
     ),
@@ -80500,224 +82121,282 @@ const \u8BA4\u77E5\u504F\u89C1\u540E\u89C6\u504F\u89C1 = () => {
           pointerEvents: "none",
           opacity: bgBreathOpacity,
           transform: `translate(${bgShiftX}px, ${bgShiftY}px)`,
-          background: "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)"
+          background: "radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08), transparent 40%), radial-gradient(circle at 80% 60%, rgba(56, 189, 248, 0.12), transparent 45%), radial-gradient(circle at 40% 80%, rgba(148, 163, 184, 0.15), transparent 50%)"
         }
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { durationInFrames: src_remotions_COVER_DURATION_FRAMES_5, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      StaticCover,
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(RemotionLayoutMetricsProvider, { value: { width: _3Constants_DESIGN_W, height: _3Constants_DESIGN_H }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      esm.AbsoluteFill,
       {
-        title: "\u540E\u89C6\u504F\u89C1",
-        subtitle: "\u6211\u65E9\u5C31\u77E5\u9053\u4F1A\u8FD9\u6837!",
-        coverDurationInFrames: src_remotions_COVER_DURATION_FRAMES_5,
-        themeColor: "#2563EB",
-        badge: "\u8BA4\u8BC6\u81EA\u6211 \xB7 \u7406\u6027\u601D\u8003",
-        seriesLabel: "\u8BA4\u77E5\u5FC3\u7406\u5B66",
-        seriesLabelEn: "COGNITIVE PSYCHOLOGY",
-        methodologySteps: ["\u89C9\u5BDF", "\u5F52\u56E0", "\u8C03\u6574"],
-        methodologyStepsEn: "OBSERVE \xB7 ATTRIBUTE \xB7 ADJUST"
+        style: {
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden"
+        },
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+          "div",
+          {
+            style: {
+              width: _3Constants_DESIGN_W,
+              height: _3Constants_DESIGN_H,
+              flexShrink: 0,
+              transform: `scale(${_3Constants_LANDSCAPE_CONTAIN_SCALE})`,
+              transformOrigin: "center center"
+            },
+            children: /* @__PURE__ */ (0,jsx_runtime.jsx)(认知陷阱3MainBody, {})
+          }
+        )
       }
-    ) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: src_remotions_COVER_DURATION_FRAMES_5, durationInFrames: MAIN_DURATION_\u8BA4\u77E5\u504F\u89C1_\u540E\u89C6\u504F\u89C1, children: /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
+    ) })
+  ] });
+};
+
+;// ./src/remotions/认知陷阱3/认知陷阱3VerticalChrome.tsx
+
+
+
+
+
+const _3VerticalChrome_FONT_STACK = '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
+const _3VerticalChrome_STATIC_HEADLINE = "\u8BA4\u77E5\u9677\u96313";
+const _3VerticalChrome_STATIC_HEADLINE_SUB = "\u8BA4\u77E5\u5FC3\u7406\u5B66";
+const _3VerticalChrome_STATIC_HEADLINE_SUB_EN = "COGNITIVE PSYCHOLOGY";
+const _3VerticalChrome_THEME_ACCENT = "#2563EB";
+const _3VerticalChrome_THEME_ACCENT_SOFT = "#2563EBD9";
+const \u8BA4\u77E5\u9677\u96313TopStaticHeadline = ({ canvasW, topBandH }) => /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+  "div",
+  {
+    style: {
+      position: "absolute",
+      left: 0,
+      top: 0,
+      width: canvasW,
+      height: topBandH,
+      overflow: "hidden",
+      boxSizing: "border-box",
+      pointerEvents: "none"
+    },
+    children: [
       /* @__PURE__ */ (0,jsx_runtime.jsx)(
         "div",
         {
           style: {
             position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "10%",
-            minHeight: 48,
-            backgroundColor: "rgba(0,0,0,0.5)"
+            inset: 0,
+            background: "radial-gradient(ellipse 72% 85% at 50% 48%, rgba(37, 99, 235, 0.14) 0%, transparent 58%), radial-gradient(ellipse 50% 40% at 50% 100%, rgba(56, 189, 248, 0.08) 0%, transparent 50%)"
           }
         }
       ),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries, { children: src_remotions_sceneConfigs_5.map((config, index) => {
-        const SceneComp = config.component;
-        const isLast = index === src_remotions_sceneConfigs_5.length - 1;
-        return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries.Sequence, { durationInFrames: config.duration, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(SceneComp, {}) }),
-          !isLast && /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            TransitionSeries.Transition,
-            {
-              timing: linearTiming({ durationInFrames: src_remotions_TRANSITION_DURATION_5 }),
-              presentation: fade()
-            }
-          )
-        ] }, config.name);
-      }) })
-    ] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(src_remotions_ProgressBar_5, {})
-  ] });
-};
-
-;// ./src/remotions/认知偏见_幸存者偏差/scenes/Scene1.tsx
-
-
-
-
-const src_remotions_scenes_Scene1_SCENE_DURATION_4 = 155 + 81 + 67;
-const src_remotions_scenes_Scene1_calculateScene1Duration_4 = () => {
-  return src_remotions_scenes_Scene1_SCENE_DURATION_4;
-};
-const src_remotions_scenes_Scene1_Scene1_4 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 155, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u770B\u7740\u90A3\u4E2A\u521D\u4E2D\u8F8D\u5B66\u521B\u4E1A\u3001", "startFrame": 0, "durationFrames": 30 }, { "text": "\u5982\u4ECA\u8EAB\u4EF7\u8FC7\u4EBF\u7684\u4E13\u8BBF\uFF0C", "startFrame": 30, "durationFrames": 30 }, { "text": "\u4F60\u9ED8\u9ED8\u653E\u4E0B\u4E86\u624B\u91CC\u6B63\u5728\u5543\u7684\u4E13\u4E1A\u4E66\uFF0C", "startFrame": 60, "durationFrames": 35 }, { "text": "\u8111\u5B50\u91CC\u5192\u51FA\u4E00\u4E2A\u5FF5\u5934\uFF1A", "startFrame": 95, "durationFrames": 30 }, { "text": "\u4E5F\u8BB8\u8BFB\u4E66\u771F\u7684\u65E0\u7528\u3002", "startFrame": 125, "durationFrames": 30 }], totalDurationFrames: 155, imageSrc: (0,esm.staticFile)("\u4E00\u4E2A\u5E74\u8F7B\u4EBA\u770B\u7740\u7535\u8111\u5C4F\u5E55\uFF0C\u5C4F\u5E55\u4E0A\u663E\u793A\u7740\u521B\u4E1A\u6210\u529F\u4EBA\u58EB\u7684\u91C7\u8BBF"), enterEffect: "fadeIn", anchors: [{ "text": "\u8F8D\u5B66\u521B\u4E1A", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u8BFB\u4E66\u65E0\u7528", "showFrom": 4, "color": "#EF4444", "anim": "highlight", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 155, durationInFrames: 81, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u90A3\u4E9B\u5728\u8BB2\u53F0\u4E0A\u4F83\u4F83\u800C\u8C08\u7684\u5546\u4E1A\u5927\u4F6C\uFF0C", "startFrame": 0, "durationFrames": 35 }, { "text": "\u4F3C\u4E4E\u90FD\u5728\u7528\u4EB2\u8EAB\u7ECF\u5386\u5370\u8BC1\u201C\u8349\u6839\u9006\u88AD\u201D\u7684\u795E\u8BDD\u3002", "startFrame": 35, "durationFrames": 46 }], totalDurationFrames: 81, imageSrc: (0,esm.staticFile)("\u5546\u4E1A\u5927\u4F6C\u5728\u53F0\u4E0A\u6F14\u8BB2\u7684\u573A\u666F\uFF0C\u89C2\u4F17\u5E2D\u6A21\u7CCA"), enterEffect: "fadeIn", anchors: [{ "text": "\u8349\u6839\u9006\u88AD", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 236, durationInFrames: 67, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8FD9\u79CD\u6781\u5177\u8BF1\u60D1\u529B\u7684\u6210\u529F\u6377\u5F84\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u662F\u4E0D\u662F\u8BA9\u4F60\u77AC\u95F4\u89C9\u5F97\u624B\u91CC\u7684\u4E66\u4E0D\u9999\u4E86\uFF1F", "startFrame": 30, "durationFrames": 37 }], totalDurationFrames: 67, imageSrc: (0,esm.staticFile)("\u4E00\u4E2A\u4EBA\u770B\u7740\u6210\u529F\u4EBA\u58EB\u7684\u91C7\u8BBF\uFF0C\u601D\u8003\u4EBA\u751F\u7684\u573A\u666F"), enterEffect: "fadeIn", anchors: [{ "text": "\u6210\u529F\u6377\u5F84", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "woosh" }] }) })
-  ] });
-};
-
-;// ./src/remotions/认知偏见_幸存者偏差/scenes/Scene2.tsx
-
-
-
-
-const src_remotions_scenes_Scene2_SCENE_DURATION_5 = 80 + 192 + 95 + 118 + 70 + 128 + 65 + 112;
-const src_remotions_scenes_Scene2_calculateScene2Duration_4 = () => {
-  return src_remotions_scenes_Scene2_SCENE_DURATION_5;
-};
-const src_remotions_scenes_Scene2_Scene2_4 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 80, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u6211\u4EEC\u603B\u662F\u5BB9\u6613\u88AB\u8FD9\u79CD\u4F20\u5947\u6545\u4E8B\u6DF1\u6DF1\u6253\u52A8\uFF0C", "startFrame": 0, "durationFrames": 40 }, { "text": "\u89C9\u5F97\u53EA\u8981\u590D\u5236\u4ED6\u4EEC\u7684\u5957\u8DEF\u5C31\u80FD\u9006\u5929\u6539\u547D\u3002", "startFrame": 40, "durationFrames": 40 }], totalDurationFrames: 80, imageSrc: (0,esm.staticFile)("\u4E00\u4E2A\u4EBA\u770B\u7740\u4E00\u4E2A\u4F20\u5947\u6545\u4E8B\uFF0C\u601D\u8003\u7684\u6837\u5B50"), enterEffect: "fadeIn", anchors: [{ "text": "\u9006\u5929\u6539\u547D", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 80, durationInFrames: 192, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u4F46\u5176\u5B9E\u4F60\u6B63\u5728\u88AB\u4E00\u79CD\u9690\u79D8\u7684\u201C\u6C89\u9ED8\u201D\u6240\u6B3A\u9A97\u3002", "startFrame": 0, "durationFrames": 44 }, { "text": "\u8FD9\u4E0D\u662F\u56E0\u4E3A\u4F60\u89C1\u8BC6\u77ED\u6D45\uFF0C", "startFrame": 44, "durationFrames": 30 }, { "text": "\u800C\u662F\u56E0\u4E3A\u8FD9\u4E2A\u793E\u4F1A\u53EA\u5141\u8BB8\u80DC\u5229\u8005\u7AD9\u5728\u805A\u5149\u706F\u4E0B\u5927\u58F0\u55A7\u54D7\uFF0C", "startFrame": 74, "durationFrames": 55 }, { "text": "\u800C\u5931\u8D25\u8005\u7684\u54C0\u9E23\uFF0C", "startFrame": 129, "durationFrames": 30 }, { "text": "\u65E9\u5C31\u88AB\u63A9\u76D6\u5728\u65F6\u4EE3\u7684\u5E9F\u589F\u4E4B\u4E0B\u4E86\u3002", "startFrame": 159, "durationFrames": 33 }], totalDurationFrames: 192, notText: "\u89C1\u8BC6\u77ED\u6D45", butText: "\u793E\u4F1A\u7684\u5141\u8BB8", butSrc: (0,esm.staticFile)("\u805A\u5149\u706F\u7167\u4EAE\u821E\u53F0\u4E2D\u592E\u7684\u6210\u529F\u8005"), notContentIndex: 1, butContentIndex: 2, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 272, durationInFrames: 95, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWConceptCard, { content: [{ "text": "\u8FD9\u5728\u903B\u8F91\u5B66\u4E2D\u53EB\u505A\u201C\u5E78\u5B58\u8005\u504F\u5DEE\u201D\uFF1A", "startFrame": 0, "durationFrames": 35 }, { "text": "\u7B80\u5355\u6765\u8BF4\uFF0C", "startFrame": 35, "durationFrames": 30 }, { "text": "\u5C31\u662F\u6B7B\u4EBA\u6C38\u8FDC\u4E0D\u4F1A\u8BF4\u8BDD\u3002", "startFrame": 65, "durationFrames": 30 }], totalDurationFrames: 95, imageSrc: (0,esm.staticFile)("\u4EBA\u7FA4\u4E2D\u90E8\u5206\u4EBA\u88AB\u805A\u5149\u706F\u7167\u4EAE\u7684\u7B80\u7B14\u753B"), conceptName: "\u5E78\u5B58\u8005\u504F\u5DEE", anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 367, durationInFrames: 118, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u6211\u4EEC\u5728\u603B\u7ED3\u6210\u529F\u89C4\u5F8B\u65F6\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u603B\u662F\u4E60\u60EF\u6027\u5730\u76EF\u7740\u90A3\u4E9B\u201C\u6D3B\u4E0B\u6765\u201D\u7684\u6837\u672C\uFF0C", "startFrame": 30, "durationFrames": 42 }, { "text": "\u5374\u5B8C\u5168\u5FFD\u7565\u4E86\u80CC\u540E\u5E9E\u5927\u5230\u4EE4\u4EBA\u7EDD\u671B\u7684\u201C\u5206\u6BCD\u201D\u3002", "startFrame": 72, "durationFrames": 46 }], totalDurationFrames: 118, imageSrc: (0,esm.staticFile)("\u4EBA\u4EEC\u62FF\u7740\u653E\u5927\u955C\u5BFB\u627E\u7EBF\u7D22\u7684\u62BD\u8C61\u753B"), enterEffect: "fadeIn", anchors: [{ "text": "\u5E78\u5B58\u8005\u504F\u5DEE", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 485, durationInFrames: 70, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u90A3\u4E2A\u8F8D\u5B66\u5927\u4F6C\u7684\u6210\u529F\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u80CC\u540E\u53EF\u80FD\u662F\u4E07\u4E2D\u65E0\u4E00\u7684\u8FD0\u6C14\u6216\u65F6\u4EE3\u7EA2\u5229\u3002", "startFrame": 30, "durationFrames": 40 }], totalDurationFrames: 70, imageSrc: (0,esm.staticFile)("\u4E00\u4E2A\u4E2D\u5E74\u7537\u4EBA\u770B\u7740\u7535\u8111\u5C4F\u5E55\uFF0C\u5C4F\u5E55\u4E0A\u662F\u80A1\u7968\u66F2\u7EBF\u56FE"), enterEffect: "breathe", anchors: [{ "text": "\u5E78\u5B58\u8005\u504F\u5DEE", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 555, durationInFrames: 128, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u4F46\u4ED6\u7EDD\u4E0D\u4F1A\u5728\u8BBF\u8C08\u91CC\u544A\u8BC9\u4F60\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u8FD8\u6709\u5341\u4E07\u4E2A\u548C\u4ED6\u4E00\u6837\u6BC5\u7136\u8F8D\u5B66\u7684\u4EBA\uFF0C", "startFrame": 30, "durationFrames": 35 }, { "text": "\u6B64\u523B\u6B63\u6D88\u5931\u5728\u832B\u832B\u4EBA\u6D77\uFF0C", "startFrame": 65, "durationFrames": 30 }, { "text": "\u5728\u6D41\u6C34\u7EBF\u4E0A\u65E5\u590D\u4E00\u65E5\u5730\u6D88\u78E8\u9752\u6625\u3002", "startFrame": 95, "durationFrames": 33 }], totalDurationFrames: 128, imageSrc: (0,esm.staticFile)("\u6D41\u6C34\u7EBF\u4E0A\u5FD9\u788C\u7684\u5DE5\u4EBA\u7684\u9ED1\u767D\u901F\u5199"), enterEffect: "fadeIn", anchors: [{ "text": "\u5E78\u5B58\u8005\u504F\u5DEE", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u6D41\u6C34\u7EBF", "showFrom": 3, "color": "#000000", "anim": "slideUp", "audioEffect": "woosh" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 683, durationInFrames: 65, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCognitiveShift, { content: [{ "text": "\u4F60\u53EA\u770B\u5230\u4E86\u98DE\u4E0A\u5929\u7684\u98CE\u53E3\u732A\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u5374\u6CA1\u770B\u5230\u6454\u6B7B\u5728\u98CE\u53E3\u4E0B\u7684\u5C38\u5C71\u8840\u6D77\u3002", "startFrame": 30, "durationFrames": 35 }], totalDurationFrames: 65, notText: "\u98CE\u53E3\u732A", butText: "\u5C38\u5C71\u8840\u6D77", butSrc: (0,esm.staticFile)("\u65E0\u6570\u5C38\u4F53\u5806\u79EF\u6210\u5C71\u7684\u60B2\u60E8\u666F\u8C61"), notContentIndex: 0, butContentIndex: 1, anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 748, durationInFrames: 112, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWQuoteCitation, { content: [{ "text": "\u8FD9\u5C31\u597D\u6BD4\u4F60\u5728\u533B\u9662\u95E8\u53E3\u91C7\u8BBF\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u5F97\u5230\u7684\u7ED3\u8BBA\u6C38\u8FDC\u662F\u201C\u8FD9\u5BB6\u533B\u9662\u533B\u672F\u9AD8\u8D85\u201D\uFF0C", "startFrame": 30, "durationFrames": 42 }, { "text": "\u56E0\u4E3A\u6CBB\u4E0D\u597D\u7684\u75C5\u4EBA\u6839\u672C\u6CA1\u673A\u4F1A\u8D70\u51FA\u5927\u95E8\u3002", "startFrame": 72, "durationFrames": 40 }], totalDurationFrames: 112, quoteSource: "\u8857\u5934\u91C7\u8BBF", anchors: [] }) })
-  ] });
-};
-
-;// ./src/remotions/认知偏见_幸存者偏差/scenes/Scene3.tsx
-
-
-
-
-const src_remotions_scenes_Scene3_SCENE_DURATION_5 = 67 + 191 + 181 + 183;
-const src_remotions_scenes_Scene3_calculateScene3Duration_4 = () => {
-  return src_remotions_scenes_Scene3_SCENE_DURATION_5;
-};
-const src_remotions_scenes_Scene3_Scene3_4 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 67, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5B9E\u9645\u4E0A\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u5E78\u5B58\u8005\u504F\u5DEE\u7684\u201C\u5267\u6BD2\u9E21\u6C64\u201D\u968F\u5904\u53EF\u89C1\uFF1A", "startFrame": 30, "durationFrames": 37 }], totalDurationFrames: 67, imageSrc: (0,esm.staticFile)("\u4E4C\u4E91\u5BC6\u5E03\u7684\u5929\u7A7A\u4E2D\uFF0C\u4E00\u53EA\u9E21\u6B63\u5728\u559D\u6BD2\u836F"), enterEffect: "slideBottom", anchors: [{ "text": "\u5E78\u5B58\u8005\u504F\u5DEE", "showFrom": 1, "color": "#EF4444", "anim": "highlight", "audioEffect": "impact_thud" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 67, durationInFrames: 191, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u7406\u8D22\u5708\u7684\u201C\u5927\u795E\u201D\uFF1A", "startFrame": 0, "durationFrames": 30 }, { "text": "\u4F60\u770B\u5230\u67D0\u535A\u4E3B\u6652\u51FA\u7FFB\u500D\u7684\u6536\u76CA\u5355\uFF0C", "startFrame": 30, "durationFrames": 33 }, { "text": "\u5C31\u89C9\u5F97\u8DDF\u7740\u4ED6\u80FD\u53D1\u8D22\u3002", "startFrame": 63, "durationFrames": 30 }, { "text": "\u4F60\u6CA1\u770B\u5230\u7684\u662F\uFF0C", "startFrame": 93, "durationFrames": 30 }, { "text": "\u4ED6\u80CC\u540E\u8FD8\u6709\u5341\u4E2A\u4E8F\u5230\u9500\u53F7\u7684\u9A6C\u7532\uFF0C", "startFrame": 123, "durationFrames": 33 }, { "text": "\u53EA\u662F\u90A3\u4E2A\u4E2D\u5956\u7684\u53F7\u6070\u597D\u88AB\u4F60\u5237\u5230\u4E86\u3002", "startFrame": 156, "durationFrames": 35 }], totalDurationFrames: 191, title: "\u7406\u8D22\u9677\u9631", imageSrc: (0,esm.staticFile)("\u8BB8\u591A\u4EBA\u56F4\u7740\u4E00\u5F20\u6536\u76CA\u8868\uFF0C\u8868\u60C5\u8D2A\u5A6A"), notes: [{ "text": "\u5E78\u5B58\u8005\u504F\u5DEE", "showFrom": 0 }, { "text": "\u53EA\u770B\u8D3C\u5403\u8089\uFF0C\u4E0D\u89C1\u8D3C\u6328\u6253", "showFrom": 3 }, { "text": "\u4FE1\u606F\u8327\u623F", "showFrom": 5 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 258, durationInFrames: 181, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u957F\u5BFF\u8001\u4EBA\u7684\u201C\u79D8\u8BC0\u201D\uFF1A", "startFrame": 0, "durationFrames": 30 }, { "text": "\u67D0\u4E2A\u767E\u5C81\u8001\u4EBA\u6BCF\u5929\u62BD\u70DF\u559D\u9152\uFF0C", "startFrame": 30, "durationFrames": 30 }, { "text": "\u5927\u5BB6\u5C31\u89C9\u5F97\u517B\u751F\u6CA1\u7528\u3002", "startFrame": 60, "durationFrames": 30 }, { "text": "\u5176\u5B9E\u90A3\u53EA\u662F\u56E0\u4E3A\u4ED6\u57FA\u56E0\u9006\u5929\uFF0C", "startFrame": 90, "durationFrames": 30 }, { "text": "\u800C\u90A3\u4E9B\u5B66\u4ED6\u62BD\u70DF\u559D\u9152\u7684\u4EBA\uFF0C", "startFrame": 120, "durationFrames": 30 }, { "text": "\u5927\u591A\u6CA1\u6D3B\u5230\u80FD\u63A5\u53D7\u91C7\u8BBF\u7684\u5E74\u7EAA\u3002", "startFrame": 150, "durationFrames": 31 }], totalDurationFrames: 181, title: "\u957F\u5BFF\u6096\u8BBA", imageSrc: (0,esm.staticFile)("\u4E00\u4F4D\u9762\u5E26\u5FAE\u7B11\u7684\u767E\u5C81\u8001\u4EBA\u6B63\u5728\u62BD\u70DF\uFF0C\u65C1\u8FB9\u653E\u7740\u4E00\u676F\u9152"), notes: [{ "text": "\u5E78\u5B58\u8005\u504F\u5DEE", "showFrom": 2 }, { "text": "\u5FFD\u7565\u6C89\u9ED8\u7684\u5927\u591A\u6570", "showFrom": 5 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 439, durationInFrames: 183, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u804C\u573A\u4E0A\u7684\u201C\u7279\u4F8B\u201D\uFF1A", "startFrame": 0, "durationFrames": 30 }, { "text": "\u516C\u53F8\u91CC\u6709\u4E2A\u8001\u5458\u5DE5\u4ECE\u4E0D\u52A0\u73ED\u4E5F\u80FD\u5347\u804C\uFF0C", "startFrame": 30, "durationFrames": 37 }, { "text": "\u4F60\u89C9\u5F97\u4E5F\u80FD\u6548\u4EFF\u3002", "startFrame": 67, "durationFrames": 30 }, { "text": "\u5374\u4E0D\u77E5\u9053\u4ED6\u53EF\u80FD\u662F\u67D0\u4E2A\u5927\u5BA2\u6237\u7684\u4EB2\u4F84\u5B50\uFF0C", "startFrame": 97, "durationFrames": 40 }, { "text": "\u6216\u8005\u662F\u638C\u63E1\u4E86\u67D0\u79CD\u4F60\u6839\u672C\u65E0\u6CD5\u590D\u5236\u7684\u6838\u5FC3\u8D44\u6E90\u3002", "startFrame": 137, "durationFrames": 46 }], totalDurationFrames: 183, title: "\u804C\u573A\u7279\u4F8B\u9677\u9631", imageSrc: (0,esm.staticFile)("\u529E\u516C\u5BA4\u91CC\uFF0C\u4E00\u4E2A\u6234\u7740\u58A8\u955C\u7684\u4EBA\u60A0\u95F2\u5730\u5750\u5728\u529E\u516C\u6905\u4E0A\uFF0C\u5468\u56F4\u7684\u4EBA\u5FD9\u788C\u5730\u5DE5\u4F5C"), notes: [{ "text": "\u5347\u804C\u4E0D\u4E00\u5B9A\u9760\u52AA\u529B", "showFrom": 1 }, { "text": "\u8D44\u6E90\u624D\u662F\u5173\u952E", "showFrom": 4 }], anchors: [] }) })
-  ] });
-};
-
-;// ./src/remotions/认知偏见_幸存者偏差/scenes/Scene4.tsx
-
-
-
-
-const src_remotions_scenes_Scene4_SCENE_DURATION_3 = 65 + 155 + 183 + 167 + 97 + 130;
-const src_remotions_scenes_Scene4_calculateScene4Duration_2 = () => {
-  return src_remotions_scenes_Scene4_SCENE_DURATION_3;
-};
-const src_remotions_scenes_Scene4_Scene4_2 = () => {
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 0, durationInFrames: 65, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u8981\u60F3\u4E0D\u88AB\u8FD9\u79CD\u865A\u5984\u7684\u795E\u8BDD\u6BC1\u6389\u4EBA\u751F\uFF0C", "startFrame": 0, "durationFrames": 35 }, { "text": "\u4F60\u6700\u597D\u8BB0\u4F4F\u8FD9\u4E09\u4E2A\u6838\u5FC3\u5FC3\u6CD5\uFF1A", "startFrame": 35, "durationFrames": 30 }], totalDurationFrames: 65, imageSrc: (0,esm.staticFile)("\u5927\u8111\u601D\u8003\u7684\u62BD\u8C61\u6982\u5FF5\u56FE"), enterEffect: "fadeIn", anchors: [{ "text": "\u6838\u5FC3\u5FC3\u6CD5", "showFrom": 1, "color": "#000000", "anim": "popIn", "audioEffect": "ping" }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 65, durationInFrames: 155, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u7B2C\u4E00\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u5BFB\u627E\u201C\u6C89\u9ED8\u7684\u8BC1\u636E\u201D\uFF1A", "startFrame": 30, "durationFrames": 30 }, { "text": "\u770B\u5230\u4E00\u4E2A\u8BF1\u4EBA\u7684\u6210\u529F\u6848\u4F8B\u65F6\uFF0C", "startFrame": 60, "durationFrames": 30 }, { "text": "\u5148\u53BB\u641C\u7D22\u5B83\u7684\u5931\u8D25\u7387\uFF0C", "startFrame": 90, "durationFrames": 30 }, { "text": "\u53BB\u770B\u770B\u90A3\u4E9B\u5931\u8D25\u7684\u4EBA\u90FD\u8E29\u4E86\u54EA\u4E9B\u5751\u3002", "startFrame": 120, "durationFrames": 35 }], totalDurationFrames: 155, title: "\u5BFB\u627E\u6C89\u9ED8\u7684\u8BC1\u636E", imageSrc: (0,esm.staticFile)("\u4E00\u4E2A\u4FA6\u63A2\u62FF\u7740\u653E\u5927\u955C\u5728\u6563\u843D\u7684\u788E\u7247\u4E2D\u5BFB\u627E\u7EBF\u7D22"), notes: [{ "text": "\u5173\u6CE8\u5931\u8D25\u6848\u4F8B", "showFrom": 1 }, { "text": "\u907F\u514D\u91CD\u8E48\u8986\u8F99", "showFrom": 3 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 220, durationInFrames: 183, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u7B2C\u4E8C\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u5265\u79BB\u201C\u8FD0\u6C14\u7684\u5E95\u8272\u201D\uFF1A", "startFrame": 30, "durationFrames": 30 }, { "text": "\u51B7\u9177\u5730\u5206\u6790\u6210\u529F\u8005\u7684\u80CC\u666F\u3002", "startFrame": 60, "durationFrames": 30 }, { "text": "\u5982\u679C\u4ED6\u7684\u6210\u529F\u4F9D\u8D56\u4E8E\u7279\u5B9A\u7684\u65F6\u4EE3\u3001", "startFrame": 90, "durationFrames": 33 }, { "text": "\u5BB6\u5883\u6216\u6781\u4F4E\u7684\u6982\u7387\uFF0C", "startFrame": 123, "durationFrames": 30 }, { "text": "\u90A3\u5BF9\u4F60\u6765\u8BF4\u5C31\u6BEB\u65E0\u53C2\u8003\u4EF7\u503C\u3002", "startFrame": 153, "durationFrames": 30 }], totalDurationFrames: 183, title: "\u5265\u79BB\u8FD0\u6C14\u6210\u5206", imageSrc: (0,esm.staticFile)("\u4E00\u4E2A\u6234\u7740\u653E\u5927\u955C\u7684\u4EBA\u6B63\u5728\u4ED4\u7EC6\u89C2\u5BDF\u4E00\u4E2A\u5956\u676F\uFF0C\u80CC\u666F\u662F\u4E00\u4E9B\u6A21\u7CCA\u7684\u9AB0\u5B50\u548C\u5F69\u7968"), notes: [{ "text": "\u5206\u6790\u6210\u529F\u8005\u7684\u80CC\u666F", "showFrom": 2 }, { "text": "\u770B\u662F\u5426\u4F9D\u8D56\u7279\u5B9A\u6761\u4EF6", "showFrom": 3 }, { "text": "\u4E0D\u5177\u53C2\u8003\u4EF7\u503C", "showFrom": 5 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 403, durationInFrames: 167, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWMethodStack, { content: [{ "text": "\u7B2C\u4E09\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u5EFA\u7ACB\u201C\u6982\u7387\u601D\u7EF4\u201D\uFF1A", "startFrame": 30, "durationFrames": 30 }, { "text": "\u522B\u88AB\u4E2A\u522B\u201C\u9ED1\u5929\u9E45\u201D\u5E26\u504F\u4E86\u8282\u594F\u3002", "startFrame": 60, "durationFrames": 33 }, { "text": "\u5728\u8FD9\u4E2A\u4E16\u754C\u4E0A\uFF0C", "startFrame": 93, "durationFrames": 30 }, { "text": "\u5E38\u8BC6\u548C\u5927\u6982\u7387\u4E8B\u4EF6\u624D\u662F\u666E\u901A\u4EBA\u907F\u5751\u7684\u62A4\u8EAB\u7B26\u3002", "startFrame": 123, "durationFrames": 44 }], totalDurationFrames: 167, title: "\u5EFA\u7ACB\u6982\u7387\u601D\u7EF4", imageSrc: (0,esm.staticFile)("\u4E00\u7FA4\u4EBA\u671D\u7740\u4E0D\u540C\u7684\u65B9\u5411\u8D70\uFF0C\u5176\u4E2D\u53EA\u6709\u4E00\u6761\u8DEF\u901A\u5411\u5C71\u9876\uFF0C\u5927\u90E8\u5206\u4EBA\u90FD\u5728\u5C71\u811A\u4E0B\u5F98\u5F8A\u7684\u7B80\u7B14\u753B"), notes: [{ "text": "\u522B\u88AB\u9ED1\u5929\u9E45\u5E26\u504F", "showFrom": 2 }, { "text": "\u5E38\u8BC6\u624D\u662F\u62A4\u8EAB\u7B26", "showFrom": 4 }], anchors: [] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 570, durationInFrames: 97, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWCenterFocus, { content: [{ "text": "\u5728\u8FD9\u4E2A\u5D07\u62DC\u8D62\u5BB6\u7684\u65F6\u4EE3\u91CC\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u5982\u679C\u4F60\u4E0D\u4E3B\u52A8\u53BB\u63A8\u5F00\u805A\u5149\u706F\u5916\u7684\u9ED1\u6697\uFF0C", "startFrame": 30, "durationFrames": 37 }, { "text": "\u4F60\u5C31\u6C38\u8FDC\u65E0\u6CD5\u770B\u6E05\u811A\u4E0B\u7684\u8DEF\u3002", "startFrame": 67, "durationFrames": 30 }], totalDurationFrames: 97, imageSrc: (0,esm.staticFile)("\u805A\u5149\u706F\u7167\u4EAE\u9ED1\u6697\u9053\u8DEF\u7684\u573A\u666F"), enterEffect: "fadeIn", anchors: [{ "text": "\u5D07\u62DC\u8D62\u5BB6", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud" }, { "text": "\u805A\u5149\u706F\u5916", "showFrom": 1, "color": "#000000", "anim": "slideUp", "audioEffect": null }] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: 667, durationInFrames: 130, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(BWTextFocus, { content: [{ "text": "\u6C38\u8FDC\u8BB0\u4F4F\uFF0C", "startFrame": 0, "durationFrames": 30 }, { "text": "\u771F\u6B63\u7684\u6E05\u9192\u4E0D\u662F\u590D\u523B\u522B\u4EBA\u7684\u5947\u8FF9\uFF0C", "startFrame": 30, "durationFrames": 33 }, { "text": "\u800C\u662F\u8BA4\u6E05\u6982\u7387\u540E\uFF0C", "startFrame": 63, "durationFrames": 30 }, { "text": "\u4F9D\u7136\u6709\u52C7\u6C14\u9009\u62E9\u90A3\u6761\u80DC\u7B97\u6700\u9AD8\u7684\u6B63\u9053\u3002", "startFrame": 93, "durationFrames": 37 }], totalDurationFrames: 130, coreSentence: "\u8BA4\u6E05\u6982\u7387\u540E\uFF0C\u4F9D\u7136\u9009\u62E9\u80DC\u7B97\u6700\u9AD8\u7684\u6B63\u9053", coreSentenceAnchors: [{ "coreSentenceAnchor": "\u80DC\u7B97\u6700\u9AD8", "color": "#EF4444" }] }) })
-  ] });
-};
-
-;// ./src/remotions/认知偏见_幸存者偏差/认知偏见幸存者偏差.tsx
-
-
-
-
-
-
-
-
-
-
-
-
-const \u8BA4\u77E5\u504F\u89C1\u5E78\u5B58\u8005\u504F\u5DEESchema = lib.z.object({});
-const src_remotions_TRANSITION_DURATION_6 = 15;
-const src_remotions_SCENE_END_PADDING_6 = 20;
-const src_remotions_COVER_DURATION_FRAMES_6 = 5;
-const src_remotions_sceneConfigs_6 = [
-  { name: "scene1", duration: src_remotions_scenes_Scene1_calculateScene1Duration_4() + src_remotions_SCENE_END_PADDING_6, component: src_remotions_scenes_Scene1_Scene1_4, label: "\u5F15\u5165\uFF1A\u8BFB\u4E66\u65E0\u7528\u8BBA" },
-  { name: "scene2", duration: src_remotions_scenes_Scene2_calculateScene2Duration_4() + src_remotions_SCENE_END_PADDING_6, component: src_remotions_scenes_Scene2_Scene2_4, label: "\u5256\u6790\uFF1A\u5E78\u5B58\u8005\u504F\u5DEE" },
-  { name: "scene3", duration: src_remotions_scenes_Scene3_calculateScene3Duration_4() + src_remotions_SCENE_END_PADDING_6, component: src_remotions_scenes_Scene3_Scene3_4, label: "\u53CD\u8F6C\uFF1A\u5267\u6BD2\u9E21\u6C64" },
-  { name: "scene4", duration: src_remotions_scenes_Scene4_calculateScene4Duration_2() + src_remotions_SCENE_END_PADDING_6, component: src_remotions_scenes_Scene4_Scene4_2, label: "\u53EC\u5524\uFF1A\u6838\u5FC3\u5FC3\u6CD5" }
-];
-const MAIN_DURATION_\u8BA4\u77E5\u504F\u89C1_\u5E78\u5B58\u8005\u504F\u5DEE = src_remotions_sceneConfigs_6.reduce((total, c) => total + c.duration, 0) - (src_remotions_sceneConfigs_6.length - 1) * src_remotions_TRANSITION_DURATION_6;
-const TOTAL_DURATION_\u8BA4\u77E5\u504F\u89C1_\u5E78\u5B58\u8005\u504F\u5DEE = src_remotions_COVER_DURATION_FRAMES_6 + MAIN_DURATION_\u8BA4\u77E5\u504F\u89C1_\u5E78\u5B58\u8005\u504F\u5DEE;
-const src_remotions_ProgressBar_6 = () => {
-  var _a;
-  const frame = (0,esm.useCurrentFrame)();
-  if (frame < src_remotions_COVER_DURATION_FRAMES_6) {
-    return null;
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        "div",
+        {
+          style: {
+            position: "absolute",
+            left: "12%",
+            right: "12%",
+            bottom: 0,
+            height: 1,
+            background: "linear-gradient(90deg, transparent 0%, rgba(226, 232, 240, 0.45) 45%, rgba(226, 232, 240, 0.45) 55%, transparent 100%)"
+          }
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        "div",
+        {
+          style: {
+            position: "absolute",
+            left: 36,
+            top: 36,
+            width: 40,
+            height: 40,
+            borderLeft: "2px solid rgba(248, 250, 252, 0.22)",
+            borderTop: "2px solid rgba(248, 250, 252, 0.22)",
+            borderRadius: "2px 0 0 0"
+          }
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(
+        "div",
+        {
+          style: {
+            position: "absolute",
+            right: 36,
+            top: 36,
+            width: 40,
+            height: 40,
+            borderRight: "2px solid rgba(248, 250, 252, 0.22)",
+            borderTop: "2px solid rgba(248, 250, 252, 0.22)",
+            borderRadius: "0 2px 0 0"
+          }
+        }
+      ),
+      /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+        "div",
+        {
+          style: {
+            position: "relative",
+            zIndex: 1,
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "0 56px",
+            boxSizing: "border-box"
+          },
+          children: [
+            /* @__PURE__ */ (0,jsx_runtime.jsx)(
+              "div",
+              {
+                style: {
+                  width: 56,
+                  height: 4,
+                  borderRadius: 999,
+                  background: `linear-gradient(90deg, ${_3VerticalChrome_THEME_ACCENT_SOFT}, rgba(56, 189, 248, 0.95))`,
+                  boxShadow: "0 0 22px rgba(37, 99, 235, 0.45)",
+                  marginBottom: 22
+                }
+              }
+            ),
+            /* @__PURE__ */ (0,jsx_runtime.jsx)(
+              "div",
+              {
+                style: {
+                  fontSize: 80,
+                  fontWeight: 800,
+                  fontFamily: _3VerticalChrome_FONT_STACK,
+                  color: "#fafafa",
+                  letterSpacing: "0.14em",
+                  textAlign: "center",
+                  lineHeight: 1.08,
+                  textShadow: "0 1px 0 rgba(255,255,255,0.12), 0 4px 36px rgba(0,0,0,0.55), 0 0 48px rgba(37, 99, 235, 0.25)"
+                },
+                children: _3VerticalChrome_STATIC_HEADLINE
+              }
+            ),
+            /* @__PURE__ */ (0,jsx_runtime.jsx)(
+              "div",
+              {
+                style: {
+                  marginTop: 10,
+                  fontSize: 15,
+                  fontWeight: 600,
+                  fontFamily: 'ui-sans-serif, "Segoe UI", sans-serif',
+                  color: "rgba(148, 163, 184, 0.95)",
+                  letterSpacing: "0.42em",
+                  textAlign: "center"
+                },
+                children: _3VerticalChrome_STATIC_HEADLINE_SUB_EN
+              }
+            ),
+            /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+              "div",
+              {
+                style: {
+                  marginTop: 20,
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 20,
+                  width: "100%",
+                  maxWidth: 520
+                },
+                children: [
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        flex: 1,
+                        height: 1,
+                        background: "linear-gradient(90deg, transparent, rgba(248, 250, 252, 0.38))"
+                      }
+                    }
+                  ),
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        width: 7,
+                        height: 7,
+                        transform: "rotate(45deg)",
+                        background: `linear-gradient(135deg, ${_3VerticalChrome_THEME_ACCENT}, rgba(56, 189, 248, 0.9))`,
+                        boxShadow: "0 0 12px rgba(37, 99, 235, 0.5)",
+                        flexShrink: 0
+                      }
+                    }
+                  ),
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        fontSize: 26,
+                        fontWeight: 600,
+                        fontFamily: _3VerticalChrome_FONT_STACK,
+                        color: "rgba(248, 250, 252, 0.88)",
+                        letterSpacing: "0.42em",
+                        textAlign: "center",
+                        flexShrink: 0
+                      },
+                      children: _3VerticalChrome_STATIC_HEADLINE_SUB
+                    }
+                  ),
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        width: 7,
+                        height: 7,
+                        transform: "rotate(45deg)",
+                        background: `linear-gradient(135deg, ${_3VerticalChrome_THEME_ACCENT}, rgba(56, 189, 248, 0.9))`,
+                        boxShadow: "0 0 12px rgba(37, 99, 235, 0.5)",
+                        flexShrink: 0
+                      }
+                    }
+                  ),
+                  /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                    "div",
+                    {
+                      style: {
+                        flex: 1,
+                        height: 1,
+                        background: "linear-gradient(270deg, transparent, rgba(248, 250, 252, 0.38))"
+                      }
+                    }
+                  )
+                ]
+              }
+            )
+          ]
+        }
+      )
+    ]
   }
-  const contentFrame = frame - src_remotions_COVER_DURATION_FRAMES_6;
-  let currentStart = 0;
-  const segments = src_remotions_sceneConfigs_6.map((c, i) => {
-    const isLast = i === src_remotions_sceneConfigs_6.length - 1;
-    const segmentDuration = isLast ? c.duration : c.duration - src_remotions_TRANSITION_DURATION_6;
-    const segment = { start: currentStart, duration: segmentDuration };
-    currentStart += segmentDuration;
-    return segment;
-  });
-  const activeIndex = segments.findIndex((seg) => contentFrame >= seg.start && contentFrame < seg.start + seg.duration);
-  const validActiveIndex = activeIndex !== -1 ? activeIndex : segments.length - 1;
-  const activeLabel = ((_a = src_remotions_sceneConfigs_6[validActiveIndex]) == null ? void 0 : _a.label) || "";
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)("div", { style: {
-    position: "absolute",
-    top: 40,
-    left: 40,
-    right: 40,
-    display: "flex",
-    flexDirection: "column",
-    gap: 16,
-    zIndex: 100
-  }, children: [
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, height: 8 }, children: segments.map((seg, i) => {
-      const progress = Math.max(0, Math.min(1, (contentFrame - seg.start) / seg.duration));
-      const isActive = i === validActiveIndex;
-      return /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        flex: 1,
-        backgroundColor: isActive ? "rgba(34, 43, 69, 0.18)" : "rgba(34, 43, 69, 0.1)",
-        borderRadius: 999,
-        overflow: "hidden",
-        border: isActive ? "1px solid rgba(34, 43, 69, 0.32)" : "1px solid rgba(34, 43, 69, 0.2)",
-        boxShadow: isActive ? "0 3px 10px rgba(31, 41, 55, 0.12)" : "0 1px 4px rgba(31, 41, 55, 0.08)"
-      }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-        width: `${progress * 100}%`,
-        height: "100%",
-        background: isActive ? "linear-gradient(90deg, rgba(29, 78, 216, 0.95), rgba(56, 189, 248, 0.92))" : "rgba(30, 41, 59, 0.72)",
-        boxShadow: isActive ? "0 0 12px rgba(37, 99, 235, 0.35)" : "none"
-      } }) }, i);
-    }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)("div", { style: {
-      fontSize: 30,
-      fontWeight: 700,
-      fontFamily: '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif',
-      letterSpacing: 0.4,
-      color: "rgba(17, 24, 39, 0.95)",
-      textAlign: "left",
-      textShadow: "0 1px 2px rgba(255,255,255,0.45)",
-      padding: "6px 14px",
-      backgroundColor: "rgba(255, 255, 255, 0.58)",
-      border: "1px solid rgba(17, 24, 39, 0.12)",
-      borderRadius: 10,
-      alignSelf: "flex-start",
-      backdropFilter: "blur(6px)",
-      boxShadow: "0 6px 20px rgba(15, 23, 42, 0.12)"
-    }, children: activeLabel })
-  ] });
+);
+const \u8BA4\u77E5\u9677\u96313ProgressBar = () => {
+  const frame = (0,esm.useCurrentFrame)();
+  return /* @__PURE__ */ (0,jsx_runtime.jsx)(
+    VerticalSegmentedProgressBar,
+    {
+      frame,
+      coverDurationFrames: _3Constants_COVER_DURATION_FRAMES,
+      sceneConfigs: _3Constants_sceneConfigs,
+      transitionDuration: _3Constants_TRANSITION_DURATION,
+      fontStack: _3VerticalChrome_FONT_STACK
+    }
+  );
 };
-const \u8BA4\u77E5\u504F\u89C1\u5E78\u5B58\u8005\u504F\u5DEE = () => {
+
+;// ./src/remotions/认知陷阱3/认知陷阱3Vertical.tsx
+
+
+
+
+
+
+
+const \u8BA4\u77E5\u9677\u96313Vertical = () => {
   const frame = (0,esm.useCurrentFrame)();
   const bgShiftX = (0,esm.interpolate)(frame % 240, [0, 120, 240], [-4, 4, -4], {
     extrapolateLeft: "clamp",
@@ -80731,23 +82410,97 @@ const \u8BA4\u77E5\u504F\u89C1\u5E78\u5B58\u8005\u504F\u5DEE = () => {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp"
   });
-  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
+  return /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { style: { background: VERTICAL_SHELL_BG }, children: [
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Audio,
       {
         src: (0,esm.staticFile)("audio/effects/Seven_Measured_Breaths.mp3"),
         loop: true,
-        volume: 0.22,
+        volume: 0.1,
         name: "Background music"
+      }
+    ),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(认知陷阱3TopStaticHeadline, { canvasW: _3Constants_VERTICAL_CANVAS_W, topBandH: _3Constants_VERTICAL_PLAY_TOP }),
+    /* @__PURE__ */ (0,jsx_runtime.jsxs)(
+      "div",
+      {
+        style: {
+          position: "absolute",
+          left: 0,
+          top: _3Constants_VERTICAL_PLAY_TOP,
+          width: _3Constants_VERTICAL_PLAY_W,
+          height: _3Constants_VERTICAL_PLAY_H,
+          overflow: "hidden"
+        },
+        children: [
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                height: "100%",
+                width: "100%",
+                background: "linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #e2e8f0 100%)"
+              }
+            }
+          ),
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                position: "absolute",
+                inset: "-6%",
+                pointerEvents: "none",
+                opacity: bgBreathOpacity,
+                transform: `translate(${bgShiftX}px, ${bgShiftY}px)`,
+                background: "radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08), transparent 40%), radial-gradient(circle at 80% 60%, rgba(56, 189, 248, 0.12), transparent 45%), radial-gradient(circle at 40% 80%, rgba(148, 163, 184, 0.15), transparent 50%)"
+              }
+            }
+          ),
+          /* @__PURE__ */ (0,jsx_runtime.jsx)(
+            "div",
+            {
+              style: {
+                position: "absolute",
+                left: 0,
+                right: 0,
+                top: 0,
+                height: _3Constants_VERTICAL_PLAY_H,
+                overflow: "hidden",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-start"
+              },
+              children: /* @__PURE__ */ (0,jsx_runtime.jsx)(RemotionLayoutMetricsProvider, { value: { width: _3Constants_DESIGN_W, height: _3Constants_DESIGN_H }, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
+                "div",
+                {
+                  style: {
+                    width: _3Constants_DESIGN_W,
+                    height: _3Constants_DESIGN_H,
+                    flexShrink: 0,
+                    transform: `scale(${_3Constants_VERTICAL_CONTENT_SCALE})`,
+                    transformOrigin: "top center"
+                  },
+                  children: /* @__PURE__ */ (0,jsx_runtime.jsx)(认知陷阱3MainBody, {})
+                }
+              ) })
+            }
+          )
+        ]
       }
     ),
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       "div",
       {
         style: {
-          height: "100%",
-          width: "100%",
-          background: "linear-gradient(135deg, #fffdf7 0%, #f7fbff 52%, #f6fff8 100%)"
+          position: "absolute",
+          left: 0,
+          top: _3Constants_VERTICAL_PLAY_TOP,
+          width: _3Constants_VERTICAL_PLAY_W,
+          height: _3Constants_VERTICAL_PLAY_H,
+          border: "1px solid rgba(255, 255, 255, 0.07)",
+          boxSizing: "border-box",
+          pointerEvents: "none",
+          zIndex: 20
         }
       }
     ),
@@ -80756,68 +82509,55 @@ const \u8BA4\u77E5\u504F\u89C1\u5E78\u5B58\u8005\u504F\u5DEE = () => {
       {
         style: {
           position: "absolute",
-          inset: "-6%",
-          pointerEvents: "none",
-          opacity: bgBreathOpacity,
-          transform: `translate(${bgShiftX}px, ${bgShiftY}px)`,
-          background: "radial-gradient(circle at 20% 30%, rgba(255, 225, 170, 0.42), transparent 36%), radial-gradient(circle at 78% 64%, rgba(174, 222, 255, 0.35), transparent 40%), radial-gradient(circle at 52% 80%, rgba(191, 255, 208, 0.26), transparent 42%)"
-        }
+          left: 0,
+          top: _3Constants_VERTICAL_PLAY_TOP + _3Constants_VERTICAL_PLAY_H + _3Constants_VERTICAL_PLAY_PROGRESS_GAP,
+          width: _3Constants_VERTICAL_CANVAS_W,
+          boxSizing: "border-box",
+          pointerEvents: "none"
+        },
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(认知陷阱3ProgressBar, {})
       }
     ),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { durationInFrames: src_remotions_COVER_DURATION_FRAMES_6, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(
-      StaticCover,
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      "div",
       {
-        title: "\u5E78\u5B58\u8005\u504F\u5DEE",
-        subtitle: "\u8BFB\u4E66\u6709\u4E2A\u5C41\u7528\uFF01",
-        coverDurationInFrames: src_remotions_COVER_DURATION_FRAMES_6,
-        themeColor: "#2563EB",
-        badge: "\u8BA4\u8BC6\u81EA\u6211 \xB7 \u7406\u6027\u601D\u8003",
-        seriesLabel: "\u8BA4\u77E5\u5FC3\u7406\u5B66",
-        seriesLabelEn: "COGNITIVE PSYCHOLOGY",
-        methodologySteps: ["\u89C9\u5BDF", "\u5F52\u56E0", "\u8C03\u6574"],
-        methodologyStepsEn: "OBSERVE \xB7 ATTRIBUTE \xB7 ADJUST"
+        style: {
+          position: "absolute",
+          left: 0,
+          bottom: _3Constants_VERTICAL_BOTTOM_BRAND_OFFSET,
+          width: _3Constants_VERTICAL_CANVAS_W,
+          boxSizing: "border-box",
+          pointerEvents: "none",
+          zIndex: 18
+        },
+        children: /* @__PURE__ */ (0,jsx_runtime.jsx)(VerticalBottomBrandBar, { canvasW: _3Constants_VERTICAL_CANVAS_W })
       }
-    ) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(esm.Sequence, { from: src_remotions_COVER_DURATION_FRAMES_6, durationInFrames: MAIN_DURATION_\u8BA4\u77E5\u504F\u89C1_\u5E78\u5B58\u8005\u504F\u5DEE, children: /* @__PURE__ */ (0,jsx_runtime.jsxs)(esm.AbsoluteFill, { children: [
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(
-        "div",
-        {
-          style: {
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "10%",
-            minHeight: 48,
-            backgroundColor: "rgba(0,0,0,0.5)"
-          }
-        }
-      ),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries, { children: src_remotions_sceneConfigs_6.map((config, index) => {
-        const SceneComp = config.component;
-        const isLast = index === src_remotions_sceneConfigs_6.length - 1;
-        return /* @__PURE__ */ (0,jsx_runtime.jsxs)(react.Fragment, { children: [
-          /* @__PURE__ */ (0,jsx_runtime.jsx)(TransitionSeries.Sequence, { durationInFrames: config.duration, children: /* @__PURE__ */ (0,jsx_runtime.jsx)(SceneComp, {}) }),
-          !isLast && /* @__PURE__ */ (0,jsx_runtime.jsx)(
-            TransitionSeries.Transition,
-            {
-              timing: linearTiming({ durationInFrames: src_remotions_TRANSITION_DURATION_6 }),
-              presentation: fade()
-            }
-          )
-        ] }, config.name);
-      }) })
-    ] }) }),
-    /* @__PURE__ */ (0,jsx_runtime.jsx)(src_remotions_ProgressBar_6, {})
+    )
   ] });
 };
+
+;// ./src/remotions/认知陷阱3/认知陷阱3CoverProps.ts
+
+const \u8BA4\u77E5\u9677\u96313_STATIC_COVER_PROPS = {
+  title: "\u8BA4\u77E5\u9677\u96313",
+  subtitle: "\u4E3A\u4EC0\u4E48\u8F66\u7978\u89C6\u9891\u4E0B\uFF0C\u6CA1\u4EBA\u5173\u5FC3\u6B7B\u6D3B\uFF1F\u4F60\u53EA\u662F\u5728\u6025\u7740\u7AD9\u961F",
+  themeColor: "#2563EB",
+  badge: "\u8BA4\u8BC6\u81EA\u6211 \xB7 \u7406\u6027\u601D\u8003",
+  seriesLabel: "\u8BA4\u77E5\u5FC3\u7406\u5B66",
+  seriesLabelEn: "COGNITIVE PSYCHOLOGY",
+  methodologySteps: ["\u89C9\u5BDF", "\u5F52\u56E0", "\u8C03\u6574"],
+  methodologyStepsEn: "OBSERVE \xB7 ATTRIBUTE \xB7 ADJUST"
+};
+
+;// ./src/remotions/认知陷阱3/认知陷阱3CoverStills.tsx
+
+
+
+
+const \u8BA4\u77E5\u9677\u96313\u5C01\u9762\u6A2A\u5C4F = () => /* @__PURE__ */ (0,jsx_runtime.jsx)(LandscapeCoverPoster, { ...认知陷阱3_STATIC_COVER_PROPS });
+const \u8BA4\u77E5\u9677\u96313\u5C01\u9762\u7AD6\u5C4F = () => /* @__PURE__ */ (0,jsx_runtime.jsx)(VerticalCoverPoster, { ...认知陷阱3_STATIC_COVER_PROPS });
 
 ;// ./src/Root.tsx
-
-
-
-
-
 
 
 
@@ -80838,151 +82578,158 @@ const RemotionRoot = () => {
         component: TemplateShowcase,
         durationInFrames: TOTAL_DURATION_TEMPLATE_SHOWCASE,
         fps: 30,
-        width: 960,
-        height: 1280,
+        width: 1920,
+        height: 1080,
         defaultProps: {}
       }
     ),
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Composition,
       {
-        id: "\u53EF\u8BC1\u4F2A\u6027",
-        component: 可证伪性,
-        durationInFrames: TOTAL_DURATION_可证伪性,
+        id: "\u5C0F\u7C73\u6838\u5FC3\u6280\u672F",
+        component: 小米核心技术Landscape,
+        durationInFrames: TOTAL_DURATION_小米核心技术,
         fps: 30,
-        width: 960,
-        height: 1280,
-        schema: 可证伪性Schema,
+        width: 1920,
+        height: 1080,
+        schema: 小米核心技术Schema,
         defaultProps: {}
       }
     ),
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Composition,
       {
-        id: "\u53CC\u76F2\u5B9E\u9A8C",
-        component: 双盲实验,
-        durationInFrames: TOTAL_DURATION_双盲实验,
+        id: "\u5C0F\u7C73\u6838\u5FC3\u6280\u672F\u7AD6\u5C4F",
+        component: 小米核心技术Vertical,
+        durationInFrames: TOTAL_DURATION_小米核心技术,
         fps: 30,
-        width: 960,
-        height: 1280,
-        schema: 双盲实验Schema,
+        width: 1080,
+        height: 1920,
+        schema: 小米核心技术Schema,
         defaultProps: {}
       }
     ),
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Composition,
       {
-        id: "\u6837\u672C\u504F\u5DEE",
-        component: 样本偏差,
-        durationInFrames: TOTAL_DURATION_样本偏差,
+        id: "\u5C0F\u7C73\u6838\u5FC3\u6280\u672F\u5C01\u9762\u6A2A\u5C4F",
+        component: 小米核心技术封面横屏,
+        durationInFrames: 1,
         fps: 30,
-        width: 960,
-        height: 1280,
-        schema: 样本偏差Schema,
+        width: 1920,
+        height: 1080,
         defaultProps: {}
       }
     ),
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Composition,
       {
-        id: "\u6570\u636E\u53EF\u89C6\u5316\u9677\u9631",
-        component: 数据可视化陷阱,
-        durationInFrames: TOTAL_DURATION_数据可视化陷阱,
+        id: "\u5C0F\u7C73\u6838\u5FC3\u6280\u672F\u5C01\u9762\u7AD6\u5C4F",
+        component: 小米核心技术封面竖屏,
+        durationInFrames: 1,
         fps: 30,
-        width: 960,
-        height: 1280,
-        schema: 数据可视化陷阱Schema,
+        width: 1080,
+        height: 1440,
         defaultProps: {}
       }
     ),
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Composition,
       {
-        id: "\u5E73\u5747\u6570\u9677\u9631",
-        component: 平均数陷阱,
-        durationInFrames: TOTAL_DURATION_平均数陷阱,
+        id: "\u5C0F\u7C73\u5E73\u6743",
+        component: 小米平权Landscape,
+        durationInFrames: TOTAL_DURATION_小米平权,
         fps: 30,
-        width: 960,
-        height: 1280,
-        schema: 平均数陷阱Schema,
+        width: 1920,
+        height: 1080,
+        schema: 小米平权Schema,
         defaultProps: {}
       }
     ),
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Composition,
       {
-        id: "\u76F8\u5173\u4E0D\u7B49\u4E8E\u56E0\u679C",
-        component: 相关不等于因果,
-        durationInFrames: TOTAL_DURATION_相关不等于因果,
+        id: "\u5C0F\u7C73\u5E73\u6743\u7AD6\u5C4F",
+        component: 小米平权Vertical,
+        durationInFrames: TOTAL_DURATION_小米平权,
         fps: 30,
-        width: 960,
-        height: 1280,
-        schema: 相关不等于因果Schema,
+        width: 1080,
+        height: 1920,
+        schema: 小米平权Schema,
         defaultProps: {}
       }
     ),
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Composition,
       {
-        id: "\u8BA4\u77E5\u504F\u89C1\u786E\u8BA4\u504F\u8BEF",
-        component: 认知偏见确认偏误,
-        durationInFrames: TOTAL_DURATION_认知偏见_确认偏误,
+        id: "\u5C0F\u7C73\u5E73\u6743\u5C01\u9762\u6A2A\u5C4F",
+        component: 小米平权封面横屏,
+        durationInFrames: 1,
         fps: 30,
-        width: 960,
-        height: 1280,
-        schema: 认知偏见确认偏误Schema,
+        width: 1920,
+        height: 1080,
         defaultProps: {}
       }
     ),
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Composition,
       {
-        id: "\u8BA4\u77E5\u504F\u89C1\u53EF\u5F97\u6027\u542F\u53D1",
-        component: 认知偏见可得性启发,
-        durationInFrames: TOTAL_DURATION_认知偏见_可得性启发,
+        id: "\u5C0F\u7C73\u5E73\u6743\u5C01\u9762\u7AD6\u5C4F",
+        component: 小米平权封面竖屏,
+        durationInFrames: 1,
         fps: 30,
-        width: 960,
-        height: 1280,
-        schema: 认知偏见可得性启发Schema,
+        width: 1080,
+        height: 1440,
         defaultProps: {}
       }
     ),
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Composition,
       {
-        id: "\u8BA4\u77E5\u504F\u89C1\u951A\u5B9A\u6548\u5E94",
-        component: 认知偏见锚定效应,
-        durationInFrames: TOTAL_DURATION_认知偏见_锚定效应,
+        id: "\u8BA4\u77E5\u9677\u96313",
+        component: 认知陷阱3Landscape,
+        durationInFrames: TOTAL_DURATION_认知陷阱3,
         fps: 30,
-        width: 960,
-        height: 1280,
-        schema: 认知偏见锚定效应Schema,
+        width: 1920,
+        height: 1080,
+        schema: 认知陷阱3Schema,
         defaultProps: {}
       }
     ),
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Composition,
       {
-        id: "\u8BA4\u77E5\u504F\u89C1\u540E\u89C6\u504F\u89C1",
-        component: 认知偏见后视偏见,
-        durationInFrames: TOTAL_DURATION_认知偏见_后视偏见,
+        id: "\u8BA4\u77E5\u9677\u96313\u7AD6\u5C4F",
+        component: 认知陷阱3Vertical,
+        durationInFrames: TOTAL_DURATION_认知陷阱3,
         fps: 30,
-        width: 960,
-        height: 1280,
-        schema: 认知偏见后视偏见Schema,
+        width: 1080,
+        height: 1920,
+        schema: 认知陷阱3Schema,
         defaultProps: {}
       }
     ),
     /* @__PURE__ */ (0,jsx_runtime.jsx)(
       esm.Composition,
       {
-        id: "\u8BA4\u77E5\u504F\u89C1\u5E78\u5B58\u8005\u504F\u5DEE",
-        component: 认知偏见幸存者偏差,
-        durationInFrames: TOTAL_DURATION_认知偏见_幸存者偏差,
+        id: "\u8BA4\u77E5\u9677\u96313\u5C01\u9762\u6A2A\u5C4F",
+        component: 认知陷阱3封面横屏,
+        durationInFrames: 1,
         fps: 30,
-        width: 960,
-        height: 1280,
-        schema: 认知偏见幸存者偏差Schema,
+        width: 1920,
+        height: 1080,
+        defaultProps: {}
+      }
+    ),
+    /* @__PURE__ */ (0,jsx_runtime.jsx)(
+      esm.Composition,
+      {
+        id: "\u8BA4\u77E5\u9677\u96313\u5C01\u9762\u7AD6\u5C4F",
+        component: 认知陷阱3封面竖屏,
+        durationInFrames: 1,
+        fps: 30,
+        width: 1080,
+        height: 1440,
         defaultProps: {}
       }
     )
@@ -81177,7 +82924,7 @@ if (typeof globalThis === 'undefined') {
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "/*! tailwindcss v4.1.1 | MIT License | https://tailwindcss.com */\n@layer theme, base, components, utilities;\n@supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {\n  @layer base {\n    *, ::before, ::after, ::backdrop {\n      --tw-rotate-x: rotateX(0);\n      --tw-rotate-y: rotateY(0);\n      --tw-rotate-z: rotateZ(0);\n      --tw-skew-x: skewX(0);\n      --tw-skew-y: skewY(0);\n      --tw-border-style: solid;\n      --tw-outline-style: solid;\n      --tw-blur: initial;\n      --tw-brightness: initial;\n      --tw-contrast: initial;\n      --tw-grayscale: initial;\n      --tw-hue-rotate: initial;\n      --tw-invert: initial;\n      --tw-opacity: initial;\n      --tw-saturate: initial;\n      --tw-sepia: initial;\n      --tw-drop-shadow: initial;\n      --tw-drop-shadow-color: initial;\n      --tw-drop-shadow-alpha: 100%;\n      --tw-drop-shadow-size: initial;\n    }\n  }\n}\n@layer theme {\n  :root, :host {\n    --font-sans: ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\",\n      \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,\n      \"Liberation Mono\", \"Courier New\", monospace;\n    --default-transition-duration: 150ms;\n    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n    --default-font-family: var(--font-sans);\n    --default-font-feature-settings: var(--font-sans--font-feature-settings);\n    --default-font-variation-settings: var(\n      --font-sans--font-variation-settings\n    );\n    --default-mono-font-family: var(--font-mono);\n    --default-mono-font-feature-settings: var(\n      --font-mono--font-feature-settings\n    );\n    --default-mono-font-variation-settings: var(\n      --font-mono--font-variation-settings\n    );\n  }\n}\n@layer base {\n  *, ::after, ::before, ::backdrop, ::file-selector-button {\n    box-sizing: border-box;\n    margin: 0;\n    padding: 0;\n    border: 0 solid;\n  }\n  html, :host {\n    line-height: 1.5;\n    -webkit-text-size-adjust: 100%;\n    tab-size: 4;\n    font-family: var( --default-font-family, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\" );\n    font-feature-settings: var(--default-font-feature-settings, normal);\n    font-variation-settings: var( --default-font-variation-settings, normal );\n    -webkit-tap-highlight-color: transparent;\n  }\n  body {\n    line-height: inherit;\n  }\n  hr {\n    height: 0;\n    color: inherit;\n    border-top-width: 1px;\n  }\n  abbr:where([title]) {\n    -webkit-text-decoration: underline dotted;\n    text-decoration: underline dotted;\n  }\n  h1, h2, h3, h4, h5, h6 {\n    font-size: inherit;\n    font-weight: inherit;\n  }\n  a {\n    color: inherit;\n    -webkit-text-decoration: inherit;\n    text-decoration: inherit;\n  }\n  b, strong {\n    font-weight: bolder;\n  }\n  code, kbd, samp, pre {\n    font-family: var( --default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace );\n    font-feature-settings: var( --default-mono-font-feature-settings, normal );\n    font-variation-settings: var( --default-mono-font-variation-settings, normal );\n    font-size: 1em;\n  }\n  small {\n    font-size: 80%;\n  }\n  sub, sup {\n    font-size: 75%;\n    line-height: 0;\n    position: relative;\n    vertical-align: baseline;\n  }\n  sub {\n    bottom: -0.25em;\n  }\n  sup {\n    top: -0.5em;\n  }\n  table {\n    text-indent: 0;\n    border-color: inherit;\n    border-collapse: collapse;\n  }\n  :-moz-focusring {\n    outline: auto;\n  }\n  progress {\n    vertical-align: baseline;\n  }\n  summary {\n    display: list-item;\n  }\n  ol, ul, menu {\n    list-style: none;\n  }\n  img, svg, video, canvas, audio, iframe, embed, object {\n    display: block;\n    vertical-align: middle;\n  }\n  img, video {\n    max-width: 100%;\n    height: auto;\n  }\n  button, input, select, optgroup, textarea, ::file-selector-button {\n    font: inherit;\n    font-feature-settings: inherit;\n    font-variation-settings: inherit;\n    letter-spacing: inherit;\n    color: inherit;\n    border-radius: 0;\n    background-color: transparent;\n    opacity: 1;\n  }\n  :where(select:is([multiple], [size])) optgroup {\n    font-weight: bolder;\n  }\n  :where(select:is([multiple], [size])) optgroup option {\n    padding-inline-start: 20px;\n  }\n  ::file-selector-button {\n    margin-inline-end: 4px;\n  }\n  ::placeholder {\n    opacity: 1;\n    color: color-mix(in oklab, currentColor 50%, transparent);\n  }\n  textarea {\n    resize: vertical;\n  }\n  ::-webkit-search-decoration {\n    -webkit-appearance: none;\n  }\n  ::-webkit-date-and-time-value {\n    min-height: 1lh;\n    text-align: inherit;\n  }\n  ::-webkit-datetime-edit {\n    display: inline-flex;\n  }\n  ::-webkit-datetime-edit-fields-wrapper {\n    padding: 0;\n  }\n  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {\n    padding-block: 0;\n  }\n  :-moz-ui-invalid {\n    box-shadow: none;\n  }\n  button, input:where([type=\"button\"], [type=\"reset\"], [type=\"submit\"]), ::file-selector-button {\n    appearance: button;\n  }\n  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {\n    height: auto;\n  }\n  [hidden]:where(:not([hidden=\"until-found\"])) {\n    display: none !important;\n  }\n}\n@layer utilities {\n  .visible {\n    visibility: visible;\n  }\n  .absolute {\n    position: absolute;\n  }\n  .fixed {\n    position: fixed;\n  }\n  .relative {\n    position: relative;\n  }\n  .static {\n    position: static;\n  }\n  .container {\n    width: 100%;\n    @media (width >= 40rem) {\n      max-width: 40rem;\n    }\n    @media (width >= 48rem) {\n      max-width: 48rem;\n    }\n    @media (width >= 64rem) {\n      max-width: 64rem;\n    }\n    @media (width >= 80rem) {\n      max-width: 80rem;\n    }\n    @media (width >= 96rem) {\n      max-width: 96rem;\n    }\n  }\n  .block {\n    display: block;\n  }\n  .contents {\n    display: contents;\n  }\n  .flex {\n    display: flex;\n  }\n  .grid {\n    display: grid;\n  }\n  .hidden {\n    display: none;\n  }\n  .inline {\n    display: inline;\n  }\n  .inline-block {\n    display: inline-block;\n  }\n  .transform {\n    transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);\n  }\n  .resize {\n    resize: both;\n  }\n  .border {\n    border-style: var(--tw-border-style);\n    border-width: 1px;\n  }\n  .italic {\n    font-style: italic;\n  }\n  .antialiased {\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n  }\n  .outline {\n    outline-style: var(--tw-outline-style);\n    outline-width: 1px;\n  }\n  .blur {\n    --tw-blur: blur(8px);\n    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);\n  }\n  .grayscale {\n    --tw-grayscale: grayscale(100%);\n    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);\n  }\n  .filter {\n    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);\n  }\n  .transition {\n    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;\n    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));\n    transition-duration: var(--tw-duration, var(--default-transition-duration));\n  }\n}\n@property --tw-rotate-x {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: rotateX(0);\n}\n@property --tw-rotate-y {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: rotateY(0);\n}\n@property --tw-rotate-z {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: rotateZ(0);\n}\n@property --tw-skew-x {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: skewX(0);\n}\n@property --tw-skew-y {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: skewY(0);\n}\n@property --tw-border-style {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: solid;\n}\n@property --tw-outline-style {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: solid;\n}\n@property --tw-blur {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-brightness {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-contrast {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-grayscale {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-hue-rotate {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-invert {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-opacity {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-saturate {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-sepia {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-drop-shadow {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-drop-shadow-color {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-drop-shadow-alpha {\n  syntax: \"<percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-drop-shadow-size {\n  syntax: \"*\";\n  inherits: false;\n}\r\n", "",{"version":3,"sources":["webpack://./src/index.css"],"names":[],"mappings":"AAAA,gEACA;AADA,yCACA;AADA;EAAA;IAAA;MAAA,yBACA;MADA,yBACA;MADA,yBACA;MADA,qBACA;MADA,qBACA;MADA,wBACA;MADA,yBACA;MADA,kBACA;MADA,wBACA;MADA,sBACA;MADA,uBACA;MADA,wBACA;MADA,oBACA;MADA,qBACA;MADA,sBACA;MADA,mBACA;MADA,yBACA;MADA,+BACA;MADA,4BACA;MADA,8BACA;IAAA;EAAA;AAAA;AADA;EAAA;IAAA;6DACA;IADA;iDACA;IADA,oCACA;IADA,kEACA;IADA,uCACA;IADA,wEACA;IADA;;KACA;IADA,4CACA;IADA;;KACA;IADA;;KACA;EAAA;AAAA;AADA;EAAA;IAAA,sBACA;IADA,SACA;IADA,UACA;IADA,eACA;EAAA;EADA;IAAA,gBACA;IADA,8BACA;IADA,WACA;IADA,6JACA;IADA,mEACA;IADA,yEACA;IADA,wCACA;EAAA;EADA;IAAA,oBACA;EAAA;EADA;IAAA,SACA;IADA,cACA;IADA,qBACA;EAAA;EADA;IAAA,yCACA;IADA,iCACA;EAAA;EADA;IAAA,kBACA;IADA,oBACA;EAAA;EADA;IAAA,cACA;IADA,gCACA;IADA,wBACA;EAAA;EADA;IAAA,mBACA;EAAA;EADA;IAAA,kJACA;IADA,0EACA;IADA,8EACA;IADA,cACA;EAAA;EADA;IAAA,cACA;EAAA;EADA;IAAA,cACA;IADA,cACA;IADA,kBACA;IADA,wBACA;EAAA;EADA;IAAA,eACA;EAAA;EADA;IAAA,WACA;EAAA;EADA;IAAA,cACA;IADA,qBACA;IADA,yBACA;EAAA;EADA;IAAA,aACA;EAAA;EADA;IAAA,wBACA;EAAA;EADA;IAAA,kBACA;EAAA;EADA;IAAA,gBACA;EAAA;EADA;IAAA,cACA;IADA,sBACA;EAAA;EADA;IAAA,eACA;IADA,YACA;EAAA;EADA;IAAA,aACA;IADA,8BACA;IADA,gCACA;IADA,uBACA;IADA,cACA;IADA,gBACA;IADA,6BACA;IADA,UACA;EAAA;EADA;IAAA,mBACA;EAAA;EADA;IAAA,0BACA;EAAA;EADA;IAAA,sBACA;EAAA;EADA;IAAA,UACA;IADA,yDACA;EAAA;EADA;IAAA,gBACA;EAAA;EADA;IAAA,wBACA;EAAA;EADA;IAAA,eACA;IADA,mBACA;EAAA;EADA;IAAA,oBACA;EAAA;EADA;IAAA,UACA;EAAA;EADA;IAAA,gBACA;EAAA;EADA;IAAA,gBACA;EAAA;EADA;IAAA,kBACA;EAAA;EADA;IAAA,YACA;EAAA;EADA;IAAA,wBACA;EAAA;AAAA;AADA;EAAA;IAAA,mBACA;EAAA;EADA;IAAA,kBACA;EAAA;EADA;IAAA,eACA;EAAA;EADA;IAAA,kBACA;EAAA;EADA;IAAA,gBACA;EAAA;EADA;IAAA,WACA;IADA;MAAA,gBACA;IAAA;IADA;MAAA,gBACA;IAAA;IADA;MAAA,gBACA;IAAA;IADA;MAAA,gBACA;IAAA;IADA;MAAA,gBACA;IAAA;EAAA;EADA;IAAA,cACA;EAAA;EADA;IAAA,iBACA;EAAA;EADA;IAAA,aACA;EAAA;EADA;IAAA,aACA;EAAA;EADA;IAAA,aACA;EAAA;EADA;IAAA,eACA;EAAA;EADA;IAAA,qBACA;EAAA;EADA;IAAA,qGACA;EAAA;EADA;IAAA,YACA;EAAA;EADA;IAAA,oCACA;IADA,iBACA;EAAA;EADA;IAAA,kBACA;EAAA;EADA;IAAA,mCACA;IADA,kCACA;EAAA;EADA;IAAA,sCACA;IADA,kBACA;EAAA;EADA;IAAA,oBACA;IADA,0LACA;EAAA;EADA;IAAA,+BACA;IADA,0LACA;EAAA;EADA;IAAA,0LACA;EAAA;EADA;IAAA,mRACA;IADA,qFACA;IADA,2EACA;EAAA;AAAA;AADA;EAAA,WACA;EADA,eACA;EADA,yBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;EADA,yBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;EADA,yBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;EADA,uBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;EADA,uBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;EADA,oBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;EADA,oBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,sBACA;EADA,eACA;EADA,mBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA","sourcesContent":["@import \"tailwindcss\";\r\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "/*! tailwindcss v4.1.1 | MIT License | https://tailwindcss.com */\n@layer theme, base, components, utilities;\n@supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {\n  @layer base {\n    *, ::before, ::after, ::backdrop {\n      --tw-rotate-x: rotateX(0);\n      --tw-rotate-y: rotateY(0);\n      --tw-rotate-z: rotateZ(0);\n      --tw-skew-x: skewX(0);\n      --tw-skew-y: skewY(0);\n      --tw-border-style: solid;\n      --tw-ordinal: initial;\n      --tw-slashed-zero: initial;\n      --tw-numeric-figure: initial;\n      --tw-numeric-spacing: initial;\n      --tw-numeric-fraction: initial;\n      --tw-outline-style: solid;\n      --tw-blur: initial;\n      --tw-brightness: initial;\n      --tw-contrast: initial;\n      --tw-grayscale: initial;\n      --tw-hue-rotate: initial;\n      --tw-invert: initial;\n      --tw-opacity: initial;\n      --tw-saturate: initial;\n      --tw-sepia: initial;\n      --tw-drop-shadow: initial;\n      --tw-drop-shadow-color: initial;\n      --tw-drop-shadow-alpha: 100%;\n      --tw-drop-shadow-size: initial;\n    }\n  }\n}\n@layer theme {\n  :root, :host {\n    --font-sans: ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\",\n      \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,\n      \"Liberation Mono\", \"Courier New\", monospace;\n    --default-transition-duration: 150ms;\n    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n    --default-font-family: var(--font-sans);\n    --default-font-feature-settings: var(--font-sans--font-feature-settings);\n    --default-font-variation-settings: var(\n      --font-sans--font-variation-settings\n    );\n    --default-mono-font-family: var(--font-mono);\n    --default-mono-font-feature-settings: var(\n      --font-mono--font-feature-settings\n    );\n    --default-mono-font-variation-settings: var(\n      --font-mono--font-variation-settings\n    );\n  }\n}\n@layer base {\n  *, ::after, ::before, ::backdrop, ::file-selector-button {\n    box-sizing: border-box;\n    margin: 0;\n    padding: 0;\n    border: 0 solid;\n  }\n  html, :host {\n    line-height: 1.5;\n    -webkit-text-size-adjust: 100%;\n    tab-size: 4;\n    font-family: var( --default-font-family, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\" );\n    font-feature-settings: var(--default-font-feature-settings, normal);\n    font-variation-settings: var( --default-font-variation-settings, normal );\n    -webkit-tap-highlight-color: transparent;\n  }\n  body {\n    line-height: inherit;\n  }\n  hr {\n    height: 0;\n    color: inherit;\n    border-top-width: 1px;\n  }\n  abbr:where([title]) {\n    -webkit-text-decoration: underline dotted;\n    text-decoration: underline dotted;\n  }\n  h1, h2, h3, h4, h5, h6 {\n    font-size: inherit;\n    font-weight: inherit;\n  }\n  a {\n    color: inherit;\n    -webkit-text-decoration: inherit;\n    text-decoration: inherit;\n  }\n  b, strong {\n    font-weight: bolder;\n  }\n  code, kbd, samp, pre {\n    font-family: var( --default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace );\n    font-feature-settings: var( --default-mono-font-feature-settings, normal );\n    font-variation-settings: var( --default-mono-font-variation-settings, normal );\n    font-size: 1em;\n  }\n  small {\n    font-size: 80%;\n  }\n  sub, sup {\n    font-size: 75%;\n    line-height: 0;\n    position: relative;\n    vertical-align: baseline;\n  }\n  sub {\n    bottom: -0.25em;\n  }\n  sup {\n    top: -0.5em;\n  }\n  table {\n    text-indent: 0;\n    border-color: inherit;\n    border-collapse: collapse;\n  }\n  :-moz-focusring {\n    outline: auto;\n  }\n  progress {\n    vertical-align: baseline;\n  }\n  summary {\n    display: list-item;\n  }\n  ol, ul, menu {\n    list-style: none;\n  }\n  img, svg, video, canvas, audio, iframe, embed, object {\n    display: block;\n    vertical-align: middle;\n  }\n  img, video {\n    max-width: 100%;\n    height: auto;\n  }\n  button, input, select, optgroup, textarea, ::file-selector-button {\n    font: inherit;\n    font-feature-settings: inherit;\n    font-variation-settings: inherit;\n    letter-spacing: inherit;\n    color: inherit;\n    border-radius: 0;\n    background-color: transparent;\n    opacity: 1;\n  }\n  :where(select:is([multiple], [size])) optgroup {\n    font-weight: bolder;\n  }\n  :where(select:is([multiple], [size])) optgroup option {\n    padding-inline-start: 20px;\n  }\n  ::file-selector-button {\n    margin-inline-end: 4px;\n  }\n  ::placeholder {\n    opacity: 1;\n    color: color-mix(in oklab, currentColor 50%, transparent);\n  }\n  textarea {\n    resize: vertical;\n  }\n  ::-webkit-search-decoration {\n    -webkit-appearance: none;\n  }\n  ::-webkit-date-and-time-value {\n    min-height: 1lh;\n    text-align: inherit;\n  }\n  ::-webkit-datetime-edit {\n    display: inline-flex;\n  }\n  ::-webkit-datetime-edit-fields-wrapper {\n    padding: 0;\n  }\n  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {\n    padding-block: 0;\n  }\n  :-moz-ui-invalid {\n    box-shadow: none;\n  }\n  button, input:where([type=\"button\"], [type=\"reset\"], [type=\"submit\"]), ::file-selector-button {\n    appearance: button;\n  }\n  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {\n    height: auto;\n  }\n  [hidden]:where(:not([hidden=\"until-found\"])) {\n    display: none !important;\n  }\n}\n@layer utilities {\n  .visible {\n    visibility: visible;\n  }\n  .absolute {\n    position: absolute;\n  }\n  .fixed {\n    position: fixed;\n  }\n  .relative {\n    position: relative;\n  }\n  .static {\n    position: static;\n  }\n  .container {\n    width: 100%;\n    @media (width >= 40rem) {\n      max-width: 40rem;\n    }\n    @media (width >= 48rem) {\n      max-width: 48rem;\n    }\n    @media (width >= 64rem) {\n      max-width: 64rem;\n    }\n    @media (width >= 80rem) {\n      max-width: 80rem;\n    }\n    @media (width >= 96rem) {\n      max-width: 96rem;\n    }\n  }\n  .block {\n    display: block;\n  }\n  .contents {\n    display: contents;\n  }\n  .flex {\n    display: flex;\n  }\n  .grid {\n    display: grid;\n  }\n  .hidden {\n    display: none;\n  }\n  .inline {\n    display: inline;\n  }\n  .inline-block {\n    display: inline-block;\n  }\n  .inline-flex {\n    display: inline-flex;\n  }\n  .transform {\n    transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);\n  }\n  .resize {\n    resize: both;\n  }\n  .rounded {\n    border-radius: 0.25rem;\n  }\n  .border {\n    border-style: var(--tw-border-style);\n    border-width: 1px;\n  }\n  .italic {\n    font-style: italic;\n  }\n  .tabular-nums {\n    --tw-numeric-spacing: tabular-nums;\n    font-variant-numeric: var(--tw-ordinal,) var(--tw-slashed-zero,) var(--tw-numeric-figure,) var(--tw-numeric-spacing,) var(--tw-numeric-fraction,);\n  }\n  .antialiased {\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n  }\n  .outline {\n    outline-style: var(--tw-outline-style);\n    outline-width: 1px;\n  }\n  .blur {\n    --tw-blur: blur(8px);\n    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);\n  }\n  .grayscale {\n    --tw-grayscale: grayscale(100%);\n    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);\n  }\n  .filter {\n    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);\n  }\n  .transition {\n    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;\n    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));\n    transition-duration: var(--tw-duration, var(--default-transition-duration));\n  }\n}\n@property --tw-rotate-x {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: rotateX(0);\n}\n@property --tw-rotate-y {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: rotateY(0);\n}\n@property --tw-rotate-z {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: rotateZ(0);\n}\n@property --tw-skew-x {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: skewX(0);\n}\n@property --tw-skew-y {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: skewY(0);\n}\n@property --tw-border-style {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: solid;\n}\n@property --tw-ordinal {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-slashed-zero {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-numeric-figure {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-numeric-spacing {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-numeric-fraction {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-outline-style {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: solid;\n}\n@property --tw-blur {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-brightness {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-contrast {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-grayscale {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-hue-rotate {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-invert {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-opacity {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-saturate {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-sepia {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-drop-shadow {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-drop-shadow-color {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-drop-shadow-alpha {\n  syntax: \"<percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-drop-shadow-size {\n  syntax: \"*\";\n  inherits: false;\n}\r\n", "",{"version":3,"sources":["webpack://./src/index.css"],"names":[],"mappings":"AAAA,gEACA;AADA,yCACA;AADA;EAAA;IAAA;MAAA,yBACA;MADA,yBACA;MADA,yBACA;MADA,qBACA;MADA,qBACA;MADA,wBACA;MADA,qBACA;MADA,0BACA;MADA,4BACA;MADA,6BACA;MADA,8BACA;MADA,yBACA;MADA,kBACA;MADA,wBACA;MADA,sBACA;MADA,uBACA;MADA,wBACA;MADA,oBACA;MADA,qBACA;MADA,sBACA;MADA,mBACA;MADA,yBACA;MADA,+BACA;MADA,4BACA;MADA,8BACA;IAAA;EAAA;AAAA;AADA;EAAA;IAAA;6DACA;IADA;iDACA;IADA,oCACA;IADA,kEACA;IADA,uCACA;IADA,wEACA;IADA;;KACA;IADA,4CACA;IADA;;KACA;IADA;;KACA;EAAA;AAAA;AADA;EAAA;IAAA,sBACA;IADA,SACA;IADA,UACA;IADA,eACA;EAAA;EADA;IAAA,gBACA;IADA,8BACA;IADA,WACA;IADA,6JACA;IADA,mEACA;IADA,yEACA;IADA,wCACA;EAAA;EADA;IAAA,oBACA;EAAA;EADA;IAAA,SACA;IADA,cACA;IADA,qBACA;EAAA;EADA;IAAA,yCACA;IADA,iCACA;EAAA;EADA;IAAA,kBACA;IADA,oBACA;EAAA;EADA;IAAA,cACA;IADA,gCACA;IADA,wBACA;EAAA;EADA;IAAA,mBACA;EAAA;EADA;IAAA,kJACA;IADA,0EACA;IADA,8EACA;IADA,cACA;EAAA;EADA;IAAA,cACA;EAAA;EADA;IAAA,cACA;IADA,cACA;IADA,kBACA;IADA,wBACA;EAAA;EADA;IAAA,eACA;EAAA;EADA;IAAA,WACA;EAAA;EADA;IAAA,cACA;IADA,qBACA;IADA,yBACA;EAAA;EADA;IAAA,aACA;EAAA;EADA;IAAA,wBACA;EAAA;EADA;IAAA,kBACA;EAAA;EADA;IAAA,gBACA;EAAA;EADA;IAAA,cACA;IADA,sBACA;EAAA;EADA;IAAA,eACA;IADA,YACA;EAAA;EADA;IAAA,aACA;IADA,8BACA;IADA,gCACA;IADA,uBACA;IADA,cACA;IADA,gBACA;IADA,6BACA;IADA,UACA;EAAA;EADA;IAAA,mBACA;EAAA;EADA;IAAA,0BACA;EAAA;EADA;IAAA,sBACA;EAAA;EADA;IAAA,UACA;IADA,yDACA;EAAA;EADA;IAAA,gBACA;EAAA;EADA;IAAA,wBACA;EAAA;EADA;IAAA,eACA;IADA,mBACA;EAAA;EADA;IAAA,oBACA;EAAA;EADA;IAAA,UACA;EAAA;EADA;IAAA,gBACA;EAAA;EADA;IAAA,gBACA;EAAA;EADA;IAAA,kBACA;EAAA;EADA;IAAA,YACA;EAAA;EADA;IAAA,wBACA;EAAA;AAAA;AADA;EAAA;IAAA,mBACA;EAAA;EADA;IAAA,kBACA;EAAA;EADA;IAAA,eACA;EAAA;EADA;IAAA,kBACA;EAAA;EADA;IAAA,gBACA;EAAA;EADA;IAAA,WACA;IADA;MAAA,gBACA;IAAA;IADA;MAAA,gBACA;IAAA;IADA;MAAA,gBACA;IAAA;IADA;MAAA,gBACA;IAAA;IADA;MAAA,gBACA;IAAA;EAAA;EADA;IAAA,cACA;EAAA;EADA;IAAA,iBACA;EAAA;EADA;IAAA,aACA;EAAA;EADA;IAAA,aACA;EAAA;EADA;IAAA,aACA;EAAA;EADA;IAAA,eACA;EAAA;EADA;IAAA,qBACA;EAAA;EADA;IAAA,oBACA;EAAA;EADA;IAAA,qGACA;EAAA;EADA;IAAA,YACA;EAAA;EADA;IAAA,sBACA;EAAA;EADA;IAAA,oCACA;IADA,iBACA;EAAA;EADA;IAAA,kBACA;EAAA;EADA;IAAA,kCACA;IADA,iJACA;EAAA;EADA;IAAA,mCACA;IADA,kCACA;EAAA;EADA;IAAA,sCACA;IADA,kBACA;EAAA;EADA;IAAA,oBACA;IADA,0LACA;EAAA;EADA;IAAA,+BACA;IADA,0LACA;EAAA;EADA;IAAA,0LACA;EAAA;EADA;IAAA,mRACA;IADA,qFACA;IADA,2EACA;EAAA;AAAA;AADA;EAAA,WACA;EADA,eACA;EADA,yBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;EADA,yBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;EADA,yBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;EADA,uBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;EADA,uBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;EADA,oBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;EADA,oBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA;AADA;EAAA,sBACA;EADA,eACA;EADA,mBACA;AAAA;AADA;EAAA,WACA;EADA,eACA;AAAA","sourcesContent":["@import \"tailwindcss\";\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -112851,7 +114598,7 @@ var z = /*#__PURE__*/Object.freeze({
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
 /******/ 	__webpack_require__(6507);
-/******/ 	__webpack_require__(4185);
+/******/ 	__webpack_require__(3809);
 /******/ 	__webpack_require__(3610);
 /******/ 	var __webpack_exports__ = __webpack_require__(3482);
 /******/ 	

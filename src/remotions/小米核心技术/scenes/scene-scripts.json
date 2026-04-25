@@ -3,305 +3,308 @@
   "scenes": [
     {
       "sceneId": "scene_1",
-      "sceneName": "引入：核心技术误区",
+      "sceneName": "引入",
       "items": [
         {
           "narrativeType": "HOOK",
-          "template": "CENTER_FOCUS",
-          "reasoning": "平缓叙述，引出话题，适合用默认的居中展示模板。",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "同一段内三层递进（争论者→没搞懂→更不知底牌），情绪与画面节拍递进，选 BEAT_SEQUENCE 优于零散 CENTER_FOCUS。",
           "content": [
             {
-              "text": "争论小米有没有核心技术的人，"
+              "text": "争论小米有没有核心技术的人，",
+              "startFrame": 0,
+              "durationFrames": 65
+            },
+            {
+              "text": "不仅没搞懂到底什么叫核心技术，",
+              "startFrame": 64,
+              "durationFrames": 68
+            },
+            {
+              "text": "更对它的恐怖研发底牌一无所知。",
+              "startFrame": 132,
+              "durationFrames": 76
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一群人正在激烈的争论的画面",
-            "enterEffect": "fadeIn",
-            "anchors": [
+            "stages": [
               {
-                "text": "核心技术",
-                "showFrom": 0,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": null
+                "imageSrc": "images/小米核心技术/scene_1_1_img0.png",
+                "enterEffect": "fadeIn",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "images/小米核心技术/scene_1_1_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 1
+              },
+              {
+                "imageSrc": "images/小米核心技术/scene_1_1_img2.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert",
+                "showFrom": 2
               }
             ]
-          }
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "COGNITIVE_SHIFT",
-          "reasoning": "典型的“不是…而是…”句式，属于认知转变，适合用`COGNITIVE_SHIFT`。",
-          "content": [
-            {
-              "text": "不仅没搞懂到底什么叫核心技术，"
-            }
-          ],
-          "order": 2,
-          "param": {
-            "notText": "没搞懂核心技术",
-            "butText": "掌握研发底牌",
-            "butSrc": "堆满高科技芯片和精密仪器的实验室",
-            "notContentIndex": 0,
-            "butContentIndex": 0,
-            "anchors": []
-          }
-        },
-        {
-          "narrativeType": "HOOK",
-          "template": "CENTER_FOCUS",
-          "reasoning": "平缓叙述，引出话题，适合用默认的居中展示模板。",
-          "content": [
-            {
-              "text": "更对它的恐怖研发底牌一无所知。"
-            }
-          ],
-          "order": 3,
-          "param": {
-            "imageSrc": "一个人困惑地看着前方，周围有问号的抽象概念图",
-            "enterEffect": "fadeIn",
-            "anchors": []
-          }
+          },
+          "totalDurationFrames": 208
         }
-      ]
+      ],
+      "audioSrc": "/audio/小米核心技术/scene_1/scene_1.mp3",
+      "totalDurationFrames": 210
     },
     {
       "sceneId": "scene_2",
-      "sceneName": "剖析：超级供应链整合",
+      "sceneName": "剖析",
       "items": [
         {
           "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "平缓叙述，定义核心技术，无明显结构特征，使用默认模板。",
+          "template": "METHOD_STACK",
+          "reasoning": "「先下定义 + 常见误解 + 多条并列条件」属于单标题多句展开，METHOD_STACK 比连续 CENTER_FOCUS 更贴叙事结构。",
           "content": [
             {
-              "text": "我们先说说什么叫核心技术。"
+              "text": "我们先说说什么叫核心技术。",
+              "startFrame": 0,
+              "durationFrames": 62
+            },
+            {
+              "text": "很多人认为，必须从零开始造轮子，",
+              "startFrame": 61,
+              "durationFrames": 89
+            },
+            {
+              "text": "架构要自己画，光刻机要自己造，芯片也要自己生产，",
+              "startFrame": 149,
+              "durationFrames": 123
+            },
+            {
+              "text": "才配得到一句网民的肯定。",
+              "startFrame": 271,
+              "durationFrames": 63
+            },
+            {
+              "text": "但这不过是落后的老农种地思维。",
+              "startFrame": 333,
+              "durationFrames": 75
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一个齿轮的特写",
-            "enterEffect": "fadeIn",
-            "anchors": [
+            "title": "什么叫核心技术",
+            "imageSrc": "images/小米核心技术/scene_2_1.png",
+            "notes": [
               {
-                "text": "核心技术",
-                "showFrom": 0,
-                "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "ping"
-              }
-            ]
-          }
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "描述一种错误观点，使用默认模板。",
-          "content": [
-            {
-              "text": "很多人认为，"
-            },
-            {
-              "text": "必须从零开始造轮子，"
-            },
-            {
-              "text": "\n架构要自己画，"
-            },
-            {
-              "text": "光刻机要自己造，"
-            },
-            {
-              "text": "芯片也要自己生产，"
-            },
-            {
-              "text": "\n才配得到一句网民的肯定。"
-            }
-          ],
-          "order": 2,
-          "param": {
-            "imageSrc": "工厂生产线上，机器臂正在组装芯片",
-            "enterEffect": "fadeIn",
-            "anchors": [
-              {
-                "text": "造轮子",
-                "showFrom": 1,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
+                "text": "从零造轮子",
+                "showFrom": 1
               },
               {
-                "text": "核心技术",
-                "showFrom": 4,
-                "color": "#000000",
-                "anim": "slideUp",
-                "audioEffect": "ping"
+                "text": "全栈自研想象",
+                "showFrom": 2
+              },
+              {
+                "text": "老农种地思维",
+                "showFrom": 4
               }
             ]
-          }
+          },
+          "totalDurationFrames": 408
         },
         {
           "narrativeType": "LOGIC",
           "template": "COGNITIVE_SHIFT",
-          "reasoning": "明确指出“不是...而是...”，属于认知转变，使用COGNITIVE_SHIFT。",
+          "reasoning": "口播含明确的「早就不是…而是…」对立翻转，符合 COGNITIVE_SHIFT 语义。",
           "content": [
             {
-              "text": "但这不过是落后的老农种地思维。"
+              "text": "在高度分工的现代商业里，",
+              "startFrame": 0,
+              "durationFrames": 55
             },
             {
-              "text": "\n在高度分工的现代商业里，"
+              "text": "最深的护城河，早就不是单点突破。",
+              "startFrame": 54,
+              "durationFrames": 80
             },
             {
-              "text": "\n最深的护城河，"
+              "text": "而是对超级供应链的恐怖整合能力。",
+              "startFrame": 133,
+              "durationFrames": 86
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "单点突破",
+            "butText": "供应链整合",
+            "butSrc": "images/小米核心技术/scene_2_2.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2
+          },
+          "totalDurationFrames": 219
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "场景化举例（拼机跑分→灾难），单主图叙述即可。",
+          "content": [
+            {
+              "text": "你可以试着组装一台手机看看，",
+              "startFrame": 0,
+              "durationFrames": 62
             },
             {
-              "text": "早就不是单点突破。"
+              "text": "把最好的芯片、屏幕和镜头，",
+              "startFrame": 61,
+              "durationFrames": 62
             },
             {
-              "text": "\n而是对超级供应链的恐怖整合能力。"
+              "text": "凑在一块强行跑个分。",
+              "startFrame": 122,
+              "durationFrames": 54
+            },
+            {
+              "text": "结果一定是一场灾难。",
+              "startFrame": 175,
+              "durationFrames": 52
             }
           ],
           "order": 3,
           "param": {
-            "notText": "单点突破",
-            "butText": "整合能力",
-            "butSrc": "繁忙的巨型自动化工厂车间，无数机械臂协同工作",
-            "notContentIndex": 3,
-            "butContentIndex": 4,
-            "anchors": []
-          }
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "举例说明，描述组装手机的灾难性结果，使用默认模板。",
-          "content": [
-            {
-              "text": "你可以试着组装一台手机看看，"
-            },
-            {
-              "text": "\n把最好的芯片、"
-            },
-            {
-              "text": "屏幕和镜头，"
-            },
-            {
-              "text": "\n凑在一块强行跑个分。"
-            },
-            {
-              "text": "\n结果一定是一场灾难。"
-            }
-          ],
-          "order": 4,
-          "param": {
-            "imageSrc": "一堆手机零件散落在桌子上，有人尝试组装",
+            "imageSrc": "images/小米核心技术/scene_2_3.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
                 "text": "灾难",
-                "showFrom": 4,
+                "showFrom": 3,
                 "color": "#EF4444",
                 "anim": "spring",
                 "audioEffect": "impact_thud"
               }
             ]
-          }
+          },
+          "totalDurationFrames": 227
         },
         {
           "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "提出一系列问题，引出背后的挑战，使用默认模板。",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "四句排比追问同一镜头内节拍递进，BEAT_SEQUENCE 比单图 CENTER_FOCUS 更贴「连珠炮」节奏。",
           "content": [
             {
-              "text": "硬件底层的通讯怎么打通？"
+              "text": "硬件底层的通讯怎么打通？",
+              "startFrame": 0,
+              "durationFrames": 64
             },
             {
-              "text": "\n功耗如何榨取到极限？"
+              "text": "功耗如何榨取到极限？",
+              "startFrame": 63,
+              "durationFrames": 59
             },
             {
-              "text": "\n如何在千万级量产下，"
+              "text": "如何在千万级量产下，",
+              "startFrame": 122,
+              "durationFrames": 55
             },
             {
-              "text": "\n把良品率咬死在百分之九十九以上？"
+              "text": "把良品率咬死在百分之九十九以上？",
+              "startFrame": 176,
+              "durationFrames": 78
+            }
+          ],
+          "order": 4,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/小米核心技术/scene_2_4_img0.png",
+                "enterEffect": "slideBottom",
+                "tone": "calm",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/小米核心技术/scene_2_4_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 1
+              },
+              {
+                "imageSrc": "images/小米核心技术/scene_2_4_img2.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 2
+              }
+            ]
+          },
+          "totalDurationFrames": 254
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "「算法调优→撬动供应商→节奏协同」为机制传导链，CAUSE_CHAIN 比平铺 CENTER_FOCUS 更贴语义。",
+          "content": [
+            {
+              "text": "这背后需要海量的算法调优。",
+              "startFrame": 0,
+              "durationFrames": 66
+            },
+            {
+              "text": "小米能让全球最顶尖的供应商，",
+              "startFrame": 65,
+              "durationFrames": 74
+            },
+            {
+              "text": "心甘情愿配合它的节奏。",
+              "startFrame": 138,
+              "durationFrames": 57
             }
           ],
           "order": 5,
           "param": {
-            "imageSrc": "复杂的电路板",
-            "enterEffect": "fadeIn",
-            "anchors": [
+            "layout": "horizontal",
+            "nodes": [
               {
-                "text": "算法调优",
-                "showFrom": 3,
-                "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "ping"
-              }
-            ]
-          }
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "描述算法调优的重要性，小米的供应链整合能力，使用默认模板。",
-          "content": [
-            {
-              "text": "这背后需要海量的算法调优。"
-            },
-            {
-              "text": "\n小米能让全球最顶尖的供应商，"
-            },
-            {
-              "text": "\n心甘情愿配合它的节奏。"
-            }
-          ],
-          "order": 6,
-          "param": {
-            "imageSrc": "复杂的算法优化流程图",
-            "enterEffect": "fadeIn",
-            "anchors": [
-              {
-                "text": "算法调优",
+                "label": "算法调优",
+                "imageSrc": "images/小米核心技术/scene_2_5_img0.png",
                 "showFrom": 0,
-                "color": "#000000",
-                "anim": "highlight",
-                "audioEffect": "ping"
+                "enterEffect": "fadeIn"
               },
               {
-                "text": "供应商",
+                "label": "顶尖供应商",
+                "imageSrc": "images/小米核心技术/scene_2_5_img1.png",
                 "showFrom": 1,
-                "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "woosh"
+                "enterEffect": "slideLeft"
               },
               {
-                "text": "配合节奏",
+                "label": "节奏协同",
+                "imageSrc": "images/小米核心技术/scene_2_5_img2.png",
                 "showFrom": 2,
-                "color": "#EF4444",
-                "anim": "popIn",
-                "audioEffect": "impact_thud"
+                "enterEffect": "zoomIn"
               }
             ]
-          }
+          },
+          "totalDurationFrames": 196
         },
         {
           "narrativeType": "CONCLUSION",
           "template": "CENTER_FOCUS",
-          "reasoning": "总结小米的系统能力，使用默认模板。",
+          "reasoning": "比喻收束（孤岛—高速公路—系统能力）适合单主图强化意象。",
           "content": [
             {
-              "text": "在这无数个硬件孤岛里，"
+              "text": "在这无数个硬件孤岛里，",
+              "startFrame": 0,
+              "durationFrames": 53
             },
             {
-              "text": "\n硬生生蹚出一条澎湃系统的高速公路。"
+              "text": "硬生生蹚出一条澎湃系统的高速公路。",
+              "startFrame": 52,
+              "durationFrames": 87
             },
             {
-              "text": "\n这就是别人抄不走的系统能力。"
+              "text": "这就是别人抄不走的系统能力。",
+              "startFrame": 138,
+              "durationFrames": 67
             }
           ],
-          "order": 7,
+          "order": 6,
           "param": {
-            "imageSrc": "一条高速公路在群岛中延伸的抽象概念图，象征系统互联互通",
+            "imageSrc": "images/小米核心技术/scene_2_6.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -312,311 +315,252 @@
                 "audioEffect": "impact_thud"
               },
               {
-                "text": "高速公路",
-                "showFrom": 1,
-                "color": "#000000",
-                "anim": "slideUp",
-                "audioEffect": "woosh"
-              },
-              {
                 "text": "系统能力",
                 "showFrom": 2,
-                "color": "#EF4444",
+                "color": "#2563EB",
                 "anim": "popIn",
                 "audioEffect": "ping"
               }
             ]
-          }
+          },
+          "totalDurationFrames": 205
         }
-      ]
+      ],
+      "audioSrc": "/audio/小米核心技术/scene_2/scene_2.mp3",
+      "totalDurationFrames": 1510
     },
     {
       "sceneId": "scene_3",
-      "sceneName": "剖析：百亿研发底牌",
+      "sceneName": "研发底牌",
       "items": [
         {
           "narrativeType": "TRANSITION",
-          "template": "CENTER_FOCUS",
-          "reasoning": "平缓过渡，开启新话题，适合默认的单图居中模板。",
+          "template": "QUOTE_CITATION",
+          "reasoning": "过渡后给出一句可独立成条的立论口径，QUOTE_CITATION 用出处+版心打字强化「背书感」；首句过渡不入版心，showFrom 对齐第二句。",
           "content": [
             {
-              "text": "我们再讲讲小米的研发底牌。"
+              "text": "我们再讲讲小米的研发底牌。",
+              "startFrame": 0,
+              "durationFrames": 82
+            },
+            {
+              "text": "小米不仅是做整合，还在死磕自研。",
+              "startFrame": 81,
+              "durationFrames": 84
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "演讲者站在聚光灯下的舞台上",
-            "enterEffect": "fadeIn",
-            "anchors": [
-              {
-                "text": "小米",
-                "showFrom": 0,
-                "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "ping"
-              },
-              {
-                "text": "研发底牌",
-                "showFrom": 0,
-                "color": "#EF4444",
-                "anim": "highlight",
-                "audioEffect": "woosh"
-              }
-            ]
-          }
+            "quoteSource": "整合 & 研发",
+            "quoteDisplayText": "小米不仅是做整合，还在死磕自研。",
+            "showFrom": 1
+          },
+          "totalDurationFrames": 166
         },
         {
-          "narrativeType": "LOGIC",
-          "template": "COGNITIVE_SHIFT",
-          "reasoning": "典型的“不是...而是...”结构，用认知转变模板。",
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "口播给出研发投入 331 亿元与研发人员超 2.5 万（口径 25000 人）两个整数锚点，KPI_HERO 多列 blocks 随句递进展示。",
           "content": [
             {
-              "text": "小米不仅是做整合，"
+              "text": "翻开小米最新的财报数据。",
+              "startFrame": 0,
+              "durationFrames": 77
             },
             {
-              "text": "还在死磕自研。"
+              "text": "过去一年研发投入已达到331亿元。",
+              "startFrame": 76,
+              "durationFrames": 106
+            },
+            {
+              "text": "研发人员规模也已超过2.5万人。",
+              "startFrame": 182,
+              "durationFrames": 87
             }
           ],
           "order": 2,
           "param": {
-            "notText": "做整合",
-            "butText": "死磕自研",
-            "butSrc": "工程师在实验室里研究芯片",
-            "notContentIndex": 0,
-            "butContentIndex": 1,
-            "anchors": []
-          }
+            "blocks": [
+              {
+                "value": 331,
+                "suffix": "亿元",
+                "label": "研发投入",
+                "showFrom": 1
+              },
+              {
+                "value": 2.5,
+                "suffix": "万人",
+                "label": "研发人员规模",
+                "showFrom": 2,
+                "useGrouping": true
+              }
+            ]
+          },
+          "totalDurationFrames": 269
         },
         {
-          "narrativeType": "TRANSITION",
-          "template": "CENTER_FOCUS",
-          "reasoning": "为数据做铺垫，选择默认模板。",
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "「审计公开数据」对照「营销费冒充研发」为明确对错避坑叙事，DOS_AND_DONTS 比平铺叙述更贴。",
           "content": [
             {
-              "text": "翻开小米最新的财报数据。"
+              "text": "这可是上市公司有审计的公开数据。",
+              "startFrame": 0,
+              "durationFrames": 80
+            },
+            {
+              "text": "不是某些把公关营销费用都算在研发里的公司所能比拟的。",
+              "startFrame": 79,
+              "durationFrames": 123
             }
           ],
           "order": 3,
           "param": {
-            "imageSrc": "图表数据增长的趋势",
-            "enterEffect": "fadeIn",
-            "anchors": [
-              {
-                "text": "财报数据",
-                "showFrom": 0,
-                "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "ping"
-              }
-            ]
-          }
+            "left": {
+              "label": "可信口径",
+              "src": "images/小米核心技术/scene_3_3_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "掺水对比",
+              "src": "images/小米核心技术/scene_3_3_right.png",
+              "showFrom": 0
+            }
+          },
+          "totalDurationFrames": 203
         },
         {
           "narrativeType": "DATA",
           "template": "KPI_HERO",
-          "reasoning": "强调单个核心数值，选择KPI_HERO模板。",
+          "reasoning": "口播明确「九成以上」，可抽象为单指标 90% 强调。",
           "content": [
             {
-              "text": "过去一年研发投入飙过了几百亿。"
+              "text": "这个数据已经超过了全世界九成以上的高科技企业。",
+              "startFrame": 0,
+              "durationFrames": 106
             }
           ],
           "order": 4,
           "param": {
-            "value": 300,
-            "suffix": "亿",
-            "headline": "研发投入",
-            "countDuration": 36,
-            "anchors": []
-          }
+            "value": 90,
+            "prefix": "",
+            "suffix": "%",
+            "label": "超越全球九成高科企业"
+          },
+          "totalDurationFrames": 106
         },
         {
-          "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "补充说明数据的权威性，选择默认模板。",
+          "narrativeType": "CASE",
+          "template": "METHOD_STACK",
+          "reasoning": "比喻句 + 案例句 + 人力投入，为「造车难度」单核多句展开。",
           "content": [
             {
-              "text": "这可是上市公司有审计的公开数据。"
+              "text": "造车方面，",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "自研超级电机，碾压行业量产天花板。",
+              "startFrame": 31,
+              "durationFrames": 103
+            },
+            {
+              "text": "SiC 电控，转换效率高达99.85%",
+              "startFrame": 134,
+              "durationFrames": 110
+            },
+            {
+              "text": "一体化压铸，已达万吨级。",
+              "startFrame": 243,
+              "durationFrames": 77
             }
           ],
           "order": 5,
           "param": {
-            "imageSrc": "审计报告文件的图标",
-            "enterEffect": "fadeIn",
-            "anchors": [
+            "title": "造车",
+            "imageSrc": "images/小米核心技术/scene_3_5.png",
+            "notes": [
               {
-                "text": "上市公司",
-                "showFrom": 0,
-                "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "ping"
+                "text": "自研超级电机",
+                "showFrom": 1
               },
               {
-                "text": "公开数据",
-                "showFrom": 0,
-                "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "ping"
+                "text": "SiC 电控",
+                "showFrom": 2
+              },
+              {
+                "text": "一体化压铸",
+                "showFrom": 3
               }
             ]
-          }
+          },
+          "totalDurationFrames": 320
         },
         {
-          "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "反面衬托，选择默认模板。",
+          "narrativeType": "CASE",
+          "template": "METHOD_STACK",
+          "reasoning": "同一镜头内「领域引入 → MiMo 自研 → 推理与成本优势」为单标题下的多句展开，METHOD_STACK 的 title + notes 对齐各句下标。",
           "content": [
             {
-              "text": "不是某些把公关营销费用都算在研发里的公司所能比拟的。"
-            }
-          ],
-          "order": 6,
-          "param": {
-            "imageSrc": "公司财务报表数据图表",
-            "enterEffect": "fadeIn",
-            "anchors": []
-          }
-        },
-        {
-          "narrativeType": "DATA",
-          "template": "KPI_HERO",
-          "reasoning": "强调单个核心数值，选择KPI_HERO模板。",
-          "content": [
+              "text": "在AI智能领域，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
             {
-              "text": "这个数据已经超过了全世界九成以上的高科技企业。"
+              "text": "自研模型MiMo，世界第一梯队的智能体验。",
+              "startFrame": 38,
+              "durationFrames": 92
+            },
+            {
+              "text": "并在推理速度与算力成本控制上表现出断崖式的领先优势",
+              "startFrame": 130,
+              "durationFrames": 158
             }
           ],
           "order": 7,
           "param": {
-            "value": 90,
-            "prefix": "",
-            "suffix": "%",
-            "headline": "超过全球高科技企业",
-            "anchors": []
-          }
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "简单比喻，选择默认模板。",
-          "content": [
-            {
-              "text": "造一辆车不是去超市买菜。"
-            }
-          ],
-          "order": 8,
-          "param": {
-            "imageSrc": "一辆汽车停在超市门口，超市里人来人往",
-            "enterEffect": "fadeIn",
-            "anchors": []
-          }
-        },
-        {
-          "narrativeType": "CASE",
-          "template": "CENTER_FOCUS",
-          "reasoning": "具体案例，强调努力，选择默认模板。",
-          "content": [
-            {
-              "text": "小米汽车的底盘架构，"
-            },
-            {
-              "text": "\n是几千个工程师硬生生啃下来的。"
-            }
-          ],
-          "order": 9,
-          "param": {
-            "imageSrc": "工程师团队围着汽车底盘模型进行讨论",
-            "enterEffect": "slideBottom",
-            "anchors": [
+            "title": "AI 智能",
+            "imageSrc": "images/小米核心技术/scene_3_7.png",
+            "notes": [
               {
-                "text": "小米汽车",
-                "showFrom": 0,
-                "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "ping"
+                "text": "世界第一梯队的智能体验",
+                "showFrom": 1
               },
               {
-                "text": "底盘架构",
-                "showFrom": 0,
-                "color": "#000000",
-                "anim": "popIn",
-                "audioEffect": null
-              },
-              {
-                "text": "硬生生啃下来",
-                "showFrom": 1,
-                "color": "#EF4444",
-                "anim": "highlight",
-                "audioEffect": "impact_thud"
+                "text": "断崖领先的推理速度与算力成本控制",
+                "showFrom": 2
               }
             ]
-          }
-        },
-        {
-          "narrativeType": "DATA",
-          "template": "KPI_HERO",
-          "reasoning": "强调单个核心数值，选择KPI_HERO模板。",
-          "content": [
-            {
-              "text": "它的超级电机转速，"
-            },
-            {
-              "text": "\n直接捅破了行业的量产天花板。"
-            }
-          ],
-          "order": 10,
-          "param": {
-            "value": 100,
-            "prefix": "",
-            "suffix": "%",
-            "headline": "超级电机转速",
-            "anchors": []
-          }
-        },
-        {
-          "narrativeType": "DATA",
-          "template": "KPI_HERO",
-          "reasoning": "强调单个核心数值，选择KPI_HERO模板。",
-          "content": [
-            {
-              "text": "在自动驾驶系统领域，"
-            },
-            {
-              "text": "\n小米手里的绝对专利数，"
-            },
-            {
-              "text": "\n早就默默排进了全球前十。"
-            }
-          ],
-          "order": 11,
-          "param": {
-            "value": 10,
-            "prefix": "全球",
-            "suffix": "强",
-            "headline": "绝对专利数",
-            "anchors": []
-          }
+          },
+          "totalDurationFrames": 288
         }
-      ]
+      ],
+      "audioSrc": "/audio/小米核心技术/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1351
     },
     {
       "sceneId": "scene_4",
-      "sceneName": "反转：技术洁癖双标",
+      "sceneName": "双标",
       "items": [
         {
           "narrativeType": "LOGIC",
           "template": "CENTER_FOCUS",
-          "reasoning": "铺垫观点，平缓叙述，使用居中模板。",
+          "reasoning": "立靶子（嘲笑组装厂 + 双标洁癖），单图情绪铺垫。",
           "content": [
             {
-              "text": "那些成天嘲笑它是组装厂的人，"
+              "text": "那些成天嘲笑它是组装厂的人，",
+              "startFrame": 0,
+              "durationFrames": 86
             },
             {
-              "text": "\n陷入了极度双标的技术洁癖。"
+              "text": "陷入了极度双标的技术洁癖。",
+              "startFrame": 85,
+              "durationFrames": 71
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一群人嘲笑别人的简笔画",
+            "imageSrc": "images/小米核心技术/scene_4_1.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -625,159 +569,142 @@
                 "color": "#EF4444",
                 "anim": "spring",
                 "audioEffect": "impact_thud"
-              },
-              {
-                "text": "洁癖",
-                "showFrom": 1,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
               }
             ]
-          }
+          },
+          "totalDurationFrames": 156
         },
         {
           "narrativeType": "LOGIC",
-          "template": "COGNITIVE_SHIFT",
-          "reasoning": "明显的“对...视而不见，对...却...”结构，属于认知偏差，使用COGNITIVE_SHIFT模板。",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "「对 A 视而不见 / 对 B 却…」为并列对照而非「不是而是」，中立 SPLIT_COMPARE 比 COGNITIVE_SHIFT 更贴文案结构。",
           "content": [
             {
-              "text": "对国外巨头采购硬件视而不见。"
+              "text": "对国外巨头采购硬件视而不见。",
+              "startFrame": 0,
+              "durationFrames": 78
             },
             {
-              "text": "\n对自己人却抱着莫须有的耻辱感。"
+              "text": "对自己人却抱着莫须有的耻辱感。",
+              "startFrame": 77,
+              "durationFrames": 79
             }
           ],
           "order": 2,
           "param": {
-            "notText": "国外巨头",
-            "butText": "自己人",
-            "butSrc": "特写镜头，一个自豪的工程师正在检查芯片",
-            "notContentIndex": 0,
-            "butContentIndex": 1,
-            "anchors": []
-          }
+            "leftSrc": "images/小米核心技术/scene_4_2_left.png",
+            "rightSrc": "images/小米核心技术/scene_4_2_right.png",
+            "leftLabel": "对国外",
+            "rightLabel": "对自己人"
+          },
+          "totalDurationFrames": 156
         },
         {
           "narrativeType": "LOGIC",
-          "template": "COGNITIVE_SHIFT",
-          "reasoning": "明显的“对...视而不见，却对...”结构，属于认知偏差，使用COGNITIVE_SHIFT模板。",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "第二组「对研发视而不见 / 对陈词滥调却…」同样为并列双标对照。",
           "content": [
             {
-              "text": "对账本上的百亿研发视而不见。"
+              "text": "对账本上的百亿研发视而不见。",
+              "startFrame": 0,
+              "durationFrames": 77
             },
             {
-              "text": "\n却对十年前的陈词滥调倒背如流。"
+              "text": "却对十年前的陈词滥调倒背如流。",
+              "startFrame": 76,
+              "durationFrames": 90
             }
           ],
           "order": 3,
           "param": {
-            "notText": "百亿研发",
-            "butText": "十年陈词滥调",
-            "butSrc": "一个老旧的卷轴，上面写满了文字",
-            "notContentIndex": 0,
-            "butContentIndex": 1,
-            "anchors": []
-          }
+            "leftSrc": "images/小米核心技术/scene_4_3_left.png",
+            "rightSrc": "images/小米核心技术/scene_4_3_right.png",
+            "leftLabel": "百亿研发",
+            "rightLabel": "陈旧偏见"
+          },
+          "totalDurationFrames": 166
         },
         {
           "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "承接上文，提出假设，并解释原因，使用居中模板。",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "反问→鲶鱼撕咬→地板价，为同一镜头内「问—机制—结果」递进。",
           "content": [
             {
-              "text": "可是你想过没有？"
+              "text": "可是你想过没有？",
+              "startFrame": 0,
+              "durationFrames": 43
             },
             {
-              "text": "\n没有这样像鲶鱼一样的企业在前面撕咬。"
+              "text": "没有这样像鲶鱼一样的企业在前面撕咬。",
+              "startFrame": 42,
+              "durationFrames": 83
             },
             {
-              "text": "\n逼着产业链把成本打到地板价。"
+              "text": "逼着产业链把成本打到地板价。",
+              "startFrame": 125,
+              "durationFrames": 86
+            },
+            {
+              "text": "你今天买一部好用的智能设备，",
+              "startFrame": 210,
+              "durationFrames": 74
+            },
+            {
+              "text": "至少还要多掏一半的冤枉钱。",
+              "startFrame": 283,
+              "durationFrames": 75
             }
           ],
           "order": 4,
           "param": {
-            "imageSrc": "鲶鱼在水中游动的动画",
-            "enterEffect": "fadeIn",
-            "anchors": [
+            "stages": [
               {
-                "text": "鲶鱼效应",
-                "showFrom": 1,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
+                "imageSrc": "images/小米核心技术/scene_4_4_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm"
               },
               {
-                "text": "地板价",
-                "showFrom": 2,
-                "color": "#000000",
-                "anim": "highlight",
-                "audioEffect": "ping"
-              }
-            ]
-          }
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "CENTER_FOCUS",
-          "reasoning": "上文假设带来的后果，平缓叙述，使用居中模板。",
-          "content": [
-            {
-              "text": "你今天买一部好用的智能设备，"
-            },
-            {
-              "text": "\n至少还要多掏一半的冤枉钱。"
-            }
-          ],
-          "order": 5,
-          "param": {
-            "imageSrc": "一个人对着智能设备计算费用的场景",
-            "enterEffect": "fadeIn",
-            "anchors": [
+                "imageSrc": "images/小米核心技术/scene_4_4_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 2
+              },
               {
-                "text": "冤枉钱",
-                "showFrom": 1,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
+                "imageSrc": "images/小米核心技术/scene_4_4_img2.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert",
+                "showFrom": 3
               }
             ]
-          }
+          },
+          "totalDurationFrames": 358
         },
         {
-          "narrativeType": "LOGIC",
+          "narrativeType": "CONCLUSION",
           "template": "CENTER_FOCUS",
-          "reasoning": "总结，讲述客观事实，平缓叙述，使用居中模板。",
+          "reasoning": "键盘侠三连击收束为同一场景、同一视觉母题（键盘与底线隐喻）。",
           "content": [
             {
-              "text": "键盘侠享受别人打下的价格底线，"
+              "text": "键盘侠享受别人打下的价格底线，",
+              "startFrame": 0,
+              "durationFrames": 80
             },
             {
-              "text": "\n却在鄙视那个把底线砸穿的人。"
+              "text": "却在鄙视那个把底线砸穿的人。",
+              "startFrame": 79,
+              "durationFrames": 71
             },
             {
-              "text": "\n这就叫吃水还要骂挖井的人。"
+              "text": "这就叫吃水还要骂挖井的人。",
+              "startFrame": 150,
+              "durationFrames": 65
             }
           ],
           "order": 6,
           "param": {
-            "imageSrc": "一个人在键盘前敲击键盘的场景",
+            "imageSrc": "images/小米核心技术/scene_4_6.png",
             "enterEffect": "fadeIn",
             "anchors": [
-              {
-                "text": "价格底线",
-                "showFrom": 0,
-                "color": "#000000",
-                "anim": "spring",
-                "audioEffect": "ping"
-              },
-              {
-                "text": "砸穿底线",
-                "showFrom": 1,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
-              },
               {
                 "text": "吃水骂井",
                 "showFrom": 2,
@@ -786,96 +713,115 @@
                 "audioEffect": "impact_thud"
               }
             ]
-          }
+          },
+          "totalDurationFrames": 216
         }
-      ]
+      ],
+      "audioSrc": "/audio/小米核心技术/scene_4/scene_4.mp3",
+      "totalDurationFrames": 1053
     },
     {
       "sceneId": "scene_5",
-      "sceneName": "召唤：重新评估",
+      "sceneName": "总结",
       "items": [
         {
           "narrativeType": "LOGIC",
           "template": "CENTER_FOCUS",
-          "reasoning": "平缓叙述，表达一种观点，没有明显的结构特征，适合使用CENTER_FOCUS。",
+          "reasoning": "号召换眼镜、看进化，双句同一视觉母题即可。",
           "content": [
             {
-              "text": "不要再用旧时代的有色眼镜，"
+              "text": "不要再用旧时代的有色眼镜，",
+              "startFrame": 0,
+              "durationFrames": 59
             },
             {
-              "text": "\n去评判一个高速进化的中国企业。"
+              "text": "去评判一个高速进化的中国企业。",
+              "startFrame": 58,
+              "durationFrames": 88
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一个人戴着旧式眼镜打量着前方",
+            "imageSrc": "images/小米核心技术/scene_5_1.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
-                "text": "有色眼镜",
-                "showFrom": 0,
-                "color": "#EF4444",
-                "anim": "spring",
-                "audioEffect": "impact_thud"
-              },
-              {
                 "text": "高速进化",
                 "showFrom": 1,
-                "color": "#000000",
+                "color": "#2563EB",
                 "anim": "slideUp",
                 "audioEffect": "ping"
               }
             ]
-          }
+          },
+          "totalDurationFrames": 147
         },
         {
           "narrativeType": "LOGIC",
           "template": "QUOTE_CITATION",
-          "reasoning": "类似名言警句，强调数据和专利的客观性，适合使用QUOTE_CITATION。",
+          "reasoning": "对仗金句式断言，适合引用体呈现以增强「公理感」。",
           "content": [
             {
-              "text": "数据不会撒谎，"
+              "text": "数据不会撒谎，",
+              "startFrame": 0,
+              "durationFrames": 40
             },
             {
-              "text": "专利更不会骗人。"
+              "text": "专利更不会骗人。",
+              "startFrame": 39,
+              "durationFrames": 42
             }
           ],
           "order": 2,
           "param": {
-            "quoteSource": "谚语",
-            "quoteDisplayText": "数据不会撒谎，专利更不会骗人。",
-            "anchors": []
-          }
+            "quoteSource": "片内立论",
+            "quoteDisplayText": "数据不会撒谎，专利更不会骗人。"
+          },
+          "totalDurationFrames": 81
         },
         {
           "narrativeType": "LOGIC",
-          "template": "COGNITIVE_SHIFT",
-          "reasoning": "通过反问，暗示公司有核心技术，属于一种“不是…而是…”的表达，适合使用COGNITIVE_SHIFT。",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "连续反问为同镜头情绪递进，非「不是而是」结构，不用 COGNITIVE_SHIFT；用节拍换图承接张力。",
           "content": [
             {
-              "text": "如果一家舍得砸百亿死磕底层系统的公司没有核心技术，"
+              "text": "如果一家舍得砸百亿死磕底层系统的公司没有核心技术，",
+              "startFrame": 0,
+              "durationFrames": 121
             },
             {
-              "text": "\n那什么叫有核心技术？"
+              "text": "那什么叫有核心技术？",
+              "startFrame": 120,
+              "durationFrames": 57
             }
           ],
           "order": 3,
           "param": {
-            "notText": "没有核心技术",
-            "butText": "掌握核心技术",
-            "butSrc": "技术人员在实验室里认真研究芯片",
-            "notContentIndex": 0,
-            "butContentIndex": 1,
-            "anchors": []
-          }
+            "stages": [
+              {
+                "imageSrc": "images/小米核心技术/scene_5_3_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "images/小米核心技术/scene_5_3_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 1
+              }
+            ]
+          },
+          "totalDurationFrames": 177
         },
         {
           "narrativeType": "CONCLUSION",
           "template": "TEXT_FOCUS",
-          "reasoning": "结论性的短句，强调公司拥有自主技术，适合使用TEXT_FOCUS。",
+          "reasoning": "收束短句、强结论，TEXT_FOCUS 锁定「掐脖子」锚点。",
           "content": [
             {
-              "text": "想必一定不是被掐脖子的技术吧！"
+              "text": "想必，一定不是被掐脖子的技术吧！",
+              "startFrame": 0,
+              "durationFrames": 77
             }
           ],
           "order": 4,
@@ -889,25 +835,29 @@
                 "color": "#EF4444"
               }
             ]
-          }
+          },
+          "totalDurationFrames": 77
         }
-      ]
+      ],
+      "audioSrc": "/audio/小米核心技术/scene_5/scene_5.mp3",
+      "totalDurationFrames": 483
     }
   ],
   "fps": 30,
   "cover": {
     "durationFrames": 5,
     "title": "小米核心技术",
-    "subtitle": "别再骂小米组装厂！百亿研发背后，藏着你不知道的科技底牌",
+    "subtitle": "争论小米核心技术的人，既不懂什么叫核心技术，也不懂查阅资料",
     "themeColor": "#2563EB",
-    "badge": "认识自我 · 理性思考",
-    "seriesLabel": "认知心理学",
-    "seriesLabelEn": "COGNITIVE PSYCHOLOGY",
+    "surface": "dark",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
     "methodologySteps": [
-      "觉察",
-      "归因",
-      "调整"
+      "争议",
+      "数据",
+      "结论"
     ],
-    "methodologyStepsEn": "OBSERVE · ATTRIBUTE · ADJUST"
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
   }
 }

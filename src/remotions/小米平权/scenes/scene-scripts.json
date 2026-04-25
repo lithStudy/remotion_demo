@@ -1,0 +1,1498 @@
+{
+  "topic": "你以为小米“廉价”？是谁偷偷希望你觉得，买得起好东西很丢脸？",
+  "cover": {
+    "durationFrames": 5,
+    "title": "小米的科技平权",
+    "subtitle": "谁在悄悄把「买得起好东西」说成丢脸？",
+    "themeColor": "#FF6900",
+    "surface": "light",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  },
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：小米与廉价的真相",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "开篇引出话题，奠定情绪基调，陈述客观现象，使用居中展示，聚焦'廉价'一词。",
+          "content": [
+            {
+              "text": "全网嘲笑小米“廉价”。",
+              "startFrame": 0,
+              "durationFrames": 54
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/小米平权/scene_1_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "廉价",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 54
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "连续反问适合引用体呈现，QUOTE_CITATION 用出处+版心打字强化「抛出问题」的仪式感；前两问为铺垫不入版心，showFrom 对齐第三句核心反问。",
+          "content": [
+            {
+              "text": "有没有人想过——",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "是谁，",
+              "startFrame": 37,
+              "durationFrames": 26
+            },
+            {
+              "text": "在希望你觉得买得起好东西是一件丢脸的事？",
+              "startFrame": 62,
+              "durationFrames": 102
+            }
+          ],
+          "order": 2,
+          "param": {
+            "quoteSource": "思考",
+            "quoteDisplayText": "买得起好东西是一件丢脸的事吗？",
+            "showFrom": 1
+          },
+          "totalDurationFrames": 164
+        }
+      ],
+      "audioSrc": "/audio/小米平权/scene_1/scene_1.mp3",
+      "totalDurationFrames": 219
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析：智能手机平民化困境",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "提问，作为引子，使用默认的居中模板即可。",
+          "content": [
+            {
+              "text": "2011年前，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "普通人想用上智能手机，",
+              "startFrame": 38,
+              "durationFrames": 53
+            },
+            {
+              "text": "到底有多难？",
+              "startFrame": 90,
+              "durationFrames": 37
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/小米平权/scene_2_1.png",
+            "enterEffect": "fadeIn"
+          },
+          "totalDurationFrames": 127
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "STAT_COMPARE",
+          "reasoning": "两款手机的价格对比，使用STAT_COMPARE模板突出数据对比效果。",
+          "content": [
+            {
+              "text": "一部三星手机要四千多，",
+              "startFrame": 0,
+              "durationFrames": 62
+            },
+            {
+              "text": "一部HTC手机要三千多。",
+              "startFrame": 61,
+              "durationFrames": 74
+            },
+            {
+              "text": "普通上班族月薪两三千，",
+              "startFrame": 134,
+              "durationFrames": 63
+            },
+            {
+              "text": "买一部手机等于一两个月工资。",
+              "startFrame": 196,
+              "durationFrames": 69
+            }
+          ],
+          "order": 2,
+          "param": {
+            "bars": [
+              {
+                "label": "三星",
+                "value": 4999,
+                "showFrom": 0
+              },
+              {
+                "label": "HTC",
+                "value": 3000,
+                "showFrom": 1
+              }
+            ],
+            "anchors": [
+              {
+                "text": "一两个月工资",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 266
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "承接上文，阐述买不起正品的选择，使用默认居中模板。",
+          "content": [
+            {
+              "text": "买不起正品，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "只能去买山寨机。",
+              "startFrame": 34,
+              "durationFrames": 45
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/小米平权/scene_2_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "山寨机",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight"
+              }
+            ]
+          },
+          "totalDurationFrames": 80
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "三个山寨机的缺点并列，适合PANEL_GRID。",
+          "content": [
+            {
+              "text": "那些山寨机，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "屏幕一碰就碎，",
+              "startFrame": 30,
+              "durationFrames": 38
+            },
+            {
+              "text": "系统卡得要死，",
+              "startFrame": 67,
+              "durationFrames": 38
+            },
+            {
+              "text": "信号差得经常掉线。",
+              "startFrame": 104,
+              "durationFrames": 48
+            }
+          ],
+          "order": 5,
+          "param": {
+            "panels": [
+              {
+                "src": "images/小米平权/scene_2_5_img0.png",
+                "showFrom": 1
+              },
+              {
+                "src": "images/小米平权/scene_2_5_img1.png",
+                "showFrom": 2
+              },
+              {
+                "src": "images/小米平权/scene_2_5_img2.png",
+                "showFrom": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 153
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "用户花钱买山寨机但体验不好，引起共鸣，使用默认居中模板。",
+          "content": [
+            {
+              "text": "很多打工仔、",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "学生、",
+              "startFrame": 31,
+              "durationFrames": 11
+            },
+            {
+              "text": "老人，",
+              "startFrame": 42,
+              "durationFrames": 18
+            },
+            {
+              "text": "辛辛苦苦攒钱买一台，",
+              "startFrame": 60,
+              "durationFrames": 55
+            },
+            {
+              "text": "却连基本的智能功能都用不了。",
+              "startFrame": 114,
+              "durationFrames": 72
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/小米平权/scene_2_6.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "打工仔",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "学生",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "老人",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 187
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "当时移动支付不发达，继续补充说明当时智能手机使用不便，用CENTER_FOCUS平缓叙述即可",
+          "content": [
+            {
+              "text": "那时候微信刚刚起步，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "支付宝主要在电脑上用，",
+              "startFrame": 58,
+              "durationFrames": 56
+            },
+            {
+              "text": "大多数普通人根本没法顺畅移动支付。",
+              "startFrame": 114,
+              "durationFrames": 84
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "images/小米平权/scene_2_7.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "微信起步",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "slideUp"
+              },
+              {
+                "text": "移动支付",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 199
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "结论，使用TEXT_FOCUS，突出强调。",
+          "content": [
+            {
+              "text": "门槛不是软件，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "是手机。",
+              "startFrame": 37,
+              "durationFrames": 30
+            }
+          ],
+          "order": 8,
+          "param": {
+            "coreSentence": [
+              "门槛不是软件",
+              "是手机"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "是手机",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 67
+        }
+      ],
+      "audioSrc": "/audio/小米平权/scene_2/scene_2.mp3",
+      "totalDurationFrames": 1078
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "叙述：小米1横空出世",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "KPI_HERO",
+          "reasoning": "本段落主要在描述小米1发布时的火爆销售数据，强调了1999元的价格和790万台的销量，是一个典型的用数据吸引眼球的HOOK。KPI_HERO 模板适合展示核心数据，突出小米1的成功。",
+          "content": [
+            {
+              "text": "2011年8月，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "小米1来了。",
+              "startFrame": 38,
+              "durationFrames": 38
+            },
+            {
+              "text": "1999元，",
+              "startFrame": 75,
+              "durationFrames": 45
+            },
+            {
+              "text": "顶配处理器。",
+              "startFrame": 120,
+              "durationFrames": 36
+            },
+            {
+              "text": "790万台瞬间抢光。",
+              "startFrame": 156,
+              "durationFrames": 69
+            }
+          ],
+          "order": 1,
+          "param": {
+            "blocks": [
+              {
+                "value": 2011,
+                "label": "年份",
+                "showFrom": 0
+              },
+              {
+                "value": 1,
+                "label": "小米",
+                "showFrom": 1
+              },
+              {
+                "value": 1999,
+                "suffix": "元",
+                "label": "价格",
+                "showFrom": 2
+              },
+              {
+                "value": 790,
+                "suffix": "万台",
+                "label": "销量",
+                "showFrom": 4,
+                "useGrouping": true
+              }
+            ]
+          },
+          "totalDurationFrames": 225
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "本段落继续描述红米手机的销量数据，4460万台销量是一个关键数据，适合使用KPI_HERO模板突出展示。",
+          "content": [
+            {
+              "text": "两年后红米799元杀出，",
+              "startFrame": 0,
+              "durationFrames": 74
+            },
+            {
+              "text": "最终卖出4460万台。",
+              "startFrame": 73,
+              "durationFrames": 78
+            }
+          ],
+          "order": 2,
+          "param": {
+            "blocks": [
+              {
+                "value": 799,
+                "suffix": "元",
+                "showFrom": 0
+              },
+              {
+                "value": 4460,
+                "suffix": "万台",
+                "showFrom": 1
+              }
+            ]
+          },
+          "totalDurationFrames": 151
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "承上启下的过渡句，使用TEXT_FOCUS模板，用醒目的文字引起观众思考。",
+          "content": [
+            {
+              "text": "这4460万台意味着什么？",
+              "startFrame": 0,
+              "durationFrames": 64
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              "这4460万台意味着什么？"
+            ]
+          },
+          "totalDurationFrames": 64
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "本段按人群分句铺陈（工人→学生→长辈→收束平权），画面需随口播节拍换图递进，选 BEAT_SEQUENCE 优于单图 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "是三四线城市的工人、",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "刚上大学的农村学生、",
+              "startFrame": 52,
+              "durationFrames": 54
+            },
+            {
+              "text": "第一次摸智能手机的大爷大妈，",
+              "startFrame": 105,
+              "durationFrames": 60
+            },
+            {
+              "text": "终于用上了和城里人一样的手机。",
+              "startFrame": 165,
+              "durationFrames": 74
+            }
+          ],
+          "order": 4,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/小米平权/scene_3_4_img0.png",
+                "enterEffect": "fadeIn",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "images/小米平权/scene_3_4_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 1
+              },
+              {
+                "imageSrc": "images/小米平权/scene_3_4_img2.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 2
+              }
+            ]
+          },
+          "totalDurationFrames": 239
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "本段描述了红米手机普及带来的结果，即移动互联网的下沉和微信支付宝的普及，形成了一个因果链。CAUSE_CHAIN模板适合展示这种因果关系。",
+          "content": [
+            {
+              "text": "移动互联网真正下沉了，",
+              "startFrame": 0,
+              "durationFrames": 65
+            },
+            {
+              "text": "微信、",
+              "startFrame": 64,
+              "durationFrames": 15
+            },
+            {
+              "text": "支付宝才跟着这些手机，",
+              "startFrame": 78,
+              "durationFrames": 50
+            },
+            {
+              "text": "走进了千家万户。",
+              "startFrame": 127,
+              "durationFrames": 51
+            }
+          ],
+          "order": 5,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "移动互联",
+                "imageSrc": "images/小米平权/scene_3_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "label": "微信支付宝",
+                "imageSrc": "images/小米平权/scene_3_5_img1.png",
+                "showFrom": 1,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "label": "走进生活",
+                "imageSrc": "images/小米平权/scene_3_5_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ]
+          },
+          "totalDurationFrames": 178
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "KPI_HERO",
+          "reasoning": "本段落总结了红米手机的另一重要影响，即淘汰山寨机，突出了1.45亿台这一数据，是一个结论性表述。KPI_HERO 模板适合展示核心数据，突出红米的影响。",
+          "content": [
+            {
+              "text": "以前横行的1.45亿台山寨机，",
+              "startFrame": 0,
+              "durationFrames": 86
+            },
+            {
+              "text": "逐渐被彻底淘汰。",
+              "startFrame": 85,
+              "durationFrames": 47
+            }
+          ],
+          "order": 6,
+          "param": {
+            "blocks": [
+              {
+                "value": 1.45,
+                "suffix": "亿台",
+                "label": "山寨机",
+                "showFrom": 0
+              },
+              {
+                "value": 0,
+                "label": "被淘汰",
+                "showFrom": 1
+              }
+            ]
+          },
+          "totalDurationFrames": 132
+        }
+      ],
+      "audioSrc": "/audio/小米平权/scene_3/scene_3.mp3",
+      "totalDurationFrames": 990
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "剖析：小米模式的降维打击",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "承上启下的短过渡句，用纯大字冲击比单图 CENTER_FOCUS 更利落 → 选用 TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "不止手机。",
+              "startFrame": 0,
+              "durationFrames": 33
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              "不止手机。"
+            ]
+          },
+          "totalDurationFrames": 33
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "案例描述，平缓叙述 → 选用CENTER_FOCUS",
+          "content": [
+            {
+              "text": "2014年之前，手环类产品动辄七百多八百多，",
+              "startFrame": 0,
+              "durationFrames": 115
+            },
+            {
+              "text": "功能也只有运动监测而已。",
+              "startFrame": 114,
+              "durationFrames": 64
+            },
+            {
+              "text": "那是只有有钱人才能买得起的玩具。",
+              "startFrame": 177,
+              "durationFrames": 74
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/小米平权/scene_4_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "昂贵的手环",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "有钱人的玩具",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 251
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "两句讲小米手环定价与销量爆发，单图居中叙述即可；与下一条 STAT_COMPARE（670↔99）分工明确。",
+          "content": [
+            {
+              "text": "然后小米进来了，79元。",
+              "startFrame": 0,
+              "durationFrames": 67
+            },
+            {
+              "text": "一年卖1000万条，",
+              "startFrame": 66,
+              "durationFrames": 50
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/小米平权/scene_4_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "79元",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "1000万条",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 116
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "STAT_COMPARE",
+          "reasoning": "单独镜头呈现对标品牌在压力下的价格跳水：670 与 99 两柱按两句口播依次 reveal。",
+          "content": [
+            {
+              "text": "对标品牌第二天就把670元的产品，",
+              "startFrame": 0,
+              "durationFrames": 89
+            },
+            {
+              "text": "直接降到99元。",
+              "startFrame": 88,
+              "durationFrames": 44
+            }
+          ],
+          "order": 4,
+          "param": {
+            "bars": [
+              {
+                "label": "对标原价",
+                "value": 670,
+                "showFrom": 0
+              },
+              {
+                "label": "次日标价",
+                "value": 99,
+                "showFrom": 1
+              }
+            ]
+          },
+          "totalDurationFrames": 133
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "先铺外资高价与「最便宜也要四千多」的旧门槛，再转小米 899 普惠，左右对错对照比单图 CENTER_FOCUS 更贴「别被高价卡死 vs 平价用上」的叙事。",
+          "content": [
+            {
+              "text": "空气净化器，",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "以前飞利浦卖7999元，",
+              "startFrame": 45,
+              "durationFrames": 78
+            },
+            {
+              "text": "类似效果的产品最便宜也要4500多。",
+              "startFrame": 123,
+              "durationFrames": 95
+            },
+            {
+              "text": "小米899元进来，",
+              "startFrame": 218,
+              "durationFrames": 59
+            },
+            {
+              "text": "普通家庭终于能用上靠谱净化器，",
+              "startFrame": 277,
+              "durationFrames": 71
+            },
+            {
+              "text": "不用每天吸雾霾。",
+              "startFrame": 348,
+              "durationFrames": 48
+            }
+          ],
+          "order": 5,
+          "param": {
+            "left": {
+              "label": "❌ 高价门槛",
+              "src": "images/小米平权/scene_4_5_left.png",
+              "showFrom": 1
+            },
+            "right": {
+              "label": "✅ 平价用上",
+              "src": "images/小米平权/scene_4_5_right.png",
+              "showFrom": 3
+            }
+          },
+          "totalDurationFrames": 396
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "先讲外资大屏「六七千起步」的旧价体系，再落小米 47 寸 2999 的颠覆，左右对错对照比单图 CENTER_FOCUS 更贴「高价门槛 vs 平价大屏」叙事。",
+          "content": [
+            {
+              "text": "智能电视，",
+              "startFrame": 0,
+              "durationFrames": 29
+            },
+            {
+              "text": "以前大尺寸六七千起步。",
+              "startFrame": 28,
+              "durationFrames": 68
+            },
+            {
+              "text": "2013年，小米来了，47寸只要两千九百九十九元。",
+              "startFrame": 96,
+              "durationFrames": 128
+            },
+            {
+              "text": "首批3000台，1分58秒就卖完了。",
+              "startFrame": 223,
+              "durationFrames": 98
+            }
+          ],
+          "order": 7,
+          "param": {
+            "left": {
+              "label": "❌ 高价大屏",
+              "src": "images/小米平权/scene_4_7_left.png",
+              "showFrom": 1
+            },
+            "right": {
+              "label": "✅ 小米定价",
+              "src": "images/小米平权/scene_4_7_right.png",
+              "showFrom": 2
+            }
+          },
+          "totalDurationFrames": 321
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "海信、TCL、创维三品牌点名并列，再接「全线降价」与家庭大屏结果，用 2～4 宫格随口播逐格显现比单图 CENTER_FOCUS 更贴结构。",
+          "content": [
+            {
+              "text": "之后海信、",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "TCL、",
+              "startFrame": 31,
+              "durationFrames": 19
+            },
+            {
+              "text": "创维，",
+              "startFrame": 50,
+              "durationFrames": 22
+            },
+            {
+              "text": "被迫全线降价。",
+              "startFrame": 72,
+              "durationFrames": 56
+            },
+            {
+              "text": "普通家庭第一次能用上大屏智能电视",
+              "startFrame": 127,
+              "durationFrames": 90
+            }
+          ],
+          "order": 9,
+          "param": {
+            "panels": [
+              {
+                "src": "images/小米平权/scene_4_9_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/小米平权/scene_4_9_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/小米平权/scene_4_9_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ]
+          },
+          "totalDurationFrames": 218
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "收束为「共性规律 → 旧模式收割 → 小米破局降价 → 科技落到普通人」传导链，CAUSE_CHAIN 比单图 CENTER_FOCUS 更贴因果递进。",
+          "content": [
+            {
+              "text": "科技产品的每个品类的逻辑都一样：",
+              "startFrame": 0,
+              "durationFrames": 74
+            },
+            {
+              "text": "以前有人靠没有竞争的高溢价收割你，",
+              "startFrame": 73,
+              "durationFrames": 84
+            },
+            {
+              "text": "小米进来，把价格打下来，",
+              "startFrame": 157,
+              "durationFrames": 62
+            },
+            {
+              "text": "把科技真正交到普通人手里。",
+              "startFrame": 218,
+              "durationFrames": 65
+            }
+          ],
+          "order": 10,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "高溢价收割",
+                "imageSrc": "images/小米平权/scene_4_10_img0.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "label": "小米降价",
+                "imageSrc": "images/小米平权/scene_4_10_img1.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "label": "科技到手",
+                "imageSrc": "images/小米平权/scene_4_10_img2.png",
+                "showFrom": 3,
+                "enterEffect": "slideBottom"
+              }
+            ]
+          },
+          "totalDurationFrames": 283
+        }
+      ],
+      "audioSrc": "/audio/小米平权/scene_4/scene_4.mp3",
+      "totalDurationFrames": 1750
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "反转：硬件利润率的克制",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "单句悬念「最硬的证据还在后面」，用放大镜模板把观众注意力锁在落点关键词上，比泛用 CENTER_FOCUS 更贴揭秘口吻。",
+          "content": [
+            {
+              "text": "而最硬的证据还在后面。",
+              "startFrame": 0,
+              "durationFrames": 51
+            }
+          ],
+          "order": 1,
+          "param": {
+            "anchors": [
+              {
+                "text": "最硬的证据",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 51
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "CENTER_FOCUS",
+          "reasoning": "时间、场合与「董事会决议」铺垫后落在「硬件利润率不超 5%」一句，单主图 + 锚点递进比 KPI 大字块更贴庄重叙事。",
+          "content": [
+            {
+              "text": "2018年，",
+              "startFrame": 0,
+              "durationFrames": 29
+            },
+            {
+              "text": "雷军在武汉大学当着全球媒体立下董事会决议——",
+              "startFrame": 28,
+              "durationFrames": 94
+            },
+            {
+              "text": "整体硬件利润率永不超5%。",
+              "startFrame": 122,
+              "durationFrames": 88
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/小米平权/scene_5_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "董事会决议",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "永不超5%",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 210
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "CENTER_FOCUS",
+          "reasoning": "对前面的决议进行补充说明，再次强调了决议的严肃性，适合用CENTER_FOCUS模板。",
+          "content": [
+            {
+              "text": "超出部分，",
+              "startFrame": 0,
+              "durationFrames": 24
+            },
+            {
+              "text": "全额返还用户。",
+              "startFrame": 23,
+              "durationFrames": 42
+            },
+            {
+              "text": "这是签了字的法律契约。",
+              "startFrame": 65,
+              "durationFrames": 54
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/小米平权/scene_5_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "全额返还",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "法律契约",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "slideUp"
+              }
+            ]
+          },
+          "totalDurationFrames": 119
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "PROGRESS_RING",
+          "reasoning": "「不到 1%」是极低占比结论，用环形进度比 KPI 大字块更能强化「几乎贴地」的观感；第二句落数时用 showFrom 对齐口播。",
+          "content": [
+            {
+              "text": "2018年实际财报显示，",
+              "startFrame": 0,
+              "durationFrames": 56
+            },
+            {
+              "text": "他们硬件净利率只有不到1%。",
+              "startFrame": 55,
+              "durationFrames": 72
+            }
+          ],
+          "order": 4,
+          "param": {
+            "blocks": [
+              {
+                "percent": 1,
+                "label": "硬件净利率",
+                "subLabel": "2018 财报 · 不到 1%",
+                "showFrom": 1,
+                "ringColor": "#2B6CB0"
+              }
+            ]
+          },
+          "totalDurationFrames": 128
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "这是一个明显的“不是...而是...”结构，表达了一种认知转变，适合COGNITIVE_SHIFT模板。",
+          "content": [
+            {
+              "text": "他们完全可以把价格再提几百块，",
+              "startFrame": 0,
+              "durationFrames": 69
+            },
+            {
+              "text": "多赚几倍利润，",
+              "startFrame": 68,
+              "durationFrames": 52
+            },
+            {
+              "text": "却主动克制住了。",
+              "startFrame": 120,
+              "durationFrames": 45
+            }
+          ],
+          "order": 5,
+          "param": {
+            "notText": "提价",
+            "butText": "主动克制住",
+            "butSrc": "images/小米平权/scene_5_5.png",
+            "notContentIndex": 0,
+            "butContentIndex": 2
+          },
+          "totalDurationFrames": 165
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "PANEL_GRID",
+          "reasoning": "从「克制」到好手机、好电视、好手环并列落格，随口播逐格显现，比单图 CENTER_FOCUS 更贴「多品类普惠」收束。",
+          "content": [
+            {
+              "text": "这份克制，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "让普通家庭都能买得起",
+              "startFrame": 27,
+              "durationFrames": 59
+            },
+            {
+              "text": "好手机、",
+              "startFrame": 86,
+              "durationFrames": 20
+            },
+            {
+              "text": "好电视、",
+              "startFrame": 105,
+              "durationFrames": 18
+            },
+            {
+              "text": "好手环，",
+              "startFrame": 123,
+              "durationFrames": 19
+            },
+            {
+              "text": "以及更多的产品，",
+              "startFrame": 141,
+              "durationFrames": 36
+            },
+            {
+              "text": "让我们真正享受到科技带来的便利。",
+              "startFrame": 177,
+              "durationFrames": 78
+            }
+          ],
+          "order": 6,
+          "param": {
+            "panels": [
+              {
+                "src": "images/小米平权/scene_5_6_img0.png",
+                "showFrom": 2,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/小米平权/scene_5_6_img1.png",
+                "showFrom": 3,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/小米平权/scene_5_6_img2.png",
+                "showFrom": 4,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/小米平权/scene_5_6_img3.png",
+                "showFrom": 5,
+                "enterEffect": "zoomIn"
+              }
+            ]
+          },
+          "totalDurationFrames": 256
+        }
+      ],
+      "audioSrc": "/audio/小米平权/scene_5/scene_5.mp3",
+      "totalDurationFrames": 928
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "命名：科技平权",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "陈述一个观点，适合用CENTER_FOCUS居中展示。",
+          "content": [
+            {
+              "text": "“廉价”这两个字，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "从来不是产品的问题。",
+              "startFrame": 39,
+              "durationFrames": 50
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/小米平权/scene_6_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "产品问题",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "slideUp"
+              }
+            ]
+          },
+          "totalDurationFrames": 89
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "解释廉价背后的原因，是精心设计的话语武器，导致嫌弃自己买得起的东西，最终被高溢价收割。因果链条适合CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "它是一套精心设计的话语武器，",
+              "startFrame": 0,
+              "durationFrames": 71
+            },
+            {
+              "text": "让你嫌弃自己买得起的东西，",
+              "startFrame": 70,
+              "durationFrames": 68
+            },
+            {
+              "text": "让你继续心甘情愿被高溢价收割。",
+              "startFrame": 138,
+              "durationFrames": 88
+            }
+          ],
+          "order": 2,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "话语武器",
+                "imageSrc": "images/小米平权/scene_6_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "label": "嫌弃自身",
+                "imageSrc": "images/小米平权/scene_6_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "label": "高溢价收割",
+                "imageSrc": "images/小米平权/scene_6_2_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ]
+          },
+          "totalDurationFrames": 226
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TIMELINE",
+          "reasoning": "口播从「克制」到「少数人奢侈品」再到「普通人权利」，是同一叙事轴上的递进，用 TIMELINE 三节点（左→中→右）比单图 CENTER_FOCUS 更贴「转变过程」。",
+          "content": [
+            {
+              "text": "而小米做的，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "恰恰相反。",
+              "startFrame": 36,
+              "durationFrames": 43
+            },
+            {
+              "text": "它用极致的克制，",
+              "startFrame": 78,
+              "durationFrames": 41
+            },
+            {
+              "text": "把科技从少数人的奢侈品，",
+              "startFrame": 118,
+              "durationFrames": 66
+            },
+            {
+              "text": "变成了每个普通人都能享有的权利。",
+              "startFrame": 184,
+              "durationFrames": 76
+            }
+          ],
+          "order": 4,
+          "param": {
+            "images": [
+              {
+                "src": "images/小米平权/scene_6_4_img0.png",
+                "position": "left",
+                "enterEffect": "slideLeft",
+                "textIndex": 0
+              },
+              {
+                "src": "images/小米平权/scene_6_4_img1.png",
+                "position": "center",
+                "enterEffect": "fadeIn",
+                "textIndex": 2
+              },
+              {
+                "src": "images/小米平权/scene_6_4_img2.png",
+                "position": "right",
+                "enterEffect": "zoomIn",
+                "textIndex": 4
+              }
+            ]
+          },
+          "totalDurationFrames": 260
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "结论，金句冲击，适合TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "这，",
+              "startFrame": 0,
+              "durationFrames": 16
+            },
+            {
+              "text": "才是真正的科技平权。",
+              "startFrame": 15,
+              "durationFrames": 54
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              "这，才是真正的科技平权。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "科技平权",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 69
+        }
+      ],
+      "audioSrc": "/audio/小米平权/scene_6/scene_6.mp3",
+      "totalDurationFrames": 643
+    },
+    {
+      "sceneId": "scene_7",
+      "sceneName": "召唤：呼唤科技红利",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述，陈述市场现状 → 无明显结构，选择CENTER_FOCUS",
+          "content": [
+            {
+              "text": "市场上从来不缺卖贵的东西。",
+              "startFrame": 0,
+              "durationFrames": 65
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/小米平权/scene_7_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "昂贵",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 65
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束段金句密度高，纯大字 TEXT_FOCUS 比概念卡更压得住；口播仍拆多条 content，大屏用 coreSentence 三行概括。",
+          "content": [
+            {
+              "text": "真正稀缺的，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "是愿意把科技红利让渡给普通人的公司。",
+              "startFrame": 38,
+              "durationFrames": 86
+            },
+            {
+              "text": "让更多人买得起好科技、",
+              "startFrame": 123,
+              "durationFrames": 57
+            },
+            {
+              "text": "用得上好科技，",
+              "startFrame": 180,
+              "durationFrames": 36
+            },
+            {
+              "text": "这比制造一堆高端崇拜，",
+              "startFrame": 216,
+              "durationFrames": 53
+            },
+            {
+              "text": "难得多，",
+              "startFrame": 268,
+              "durationFrames": 20
+            },
+            {
+              "text": "也贵重得多。",
+              "startFrame": 288,
+              "durationFrames": 32
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              "让更多人买得起、用得上好科技",
+              "比制造一堆高端崇拜贵重得多"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "买得起、用得上",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "贵重得多",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 320
+        }
+      ],
+      "audioSrc": "/audio/小米平权/scene_7/scene_7.mp3",
+      "totalDurationFrames": 386
+    }
+  ],
+  "fps": 30
+}

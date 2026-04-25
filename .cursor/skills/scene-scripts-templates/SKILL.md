@@ -1,6 +1,6 @@
 ---
 name: scene-scripts-templates
-description: "scene-scripts.json 中可用的模板详情，在编辑或生成 `scene-scripts.json`时，用于了解如何正确使用模板，响应用户的验证、修改模板的请求。模板包括：BEAT_SEQUENCE、CASE_BREAKDOWN、CAUSE_CHAIN、CENTER_FOCUS、CHAT_BUBBLE、CHECKLIST_REVEAL、COGNITIVE_SHIFT、CONCEPT_CARD、DOS_AND_DONTS、KPI_HERO、MAGNIFYING_GLASS、METHOD_STACK、PANEL_GRID、PROGRESS_RING、QUOTE_CITATION、SPLIT_COMPARE、STAT_COMPARE、STEP_LIST、TEXT_FOCUS、TIMELINE。"
+description: "scene-scripts.json 中可用的模板详情，在编辑或生成 `scene-scripts.json`时，用于了解如何正确使用模板，响应用户的验证、修改模板的请求。模板包括：BEAT_SEQUENCE、CASE_BREAKDOWN、CAUSE_CHAIN、CENTER_FOCUS、CHAT_BUBBLE、CHECKLIST_REVEAL、COGNITIVE_SHIFT、CONCEPT_CARD、DATA_TABLE、DOS_AND_DONTS、KPI_HERO、MAGNIFYING_GLASS、METHOD_STACK、PANEL_GRID、PEER_INDUCT、PROGRESS_RING、QUOTE_CITATION、SPLIT_COMPARE、STAT_COMPARE、STEP_LIST、TEXT_FOCUS、TIMELINE。"
 metadata:
   tags: remotion, scene-scripts, templateMeta, json
 ---
@@ -41,11 +41,13 @@ metadata:
 - **CHECKLIST_REVEAL**: `references/CHECKLIST_REVEAL.md`
 - **COGNITIVE_SHIFT**: `references/COGNITIVE_SHIFT.md`
 - **CONCEPT_CARD**: `references/CONCEPT_CARD.md`
+- **DATA_TABLE**: `references/DATA_TABLE.md`
 - **DOS_AND_DONTS**: `references/DOS_AND_DONTS.md`
 - **KPI_HERO**: `references/KPI_HERO.md`
 - **MAGNIFYING_GLASS**: `references/MAGNIFYING_GLASS.md`
 - **METHOD_STACK**: `references/METHOD_STACK.md`
 - **PANEL_GRID**: `references/PANEL_GRID.md`
+- **PEER_INDUCT**: `references/PEER_INDUCT.md`
 - **PROGRESS_RING**: `references/PROGRESS_RING.md`
 - **QUOTE_CITATION**: `references/QUOTE_CITATION.md`
 - **SPLIT_COMPARE**: `references/SPLIT_COMPARE.md`

@@ -70,15 +70,25 @@ def _escape_jsx(text: str) -> str:
     return text.replace("{", "{{").replace("}", "}}").replace('"', '\\"')
 
 
-def _param_to_jsx_props(param: dict, name: str, scene_id: str, order: int) -> str:
+def _param_to_jsx_props(
+    param: dict,
+    name: str,
+    scene_id: str,
+    order: int,
+    template: str | None = None,
+) -> str:
     """
     将 param 对象转换为 JSX props 字符串（不含 item 层级的 content / totalDurationFrames）。
     - 图片字段用 staticFile() 包装
     - images 数组中的 src 也用 staticFile() 包装
+    - CHAT_BUBBLE：头像为 BWChatBubble 内置 SVG，不传 imageSrc；bubbles 逐项序列化且不包装 imageSrc
     """
     props = []
     for key, value in param.items():
         if key in ("content", "totalDurationFrames"):
+            continue
+        if template == "CHAT_BUBBLE" and key == "imageSrc":
+            # 模板已弃用该字段渲染，避免生成 staticFile 与多余 props
             continue
         elif key == "audioSrc":
             # audioSrc 已移到 scene 级别，不在 item props 中传递
@@ -130,6 +140,47 @@ def _param_to_jsx_props(param: dict, name: str, scene_id: str, order: int) -> st
                         parts.append(f'{sk}: {json.dumps(sv, ensure_ascii=False)}')
                 stage_jsx_parts.append("{ " + ", ".join(parts) + " }")
             props.append(f'stages={{[{", ".join(stage_jsx_parts)}]}}')
+        elif key == "premises" and isinstance(value, list):
+            # PEER_INDUCT：每项含 imageSrc、可选 enterEffect、showFrom（与 stages 序列化一致）
+            premise_jsx_parts = []
+            for pr in value:
+                if not isinstance(pr, dict):
+                    continue
+                parts = []
+                for pk, pv in pr.items():
+                    if pk == "imageSrc" and isinstance(pv, str):
+                        parts.append(f'imageSrc: staticFile("{_escape_jsx(pv)}")')
+                    elif pk == "enterEffect" and isinstance(pv, str):
+                        parts.append(f'{pk}: "{_escape_jsx(pv)}"')
+                    elif isinstance(pv, str):
+                        parts.append(f'{pk}: "{_escape_jsx(pv)}"')
+                    elif isinstance(pv, bool):
+                        parts.append(f'{pk}: {str(pv).lower()}')
+                    elif isinstance(pv, (int, float)):
+                        parts.append(f'{pk}: {pv}')
+                    else:
+                        parts.append(f'{pk}: {json.dumps(pv, ensure_ascii=False)}')
+                premise_jsx_parts.append("{ " + ", ".join(parts) + " }")
+            props.append(f'premises={{[{", ".join(premise_jsx_parts)}]}}')
+        elif key == "conclusion" and isinstance(value, dict):
+            parts = []
+            for ck, cv in value.items():
+                if ck == "imageSrc" and isinstance(cv, str):
+                    parts.append(f'imageSrc: staticFile("{_escape_jsx(cv)}")')
+                elif ck == "enterEffect" and isinstance(cv, str):
+                    parts.append(f'{ck}: "{_escape_jsx(cv)}"')
+                elif ck == "tone" and isinstance(cv, str):
+                    parts.append(f'{ck}: "{_escape_jsx(cv)}"')
+                elif isinstance(cv, str):
+                    parts.append(f'{ck}: "{_escape_jsx(cv)}"')
+                elif isinstance(cv, bool):
+                    parts.append(f'{ck}: {str(cv).lower()}')
+                elif isinstance(cv, (int, float)):
+                    parts.append(f'{ck}: {cv}')
+                else:
+                    parts.append(f'{ck}: {json.dumps(cv, ensure_ascii=False)}')
+            if parts:
+                props.append("conclusion={{ " + ", ".join(parts) + " }}")
         elif key == "nodes" and isinstance(value, list):
             # CAUSE_CHAIN：每项含 label、imageSrc、showFrom、可选 enterEffect
             node_jsx_parts = []
@@ -176,6 +227,32 @@ def _param_to_jsx_props(param: dict, name: str, scene_id: str, order: int) -> st
                         parts.append(f'{pk}: {json.dumps(pv, ensure_ascii=False)}')
                 panel_jsx_parts.append("{ " + ", ".join(parts) + " }")
             props.append(f'panels={{[{", ".join(panel_jsx_parts)}]}}')
+        elif key == "bubbles" and isinstance(value, list):
+            # CHAT_BUBBLE：多气泡；组件内为内置 SVG，忽略每项中的 imageSrc
+            bubble_jsx_parts = []
+            for b in value:
+                if not isinstance(b, dict):
+                    continue
+                parts = []
+                for bk, bv in b.items():
+                    if bk == "imageSrc":
+                        continue
+                    if bk == "bubbleText" and isinstance(bv, str):
+                        parts.append(f'bubbleText: "{_escape_jsx(bv)}"')
+                    elif bk == "showFrom" and isinstance(bv, (int, float)):
+                        parts.append(f"showFrom: {int(bv)}")
+                    elif bk == "align" and isinstance(bv, str):
+                        parts.append(f'align: "{_escape_jsx(bv)}"')
+                    elif isinstance(bv, str):
+                        parts.append(f'{bk}: "{_escape_jsx(bv)}"')
+                    elif isinstance(bv, bool):
+                        parts.append(f'{bk}: {str(bv).lower()}')
+                    elif isinstance(bv, (int, float)):
+                        parts.append(f"{bk}: {bv}")
+                    else:
+                        parts.append(f"{bk}: {json.dumps(bv, ensure_ascii=False)}")
+                bubble_jsx_parts.append("{ " + ", ".join(parts) + " }")
+            props.append(f'bubbles={{[{", ".join(bubble_jsx_parts)}]}}')
         elif key in ("left", "right") and isinstance(value, dict):
             # DOS_AND_DONTS：左右侧配置，src 需 staticFile
             parts = []
@@ -216,7 +293,7 @@ def normalize_cover(scripts_data: dict) -> dict | None:
     """
     从 scene-scripts.json 顶层读取可选 cover。
     有效条件：cover 为对象，durationFrames 为正整数，且含非空字符串 title、subtitle。
-    可选：themeColor、badge、seriesLabel、seriesLabelEn（字符串）；
+    可选：themeColor、surface（light|dark）、badge、seriesLabel、seriesLabelEn（字符串）；
     methodologySteps（非空字符串数组）、methodologyStepsEn（字符串）。
     """
     raw = scripts_data.get("cover")
@@ -238,6 +315,9 @@ def normalize_cover(scripts_data: dict) -> dict | None:
     tc = raw.get("themeColor")
     if isinstance(tc, str) and tc.strip():
         out["themeColor"] = tc.strip()
+    sf = raw.get("surface")
+    if sf in ("light", "dark"):
+        out["surface"] = sf
     bd = raw.get("badge")
     if isinstance(bd, str) and bd.strip():
         out["badge"] = bd.strip()
@@ -276,6 +356,9 @@ def normalize_cover_still(scripts_data: dict) -> dict | None:
     tc = raw.get("themeColor")
     if isinstance(tc, str) and tc.strip():
         out["themeColor"] = tc.strip()
+    sf = raw.get("surface")
+    if sf in ("light", "dark"):
+        out["surface"] = sf
     bd = raw.get("badge")
     if isinstance(bd, str) and bd.strip():
         out["badge"] = bd.strip()
@@ -304,6 +387,8 @@ def static_cover_props_jsx(cover: dict) -> str:
     ]
     if cover.get("themeColor"):
         lines.append(f'themeColor={json.dumps(cover["themeColor"], ensure_ascii=False)}')
+    if cover.get("surface") in ("light", "dark"):
+        lines.append(f'surface={json.dumps(cover["surface"], ensure_ascii=False)}')
     if cover.get("badge"):
         lines.append(f'badge={json.dumps(cover["badge"], ensure_ascii=False)}')
     if cover.get("seriesLabel"):
@@ -328,6 +413,8 @@ def generate_cover_props_tsx(pascal: str, cover: dict) -> str:
     ]
     if cover.get("themeColor"):
         parts.append(f'\tthemeColor: {json.dumps(cover["themeColor"], ensure_ascii=False)},')
+    if cover.get("surface") in ("light", "dark"):
+        parts.append(f'\tsurface: {json.dumps(cover["surface"], ensure_ascii=False)},')
     if cover.get("badge"):
         parts.append(f'\tbadge: {json.dumps(cover["badge"], ensure_ascii=False)},')
     if cover.get("seriesLabel"):
@@ -402,6 +489,16 @@ def _apply_preview_overrides(scenes: list, preview_image: str | None, mute_audio
                         if isinstance(st, dict) and "imageSrc" in st:
                             st["imageSrc"] = preview_image
 
+                premises = param.get("premises")
+                if isinstance(premises, list):
+                    for pr in premises:
+                        if isinstance(pr, dict) and "imageSrc" in pr:
+                            pr["imageSrc"] = preview_image
+
+                concl = param.get("conclusion")
+                if isinstance(concl, dict) and isinstance(concl.get("imageSrc"), str):
+                    concl["imageSrc"] = preview_image
+
                 nodes = param.get("nodes")
                 if isinstance(nodes, list):
                     for nd in nodes:
@@ -413,6 +510,13 @@ def _apply_preview_overrides(scenes: list, preview_image: str | None, mute_audio
                     for pn in panels:
                         if isinstance(pn, dict) and "src" in pn:
                             pn["src"] = preview_image
+
+                bubbles = param.get("bubbles")
+                if isinstance(bubbles, list):
+                    for b in bubbles:
+                        if isinstance(b, dict) and "imageSrc" in b and isinstance(b.get("imageSrc"), str):
+                            b["imageSrc"] = preview_image
+
 
 def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -> str:
     """生成单个场景文件"""
@@ -436,7 +540,10 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
         content = item.get("content", [])
         content_prop = f"content={{{json.dumps(content, ensure_ascii=False)}}}"
         duration_prop = f"totalDurationFrames={{{total_frames}}}"
-        props_str = f"{content_prop} {duration_prop} {_param_to_jsx_props(param, name, scene_id, order)}".strip()
+        props_str = (
+            f"{content_prop} {duration_prop} "
+            f"{_param_to_jsx_props(param, name, scene_id, order, template=template)}"
+        ).strip()
 
         item_renders.append({
             "component": component,

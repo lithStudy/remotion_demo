@@ -1,5 +1,4 @@
 import React from "react";
-import {useVideoConfig} from "remotion";
 
 export type VerticalSceneSegmentConfig = {
 	duration: number;
@@ -38,8 +37,6 @@ export const VerticalSegmentedProgressBar: React.FC<VerticalSegmentedProgressBar
 	transitionDuration,
 	fontStack = DEFAULT_FONT_STACK,
 }) => {
-	const {width: compositionWidth} = useVideoConfig();
-
 	if (frame < coverDurationFrames) {
 		return null;
 	}
@@ -96,7 +93,9 @@ export const VerticalSegmentedProgressBar: React.FC<VerticalSegmentedProgressBar
 						{i > 0 ? <div style={dividerStyle} aria-hidden /> : null}
 						<div
 							style={{
-								flex: 1,
+								flexGrow: Math.max(seg.duration, 1),
+								flexShrink: 1,
+								flexBasis: 0,
 								minWidth: 0,
 								position: "relative",
 								minHeight: 44,

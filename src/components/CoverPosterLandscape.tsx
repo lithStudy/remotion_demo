@@ -7,23 +7,31 @@ import { AbsoluteFill } from "remotion";
 
 import { CoverPosterCore, type StaticCoverProps } from "./CoverPosterCore";
 
-/** 偏学院蓝，与理性、方法论气质一致 */
 const DEFAULT_THEME = "#1d4ed8";
 
-/** 封面底色素色（与原先灰阶主色一致） */
 const COVER_SOLID_BG = "#f1f5f9";
+
+/** 与竖屏统一的深色资讯壳层（纯色，避免预览图对渐变压缩失真） */
+const COVER_DARK_SOLID = "#0f172a";
+
+const MONO_FOOTER =
+	'"JetBrains Mono", "Cascadia Code", "SF Mono", Consolas, monospace';
 
 export const LandscapeCoverPoster: React.FC<StaticCoverProps> = ({
 	themeColor = DEFAULT_THEME,
+	surface = "light",
+	seriesLabelEn,
 	...coreProps
 }) => {
+	const isDark = surface === "dark";
+
 	return (
 		<AbsoluteFill style={{ overflow: "hidden" }}>
 			<div
 				style={{
 					position: "absolute",
 					inset: 0,
-					background: COVER_SOLID_BG,
+					background: isDark ? COVER_DARK_SOLID : COVER_SOLID_BG,
 				}}
 			/>
 
@@ -36,7 +44,7 @@ export const LandscapeCoverPoster: React.FC<StaticCoverProps> = ({
 					height: "1200px",
 					borderRadius: "50%",
 					border: `1.5px dashed ${themeColor}`,
-					opacity: 0.07,
+					opacity: isDark ? 0.16 : 0.07,
 					pointerEvents: "none",
 				}}
 			/>
@@ -48,8 +56,8 @@ export const LandscapeCoverPoster: React.FC<StaticCoverProps> = ({
 					width: "600px",
 					height: "600px",
 					borderRadius: "50%",
-					border: `1px solid ${themeColor}`,
-					opacity: 0.1,
+					border: `1px solid ${isDark ? `${themeColor}99` : themeColor}`,
+					opacity: isDark ? 0.22 : 0.1,
 					pointerEvents: "none",
 				}}
 			/>
@@ -63,7 +71,12 @@ export const LandscapeCoverPoster: React.FC<StaticCoverProps> = ({
 					justifyContent: "center",
 				}}
 			>
-				<CoverPosterCore themeColor={themeColor} {...coreProps} />
+				<CoverPosterCore
+					themeColor={themeColor}
+					surface={surface}
+					seriesLabelEn={seriesLabelEn}
+					{...coreProps}
+				/>
 			</div>
 
 			<div
@@ -75,39 +88,66 @@ export const LandscapeCoverPoster: React.FC<StaticCoverProps> = ({
 					display: "flex",
 					justifyContent: "space-between",
 					alignItems: "center",
-					// borderTop: `1px solid ${themeColor}28`,
 					paddingTop: 22,
 					pointerEvents: "none",
 				}}
 			>
-				<div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+				{seriesLabelEn?.trim() ? (
+					<div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+						<div
+							style={{
+								width: 7,
+								height: 7,
+								background: themeColor,
+								transform: "rotate(45deg)",
+								opacity: isDark ? 0.85 : 0.55,
+							}}
+						/>
+						<div
+							style={{
+								fontFamily: MONO_FOOTER,
+								fontSize: 22,
+								fontWeight: 600,
+								color: isDark ? "#e2e8f0" : themeColor,
+								letterSpacing: 3.5,
+								opacity: isDark ? 0.88 : 0.55,
+							}}
+						>
+							{seriesLabelEn.trim()}
+						</div>
+					</div>
+				) : (
+					<div />
+				)}
+
+				<div style={{ display: "flex", alignItems: "center", gap: 6 }}>
 					<div
 						style={{
-							width: 7,
-							height: 7,
+							width: 36,
+							height: 4,
 							background: themeColor,
-							transform: "rotate(45deg)",
-							opacity: 0.55,
+							borderRadius: 2,
+							opacity: isDark ? 0.75 : 0.6,
 						}}
 					/>
 					<div
 						style={{
-							fontFamily: '"JetBrains Mono", "Cascadia Code", Consolas, monospace',
-							fontSize: 22,
-							fontWeight: 600,
-							color: themeColor,
-							letterSpacing: 3.5,
-							opacity: 0.55,
+							width: 10,
+							height: 4,
+							background: themeColor,
+							borderRadius: 2,
+							opacity: isDark ? 0.35 : 0.22,
 						}}
-					>
-						KNOWLEDGE EXPLORATION
-					</div>
-				</div>
-
-				<div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-					<div style={{ width: 36, height: 4, background: themeColor, borderRadius: 2, opacity: 0.6 }} />
-					<div style={{ width: 10, height: 4, background: themeColor, borderRadius: 2, opacity: 0.22 }} />
-					<div style={{ width: 10, height: 4, background: themeColor, borderRadius: 2, opacity: 0.22 }} />
+					/>
+					<div
+						style={{
+							width: 10,
+							height: 4,
+							background: themeColor,
+							borderRadius: 2,
+							opacity: isDark ? 0.35 : 0.22,
+						}}
+					/>
 				</div>
 			</div>
 		</AbsoluteFill>

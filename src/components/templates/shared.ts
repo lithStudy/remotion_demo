@@ -494,6 +494,21 @@ export interface BeatStageItem {
 	showFrom?: number;
 }
 
+/** PEER_INDUCT：横排前提项（无 tone，情绪由归纳行统一拉升） */
+export interface PeerInductPremiseItem {
+	imageSrc: string;
+	enterEffect?: ImageEnterEffect;
+	showFrom?: number;
+}
+
+/** PEER_INDUCT：单独一行的归纳配图 */
+export interface PeerInductConclusionItem {
+	imageSrc: string;
+	enterEffect?: ImageEnterEffect;
+	showFrom?: number;
+	tone?: BeatStageTone;
+}
+
 // ─────────────────────────────────────────────────────────────
 // 模板驱动架构：公共类型
 // ─────────────────────────────────────────────────────────────

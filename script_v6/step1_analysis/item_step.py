@@ -1,7 +1,7 @@
 import json
 import re
 
-from utils.gemini_utils import generate_with_retry, parse_json_from_response
+from utils.llm_utils import generate_with_retry, parse_json_from_response
 from .prompt_loader import load_prompt, render_prompt
 from utils import split_text_to_content
 

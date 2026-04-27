@@ -1,4 +1,8 @@
 {
+    "llm_provider": "deepseek",
+    "llm_provider_bak": "gemini",    
+    "deepseek_model": "deepseek-v4-pro",
+    "deepseek_base_url": "https://api.deepseek.com",
     "default_template": "CENTER_FOCUS",
     "package_name": "my_video",
     "gemini_model": "gemini-2.0-flash",

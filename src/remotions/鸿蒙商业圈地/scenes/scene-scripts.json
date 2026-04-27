@@ -1,0 +1,1174 @@
+{
+  "topic": "你为鸿蒙流下的热泪，正在填满几百亿的垄断账单",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：商业圈地运动",
+      "items": [
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "用大字暴击金句：驳斥国家安全说辞，为后续指出商业圈地真相做情绪铺垫。",
+          "content": [
+            {
+              "text": "别再拿国家安全，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "来做鸿蒙的挡箭牌了！",
+              "startFrame": 37,
+              "durationFrames": 45
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              "别再拿国家安全",
+              "来做鸿蒙的挡箭牌了！"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "国家安全",
+                "color": "red"
+              },
+              {
+                "coreSentenceAnchor": "挡箭牌",
+                "color": "red"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 82
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "否定错误说法（技术保卫战），肯定真相（商业圈地运动），构成“不是...而是...”的认知转变，使用COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "这根本不是什么技术保卫战。",
+              "startFrame": 0,
+              "durationFrames": 57
+            },
+            {
+              "text": "这只是一场包装完美的，",
+              "startFrame": 56,
+              "durationFrames": 48
+            },
+            {
+              "text": "商业圈地运动。",
+              "startFrame": 104,
+              "durationFrames": 35
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "技术保卫战",
+            "butText": "商业圈地运动",
+            "butSrc": "images/鸿蒙商业圈地/scene_1_2.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 140
+        }
+      ],
+      "audioSrc": "/audio/鸿蒙商业圈地/scene_1/scene_1.mp3",
+      "totalDurationFrames": 224
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析：商业双标",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用他人观点作为反驳的靶子，符合QUOTE_CITATION引用/证言摘录结构，字数12字，适合独立作为引述镜头。",
+          "content": [
+            {
+              "text": "有人说安卓不自主，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "会被卡脖子。",
+              "startFrame": 41,
+              "durationFrames": 35
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteDisplayText": "安卓不自主，会被卡脖子",
+            "quoteSource": "网络观点",
+            "anchors": []
+          },
+          "totalDurationFrames": 77
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对“开源”这一核心概念进行定义性澄清，命名关键属性，符合CONCEPT_CARD解释关键术语的结构。",
+          "content": [
+            {
+              "text": "但安卓的代码，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "是全球彻底开源的。",
+              "startFrame": 32,
+              "durationFrames": 50
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/鸿蒙商业圈地/scene_2_2.png",
+            "conceptName": "开源的安卓",
+            "anchors": []
+          },
+          "totalDurationFrames": 82
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述展开“开源”的具体表现，用第二人称拉近举例，无强对比/步骤/数据，默认CENTER_FOCUS保持单图叙述。",
+          "content": [
+            {
+              "text": "任何人，",
+              "startFrame": 0,
+              "durationFrames": 26
+            },
+            {
+              "text": "包括你————",
+              "startFrame": 25,
+              "durationFrames": 18
+            },
+            {
+              "text": "我的朋友，",
+              "startFrame": 42,
+              "durationFrames": 24
+            },
+            {
+              "text": "你也能下载到完整的代码。",
+              "startFrame": 66,
+              "durationFrames": 56
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/鸿蒙商业圈地/scene_2_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 123
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "两项并列用途（安全审计 vs 深度定制），虽为并列分点但更适合SPLIT_COMPARE展现两种用途的平等对比，而非步骤序列。",
+          "content": [
+            {
+              "text": "你可以下载代码去做安全审计，",
+              "startFrame": 0,
+              "durationFrames": 67
+            },
+            {
+              "text": "你也可以下载代码去做深度定制。",
+              "startFrame": 66,
+              "durationFrames": 70
+            }
+          ],
+          "order": 4,
+          "param": {
+            "leftSrc": "images/鸿蒙商业圈地/scene_2_4_left.png",
+            "rightSrc": "images/鸿蒙商业圈地/scene_2_4_right.png",
+            "leftLabel": "安全审计",
+            "rightLabel": "深度定制",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 137
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "反驳递进收束：前提“代码是你自己的” → 推论“可直接本地运行” → 反问收束，情绪节拍递进明显，用BEAT_SEQUENCE分段推进。",
+          "content": [
+            {
+              "text": "你下载到的代码是你自己的，",
+              "startFrame": 0,
+              "durationFrames": 63
+            },
+            {
+              "text": "你可以直接本地运行。",
+              "startFrame": 62,
+              "durationFrames": 53
+            },
+            {
+              "text": "没有谁能卡你的脖子。",
+              "startFrame": 114,
+              "durationFrames": 44
+            }
+          ],
+          "order": 5,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/鸿蒙商业圈地/scene_2_5_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "images/鸿蒙商业圈地/scene_2_5_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "images/鸿蒙商业圈地/scene_2_5_img2.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 159
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "QUOTE_CITATION",
+          "reasoning": "又一个引用靶子观点，与上一段同理，用QUOTE_CITATION引出伪命题。",
+          "content": [
+            {
+              "text": "有人说安卓不安全，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "会被装漏洞。",
+              "startFrame": 37,
+              "durationFrames": 30
+            }
+          ],
+          "order": 6,
+          "param": {
+            "quoteSource": "网络观点",
+            "quoteDisplayText": "安卓不安全，会被装漏洞。",
+            "anchors": []
+          },
+          "totalDurationFrames": 67
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "强对比推翻引述观点，“不是不安全的安卓，而是更安全的开源安卓”，显性反转，符合COGNITIVE_SHIFT“不是…而是…”认知转折。",
+          "content": [
+            {
+              "text": "但我告诉你，",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "开源的安卓，",
+              "startFrame": 33,
+              "durationFrames": 38
+            },
+            {
+              "text": "远比闭源的鸿蒙更安全！",
+              "startFrame": 70,
+              "durationFrames": 62
+            }
+          ],
+          "order": 7,
+          "param": {
+            "notText": "闭源更安全",
+            "butText": "开源更安全",
+            "butSrc": "images/鸿蒙商业圈地/scene_2_7.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 132
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "聚焦核心论点“全球白客众包安全审计”，采用MAGNIFYING_GLASS放大关键证据，突出高价值锚点“最顶尖的白客”“成千上万的大脑”。",
+          "content": [
+            {
+              "text": "因为安卓背后，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "是全球最顶尖的白客。",
+              "startFrame": 36,
+              "durationFrames": 58
+            },
+            {
+              "text": "成千上万的大脑，",
+              "startFrame": 93,
+              "durationFrames": 43
+            },
+            {
+              "text": "每天帮它找漏洞。",
+              "startFrame": 136,
+              "durationFrames": 40
+            }
+          ],
+          "order": 8,
+          "param": {
+            "anchors": [
+              {
+                "text": "白客",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "找漏洞",
+                "showFrom": 3,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": "woosh"
+              }
+            ]
+          },
+          "totalDurationFrames": 176
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "突出单一关键数据“一家公司一百多号人”，强调数量级悬殊，用KPI_HERO放大这个数据锚点。",
+          "content": [
+            {
+              "text": "而鸿蒙呢？",
+              "startFrame": 0,
+              "durationFrames": 29
+            },
+            {
+              "text": "作为一个闭源系统。",
+              "startFrame": 28,
+              "durationFrames": 43
+            },
+            {
+              "text": "不过是一家公司，",
+              "startFrame": 70,
+              "durationFrames": 43
+            },
+            {
+              "text": "最多一百多号人的开发团队。",
+              "startFrame": 113,
+              "durationFrames": 70
+            },
+            {
+              "text": "拿什么碰瓷安卓的代码安全性？",
+              "startFrame": 183,
+              "durationFrames": 73
+            }
+          ],
+          "order": 10,
+          "param": {
+            "blocks": [
+              {
+                "value": 1,
+                "label": "公司",
+                "showFrom": 2
+              },
+              {
+                "value": 100,
+                "suffix": "+人",
+                "label": "开发团队",
+                "showFrom": 3
+              }
+            ],
+            "anchors": [
+              {
+                "text": "闭源系统",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 256
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "QUOTE_CITATION",
+          "reasoning": "第三个被引用的靶子观点，同理用QUOTE_CITATION引述。",
+          "content": [
+            {
+              "text": "有人说国家核心系统不能用安卓，",
+              "startFrame": 0,
+              "durationFrames": 80
+            }
+          ],
+          "order": 12,
+          "param": {
+            "quoteSource": "网络观点",
+            "quoteDisplayText": "国家核心系统不能用安卓",
+            "anchors": []
+          },
+          "totalDurationFrames": 80
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "用放大镜聚焦核心落点句「全部都是基于国外开源的linux打造的」，突出揭秘感：前面铺垫国产系统名，最后一句揭露开源本质，锁定关键细节。",
+          "content": [
+            {
+              "text": "但他们不知道，",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "国家需要保密的机构使用的所谓'国产系统'，",
+              "startFrame": 31,
+              "durationFrames": 106
+            },
+            {
+              "text": "包括麒麟、红旗、欧拉，",
+              "startFrame": 137,
+              "durationFrames": 78
+            },
+            {
+              "text": "全部都是基于国外开源的linux打造的。",
+              "startFrame": 214,
+              "durationFrames": 89
+            }
+          ],
+          "order": 13,
+          "param": {
+            "imageSrc": "images/鸿蒙商业圈地/scene_2_13.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "源于linux",
+                "showFrom": 3,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 304
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "揭示关键概念“鸿蒙底层=开源安卓”，命名血缘关系，用CONCEPT_CARD锚定核心术语。",
+          "content": [
+            {
+              "text": "鸿蒙的底层，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "和小米、OPPO一样。",
+              "startFrame": 34,
+              "durationFrames": 51
+            },
+            {
+              "text": "追根溯源，",
+              "startFrame": 85,
+              "durationFrames": 31
+            },
+            {
+              "text": "全都流着开源安卓的血。",
+              "startFrame": 115,
+              "durationFrames": 55
+            }
+          ],
+          "order": 14,
+          "param": {
+            "imageSrc": "images/鸿蒙商业圈地/scene_2_14.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "源于安卓",
+                "showFrom": 3,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 171
+        },
+        {
+          "narrativeType": "CONTRAST",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "强双标对比：Linux vs 开源安卓，同源不同待遇，用SPLIT_COMPARE并排对照展示双标。",
+          "content": [
+            {
+              "text": "凭什么基于Linux，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "就是安全典范？",
+              "startFrame": 39,
+              "durationFrames": 35
+            },
+            {
+              "text": "基于开源安卓，",
+              "startFrame": 74,
+              "durationFrames": 39
+            },
+            {
+              "text": "就成了卖国贼？",
+              "startFrame": 112,
+              "durationFrames": 34
+            }
+          ],
+          "order": 15,
+          "param": {
+            "leftSrc": "images/鸿蒙商业圈地/scene_2_15_left.png",
+            "rightSrc": "images/鸿蒙商业圈地/scene_2_15_right.png",
+            "leftLabel": "安全典范",
+            "rightLabel": "卖国贼",
+            "leftShowFrom": 0,
+            "rightShowFrom": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 147
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "定性转折：从技术维度跳转到商业维度，用COGNITIVE_SHIFT显性排除技术探讨。",
+          "content": [
+            {
+              "text": "这根本不是技术探讨。",
+              "startFrame": 0,
+              "durationFrames": 48
+            },
+            {
+              "text": "这是赤裸裸的，商业双标！",
+              "startFrame": 48,
+              "durationFrames": 71
+            }
+          ],
+          "order": 16,
+          "param": {
+            "notText": "技术探讨",
+            "butText": "商业双标",
+            "butSrc": "images/鸿蒙商业圈地/scene_2_16.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 119
+        }
+      ],
+      "audioSrc": "/audio/鸿蒙商业圈地/scene_2/scene_2.mp3",
+      "totalDurationFrames": 2025
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "揭示：垄断代价",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "以‘但’转折揭示鸿蒙闭源本质，完成从开源免费到闭源资产的认知转变，适合COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "我还要告诉你一个事实，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "安卓因为完全开源，",
+              "startFrame": 50,
+              "durationFrames": 46
+            },
+            {
+              "text": "不需要你付一分钱。",
+              "startFrame": 96,
+              "durationFrames": 45
+            },
+            {
+              "text": "但鸿蒙，",
+              "startFrame": 140,
+              "durationFrames": 26
+            },
+            {
+              "text": "是自家的闭源资产！",
+              "startFrame": 165,
+              "durationFrames": 51
+            }
+          ],
+          "order": 1,
+          "param": {
+            "notText": "安卓免费开源",
+            "butText": "鸿蒙闭源资产",
+            "butSrc": "images/鸿蒙商业圈地/scene_3_1.png",
+            "notContentIndex": 1,
+            "butContentIndex": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 216
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "清晰因果链：安卓未死→不收费，生态封锁→垄断市场，两层传导适合CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "现在它不收费，",
+              "startFrame": 0,
+              "durationFrames": 41
+            },
+            {
+              "text": "是因为安卓还没死！",
+              "startFrame": 40,
+              "durationFrames": 53
+            },
+            {
+              "text": "一旦生态封锁完成，",
+              "startFrame": 92,
+              "durationFrames": 48
+            },
+            {
+              "text": "彻底垄断市场。",
+              "startFrame": 140,
+              "durationFrames": 43
+            }
+          ],
+          "order": 2,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "免费使用",
+                "imageSrc": "images/鸿蒙商业圈地/scene_3_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "安卓存活",
+                "imageSrc": "images/鸿蒙商业圈地/scene_3_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "生态封锁",
+                "imageSrc": "images/鸿蒙商业圈地/scene_3_2_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "垄断市场",
+                "imageSrc": "images/鸿蒙商业圈地/scene_3_2_img3.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 184
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "反问句式聚焦研发费买单问题，短促冲击性强，无需配图，适用TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "你猜猜看，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "那几百亿的研发费。",
+              "startFrame": 27,
+              "durationFrames": 52
+            },
+            {
+              "text": "最后是谁来买单？",
+              "startFrame": 78,
+              "durationFrames": 45
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              "那几百亿的研发费",
+              "最后是谁来买单"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "谁来买单",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 124
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "过渡到当前案例并列举两个常见应用，平铺叙述且未形成明确对比或分点，适合CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "甚至都不用等垄断了，",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "就看现在。",
+              "startFrame": 51,
+              "durationFrames": 25
+            },
+            {
+              "text": "同一个打车软件，",
+              "startFrame": 75,
+              "durationFrames": 39
+            },
+            {
+              "text": "同一个游戏。",
+              "startFrame": 113,
+              "durationFrames": 31
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/鸿蒙商业圈地/scene_3_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 145
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "给出适配鸿蒙带来的两个并列成本项：开发成本和维护费，可配图宫格展示，适用PANEL_GRID。",
+          "content": [
+            {
+              "text": "为了多适配一个鸿蒙系统。",
+              "startFrame": 0,
+              "durationFrames": 60
+            },
+            {
+              "text": "企业就要多花一倍的开发成本。",
+              "startFrame": 60,
+              "durationFrames": 70
+            },
+            {
+              "text": "多出一倍的长期维护费。",
+              "startFrame": 129,
+              "durationFrames": 55
+            }
+          ],
+          "order": 5,
+          "param": {
+            "panels": [
+              {
+                "src": "images/鸿蒙商业圈地/scene_3_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/鸿蒙商业圈地/scene_3_5_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/鸿蒙商业圈地/scene_3_5_img2.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 185
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "反问立即驳斥，形成强烈情绪金句，短促有力无需配图，适用TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "你以为这笔钱，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "是资本家自己出了？",
+              "startFrame": 32,
+              "durationFrames": 43
+            },
+            {
+              "text": "别天真了！",
+              "startFrame": 75,
+              "durationFrames": 32
+            }
+          ],
+          "order": 6,
+          "param": {
+            "coreSentence": [
+              "你以为这笔钱，是资本家自己出了？"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "资本家！",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 107
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片收束结论，金句式点明成本最终由消费者承担，冲击收尾，适用TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "羊毛出在羊身上。",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "每一分额外的开销，",
+              "startFrame": 50,
+              "durationFrames": 51
+            },
+            {
+              "text": "都会转嫁到你的头上。",
+              "startFrame": 100,
+              "durationFrames": 46
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              "每一分额外的开销，",
+              "都会转嫁到你的头上。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "转嫁到你的头上",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 147
+        }
+      ],
+      "audioSrc": "/audio/鸿蒙商业圈地/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1106
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "反转：替鸿蒙数钱",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开篇短促强结论，直接定性鸿蒙破坏开源，结构为金句冲击，无需配图，用TEXT_FOCUS聚焦核心论断。",
+          "content": [
+            {
+              "text": "更为可怕的是，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "鸿蒙破坏了开源精神。",
+              "startFrame": 36,
+              "durationFrames": 59
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              "鸿蒙破坏了开源精神"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "破坏了开源精神",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 95
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "通过表里不一的对照，扭转观众对‘国产自研’的认知，符合COGNITIVE_SHIFT的‘揭露伪装’结构。",
+          "content": [
+            {
+              "text": "至少在鸿蒙5.0之前，",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "他一边用着安卓的核心代码，",
+              "startFrame": 54,
+              "durationFrames": 63
+            },
+            {
+              "text": "一边却打着百分百国产自研的口号。",
+              "startFrame": 116,
+              "durationFrames": 92
+            }
+          ],
+          "order": 2,
+          "param": {
+            "leftSrc": "images/鸿蒙商业圈地/scene_4_2_left.png",
+            "rightSrc": "images/鸿蒙商业圈地/scene_4_2_right.png",
+            "leftLabel": "套壳安卓",
+            "rightLabel": "宣称自研",
+            "leftShowFrom": 0,
+            "rightShowFrom": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 209
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "用比喻将‘信任’解读为‘杂草’，需聚焦核心意象，MAGNIFYING_GLASS可锁定‘信任’‘杂草’等高价值锚点。",
+          "content": [
+            {
+              "text": "这是把当初投身开源的开发者的信任，",
+              "startFrame": 0,
+              "durationFrames": 89
+            },
+            {
+              "text": "按在了地上摩擦",
+              "startFrame": 88,
+              "durationFrames": 43
+            }
+          ],
+          "order": 3,
+          "param": {
+            "anchors": [
+              {
+                "text": "信任",
+                "showFrom": 0,
+                "color": "#111111",
+                "anim": "spring",
+                "audioEffect": null
+              },
+              {
+                "text": "按地摩擦",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 131
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "明确因果传导：成果被攫取 → 失去动力，每环一图，用CAUSE_CHAIN演示机制。",
+          "content": [
+            {
+              "text": "当开源的成果被攫取，",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "所有开源者都会失去继续开源的动力。",
+              "startFrame": 54,
+              "durationFrames": 92
+            }
+          ],
+          "order": 4,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "成果被攫取",
+                "imageSrc": "images/鸿蒙商业圈地/scene_4_4_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "失去开源动力",
+                "imageSrc": "images/鸿蒙商业圈地/scene_4_4_img1.png",
+                "showFrom": 1
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 146
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "用KPI大字报突出展示失去开源后硬件翻倍（2x）和服务三倍（3x）的涨价倍数，分步强调数字冲击感。",
+          "content": [
+            {
+              "text": "失去开源社区的普惠，",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "你买的每一件电子产品，",
+              "startFrame": 45,
+              "durationFrames": 48
+            },
+            {
+              "text": "硬件价格会原地翻倍；",
+              "startFrame": 93,
+              "durationFrames": 53
+            },
+            {
+              "text": "你用的每一项互联网服务，",
+              "startFrame": 146,
+              "durationFrames": 51
+            },
+            {
+              "text": "开销起码再涨三倍。",
+              "startFrame": 196,
+              "durationFrames": 51
+            }
+          ],
+          "order": 5,
+          "param": {
+            "blocks": [
+              {
+                "value": 1,
+                "suffix": "件",
+                "label": "电子产品",
+                "showFrom": 1
+              },
+              {
+                "value": 2,
+                "suffix": "倍以上",
+                "label": "硬件价格",
+                "showFrom": 2
+              },
+              {
+                "value": 3,
+                "suffix": "倍以上",
+                "label": "服务费用",
+                "showFrom": 4
+              }
+            ],
+            "countDuration": 28,
+            "anchors": []
+          },
+          "totalDurationFrames": 247
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "让步陈述，平缓过渡，为后续转折铺垫，使用CENTER_FOCUS单图保持节奏。",
+          "content": [
+            {
+              "text": "商业公司逐利，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "这无可厚非。",
+              "startFrame": 37,
+              "durationFrames": 32
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/鸿蒙商业圈地/scene_4_6.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 69
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "再次揭露伪装，与前面认知扭转一致，用COGNITIVE_SHIFT强化‘野心→牺牲’的反差认知。",
+          "content": [
+            {
+              "text": "但他们把收割市场的野心，",
+              "startFrame": 0,
+              "durationFrames": 69
+            },
+            {
+              "text": "包装成了为国为民的牺牲。",
+              "startFrame": 68,
+              "durationFrames": 68
+            }
+          ],
+          "order": 7,
+          "param": {
+            "notText": "为国为民的牺牲",
+            "butText": "收割市场的野心",
+            "butSrc": "images/鸿蒙商业圈地/scene_4_7.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 137
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束全篇，最具冲击力的结论金句，用TEXT_FOCUS全屏呈现，唤起情绪共鸣。",
+          "content": [
+            {
+              "text": "而你们，我智慧的同胞们",
+              "startFrame": 0,
+              "durationFrames": 70
+            },
+            {
+              "text": "被人卖了，",
+              "startFrame": 69,
+              "durationFrames": 28
+            },
+            {
+              "text": "还在热泪盈眶地替他们数钱。",
+              "startFrame": 97,
+              "durationFrames": 64
+            }
+          ],
+          "order": 8,
+          "param": {
+            "coreSentence": [
+              "而你们，我智慧的同胞们",
+              "被人卖了，还在热泪盈眶地替他们数钱。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "被人卖了",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "替他们数钱",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 161
+        }
+      ],
+      "audioSrc": "/audio/鸿蒙商业圈地/scene_4/scene_4.mp3",
+      "totalDurationFrames": 1194
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "鸿蒙的遮羞布",
+    "subtitle": "哄是哄骗的哄，蒙是蒙人的蒙",
+    "themeColor": "#FF6900",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

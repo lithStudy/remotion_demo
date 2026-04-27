@@ -24,6 +24,7 @@ from step1_analysis import (
     gemini_fix_after_warnings,
 )
 from template_registry import TEMPLATE_REGISTRY, generate_ai_prompt_guide
+from utils.llm_utils import create_llm_client
 from utils import AiLogger, load_config, load_env
 from validation_errors import ScriptValidationError
 
@@ -435,20 +436,28 @@ def _validate_and_auto_fix(
         raise ScriptValidationError(f"自动修订失败: {ex}", path="step1.auto_fix")
 
 
-def analyze_with_gemini(text: str, config: dict, ai_logger: AiLogger | None) -> dict:
+def analyze_with_llm(
+    text: str,
+    config: dict,
+    ai_logger: AiLogger | None,
+    *,
+    llm_provider: str | None = None,
+    llm_model: str | None = None,
+) -> dict:
     """
-    调用 Gemini 对口播文案进行完整分析，返回场景脚本字典。
+    调用 LLM（Gemini / DeepSeek）对口播文案进行完整分析，返回场景脚本字典。
     编排 _run_ai_analysis_pipeline → _cleanup_intermediate_fields → _validate_and_auto_fix。
     """
-    import os
-    from google import genai
+    client = create_llm_client(config, provider=llm_provider)
 
-    api_key = os.environ.get("GEMINI_API_KEY", "")
-    if not api_key:
-        raise ValueError("未设置 GEMINI_API_KEY，请在 .env 中配置")
+    provider = str(getattr(client, "provider", "gemini")).lower().strip()
+    if llm_model and str(llm_model).strip():
+        model = str(llm_model).strip()
+    elif provider == "deepseek":
+        model = config.get("deepseek_model", "deepseek-v4-pro")
+    else:
+        model = config.get("gemini_model", "gemini-2.0-flash")
 
-    client = genai.Client(api_key=api_key)
-    model = config.get("gemini_model", "gemini-2.0-flash")
     fps = config.get("fps", 30)
     image_style = config.get("image_style", "简洁线条插画风格，无背景，无文字")
 
@@ -476,6 +485,15 @@ def main():
     parser.add_argument("--input", "-i", required=True, help="口播文案文件路径")
     parser.add_argument("--output", "-o", required=True, help="输出目录路径")
     parser.add_argument("--name", "-n", help="视频名称（英文，不填则读取 config.json）")
+    parser.add_argument(
+        "--llm-provider",
+        choices=["gemini", "deepseek"],
+        help="LLM 提供方（默认读取 config.json 的 llm_provider；未配置则 gemini）",
+    )
+    parser.add_argument(
+        "--llm-model",
+        help="覆盖模型名（gemini/deepseek 通用覆盖；不填则按 provider 读取 config.json 对应字段）",
+    )
     args = parser.parse_args()
 
     script_dir = Path(__file__).parent
@@ -503,7 +521,13 @@ def main():
 
     print(f"📄 读取文案: {len(text)} 字符")
 
-    result = analyze_with_gemini(text, config, ai_logger)
+    result = analyze_with_llm(
+        text,
+        config,
+        ai_logger,
+        llm_provider=args.llm_provider,
+        llm_model=args.llm_model,
+    )
     _merge_dash_only_captions(result)
     finalize_step1_content_and_anchors(result)
     _inject_cover_for_step4(result, video_name, config)

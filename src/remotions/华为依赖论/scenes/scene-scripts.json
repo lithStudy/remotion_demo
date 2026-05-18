@@ -1,0 +1,1447 @@
+{
+  "topic": "中国最该怕的，不是没有华为，而是只有一个华为",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：唯一华为之惧",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "原文为强对比金句，短小完整，适合用TEXT_FOCUS以纯大字方式呈现结论暴击，冲击力最大化。",
+          "content": [
+            {
+              "text": "中国最该怕的，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "不是没有华为，",
+              "startFrame": 36,
+              "durationFrames": 30
+            },
+            {
+              "text": "而是只有华为。",
+              "startFrame": 65,
+              "durationFrames": 33
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              "中国最该怕的，不是没有华为，",
+              "而是只有华为。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "只有华为"
+              }
+            ]
+          },
+          "totalDurationFrames": 98
+        }
+      ],
+      "audioSrc": "/audio/华为依赖论/scene_1/scene_1.mp3",
+      "totalDurationFrames": 100
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析：通信网络并非华为独建",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "以流传的错误说法作为引述开篇，适合用QUOTE_CITATION模板以引用体裁呈现网络流传说法，再由后续反驳形成认知翻转。",
+          "content": [
+            {
+              "text": "网上总有人说，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "你只要用手机，",
+              "startFrame": 32,
+              "durationFrames": 33
+            },
+            {
+              "text": "就是在用华为基站。",
+              "startFrame": 65,
+              "durationFrames": 46
+            },
+            {
+              "text": "好像中国的通信网络是华为一个人建的。",
+              "startFrame": 111,
+              "durationFrames": 89
+            },
+            {
+              "text": "但凡你去翻过任何一轮运营商的集采公告，",
+              "startFrame": 199,
+              "durationFrames": 95
+            },
+            {
+              "text": "你就知道这话有多离谱。",
+              "startFrame": 294,
+              "durationFrames": 53
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteDisplayText": "你只要用手机，就在用华为基站。",
+            "showFrom": 1,
+            "quoteSource": "智选用户"
+          },
+          "totalDurationFrames": 347
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "仅陈述具体案例背景事实，单一数字无对比，用居中卡片平铺为后续数据表格做引，结构单一清晰。",
+          "content": [
+            {
+              "text": "中国移动2023到2024年搞了一轮41亿元的5G基站集采。",
+              "startFrame": 0,
+              "durationFrames": 166
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/华为依赖论/scene_2_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 166
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "DATA_TABLE",
+          "reasoning": "‘结果是什么？’引出多厂商份额与入围状态的并列数据，天然适合表格逐行展示厂商名称与份额/状态。",
+          "content": [
+            {
+              "text": "结果是什么？",
+              "startFrame": 0,
+              "durationFrames": 29
+            },
+            {
+              "text": "华为拿大概50%，",
+              "startFrame": 28,
+              "durationFrames": 67
+            },
+            {
+              "text": "中兴拿23%到37%，",
+              "startFrame": 95,
+              "durationFrames": 84
+            },
+            {
+              "text": "剩下的，由爱立信、",
+              "startFrame": 179,
+              "durationFrames": 52
+            },
+            {
+              "text": "诺基亚上海贝尔、",
+              "startFrame": 230,
+              "durationFrames": 45
+            },
+            {
+              "text": "大唐移动瓜分。",
+              "startFrame": 275,
+              "durationFrames": 45
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "5G基站集采份额",
+            "columns": [
+              "厂商",
+              "份额"
+            ],
+            "rows": [
+              {
+                "cells": [
+                  "华为",
+                  "大概50%"
+                ],
+                "showFrom": 1
+              },
+              {
+                "cells": [
+                  "中兴",
+                  "23%~37%"
+                ],
+                "showFrom": 2
+              },
+              {
+                "cells": [
+                  "爱立信",
+                  "部分"
+                ],
+                "showFrom": 3
+              },
+              {
+                "cells": [
+                  "诺基亚上海贝尔",
+                  "部分"
+                ],
+                "showFrom": 4
+              },
+              {
+                "cells": [
+                  "大唐移动",
+                  "部分"
+                ],
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 321
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "‘不是…而是…’直接构成错误归因→制度真相的认知翻转，命中 COGNITIVE_SHIFT 的强对照用法。",
+          "content": [
+            {
+              "text": "这不是华为\"施舍\"给别人的一点份额，",
+              "startFrame": 0,
+              "durationFrames": 77
+            },
+            {
+              "text": "而是运营商主动设计的分配制度。",
+              "startFrame": 76,
+              "durationFrames": 90
+            }
+          ],
+          "order": 4,
+          "param": {
+            "notText": "华为施舍份额",
+            "butText": "运营商主动设计",
+            "butSrc": "images/华为依赖论/scene_2_4.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 167
+        }
+      ],
+      "audioSrc": "/audio/华为依赖论/scene_2/scene_2.mp3",
+      "totalDurationFrames": 1001
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "剖析：份额分配的双重逻辑",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "引入性问题，短促聚焦，因不属于强结论类金句，使用CENTER_FOCUS平缓呈现，避免提前使用全片级冲击模板",
+          "content": [
+            {
+              "text": "为什么运营商要这么干？",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "两个原因。",
+              "startFrame": 50,
+              "durationFrames": 39
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为依赖论/scene_3_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 89
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "本段以'供应链安全'为核心论点，后接运营商不会把命脉绑死在一家公司的解释，末尾以'生存本能'收束，符合METHOD_STACK'标题+解释展开'的结构",
+          "content": [
+            {
+              "text": "第一，",
+              "startFrame": 0,
+              "durationFrames": 18
+            },
+            {
+              "text": "供应链安全。",
+              "startFrame": 17,
+              "durationFrames": 41
+            },
+            {
+              "text": "任何理性的运营商，",
+              "startFrame": 57,
+              "durationFrames": 44
+            },
+            {
+              "text": "都不会把事关国民经济命脉的核心网络，",
+              "startFrame": 101,
+              "durationFrames": 83
+            },
+            {
+              "text": "绑死在一家公司身上。",
+              "startFrame": 184,
+              "durationFrames": 55
+            },
+            {
+              "text": "这不是技术判断，",
+              "startFrame": 238,
+              "durationFrames": 40
+            },
+            {
+              "text": "这是生存本能。",
+              "startFrame": 278,
+              "durationFrames": 46
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "供应链安全",
+            "imageSrc": "images/华为依赖论/scene_3_2.png",
+            "notes": [
+              {
+                "text": "运营商不会把核心网络绑死在一家公司身上",
+                "showFrom": 2
+              },
+              {
+                "text": "这不是技术判断，是生存本能",
+                "showFrom": 5
+              }
+            ]
+          },
+          "totalDurationFrames": 325
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "本段以'议价能力'为核心论点，后接多家供应商竞标压低成本的解释，符合METHOD_STACK'标题+解释展开'的结构",
+          "content": [
+            {
+              "text": "第二，",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "议价能力。",
+              "startFrame": 18,
+              "durationFrames": 36
+            },
+            {
+              "text": "只有让两到三家供应商同时竞标，",
+              "startFrame": 54,
+              "durationFrames": 79
+            },
+            {
+              "text": "运营商才能把采购成本压到最低。",
+              "startFrame": 133,
+              "durationFrames": 71
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "议价能力",
+            "imageSrc": "images/华为依赖论/scene_3_3.png",
+            "notes": [
+              {
+                "text": "多家供应商同时竞标，压低采购成本",
+                "showFrom": 2
+              }
+            ]
+          },
+          "totalDurationFrames": 204
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全段为短促强结论，金句属性突出，使用TEXT_FOCUS实现无配图冲击，将注意力完全锁定在这一核心论点",
+          "content": [
+            {
+              "text": "中兴的存在，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "本身就是对华为最大的制衡筹码。",
+              "startFrame": 32,
+              "durationFrames": 77
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              "中兴的存在，",
+              "本身就是对华为最大的制衡筹码。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "最大的制衡筹码",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 109
+        }
+      ],
+      "audioSrc": "/audio/华为依赖论/scene_3/scene_3.mp3",
+      "totalDurationFrames": 727
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "命名：压舱石角色",
+      "items": [
+        {
+          "narrativeType": "DATA",
+          "reasoning": "决策树：Step1 数据型但无同框对比/完成度/单个核心大字 -> 未命中 -> Step2 无对立 -> Step3 结构化多分点；口播清晰包含两个并列技术证据（芯片量产与5纳米推进、核心网55家客户），各有一图，故选 PANEL_GRID，panels 数量 2。自检：真实并列分点与 panels 数一致，无强行分点，符合合并后一镜双宫格的表达。",
+          "template": "PANEL_GRID",
+          "content": [
+            {
+              "text": "而中兴确实接得住这个角色。",
+              "startFrame": 0,
+              "durationFrames": 67
+            },
+            {
+              "text": "7纳米5G基站芯片量产，",
+              "startFrame": 66,
+              "durationFrames": 75
+            },
+            {
+              "text": "5纳米在推进。",
+              "startFrame": 140,
+              "durationFrames": 42
+            },
+            {
+              "text": "核心网云原生化全球55家客户。",
+              "startFrame": 182,
+              "durationFrames": 98
+            },
+            {
+              "text": "2024年全年营收约1213亿。",
+              "startFrame": 279,
+              "durationFrames": 120
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为依赖论/scene_4_2_img0.png",
+                "showFrom": 1,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为依赖论/scene_4_2_img1.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为依赖论/scene_4_2_img2.png",
+                "showFrom": 3,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/华为依赖论/scene_4_2_img3.png",
+                "showFrom": 4,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "中兴压舱石",
+                "color": "#EF4444",
+                "showFrom": 0
+              }
+            ]
+          },
+          "totalDurationFrames": 400
+        },
+        {
+          "narrativeType": "CASE",
+          "reasoning": "本段描述中国移动75亿核心网招标被华为和中兴瓜分的商业事实，属于平缓叙述单一案例，适合CENTER_FOCUS以单图居中承载",
+          "template": "CENTER_FOCUS",
+          "content": [
+            {
+              "text": "中国移动75亿的核心网招标，",
+              "startFrame": 0,
+              "durationFrames": 71
+            },
+            {
+              "text": "华为和中兴两家瓜分绝大多数份额。",
+              "startFrame": 70,
+              "durationFrames": 97
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/华为依赖论/scene_4_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "75亿",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 168
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "reasoning": "决策树：Step1 无数据 -> Step2 无对立 -> Step3 无多分点结构 -> Step4 首次抛出需标签化的比喻概念“压舱石”，正是命名/术语操作，故选用 CONCEPT_CARD。自检：明确落点在概念自身，非逻辑连环或案例弧，无需 MAGNIFYING_GLASS 等其它模板。",
+          "template": "CONCEPT_CARD",
+          "content": [
+            {
+              "text": "业内管中兴叫“压舱石”—",
+              "startFrame": 0,
+              "durationFrames": 68
+            },
+            {
+              "text": "有它在，",
+              "startFrame": 67,
+              "durationFrames": 27
+            },
+            {
+              "text": "运营商就永远有第二选择。",
+              "startFrame": 93,
+              "durationFrames": 66
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/华为依赖论/scene_4_4.png",
+            "conceptName": "压舱石",
+            "anchors": []
+          },
+          "totalDurationFrames": 159
+        }
+      ],
+      "audioSrc": "/audio/华为依赖论/scene_4/scene_4.mp3",
+      "totalDurationFrames": 728
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "反转：份额不等于技术",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "直接引用常见的错误观点，适合用 QUOTE_CITATION 呈现引述与质疑，承担开场钩子功能。",
+          "content": [
+            {
+              "text": "有人会说，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "华为份额那么高，",
+              "startFrame": 26,
+              "durationFrames": 42
+            },
+            {
+              "text": "不就说明技术最好吗？",
+              "startFrame": 67,
+              "durationFrames": 53
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteSource": "非业内人士",
+            "quoteDisplayText": "华为份额那么高，，不就说明技术最好吗？",
+            "showFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 120
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促有力的否定句，具有金句冲击力，用 TEXT_FOCUS 聚焦强调这一拆解偏见的结论。",
+          "content": [
+            {
+              "text": "你真这么想，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "说明你没做过B2B的生意。",
+              "startFrame": 36,
+              "durationFrames": 68
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              "你真这么想，",
+              "说明你没做过B2B的生意。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "B2B的生意",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 104
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "以“技术能力只是敲门砖”为核心观点，后跟解释展开，符合 METHOD_STACK 的标题式核心＋解释句结构。",
+          "content": [
+            {
+              "text": "但凡不是直接面向普通消费者的招投标，",
+              "startFrame": 0,
+              "durationFrames": 84
+            },
+            {
+              "text": "技术能力只是敲门砖—",
+              "startFrame": 84,
+              "durationFrames": 53
+            },
+            {
+              "text": "你够格了，",
+              "startFrame": 136,
+              "durationFrames": 31
+            },
+            {
+              "text": "才有资格坐到牌桌上。",
+              "startFrame": 166,
+              "durationFrames": 47
+            },
+            {
+              "text": "但真正决定谁能中标的，",
+              "startFrame": 212,
+              "durationFrames": 66
+            },
+            {
+              "text": "跟领导层的关系、",
+              "startFrame": 278,
+              "durationFrames": 44
+            },
+            {
+              "text": "利益绑定、",
+              "startFrame": 322,
+              "durationFrames": 29
+            },
+            {
+              "text": "长期合作默契，",
+              "startFrame": 350,
+              "durationFrames": 45
+            },
+            {
+              "text": "这些才是桌底下的牌。",
+              "startFrame": 395,
+              "durationFrames": 60
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "商业不止技术",
+            "imageSrc": "images/华为依赖论/scene_5_3.png",
+            "notes": [
+              {
+                "text": "技术仅够满足准入门槛",
+                "showFrom": 1
+              },
+              {
+                "text": "关系、利益绑定、长期合作默契",
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 456
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "以华为为具体案例，解析其份额背后的双重因素并提炼真正护城河，适合 CASE_BREAKDOWN 个案剖析。",
+          "content": [
+            {
+              "text": "华为能拿过半份额，",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "技术强是一方面，",
+              "startFrame": 52,
+              "durationFrames": 50
+            },
+            {
+              "text": "跟运营商多年深耕绑定的关系网，",
+              "startFrame": 101,
+              "durationFrames": 76
+            },
+            {
+              "text": "才是真正的护城河。",
+              "startFrame": 176,
+              "durationFrames": 48
+            },
+            {
+              "text": "中兴拿23%到37%，",
+              "startFrame": 223,
+              "durationFrames": 81
+            },
+            {
+              "text": "不代表技术差到只有华为一半，",
+              "startFrame": 304,
+              "durationFrames": 66
+            },
+            {
+              "text": "而是另一套关系网络的结果。",
+              "startFrame": 369,
+              "durationFrames": 64
+            }
+          ],
+          "order": 5,
+          "param": {
+            "title": "华为护城河拆解",
+            "imageSrc": "images/华为依赖论/scene_5_5.png",
+            "phases": [
+              {
+                "phaseLabel": "表面现象",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "常见误判",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "真正护城河",
+                "showFrom": 2
+              },
+              {
+                "phaseLabel": "反证收束",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 434
+        }
+      ],
+      "audioSrc": "/audio/华为依赖论/scene_5/scene_5.mp3",
+      "totalDurationFrames": 1115
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "剖析：技术领先的短暂性",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引述虚拟观点作为开场，使用 QUOTE_CITATION 引用体裁强化「有人会说」的引述感。",
+          "content": [
+            {
+              "text": "有人会说，",
+              "startFrame": 0,
+              "durationFrames": 26
+            },
+            {
+              "text": "华为是技术最强的，",
+              "startFrame": 25,
+              "durationFrames": 50
+            },
+            {
+              "text": "换别的就是降级。",
+              "startFrame": 74,
+              "durationFrames": 49
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteSource": "虚拟观点引述"
+          },
+          "totalDurationFrames": 123
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "反驳核心论点，平述观点，无特殊数据或对比结构 → CENTER_FOCUS 展示关键语句；与后文案例拆分以保持单镜头短节拍。",
+          "content": [
+            {
+              "text": "但通信设备的技术领先，",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "是以“月”为单位交替的。",
+              "startFrame": 52,
+              "durationFrames": 51
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/华为依赖论/scene_6_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 103
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "KPI_HERO",
+          "reasoning": "华为MetaAAU技术指标突出，384个振子和降30%能耗适合用KPI大字报做数字冲击。",
+          "content": [
+            {
+              "text": "华为的MetaAAU天线振子翻到384个，",
+              "startFrame": 0,
+              "durationFrames": 107
+            },
+            {
+              "text": "能耗降30%—",
+              "startFrame": 106,
+              "durationFrames": 38
+            },
+            {
+              "text": "很强。",
+              "startFrame": 144,
+              "durationFrames": 35
+            }
+          ],
+          "order": 3,
+          "param": {
+            "blocks": [
+              {
+                "value": 384,
+                "suffix": " 个",
+                "label": "天线振子",
+                "showFrom": 0
+              },
+              {
+                "value": 30,
+                "prefix": "↓",
+                "suffix": "%",
+                "label": "能耗降幅",
+                "showFrom": 1
+              }
+            ]
+          },
+          "totalDurationFrames": 179
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "竞争对手案例，平述事实，无强对比标记 → CENTER_FOCUS 展示竞争格局；独立成镜保持转折张力。",
+          "content": [
+            {
+              "text": "但中兴、爱立信、诺基亚，",
+              "startFrame": 0,
+              "durationFrames": 70
+            },
+            {
+              "text": "也都有同级别的Massive MIMO方案。",
+              "startFrame": 69,
+              "durationFrames": 74
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/华为依赖论/scene_6_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "可替代",
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping",
+                "showFrom": 1
+              }
+            ]
+          },
+          "totalDurationFrames": 144
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确“不是…而是…”结构，纠偏认知 → COGNITIVE_SHIFT 正好表现概念翻转。",
+          "content": [
+            {
+              "text": "这不是一个永远无法追赶的物理定律，",
+              "startFrame": 0,
+              "durationFrames": 77
+            },
+            {
+              "text": "是工程迭代的速度竞赛。",
+              "startFrame": 76,
+              "durationFrames": 70
+            }
+          ],
+          "order": 5,
+          "param": {
+            "notText": "永远无法追赶的物理定律",
+            "butText": "工程迭代的速度竞赛",
+            "butSrc": "images/华为依赖论/scene_6_5.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 147
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片级金句结论，无需配图，冲击收束 → TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "全球电信设备市场从来就是七国争霸，",
+              "startFrame": 0,
+              "durationFrames": 88
+            },
+            {
+              "text": "不是一人称王。",
+              "startFrame": 87,
+              "durationFrames": 36
+            }
+          ],
+          "order": 8,
+          "param": {
+            "coreSentence": [
+              "全球电信设备市场从来就是七国争霸，",
+              "不是一人称王。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "七国争霸",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "一人称王",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 124
+        }
+      ],
+      "audioSrc": "/audio/华为依赖论/scene_6/scene_6.mp3",
+      "totalDurationFrames": 818
+    },
+    {
+      "sceneId": "scene_7",
+      "sceneName": "剖析：安全在于选择",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "典型“不是…而是…”认知翻转结构，用COGNITIVE_SHIFT突出安全取决于选择的转折，长度35字未超限。",
+          "content": [
+            {
+              "text": "中国通信网络的安全，",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "从来不取决于某一家公司有多强。",
+              "startFrame": 45,
+              "durationFrames": 75
+            },
+            {
+              "text": "它取决于运营商有没有选择。",
+              "startFrame": 120,
+              "durationFrames": 70
+            }
+          ],
+          "order": 1,
+          "param": {
+            "notText": "一家公司多强",
+            "butText": "运营商有选择",
+            "butSrc": "images/华为依赖论/scene_7_1.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 190
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "明确列出四家竞争厂商作为并列例子支撑“选择”的论点，每点可独立配图（公司logo），用PANEL_GRID宫格展示增强说服力，最后总结句在同一个镜头内自然收束。",
+          "content": [
+            {
+              "text": "中兴、",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "大唐、",
+              "startFrame": 21,
+              "durationFrames": 22
+            },
+            {
+              "text": "爱立信、",
+              "startFrame": 43,
+              "durationFrames": 19
+            },
+            {
+              "text": "诺基亚，",
+              "startFrame": 62,
+              "durationFrames": 26
+            },
+            {
+              "text": "它们的存在，",
+              "startFrame": 87,
+              "durationFrames": 27
+            },
+            {
+              "text": "就是运营商手里最大的底牌。",
+              "startFrame": 113,
+              "durationFrames": 62
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为依赖论/scene_7_2_img0.png",
+                "showFrom": 0
+              },
+              {
+                "src": "images/华为依赖论/scene_7_2_img1.png",
+                "showFrom": 1
+              },
+              {
+                "src": "images/华为依赖论/scene_7_2_img2.png",
+                "showFrom": 2
+              },
+              {
+                "src": "images/华为依赖论/scene_7_2_img3.png",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 175
+        }
+      ],
+      "audioSrc": "/audio/华为依赖论/scene_7/scene_7.mp3",
+      "totalDurationFrames": 367
+    },
+    {
+      "sceneId": "scene_8",
+      "sceneName": "反转：华为消失的假设",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "假设华为消失后半年内被竞争对手接替、全面替换，三环因果传导适合 CAUSE_CHAIN 展示机制链条。",
+          "content": [
+            {
+              "text": "说句不好听的，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "就算华为明天消失了，",
+              "startFrame": 36,
+              "durationFrames": 58
+            },
+            {
+              "text": "半年之内，",
+              "startFrame": 93,
+              "durationFrames": 30
+            },
+            {
+              "text": "中兴、大唐等厂商，",
+              "startFrame": 123,
+              "durationFrames": 63
+            },
+            {
+              "text": "就能把华为的市场全部接住。",
+              "startFrame": 185,
+              "durationFrames": 75
+            },
+            {
+              "text": "从基站硬件到核心网软件，全面替换。",
+              "startFrame": 259,
+              "durationFrames": 102
+            }
+          ],
+          "order": 1,
+          "param": {
+            "nodes": [
+              {
+                "label": "假设消失",
+                "imageSrc": "images/华为依赖论/scene_8_1_img0.png",
+                "showFrom": 1
+              },
+              {
+                "label": "半年接替",
+                "imageSrc": "images/华为依赖论/scene_8_1_img1.png",
+                "showFrom": 3
+              },
+              {
+                "label": "全面替换",
+                "imageSrc": "images/华为依赖论/scene_8_1_img2.png",
+                "showFrom": 5
+              }
+            ]
+          },
+          "totalDurationFrames": 362
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促强结论，直接向用户传递“华为消失也无感知”的冲击性结果，适合无配图的TEXT_FOCUS金句模板。",
+          "content": [
+            {
+              "text": "你在手机上刷视频、打电话，",
+              "startFrame": 0,
+              "durationFrames": 69
+            },
+            {
+              "text": "甚至感觉不到任何变化。",
+              "startFrame": 68,
+              "durationFrames": 53
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              "你在手机上刷视频、打电话，",
+              "甚至感觉不到任何变化。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "感觉不到任何变化",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 121
+        }
+      ],
+      "audioSrc": "/audio/华为依赖论/scene_8/scene_8.mp3",
+      "totalDurationFrames": 484
+    },
+    {
+      "sceneId": "scene_9",
+      "sceneName": "召唤：可替代才是竞争",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "该段主结构是‘不是…而是…’的认知转换对比，后接因果结论，整体为一个完整的认知转变陈述，适合COGNITIVE_SHIFT模板；拆分保留，与后句结论在叙事角色上形成逻辑→收束的跳变。",
+          "content": [
+            {
+              "text": "真正健康的产业链，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "不是‘离不开谁’，",
+              "startFrame": 42,
+              "durationFrames": 43
+            },
+            {
+              "text": "而是‘谁都可以被替换，",
+              "startFrame": 85,
+              "durationFrames": 46
+            },
+            {
+              "text": "于是谁都不敢松懈’。",
+              "startFrame": 130,
+              "durationFrames": 50
+            }
+          ],
+          "order": 1,
+          "param": {
+            "notText": "离不开谁",
+            "butText": "谁都可被替换",
+            "butSrc": "images/华为依赖论/scene_9_1.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 180
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促金句式结论，全片收束点，无需配图，适合TEXT_FOCUS；拆分因前段为对比解释，此段为点题意义，结构纯净。",
+          "content": [
+            {
+              "text": "这才是竞争的意义。",
+              "startFrame": 0,
+              "durationFrames": 45
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              "这才是竞争的意义。"
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 45
+        }
+      ],
+      "audioSrc": "/audio/华为依赖论/scene_9/scene_9.mp3",
+      "totalDurationFrames": 227
+    },
+    {
+      "sceneId": "scene_10",
+      "sceneName": "反转：身份错位的荒诞",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "引入更讽刺的事，并平铺对比两家企业的身份属性（国有参股 vs 纯民营），适合用 SPLIT_COMPARE 并置展示，为后文认知反转铺垫。",
+          "content": [
+            {
+              "text": "最后说个更讽刺的事。",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "中兴是有国家资本参股的企业，",
+              "startFrame": 50,
+              "durationFrames": 79
+            },
+            {
+              "text": "华为是纯粹的民营企业。",
+              "startFrame": 128,
+              "durationFrames": 68
+            },
+            {
+              "text": "不知道从什么时候起，",
+              "startFrame": 196,
+              "durationFrames": 41
+            },
+            {
+              "text": "很多人眼里，",
+              "startFrame": 236,
+              "durationFrames": 32
+            },
+            {
+              "text": "华为反倒比中兴更像国家的代言人了。",
+              "startFrame": 268,
+              "durationFrames": 86
+            }
+          ],
+          "order": 1,
+          "param": {
+            "leftSrc": "images/华为依赖论/scene_10_1_left.png",
+            "rightSrc": "images/华为依赖论/scene_10_1_right.png",
+            "leftLabel": "中兴-国有参股",
+            "rightLabel": "华为-民营企业",
+            "leftShowFrom": 1,
+            "rightShowFrom": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 354
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促金句收束全段，以‘荒诞’点题，无需配图，TEXT_FOCUS 强化文字冲击力，让观众聚焦于情绪结论。",
+          "content": [
+            {
+              "text": "你品品，",
+              "startFrame": 0,
+              "durationFrames": 20
+            },
+            {
+              "text": "这事本身就够荒诞的。",
+              "startFrame": 19,
+              "durationFrames": 45
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              "你品品，",
+              "这事本身就够荒诞的。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "荒诞",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 65
+        }
+      ],
+      "audioSrc": "/audio/华为依赖论/scene_10/scene_10.mp3",
+      "totalDurationFrames": 420
+    },
+    {
+      "sceneId": "scene_11",
+      "sceneName": "召唤：重新定义爱国",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "过渡句，平铺叙述，画面聚焦“荒诞”意象，无需特殊结构。",
+          "content": [
+            {
+              "text": "更为神奇的是，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "这种荒诞不止发生在通信行业。",
+              "startFrame": 39,
+              "durationFrames": 81
+            },
+            {
+              "text": "很多其他华为参与的领域，",
+              "startFrame": 120,
+              "durationFrames": 53
+            },
+            {
+              "text": "都有这种类似的氛围。",
+              "startFrame": 172,
+              "durationFrames": 53
+            },
+            {
+              "text": "至于原因，",
+              "startFrame": 224,
+              "durationFrames": 27
+            },
+            {
+              "text": "咱也不敢说，咱也不敢问。",
+              "startFrame": 250,
+              "durationFrames": 62
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为依赖论/scene_11_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 312
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "核心结论是交出主动权，可放大“主动权”关键词，强化视觉聚焦。",
+          "content": [
+            {
+              "text": "记住，任何领域，",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "一旦你开始觉得“离不开谁”，",
+              "startFrame": 51,
+              "durationFrames": 63
+            },
+            {
+              "text": "你就已经把主动权交出去了。",
+              "startFrame": 113,
+              "durationFrames": 53
+            }
+          ],
+          "order": 2,
+          "param": {
+            "anchors": [
+              {
+                "text": "主动权",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 166
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确“不是…而是…”对比：否定单一英雄，肯定可替换零件，适合认知转变模板。",
+          "content": [
+            {
+              "text": "真正强大的系统，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "从来不是靠某一个不可替代的英雄撑起来的。",
+              "startFrame": 41,
+              "durationFrames": 88
+            },
+            {
+              "text": "而是靠无数个随时可以被替换的零件，",
+              "startFrame": 128,
+              "durationFrames": 96
+            },
+            {
+              "text": "逼着每一个都不敢偷懒。",
+              "startFrame": 224,
+              "durationFrames": 59
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "靠不可替代的英雄",
+            "butText": "靠可替换的零件",
+            "butSrc": "images/华为依赖论/scene_11_3.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 284
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束全片核心观点，不要把公司捧上神坛、垄断回旋镖打到自己，适合 TEXT_FOCUS 纯大字暴击。",
+          "content": [
+            {
+              "text": "不要把任何一家公司捧上情绪的神坛，",
+              "startFrame": 0,
+              "durationFrames": 82
+            },
+            {
+              "text": "否则垄断的回旋镖，终会打到你自己身上。",
+              "startFrame": 81,
+              "durationFrames": 94
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              "不要把任何一家公司捧上情绪的神坛，",
+              "否则垄断的回旋镖终会打到你自己身上。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "神坛",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "垄断的回旋镖",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 176
+        }
+      ],
+      "audioSrc": "/audio/华为依赖论/scene_11/scene_11.mp3",
+      "totalDurationFrames": 939
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "华为依赖论",
+    "subtitle": "中国最该怕的，不是没有华为，而是只有华为",
+    "themeColor": "#FF6900",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

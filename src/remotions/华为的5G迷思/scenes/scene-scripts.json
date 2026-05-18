@@ -1,0 +1,1671 @@
+{
+  "topic": "你以为5G是华为发明的？那剩下80%的核心专利去哪了",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "揭露：个人英雄主义陷阱",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开场讽刺递进适合用纯大字压屏强化节奏与情绪，无需配图，TEXT_FOCUS 突出「吹华为」与「没有华为就没有5G」等关键指控。",
+          "content": [
+            {
+              "text": "只要一提到5G，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "就有人不请自来的吹华为，",
+              "startFrame": 32,
+              "durationFrames": 63
+            },
+            {
+              "text": "就好像5G是华为发明出来的，",
+              "startFrame": 94,
+              "durationFrames": 60
+            },
+            {
+              "text": "没有华为就没有5G一样。",
+              "startFrame": 154,
+              "durationFrames": 53
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "只要一提到5G，",
+                "showFrom": 0,
+                "endFrom": 3
+              },
+              {
+                "text": "就有人不请自来的吹华为，",
+                "showFrom": 1,
+                "endFrom": 3
+              },
+              {
+                "text": "就好像没有华为就没有5G一样。",
+                "showFrom": 2,
+                "endFrom": 3
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "不请自来"
+              },
+              {
+                "coreSentenceAnchor": "吹华为"
+              },
+              {
+                "coreSentenceAnchor": "没有华为就没有5G"
+              }
+            ]
+          },
+          "totalDurationFrames": 208
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "整段围绕「不知来源的论调→点破恶毒目的→两种动机并列」同一命题展开，适合单标题 METHOD_STACK：一张主图贯穿，notes 按各句 content 下标叠出要点，比多图节拍更偏理性拆解。",
+          "content": [
+            {
+              "text": "我不知道这种论调是谁提出来的，",
+              "startFrame": 0,
+              "durationFrames": 70
+            },
+            {
+              "text": "但是很显然他带着非常恶毒的目的—",
+              "startFrame": 69,
+              "durationFrames": 79
+            },
+            {
+              "text": "要么是为了贩卖情绪，",
+              "startFrame": 148,
+              "durationFrames": 47
+            },
+            {
+              "text": "要么是为了收割流量。",
+              "startFrame": 195,
+              "durationFrames": 47
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "恶毒的论调",
+            "imageSrc": "images/华为的5G迷思/scene_1_2.png",
+            "notes": [
+              {
+                "text": "贩卖情绪",
+                "showFrom": 2
+              },
+              {
+                "text": "收割流量",
+                "showFrom": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 243
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "该段揭示误导性的个人英雄主义认知与隐藏的全球合作真相，本质是“不是...而是...”的认知纠正，适合COGNITIVE_SHIFT。整体使用，避免切断对比的连贯性。",
+          "content": [
+            {
+              "text": "他希望我们误以为5G的诞生、进步、普及，",
+              "startFrame": 0,
+              "durationFrames": 106
+            },
+            {
+              "text": "都是某一家公司的个人英雄主义结果，",
+              "startFrame": 105,
+              "durationFrames": 74
+            },
+            {
+              "text": "进而忽略了背后庞大而复杂的全球合作与科学积累。",
+              "startFrame": 178,
+              "durationFrames": 110
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "个人英雄主义",
+            "butText": "全球合作与科学积累",
+            "butSrc": "images/华为的5G迷思/scene_1_3.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 289
+        }
+      ],
+      "audioSrc": "/audio/华为的5G迷思/scene_1/scene_1.mp3",
+      "totalDurationFrames": 741
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析：5G技术的全球拼图",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "铺垫5G是系统工程的基础背景，平缓叙述，未出现强结构，选CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "而现实是，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "5G是一整套系统工程，",
+              "startFrame": 26,
+              "durationFrames": 76
+            },
+            {
+              "text": "地基是全人类几十年的基础科学，",
+              "startFrame": 101,
+              "durationFrames": 75
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为的5G迷思/scene_2_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 176
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "类比式强结论，直指不可能确认发明者，适合全屏文字冲击。",
+          "content": [
+            {
+              "text": "其中参与者众多，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "你甚至不可能说清楚谁对5G的贡献最大，",
+              "startFrame": 42,
+              "durationFrames": 87
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "你甚至不可能说清楚",
+                "showFrom": 1,
+                "endFrom": 1
+              },
+              {
+                "text": "谁对5G的贡献最大",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "不可能"
+              }
+            ]
+          },
+          "totalDurationFrames": 129
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "类比式强结论，直指不可能确认发明者，适合全屏文字冲击。",
+          "content": [
+            {
+              "text": "就更不存在5G是谁发明的这种说法。",
+              "startFrame": 0,
+              "durationFrames": 80
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "就更不存在5G是谁发明的这种说法",
+                "showFrom": 0,
+                "endFrom": 0
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "不存在"
+              }
+            ]
+          },
+          "totalDurationFrames": 80
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "三个并列的'看清楚…'分点，适合宫格展示三个模块，选PANEL_GRID。",
+          "content": [
+            {
+              "text": "所以今天不站队，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "我们只做一件事：",
+              "startFrame": 41,
+              "durationFrames": 44
+            },
+            {
+              "text": "把5G里最关键的几块拆开，",
+              "startFrame": 85,
+              "durationFrames": 75
+            },
+            {
+              "text": "看清楚哪些是基础理论，",
+              "startFrame": 159,
+              "durationFrames": 58
+            },
+            {
+              "text": "哪些是关键技术，",
+              "startFrame": 217,
+              "durationFrames": 44
+            },
+            {
+              "text": "哪些才是华为真正的贡献，",
+              "startFrame": 260,
+              "durationFrames": 61
+            }
+          ],
+          "order": 5,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为的5G迷思/scene_2_5_img0.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为的5G迷思/scene_2_5_img1.png",
+                "showFrom": 4,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/华为的5G迷思/scene_2_5_img2.png",
+                "showFrom": 5,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "不站队",
+                "showFrom": 0
+              },
+              {
+                "text": "拆关键",
+                "showFrom": 2
+              }
+            ]
+          },
+          "totalDurationFrames": 321
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "强调被忽略的事实，虽有聚焦元素但无强落点词，用CENTER_FOCUS配产业链图示。",
+          "content": [
+            {
+              "text": "也看清楚一个更容易被忽略的事实：",
+              "startFrame": 0,
+              "durationFrames": 75
+            },
+            {
+              "text": "就算只看中国，",
+              "startFrame": 74,
+              "durationFrames": 40
+            },
+            {
+              "text": "5G也不只是华为一家有贡献。",
+              "startFrame": 113,
+              "durationFrames": 73
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/华为的5G迷思/scene_2_6.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "被忽略的事实",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 187
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "典型的'不是…而是…'认知反转，选COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "先说一句最基本的：",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "5G不是一个单点发明，",
+              "startFrame": 50,
+              "durationFrames": 53
+            },
+            {
+              "text": "而是“一整套”通信系统。",
+              "startFrame": 102,
+              "durationFrames": 62
+            }
+          ],
+          "order": 7,
+          "param": {
+            "notText": "单点发明",
+            "butText": "一整套通信系统",
+            "butSrc": "images/华为的5G迷思/scene_2_7.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 164
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "连续纠正提问方式：不能问A，要问B，强烈对比，适用认知反转。",
+          "content": [
+            {
+              "text": "所以你不能问“5G是谁发明的”，",
+              "startFrame": 0,
+              "durationFrames": 75
+            },
+            {
+              "text": "这个问题本身就错了。",
+              "startFrame": 74,
+              "durationFrames": 44
+            },
+            {
+              "text": "你得问：",
+              "startFrame": 117,
+              "durationFrames": 15
+            },
+            {
+              "text": "它背后的关键技术，",
+              "startFrame": 132,
+              "durationFrames": 43
+            },
+            {
+              "text": "分别从哪里来？",
+              "startFrame": 174,
+              "durationFrames": 44
+            }
+          ],
+          "order": 8,
+          "param": {
+            "notText": "5G是谁发明的",
+            "butText": "关键技术从哪来",
+            "butSrc": "images/华为的5G迷思/scene_2_8.png",
+            "notContentIndex": 0,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 219
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CONCEPT_CARD",
+          "reasoning": "引入专业术语并解释其关键作用，适合概念卡。",
+          "content": [
+            {
+              "text": "首先说大规模天线阵列(Massive MIMO)。",
+              "startFrame": 0,
+              "durationFrames": 99
+            },
+            {
+              "text": "它是5G容量提升的关键引擎之一。",
+              "startFrame": 98,
+              "durationFrames": 87
+            }
+          ],
+          "order": 9,
+          "param": {
+            "imageSrc": "images/华为的5G迷思/scene_2_9.png",
+            "conceptName": "Massive MIMO",
+            "anchors": []
+          },
+          "totalDurationFrames": 185
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "设问引出核心人物，用放大镜聚焦到Thomas Marzetta，强化记忆点。",
+          "content": [
+            {
+              "text": "这东西是谁奠基的？",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "是前美国贝尔实验室的研究员Thomas Marzetta。",
+              "startFrame": 45,
+              "durationFrames": 99
+            }
+          ],
+          "order": 10,
+          "param": {
+            "anchors": [
+              {
+                "text": "Thomas Marzetta",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 144
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "强结论，强调基础理论的不可或缺，适合全屏文字锁定。",
+          "content": [
+            {
+              "text": "没有这类理论和工程路径，",
+              "startFrame": 0,
+              "durationFrames": 64
+            },
+            {
+              "text": "5G的高速率根本无从谈起。",
+              "startFrame": 63,
+              "durationFrames": 82
+            }
+          ],
+          "order": 11,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "没有这类理论和工程路径",
+                "showFrom": 0,
+                "endFrom": 1
+              },
+              {
+                "text": "5G的高速率根本无从谈起",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              "理论"
+            ]
+          },
+          "totalDurationFrames": 146
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CONCEPT_CARD",
+          "reasoning": "新术语定义，适用概念卡展示信道编码。",
+          "content": [
+            {
+              "text": "再说信道编码，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "他是将无线电波尽可能准确地还原为原始信息的关键技术。",
+              "startFrame": 37,
+              "durationFrames": 141
+            }
+          ],
+          "order": 12,
+          "param": {
+            "imageSrc": "images/华为的5G迷思/scene_2_12.png",
+            "conceptName": "信道编码",
+            "anchors": []
+          },
+          "totalDurationFrames": 178
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "分类引出长码和短码的对比，分屏展示两面，选SPLIT_COMPARE。",
+          "content": [
+            {
+              "text": "这东西分长码和短码。",
+              "startFrame": 0,
+              "durationFrames": 63
+            },
+            {
+              "text": "长码，",
+              "startFrame": 62,
+              "durationFrames": 21
+            },
+            {
+              "text": "是美国麻省理工学院在60年代就提出来的理论，",
+              "startFrame": 83,
+              "durationFrames": 100
+            },
+            {
+              "text": "高通是核心推动者。",
+              "startFrame": 182,
+              "durationFrames": 54
+            },
+            {
+              "text": "短码，",
+              "startFrame": 236,
+              "durationFrames": 21
+            },
+            {
+              "text": "才是华为拿下的标准。",
+              "startFrame": 256,
+              "durationFrames": 56
+            }
+          ],
+          "order": 13,
+          "param": {
+            "leftSrc": "images/华为的5G迷思/scene_2_13_left.png",
+            "rightSrc": "images/华为的5G迷思/scene_2_13_right.png",
+            "leftLabel": "长码-高通",
+            "rightLabel": "短码-华为",
+            "leftShowFrom": 1,
+            "rightShowFrom": 4,
+            "anchors": []
+          },
+          "totalDurationFrames": 313
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CHAT_BUBBLE",
+          "reasoning": "模拟网友质疑，用弹幕气泡展示，增强节奏转折。",
+          "content": [
+            {
+              "text": "这个时候有人可能要高潮了：",
+              "startFrame": 0,
+              "durationFrames": 56
+            },
+            {
+              "text": "这么关键的发明，",
+              "startFrame": 55,
+              "durationFrames": 43
+            },
+            {
+              "text": "怎么不牛逼？",
+              "startFrame": 98,
+              "durationFrames": 34
+            }
+          ],
+          "order": 14,
+          "param": {
+            "bubbles": [
+              {
+                "bubbleText": "这么关键的发明，怎么不牛逼？",
+                "showFrom": 0,
+                "align": "left"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 132
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "再次用'不是…而是…'纠正算法来源，适用COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "不好意思，",
+              "startFrame": 0,
+              "durationFrames": 21
+            },
+            {
+              "text": "这个标准的核心算法Polar,",
+              "startFrame": 20,
+              "durationFrames": 63
+            },
+            {
+              "text": "不是华为发明的，",
+              "startFrame": 82,
+              "durationFrames": 40
+            },
+            {
+              "text": "而是土耳其大学的教授Erdal Arıkan在2008年提出的。",
+              "startFrame": 122,
+              "durationFrames": 140
+            }
+          ],
+          "order": 15,
+          "param": {
+            "notText": "华为发明的",
+            "butText": "土耳其教授提出",
+            "butSrc": "images/华为的5G迷思/scene_2_15.png",
+            "notContentIndex": 2,
+            "butContentIndex": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 262
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "华为工程贡献的平实陈述，无强结构，选CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "华为只是把原本停留在论文里的数学公式，",
+              "startFrame": 0,
+              "durationFrames": 99
+            },
+            {
+              "text": "实现到了工业级的芯片里。",
+              "startFrame": 98,
+              "durationFrames": 64
+            }
+          ],
+          "order": 16,
+          "param": {
+            "imageSrc": "images/华为的5G迷思/scene_2_16.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "工业级的芯片",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 162
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "先肯定工程实力、再划清「发明权」边界，适合左右「别夸大 vs 说法正确」的避坑对照。",
+          "content": [
+            {
+              "text": "这种工程变现能力，",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "确实是华为的厉害之处，",
+              "startFrame": 45,
+              "durationFrames": 53
+            },
+            {
+              "text": "但却不能说是华为“发明”了短码协议。",
+              "startFrame": 98,
+              "durationFrames": 96
+            }
+          ],
+          "order": 17,
+          "param": {
+            "left": {
+              "label": "✅ 正视工程变现",
+              "src": "images/华为的5G迷思/scene_2_17_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "❌ 别说发明了短码",
+              "src": "images/华为的5G迷思/scene_2_17_right.png",
+              "showFrom": 2
+            }
+          },
+          "totalDurationFrames": 194
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CONCEPT_CARD",
+          "reasoning": "毫米波为5G高频段术语，用概念卡锚定名词，口播顺带说明频谱与传播局限。",
+          "content": [
+            {
+              "text": "再说毫米波。",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "它给5G带来了更宽的频谱，",
+              "startFrame": 32,
+              "durationFrames": 67
+            },
+            {
+              "text": "也带来了穿墙差、",
+              "startFrame": 99,
+              "durationFrames": 48
+            },
+            {
+              "text": "覆盖短的问题。",
+              "startFrame": 147,
+              "durationFrames": 43
+            }
+          ],
+          "order": 24,
+          "param": {
+            "imageSrc": "images/华为的5G迷思/scene_2_24.png",
+            "conceptName": "毫米波",
+            "anchors": []
+          },
+          "totalDurationFrames": 190
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "陈述研究努力，配团队形象。",
+          "content": [
+            {
+              "text": "为了克服这些问题，",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "全球通信界如美国的NYU Wireless团队，",
+              "startFrame": 46,
+              "durationFrames": 111
+            },
+            {
+              "text": "进行了艰苦的长期研究。",
+              "startFrame": 157,
+              "durationFrames": 62
+            },
+            {
+              "text": "华为只是基于这些成果，",
+              "startFrame": 218,
+              "durationFrames": 54
+            },
+            {
+              "text": "继续做了工程推进的一部分工作。",
+              "startFrame": 271,
+              "durationFrames": 69
+            }
+          ],
+          "order": 25,
+          "param": {
+            "imageSrc": "images/华为的5G迷思/scene_2_25.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 341
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "多项关键技术逐项口播，适合宫格随句逐格显现；结尾「一层套一层」用锚点强调结构感。",
+          "content": [
+            {
+              "text": "再往下讲，",
+              "startFrame": 0,
+              "durationFrames": 26
+            },
+            {
+              "text": "还有波束赋形、",
+              "startFrame": 25,
+              "durationFrames": 52
+            },
+            {
+              "text": "网络切片、",
+              "startFrame": 76,
+              "durationFrames": 33
+            },
+            {
+              "text": "边缘计算、",
+              "startFrame": 109,
+              "durationFrames": 29
+            },
+            {
+              "text": "载波聚合、",
+              "startFrame": 137,
+              "durationFrames": 29
+            },
+            {
+              "text": "低时延协议、",
+              "startFrame": 165,
+              "durationFrames": 34
+            },
+            {
+              "text": "核心网虚拟化，",
+              "startFrame": 199,
+              "durationFrames": 40
+            },
+            {
+              "text": "一层套一层，",
+              "startFrame": 238,
+              "durationFrames": 29
+            },
+            {
+              "text": "一环扣一环。",
+              "startFrame": 267,
+              "durationFrames": 33
+            }
+          ],
+          "order": 27,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为的5G迷思/scene_2_27_img0.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为的5G迷思/scene_2_27_img1.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/华为的5G迷思/scene_2_27_img2.png",
+                "showFrom": 3,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为的5G迷思/scene_2_27_img3.png",
+                "showFrom": 4,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/华为的5G迷思/scene_2_27_img4.png",
+                "showFrom": 5,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为的5G迷思/scene_2_27_img5.png",
+                "showFrom": 6,
+                "enterEffect": "breathe"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "一层套一层",
+                "showFrom": 7
+              },
+              {
+                "text": "一环扣一环",
+                "showFrom": 8
+              }
+            ]
+          },
+          "totalDurationFrames": 300
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "核心总结使用'不是…而是…'，强调集体积累，适用认知反转。",
+          "content": [
+            {
+              "text": "篇幅有限，这里不再继续堆名词了，",
+              "startFrame": 0,
+              "durationFrames": 88
+            },
+            {
+              "text": "你只要看明白一件事：",
+              "startFrame": 87,
+              "durationFrames": 48
+            },
+            {
+              "text": "5G不是一个天才灵光一闪的发明，",
+              "startFrame": 135,
+              "durationFrames": 84
+            },
+            {
+              "text": "而是一代代科学家、工程师和公司，",
+              "startFrame": 219,
+              "durationFrames": 87
+            },
+            {
+              "text": "在同一套通信大厦上不断添砖加瓦才得到的成果。",
+              "startFrame": 305,
+              "durationFrames": 129
+            }
+          ],
+          "order": 28,
+          "param": {
+            "notText": "天才灵光一闪的发明",
+            "butText": "一代代科学家工程师和公司",
+            "butSrc": "images/华为的5G迷思/scene_2_28.png",
+            "notContentIndex": 2,
+            "butContentIndex": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 435
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "视角转换并立即纠正'只有华为'的认知，适用COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "而且就算把视角收回中国，",
+              "startFrame": 0,
+              "durationFrames": 63
+            },
+            {
+              "text": "也不是只有华为。",
+              "startFrame": 62,
+              "durationFrames": 44
+            }
+          ],
+          "order": 29,
+          "param": {
+            "notText": "只有华为",
+            "butText": "全产业链共建",
+            "butSrc": "images/华为的5G迷思/scene_2_29.png",
+            "notContentIndex": 1,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 106
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "介绍中兴的角色，平铺事实。",
+          "content": [
+            {
+              "text": "中兴通讯同样是全球5G设备和标准里的重要玩家，",
+              "startFrame": 0,
+              "durationFrames": 118
+            }
+          ],
+          "order": 30,
+          "param": {
+            "imageSrc": "images/华为的5G迷思/scene_2_30.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "中兴通讯",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 118
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PEER_INDUCT",
+          "reasoning": "移动、电信、联通为三条并列前提，末两句归纳为共同把标准落地为真实网络并承担组网测试与行业应用；符合并列前提→归纳收束的 PEER_INDUCT。",
+          "content": [
+            {
+              "text": "中国移动、",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "中国电信、",
+              "startFrame": 27,
+              "durationFrames": 31
+            },
+            {
+              "text": "中国联通这些运营商，",
+              "startFrame": 57,
+              "durationFrames": 54
+            },
+            {
+              "text": "同样在负责把标准变成真实网络，",
+              "startFrame": 111,
+              "durationFrames": 99
+            },
+            {
+              "text": "负责组网、测试、部署和行业应用。",
+              "startFrame": 209,
+              "durationFrames": 109
+            }
+          ],
+          "order": 31,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "images/华为的5G迷思/scene_2_31_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "imageSrc": "images/华为的5G迷思/scene_2_31_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "imageSrc": "images/华为的5G迷思/scene_2_31_img2.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "images/华为的5G迷思/scene_2_31.png",
+              "showFrom": 3,
+              "enterEffect": "zoomIn",
+              "tone": "calm"
+            },
+            "anchors": [
+              {
+                "text": "运营商",
+                "showFrom": 2
+              },
+              {
+                "text": "深度参与",
+                "showFrom": 4,
+                "color": "red"
+              }
+            ]
+          },
+          "totalDurationFrames": 318
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PEER_INDUCT",
+          "reasoning": "先并列中国信科与大唐等同级主体，末句归纳为长期在标准与产业中参与；适用并列前提→归纳收束。",
+          "content": [
+            {
+              "text": "中国信科、",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "大唐这些公司，",
+              "startFrame": 26,
+              "durationFrames": 32
+            },
+            {
+              "text": "也在通信标准和产业演进里长期参与。",
+              "startFrame": 57,
+              "durationFrames": 86
+            }
+          ],
+          "order": 32,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "images/华为的5G迷思/scene_2_32_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "imageSrc": "images/华为的5G迷思/scene_2_32_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "images/华为的5G迷思/scene_2_32.png",
+              "showFrom": 2,
+              "enterEffect": "zoomIn",
+              "tone": "calm"
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 144
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "收束全篇，用'不是某一家'纠正，适用认知反转强化整个产业链的结论。",
+          "content": [
+            {
+              "text": "换句话说，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "中国5G的进步，",
+              "startFrame": 27,
+              "durationFrames": 42
+            },
+            {
+              "text": "也是一整个产业链一起往前推出来的，",
+              "startFrame": 68,
+              "durationFrames": 86
+            },
+            {
+              "text": "不是某一家公司单枪匹马打下来的。",
+              "startFrame": 153,
+              "durationFrames": 76
+            }
+          ],
+          "order": 33,
+          "param": {
+            "notText": "某一家公司单枪匹马",
+            "butText": "全产业链共同推进",
+            "butSrc": "images/华为的5G迷思/scene_2_33.png",
+            "notContentIndex": 3,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 229
+        }
+      ],
+      "audioSrc": "/audio/华为的5G迷思/scene_2/scene_2.mp3",
+      "totalDurationFrames": 5166
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "反转：看清真实贡献",
+      "items": [
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "一句定性的强结论，短促有力，不需要配图，TEXT_FOCUS可将其升华为全片金句。",
+          "content": [
+            {
+              "text": "所以，你现在应该理解了：",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "5G是全人类几十年通信基础科学的集大成者。",
+              "startFrame": 51,
+              "durationFrames": 130
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              "全人类几十年通信基础科学的集大成者"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "集大成者",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 182
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "口播拆成「蠢」与「坏」两条并列的误区，适合左右避坑对照：左对应不懂产业链、右对应选择性抹杀贡献，用 DOS_AND_DONTS 比认知翻转卡更贴二元并列。",
+          "content": [
+            {
+              "text": "看懂这一点，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "你再回头看那些天天喊“无华为不5G”的人，",
+              "startFrame": 30,
+              "durationFrames": 101
+            },
+            {
+              "text": "就会发现，",
+              "startFrame": 130,
+              "durationFrames": 27
+            },
+            {
+              "text": "他们要么是蠢，不理解现代工业是集体努力的成果。",
+              "startFrame": 157,
+              "durationFrames": 112
+            },
+            {
+              "text": "要么是坏，故意抹杀其他国家和公司的贡献。",
+              "startFrame": 268,
+              "durationFrames": 98
+            }
+          ],
+          "order": 1,
+          "param": {
+            "left": {
+              "label": "❌ 要么是蠢",
+              "src": "images/华为的5G迷思/scene_3_1_left.png",
+              "showFrom": 3
+            },
+            "right": {
+              "label": "❌ 要么是坏",
+              "src": "images/华为的5G迷思/scene_3_1_right.png",
+              "showFrom": 4
+            },
+            "anchors": [
+              {
+                "text": "无华为不5G",
+                "showFrom": 1,
+                "color": "#EF4444"
+              }
+            ]
+          },
+          
+          "totalDurationFrames": 366
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "突出华为15-20%的核心专利占比这一关键数据，并配有惊叹反馈，属于单核心数值强调，适用KPI_HERO。",
+          "content": [
+            {
+              "text": " 你如果去查全球最权威的标准必要专利实证数据，",
+              "startFrame": 0,
+              "durationFrames": 118
+            },
+            {
+              "text": "剔除掉那些注水的数据后，",
+              "startFrame": 117,
+              "durationFrames": 65
+            },
+            {
+              "text": "华为在真正的5G核心专利里，",
+              "startFrame": 182,
+              "durationFrames": 78
+            },
+            {
+              "text": "占比大概在15%到20%之间。",
+              "startFrame": 259,
+              "durationFrames": 102
+            },
+            {
+              "text": "这个数字牛不牛？",
+              "startFrame": 361,
+              "durationFrames": 39
+            },
+            {
+              "text": "非常牛！",
+              "startFrame": 399,
+              "durationFrames": 32
+            }
+          ],
+          "order": 4,
+          "param": {
+            "blocks": [
+              {
+                "value": 15,
+                "suffix": "%",
+                "label": "华为核心专利占比",
+                "showFrom": 3
+              }
+            ],
+            "countDuration": 28,
+            "anchors": []
+          },
+          "totalDurationFrames": 431
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "核心结论，且“牌桌上的庄家”是高度可视觉化的关键比喻，MAGNIFYING_GLASS可以聚焦这一意象。",
+          "content": [
+            {
+              "text": "它意味着中国通信产业从以前的跟跑，",
+              "startFrame": 0,
+              "durationFrames": 82
+            },
+            {
+              "text": "终于变成了牌桌上的庄家之一。",
+              "startFrame": 81,
+              "durationFrames": 78
+            }
+          ],
+          "order": 6,
+          "param": {
+            "anchors": [
+              {
+                "text": "牌桌上的庄家",
+                "showFrom": 1,
+                "color": "#111111",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 159
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "METHOD_STACK",
+          "reasoning": "口播从转折到「至少八成核心专利」再到中/外两路主体，属于同一命题下的递进说明；METHOD_STACK 用单标题+一张主图收拢「专利分散、多主体持有」，notes 按 content 下标叠出占比、国内侧、国际侧要点，叙事比多格拼图更连贯。",
+          "content": [
+            {
+              "text": "但是，这也意味着，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "还有至少80%的核心专利，",
+              "startFrame": 42,
+              "durationFrames": 69
+            },
+            {
+              "text": "掌握在中国的中兴、大唐、电信；",
+              "startFrame": 111,
+              "durationFrames": 90
+            },
+            {
+              "text": "以及外国的高通、爱立信、诺基亚、",
+              "startFrame": 200,
+              "durationFrames": 87
+            },
+            {
+              "text": "三星这些巨头手里。",
+              "startFrame": 286,
+              "durationFrames": 51
+            }
+          ],
+          "order": 8,
+          "param": {
+            "title": "八成核心专利归属",
+            "imageSrc": "images/华为的5G迷思/scene_3_8.png",
+            "notes": [
+              {
+                "text": "中兴、大唐、移动等（国内侧）",
+                "showFrom": 2
+              },
+              {
+                "text": "高通、爱立信、诺基亚、三星（海外侧）",
+                "showFrom": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 338
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "陈述一个具体事实场景，用CENTER_FOCUS展示拆除设备的相关画面。",
+          "content": [
+            {
+              "text": "在欧洲和美国的很多地方，",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "因为各种制裁，",
+              "startFrame": 51,
+              "durationFrames": 35
+            },
+            {
+              "text": "他们把华为的设备从网络里拆出去了。",
+              "startFrame": 86,
+              "durationFrames": 75
+            }
+          ],
+          "order": 9,
+          "param": {
+            "imageSrc": "images/华为的5G迷思/scene_3_9.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 161
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "同一「欧美拆华为后网络怎样」子话题，口播呈悬念→否定→事实→机制收束；单主图贯穿、右侧阶段对齐 content，比多图 BEAT 更贴案例叙事；个人体验对照拆到下一镜 SPLIT_COMPARE。",
+          "content": [
+            {
+              "text": "结果呢？",
+              "startFrame": 0,
+              "durationFrames": 23
+            },
+            {
+              "text": "他们的5G网络瘫痪了吗？",
+              "startFrame": 22,
+              "durationFrames": 56
+            },
+            {
+              "text": "并没有。",
+              "startFrame": 78,
+              "durationFrames": 22
+            },
+            {
+              "text": "靠着爱立信和诺基亚，",
+              "startFrame": 100,
+              "durationFrames": 46
+            },
+            {
+              "text": "他们不仅仅建起了5G网络，甚至覆盖了90%的人口",
+              "startFrame": 146,
+              "durationFrames": 128
+            },
+            {
+              "text": "他们只需要把涉及华为的那一小部分内容，",
+              "startFrame": 273,
+              "durationFrames": 84
+            },
+            {
+              "text": "换成其他方案而已。",
+              "startFrame": 357,
+              "durationFrames": 51
+            }
+          ],
+          "order": 10,
+          "param": {
+            "title": "拆掉华为之后",
+            "imageSrc": "images/华为的5G迷思/scene_3_10.png",
+            "phases": [
+              {
+                "phaseLabel": "抛问",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "未瘫痪",
+                "showFrom": 2
+              },
+              {
+                "phaseLabel": "补位覆盖",
+                "showFrom": 3
+              },
+              {
+                "phaseLabel": "可替换",
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 409
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "尾句是「区域建设事实」与「个人在华体验」的并置对照，独立成镜用左右分屏比叠在同一案例尾句更清晰。",
+          "content": [
+            {
+              "text": "反而是在中国，我却从来没有体验过5G",
+              "startFrame": 0,
+              "durationFrames": 95
+            }
+          ],
+          "order": 11,
+          "param": {
+            "leftSrc": "images/华为的5G迷思/scene_3_11_left.png",
+            "rightSrc": "images/华为的5G迷思/scene_3_11_right.png",
+            "leftLabel": "欧美现实",
+            "rightLabel": "我的感受",
+            "leftShowFrom": 0,
+            "rightShowFrom": 0,
+            "anchors": []
+          },
+          "totalDurationFrames": 95
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "指出“神话”与“侮辱”之间的认知错位，直接纠正错误思维，适用于COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "当你在神话某一家企业，",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "把它包装成救世主的时候，",
+              "startFrame": 51,
+              "durationFrames": 59
+            },
+            {
+              "text": "你其实是在侮辱现代工业。",
+              "startFrame": 110,
+              "durationFrames": 69
+            }
+          ],
+          "order": 12,
+          "param": {
+            "notText": "把企业神话为救世主",
+            "butText": "侮辱现代工业",
+            "butSrc": "images/华为的5G迷思/scene_3_12.png",
+            "notContentIndex": 0,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 179
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确的“不是…而是…”结构，纠正把5G视为私产的观念，COGNITIVE_SHIFT最为贴切。",
+          "content": [
+            {
+              "text": "5G从来不是某一家企业的私产，",
+              "startFrame": 0,
+              "durationFrames": 76
+            },
+            {
+              "text": "它是全人类百年无线电科技协作的工业明珠。",
+              "startFrame": 75,
+              "durationFrames": 105
+            }
+          ],
+          "order": 13,
+          "param": {
+            "notText": "某一家企业私产",
+            "butText": "百年科技协作的工业明珠",
+            "butSrc": "images/华为的5G迷思/scene_3_13.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 180
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "价值判断句配单主图即可，用居中主图强化「协作而非抢功」意象，比认知反转版式更平实。",
+          "content": [
+            {
+              "text": "真正的科技自信，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "不是靠抢别人的功劳来给自己脸上贴金。",
+              "startFrame": 41,
+              "durationFrames": 92
+            }
+          ],
+          "order": 14,
+          "param": {
+            "imageSrc": "images/华为的5G迷思/scene_3_14.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 134
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "精炼的对仗金句，独立成句，力压千钧，TEXT_FOCUS能最大化其冲击力。",
+          "content": [
+            {
+              "text": "承认别人的地基，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "才能看清自己的大厦。",
+              "startFrame": 39,
+              "durationFrames": 53
+            }
+          ],
+          "order": 15,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "承认别人的地基",
+                "showFrom": 0,
+                "endFrom": 1
+              },
+              {
+                "text": "才能看清自己的大厦",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "地基",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "大厦",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 92
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片收尾的终极结论，简短而有力，用TEXT_FOCUS定格呼之欲出。",
+          "content": [
+            {
+              "text": "尊重事实，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "才是对中国科技最大的尊重。",
+              "startFrame": 30,
+              "durationFrames": 65
+            }
+          ],
+          "order": 16,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "尊重事实",
+                "showFrom": 0,
+                "endFrom": 1
+              },
+              {
+                "text": "才是对中国科技最大的尊重",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "尊重事实",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 96
+        }
+      ],
+      "audioSrc": "/audio/华为的5G迷思/scene_3/scene_3.mp3",
+      "totalDurationFrames": 2818
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "华为的5G迷思",
+    "subtitle": "无华为，不5G！蠢还是坏？",
+    "themeColor": "#FF6900",
+    "surface": "light",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

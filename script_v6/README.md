@@ -86,7 +86,7 @@ python step4_generate_remotion.py --input scene-scripts.json --name my_video
 python pipeline.py --input 文案.txt --name my_video --start 2
 
 # 只运行 Step 3
-python pipeline.py --input 文案.txt --name my_video --only 3
+python pipeline.py --input 文案.txt --name my_video --only 4
 ```
 
 ## 配置说明

@@ -63,6 +63,11 @@ def main():
         default="images/template/scene1_1.png",
         help="当 --only 1 时自动预览使用的固定图片（public 目录相对路径）",
     )
+    parser.add_argument(
+        "--skip-validate",
+        action="store_true",
+        help="Step 1 跳过 scene-scripts 校验（传给 step1_analyze_script.py）",
+    )
     args = parser.parse_args()
 
     script_dir = Path(__file__).parent
@@ -97,12 +102,16 @@ def main():
     print(f"   📂 项目: {project_root}")
     print(f"   🔢 步骤: {start} → {end}")
 
+    step1_args = [
+        "--input", str(input_path),
+        "--output", str(step1_output),
+        "--name", name,
+    ]
+    if args.skip_validate:
+        step1_args.append("--skip-validate")
+
     steps = {
-        1: ("step1_analyze_script.py", [
-            "--input", str(input_path),
-            "--output", str(step1_output),
-            "--name", name,
-        ]),
+        1: ("step1_analyze_script.py", step1_args),
         2: ("step2_generate_images.py", [
             "--input", str(scripts_json),
             "--output", str(images_dir),

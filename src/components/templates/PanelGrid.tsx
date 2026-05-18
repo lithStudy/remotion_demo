@@ -1,10 +1,19 @@
 /**
- * PANEL_GRID 模板：2～4 宫格并列主题（误区、维度、模块）
+ * PANEL_GRID 模板：2～6 宫格并列主题（误区、维度、模块）
  */
 import React from "react";
-import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import {
+	AbsoluteFill,
+	Img,
+	interpolate,
+	spring,
+	useCurrentFrame,
+	useVideoConfig,
+} from "remotion";
+import {
+	getDefaultAnchorListBottomPx,
 	getSafeImageSrc,
+	PANEL_GRID_ANCHOR_CLEARANCE_PX,
 	useImageEnterStyle,
 	type ImageEnterEffect,
 	type ImagePosition,
@@ -18,9 +27,9 @@ export const templateMeta = {
 	"name": "PANEL_GRID",
 	"componentExport": "BWPanelGrid",
 	"description":
-		"适用：同一镜头内并列 2～4 个主题块（如三个误区、四个检查项），每块一图，随对应口播条显现。\n差异：时间演进用 TIMELINE；节拍换图用 BEAT_SEQUENCE。\n参数：panels 2～4 项，结构与 TIMELINE 的 images 类似：src（image_prompt）、showFrom（content 下标）、可选 enterEffect、position（布局弱提示，可省略）。",
+		"适用：同一镜头内并列 2～6 个主题块（如多个工具/模块清单），每块一图，随对应口播条显现。\n差异：时间演进用 TIMELINE；逐拍换图更适合 BEAT_SEQUENCE。\n参数：panels 2～6 项，每项 src（image_prompt）、showFrom（content 下标）、可选 enterEffect、position（宫格布局弱提示，可省略）。",
 	"psychology": "结构并列",
-	"image_count": "2-4",
+	"image_count": "2-6",
 	"content_min_items": 2,
 	"content_max_items": 8,
 	"param_schema": {
@@ -29,7 +38,7 @@ export const templateMeta = {
 			"panels": {
 				"type": "array",
 				"minItems": 2,
-				"maxItems": 4,
+				"maxItems": 6,
 				"description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
 				"items": {
 					"type": "object",
@@ -103,11 +112,28 @@ const resolvePanelStartFrame = (
 };
 
 /** 宫格内容区与 BWPanelGrid 外层 div 一致：用于计算各格中心相对区域中心的像素偏移 */
-const getGridContentMetrics = (width: number, height: number) => {
+const getGridContentMetrics = (
+	width: number,
+	height: number,
+	topRatio = 0.22,
+	bottomRatio = 0.26,
+) => {
 	const marginX = Math.min(32, width * 0.04);
 	const gW = width - 2 * marginX;
-	const gH = height * (1 - 0.22 - 0.26);
+	const gH = height * (1 - topRatio - bottomRatio);
 	return { gW, gH };
+};
+
+const resolveGridSpec = (
+	panelCount: number,
+): { cols: number; rows: number; gap: number; shiftSecondRowStartCol?: number } => {
+	// 2: 1×2；3: 2×2(最后一格跨列)；4: 2×2；5/6: 3×2
+	if (panelCount <= 2) return { cols: 2, rows: 1, gap: 20 };
+	if (panelCount === 3) return { cols: 2, rows: 2, gap: 16 };
+	if (panelCount === 4) return { cols: 2, rows: 2, gap: 16 };
+	// 5 个时，让第二行从第 2 列开始，更居中（index 3,4 -> col 1,2）
+	if (panelCount === 5) return { cols: 3, rows: 2, gap: 14, shiftSecondRowStartCol: 1 };
+	return { cols: 3, rows: 2, gap: 14 };
 };
 
 /**
@@ -118,43 +144,39 @@ const getPanelCenterTravelOffset = (
 	index: number,
 	width: number,
 	height: number,
+	gridTopRatio: number,
+	gridBottomRatio: number,
 ): { dx: number; dy: number } => {
-	const { gW, gH } = getGridContentMetrics(width, height);
+	const { gW, gH } = getGridContentMetrics(width, height, gridTopRatio, gridBottomRatio);
 	const cx = gW / 2;
 	const cy = gH / 2;
 
-	if (n === 2) {
-		const gap = 20;
-		const cw = (gW - gap) / 2;
-		const cellCx = index === 0 ? cw / 2 : cw + gap + cw / 2;
-		return { dx: cx - cellCx, dy: cy - gH / 2 };
-	}
+	const spec = resolveGridSpec(n);
+	const cols = spec.cols;
+	const rows = spec.rows;
+	const gap = spec.gap;
 
+	// 3 个时：保持“前两格在上，最后一格跨整行”的旧布局
 	if (n === 3) {
-		const gap = 16;
 		const cw = (gW - gap) / 2;
 		const rowH = (gH - gap) / 2;
-		if (index === 0) {
-			return { dx: cx - cw / 2, dy: cy - rowH / 2 };
-		}
-		if (index === 1) {
-			return { dx: cx - (cw + gap + cw / 2), dy: cy - rowH / 2 };
-		}
+		if (index === 0) return { dx: cx - cw / 2, dy: cy - rowH / 2 };
+		if (index === 1) return { dx: cx - (cw + gap + cw / 2), dy: cy - rowH / 2 };
 		return { dx: cx - gW / 2, dy: cy - (rowH + gap + rowH / 2) };
 	}
 
-	// n === 4
-	const gap = 16;
-	const cw = (gW - gap) / 2;
-	const ch = (gH - gap) / 2;
-	const cellCenters: [number, number][] = [
-		[cw / 2, ch / 2],
-		[cw + gap + cw / 2, ch / 2],
-		[cw / 2, ch + gap + ch / 2],
-		[cw + gap + cw / 2, ch + gap + ch / 2],
-	];
-	const [ccx, ccy] = cellCenters[index] ?? [cx, cy];
-	return { dx: cx - ccx, dy: cy - ccy };
+	const cw = (gW - gap * (cols - 1)) / cols;
+	const ch = (gH - gap * (rows - 1)) / rows;
+	const row = Math.floor(index / cols);
+	let col = index % cols;
+
+	if (n === 5 && row === 1 && typeof spec.shiftSecondRowStartCol === "number") {
+		col = col + spec.shiftSecondRowStartCol;
+	}
+
+	const cellCx = col * (cw + gap) + cw / 2;
+	const cellCy = row * (ch + gap) + ch / 2;
+	return { dx: cx - cellCx, dy: cy - cellCy };
 };
 
 const PanelCell: React.FC<{
@@ -166,6 +188,8 @@ const PanelCell: React.FC<{
 	panelCount: number;
 	layoutWidth: number;
 	layoutHeight: number;
+	gridTopRatio: number;
+	gridBottomRatio: number;
 }> = ({
 	panel,
 	startFrame,
@@ -175,6 +199,8 @@ const PanelCell: React.FC<{
 	panelCount,
 	layoutWidth,
 	layoutHeight,
+	gridTopRatio,
+	gridBottomRatio,
 }) => {
 	const frame = useCurrentFrame();
 	const { fps, width, height } = useVideoConfig();
@@ -208,7 +234,14 @@ const PanelCell: React.FC<{
 		extrapolateLeft: "clamp",
 		extrapolateRight: "clamp",
 	});
-	const { dx, dy } = getPanelCenterTravelOffset(panelCount, panelIndex, layoutWidth, layoutHeight);
+	const { dx, dy } = getPanelCenterTravelOffset(
+		panelCount,
+		panelIndex,
+		layoutWidth,
+		layoutHeight,
+		gridTopRatio,
+		gridBottomRatio,
+	);
 	const ox = interpolate(travel, [0, 1], [dx, 0], {
 		extrapolateLeft: "clamp",
 		extrapolateRight: "clamp",
@@ -268,9 +301,10 @@ export const BWPanelGrid: React.FC<BWPanelGridProps> = ({
 	children,
 	style,
 }) => {
-	const { height, width } = useVideoConfig();
+	const frame = useCurrentFrame();
+	const { height, width, fps } = useVideoConfig();
 	const items = normalizeContent(content);
-	const list = (panels ?? []).slice(0, 4);
+	const list = (panels ?? []).slice(0, 6);
 	const n = list.length;
 	const stagger = 15;
 	const starts = list.map((p, i) => resolvePanelStartFrame(p.showFrom, i, items, stagger));
@@ -281,7 +315,27 @@ export const BWPanelGrid: React.FC<BWPanelGridProps> = ({
 			? Math.min(height * 0.30, 320)
 			: n === 3
 				? Math.min(height * 0.26, 280)
-				: Math.min(height * 0.24, 280);
+				: n === 4
+					? Math.min(height * 0.24, 280)
+					: Math.min(height * 0.20, 240);
+
+	const defaultGridTopRatio = 0.22;
+	const gridBottomRatio = 0.26;
+	const anchorBottomPx = getDefaultAnchorListBottomPx({
+		frame,
+		fps,
+		height,
+		content: items,
+		anchors,
+	});
+	const gridTopPx =
+		anchorBottomPx > 0
+			? Math.max(
+					height * defaultGridTopRatio,
+					anchorBottomPx + PANEL_GRID_ANCHOR_CLEARANCE_PX,
+				)
+			: height * defaultGridTopRatio;
+	const gridTopRatio = gridTopPx / height;
 
 	const gridStyle: React.CSSProperties =
 		n === 2
@@ -299,13 +353,21 @@ export const BWPanelGrid: React.FC<BWPanelGridProps> = ({
 						gap: 16,
 						alignItems: "center",
 					}
-				: {
-						display: "grid",
-						gridTemplateColumns: "1fr 1fr",
-						gridTemplateRows: "1fr 1fr",
-						gap: 16,
-						alignItems: "center",
-					};
+				: n === 4
+					? {
+							display: "grid",
+							gridTemplateColumns: "1fr 1fr",
+							gridTemplateRows: "1fr 1fr",
+							gap: 16,
+							alignItems: "center",
+						}
+					: {
+							display: "grid",
+							gridTemplateColumns: "1fr 1fr 1fr",
+							gridTemplateRows: "1fr 1fr",
+							gap: 14,
+							alignItems: "center",
+						};
 
 	return (
 		<AbsoluteFill style={style}>
@@ -314,8 +376,8 @@ export const BWPanelGrid: React.FC<BWPanelGridProps> = ({
 					position: "absolute",
 					left: Math.min(32, width * 0.04),
 					right: Math.min(32, width * 0.04),
-					top: "22%",
-					bottom: "26%",
+					top: `${gridTopRatio * 100}%`,
+					bottom: `${gridBottomRatio * 100}%`,
 					...gridStyle,
 				}}
 			>
@@ -330,6 +392,8 @@ export const BWPanelGrid: React.FC<BWPanelGridProps> = ({
 						panelCount={n}
 						layoutWidth={width}
 						layoutHeight={height}
+						gridTopRatio={gridTopRatio}
+						gridBottomRatio={gridBottomRatio}
 					/>
 				))}
 			</div>

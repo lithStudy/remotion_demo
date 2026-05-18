@@ -203,6 +203,28 @@ def _param_to_jsx_props(
                         parts.append(f'{nk}: {json.dumps(nv, ensure_ascii=False)}')
                 node_jsx_parts.append("{ " + ", ".join(parts) + " }")
             props.append(f'nodes={{[{", ".join(node_jsx_parts)}]}}')
+        elif key == "root" and isinstance(value, dict):
+            # TREE_DIAGRAM：递归树结构，含 label、showFrom、children
+            def _serialize_tree_node(node: dict) -> str:
+                parts = []
+                for tk, tv in node.items():
+                    if tk == "label" and isinstance(tv, str):
+                        parts.append(f'label: "{_escape_jsx(tv)}"')
+                    elif tk == "showFrom" and isinstance(tv, (int, float)):
+                        parts.append(f"showFrom: {int(tv)}")
+                    elif tk == "children" and isinstance(tv, list):
+                        child_parts = [_serialize_tree_node(c) for c in tv if isinstance(c, dict)]
+                        parts.append(f'children: [{", ".join(child_parts)}]')
+                    elif isinstance(tv, str):
+                        parts.append(f'{tk}: "{_escape_jsx(tv)}"')
+                    elif isinstance(tv, bool):
+                        parts.append(f'{tk}: {str(tv).lower()}')
+                    elif isinstance(tv, (int, float)):
+                        parts.append(f'{tk}: {tv}')
+                    else:
+                        parts.append(f'{tk}: {json.dumps(tv, ensure_ascii=False)}')
+                return "{ " + ", ".join(parts) + " }"
+            props.append(f"root={{{_serialize_tree_node(value)}}}")
         elif key == "panels" and isinstance(value, list):
             # PANEL_GRID：每项含 src、showFrom、可选 enterEffect、position
             panel_jsx_parts = []

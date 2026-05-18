@@ -3,7 +3,12 @@
  */
 import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { BW_TEXT, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
+import {
+	BW_LIST_SIDE_INSET,
+	BW_TEXT,
+	type TemplateAnchorsProps,
+	type TemplateBaseProps,
+} from "./shared";
 import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
 
@@ -88,7 +93,8 @@ const resolveRowStartFrame = (
 const CheckRow: React.FC<{
 	text: string;
 	startFrame: number;
-}> = ({ text, startFrame }) => {
+	fontSize: number;
+}> = ({ text, startFrame, fontSize }) => {
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
 	const rel = frame - startFrame;
@@ -119,8 +125,8 @@ const CheckRow: React.FC<{
 			style={{
 				display: "flex",
 				alignItems: "center",
-				gap: 16,
-				padding: "14px 18px",
+				gap: 18,				
+				padding: "16px 40px",
 				backgroundColor: "#f7f7f7",
 				borderRadius: 12,
 				borderLeft: `4px solid ${BW_TEXT}`,
@@ -129,8 +135,8 @@ const CheckRow: React.FC<{
 		>
 			<div
 				style={{
-					width: 36,
-					height: 36,
+					width: 40,
+					height: 40,
 					borderRadius: 8,
 					border: `2px solid ${BW_TEXT}`,
 					display: "flex",
@@ -142,7 +148,7 @@ const CheckRow: React.FC<{
 			>
 				<span
 					style={{
-						fontSize: 34,
+						fontSize: 38,
 						fontWeight: 800,
 						color: "#16a34a",
 						transform: `scale(${checkScale})`,
@@ -154,7 +160,7 @@ const CheckRow: React.FC<{
 			</div>
 			<div
 				style={{
-					fontSize: 44,
+					fontSize,
 					fontWeight: 600,
 					color: BW_TEXT,
 					lineHeight: 1.35,
@@ -180,28 +186,30 @@ export const BWChecklistReveal: React.FC<BWChecklistRevealProps> = ({
 	const list = (rows ?? []).slice(0, 6);
 	const stagger = 16;
 	const starts = list.map((r, i) => resolveRowStartFrame(r.showFrom, i, items, stagger));
+	const rowFontSize = list.length >= 6 ? 46 : list.length >= 5 ? 50 : 56;
+	const titleFontSize = title ? (list.length >= 6 ? 56 : list.length >= 5 ? 60 : 66) : 0;
 
 	return (
 		<AbsoluteFill style={style}>
 			<div
 				style={{
 					position: "absolute",
-					left: 200,
-					right: 200,
-					top: title ? "26%" : "28%",
-					bottom: "24%",
+					left: BW_LIST_SIDE_INSET,
+					right: BW_LIST_SIDE_INSET,
+					top: title ? "24%" : "27%",
+					bottom: "22%",
 					display: "flex",
 					flexDirection: "column",
-					gap: 14,
+					gap: 16,
 				}}
 			>
 				{title ? (
 					<div
 						style={{
-							fontSize: 48,
+							fontSize: titleFontSize,
 							fontWeight: 800,
 							color: BW_TEXT,
-							marginBottom: 4,
+							marginBottom: 6,
 							textAlign: "center",
 						}}
 					>
@@ -209,7 +217,12 @@ export const BWChecklistReveal: React.FC<BWChecklistRevealProps> = ({
 					</div>
 				) : null}
 				{list.map((row, i) => (
-					<CheckRow key={i} text={row.text} startFrame={starts[i] ?? 0} />
+					<CheckRow
+						key={i}
+						text={row.text}
+						startFrame={starts[i] ?? 0}
+						fontSize={rowFontSize}
+					/>
 				))}
 			</div>
 			<TemplateDefaultAnchors content={content} anchors={anchors} />

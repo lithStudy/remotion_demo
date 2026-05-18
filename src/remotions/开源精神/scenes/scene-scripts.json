@@ -1,0 +1,1418 @@
+{
+  "topic": "全球96%的商业代码里，有一件“免费”的事正在养肥巨头，你却不知道",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：开源不是技术游戏",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平铺叙述一个普遍误解，作为引子，无列表/对比/节奏变化，用CENTER_FOCUS单图展示即可；后续转折需独立成镜以强化冲击，故拆分。",
+          "content": [
+            {
+              "text": "我为什么特别讨厌鸿蒙？",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "因为鸿蒙破坏了开源精神。",
+              "startFrame": 46,
+              "durationFrames": 74
+            },
+            {
+              "text": "作为一个程序员，这是我最不能容忍的事情。",
+              "startFrame": 120,
+              "durationFrames": 86
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/开源精神/scene_1_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 206
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平铺叙述一个普遍误解，作为引子，无列表/对比/节奏变化，用CENTER_FOCUS单图展示即可；后续转折需独立成镜以强化冲击，故拆分。",
+          "content": [
+            {
+              "text": "很多人以为，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "“开源”",
+              "startFrame": 32,
+              "durationFrames": 22
+            },
+            {
+              "text": "只是程序员圈子里的技术游戏。",
+              "startFrame": 54,
+              "durationFrames": 64
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/开源精神/scene_1_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 118
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对“开源”进行概念重定义，揭示其作为“资产普惠”的本质，属核心论点输出，适合CONCEPT_CARD展开解释；与前句转折并列，无需合并。",
+          "content": [
+            {
+              "text": "但其实，",
+              "startFrame": 0,
+              "durationFrames": 24
+            },
+            {
+              "text": "开源是现代文明社会里，",
+              "startFrame": 24,
+              "durationFrames": 53
+            },
+            {
+              "text": "最伟大的一次“资产普惠”。",
+              "startFrame": 76,
+              "durationFrames": 67
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/开源精神/scene_1_3.png",
+            "conceptName": "开源"
+          },
+          "totalDurationFrames": 143
+        }
+      ],
+      "audioSrc": "/audio/开源精神/scene_1/scene_1.mp3",
+      "totalDurationFrames": 468
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析·开源代码的无形馈赠",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "KPI_HERO",
+          "reasoning": "开篇抛出96%这一核心数据，适合用KPI_HERO直接冲击视觉，锚定观众注意力。",
+          "content": [
+            {
+              "text": "根据 2024 年的数据，",
+              "startFrame": 0,
+              "durationFrames": 45
+            },
+            {
+              "text": "全球 96% 的商业代码库，",
+              "startFrame": 44,
+              "durationFrames": 66
+            },
+            {
+              "text": "都包含开源组件。",
+              "startFrame": 110,
+              "durationFrames": 45
+            }
+          ],
+          "order": 1,
+          "param": {
+            "blocks": [
+              {
+                "value": 96,
+                "suffix": "%",
+                "label": "商业代码库",
+                "showFrom": 1
+              }
+            ]
+          },
+          "totalDurationFrames": 155
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "由商业数据推论到日常APP，属于解释性叙述，画面用单图居中即可平实传达，无需额外结构。",
+          "content": [
+            {
+              "text": "这意味着，",
+              "startFrame": 0,
+              "durationFrames": 21
+            },
+            {
+              "text": "你手机里几乎每一款 APP，",
+              "startFrame": 20,
+              "durationFrames": 64
+            },
+            {
+              "text": "其核心代码的 70% 到 90%，",
+              "startFrame": 84,
+              "durationFrames": 83
+            },
+            {
+              "text": "都是开源社区免费提供的。",
+              "startFrame": 166,
+              "durationFrames": 59
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/开源精神/scene_2_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 226
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "明确因（开源消失）→果（415亿代价）的因果链条，用CAUSE_CHAIN可逐环强化逻辑冲击。",
+          "content": [
+            {
+              "text": "如果今天全世界的开源代码突然消失，",
+              "startFrame": 0,
+              "durationFrames": 77
+            },
+            {
+              "text": "我们要想从头研发这套底层设施，",
+              "startFrame": 76,
+              "durationFrames": 90
+            },
+            {
+              "text": "至少需要投入 415 亿美金。",
+              "startFrame": 165,
+              "durationFrames": 89
+            },
+            {
+              "text": "这还仅仅是研发成本，不含时间成本。",
+              "startFrame": 254,
+              "durationFrames": 89
+            }
+          ],
+          "order": 3,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "开源消失",
+                "imageSrc": "images/开源精神/scene_2_3_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "需重建底层",
+                "imageSrc": "images/开源精神/scene_2_3_img1.png",
+                "showFrom": 1
+              },
+              {
+                "label": "代价415亿",
+                "imageSrc": "images/开源精神/scene_2_3_img2.png",
+                "showFrom": 2
+              }
+            ]
+          },
+          "totalDurationFrames": 343
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "结论金句收束，适合用TEXT_FOCUS做“纯大字暴击”，让两句口播在同一画面形成强落点。",
+          "content": [
+            {
+              "text": "这笔钱，被全世界的开源者，",
+              "startFrame": 0,
+              "durationFrames": 66
+            },
+            {
+              "text": "直接送给了全人类。",
+              "startFrame": 65,
+              "durationFrames": 44
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              "这笔钱，被全世界的开源者，",
+              "直接送给了全人类。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "全人类",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 110
+        }
+      ],
+      "audioSrc": "/audio/开源精神/scene_2/scene_2.mp3",
+      "totalDurationFrames": 834
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "剖析·科技平权与价格革命",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "金句式命名核心概念“科技平权”，短促有力无需配图，适合TEXT_FOCUS强化冲击。",
+          "content": [
+            {
+              "text": "开源最重要的一点，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "是它实现了“科技平权”。",
+              "startFrame": 41,
+              "durationFrames": 59
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              "开源最重要的一点，",
+              "是它实现了“科技平权”"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "科技平权",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 101
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "STAT_COMPARE",
+          "reasoning": "明确的反事实数据对比（现价 vs 无开源价），可抽象出两个非负整数（1:3），适合STAT_COMPARE。",
+          "content": [
+            {
+              "text": "如果没有开源，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "全球智能手机的价格至少要翻三倍。",
+              "startFrame": 36,
+              "durationFrames": 92
+            }
+          ],
+          "order": 2,
+          "param": {
+            "bars": [
+              {
+                "label": "有开源",
+                "value": 1,
+                "showFrom": 0
+              },
+              {
+                "label": "无开源",
+                "value": 3,
+                "showFrom": 1
+              }
+            ]
+          },
+          "totalDurationFrames": 128
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "举例说明开源让苹果亲民，平铺叙述无特殊结构，单图即可，使用CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "因为有开源的安卓在，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "苹果才是你够够脚尖能买的起的产品，",
+              "startFrame": 50,
+              "durationFrames": 104
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/开源精神/scene_3_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 154
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "反事实推论，以“房贷”比喻沉重资产，落点句明确，适合用MAGNIFYING_GLASS聚焦关键比喻，强化警示效果。",
+          "content": [
+            {
+              "text": "如果没有安卓对抗，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "苹果这种闭源垄断产品，",
+              "startFrame": 39,
+              "durationFrames": 60
+            },
+            {
+              "text": "可能会变成像八零年代的大哥大一样贵重",
+              "startFrame": 99,
+              "durationFrames": 87
+            }
+          ],
+          "order": 4,
+          "param": {
+            "anchors": [
+              {
+                "text": "大哥大一样贵重",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 186
+        }
+      ],
+      "audioSrc": "/audio/开源精神/scene_3/scene_3.mp3",
+      "totalDurationFrames": 570
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "剖析·知识围墙的打破",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "主题引入句，平铺叙述，无需特殊结构 → CENTER_FOCUS",
+          "content": [
+            {
+              "text": "在知识面前，",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "开源也在打破围墙。",
+              "startFrame": 31,
+              "durationFrames": 54
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/开源精神/scene_4_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "开源",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring"
+              }
+            ]
+          },
+          "totalDurationFrames": 86
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "单个核心数值强调 → KPI_HERO；独立数据镜头避免与后续数据混杂",
+          "content": [
+            {
+              "text": "维基百科拥有超过6500万个页面，",
+              "startFrame": 0,
+              "durationFrames": 89
+            }
+          ],
+          "order": 2,
+          "param": {
+            "value": 6500,
+            "prefix": "超过",
+            "suffix": "万",
+            "label": "维基百科",
+            "useGrouping": true,
+            "decimalPlaces": 0
+          },
+          "totalDurationFrames": 89
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "第二个独立数值，拆分可增强数据冲击力 → KPI_HERO",
+          "content": [
+            {
+              "text": "全球网民每年在这里耗费29亿小时去学习。",
+              "startFrame": 0,
+              "durationFrames": 116
+            }
+          ],
+          "order": 3,
+          "param": {
+            "value": 29,
+            "suffix": "亿小时",
+            "label": "每年学习时长",
+            "useGrouping": false
+          },
+          "totalDurationFrames": 116
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "第三个独立数值，单独镜头保持节奏 → KPI_HERO",
+          "content": [
+            {
+              "text": "麻省理工的开源课程，",
+              "startFrame": 0,
+              "durationFrames": 57
+            },
+            {
+              "text": "累计播放量突破4.2亿次。",
+              "startFrame": 56,
+              "durationFrames": 75
+            }
+          ],
+          "order": 4,
+          "param": {
+            "blocks": [
+              {
+                "value": 4.2,
+                "decimalPlaces": 1,
+                "suffix": "亿次",
+                "label": "累计播放量",
+                "showFrom": 1
+              }
+            ],
+            "countDuration": 28
+          },
+          "totalDurationFrames": 131
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "“不是…而是…”明确认知转换，镜头层面适合一次揭示 → COGNITIVE_SHIFT",
+          "content": [
+            {
+              "text": "这不仅仅是代码的公开，",
+              "startFrame": 0,
+              "durationFrames": 61
+            },
+            {
+              "text": "更是“生存机会”的公开。",
+              "startFrame": 60,
+              "durationFrames": 54
+            }
+          ],
+          "order": 5,
+          "param": {
+            "notText": "代码的公开",
+            "butText": "生存机会的公开",
+            "butSrc": "images/开源精神/scene_4_5.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1
+          },
+          "totalDurationFrames": 114
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "具体例子，单主图即可，因果不强，无复杂拆解 → CENTER_FOCUS",
+          "content": [
+            {
+              "text": "它让一个偏远山区的孩子，",
+              "startFrame": 0,
+              "durationFrames": 48
+            },
+            {
+              "text": "可以和硅谷工程师看到一模一样的底层逻辑。",
+              "startFrame": 48,
+              "durationFrames": 81
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/开源精神/scene_4_6.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "底层逻辑",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 129
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束金句，短促有力，无需配图 → TEXT_FOCUS",
+          "content": [
+            {
+              "text": "这就是科技带给人类，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "最顶级的温柔",
+              "startFrame": 39,
+              "durationFrames": 41
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              "这就是科技带给人类，",
+              "最顶级的温柔。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "最顶级的温柔"
+              }
+            ]
+          },
+          "totalDurationFrames": 80
+        }
+      ],
+      "audioSrc": "/audio/开源精神/scene_4/scene_4.mp3",
+      "totalDurationFrames": 745
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "反转·开源拯救生命",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开篇抛出核心观点，强调开源意义的超越性，适合全片级短促强结论，无需配图，用TEXT_FOCUS突出金句冲击力。",
+          "content": [
+            {
+              "text": "开源的意义，",
+              "startFrame": 0,
+              "durationFrames": 29
+            },
+            {
+              "text": "甚至跨越了代码，",
+              "startFrame": 28,
+              "durationFrames": 38
+            },
+            {
+              "text": "在直接拯救生命。",
+              "startFrame": 65,
+              "durationFrames": 46
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              "开源的意义，",
+              "甚至跨越了代码，",
+              "在直接拯救生命。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "拯救生命",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 112
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "单一案例平铺叙述，无多分点、无对比、无因果链，使用CENTER_FOCUS单图配合口播即可；虽然内部有递进，但整体作为案例单镜头更简洁。",
+          "content": [
+            {
+              "text": "在医疗领域，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "Open Insulin打破了胰岛素市场三大药企的垄断，",
+              "startFrame": 27,
+              "durationFrames": 113
+            },
+            {
+              "text": "实现了平价的胰岛素的生物合成方案。",
+              "startFrame": 139,
+              "durationFrames": 96
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/开源精神/scene_5_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "Open Insulin",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring"
+              }
+            ]
+          },
+          "totalDurationFrames": 236
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "与前一案例并列，同为平铺案例叙述，用CENTER_FOCUS维持视觉一致性；因果关系虽明显，但单因果环节不适合CAUSE_CHAIN模板。",
+          "content": [
+            {
+              "text": "在新冠病毒肆虐期间，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "也正是超千万份病毒基因组序列的开源，",
+              "startFrame": 50,
+              "durationFrames": 99
+            },
+            {
+              "text": "促成了新冠疫苗史诗级的快速研发。",
+              "startFrame": 148,
+              "durationFrames": 81
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/开源精神/scene_5_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "新冠病毒",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "史诗级研发速度",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "woosh"
+              }
+            ]
+          },
+          "totalDurationFrames": 230
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "明确对比商业逻辑的“收割”与开源精神的“共享”，形成两方对立，适合用SPLIT_COMPARE模板呈现对比冲击，点明开源作为“武器”的价值。",
+          "content": [
+            {
+              "text": "当商业逻辑为了利润选择“收割”你的时候，",
+              "startFrame": 0,
+              "durationFrames": 84
+            },
+            {
+              "text": "开源精神通过共享，",
+              "startFrame": 84,
+              "durationFrames": 48
+            },
+            {
+              "text": "给了你活下去的“武器”。",
+              "startFrame": 132,
+              "durationFrames": 50
+            }
+          ],
+          "order": 5,
+          "param": {
+            "leftSrc": "images/开源精神/scene_5_5_left.png",
+            "rightSrc": "images/开源精神/scene_5_5_right.png",
+            "leftLabel": "利润收割",
+            "rightLabel": "共享武器",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1
+          },
+          "totalDurationFrames": 182
+        }
+      ],
+      "audioSrc": "/audio/开源精神/scene_5/scene_5.mp3",
+      "totalDurationFrames": 760
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "个人叙事·我的NAS依赖开源",
+      "items": [
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓引入个人案例，无强烈对比或列举结构，适合用默认单图模板 CENTER_FOCUS，保持视觉重心在 NAS 系统上。",
+          "content": [
+            {
+              "text": "甚至于我个人来说，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "我自己组装的NAS系统。",
+              "startFrame": 43,
+              "durationFrames": 60
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/开源精神/scene_6_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "NAS系统",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 104
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "同一段口播并列列举多个工具名，适合用PANEL_GRID做 6 宫格并列呈现，随口播逐条显现。",
+          "content": [
+            {
+              "text": "远程桌面RustDesk，",
+              "startFrame": 0,
+              "durationFrames": 57
+            },
+            {
+              "text": "网盘工具filebrowser，",
+              "startFrame": 56,
+              "durationFrames": 57
+            },
+            {
+              "text": "智能家居Home Assistant，",
+              "startFrame": 113,
+              "durationFrames": 54
+            },
+            {
+              "text": "影音播放Jellyfin，",
+              "startFrame": 166,
+              "durationFrames": 51
+            },
+            {
+              "text": "数据同步syncthing。",
+              "startFrame": 217,
+              "durationFrames": 47
+            },
+            {
+              "text": "还有很多很多。",
+              "startFrame": 264,
+              "durationFrames": 45
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "images/开源精神/scene_6_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn",
+                "position": "left"
+              },
+              {
+                "src": "images/开源精神/scene_6_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn",
+                "position": "right"
+              },
+              {
+                "src": "images/开源精神/scene_6_2_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom",
+                "position": "bottom"
+              },
+              {
+                "src": "images/开源精神/scene_6_2_img3.png",
+                "showFrom": 3,
+                "enterEffect": "zoomIn",
+                "position": "top"
+              },
+              {
+                "src": "images/开源精神/scene_6_2_img4.png",
+                "showFrom": 4,
+                "enterEffect": "slideBottom",
+                "position": "left"
+              },
+              {
+                "src": "images/开源精神/scene_6_2_img5.png",
+                "showFrom": 5,
+                "enterEffect": "slideBottom",
+                "position": "right"
+              }
+            ]
+          },
+          "totalDurationFrames": 309
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "KPI_HERO",
+          "reasoning": "明确的数据结论，“1000 元”作为核心数值，用 KPI_HERO 突出强调，强化成本节省的冲击力。",
+          "content": [
+            {
+              "text": "如果没有这些工具的开源，",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "想要实现自己的NAS，",
+              "startFrame": 51,
+              "durationFrames": 44
+            },
+            {
+              "text": "成本至少每年1000元起步。",
+              "startFrame": 94,
+              "durationFrames": 72
+            }
+          ],
+          "order": 3,
+          "param": {
+            "blocks": [
+              {
+                "value": 1000,
+                "suffix": "元",
+                "label": "年成本",
+                "showFrom": 2
+              }
+            ],
+            "countDuration": 28
+          },
+          "totalDurationFrames": 167
+        }
+      ],
+      "audioSrc": "/audio/开源精神/scene_6/scene_6.mp3",
+      "totalDurationFrames": 581
+    },
+    {
+      "sceneId": "scene_7",
+      "sceneName": "反转·农夫与蛇的掠夺",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "引出讽刺对比和比喻概念，无强烈结构，平铺叙述适合CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "但是，最讽刺的一幕正在发生",
+              "startFrame": 0,
+              "durationFrames": 77
+            },
+            {
+              "text": "某些巨头，",
+              "startFrame": 76,
+              "durationFrames": 30
+            },
+            {
+              "text": "正在上演“农夫与蛇”的故事。",
+              "startFrame": 105,
+              "durationFrames": 64
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/开源精神/scene_7_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "农夫与蛇",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 170
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "强调核心数值11亿次，适合KPI_HERO放大展示。",
+          "content": [
+            {
+              "text": "他们利用全球 11 亿次 的年度开源贡献，",
+              "startFrame": 0,
+              "durationFrames": 88
+            },
+            {
+              "text": "像海绵一样吸取养分。",
+              "startFrame": 87,
+              "durationFrames": 56
+            }
+          ],
+          "order": 2,
+          "param": {
+            "value": 11,
+            "prefix": "全球 ",
+            "suffix": "亿次",
+            "label": "年度开源贡献"
+          },
+          "totalDurationFrames": 143
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "三层递进：长肥→反手加锁→宣称研发，适合节拍递进展示。",
+          "content": [
+            {
+              "text": "等自己长肥了，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "却反手给代码加上锁，",
+              "startFrame": 36,
+              "durationFrames": 51
+            },
+            {
+              "text": "宣称这是“自主研发”。",
+              "startFrame": 86,
+              "durationFrames": 54
+            }
+          ],
+          "order": 3,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/开源精神/scene_7_3_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "images/开源精神/scene_7_3_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "images/开源精神/scene_7_3_img2.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert"
+              }
+            ]
+          },
+          "totalDurationFrames": 140
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确“不是...而是...”认知转变，强对比结构。",
+          "content": [
+            {
+              "text": "这不叫竞争，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "这叫掠夺。",
+              "startFrame": 30,
+              "durationFrames": 32
+            }
+          ],
+          "order": 4,
+          "param": {
+            "notText": "竞争",
+            "butText": "掠夺",
+            "butSrc": "images/开源精神/scene_7_4.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1
+          },
+          "totalDurationFrames": 62
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "假设铺垫→现实转折→收束强化，三段节拍递进，画面可随叙事变化。",
+          "content": [
+            {
+              "text": "如果没有开源的底座，",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "这些大厂甚至连科技的门都摸不着。",
+              "startFrame": 46,
+              "durationFrames": 86
+            },
+            {
+              "text": "现在他们却想在公用水井口修收费站，",
+              "startFrame": 132,
+              "durationFrames": 93
+            },
+            {
+              "text": "还要宣布这口井是他们家祖传的。",
+              "startFrame": 224,
+              "durationFrames": 81
+            }
+          ],
+          "order": 5,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/开源精神/scene_7_5_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "images/开源精神/scene_7_5_img1.png",
+                "enterEffect": "slideLeft",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "images/开源精神/scene_7_5_img2.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "images/开源精神/scene_7_5_img3.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert"
+              }
+            ]
+          },
+          "totalDurationFrames": 306
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促强结论，无配图需求，适合全片级金句冲击。",
+          "content": [
+            {
+              "text": "这种行为，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "正在摧毁人类协作的底层信任。",
+              "startFrame": 27,
+              "durationFrames": 76
+            }
+          ],
+          "order": 6,
+          "param": {
+            "coreSentence": [
+              "这种行为，正在摧毁人类协作的底层信任。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "摧毁人类协作的底层信任",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 103
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TIMELINE",
+          "reasoning": "按“如果…将会…”的推进关系做成时间线节点，让观众沿轴线顺序理解后果递进。",
+          "content": [
+            {
+              "text": "一旦开源精神消失，",
+              "startFrame": 0,
+              "durationFrames": 50
+            },
+            {
+              "text": "我们将退回“科技中世纪”。",
+              "startFrame": 49,
+              "durationFrames": 63
+            },
+            {
+              "text": "每个人都要重新去发明轮子，",
+              "startFrame": 111,
+              "durationFrames": 59
+            },
+            {
+              "text": "每个人都要支付昂贵的“技术智商税”。",
+              "startFrame": 170,
+              "durationFrames": 71
+            }
+          ],
+          "order": 7,
+          "param": {
+            "images": [
+              {
+                "src": "images/开源精神/scene_7_7_img0.png",
+                "enterEffect": "fadeIn",
+                "textIndex": 0
+              },
+              {
+                "src": "images/开源精神/scene_7_7_img1.png",
+                "enterEffect": "fadeIn",
+                "textIndex": 2
+              },
+              {
+                "src": "images/开源精神/scene_7_7_img2.png",
+                "enterEffect": "fadeIn",
+                "textIndex": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 241
+        }
+      ],
+      "audioSrc": "/audio/开源精神/scene_7/scene_7.mp3",
+      "totalDurationFrames": 1165
+    },
+    {
+      "sceneId": "scene_8",
+      "sceneName": "召唤：捍卫开源的尊严",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "设问句引入主题，无特殊结构，使用CENTER_FOCUS平铺叙述，作为开头钩子。",
+          "content": [
+            {
+              "text": "所以，",
+              "startFrame": 0,
+              "durationFrames": 15
+            },
+            {
+              "text": "我们为什么要大声疾呼？",
+              "startFrame": 14,
+              "durationFrames": 55
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/开源精神/scene_8_1.png",
+            "enterEffect": "zoomIn"
+          },
+          "totalDurationFrames": 69
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CHECKLIST_REVEAL",
+          "reasoning": "该段是“要点清单式”递进：先给出定义（自由宪章），再列出影响面（代码/口袋/尊严），适合用CHECKLIST_REVEAL逐条勾选呈现。",
+          "content": [
+            {
+              "text": "因为开源精神，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "是数字时代的“自由宪章”。",
+              "startFrame": 35,
+              "durationFrames": 61
+            },
+            {
+              "text": "它不仅关乎代码，",
+              "startFrame": 96,
+              "durationFrames": 39
+            },
+            {
+              "text": "更关乎我们的口袋，",
+              "startFrame": 134,
+              "durationFrames": 40
+            },
+            {
+              "text": "和我们的尊严。",
+              "startFrame": 173,
+              "durationFrames": 34
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "开源精神",
+            "rows": [
+              {
+                "text": "关乎代码",
+                "showFrom": 2
+              },
+              {
+                "text": "关乎口袋",
+                "showFrom": 3
+              },
+              {
+                "text": "关乎尊严",
+                "showFrom": 4
+              }
+            ]
+          },
+          "totalDurationFrames": 208
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "单一行动呼吁，无对比或清单结构，用CENTER_FOCUS直接表达。",
+          "content": [
+            {
+              "text": "我们要警惕那些“黑盒化”的科技陷阱。",
+              "startFrame": 0,
+              "durationFrames": 78
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/开源精神/scene_8_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "黑盒化",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "popIn"
+              }
+            ]
+          },
+          "totalDurationFrames": 78
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "第二个行动呼吁，句式较长但结构单一，使用CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "我们要抵制那些拿开源当“原材料”，",
+              "startFrame": 0,
+              "durationFrames": 72
+            },
+            {
+              "text": "却反手收割情怀的骗局。",
+              "startFrame": 72,
+              "durationFrames": 68
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/开源精神/scene_8_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "收割情怀",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 140
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "第三个行动呼吁，与前两句并列但独立成镜，用CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "我们要支持那些敢于透明、",
+              "startFrame": 0,
+              "durationFrames": 57
+            },
+            {
+              "text": "敢于回馈的真极客。",
+              "startFrame": 56,
+              "durationFrames": 49
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/开源精神/scene_8_5.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "真极客",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 105
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "明确对比“代码有国界”与“精神无国界”，适合用SPLIT_COMPARE双栏对照。",
+          "content": [
+            {
+              "text": "请记住：",
+              "startFrame": 0,
+              "durationFrames": 23
+            },
+            {
+              "text": "代码是有国界的，",
+              "startFrame": 22,
+              "durationFrames": 40
+            },
+            {
+              "text": "但开源精神是属于全人类的。",
+              "startFrame": 62,
+              "durationFrames": 68
+            }
+          ],
+          "order": 6,
+          "param": {
+            "leftSrc": "images/开源精神/scene_8_6_left.png",
+            "rightSrc": "images/开源精神/scene_8_6_right.png",
+            "leftLabel": "代码有界",
+            "rightLabel": "开源无界",
+            "leftShowFrom": 1,
+            "rightShowFrom": 2
+          },
+          "totalDurationFrames": 130
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "结论金句，适合用TEXT_FOCUS做0图大字暴击；用coreSentence承载主文案并高亮关键词。",
+          "content": [
+            {
+              "text": "它不是某种慈善，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "而是我们抵御垄断的最后一颗子弹。",
+              "startFrame": 42,
+              "durationFrames": 69
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              "它不是某种慈善，",
+              "而是抵御垄断的最后一颗子弹。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "最后一颗子弹",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 112
+        }
+      ],
+      "audioSrc": "/audio/开源精神/scene_8/scene_8.mp3",
+      "totalDurationFrames": 841
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "开源精神",
+    "subtitle": "当商业选择收割，是开源精神给了平民对抗垄断的“最后一颗子弹”",
+    "themeColor": "#FF6900",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

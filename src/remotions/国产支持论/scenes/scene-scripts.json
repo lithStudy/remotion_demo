@@ -1,0 +1,1283 @@
+{
+  "topic": "支持国产非要买它？你交的每一分税，早就是最硬的底气",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：畸形绑架",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开篇强观点、无需配图，用 TEXT_FOCUS 零图大字做钩子冲击，突出「道德绑架」「冤大头」等关键词。",
+          "content": [
+            {
+              "text": "不要再被网上的键盘侠道德绑架了，",
+              "startFrame": 0,
+              "durationFrames": 66
+            },
+            {
+              "text": "支持国产，",
+              "startFrame": 65,
+              "durationFrames": 27
+            },
+            {
+              "text": "根本不需要你去当那个冤大头。",
+              "startFrame": 91,
+              "durationFrames": 58
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "不要再被网上的键盘侠道德绑架了，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "支持国产，",
+                "showFrom": 1
+              },
+              {
+                "text": "根本不需要你去当那个冤大头。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "道德绑架",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "冤大头",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 150
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平铺叙述现状，无特殊结构，单句描述情绪状态，用CENTER_FOCUS搭配单图呈现氛围。",
+          "content": [
+            {
+              "text": "现在网上的风气，",
+              "startFrame": 0,
+              "durationFrames": 41
+            },
+            {
+              "text": "真的太畸形了。",
+              "startFrame": 40,
+              "durationFrames": 42
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/国产支持论/scene_1_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "畸形",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 82
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PEER_INDUCT",
+          "reasoning": "「不买某牌手机」「不开某牌汽车」为两条并列前提，「帽子扣下来」及两条指控为归纳收束，符合并列前提→归纳的 PEER_INDUCT。",
+          "content": [
+            {
+              "text": "只要你不买某牌手机，",
+              "startFrame": 0,
+              "durationFrames": 48
+            },
+            {
+              "text": "只要你不开某牌汽车，",
+              "startFrame": 48,
+              "durationFrames": 46
+            },
+            {
+              "text": "一顶大帽子就扣下来了：",
+              "startFrame": 93,
+              "durationFrames": 50
+            },
+            {
+              "text": "你不支持国产！",
+              "startFrame": 142,
+              "durationFrames": 40
+            },
+            {
+              "text": "你不够爱国！",
+              "startFrame": 182,
+              "durationFrames": 34
+            }
+          ],
+          "order": 3,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "images/国产支持论/scene_1_3_img0.png",
+                "enterEffect": "fadeIn",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/国产支持论/scene_1_3_img1.png",
+                "enterEffect": "slideBottom",
+                "showFrom": 1
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "images/国产支持论/scene_1_3.png",
+              "enterEffect": "zoomIn",
+              "showFrom": 2,
+              "tone": "alert"
+            }
+          },
+          "totalDurationFrames": 216
+        }
+      ],
+      "audioSrc": "/audio/国产支持论/scene_1/scene_1.mp3",
+      "totalDurationFrames": 449
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "揭示：国家扶持真相",
+      "items": [
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "「告诉你→国产产品→不需要无条件购买」三段节拍递进，用 BEAT_SEQUENCE 随口播换图强化认知转折。",
+          "content": [
+            {
+              "text": "但今天我要告诉你，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "任何的国产产品，",
+              "startFrame": 32,
+              "durationFrames": 40
+            },
+            {
+              "text": "从来不需要通过你个人无条件的购买来支持。",
+              "startFrame": 72,
+              "durationFrames": 92
+            }
+          ],
+          "order": 1,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/国产支持论/scene_2_1_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/国产支持论/scene_2_1_img1.png",
+                "enterEffect": "fadeIn",
+                "tone": "alert",
+                "showFrom": 1
+              },
+              {
+                "imageSrc": "images/国产支持论/scene_2_1_img2.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert",
+                "showFrom": 2
+              }
+            ]
+          },
+          "totalDurationFrames": 164
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓的原因解释，无强对比或多环因果，主表达结构为中性叙述，故选用 CENTER_FOCUS 配合单图说明。",
+          "content": [
+            {
+              "text": "因为当一个公司或者产业需要扶持时，",
+              "startFrame": 0,
+              "durationFrames": 80
+            },
+            {
+              "text": "国家自然会出手。",
+              "startFrame": 79,
+              "durationFrames": 42
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/国产支持论/scene_2_2.png",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "国家出手",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 122
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "四个并列的国家扶持案例，恰好适合 PANEL_GRID 的宫格展示，每项可独立配图；虽接近 50 字但拆分将破坏并列完整性。",
+          "content": [
+            {
+              "text": "新能源汽车的百亿补贴，",
+              "startFrame": 0,
+              "durationFrames": 50
+            },
+            {
+              "text": "高新企业的免税退税，",
+              "startFrame": 49,
+              "durationFrames": 52
+            },
+            {
+              "text": "各地狂发的电子消费券，",
+              "startFrame": 100,
+              "durationFrames": 53
+            },
+            {
+              "text": "还有铺天盖地的电器的以旧换新。",
+              "startFrame": 152,
+              "durationFrames": 71
+            },
+            {
+              "text": "这些都是国家扶持的政策。",
+              "startFrame": 223,
+              "durationFrames": 71
+            }
+          ],
+          "order": 3,
+          "param": {
+            "panels": [
+              {
+                "src": "images/国产支持论/scene_2_3_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/国产支持论/scene_2_3_img1.png",
+                "showFrom": 1,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/国产支持论/scene_2_3_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/国产支持论/scene_2_3_img3.png",
+                "showFrom": 3,
+                "enterEffect": "slideBottom"
+              }
+            ]
+          },
+          "totalDurationFrames": 294
+        }
+      ],
+      "audioSrc": "/audio/国产支持论/scene_2/scene_2.mp3",
+      "totalDurationFrames": 581
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "剖析：你的税收是支持本源",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CHAT_BUBBLE",
+          "reasoning": "引述观众对国家支持 vs 个人出资的质疑，两句短问递进，用 CHAT_BUBBLE 以对话气泡呈现观众内心吐槽。",
+          "content": [
+            {
+              "text": "你说这是国家的支持，不是我个人的。",
+              "startFrame": 0,
+              "durationFrames": 86
+            },
+            {
+              "text": "我一定要为国家做贡献？ ",
+              "startFrame": 85,
+              "durationFrames": 64
+            }
+          ],
+          "order": 1,
+          "param": {
+            "bubbles": [
+              {
+                "bubbleText": "这是国家的支持，不是我个人的。",
+                "showFrom": 0,
+                "align": "left"
+              },
+              {
+                "bubbleText": "我一定要为国家做贡献。",
+                "showFrom": 1,
+                "align": "left"
+              }
+            ]
+          },
+          "totalDurationFrames": 149
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "从「有没有想过」到「印钞机」的质疑—反问递进，用 CENTER_FOCUS 单图居中配合锚点词强调资金来源追问。",
+          "content": [
+            {
+              "text": "但你有没有想过，",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "这些动辄几百亿的钱，",
+              "startFrame": 45,
+              "durationFrames": 59
+            },
+            {
+              "text": "到底是从哪里来的？",
+              "startFrame": 104,
+              "durationFrames": 51
+            },
+            {
+              "text": "难道是印钞机里印出来的吗？",
+              "startFrame": 154,
+              "durationFrames": 62
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/国产支持论/scene_3_2.png",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "几百亿",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "印钞机",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 216
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "否定“印钞”错误认知，揭示“老百姓凑钱”的真相，形成“不是…而是…”式的认知转变，选用 COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "并不是。 ",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "这些都是你的钱，",
+              "startFrame": 34,
+              "durationFrames": 45
+            },
+            {
+              "text": "是从每一个普通老百姓身上，",
+              "startFrame": 79,
+              "durationFrames": 54
+            },
+            {
+              "text": "实打实凑出来的。",
+              "startFrame": 133,
+              "durationFrames": 39
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "不是印钞机",
+            "butText": "是你的钱",
+            "butSrc": "images/国产支持论/scene_3_3.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1
+          },
+          "totalDurationFrames": 173
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "日常消费场景并列列举，前四条各对应一图，用 PANEL_GRID 宫格随口播逐格显现；后四条口播延续同一镜头，收束到「含税」结论。",
+          "content": [
+            {
+              "text": "你去超市买大米，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "你去小店买包盐，",
+              "startFrame": 37,
+              "durationFrames": 38
+            },
+            {
+              "text": "你每天出门坐公交，",
+              "startFrame": 74,
+              "durationFrames": 46
+            },
+            {
+              "text": "你换季买衣服买裤子，",
+              "startFrame": 120,
+              "durationFrames": 54
+            },
+            {
+              "text": "你咬牙贷款买房买车。",
+              "startFrame": 173,
+              "durationFrames": 56
+            },
+            {
+              "text": "甚至你打开电灯用的每一度电，",
+              "startFrame": 229,
+              "durationFrames": 67
+            },
+            {
+              "text": "里面都已经包含了税！",
+              "startFrame": 295,
+              "durationFrames": 45
+            }
+          ],
+          "order": 4,
+          "param": {
+            "panels": [
+              {
+                "src": "images/国产支持论/scene_3_4_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/国产支持论/scene_3_4_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/国产支持论/scene_3_4_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/国产支持论/scene_3_4_img3.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/国产支持论/scene_3_4_img4.png",
+                "showFrom": 4,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/国产支持论/scene_3_4_img5.png",
+                "showFrom": 5,
+                "enterEffect": "fadeIn"
+              }
+            ]
+          },
+          "totalDurationFrames": 341
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "先提出专业术语“增值税”，再解释其普遍覆盖性，是典型的概念解释结构，适合 CONCEPT_CARD。",
+          "content": [
+            {
+              "text": "在我们国家，",
+              "startFrame": 0,
+              "durationFrames": 29
+            },
+            {
+              "text": "最大的税种叫增值税。",
+              "startFrame": 28,
+              "durationFrames": 60
+            },
+            {
+              "text": "只要你在这个国家生活，",
+              "startFrame": 88,
+              "durationFrames": 51
+            },
+            {
+              "text": "只要你在花钱消费，",
+              "startFrame": 138,
+              "durationFrames": 43
+            },
+            {
+              "text": "你就无时无刻不在交税。",
+              "startFrame": 181,
+              "durationFrames": 55
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/国产支持论/scene_3_6.png",
+            "conceptName": "增值税"
+          },
+          "totalDurationFrames": 236
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "展示“税收汇聚→政策滴灌→流向品牌”的因果传导链，每环可配一图，适用 CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "国家把你的这些税收，",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "汇聚到一起。",
+              "startFrame": 46,
+              "durationFrames": 36
+            },
+            {
+              "text": "通过政策的精准滴灌，",
+              "startFrame": 82,
+              "durationFrames": 62
+            },
+            {
+              "text": "流向了那些真正需要国家支持的国产品牌。",
+              "startFrame": 144,
+              "durationFrames": 98
+            }
+          ],
+          "order": 7,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "个人税收",
+                "imageSrc": "images/国产支持论/scene_3_7_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "汇聚",
+                "imageSrc": "images/国产支持论/scene_3_7_img1.png",
+                "showFrom": 1
+              },
+              {
+                "label": "精准滴灌",
+                "imageSrc": "images/国产支持论/scene_3_7_img2.png",
+                "showFrom": 2
+              },
+              {
+                "label": "国产品牌",
+                "imageSrc": "images/国产支持论/scene_3_7_img3.png",
+                "showFrom": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 242
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "假定场景后给出与直觉相反的结论，形成认知翻转，结构为“不是需要支持而是不需要”，用 COGNITIVE_SHIFT 强调对照。",
+          "content": [
+            {
+              "text": "如果政策没有流向他们？",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "那不好意思，",
+              "startFrame": 50,
+              "durationFrames": 26
+            },
+            {
+              "text": "他就是不需要国家特别支持的企业。",
+              "startFrame": 75,
+              "durationFrames": 68
+            }
+          ],
+          "order": 8,
+          "param": {
+            "notText": "需要国家特别支持",
+            "butText": "无需国家特别支持",
+            "butSrc": "images/国产支持论/scene_3_8.png",
+            "notContentIndex": 0,
+            "butContentIndex": 2
+          },
+          "totalDurationFrames": 143
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "「一边享受政策、一边爱国要钱」是典型的左右对仗谴责结构，用 SPLIT_COMPARE 分屏对照强化认知失调，第三句收束定性为骗子。",
+          "content": [
+            {
+              "text": "如果他们一边享受着国家的政策，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "一边还恬不知耻的打着爱国的旗号让你再出一次钱，",
+              "startFrame": 58,
+              "durationFrames": 95
+            },
+            {
+              "text": "那他们就是最无底线的骗子。",
+              "startFrame": 153,
+              "durationFrames": 59
+            }
+          ],
+          "order": 9,
+          "param": {
+            "leftSrc": "images/国产支持论/scene_3_9_left.png",
+            "rightSrc": "images/国产支持论/scene_3_9_right.png",
+            "leftLabel": "享受政策",
+            "rightLabel": "爱国要钱",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": [
+              {
+                "text": "无底线的骗子",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 213
+        }
+      ],
+      "audioSrc": "/audio/国产支持论/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1711
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "反转：关税壁垒的隐性代价",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "过渡引出隐秘方式，平铺叙述，没有强烈结构，适合单图居中聚焦",
+          "content": [
+            {
+              "text": "而且，",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "除了真金白银的补贴，",
+              "startFrame": 21,
+              "durationFrames": 47
+            },
+            {
+              "text": "你其实还在用另一种隐秘的方式，",
+              "startFrame": 68,
+              "durationFrames": 63
+            },
+            {
+              "text": "为国产品牌撑腰。",
+              "startFrame": 130,
+              "durationFrames": 45
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/国产支持论/scene_4_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 176
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "目的-手段-结果三段递进，适合用节拍序列分段呈现因果链条",
+          "content": [
+            {
+              "text": "为了给本土企业，",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "留出喘息和发育的空间。",
+              "startFrame": 46,
+              "durationFrames": 55
+            },
+            {
+              "text": "国家通过加征关税，",
+              "startFrame": 101,
+              "durationFrames": 47
+            },
+            {
+              "text": "通过各种进口限制，",
+              "startFrame": 148,
+              "durationFrames": 42
+            },
+            {
+              "text": "强行拦住了那些强势的外国产品。",
+              "startFrame": 189,
+              "durationFrames": 78
+            }
+          ],
+          "order": 2,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/国产支持论/scene_4_2_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/国产支持论/scene_4_2_img1.png",
+                "enterEffect": "slideLeft",
+                "tone": "alert",
+                "showFrom": 2
+              },
+              {
+                "imageSrc": "images/国产支持论/scene_4_2_img2.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert",
+                "showFrom": 4
+              }
+            ]
+          },
+          "totalDurationFrames": 268
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "设问点出核心命题「保护的代价」，后接两条「是你…」并列解释，符合 METHOD_STACK 单标题+多句展开的叙事结构。",
+          "content": [
+            {
+              "text": "但这种保护的代价是什么？",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "是你买进口货更贵了。",
+              "startFrame": 54,
+              "durationFrames": 50
+            },
+            {
+              "text": "是你只能忍受国内某些粗制滥造的作品。",
+              "startFrame": 103,
+              "durationFrames": 93
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "保护的代价",
+            "imageSrc": "images/国产支持论/scene_4_3.png",
+            "notes": [
+              {
+                "text": "进口货更贵",
+                "showFrom": 1
+              },
+              {
+                "text": "忍劣质国货",
+                "showFrom": 2
+              }
+            ]
+          },
+          "totalDurationFrames": 197
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片级短促强结论，无需配图，用文字聚焦冲击收束",
+          "content": [
+            {
+              "text": "你多掏的每一分钱，忍受的每一次不良体验，",
+              "startFrame": 0,
+              "durationFrames": 106
+            },
+            {
+              "text": "其实都是在给国产企业争取追赶的时间。",
+              "startFrame": 105,
+              "durationFrames": 84
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "你多掏的每一分钱，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "给国产企业争取追赶的时间。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "追赶的时间",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 189
+        }
+      ],
+      "audioSrc": "/audio/国产支持论/scene_4/scene_4.mp3",
+      "totalDurationFrames": 831
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "召唤：拒绝捧杀，你就是靠山",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "问→驳→驳，三段递进，利用BEAT_SEQUENCE让画面随问句和两个否定滚动变化。",
+          "content": [
+            {
+              "text": "所以，",
+              "startFrame": 0,
+              "durationFrames": 20
+            },
+            {
+              "text": "看懂这个底层逻辑了吗？",
+              "startFrame": 19,
+              "durationFrames": 46
+            },
+            {
+              "text": "支持国产，",
+              "startFrame": 65,
+              "durationFrames": 30
+            },
+            {
+              "text": "不需要你敲锣打鼓。",
+              "startFrame": 94,
+              "durationFrames": 43
+            },
+            {
+              "text": "不需要你委屈自己，",
+              "startFrame": 137,
+              "durationFrames": 47
+            },
+            {
+              "text": "去买一件难用的商品。",
+              "startFrame": 184,
+              "durationFrames": 58
+            }
+          ],
+          "order": 1,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/国产支持论/scene_5_1_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/国产支持论/scene_5_1_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 2
+              },
+              {
+                "imageSrc": "images/国产支持论/scene_5_1_img2.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 4
+              }
+            ]
+          },
+          "totalDurationFrames": 243
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促有力的观点揭示，适合用全屏文字冲击强化反转认知。",
+          "content": [
+            {
+              "text": "那些喊着不买就不爱国的人，",
+              "startFrame": 0,
+              "durationFrames": 56
+            },
+            {
+              "text": "其实是在害国产品牌。",
+              "startFrame": 55,
+              "durationFrames": 58
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "那些喊着不买就不爱国的人，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "其实是在害国产品牌。",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "害国产品牌",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 114
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "单一假设条件陈述，无多结构，用CENTER_FOCUS平铺。",
+          "content": [
+            {
+              "text": "如果一个垃圾产品，",
+              "startFrame": 0,
+              "durationFrames": 41
+            },
+            {
+              "text": "打着国产的旗号就能大卖。",
+              "startFrame": 40,
+              "durationFrames": 56
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/国产支持论/scene_5_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 96
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "连续反问制造冲击，用TEXT_FOCUS强调质问力量。",
+          "content": [
+            {
+              "text": "那谁还会去老老实实搞研发？",
+              "startFrame": 0,
+              "durationFrames": 62
+            },
+            {
+              "text": "谁还会去死磕核心技术？",
+              "startFrame": 61,
+              "durationFrames": 60
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "那谁还会去老老实实搞研发？",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "谁还会去死磕核心技术？",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ]
+          },
+          "totalDurationFrames": 121
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短结论+命名式判定，全屏金句收束因果论证。",
+          "content": [
+            {
+              "text": "劣币驱逐良币。",
+              "startFrame": 0,
+              "durationFrames": 65
+            },
+            {
+              "text": "这才是对国产品牌，",
+              "startFrame": 64,
+              "durationFrames": 49
+            },
+            {
+              "text": "最致命的捧杀。",
+              "startFrame": 112,
+              "durationFrames": 44
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "劣币驱逐良币。",
+                "showFrom": 0
+              },
+              {
+                "text": "这才是对国产品牌，",
+                "showFrom": 1
+              },
+              {
+                "text": "最致命的捧杀。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "劣币驱逐良币",
+                "color": "#EF4444",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "coreSentenceAnchor": "最致命的捧杀",
+                "color": "#EF4444",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 156
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确的“要…而不是…”认知纠偏，COGNITIVE_SHIFT展现从正面标准到错误认知的翻转。",
+          "content": [
+            {
+              "text": "我们要支持国产，",
+              "startFrame": 0,
+              "durationFrames": 41
+            },
+            {
+              "text": "但前提是它值得！",
+              "startFrame": 40,
+              "durationFrames": 47
+            },
+            {
+              "text": "是它的技术足够硬，",
+              "startFrame": 87,
+              "durationFrames": 47
+            },
+            {
+              "text": "是它的体验足够爽。",
+              "startFrame": 134,
+              "durationFrames": 48
+            },
+            {
+              "text": "而不是因为它贴了个国产标签，",
+              "startFrame": 182,
+              "durationFrames": 65
+            },
+            {
+              "text": "你就要去当这个冤大头。",
+              "startFrame": 246,
+              "durationFrames": 52
+            }
+          ],
+          "order": 6,
+          "param": {
+            "notText": "贴标签就当冤大头",
+            "butText": "技术硬体验爽",
+            "butSrc": "images/国产支持论/scene_5_6.png",
+            "notContentIndex": 4,
+            "butContentIndex": 1
+          },
+          "totalDurationFrames": 298
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "“不要…不要…，只要…就是…”清晰呈现错误行为与正确行为，DOS_AND_DONTS模板天然匹配。",
+          "content": [
+            {
+              "text": "不要总觉得自己做得不够。",
+              "startFrame": 0,
+              "durationFrames": 57
+            },
+            {
+              "text": "不要被网上的键盘侠裹挟。",
+              "startFrame": 56,
+              "durationFrames": 67
+            },
+            {
+              "text": "只要你每天努力工作，",
+              "startFrame": 123,
+              "durationFrames": 41
+            },
+            {
+              "text": "只要你合法纳税，",
+              "startFrame": 163,
+              "durationFrames": 44
+            },
+            {
+              "text": "你就是这个国家，",
+              "startFrame": 207,
+              "durationFrames": 36
+            },
+            {
+              "text": "最坚实的靠山。",
+              "startFrame": 243,
+              "durationFrames": 47
+            }
+          ],
+          "order": 7,
+          "param": {
+            "left": {
+              "label": "❌ 别被裹挟",
+              "src": "images/国产支持论/scene_5_7_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 你就是靠山",
+              "src": "images/国产支持论/scene_5_7_right.png",
+              "showFrom": 2
+            }
+          },
+          "totalDurationFrames": 291
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "三个并列生活场景，PANEL_GRID用宫格展示每个场景，增强代入感。",
+          "content": [
+            {
+              "text": "当你在工位上加班熬夜，",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "当你在早高峰挤着地铁，",
+              "startFrame": 52,
+              "durationFrames": 56
+            },
+            {
+              "text": "当你为了家人精打细算，",
+              "startFrame": 108,
+              "durationFrames": 54
+            }
+          ],
+          "order": 8,
+          "param": {
+            "panels": [
+              {
+                "src": "images/国产支持论/scene_5_8_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/国产支持论/scene_5_8_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/国产支持论/scene_5_8_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              }
+            ]
+          },
+          "totalDurationFrames": 162
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片收束双金句，TEXT_FOCUS最大字重冲击，点明靠山主题。",
+          "content": [
+            {
+              "text": "你交出去的每一分钱，",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "都变成了国产崛起的底气。",
+              "startFrame": 46,
+              "durationFrames": 67
+            }
+          ],
+          "order": 9,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "你交出去的每一分钱，",
+                "showFrom": 0
+              },
+              {
+                "text": "都变成了国产崛起的底气。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "底气",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 114
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片收束双金句，TEXT_FOCUS最大字重冲击，点明靠山主题。",
+          "content": [
+            {
+              "text": "你为生活流下的每一滴汗，",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "早就变成了国产崛起的弹药。",
+              "startFrame": 52,
+              "durationFrames": 66
+            }
+          ],
+          "order": 10,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "你为生活流下的每一滴汗，",
+                "showFrom": 0
+              },
+              {
+                "text": "早就变成了国产崛起的弹药。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "弹药",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 118
+        }
+      ],
+      "audioSrc": "/audio/国产支持论/scene_5/scene_5.mp3",
+      "totalDurationFrames": 1711
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "国产支持论",
+    "subtitle": "你早已是国产崛起的「隐形股东」",
+    "themeColor": "#059669",
+    "badge": "深度解读 · 理性思考",
+    "seriesLabel": "社会热点深读",
+    "seriesLabelEn": "SOCIAL DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

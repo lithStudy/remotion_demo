@@ -46,6 +46,12 @@ export const BW_TEXT = "#111111";
 export const BW_LAYOUT_WIDTH = 1920;
 export const BW_LAYOUT_HEIGHT = 1080;
 
+/**
+ * 步骤/清单类列表容器的左右留白（px）。增大则列表更窄、更靠近画幅水平中心。
+ * 用于 STEP_LIST、CHECKLIST_REVEAL 等。
+ */
+export const BW_LIST_SIDE_INSET = 280;
+
 /** 图片入场效果：呼吸 | 左滑 | 下滑 | 放大 | 淡入 */
 export type ImageEnterEffect = "breathe" | "slideLeft" | "slideBottom" | "zoomIn" | "fadeIn";
 
@@ -133,7 +139,7 @@ export function useImageEnterStyle(
 /**
  * 锚点列表布局常量（与 TemplateAnchorsLayer 中默认顶部锚点列表保持一致）
  */
-export const ANCHOR_LIST_TOP_RATIO = 0.18;
+export const ANCHOR_LIST_TOP_RATIO = 0.12;
 /** 锚点词行高、间距（按 1080p 版心直接取值） */
 export const ANCHOR_LIST_ROW_MIN_HEIGHT_PX = 56;
 export const ANCHOR_LIST_ROW_GAP_PX = 16;
@@ -201,6 +207,52 @@ function getVisibleAnchorItems(
 				typeof item.startFrame === "number" && item.startFrame <= frame,
 		)
 		.sort((a, b) => a.startFrame - b.startFrame);
+}
+
+/** PANEL_GRID 等：宫格顶边须低于锚点列表底边时的默认间距（像素） */
+export const PANEL_GRID_ANCHOR_CLEARANCE_PX = 200;
+
+/**
+ * 默认顶部锚点列表底边纵坐标（像素，从上边缘向下），与 TemplateAnchorsLayer 中 DefaultAnchorWordList 一致；
+ * 当前帧尚无已显示锚点时返回 0。
+ */
+export function getDefaultAnchorListBottomPx({
+	frame,
+	fps,
+	height,
+	content,
+	anchors,
+}: {
+	frame: number;
+	fps: number;
+	height: number;
+	content: ContentItem[] | undefined;
+	anchors: AnchorItem[] | undefined;
+}): number {
+	const visible = getVisibleAnchorItems(content, anchors, frame);
+	if (visible.length === 0) return 0;
+
+	const reflowP =
+		visible.length >= 3
+			? getAnchorThreeRowReflowProgress(frame, visible[2].startFrame, fps)
+			: 0;
+	const topRatio =
+		visible.length >= 3
+			? interpolate(
+					reflowP,
+					[0, 1],
+					[ANCHOR_LIST_TOP_RATIO, getAnchorListTopRatio(3)],
+					{ extrapolateLeft: "clamp", extrapolateRight: "clamp" },
+				)
+			: ANCHOR_LIST_TOP_RATIO;
+	const compactHalf =
+		visible.length >= 3 ? (ANCHOR_LIST_THREE_ROWS_COMPACT_PX / 2) * reflowP : 0;
+	const n = visible.length;
+	const blockHeightPx =
+		n * ANCHOR_LIST_ROW_MIN_HEIGHT_PX +
+		Math.max(0, n - 1) * ANCHOR_LIST_ROW_GAP_PX -
+		(visible.length >= 3 ? 2 * compactHalf : 0);
+	return height * topRatio + blockHeightPx;
 }
 
 function getSingleImageAnchorAvoidanceShiftFromLayout({

@@ -1,5 +1,5 @@
 /**
- * TIMELINE 模板：叙事连贯性，时间轴展示
+ * TIMELINE 模板：叙事连贯性，时间轴展示（images 支持 3～5 项）
  */
 import React from "react";
 import { AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
@@ -17,17 +17,17 @@ export const templateMeta = {
 	"name": "TIMELINE",
 	"componentExport": "BWTimeline",
 	"description":
-		"适用：历史演进、时间顺序、前后对比带明确时间轴。\n差异：无时间线的并列要点用 PANEL_GRID；操作步骤用 STEP_LIST。\n参数：images 2～3 项，position 常 left/right 以配合轴线。",
+		"适用：历史演进、时间顺序、前后对比带明确时间轴。\n差异：无时间线的并列要点用 PANEL_GRID；操作步骤用 STEP_LIST。\n参数：images 3～5 项，按数组顺序从左到右沿轴线均分。",
 	"psychology": "叙事连贯性",
-	"image_count": "2-3",
+	"image_count": "3-5",
 	"param_schema": {
 		"type": "object",
 		"properties": {
 			"images": {
 				"type": "array",
-				"minItems": 2,
-				"maxItems": 3,
-				"description": "时间轴图片数组；position 常用 left/right 配合轴线",
+				"minItems": 3,
+				"maxItems": 5,
+				"description": "时间轴节点配图（3～5 项）；顺序即时间先后，横向从左到右均分",
 				"items": {
 					"type": "object",
 					"required": ["src"],
@@ -36,10 +36,6 @@ export const templateMeta = {
 							"type": "string",
 							"format": "image_prompt",
 							"description": "该节点配图提示词",
-						},
-						"position": {
-							"type": "string",
-							"enum": ["center", "left", "right", "top", "bottom"],
 						},
 						"enterEffect": {
 							"type": "string",
@@ -58,21 +54,19 @@ export const templateMeta = {
 		"template": "TIMELINE",
 		"param": {
 			"images": [
-				{ "src": "1990年代电脑图标", "position": "left", "enterEffect": "slideLeft" },
-				{ "src": "2020年代手机图标", "position": "right", "enterEffect": "slideLeft" },
+				{ "src": "1990年代电脑图标", "enterEffect": "slideLeft" },
+				{ "src": "2010年代笔记本图标", "enterEffect": "fadeIn" },
+				{ "src": "2020年代手机图标", "enterEffect": "slideLeft" },
 			],
 		},
 	},
 } as const;
 
-const TIMELINE_X_BY_POS: Record<string, number> = {
-	left: 0.2,
-	center: 0.5,
-	right: 0.8,
-};
+/** TIMELINE 单节点：无 position，横坐标仅由 images 顺序与数量决定 */
+export type TimelineImageItem = Omit<MultiImageItem, "position">;
 
 export interface BWTimelineProps extends TemplateBaseProps, TemplateAnchorsProps {
-	images: MultiImageItem[];
+	images: TimelineImageItem[];
 }
 
 export const BWTimeline: React.FC<BWTimelineProps> = ({
@@ -86,6 +80,11 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
 	const contentItems = content ?? [];
+	const imgSize = images.length >= 5 ? 150 : images.length === 4 ? 170 : 200;
+	const autoXFracs =
+		images.length <= 1
+			? [0.5]
+			: images.map((_, i) => 0.2 + (i / (images.length - 1)) * 0.6);
 	const lineProgress = interpolate(
 		spring({ frame, fps, config: { damping: 80, stiffness: 40 }, durationInFrames: 50 }),
 		[0, 1],
@@ -119,7 +118,7 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 				}}
 			/>
 			{images.map((img, i) => {
-				const xFrac = img.position ? (TIMELINE_X_BY_POS[img.position] ?? 0.5) : 0.5;
+				const xFrac = autoXFracs[i] ?? 0.5;
 				const appearFrame =
 					typeof img.textIndex === "number" && img.textIndex >= 0
 						? (contentItems[img.textIndex]?.startFrame ?? img.startFrame ?? 0)
@@ -159,8 +158,8 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 								left: `${xFrac * 100}%`,
 								top: iconTop,
 								transform: `translate(-50%, 0) scale(${visible ? nodeSpring : 0.5})`,
-								width: 200,
-								height: 200,
+								width: imgSize,
+								height: imgSize,
 								objectFit: "contain",
 								opacity: visible ? nodeSpring : 0,
 							}}

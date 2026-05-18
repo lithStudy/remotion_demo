@@ -1311,7 +1311,7 @@
         {
           "narrativeType": "LOGIC",
           "template": "TIMELINE",
-          "reasoning": "口播从「克制」到「少数人奢侈品」再到「普通人权利」，是同一叙事轴上的递进，用 TIMELINE 三节点（左→中→右）比单图 CENTER_FOCUS 更贴「转变过程」。",
+          "reasoning": "口播从「克制」到「少数人奢侈品」再到「普通人权利」，是同一叙事轴上的递进，用 TIMELINE 三节点沿时间轴展开比单图 CENTER_FOCUS 更贴「转变过程」。",
           "content": [
             {
               "text": "而小米做的，",
@@ -1344,19 +1344,16 @@
             "images": [
               {
                 "src": "images/小米平权/scene_6_4_img0.png",
-                "position": "left",
                 "enterEffect": "slideLeft",
                 "textIndex": 0
               },
               {
                 "src": "images/小米平权/scene_6_4_img1.png",
-                "position": "center",
                 "enterEffect": "fadeIn",
                 "textIndex": 2
               },
               {
                 "src": "images/小米平权/scene_6_4_img2.png",
-                "position": "right",
                 "enterEffect": "zoomIn",
                 "textIndex": 4
               }

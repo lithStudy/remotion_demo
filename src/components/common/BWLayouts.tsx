@@ -101,6 +101,7 @@ export {
 	BWChecklistReveal,
 	BWPanelGrid,
 	BWDataTable,
+	BWTreeDiagram,
 	type BWKpiHeroProps,
 	type KpiHeroBlockItem,
 	type ProgressRingBlockItem,

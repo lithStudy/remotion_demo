@@ -307,7 +307,7 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 								
 								<div
 									style={{
-										fontSize: 42,
+										fontSize: 52,
 										fontWeight: 800,
 										lineHeight: 1.45,
 										color: "#1F2937",

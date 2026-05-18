@@ -1,0 +1,1115 @@
+{
+  "topic": "为什么生活越便利，你却越不值钱？",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：极致便利现象",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "总起句是短促强结论，强调核心观点'太便利了'，无需配图，适合TEXT_FOCUS以文字冲击抓注意力。此句独立成镜，作为开篇金句。",
+          "content": [
+            {
+              "text": "在中国生活实在太便利了！"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              "在中国生活实在太便利了！"
+            ],
+            "coreSentenceAnchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "本段通过三个并列例子（9块9包邮、半夜外卖、客服秒回）支撑'便利'观点，属于并列举证结构，适合PANEL_GRID以多宫格配图分别展示每个例子。合并这些例子避免碎片化，总字数30字在合理范围内。",
+          "content": [
+            {
+              "text": "9块9包邮的产品一大把，"
+            },
+            {
+              "text": "深更半夜点外卖，"
+            },
+            {
+              "text": "还能半小时就给送到了。"
+            },
+            {
+              "text": "客服24小时在线，"
+            },
+            {
+              "text": "都是秒回。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "一堆快递包裹上贴着9.9元的标签，琳琅满目",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "深夜的城市，一个人躺在床上用手机下单外卖",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "外卖骑手飞速骑车，钟表指针指向半小时",
+                "showFrom": 2,
+                "enterEffect": "breathe"
+              },
+              {
+                "src": "电脑屏幕上客服对话框显示在线，旁边24小时图标",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "聊天界面消息发送后立刻收到回复，带闪电特效",
+                "showFrom": 4,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "反转：廉价人力真相",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平铺叙述现象，无特殊结构，适合用默认的CENTER_FOCUS配图表达。",
+          "content": [
+            {
+              "text": "很多人张口就来，"
+            },
+            {
+              "text": "自豪得不行。"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "一个人张口说话，表情自豪，背景中有一群模糊的人影",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "QUOTE_CITATION",
+          "reasoning": "直接引用他人话语，用QUOTE_CITATION突出引语来源和冲击力。",
+          "content": [
+            {
+              "text": "“这一切，"
+            },
+            {
+              "text": "都因为咱们基建牛逼！"
+            },
+            {
+              "text": "高铁、"
+            },
+            {
+              "text": "5G，"
+            },
+            {
+              "text": "世界第一！”"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "quoteSource": "网友锐评",
+            "quoteDisplayText": "“这一切，都因为咱们基建牛逼！高铁、5G，世界第一！”",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "先给判断再解释，结构平实；因“对了一半”字数过短，与下句解释合并为一个镜头，用CENTER_FOCUS平铺。",
+          "content": [
+            {
+              "text": "对了一半。"
+            },
+            {
+              "text": "基建确实把物流成本砸下来了。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "高速铁路穿过绿色田野，与高速公路平行，上面货运卡车行驶，远处有现代信号塔",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "两句形成递进对比（算法局限 → 人工现实），适合用BEAT_SEQUENCE分两拍强化转折，突出人工不可替代。",
+          "content": [
+            {
+              "text": "可算法再牛，"
+            },
+            {
+              "text": "也爬不上六楼。"
+            },
+            {
+              "text": "最后三公里，"
+            },
+            {
+              "text": "永远靠两条人腿在跑。"
+            }
+          ],
+          "order": 4,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "流光溢彩的抽象数字网络，服务器集群指示灯微闪，代码流在虚空中穿梭",
+                "enterEffect": "breathe",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "灰暗老旧的居民楼六层，狭窄陡峭的楼梯空无一人，墙角有剥落的墙皮",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "街巷中外卖骑手奔跑的双腿特写，运动鞋沾满灰尘，汗水滴落在柏油路上",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              }
+            ],
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确的“不是…而是…”认知反转结构，用COGNITIVE_SHIFT强化纠正错误认知，突出廉价人力这一核心结论。",
+          "content": [
+            {
+              "text": "真正撑起这极致便利的，"
+            },
+            {
+              "text": "不是钢筋水泥，"
+            },
+            {
+              "text": "而是极其廉价的人，"
+            },
+            {
+              "text": "和不要命的汗水。"
+            }
+          ],
+          "order": 5,
+          "param": {
+            "notText": "钢筋水泥",
+            "butText": "廉价的人和不要命的汗水",
+            "butSrc": "一位疲惫的骑手在昏暗的楼梯间向上奔跑，汗水从额头滴落，背景是老旧的住宅楼，灯光昏暗",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "描绘：廉价汗水图景",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "开篇引子，平缓引入，无强结构，居中展示文字即可",
+          "content": [
+            {
+              "text": "看看你身边这些画面。"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "工厂流水线、外卖员骑车、客服接电话三个场景的简笔图标拼贴",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "KPI_HERO",
+          "reasoning": "强调核心数字“12个小时”，用KPI_HERO突出超长工作时间",
+          "content": [
+            {
+              "text": "流水线上的阿姨，"
+            },
+            {
+              "text": "一天干12个小时。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "blocks": [
+              {
+                "value": 12,
+                "prefix": "一天干",
+                "suffix": "个小时",
+                "label": "流水线上的阿姨",
+                "showFrom": 1
+              }
+            ],
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平叙极低报酬，无明确量化结构，居中展示保持画面聚焦",
+          "content": [
+            {
+              "text": "组装一个小零件，"
+            },
+            {
+              "text": "才赚几厘钱。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "流水线工人双手快速组装微型零件的特写，工厂淡背景",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "KPI_HERO",
+          "reasoning": "以9块9这个价格数字作为结论锚点，用KPI_HERO冲击观众",
+          "content": [
+            {
+              "text": "就靠这，"
+            },
+            {
+              "text": "9块9还能赚钱。"
+            }
+          ],
+          "order": 4,
+          "param": {
+            "blocks": [
+              {
+                "value": 9.9,
+                "suffix": "块",
+                "showFrom": 1,
+                "label": "售价",
+                "decimalPlaces": 1,
+                "useGrouping": false
+              }
+            ],
+            "countDuration": 28,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "场景白描，引入第二个案例，居中展示适合单幅场景图",
+          "content": [
+            {
+              "text": "暴雨夜里，"
+            },
+            {
+              "text": "外卖小哥骑着电动车狂奔。"
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "暴雨夜的城市街道，一名身穿雨衣的外卖骑手骑着电动车快速穿行，车灯照亮雨水飞溅的地面",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "说明收入与惩罚的关系，平叙两句因果，用居中文字+配图即可",
+          "content": [
+            {
+              "text": "一单只赚三五块，"
+            },
+            {
+              "text": "超时平台就扣大钱。"
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "暴雨夜里，一个外卖员骑着电动车在空荡的街道上疾驰，全身湿透，脸上混合着雨水与汗水，表情焦急而疲惫，背景是模糊的城市霓虹灯光",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "列出三个危险行为，正好用PANEL_GRID三宫格分别展示闯红灯、逆行、爬楼梯",
+          "content": [
+            {
+              "text": "为了准时送达，"
+            },
+            {
+              "text": "他们闯红灯、"
+            },
+            {
+              "text": "逆行、"
+            },
+            {
+              "text": "爬楼梯，"
+            }
+          ],
+          "order": 7,
+          "param": {
+            "panels": [
+              {
+                "src": "外卖骑手骑着电动车，表情焦急地看手表，夜晚城市街道",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "十字路口，外卖骑手闯红灯，红灯高悬，旁边车辆急刹",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "单行道，外卖骑手骑电动车逆行，迎面车灯刺眼",
+                "showFrom": 2,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "外卖骑手提着外卖袋在楼梯上奔跑，汗水滴落",
+                "showFrom": 3,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "收束外卖案例的惨烈感受，用居中画面强化情感冲击",
+          "content": [
+            {
+              "text": "汗水混着雨水，"
+            },
+            {
+              "text": "腿都快跑断了。"
+            }
+          ],
+          "order": 8,
+          "param": {
+            "imageSrc": "暴雨夜，外卖骑手在雨中骑电动车疾驰，脸上汗水与雨水交织，表情痛苦，双腿肌肉紧绷，极度疲惫几乎要跑断。",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "串联客服服务的两个表面现象，合并短句避免单镜过碎，居中展示",
+          "content": [
+            {
+              "text": "半夜一点，"
+            },
+            {
+              "text": "客服秒回你。"
+            },
+            {
+              "text": "态度好到甩欧美几条街。"
+            }
+          ],
+          "order": 9,
+          "param": {
+            "imageSrc": "一个客服人员在深夜对着电脑屏幕打字回复消息的简笔画图标，微弱的台灯照亮桌面",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "甩欧美几条街",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "设问转折→揭示底薪→揭秘KPI逼迫，三节拍递进，用BEAT_SEQUENCE强化情绪转折",
+          "content": [
+            {
+              "text": "背后呢？"
+            },
+            {
+              "text": "三四千底薪的年轻人，"
+            },
+            {
+              "text": "背着回复速度的KPI，"
+            },
+            {
+              "text": "连上厕所都要掐表。"
+            }
+          ],
+          "order": 10,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "昏暗的客服中心监控室画面，墙壁上时钟指向深夜，一个人影坐在格子间电脑前，背影疲惫",
+                "enterEffect": "breathe",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "破旧格子间，年轻客服趴在桌上，旁边散落着几枚硬币和一张薄薄的工资条",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "电脑屏幕弹出无数聊天窗口，屏幕右上角红色倒计时闪烁，手指在键盘上飞速敲击",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "一只手的特写，拇指按下秒表，背景是模糊的卫生间门把手",
+                "enterEffect": "zoomIn",
+                "tone": "alert"
+              }
+            ],
+            "anchors": []
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "剖析：内卷死循环",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "引入个人感受和设问，平缓叙事，无需特殊结构。",
+          "content": [
+            {
+              "text": "你可能觉得，"
+            },
+            {
+              "text": "我在办公室吹空调，"
+            },
+            {
+              "text": "这跟我有什么关系？"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "一个上班族坐在电脑前，头顶空调吹出冷风，简笔画风格",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促强转折结论，适合全屏金句冲击。",
+          "content": [
+            {
+              "text": "关系大了。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              "关系大了。"
+            ],
+            "coreSentenceAnchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "提出核心概念“人力便宜这个逻辑”，使用概念卡强调定义。",
+          "content": [
+            {
+              "text": "人力便宜这个逻辑，"
+            },
+            {
+              "text": "已经打通了全社会每一个角落。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "简笔画风格，一个人形图标被一枚硬币向下压低，周围延伸出箭头指向多个简化建筑角落",
+            "conceptName": "人力便宜",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "反问句，单图说话即可，同时承上启下。",
+          "content": [
+            {
+              "text": "老板为什么宁愿招三个应届生996试错，"
+            },
+            {
+              "text": "也不肯砸钱搞真正能提效的软件和研发？"
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "一个西装革履的老板站在办公室中央，左手边是三个并肩坐着的年轻应届生，右手边是一台蒙尘的昂贵软件研发服务器，老板目光在两者之间犹豫",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "996试错",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "原因对比软件/研发的成本与人力便宜，适合左右分屏对比。",
+          "content": [
+            {
+              "text": "因为软件贵，"
+            },
+            {
+              "text": "研发有风险。"
+            },
+            {
+              "text": "而你，"
+            },
+            {
+              "text": "很便宜。"
+            }
+          ],
+          "order": 5,
+          "param": {
+            "leftSrc": "昂贵的软件界面和科研人员在充满风险的实验室",
+            "rightSrc": "一群年轻的实习生在办公室加班",
+            "leftLabel": "软件研发",
+            "rightLabel": "便宜人力",
+            "leftShowFrom": 0,
+            "rightShowFrom": 2,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "继续对比人力试错成本与技术创新成本，用分屏强调差距。",
+          "content": [
+            {
+              "text": "人力试错的成本，"
+            },
+            {
+              "text": "远远低于技术创新。"
+            }
+          ],
+          "order": 6,
+          "param": {
+            "leftSrc": "工厂流水线上，一个工人被替换，旁边放着大量廉价劳动材料，昏暗灯光",
+            "rightSrc": "明亮的高科技实验室，工程师在操作精密仪器，屏幕显示数据图表",
+            "leftLabel": "人力试错",
+            "rightLabel": "技术创新",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "因果链条启动：死循环 → 企业低人力成本赚钱 → 工资上不去。",
+          "content": [
+            {
+              "text": "于是就形成了这个死循环。"
+            },
+            {
+              "text": "企业习惯用低人力成本赚钱，"
+            },
+            {
+              "text": "打工人工资就上不去。"
+            }
+          ],
+          "order": 7,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "低价用人",
+                "imageSrc": "工厂车间里密集排列的工人剪影，像廉价零件一样站在传送带旁，色调灰暗",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "工资停滞",
+                "imageSrc": "一只干瘪的钱包上方，工资条的数字被冻结，旁边一条完全水平的直线图表",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "死循环",
+                "imageSrc": "一条厚重的莫比乌斯环，表面布满裂纹，昏暗的环境光",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "因果链延续：没钱 → 消费降级 → 企业压价 → 压榨员工 → 内卷闭环。",
+          "content": [
+            {
+              "text": "大家兜里没钱，"
+            },
+            {
+              "text": "只能消费降级，"
+            },
+            {
+              "text": "追求更便宜的东西。"
+            },
+            {
+              "text": "企业为了提供更低的价格，"
+            },
+            {
+              "text": "只能继续压榨打工人。"
+            },
+            {
+              "text": "这就形成了循环，"
+            },
+            {
+              "text": "这就造就了内卷。"
+            }
+          ],
+          "order": 8,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "没钱",
+                "imageSrc": "干瘪的钱包放在空荡的桌面上，几枚硬币散落",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "消费降级",
+                "imageSrc": "购物车里的商品被一件件放回货架，箭头向下",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "压榨劳动力",
+                "imageSrc": "工人弯腰在昏暗的流水线上快速重复操作",
+                "showFrom": 4,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "label": "恶性循环",
+                "imageSrc": "闭环的箭头循环转动，中心是向下沉的人影",
+                "showFrom": 5,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "双重身份对比，用分屏展示消费者与打工人的对立统一。",
+          "content": [
+            {
+              "text": "我们每个人，"
+            },
+            {
+              "text": "既是享受廉价便利的消费者，"
+            },
+            {
+              "text": "又是被死死压榨的打工人。"
+            }
+          ],
+          "order": 9,
+          "param": {
+            "leftSrc": "A young person happily browsing discounted goods in a bright supermarket aisle, holding a shopping basket with a satisfied expression.",
+            "rightSrc": "A tired office worker sitting at a cluttered desk late at night, head in hands, surrounded by stacks of paperwork and a dim desk lamp.",
+            "leftLabel": "消费者",
+            "rightLabel": "打工人",
+            "leftShowFrom": 1,
+            "rightShowFrom": 2,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "最终金句，无法逃脱，全屏冲击收尾。",
+          "content": [
+            {
+              "text": "逃不掉。"
+            }
+          ],
+          "order": 10,
+          "param": {
+            "coreSentence": [
+              "逃不掉。"
+            ],
+            "coreSentenceAnchors": []
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "反思：低端产业陷阱",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引述他人反驳观点，符合 QUOTE_CITATION 的引用场景，单独成镜以突出反对声音的出场。",
+          "content": [
+            {
+              "text": "这时候肯定有人跳出来说，"
+            },
+            {
+              "text": "\n“国家底子薄，"
+            },
+            {
+              "text": "还在升级，"
+            },
+            {
+              "text": "先苦一苦嘛。”"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteSource": "跳出来的人",
+            "quoteDisplayText": "国家底子薄，还在升级，先苦一苦嘛。",
+            "showFrom": 1,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促金句直接反驳，用 TEXT_FOCUS 聚焦冲击力；虽不足12字但作为独立断言合理。",
+          "content": [
+            {
+              "text": "父辈已经苦过了。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              "父辈已经苦过了。"
+            ],
+            "coreSentenceAnchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TIMELINE",
+          "reasoning": "明确过去与现在的对比，体现时间演进，用 TIMELINE 展示历史阶段变化。",
+          "content": [
+            {
+              "text": "三四十年前，"
+            },
+            {
+              "text": "一穷二白，"
+            },
+            {
+              "text": "靠便宜劳动力给全世界代工，"
+            },
+            {
+              "text": "那是无奈求生。"
+            },
+            {
+              "text": "\n今天我们已经是世界第二大经济体了。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "images": [
+              {
+                "src": "1980s China street scene, calendar flipping back to 1980s, vintage sepia tones, retro cars and bicycles",
+                "enterEffect": "slideLeft",
+                "textIndex": 0
+              },
+              {
+                "src": "barren farmland, poor Chinese village in early 1980s, mud houses, empty fields, grey sky",
+                "enterEffect": "fadeIn",
+                "textIndex": 1
+              },
+              {
+                "src": "dim textile factory assembly line, Chinese women sewing garments, piles of fabric, low-cost mass production, 1990s style",
+                "enterEffect": "zoomIn",
+                "textIndex": 2
+              },
+              {
+                "src": "close-up of a tired Chinese factory worker's face, sweat on forehead, expression of hardship and survival, shallow depth of field",
+                "enterEffect": "fadeIn",
+                "textIndex": 3
+              },
+              {
+                "src": "modern Shanghai Lujiazui skyline at night, shimmering skyscrapers, Oriental Pearl Tower, colorful city lights, symbol of second largest economy",
+                "enterEffect": "slideLeft",
+                "textIndex": 4
+              }
+            ],
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "强调一个令人震惊的假设，关键词“核心竞争力居然是便宜”需要集中放大审视，故用 MAGNIFYING_GLASS。",
+          "content": [
+            {
+              "text": "如果几十年发展下来，"
+            },
+            {
+              "text": "\n我们最骄傲的核心竞争力，"
+            },
+            {
+              "text": "\n居然还是“中国人实在太便宜”"
+            }
+          ],
+          "order": 4,
+          "param": {
+            "anchors": [
+              {
+                "text": "中国人实在太便宜",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "两段递进：先否定“苦一苦”的轻描淡写，再定性为“铁证”，节拍推进适合 BEAT_SEQUENCE。",
+          "content": [
+            {
+              "text": "那就不是苦一苦的问题了。"
+            },
+            {
+              "text": "\n这是我们还深深卡在低端产业链的铁证。"
+            }
+          ],
+          "order": 5,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "一个裂开的问号雕塑，背景是灰暗的天空，地面有细碎的油污与汗水痕迹，象征廉价劳动力的困境",
+                "enterEffect": "breathe",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "生锈的铁链紧紧缠绕着一块巨大的铁球，铁球表面映出灰暗的工厂与弯腰的工人剪影，底部卡在粗糙的石缝中",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              }
+            ],
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "提出发达标志的否定定义，为后续对比铺垫，平实叙述选用 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "一个国家真正发达的标志，"
+            },
+            {
+              "text": "\n从来不是你能多便宜地使唤别人。"
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "一个劳动者剪影，双手松开断裂的铁链，背后是朝阳初升的地平线",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "PANEL_GRID",
+          "reasoning": "三个职业并列举例，适合宫格配图，共同展示体面劳动的正面标准，因此选用 PANEL_GRID。",
+          "content": [
+            {
+              "text": "而是，"
+            },
+            {
+              "text": "\n一个普通的送货员、"
+            },
+            {
+              "text": "\n一个电工、"
+            },
+            {
+              "text": "\n一个文员，"
+            },
+            {
+              "text": "\n付出每天8小时的正常劳动，"
+            },
+            {
+              "text": "\n就能换来体面的收入，"
+            },
+            {
+              "text": "\n养得起家，"
+            },
+            {
+              "text": "\n拥有作为人的基本尊严和双休。"
+            }
+          ],
+          "order": 7,
+          "param": {
+            "panels": [
+              {
+                "src": "一位快递员骑着满载包裹的电动车，面带微笑地穿梭在城市街道",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "一位电工戴着安全帽，在电线杆上熟练地操作工具，阳光照耀",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "一位文员在整洁的办公桌前专注地敲打键盘，电脑屏幕亮着",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "周末的公园里，一家人在草地上野餐，孩子放风筝，气氛轻松愉悦",
+                "showFrom": 7,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "警醒：便利的代价",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开篇强否定/警醒句式，属全片级短促强结论，无需配图，适合用TEXT_FOCUS做金句冲击。",
+          "content": [
+            {
+              "text": "别再为“廉价的便利”沾沾自喜了。"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              "别再为“廉价的便利”沾沾自喜了。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "廉价的便利",
+                "color": "#EF4444"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "典型的“你以为…其实…”认知纠正结构，前半句揭示错误观念，适合COGNITIVE_SHIFT进行观点反转展示。",
+          "content": [
+            {
+              "text": "你以为你只是在享受别人被压榨换来的便宜，"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "享受压榨来的便宜",
+            "butText": "你也将成为代价",
+            "butSrc": "一个渺小的人站在工业齿轮间隙里，周边闪动着被压榨人影的幻象",
+            "notContentIndex": 0,
+            "butContentIndex": 0,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "从“齿轮”比喻引入机制传导（身处系统→迟早被卷入→成为代价），属因果递进链，没有时间轴刻度但需要视觉分段递进，故用CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "其实在这个巨大的齿轮里，"
+            },
+            {
+              "text": "迟早有一天，"
+            },
+            {
+              "text": "你也会成为别人享受便利的代价。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "享便利",
+                "imageSrc": "一个人舒服地坐在沙发上，用手机下单外卖，笑容满面，周围有廉价标签的简笔画",
+                "showFrom": 0
+              },
+              {
+                "label": "齿轮转",
+                "imageSrc": "多个巨大金属齿轮互相咬合旋转，发出暗沉冷光，背景是工厂阴影的简笔画",
+                "showFrom": 1
+              },
+              {
+                "label": "成代价",
+                "imageSrc": "同样的人物被卷入齿轮之间的缝隙，表情痛苦，双手用力挣扎的简笔画",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          }
+        }
+      ]
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "廉价的便利",
+    "subtitle": "为什么生活越便利，你却越不值钱？",
+    "themeColor": "#2563EB",
+    "badge": "认识自我 · 理性思考",
+    "seriesLabel": "认知心理学",
+    "seriesLabelEn": "COGNITIVE PSYCHOLOGY",
+    "methodologySteps": [
+      "觉察",
+      "归因",
+      "调整"
+    ],
+    "methodologyStepsEn": "OBSERVE · ATTRIBUTE · ADJUST"
+  }
+}

@@ -1,0 +1,1023 @@
+{
+  "topic": "你越无条件支持国货，国货却越烂？",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入·爱国支持逻辑",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用典型观众言论，用QUOTE_CITATION展示引用格式。",
+          "content": [
+            {
+              "text": "我一定要无条件支持国产！ ",
+              "startFrame": 0,
+              "durationFrames": 58
+            },
+            {
+              "text": " 他做的再烂，",
+              "startFrame": 57,
+              "durationFrames": 28
+            },
+            {
+              "text": "我也要买，",
+              "startFrame": 85,
+              "durationFrames": 19
+            },
+            {
+              "text": "因为我爱国！",
+              "startFrame": 103,
+              "durationFrames": 34
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteDisplayText": "我一定要无条件支持国产！他做的再烂，我也要买，因为我爱国！",
+            "quoteSource": "爱国情怀",
+            "anchors": []
+          },
+          "totalDurationFrames": 138
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述过渡句，无特殊结构，用CENTER_FOCUS单一中心画面。",
+          "content": [
+            {
+              "text": "这种声音，",
+              "startFrame": 0,
+              "durationFrames": 24
+            },
+            {
+              "text": "你一定不陌生。",
+              "startFrame": 24,
+              "durationFrames": 47
+            },
+            {
+              "text": "这套逻辑听起来非常朴素，",
+              "startFrame": 70,
+              "durationFrames": 64
+            },
+            {
+              "text": "甚至很感人：",
+              "startFrame": 134,
+              "durationFrames": 32
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/国产情怀的谎言/scene_1_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 166
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "解释支持国产的因果传导链条（花钱→研发→崛起），用CAUSE_CHAIN展示因果递进。",
+          "content": [
+            {
+              "text": "我花钱支持，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "企业拿钱搞研发，",
+              "startFrame": 38,
+              "durationFrames": 40
+            },
+            {
+              "text": "国产就能崛起。",
+              "startFrame": 77,
+              "durationFrames": 41
+            }
+          ],
+          "order": 3,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "花钱支持",
+                "imageSrc": "images/国产情怀的谎言/scene_1_3_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "企业研发",
+                "imageSrc": "images/国产情怀的谎言/scene_1_3_img1.png",
+                "showFrom": 1
+              },
+              {
+                "label": "国产崛起",
+                "imageSrc": "images/国产情怀的谎言/scene_1_3_img2.png",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 118
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "表达尊重后转折提醒错误逻辑；CENTER_FOCUS 单图居中更稳定，适合过渡段的“提醒/警示”语气。",
+          "content": [
+            {
+              "text": "我很尊重这种赤诚，",
+              "startFrame": 0,
+              "durationFrames": 50
+            },
+            {
+              "text": "但我不得不提醒你：",
+              "startFrame": 49,
+              "durationFrames": 41
+            },
+            {
+              "text": "这里面有一个非常危险的、",
+              "startFrame": 89,
+              "durationFrames": 54
+            },
+            {
+              "text": "理想化的错误逻辑。",
+              "startFrame": 142,
+              "durationFrames": 44
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/国产情怀的谎言/scene_1_4.png",
+            "enterEffect": "slideBottom",
+            "anchors": []
+          },
+          "totalDurationFrames": 187
+        }
+      ],
+      "audioSrc": "/audio/国产情怀的谎言/scene_1/scene_1.mp3",
+      "totalDurationFrames": 610
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析·人性与商业骗局",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "引出底层关键词“人性”，需要将注意力锁定到该概念上；从说理转向点名核心，强信号拆分新建镜头",
+          "content": [
+            {
+              "text": "这套逻辑里，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "漏掉了最底层的东西———",
+              "startFrame": 27,
+              "durationFrames": 51
+            },
+            {
+              "text": "人性。",
+              "startFrame": 77,
+              "durationFrames": 23
+            }
+          ],
+          "order": 1,
+          "param": {
+            "anchors": [
+              {
+                "text": "人性",
+                "showFrom": 3,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 101
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "对“人性”给出一句话本质定义，短促有力，适合TEXT_FOCUS用大字直接击中观众注意力",
+          "content": [
+            {
+              "text": "人性是趋利避害的，",
+              "startFrame": 0,
+              "durationFrames": 48
+            },
+            {
+              "text": "这是刻在基因里的底层代码。",
+              "startFrame": 48,
+              "durationFrames": 59
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              "人性是趋利避害的",
+              "这是刻在基因里的底层代码"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "趋利避害",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "刻在基因",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 107
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "铺陈假设条件，无强对比或数据，用CENTER_FOCUS平稳叙述；情绪从概念转为情景推理，强信号拆分",
+          "content": [
+            {
+              "text": "当一个资本家发现，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "只要给产品贴上爱国标签，",
+              "startFrame": 42,
+              "durationFrames": 65
+            },
+            {
+              "text": "哪怕做得再烂，",
+              "startFrame": 106,
+              "durationFrames": 35
+            },
+            {
+              "text": "你都会为了“情怀”买单。",
+              "startFrame": 141,
+              "durationFrames": 51
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/国产情怀的谎言/scene_2_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "爱国标签",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "为“情怀”买单",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 192
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "二选一对照（搞研发 vs 躺着数钱），符合「别这样 vs 应该这样」的左右结构，用 DOS_AND_DONTS 比 CENTER_FOCUS 更直观。",
+          "content": [
+            {
+              "text": "你猜，",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "他会拿这笔钱去玩命搞研发，",
+              "startFrame": 18,
+              "durationFrames": 76
+            },
+            {
+              "text": "还是会心安理得地躺着数钱？",
+              "startFrame": 93,
+              "durationFrames": 54
+            }
+          ],
+          "order": 4,
+          "param": {
+            "left": {
+              "label": "搞研发",
+              "src": "images/国产情怀的谎言/scene_2_4_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "躺着数钱",
+              "src": "images/国产情怀的谎言/scene_2_4_right.png",
+              "showFrom": 2
+            }
+          },
+          "totalDurationFrames": 148
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确“不是…而是…”式认知重塑，揭露本质；情绪段位从提问跳转到定义式转折，强信号拆分",
+          "content": [
+            {
+              "text": "在资本家的逻辑里，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "这不叫“支持”，",
+              "startFrame": 42,
+              "durationFrames": 43
+            },
+            {
+              "text": "这叫“廉价的利润”。",
+              "startFrame": 85,
+              "durationFrames": 39
+            }
+          ],
+          "order": 5,
+          "param": {
+            "notText": "支持",
+            "butText": "廉价的利润",
+            "butSrc": "images/国产情怀的谎言/scene_2_5.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 124
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "反向逻辑质问，无对比结构，用CENTER_FOCUS；延续同一因果链但为独立反问，中等信号，字数≤40，不合并",
+          "content": [
+            {
+              "text": "既然不需要进步就能收割你，",
+              "startFrame": 0,
+              "durationFrames": 64
+            },
+            {
+              "text": "他们为什么要费力不讨好地去搞什么创新？",
+              "startFrame": 63,
+              "durationFrames": 91
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/国产情怀的谎言/scene_2_6.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 154
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "强调提醒，引出下一层现实，结构平铺；叙事重心从反问转到揭露商业本质，强信号拆分",
+          "content": [
+            {
+              "text": "别忘了，",
+              "startFrame": 0,
+              "durationFrames": 21
+            },
+            {
+              "text": "那些所谓的“国产大牌”，",
+              "startFrame": 20,
+              "durationFrames": 50
+            },
+            {
+              "text": "本质上是人在做生意。",
+              "startFrame": 69,
+              "durationFrames": 57
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "images/国产情怀的谎言/scene_2_7.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 127
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "简短底层声明，字数虽少但独立表达利润法则；与后续'为国争光'形成强对比，需拆开以强化下一步认知转换",
+          "content": [
+            {
+              "text": "在老板眼里，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "利润永远排第一。",
+              "startFrame": 30,
+              "durationFrames": 44
+            }
+          ],
+          "order": 8,
+          "param": {
+            "imageSrc": "images/国产情怀的谎言/scene_2_8.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "利润",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 75
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "颠覆'为国争光'的正面意义，贬为装饰品，典型的“不是…而是…”认知转换；强对比，独立镜头增强冲击",
+          "content": [
+            {
+              "text": "至于“为国争光”？",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "那是他们赚够了钱之后，",
+              "startFrame": 39,
+              "durationFrames": 45
+            },
+            {
+              "text": "顺带写进 PPT 里的装饰品。",
+              "startFrame": 84,
+              "durationFrames": 71
+            }
+          ],
+          "order": 9,
+          "param": {
+            "notText": "为国争光",
+            "butText": "PPT里的装饰品",
+            "butSrc": "images/国产情怀的谎言/scene_2_9.png",
+            "notContentIndex": 0,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 155
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "从原因分析过渡到案例证据的强转折句，短促有力，无需配图，适合TEXT_FOCUS制造停顿冲击",
+          "content": [
+            {
+              "text": "这绝对不是危言耸听，",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "商业史上早已写满了血淋淋的教训。",
+              "startFrame": 51,
+              "durationFrames": 1
+            },
+            {
+              "text": "",
+              "startFrame": 51,
+              "durationFrames": 76
+            }
+          ],
+          "order": 10,
+          "param": {
+            "coreSentence": [
+              "这不是危言耸听",
+              "商业史上早已写满了血淋淋的教训"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "血淋淋的教训",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 127
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "案例引入提问，平缓引出具体事件；从过渡转向案例叙述，强信号拆分",
+          "content": [
+            {
+              "text": "还记得2018年闹出天大笑话的“红芯浏览器”吗？",
+              "startFrame": 0,
+              "durationFrames": 96
+            }
+          ],
+          "order": 11,
+          "param": {
+            "imageSrc": "images/国产情怀的谎言/scene_2_11.png",
+            "enterEffect": "zoomIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 96
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描写虚假宣传内容，叙事平稳；进入案例细节，独立镜头陈述行为",
+          "content": [
+            {
+              "text": "它高举“打破美国垄断”、",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": " “自主研发世界第五大浏览器内核”的爱国大旗，",
+              "startFrame": 58,
+              "durationFrames": 99
+            },
+            {
+              "text": "把民族情怀拉满。",
+              "startFrame": 157,
+              "durationFrames": 43
+            }
+          ],
+          "order": 12,
+          "param": {
+            "imageSrc": "images/国产情怀的谎言/scene_2_12.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "爱国大旗",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 200
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "KPI_HERO",
+          "reasoning": "引出具体融资额2.5亿，适合KPI_HERO突出核心数字；案例中数据提炼，增强说服力",
+          "content": [
+            {
+              "text": "靠着这套完美的爱国叙事，",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "它成功融到了高达 2.5亿元 的资金。",
+              "startFrame": 54,
+              "durationFrames": 90
+            }
+          ],
+          "order": 13,
+          "param": {
+            "blocks": [
+              {
+                "value": 2.5,
+                "suffix": "亿元",
+                "label": "融资",
+                "showFrom": 1,
+                "decimalPlaces": 1
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 144
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "转折揭露真相，情节推进；从融资结果跳转到曝光，情绪段位变化，强信号拆分",
+          "content": [
+            {
+              "text": "结果呢？",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "当网友扒开它的安装包时，",
+              "startFrame": 21,
+              "durationFrames": 56
+            },
+            {
+              "text": "发现里面竟然是原封不动的谷歌 Chrome 文件。",
+              "startFrame": 77,
+              "durationFrames": 91
+            }
+          ],
+          "order": 14,
+          "param": {
+            "imageSrc": "images/国产情怀的谎言/scene_2_14.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "Chrome文件",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 168
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "自问自答，否定研发，指出真实行为是作假外壳，符合“不是…而是…”认知转换；案例收束，强对比",
+          "content": [
+            {
+              "text": "他们拿到钱去死磕技术了吗？",
+              "startFrame": 0,
+              "durationFrames": 67
+            },
+            {
+              "text": "没有，",
+              "startFrame": 66,
+              "durationFrames": 21
+            },
+            {
+              "text": "他们只是花钱请人做了一个“换壳”的表面功夫。",
+              "startFrame": 87,
+              "durationFrames": 100
+            }
+          ],
+          "order": 15,
+          "param": {
+            "notText": "死磕技术",
+            "butText": "换壳的表面功夫",
+            "butSrc": "images/国产情怀的谎言/scene_2_15.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 188
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "引入第二个案例，类似开场；从一个案例跳到另一个，叙事主体完全更换，强信号拆分",
+          "content": [
+            {
+              "text": "再看看中国科技史上刻骨铭心的耻辱—",
+              "startFrame": 0,
+              "durationFrames": 86
+            },
+            {
+              "text": "“汉芯一号”事件。",
+              "startFrame": 85,
+              "durationFrames": 44
+            }
+          ],
+          "order": 16,
+          "param": {
+            "imageSrc": "images/国产情怀的谎言/scene_2_16.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 129
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述宣传口号，无特殊结构；此处拆分是因为后续数据句过长，单独拆出宣传部分使节奏更晰",
+          "content": [
+            {
+              "text": "它打着“填补国内芯片空白”、",
+              "startFrame": 0,
+              "durationFrames": 68
+            },
+            {
+              "text": "“让国人扬眉吐气”的爱国旗号，",
+              "startFrame": 67,
+              "durationFrames": 65
+            }
+          ],
+          "order": 17,
+          "param": {
+            "imageSrc": "images/国产情怀的谎言/scene_2_17.png",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "爱国旗号",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 132
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "KPI_HERO",
+          "reasoning": "突出1.1亿科研经费，用KPI_HERO放大数据冲击；原句超50字需拆分，此处为数据强调句",
+          "content": [
+            {
+              "text": "骗取了高达 1.1亿元 的科研经费。",
+              "startFrame": 0,
+              "durationFrames": 95
+            }
+          ],
+          "order": 18,
+          "param": {
+            "value": 1.1,
+            "suffix": "亿元",
+            "label": "科研经费",
+            "decimalPlaces": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 95
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "揭露虚假研发的真相，用'所谓的…不过是…'实现认知颠覆，COGNITIVE_SHIFT；案例结论部分，强对比",
+          "content": [
+            {
+              "text": "而它所谓的“硬核研发”，",
+              "startFrame": 0,
+              "durationFrames": 50
+            },
+            {
+              "text": "不过是买来美国的摩托罗拉芯片，",
+              "startFrame": 49,
+              "durationFrames": 74
+            },
+            {
+              "text": "雇人拿砂纸把原厂 Logo 磨掉，",
+              "startFrame": 122,
+              "durationFrames": 79
+            },
+            {
+              "text": "再印上“汉芯”两个字！",
+              "startFrame": 200,
+              "durationFrames": 51
+            }
+          ],
+          "order": 19,
+          "param": {
+            "notText": "硬核研发",
+            "butText": "换标造假",
+            "butSrc": "images/国产情怀的谎言/scene_2_19.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 252
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "设问，引出误解；从案例收束到普遍结论，叙事角色转换，强信号拆分",
+          "content": [
+            {
+              "text": "你以为你给“情怀”花的钱，",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "变成了他们实验室里的研发资金？",
+              "startFrame": 51,
+              "durationFrames": 72
+            }
+          ],
+          "order": 20,
+          "param": {
+            "imageSrc": "images/国产情怀的谎言/scene_2_20.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 124
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "否定上句假设的强转折句，短促有力，适合TEXT_FOCUS用大字停顿制造冲击",
+          "content": [
+            {
+              "text": "不，",
+              "startFrame": 0,
+              "durationFrames": 14
+            },
+            {
+              "text": "你的情怀，",
+              "startFrame": 13,
+              "durationFrames": 30
+            },
+            {
+              "text": "往往只变成了投机者账本上的暴利。",
+              "startFrame": 42,
+              "durationFrames": 90
+            }
+          ],
+          "order": 21,
+          "param": {
+            "coreSentence": [
+              "你的情怀",
+              "往往只变成了投机者账本上的暴利"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "投机者",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "暴利",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 132
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "用'绝不是…而是…'完成全片级认知转换，揭露无条件支持的恶果；合并条件与结果句（原超50字但此处紧密因果，拆分会破坏逻辑连贯性，合并后约45字适合一个COGNITIVE_SHIFT）",
+          "content": [
+            {
+              "text": "如果你无条件支持这些“烂”产品，",
+              "startFrame": 0,
+              "durationFrames": 66
+            },
+            {
+              "text": "你换来的绝不是国产的强大，",
+              "startFrame": 65,
+              "durationFrames": 62
+            },
+            {
+              "text": "而是资本的傲慢，",
+              "startFrame": 126,
+              "durationFrames": 42
+            },
+            {
+              "text": "和国产竞争力的集体退化。",
+              "startFrame": 168,
+              "durationFrames": 68
+            }
+          ],
+          "order": 22,
+          "param": {
+            "notText": "国产的强大",
+            "butText": "资本傲慢，竞争力退化",
+            "butSrc": "images/国产情怀的谎言/scene_2_22.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 236
+        }
+      ],
+      "audioSrc": "/audio/国产情怀的谎言/scene_2/scene_2.mp3",
+      "totalDurationFrames": 3201
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "召唤·价值投票即爱国",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "从说理转向直接行动呼吁，语气平缓，无明显结构，以中心聚焦呈现。",
+          "content": [
+            {
+              "text": "如果你真心希望国产崛起，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "请收起你的情绪，",
+              "startFrame": 58,
+              "durationFrames": 41
+            },
+            {
+              "text": "收起你的同情。",
+              "startFrame": 99,
+              "durationFrames": 39
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/国产情怀的谎言/scene_3_3.png",
+            "enterEffect": "zoomIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 138
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片核心结论，短促有力，无需配图，用大字直接冲击观众。",
+          "content": [
+            {
+              "text": "只有当你只为“价值”投票，",
+              "startFrame": 0,
+              "durationFrames": 62
+            },
+            {
+              "text": "当他们发现不把产品做到极致就活不下去的时候，",
+              "startFrame": 61,
+              "durationFrames": 103
+            },
+            {
+              "text": "真正的崛起，",
+              "startFrame": 163,
+              "durationFrames": 38
+            },
+            {
+              "text": "才会开始。",
+              "startFrame": 200,
+              "durationFrames": 35
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              "为“价值”投票",
+              "真正的崛起，才会开始。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "价值",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "崛起",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 236
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片核心结论，短促有力，无需配图，用大字直接冲击观众。",
+          "content": [
+            {
+              "text": "如果你真的爱国，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "想看到国货屹立不倒。",
+              "startFrame": 34,
+              "durationFrames": 47
+            },
+            {
+              "text": "别做他们的遮阳伞，",
+              "startFrame": 81,
+              "durationFrames": 41
+            },
+            {
+              "text": "去做他们的磨刀石。",
+              "startFrame": 122,
+              "durationFrames": 42
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              "别做他们的遮阳伞，",
+              "去做他们的磨刀石。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "遮阳伞",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "磨刀石",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 164
+        }
+      ],
+      "audioSrc": "/audio/国产情怀的谎言/scene_3/scene_3.mp3",
+      "totalDurationFrames": 539
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "国产情怀的谎言",
+    "subtitle": "别做他们的遮阳伞，去做他们的磨刀石。 ",
+    "themeColor": "#FF6900",
+    "surface": "light",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

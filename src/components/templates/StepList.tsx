@@ -4,7 +4,12 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { StaggeredList } from "../TextAnimations";
-import { BW_TEXT, type TemplateAnchorsProps, type TemplateBaseProps } from "./shared";
+import {
+	BW_LIST_SIDE_INSET,
+	BW_TEXT,
+	type TemplateAnchorsProps,
+	type TemplateBaseProps,
+} from "./shared";
 import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
 
@@ -12,7 +17,7 @@ export const templateMeta = {
 	"name": "STEP_LIST",
 	"componentExport": "BWStepList",
 	"description":
-		"适用：可执行步骤、操作流程、短分点清单（第一步/第二步…），无配图，每个分点必须限制在10个字符以内。\n差异：若每条方法后还跟较长解释、追问或补充句，优先用 METHOD_STACK；无步骤感的并列要点用 PANEL_GRID 或 CENTER_FOCUS。\n参数：steps 可为字符串数组，或 { text, showFrom? }；showFrom 为 content 数组的下标（0-based），与 anchors 一致，入场时刻取该条 content 的 startFrame；不传 steps 则从 content 提取；未写 showFrom 时按 staggerDelay 与序号交错。",
+		"适用：可执行步骤、操作流程、短分点清单（第一步/第二步…），无配图，每个分点必须限制在10个字符以内。\n差异：若每条方法后还跟较长解释、追问或补充句，优先用 METHOD_STACK；无步骤感的并列要点用 PANEL_GRID 或 CENTER_FOCUS。\n参数：可选 title 为步骤区上方总标题（建议 4～14 字）；steps 可为字符串数组，或 { text, showFrom? }；showFrom 为 content 数组的下标（0-based），与 anchors 一致，入场时刻取该条 content 的 startFrame；不传 steps 则从 content 提取；未写 showFrom 时按 staggerDelay 与序号交错。",
 	"content_min_items": 2,
 	"content_max_items": 6,
 	"psychology": "降低认知负荷",
@@ -20,6 +25,10 @@ export const templateMeta = {
 	"param_schema": {
 		"type": "object",
 		"properties": {
+			"title": {
+				"type": "string",
+				"description": "可选；步骤列表上方标题，建议 4～14 字",
+			},
 			"steps": {
 				"type": "array",
 				"items": {
@@ -51,6 +60,7 @@ export const templateMeta = {
 	"example": {
 		"template": "STEP_LIST",
 		"param": {
+			"title": "流程概览",
 			"steps": [
 				{"text": "第一步", "showFrom": 0},
 				{"text": "第二步", "showFrom": 1},
@@ -69,6 +79,8 @@ export type BWStepListStepItem =
 	  };
 
 export interface BWStepListProps extends TemplateBaseProps, TemplateAnchorsProps {
+	/** 可选；步骤区上方总标题 */
+	title?: string;
 	steps?: BWStepListStepItem[];
 	startFrame?: number;
 	/** 未指定 showFrom 时的步间间隔（帧） */
@@ -107,6 +119,7 @@ const resolveStepEntryFrame = (
 };
 
 export const BWStepList: React.FC<BWStepListProps> = ({
+	title,
 	steps,
 	startFrame = 0,
 	staggerDelay = 12,
@@ -121,18 +134,48 @@ export const BWStepList: React.FC<BWStepListProps> = ({
 	const itemDelays = stepRows.map((row, i) =>
 		startFrame + resolveStepEntryFrame(row, i, items, staggerDelay),
 	);
+	const titleFontSize = title
+		? stepRows.length >= 5
+			? 52
+			: stepRows.length >= 4
+				? 56
+				: 60
+		: 0;
 
 	return (
 		<AbsoluteFill style={style}>
 			<div
 				style={{
 					position: "absolute",
-					left: 200,					
-					right: 200,
-					top: "50%",
-					transform: "translateY(-50%)",
+					left: BW_LIST_SIDE_INSET,
+					right: BW_LIST_SIDE_INSET,
+					...(title
+						? {
+								top: "20%",
+								bottom: "16%",
+								display: "flex",
+								flexDirection: "column",
+								gap: 18,
+							}
+						: {
+								top: "50%",
+								transform: "translateY(-50%)",
+							}),
 				}}
 			>
+				{title ? (
+					<div
+						style={{
+							fontSize: titleFontSize,
+							fontWeight: 800,
+							color: BW_TEXT,
+							textAlign: "center",
+							flexShrink: 0,
+						}}
+					>
+						{title}
+					</div>
+				) : null}
 				<StaggeredList
 					items={stepRows.map((row, i) => (
 						<div
@@ -151,7 +194,7 @@ export const BWStepList: React.FC<BWStepListProps> = ({
 						>
 							<span style={{ opacity: 0.6 }}>{i + 1}.</span>
 							{row.text}
-						</div> 
+						</div>
 					))}
 					itemDelays={itemDelays}
 					staggerDelay={staggerDelay}

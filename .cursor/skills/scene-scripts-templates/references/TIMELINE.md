@@ -10,17 +10,17 @@ metadata:
 {
   "name": "TIMELINE",
   "componentExport": "BWTimeline",
-  "description": "适用：历史演进、时间顺序、前后对比带明确时间轴。\n差异：无时间线的并列要点用 PANEL_GRID；操作步骤用 STEP_LIST。\n参数：images 2～3 项，position 常 left/right 以配合轴线。",
+  "description": "适用：历史演进、时间顺序、前后对比带明确时间轴。\n差异：无时间线的并列要点用 PANEL_GRID；操作步骤用 STEP_LIST。\n参数：images 3～5 项，按数组顺序从左到右沿轴线均分。",
   "psychology": "叙事连贯性",
-  "image_count": "2-3",
+  "image_count": "3-5",
   "param_schema": {
     "type": "object",
     "properties": {
       "images": {
         "type": "array",
-        "minItems": 2,
-        "maxItems": 3,
-        "description": "时间轴图片数组；position 常用 left/right 配合轴线",
+        "minItems": 3,
+        "maxItems": 5,
+        "description": "时间轴节点配图（3～5 项）；顺序即时间先后，横向从左到右均分",
         "items": {
           "type": "object",
           "required": [
@@ -31,16 +31,6 @@ metadata:
               "type": "string",
               "format": "image_prompt",
               "description": "该节点配图提示词"
-            },
-            "position": {
-              "type": "string",
-              "enum": [
-                "center",
-                "left",
-                "right",
-                "top",
-                "bottom"
-              ]
             },
             "enterEffect": {
               "type": "string",
@@ -74,12 +64,14 @@ metadata:
       "images": [
         {
           "src": "1990年代电脑图标",
-          "position": "left",
           "enterEffect": "slideLeft"
         },
         {
+          "src": "2010年代笔记本图标",
+          "enterEffect": "fadeIn"
+        },
+        {
           "src": "2020年代手机图标",
-          "position": "right",
           "enterEffect": "slideLeft"
         }
       ]

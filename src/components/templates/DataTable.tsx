@@ -209,7 +209,7 @@ export const BWDataTable: React.FC<BWDataTableProps> = ({
 		extrapolateRight: "clamp",
 	});
 	const headerFont = colCount >= 5 ? 30 : colCount === 2 ? 40 : 34;
-	const cellFont = colCount >= 5 ? 28 : colCount === 2 ? 36 : 32;
+	const cellFont = colCount >= 5 ? 28 : colCount === 2 ? 50 : 32;
 
 	return (
 		<AbsoluteFill style={style}>
@@ -228,7 +228,7 @@ export const BWDataTable: React.FC<BWDataTableProps> = ({
 				{title ? (
 					<div
 						style={{
-							fontSize: 46,
+							fontSize: 55,
 							fontWeight: 800,
 							color: BW_TEXT,
 							marginBottom: 40,

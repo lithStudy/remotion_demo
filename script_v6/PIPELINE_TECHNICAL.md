@@ -35,7 +35,7 @@
 - **画布**：`fps`、`width`、`height`。
 - **Azure TTS**：`azure_service_region`、`azure_voice_name`、`speech_rate`。
 - **转场与片尾**：`transition_duration_frames`、`scene_end_padding_frames`。
-- **Step1 行为**：`default_template`（未知模板回退）、`step1_retry_on_validate_warnings`（校验有告警时是否触发一次 AI 修订）。
+- **Step1 行为**：`default_template`（未知模板回退）、`step1_skip_validate`（为 `true` 时跳过校验；为 `false` 时校验且有告警则自动修订一次）。
 - **无音频预览**：`preview_min_duration_frames`、`preview_frames_per_char`（Step4 在尚未跑 Step3 时于内存中按文案长度注入 `content` 时间轴用；不写回 JSON）。
 
 ### 3.2 `.env`（由 `utils.load_env` 加载）
@@ -147,10 +147,10 @@ Prompt 文件位于 `prompts/step1/*.md`，占位符为 `__KEY__`，由 `prompt_
 ### 5.6 `_validate_and_auto_fix`
 
 1. **`validate_and_normalize_scene_scripts`**（`scene_script_validate.py`）：按 `TEMPLATE_REGISTRY` 归一化并收集 **warnings**（未知模板回退、enum 钳制、`content` 回填、`images` 与 `image_count` 等）。
-2. 有告警则打印；若 **`step1_retry_on_validate_warnings`** 为 `false`，直接返回当前 `result`。
-3. 若为 `true`：调用 **`fix_step.gemini_fix_after_warnings`**（**`fix_after_warnings.md`**），传入原文、告警列表、当前草稿、`TEMPLATE_GUIDE`，做一次结构修订。
+2. 若 **`step1_skip_validate`** 为 `true`（或 CLI `--skip-validate`），跳过本段。
+3. 有告警则打印，并调用 **`fix_step.gemini_fix_after_warnings`**（**`fix_after_warnings.md`**），传入原文、告警列表、当前草稿、`TEMPLATE_GUIDE`，做一次结构修订。
 4. **锁定 `content`**：修订前按 `(sceneId, order)` 备份 **`item.content`**，修订后写回；`param` 可由模型修订。
-5. 对修订结果再校验；打印修订后是否仍有告警。修订失败（如 JSON 解析错误）则保留初稿。
+5. 对修订结果再校验；修订后仍有 **hard** 告警则失败；仅 **ADVISORY** 告警不阻断。修订失败（如 JSON 解析错误）则抛错。
 
 ### 5.7 `scene_timing.py`：Step1 落盘内容 vs Step4 内存预览帧
 

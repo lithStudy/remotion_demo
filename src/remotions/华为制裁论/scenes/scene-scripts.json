@@ -1,0 +1,1284 @@
+{
+  "topic": "为什么西方“围剿”华为？别再用“中国强大”一句话概括了，内幕远比你想的复杂！",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：华为困境",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "提问引出话题，纯文字大屏冲击，适合TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "为什么西方国家在全面移除华为服务？",
+              "startFrame": 0,
+              "durationFrames": 81
+            },
+            {
+              "text": "为什么美国不卖高端技术给华为？",
+              "startFrame": 80,
+              "durationFrames": 82
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              "为什么西方国家在全面移除华为服务？",
+              "为什么美国不卖高端技术给华为？"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "西方国家",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "华为",
+                "color": "#000000"
+              },
+              {
+                "coreSentenceAnchor": "美国",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "高端技术",
+                "color": "#000000"
+              }
+            ]
+          },
+          "totalDurationFrames": 163
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用网上常见的观点，属于引用，选择QUOTE_CITATION。",
+          "content": [
+            {
+              "text": "网上99%的回答，",
+              "startFrame": 0,
+              "durationFrames": 57
+            },
+            {
+              "text": "都是一句话—-",
+              "startFrame": 56,
+              "durationFrames": 30
+            },
+            {
+              "text": "因为中国强大了，",
+              "startFrame": 86,
+              "durationFrames": 39
+            },
+            {
+              "text": "所以被打压。",
+              "startFrame": 124,
+              "durationFrames": 32
+            }
+          ],
+          "order": 2,
+          "param": {
+            "quoteSource": "网上99%的回答",
+            "quoteDisplayText": "因为中国强大了，所以被打压。",
+            "showFrom": 2
+          },
+          "totalDurationFrames": 156
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "过渡句，预告接下来要展开原因，平缓叙述，无特殊结构，因此选择CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "这话对了一部分，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "但还省略了太多东西。",
+              "startFrame": 37,
+              "durationFrames": 53
+            },
+            {
+              "text": "今天我把相关原因一个一个铺开。",
+              "startFrame": 89,
+              "durationFrames": 72
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/华为制裁论/scene_1_4.png",
+            "enterEffect": "fadeIn"
+          },
+          "totalDurationFrames": 162
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "总结性话语，希望用户自己判断，可以使用TEXT_FOCUS强调。",
+          "content": [
+            {
+              "text": "你看完，",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "自己判断。",
+              "startFrame": 18,
+              "durationFrames": 28
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "你看完",
+                "showFrom": 0
+              },
+              {
+                "text": "自己判断",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "自己判断",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 46
+        }
+      ],
+      "audioSrc": "/audio/华为制裁论/scene_1/scene_1.mp3",
+      "totalDurationFrames": 528
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析：制裁与去华为化",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "陈述华为处境分为被制裁和去华为化两方面，平缓叙述，无明显结构，选择CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "华为如今的处境其实不能一概而论为“制裁”，",
+              "startFrame": 0,
+              "durationFrames": 89
+            },
+            {
+              "text": "应该分两方面讲：",
+              "startFrame": 88,
+              "durationFrames": 37
+            },
+            {
+              "text": "一是被制裁，",
+              "startFrame": 124,
+              "durationFrames": 34
+            },
+            {
+              "text": "一是被去华为化。",
+              "startFrame": 158,
+              "durationFrames": 44
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为制裁论/scene_2_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "制裁",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "去华为化",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 202
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CHAT_BUBBLE",
+          "reasoning": "“有人说这不是一回事吗？”为提问口吻，后续为反驳回答，适合用对话气泡体表达，选择CHAT_BUBBLE。",
+          "content": [
+            {
+              "text": "有人说这不是一回事吗？",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "其实不是的，",
+              "startFrame": 52,
+              "durationFrames": 28
+            },
+            {
+              "text": "从法理上，",
+              "startFrame": 79,
+              "durationFrames": 29
+            },
+            {
+              "text": "操作上都是有区别的。",
+              "startFrame": 108,
+              "durationFrames": 45
+            }
+          ],
+          "order": 2,
+          "param": {
+            "bubbles": [
+              {
+                "bubbleText": "有人说这不是一回事吗？",
+                "showFrom": 0,
+                "align": "left"
+              },
+              {
+                "bubbleText": "其实不是的，从法理上，操作上都是有区别的。",
+                "showFrom": 1,
+                "align": "right"
+              }
+            ]
+          },
+          "totalDurationFrames": 153
+        }
+      ],
+      "audioSrc": "/audio/华为制裁论/scene_2/scene_2.mp3",
+      "totalDurationFrames": 357
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "剖析：惩罚性制裁",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "TREE_DIAGRAM",
+          "reasoning": "将制裁的目的分为两种层级关系 → TREE_DIAGRAM",
+          "content": [
+            {
+              "text": "先说“被制裁”。",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "制裁的目的也分两种：",
+              "startFrame": 36,
+              "durationFrames": 46
+            },
+            {
+              "text": "一种是惩罚性的，就是你干了坏事我用制裁惩罚了",
+              "startFrame": 81,
+              "durationFrames": 107
+            },
+            {
+              "text": "一种是制约性的，就是你太牛了我要限制你。",
+              "startFrame": 188,
+              "durationFrames": 101
+            }
+          ],
+          "order": 1,
+          "param": {
+            "root": {
+              "label": "制裁",
+              "showFrom": 0,
+              "children": [
+                {
+                  "label": "惩罚性",
+                  "showFrom": 2
+                },
+                {
+                  "label": "制约性",
+                  "showFrom": 3
+                }
+              ]
+            }
+          },
+          "totalDurationFrames": 290
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "METHOD_STACK",
+          "reasoning": "承上启下，为接下来列举事件做铺垫 + 描述星通事件 + 描述孟女士PPT事件→ METHOD_STACK",
+          "content": [
+            {
+              "text": "惩罚性，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "是因为华为在美国做生意，",
+              "startFrame": 27,
+              "durationFrames": 46
+            },
+            {
+              "text": "却违反了美国法律。",
+              "startFrame": 73,
+              "durationFrames": 38
+            },
+            {
+              "text": "最主要的有下面两件事：",
+              "startFrame": 110,
+              "durationFrames": 59
+            },
+            {
+              "text": "第一，",
+              "startFrame": 169,
+              "durationFrames": 18
+            },
+            {
+              "text": "星通事件，",
+              "startFrame": 186,
+              "durationFrames": 35
+            },
+            {
+              "text": "华为通过“星通”公司，",
+              "startFrame": 221,
+              "durationFrames": 55
+            },
+            {
+              "text": "向当时被美国制裁的伊朗转卖禁售的设备。",
+              "startFrame": 276,
+              "durationFrames": 100
+            },
+            {
+              "text": "尽管华为不承认，",
+              "startFrame": 375,
+              "durationFrames": 42
+            },
+            {
+              "text": "但“星通”的员工确实是使用的华为工牌和邮箱。",
+              "startFrame": 417,
+              "durationFrames": 111
+            },
+            {
+              "text": "第二，",
+              "startFrame": 527,
+              "durationFrames": 16
+            },
+            {
+              "text": "孟女士PPT事件，",
+              "startFrame": 543,
+              "durationFrames": 53
+            },
+            {
+              "text": "通过向汇丰银行提供虚假或误导性的信息，",
+              "startFrame": 595,
+              "durationFrames": 108
+            },
+            {
+              "text": "来为华为及星通，",
+              "startFrame": 703,
+              "durationFrames": 44
+            },
+            {
+              "text": "处理了数百万美元的伊朗方面的清算交易。",
+              "startFrame": 747,
+              "durationFrames": 111
+            },
+            {
+              "text": "这是孟女士在《延期起诉协议》中签字确认过的。",
+              "startFrame": 857,
+              "durationFrames": 101
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "惩罚性制裁",
+            "imageSrc": "images/华为制裁论/scene_3_2.png",
+            "notes": [
+              {
+                "text": "星通事件",
+                "showFrom": 4
+              },
+              {
+                "text": "孟女士PPT事件",
+                "showFrom": 10
+              }
+            ]
+          },
+          "totalDurationFrames": 958
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "总结两件事的定性以及带来的后果→ SPLIT_COMPARE",
+          "content": [
+            {
+              "text": "这两件事前者被定性为违反了制裁法案，",
+              "startFrame": 0,
+              "durationFrames": 102
+            },
+            {
+              "text": "后者被定性为“银行欺诈”，",
+              "startFrame": 101,
+              "durationFrames": 64
+            },
+            {
+              "text": "这两者，",
+              "startFrame": 164,
+              "durationFrames": 22
+            },
+            {
+              "text": "是导致华为被列入实体清单的直接法理依据。",
+              "startFrame": 186,
+              "durationFrames": 101
+            }
+          ],
+          "order": 3,
+          "param": {
+            "leftSrc": "images/华为制裁论/scene_3_3_left.png",
+            "rightSrc": "images/华为制裁论/scene_3_3_right.png",
+            "leftLabel": "制裁法案",
+            "rightLabel": "银行欺诈",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1
+          },
+          "totalDurationFrames": 288
+        }
+      ],
+      "audioSrc": "/audio/华为制裁论/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1538
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "剖析：制约性制裁",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "制约性原因及6G专利数据说明→ METHOD_STACK",
+          "content": [
+            {
+              "text": "制约性，",
+              "startFrame": 0,
+              "durationFrames": 20
+            },
+            {
+              "text": "是因为华为在通信领域技术确实相当牛，",
+              "startFrame": 19,
+              "durationFrames": 96
+            },
+            {
+              "text": "5G相关专利确实多，",
+              "startFrame": 115,
+              "durationFrames": 56
+            },
+            {
+              "text": "尤其是中国在6G相关专利的储备上已占全球35%，",
+              "startFrame": 171,
+              "durationFrames": 141
+            },
+            {
+              "text": "远高于美国的18%，",
+              "startFrame": 312,
+              "durationFrames": 62
+            },
+            {
+              "text": "如果不采取手段，未来的6G标准制定权，",
+              "startFrame": 373,
+              "durationFrames": 101
+            },
+            {
+              "text": "有可能会落入我们中国之手。",
+              "startFrame": 473,
+              "durationFrames": 56
+            },
+            {
+              "text": "因此美国开始通过各种手段，",
+              "startFrame": 528,
+              "durationFrames": 72
+            },
+            {
+              "text": "制裁包括华为在内的所有中国通信企业。",
+              "startFrame": 600,
+              "durationFrames": 90
+            }
+          ],
+          "order": 1,
+          "param": {
+            "title": "制约性",
+            "imageSrc": "images/华为制裁论/scene_4_1.png",
+            "notes": [
+              {
+                "text": "华为在通信领域技术确实相当牛",
+                "showFrom": 1
+              },
+              {
+                "text": "中国6G专利储备已占全球35%",
+                "showFrom": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 691
+        }
+      ],
+      "audioSrc": "/audio/华为制裁论/scene_4/scene_4.mp3",
+      "totalDurationFrames": 693
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "剖析：去华为化原因",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "TREE_DIAGRAM",
+          "reasoning": "将制裁的目的分为两种层级关系 → TREE_DIAGRAM",
+          "content": [
+            {
+              "text": "接下来，",
+              "startFrame": 0,
+              "durationFrames": 16
+            },
+            {
+              "text": "再说“去华为化”。",
+              "startFrame": 15,
+              "durationFrames": 46
+            },
+            {
+              "text": "去华为也分为两种原因：",
+              "startFrame": 61,
+              "durationFrames": 57
+            },
+            {
+              "text": "一种是技术上的，",
+              "startFrame": 117,
+              "durationFrames": 38
+            },
+            {
+              "text": "一种是法理上的。",
+              "startFrame": 154,
+              "durationFrames": 45
+            }
+          ],
+          "order": 1,
+          "param": {
+            "root": {
+              "label": "抵制华为",
+              "showFrom": 0,
+              "children": [
+                {
+                  "label": "被制裁",
+                  "showFrom": 0,
+                  "children": [
+                    {
+                      "label": "惩罚性制裁",
+                      "showFrom": 0
+                    },
+                    {
+                      "label": "制约性制裁",
+                      "showFrom": 0
+                    }
+                  ]
+                },
+                {
+                  "label": "去华为化",
+                  "showFrom": 1,
+                  "children": [
+                    {
+                      "label": "技术原因",
+                      "showFrom": 3
+                    },
+                    {
+                      "label": "法理原因",
+                      "showFrom": 4
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "totalDurationFrames": 200
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "引出技术原因，铺垫，选择默认模板。",
+          "content": [
+            {
+              "text": "技术上，",
+              "startFrame": 0,
+              "durationFrames": 21
+            },
+            {
+              "text": "HCSEC审查事件。",
+              "startFrame": 20,
+              "durationFrames": 49
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/华为制裁论/scene_5_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "HCSEC",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring"
+              }
+            ]
+          },
+          "totalDurationFrames": 70
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "对HCSEC审查的原因和结论进行了解释说明，整体是一个“原因+结论+两点缺陷”的结构，适合METHOD_STACK。",
+          "content": [
+            {
+              "text": "为了在接纳华为设备与保障国家安全之间寻找平衡，",
+              "startFrame": 0,
+              "durationFrames": 126
+            },
+            {
+              "text": "英国政府成立了HCSEC，",
+              "startFrame": 125,
+              "durationFrames": 65
+            },
+            {
+              "text": "来对华为提供的服务进行安全审计，",
+              "startFrame": 189,
+              "durationFrames": 93
+            },
+            {
+              "text": "结论是，",
+              "startFrame": 282,
+              "durationFrames": 23
+            },
+            {
+              "text": "华为的软件工程和网络安全能力方面，",
+              "startFrame": 305,
+              "durationFrames": 93
+            },
+            {
+              "text": "发现了“严重且系统性的缺陷”，",
+              "startFrame": 398,
+              "durationFrames": 73
+            },
+            {
+              "text": "一方面是代码存在诸多安全漏洞，",
+              "startFrame": 471,
+              "durationFrames": 76
+            },
+            {
+              "text": "另一方面是华为提供的代码和实际编译的结果不一致，",
+              "startFrame": 546,
+              "durationFrames": 116
+            },
+            {
+              "text": "相当于华为给人家审计的都不是真实运行的代码。",
+              "startFrame": 661,
+              "durationFrames": 122
+            }
+          ],
+          "order": 4,
+          "param": {
+            "title": "技术审查缺陷",
+            "imageSrc": "images/华为制裁论/scene_5_4.png",
+            "notes": [
+              {
+                "text": "安全审计",
+                "showFrom": 2
+              },
+              {
+                "text": "代码漏洞",
+                "showFrom": 5
+              },
+              {
+                "text": "审查与运行代码不一致",
+                "showFrom": 7
+              }
+            ]
+          },
+          "totalDurationFrames": 784
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "对技术原因的总结，是结论性的句子。选择CENTER_FOCUS",
+          "content": [
+            {
+              "text": "这种技术层面的不可信，",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "为西方政客推动“剥离并替换”计划提供了坚实的技术辩护。",
+              "startFrame": 51,
+              "durationFrames": 151
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/华为制裁论/scene_5_5.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "技术层面",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring"
+              },
+              {
+                "text": "坚实辩护",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 202
+        }
+      ],
+      "audioSrc": "/audio/华为制裁论/scene_5/scene_5.mp3",
+      "totalDurationFrames": 1257
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "剖析：法理风险",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "引出技术原因，铺垫，选择默认模板。",
+          "content": [
+            {
+              "text": "法理上，",
+              "startFrame": 0,
+              "durationFrames": 23
+            },
+            {
+              "text": " 《国家情报法》事件。",
+              "startFrame": 22,
+              "durationFrames": 45
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/华为制裁论/scene_6_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "国家情报法",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring"
+              }
+            ]
+          },
+          "totalDurationFrames": 68
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "QUOTE_CITATION",
+          "reasoning": "援引《国家情报法》第七条条文原文，法律摘录体裁，适合 QUOTE_CITATION。",
+          "content": [
+            {
+              "text": "2017年，中国通过了《国家情报法》。",
+              "startFrame": 0,
+              "durationFrames": 88
+            },
+            {
+              "text": "第七条写的是：",
+              "startFrame": 87,
+              "durationFrames": 41
+            },
+            {
+              "text": "任何组织和公民都应当依法支持、",
+              "startFrame": 127,
+              "durationFrames": 83
+            },
+            {
+              "text": "协助和配合国家情报工作。",
+              "startFrame": 210,
+              "durationFrames": 69
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteSource": "《国家情报法》第七条",
+            "quoteDisplayText": "任何组织和公民都应当依法支持、协助和配合国家情报工作。",
+            "showFrom": 2
+          },
+          "totalDurationFrames": 280
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "QUOTE_CITATION",
+          "reasoning": "援引《网络安全法》第二十八条条文原文，法律摘录体裁，适合 QUOTE_CITATION。",
+          "content": [
+            {
+              "text": "再加上《网络安全法》第二十八条：",
+              "startFrame": 0,
+              "durationFrames": 66
+            },
+            {
+              "text": "网络运营者应当为公安机关、",
+              "startFrame": 65,
+              "durationFrames": 83
+            },
+            {
+              "text": "国家安全机关提供技术支持和协助。",
+              "startFrame": 148,
+              "durationFrames": 88
+            }
+          ],
+          "order": 2,
+          "param": {
+            "quoteSource": "《网络安全法》第二十八条",
+            "quoteDisplayText": "网络运营者应当为公安机关、国家安全机关提供技术支持和协助。",
+            "showFrom": 1
+          },
+          "totalDurationFrames": 236
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "归纳两条法律的实质含义，适合纯大字结论呈现；无需配图锚定，用 TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "这两条法律的意思是，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "中国政府有权利要求任何中国企业，",
+              "startFrame": 42,
+              "durationFrames": 82
+            },
+            {
+              "text": "在必要时为政府提供情报信息，",
+              "startFrame": 124,
+              "durationFrames": 81
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              "中国政府有权利要求任何中国企业，",
+              "在必要时为政府提供情报信息，"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "任何中国企业",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "情报信息",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 206
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "「本国角度可理解」与「他国角度难以接受」为并列对照叙事，用 DOS_AND_DONTS 左右分栏比单卡认知翻转更直观。",
+          "content": [
+            {
+              "text": "站在自己国家的角度来讲这是没问题的，",
+              "startFrame": 0,
+              "durationFrames": 83
+            },
+            {
+              "text": "国家安全嘛。",
+              "startFrame": 82,
+              "durationFrames": 35
+            },
+            {
+              "text": "但是站在其他国家这就有问题了，",
+              "startFrame": 117,
+              "durationFrames": 71
+            },
+            {
+              "text": "理由一样的：",
+              "startFrame": 188,
+              "durationFrames": 29
+            },
+            {
+              "text": "也是因为国家安全。",
+              "startFrame": 217,
+              "durationFrames": 42
+            },
+            {
+              "text": "毕竟一个掌握大量通讯基站的公司，",
+              "startFrame": 258,
+              "durationFrames": 78
+            },
+            {
+              "text": "随时可能向其政府传递情报，",
+              "startFrame": 335,
+              "durationFrames": 69
+            },
+            {
+              "text": "这谁能接受？",
+              "startFrame": 404,
+              "durationFrames": 44
+            }
+          ],
+          "order": 4,
+          "param": {
+            "left": {
+              "label": "本国角度",
+              "src": "images/华为制裁论/scene_6_4_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "他国角度",
+              "src": "images/华为制裁论/scene_6_4_right.png",
+              "showFrom": 2
+            }
+          },
+          "totalDurationFrames": 449
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "总结法律条文导致的后果，平缓叙述，使用单图即可。",
+          "content": [
+            {
+              "text": "这一法律条文，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "导致了所有的西方国家，即使需要付出相当的代价，",
+              "startFrame": 43,
+              "durationFrames": 113
+            },
+            {
+              "text": "但都坚定的开始了去华为化，",
+              "startFrame": 156,
+              "durationFrames": 66
+            },
+            {
+              "text": "去中国化。",
+              "startFrame": 221,
+              "durationFrames": 35
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/华为制裁论/scene_6_6.png",
+            "enterEffect": "slideLeft",
+            "anchors": [
+              {
+                "text": "去华为化",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "去中国化",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 256
+        }
+      ],
+      "audioSrc": "/audio/华为制裁论/scene_6/scene_6.mp3",
+      "totalDurationFrames": 1494
+    },
+    {
+      "sceneId": "scene_7",
+      "sceneName": "总结：多重原因",
+      "items": [
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TREE_DIAGRAM",
+          "reasoning": "总结段落展示树状分类体系：抵制华为分为被制裁和去华为化两大类，各自再细分子项。用TREE_DIAGRAM一次性呈现完整层次结构，替代原来7个item的拆分展示。",
+          "content": [
+            {
+              "text": "让我们总结一下：",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "西方国家掀起的抵制华为行动是多方面原因促成的。",
+              "startFrame": 36,
+              "durationFrames": 131
+            },
+            {
+              "text": "一是被制裁，",
+              "startFrame": 166,
+              "durationFrames": 38
+            },
+            {
+              "text": "一是被去华为化。",
+              "startFrame": 204,
+              "durationFrames": 47
+            },
+            {
+              "text": "被制裁分为惩罚性",
+              "startFrame": 250,
+              "durationFrames": 52
+            },
+            {
+              "text": "和制约性，",
+              "startFrame": 302,
+              "durationFrames": 32
+            },
+            {
+              "text": "去华为分为技术原因",
+              "startFrame": 333,
+              "durationFrames": 53
+            },
+            {
+              "text": "和法理原因。",
+              "startFrame": 386,
+              "durationFrames": 36
+            },
+            {
+              "text": "惩罚性制裁由“星通事件”和“孟女士PPT事件”作为导火索",
+              "startFrame": 421,
+              "durationFrames": 139
+            },
+            {
+              "text": "制约性制裁是因为中国通信领域技术积累让美国感觉到了威胁",
+              "startFrame": 559,
+              "durationFrames": 151
+            },
+            {
+              "text": "去华为的技术原因是代码的不可信",
+              "startFrame": 710,
+              "durationFrames": 84
+            },
+            {
+              "text": "去华为的法理原因是《国家情报法》的颁布。",
+              "startFrame": 794,
+              "durationFrames": 96
+            }
+          ],
+          "order": 1,
+          "param": {
+            "root": {
+              "label": "抵制华为",
+              "showFrom": 1,
+              "children": [
+                {
+                  "label": "被制裁",
+                  "showFrom": 2,
+                  "children": [
+                    {
+                      "label": "惩罚性制裁",
+                      "showFrom": 4,
+                      "children": [
+                        {
+                          "label": "星通",
+                          "showFrom": 8
+                        },
+                        {
+                          "label": "孟女士",
+                          "showFrom": 8
+                        }
+                      ]
+                    },
+                    {
+                      "label": "制约性制裁",
+                      "showFrom": 5,
+                      "children": [
+                        {
+                          "label": "技术威胁",
+                          "showFrom": 9
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": "去华为化",
+                  "showFrom": 3,
+                  "children": [
+                    {
+                      "label": "技术原因",
+                      "showFrom": 6,
+                      "children": [
+                        {
+                          "label": "代码不可信",
+                          "showFrom": 10
+                        }
+                      ]
+                    },
+                    {
+                      "label": "法理原因",
+                      "showFrom": 7,
+                      "children": [
+                        {
+                          "label": "国家情报法",
+                          "showFrom": 11
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "totalDurationFrames": 891
+        }
+      ],
+      "audioSrc": "/audio/华为制裁论/scene_7/scene_7.mp3",
+      "totalDurationFrames": 893
+    },
+    {
+      "sceneId": "scene_8",
+      "sceneName": "反转：站队问题",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "表达了不是A而是B的认知转变，使用COGNITIVE_SHIFT模板。",
+          "content": [
+            {
+              "text": "所以你看，",
+              "startFrame": 0,
+              "durationFrames": 24
+            },
+            {
+              "text": "这不是一个\"谁对谁错\"的问题。",
+              "startFrame": 24,
+              "durationFrames": 60
+            },
+            {
+              "text": "这是一个\"你站在哪边，哪边就对\"的问题。",
+              "startFrame": 84,
+              "durationFrames": 115
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "谁对谁错",
+            "butText": "你站在哪边",
+            "butSrc": "images/华为制裁论/scene_8_2.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2
+          },
+          "totalDurationFrames": 199
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束为「别选边、多想一想」的结论句群，适合纯大字 TEXT_FOCUS；口播略长仍保留在 content，大屏与 coreSentence 对齐分行。",
+          "content": [
+            {
+              "text": "但我想说的是——",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "理解这些，",
+              "startFrame": 33,
+              "durationFrames": 32
+            },
+            {
+              "text": "不是为了让你选边站。",
+              "startFrame": 65,
+              "durationFrames": 51
+            },
+            {
+              "text": "而是下次再看到有人说\"一句话就能解释\"的时候，",
+              "startFrame": 115,
+              "durationFrames": 114
+            },
+            {
+              "text": "你能多想三秒钟。",
+              "startFrame": 229,
+              "durationFrames": 51
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "理解这些，不是为了让你选边站。",
+                "showFrom": 1
+              },
+              {
+                "text": "而是让你能多想三秒钟。",
+                "showFrom": 3
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "选边站",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "多想三秒钟",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 280
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "结论，是一个金句，因此使用TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "这三秒钟，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "就是你和大多数人的区别。",
+              "startFrame": 26,
+              "durationFrames": 61
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "这三秒钟，",
+                "showFrom": 0
+              },
+              {
+                "text": "就是你和大多数人的区别。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "和大多数人的区别",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 87
+        }
+      ],
+      "audioSrc": "/audio/华为制裁论/scene_8/scene_8.mp3",
+      "totalDurationFrames": 566
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "华为制裁论",
+    "subtitle": "西方抵制华为的多因拼图",
+    "themeColor": "#FF6900",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

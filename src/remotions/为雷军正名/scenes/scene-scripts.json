@@ -1,0 +1,1428 @@
+{
+  "topic": "为什么你讨厌的雷军，反而让你少花了冤枉钱？",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：被污名的营销",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开篇抛出公众对雷军的两个刻板标签，短句递进后落在两个词上，适合 TEXT_FOCUS 零图大字压信噪比、强化记忆点。",
+          "content": [
+            {
+              "text": "只要一提到雷军，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "评论区永远少不了两个词：",
+              "startFrame": 36,
+              "durationFrames": 63
+            },
+            {
+              "text": "“营销大师”、“猴王” 。",
+              "startFrame": 98,
+              "durationFrames": 56
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "只要一提到雷军，",
+                "showFrom": 0
+              },
+              {
+                "text": "评论区永远少不了两个词：",
+                "showFrom": 1
+              },
+              {
+                "text": "“营销大师”、“猴王” ",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "营销大师"
+              },
+              {
+                "coreSentenceAnchor": "猴王"
+              }
+            ]
+          },
+          "totalDurationFrames": 154
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "STEP_LIST",
+          "reasoning": "三条并列反感理由为短分点清单、无配图诉求；首句总起作 STEP_LIST 标题，三条「觉得…」压缩为步骤条与口播同步显现。",
+          "content": [
+            {
+              "text": "很多人反感他，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "觉得他把发布会开成了真人秀，",
+              "startFrame": 36,
+              "durationFrames": 70
+            },
+            {
+              "text": "觉得早年的“饥饿营销”是在耍消费者，",
+              "startFrame": 105,
+              "durationFrames": 88
+            },
+            {
+              "text": "觉得他整天在台上“碰瓷”苹果和保时捷。",
+              "startFrame": 193,
+              "durationFrames": 93
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "反感雷军的理由",
+            "steps": [
+              {
+                "text": "发布会开成真人秀",
+                "showFrom": 1
+              },
+              {
+                "text": "饥饿营销耍消费者",
+                "showFrom": 2
+              },
+              {
+                "text": "碰瓷苹果保时捷",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 286
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "个人立场转折，平铺叙述，无强烈结构，适合CENTER_FOCUS单图过渡。",
+          "content": [
+            {
+              "text": "但今天，",
+              "startFrame": 0,
+              "durationFrames": 24
+            },
+            {
+              "text": "作为一个从MIUI刷机时代就了解雷军的人，",
+              "startFrame": 24,
+              "durationFrames": 100
+            },
+            {
+              "text": "我想为雷军说句公道话：",
+              "startFrame": 127,
+              "durationFrames": 66
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/为雷军正名/scene_1_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 193
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "假设因果链：不逼成营销大师→小米死→消费者多花冤枉钱，三层因果传导，正好对应CAUSE_CHAIN的因→果→再果结构。",
+          "content": [
+            {
+              "text": "如果在这个残酷的商业世界里，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "雷军不把自己逼成一个“营销大师”，",
+              "startFrame": 50,
+              "durationFrames": 46
+            },
+            {
+              "text": "小米可能早就死了，",
+              "startFrame": 95,
+              "durationFrames": 39
+            },
+            {
+              "text": "而我们今天，",
+              "startFrame": 134,
+              "durationFrames": 35
+            },
+            {
+              "text": "还要花更多的冤枉钱在各种电子产品的溢价上",
+              "startFrame": 169,
+              "durationFrames": 103
+            }
+          ],
+          "order": 4,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "残酷赛道",
+                "imageSrc": "images/为雷军正名/scene_1_4_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "营销大师",
+                "imageSrc": "images/为雷军正名/scene_1_4_img1.png",
+                "showFrom": 1
+              },
+              {
+                "label": "小米存活",
+                "imageSrc": "images/为雷军正名/scene_1_4_img2.png",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 290
+        }
+      ],
+      "audioSrc": "/audio/为雷军正名/scene_1/scene_1.mp3",
+      "totalDurationFrames": 926
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析：饥饿营销的真相",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CONCEPT_CARD",
+          "reasoning": "口播首次抛出并强调争议标签「饥饿营销」，需符号化锚定与命名强化，选用 CONCEPT_CARD（图标 + 大字）而非中性单图 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "咱们先聊聊被骂得最惨的“饥饿营销”。",
+              "startFrame": 0,
+              "durationFrames": 88
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/为雷军正名/scene_2_1.png",
+            "conceptName": "饥饿营销"
+          },
+          "totalDurationFrames": 88
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "提出普遍误解的反问，为后续剖析铺垫，主结构为中性叙述，故用CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "很多人真以为，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "当年的小米是故意压着货不卖，",
+              "startFrame": 43,
+              "durationFrames": 77
+            },
+            {
+              "text": "就为了看大家定闹钟抢？",
+              "startFrame": 120,
+              "durationFrames": 70
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/为雷军正名/scene_2_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 190
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "同一子话题内从招呼→历史主体→初创体量→供应链产能与话语权，单主图贯穿；右侧阶段轨用 showFrom 对齐各句下标，适合 CASE_BREAKDOWN。",
+          "content": [
+            {
+              "text": "朋友们，",
+              "startFrame": 0,
+              "durationFrames": 21
+            },
+            {
+              "text": "十多年前的小米，",
+              "startFrame": 20,
+              "durationFrames": 43
+            },
+            {
+              "text": "只是个名不见经传的初创公司。",
+              "startFrame": 63,
+              "durationFrames": 77
+            },
+            {
+              "text": "他们拿不到顶级供应商的产能，",
+              "startFrame": 139,
+              "durationFrames": 74
+            },
+            {
+              "text": "没有苹果那种几百亿砸出来的供应链话语权。",
+              "startFrame": 212,
+              "durationFrames": 91
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "小米初创链弱势",
+            "imageSrc": "images/为雷军正名/scene_2_3.png",
+            "phases": [
+              {
+                "phaseLabel": "历史主体",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "产能跟不上",
+                "showFrom": 3
+              },
+              {
+                "phaseLabel": "没有话语权",
+                "showFrom": 4
+              }
+            ]
+          },
+          "totalDurationFrames": 303
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "口播呈「缺钱→缺产能→爬坡慢→落到现实」的传导链，每句对应链上一环，适合 CAUSE_CHAIN；不再用放大镜单点锚定。",
+          "content": [
+            {
+              "text": "没钱、",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "没产能、",
+              "startFrame": 21,
+              "durationFrames": 29
+            },
+            {
+              "text": "供应链爬坡慢，",
+              "startFrame": 50,
+              "durationFrames": 39
+            },
+            {
+              "text": "这就是现实。",
+              "startFrame": 88,
+              "durationFrames": 41
+            }
+          ],
+          "order": 4,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "缺钱",
+                "imageSrc": "images/为雷军正名/scene_2_4_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "缺产能",
+                "imageSrc": "images/为雷军正名/scene_2_4_img1.png",
+                "showFrom": 1
+              },
+              {
+                "label": "爬坡慢",
+                "imageSrc": "images/为雷军正名/scene_2_4_img2.png",
+                "showFrom": 2
+              },
+              {
+                "label": "落现实",
+                "imageSrc": "images/为雷军正名/scene_2_4_img3.png",
+                "showFrom": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 129
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "用“与其说…不如说…”完成认知翻转，强对比结构，直接命中COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "与其说那是精于算计的“饥饿营销”，",
+              "startFrame": 0,
+              "durationFrames": 70
+            },
+            {
+              "text": "不如说那是一个创业公司，",
+              "startFrame": 69,
+              "durationFrames": 62
+            },
+            {
+              "text": "在巨头夹击下为了活下去的狼狈挣扎。",
+              "startFrame": 130,
+              "durationFrames": 82
+            }
+          ],
+          "order": 5,
+          "param": {
+            "notText": "精于算计的饥饿营销",
+            "butText": "创业公司狼狈求生",
+            "butSrc": "images/为雷军正名/scene_2_5.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 213
+        }
+      ],
+      "audioSrc": "/audio/为雷军正名/scene_2/scene_2.mp3",
+      "totalDurationFrames": 924
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "反转：谦卑的参数战",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CONCEPT_CARD",
+          "reasoning": "首次抛出并标签化争议词「碰瓷营销」，需符号化锚定（图标 + 大字），用 CONCEPT_CARD 而非中性 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "再说说大家都觉得他不讨喜的“碰瓷营销”。",
+              "startFrame": 0,
+              "durationFrames": 86
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/为雷军正名/scene_3_1.png",
+            "conceptName": "碰瓷营销"
+          },
+          "totalDurationFrames": 86
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "大众以为vs.事实的认知反转，典型“不是…而是…”结构变体，适合COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "很多人觉得雷军狂妄，",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "天天在发布会上“吊打”友商。",
+              "startFrame": 52,
+              "durationFrames": 75
+            },
+            {
+              "text": "但如果你真看完过他的发布会，",
+              "startFrame": 126,
+              "durationFrames": 59
+            },
+            {
+              "text": "你会发现他极少说“吊打”这个词。",
+              "startFrame": 185,
+              "durationFrames": 72
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "经常吊打友商",
+            "butText": "极少说“吊打”",
+            "butSrc": "images/为雷军正名/scene_3_2.png",
+            "notContentIndex": 1,
+            "butContentIndex": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 257
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "三个并列引语构成2-4个分点，每点需独立配图，用PANEL_GRID宫格展示谦卑言辞，不超50字。",
+          "content": [
+            {
+              "text": "面对苹果，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "面对保时捷，",
+              "startFrame": 29,
+              "durationFrames": 32
+            },
+            {
+              "text": "他嘴上说的永远是“全面对标”、",
+              "startFrame": 61,
+              "durationFrames": 70
+            },
+            {
+              "text": "“向行业标杆学习”、",
+              "startFrame": 130,
+              "durationFrames": 52
+            },
+            {
+              "text": "“如果局部有超越，请大家给点掌声”。",
+              "startFrame": 182,
+              "durationFrames": 93
+            },
+            {
+              "text": "态度极其谦卑。",
+              "startFrame": 274,
+              "durationFrames": 47
+            }
+          ],
+          "order": 3,
+          "param": {
+            "panels": [
+              {
+                "src": "images/为雷军正名/scene_3_3_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/为雷军正名/scene_3_3_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "全面对标",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": null
+              },
+              {
+                "text": "向行业标杆学习",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": null
+              },
+              {
+                "text": "局部超越",
+                "showFrom": 4,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 322
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "转折到行动，画面焦点落在参数对比表，无强结构，用CENTER_FOCUS。",
+          "content": [
+            {
+              "text": " 只是转头，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "大屏幕上打出来的，",
+              "startFrame": 29,
+              "durationFrames": 44
+            },
+            {
+              "text": "却是一张张密密麻麻的参数对比表。",
+              "startFrame": 73,
+              "durationFrames": 92
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/为雷军正名/scene_3_5.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "参数对比表",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 165
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "PANEL_GRID",
+          "reasoning": "四个参数项并列，每项可独立图标，适合PANEL_GRID；总结句留在同一镜头形成对照。",
+          "content": [
+            {
+              "text": "处理器跑分、",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "电池续航、",
+              "startFrame": 32,
+              "durationFrames": 29
+            },
+            {
+              "text": "零百加速、",
+              "startFrame": 61,
+              "durationFrames": 29
+            },
+            {
+              "text": "风阻系数等等。",
+              "startFrame": 89,
+              "durationFrames": 44
+            },
+            {
+              "text": "他用最谦虚的语气，",
+              "startFrame": 132,
+              "durationFrames": 50
+            },
+            {
+              "text": "干着最狠的“拉表”动作。",
+              "startFrame": 182,
+              "durationFrames": 76
+            }
+          ],
+          "order": 6,
+          "param": {
+            "panels": [
+              {
+                "src": "images/为雷军正名/scene_3_6_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/为雷军正名/scene_3_6_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/为雷军正名/scene_3_6_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/为雷军正名/scene_3_6_img3.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 258
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "自问式过渡，短问句独立成镜引起注意，用CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "为什么要这么干？",
+              "startFrame": 0,
+              "durationFrames": 43
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "images/为雷军正名/scene_3_7.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 43
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "从「术语难懂→表格可读→比数字→比价格」为同一镜头内的传导链，每句对应链上一环，用 CAUSE_CHAIN 替代单图 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "因为绝大多数普通人看不懂深奥的技术名词，",
+              "startFrame": 0,
+              "durationFrames": 105
+            },
+            {
+              "text": "但大家能看懂表格，",
+              "startFrame": 104,
+              "durationFrames": 47
+            },
+            {
+              "text": "能看懂谁的数字更大，",
+              "startFrame": 151,
+              "durationFrames": 48
+            },
+            {
+              "text": "谁的价格更低。",
+              "startFrame": 199,
+              "durationFrames": 42
+            }
+          ],
+          "order": 8,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "术语门槛",
+                "imageSrc": "images/为雷军正名/scene_3_8_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "表格语言",
+                "imageSrc": "images/为雷军正名/scene_3_8_img1.png",
+                "showFrom": 1
+              },
+              {
+                "label": "数字可比",
+                "imageSrc": "images/为雷军正名/scene_3_8_img2.png",
+                "showFrom": 2
+              },
+              {
+                "label": "价格更低",
+                "imageSrc": "images/为雷军正名/scene_3_8_img3.png",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 242
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "全文最终结论，否定误解+揭示真实意图，明显“不是…而是…”结构，用COGNITIVE_SHIFT收束。",
+          "content": [
+            {
+              "text": "他不是在“碰瓷”，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "他只是想把产品的好坏对比，",
+              "startFrame": 43,
+              "durationFrames": 62
+            },
+            {
+              "text": "以最没有门槛的方式给你看到。",
+              "startFrame": 104,
+              "durationFrames": 73
+            }
+          ],
+          "order": 9,
+          "param": {
+            "notText": "碰瓷",
+            "butText": "硬核展现产品质量",
+            "butSrc": "images/为雷军正名/scene_3_9.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 178
+        }
+      ],
+      "audioSrc": "/audio/为雷军正名/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1549
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "命名：工程师文化底色",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "口播落点为核心命名「工程师文化」，需图标+大字做符号化锚定；本段是概念钉住而非「不是…而是…」二元对照，用 CONCEPT_CARD。",
+          "content": [
+            {
+              "text": "这其实就是小米的底色---",
+              "startFrame": 0,
+              "durationFrames": 65
+            },
+            {
+              "text": "极致的 “工程师文化”。",
+              "startFrame": 64,
+              "durationFrames": 52
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/为雷军正名/scene_4_1.png",
+            "conceptName": "工程师文化"
+          },
+          "totalDurationFrames": 116
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PEER_INDUCT",
+          "reasoning": "「讲调性」与「讲生活方式」为两条并列营销话术前提，末句归纳为制造信息壁垒与为「感觉」溢价买单；并列前提→归纳收束，用 PEER_INDUCT。",
+          "content": [
+            {
+              "text": "传统品牌跟你讲调性、",
+              "startFrame": 0,
+              "durationFrames": 48
+            },
+            {
+              "text": "讲生活方式，",
+              "startFrame": 48,
+              "durationFrames": 39
+            },
+            {
+              "text": "制造信息壁垒让你为了“感觉”去溢价买单。",
+              "startFrame": 86,
+              "durationFrames": 98
+            }
+          ],
+          "order": 2,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "images/为雷军正名/scene_4_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "imageSrc": "images/为雷军正名/scene_4_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "images/为雷军正名/scene_4_2.png",
+              "showFrom": 2,
+              "enterEffect": "zoomIn",
+              "tone": "alert"
+            },
+            "anchors": [
+              {
+                "text": "信息壁垒",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 184
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "工程师价值观金句、与上文传统营销话术形成立场对比，适合 TEXT_FOCUS 零图大字压信噪比；无需配图锚定。",
+          "content": [
+            {
+              "text": "但工程师最讨厌虚无缥缈的形容词。",
+              "startFrame": 0,
+              "durationFrames": 88
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              "但工程师最讨厌虚无缥缈的形容词"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "虚无缥缈的形容词",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 88
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "「质疑性能→拒绝竖屏小视频→纽北赛道实证」为第三条工程师式验证链，与电池、安全两段排比。",
+          "content": [
+            {
+              "text": "你说你性能好？",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "不看小视频，",
+              "startFrame": 38,
+              "durationFrames": 33
+            },
+            {
+              "text": "直接打上纽北赛道；",
+              "startFrame": 70,
+              "durationFrames": 47
+            }
+          ],
+          "order": 4,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "质疑性能",
+                "imageSrc": "images/为雷军正名/scene_4_4_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "纽北赛道",
+                "imageSrc": "images/为雷军正名/scene_4_4_img1.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 118
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "「你称电池好→拒绝PPT→高管直播→满电至趴窝」为工程师式验证链条，每环一图，用 CAUSE_CHAIN 替代单主图 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "你说你电池好？",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "别整PPT，",
+              "startFrame": 32,
+              "durationFrames": 33
+            },
+            {
+              "text": "雷军亲自开直播，",
+              "startFrame": 65,
+              "durationFrames": 46
+            },
+            {
+              "text": "从满电跑到趴窝；",
+              "startFrame": 110,
+              "durationFrames": 53
+            }
+          ],
+          "order": 5,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "你说电池好",
+                "imageSrc": "images/为雷军正名/scene_4_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "高速直播",
+                "imageSrc": "images/为雷军正名/scene_4_5_img1.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 164
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "「质疑安全→暴力拆解→结构透明→全网审视」为工程师式验车链条；六句口播映射四个链上节点，用 CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "你说你车安全？",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "别废话，",
+              "startFrame": 41,
+              "durationFrames": 23
+            },
+            {
+              "text": "直接把车大卸八块，",
+              "startFrame": 64,
+              "durationFrames": 42
+            },
+            {
+              "text": "防撞梁多厚、",
+              "startFrame": 105,
+              "durationFrames": 33
+            },
+            {
+              "text": "线束怎么走的，",
+              "startFrame": 138,
+              "durationFrames": 33
+            },
+            {
+              "text": "全网拿着放大镜看。",
+              "startFrame": 171,
+              "durationFrames": 54
+            }
+          ],
+          "order": 6,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "质疑安全",
+                "imageSrc": "images/为雷军正名/scene_4_6_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "结构拆解",
+                "imageSrc": "images/为雷军正名/scene_4_6_img1.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 225
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束短口号「别废话」到「数据即正义」，零图大字压信噪比，比换图节拍更适合与上文三条 CAUSE_CHAIN 形成「图链→金句」落锤。",
+          "content": [
+            {
+              "text": "别废话，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "看东西 数据即正义",
+              "startFrame": 26,
+              "durationFrames": 62
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "别废话",
+                "showFrom": 0
+              },
+              {
+                "text": "看东西 数据即正义",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "数据即正义",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 88
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "从“土”的主观感知到尊重知情权的认知纠正，适合用COGNITIVE_SHIFT完成全篇收束，强化价值升维。",
+          "content": [
+            {
+              "text": "这种把底牌翻给消费者看的营销，",
+              "startFrame": 0,
+              "durationFrames": 68
+            },
+            {
+              "text": "没有滤镜，甚至有点“土”，",
+              "startFrame": 67,
+              "durationFrames": 58
+            },
+            {
+              "text": "但它是对消费者知情权最大的尊重。",
+              "startFrame": 125,
+              "durationFrames": 82
+            }
+          ],
+          "order": 8,
+          "param": {
+            "notText": "没有滤镜有点土",
+            "butText": "尊重消费者知情权",
+            "butSrc": "images/为雷军正名/scene_4_8.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 207
+        }
+      ],
+      "audioSrc": "/audio/为雷军正名/scene_4/scene_4.mp3",
+      "totalDurationFrames": 1188
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "正名：燃烧的理工男",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓铺陈「被遗忘的底色」：三层口播指向同一视觉意象（深夜写代码的内向程序员），无左右对比或翻转结构，适合 CENTER_FOCUS 单图居中叙事。",
+          "content": [
+            {
+              "text": "大家似乎忘了，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "雷军原本，",
+              "startFrame": 37,
+              "durationFrames": 27
+            },
+            {
+              "text": "其实是个写代码写到半夜的内向程序员。",
+              "startFrame": 63,
+              "durationFrames": 87
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/为雷军正名/scene_5_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 150
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CHECKLIST_REVEAL",
+          "reasoning": "口播从背景到三个具体身段递进，适合 CHECKLIST_REVEAL：清单短标签随各句显现并逐项打勾，强调「为卖货放下身段」的案例感。",
+          "content": [
+            {
+              "text": "一个早就财务自由的IT大佬，",
+              "startFrame": 0,
+              "durationFrames": 64
+            },
+            {
+              "text": "为了把产品卖出去，",
+              "startFrame": 63,
+              "durationFrames": 47
+            },
+            {
+              "text": "逼着自己学乔布斯演讲，",
+              "startFrame": 110,
+              "durationFrames": 53
+            },
+            {
+              "text": "逼着自己接受全网的鬼畜恶搞，",
+              "startFrame": 162,
+              "durationFrames": 68
+            },
+            {
+              "text": "甚至弯下腰去给买车的用户拉车门。",
+              "startFrame": 230,
+              "durationFrames": 80
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "程序员的逆袭",
+            "rows": [
+              {
+                "text": "学乔布斯式演讲",
+                "showFrom": 2
+              },
+              {
+                "text": "接住全网鬼畜",
+                "showFrom": 3
+              },
+              {
+                "text": "弯腰给用户拉门",
+                "showFrom": 4
+              }
+            ]
+          },
+          "totalDurationFrames": 310
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "从「做戏」的质疑到「孤勇者」的定性，是典型的纠偏式「不是…而是…」对立翻转，适合 COGNITIVE_SHIFT 划线弱化旧认知、高亮新结论。",
+          "content": [
+            {
+              "text": "你觉得这叫“做戏”？",
+              "startFrame": 0,
+              "durationFrames": 49
+            },
+            {
+              "text": "我看到的，",
+              "startFrame": 48,
+              "durationFrames": 23
+            },
+            {
+              "text": "是一个愿意放下所有身段，",
+              "startFrame": 71,
+              "durationFrames": 56
+            },
+            {
+              "text": "把个人IP燃烧到极致的孤勇者。",
+              "startFrame": 127,
+              "durationFrames": 77
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "做戏博眼球",
+            "butText": "燃尽自我的孤勇者",
+            "butSrc": "images/为雷军正名/scene_5_3.png",
+            "notContentIndex": 0,
+            "butContentIndex": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 204
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "口播先承认懂营销，再对照「少吹嘘 vs 用事实与数据」，左右避坑结构比三拍 BEAT_SEQUENCE 更贴对错分栏。",
+          "content": [
+            {
+              "text": "他当然懂营销。",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "但他的营销里，极少无脑吹嘘。",
+              "startFrame": 37,
+              "durationFrames": 77
+            },
+            {
+              "text": "更多的是事实说话，佐以数据支撑。",
+              "startFrame": 113,
+              "durationFrames": 85
+            }
+          ],
+          "order": 4,
+          "param": {
+            "left": {
+              "label": "❌ 无脑吹嘘",
+              "src": "images/为雷军正名/scene_5_4_left.png",
+              "showFrom": 1
+            },
+            "right": {
+              "label": "✅ 事实与数据",
+              "src": "images/为雷军正名/scene_5_4_right.png",
+              "showFrom": 2
+            }
+          },
+          "totalDurationFrames": 199
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "让步到落锤四句口播共用同一收束意象（用户受益 + 工程师底色），单图居中比三拍 BEAT_SEQUENCE 更稳；末句「科技平权」作锚点。",
+          "content": [
+            {
+              "text": "你可以不喜欢他略显笨拙的套路，",
+              "startFrame": 0,
+              "durationFrames": 76
+            },
+            {
+              "text": "但你无法否认，",
+              "startFrame": 75,
+              "durationFrames": 37
+            },
+            {
+              "text": "这个一边挨骂一边死磕的理工男，",
+              "startFrame": 111,
+              "durationFrames": 77
+            },
+            {
+              "text": "真的推动了中国科技平权的进程。",
+              "startFrame": 187,
+              "durationFrames": 73
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/为雷军正名/scene_5_5.png",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "科技平权",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 260
+        }
+      ],
+      "audioSrc": "/audio/为雷军正名/scene_5/scene_5.mp3",
+      "totalDurationFrames": 1124
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "召唤：你的理由",
+      "items": [
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "利益链被压缩与情绪化攻讦的收束，需单图锚定「触利益→对立情绪」意象，用 CENTER_FOCUS 居中叙事而非零图大字。",
+          "content": [
+            {
+              "text": "而雷军的没有中间商的销售策略",
+              "startFrame": 0,
+              "durationFrames": 68
+            },
+            {
+              "text": "与高性价比的打法，",
+              "startFrame": 67,
+              "durationFrames": 50
+            },
+            {
+              "text": "明显触动了一部分人的利益，",
+              "startFrame": 116,
+              "durationFrames": 70
+            },
+            {
+              "text": "因此这些人恨不能生啖其肉，生饮其血。",
+              "startFrame": 186,
+              "durationFrames": 81
+            },
+            {
+              "text": "我可以理解他们。",
+              "startFrame": 267,
+              "durationFrames": 45
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/为雷军正名/scene_6_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "高性价比",
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": null,
+                "showFrom": 1
+              },
+              {
+                "text": "恨不能生啖其肉，生饮其血",
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": null,
+                "showFrom": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 314
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收尾向观众发问，用 TEXT_FOCUS 零图大字压屏，与全片口播分段对齐；强调「白手起家…低调务实」画像子串高亮。",
+          "content": [
+            {
+              "text": "但你，",
+              "startFrame": 0,
+              "durationFrames": 15
+            },
+            {
+              "text": "我的朋友，",
+              "startFrame": 15,
+              "durationFrames": 30
+            },
+            {
+              "text": "你作为一个受益良多的消费者。",
+              "startFrame": 45,
+              "durationFrames": 75
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "但你",
+                "showFrom": 0
+              },
+              {
+                "text": "我的朋友",
+                "showFrom": 1
+              },
+              {
+                "text": "你作为一个受益良多的消费者",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "受益良多",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "消费者",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 120
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收尾向观众发问，用 TEXT_FOCUS 零图大字压屏，与全片口播分段对齐；强调「白手起家…低调务实」画像子串高亮。",
+          "content": [
+            {
+              "text": "又是因为什么，讨厌这样一个",
+              "startFrame": 0,
+              "durationFrames": 61
+            },
+            {
+              "text": "白手起家，从无绯闻，低调谦和的工程师呢？",
+              "startFrame": 60,
+              "durationFrames": 82
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "你又是因为什么，讨厌这样一个",
+                "showFrom": 0
+              },
+              {
+                "text": "白手起家，从无绯闻，低调谦和",
+                "showFrom": 1
+              },
+              {
+                "text": "的工程师呢？",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "白手起家，从无绯闻，低调谦和",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 171
+        }
+      ],
+      "audioSrc": "/audio/为雷军正名/scene_6/scene_6.mp3",
+      "totalDurationFrames": 588
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "为雷军正名",
+    "subtitle": "传奇耐黑王！！",
+    "themeColor": "#FF6900",
+    "surface": "light",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

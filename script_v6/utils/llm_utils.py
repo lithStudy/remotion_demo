@@ -7,7 +7,7 @@ from typing import Any, Callable, Literal, Optional
 
 from .gemini_utils import parse_json_from_response  # re-export for compatibility
 
-LlmProvider = Literal["gemini", "deepseek"]
+LlmProvider = Literal["gemini", "deepseek", "mimo"]
 
 
 @dataclass(frozen=True)
@@ -21,6 +21,8 @@ def _normalize_provider(value: Any) -> LlmProvider:
     v = str(value or "").strip().lower()
     if v in ("deepseek", "ds"):
         return "deepseek"
+    if v in ("mimo", "xiaomi"):
+        return "mimo"
     return "gemini"
 
 
@@ -43,6 +45,16 @@ def create_llm_client(config: dict, provider: Any | None = None) -> LlmClient:
         base_url = str(config.get("deepseek_base_url", "https://api.deepseek.com")).strip() or "https://api.deepseek.com"
         client = OpenAI(api_key=api_key, base_url=base_url)
         return LlmClient(provider="deepseek", raw=client, base_url=base_url)
+
+    if resolved == "mimo":
+        from openai import OpenAI
+
+        api_key = os.environ.get("MIMO_API_KEY", "")
+        if not api_key:
+            raise ValueError("未设置 MIMO_API_KEY，请在 .env 中配置")
+        base_url = str(config.get("mimo_base_url", "https://api.xiaomimimo.com/v1")).strip() or "https://api.xiaomimimo.com/v1"
+        client = OpenAI(api_key=api_key, base_url=base_url)
+        return LlmClient(provider="mimo", raw=client, base_url=base_url)
 
     # default: gemini
     from google import genai
@@ -150,6 +162,31 @@ def _extract_text_from_openai_chat_response(resp: Any) -> str:
         return ""
 
 
+def _call_openai_compatible(
+    provider: str,
+    client: Any,
+    model: str,
+    prompt: str,
+    *,
+    reasoning_effort: str | None = None,
+    thinking_enabled: bool | None = None,
+) -> SimpleNamespace:
+    """统一 OpenAI 兼容格式的调用（DeepSeek / MiMo）。"""
+    kwargs: dict[str, Any] = dict(
+        model=model,
+        messages=_deepseek_messages_from_prompt(prompt),
+        stream=False,
+    )
+    # thinking 模式（DeepSeek / MiMo-V2-Pro 等均支持）
+    if reasoning_effort:
+        kwargs["reasoning_effort"] = reasoning_effort
+    if thinking_enabled is True:
+        kwargs["extra_body"] = {"thinking": {"type": "enabled"}}
+    resp = client.chat.completions.create(**kwargs)
+    response_text = _extract_text_from_openai_chat_response(resp)
+    return SimpleNamespace(text=response_text, raw=resp)
+
+
 def generate_with_retry(
     client: LlmClient,
     model: str,
@@ -172,18 +209,22 @@ def generate_with_retry(
             if provider == "deepseek":
                 reasoning_effort = deepseek_reasoning_effort or "high"
                 thinking_enabled = True if deepseek_thinking_enabled is None else bool(deepseek_thinking_enabled)
-                extra_body = {"thinking": {"type": "enabled"}} if thinking_enabled else None
-
-                resp = client.raw.chat.completions.create(
-                    model=model,
-                    messages=_deepseek_messages_from_prompt(prompt),
-                    stream=False,
+                result = _call_openai_compatible(
+                    provider, client.raw, model, prompt,
                     reasoning_effort=reasoning_effort,
-                    extra_body=extra_body,
+                    thinking_enabled=thinking_enabled,
                 )
-                response_text = _extract_text_from_openai_chat_response(resp)
-                _log_response(response_text, attempt + 1, retries, append_ai_log)
-                return SimpleNamespace(text=response_text, raw=resp)
+                _log_response(result.text, attempt + 1, retries, append_ai_log)
+                return result
+
+            if provider == "mimo":
+                result = _call_openai_compatible(
+                    provider, client.raw, model, prompt,
+                    reasoning_effort=None,
+                    thinking_enabled=None,
+                )
+                _log_response(result.text, attempt + 1, retries, append_ai_log)
+                return result
 
             # gemini
             from .gemini_utils import json_generate_config

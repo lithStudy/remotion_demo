@@ -90,8 +90,37 @@ def task_key(scene_id: str, order: Any, path: list[str | int]) -> str:
 	return "_".join(parts)
 
 
+def _normalize_schema_node(schema: dict) -> dict:
+	"""将 templateMeta 中的非标准 JSON Schema 节点规范为校验器可识别的形态。"""
+	if not isinstance(schema, dict):
+		return schema
+	out = dict(schema)
+	st = out.get("type")
+	if st == CONTENT_INDEX_FORMAT:
+		out["type"] = "integer"
+		out["format"] = CONTENT_INDEX_FORMAT
+	if "oneOf" in out:
+		branches = out.get("oneOf")
+		if isinstance(branches, list):
+			out["oneOf"] = [
+				_normalize_schema_node(br) if isinstance(br, dict) else br for br in branches
+			]
+	if out.get("type") == "object":
+		props = out.get("properties")
+		if isinstance(props, dict):
+			out["properties"] = {
+				k: _normalize_schema_node(v) if isinstance(v, dict) else v for k, v in props.items()
+			}
+	if out.get("type") == "array":
+		items = out.get("items")
+		if isinstance(items, dict):
+			out["items"] = _normalize_schema_node(items)
+	return out
+
+
 def _nonempty_matches_oneof_branch(val: Any, br: dict) -> bool:
 	"""值在该 oneOf 分支下是否视为非空（用于必填校验）。"""
+	br = _normalize_schema_node(br) if isinstance(br, dict) else br
 	st = br.get("type")
 	if st == "string":
 		return isinstance(val, str) and bool(val.strip())
@@ -101,6 +130,16 @@ def _nonempty_matches_oneof_branch(val: Any, br: dict) -> bool:
 		items = br.get("items") or {}
 		if items.get("type") == "string":
 			return any(isinstance(x, str) and str(x).strip() for x in val)
+		return True
+	if st == "object":
+		if not isinstance(val, dict):
+			return False
+		props = br.get("properties") or {}
+		req = br.get("required") or []
+		for rk in req:
+			sub = props.get(rk, {}) if isinstance(props.get(rk), dict) else {}
+			if rk not in val or _is_empty_value(val.get(rk), sub):
+				return False
 		return True
 	return False
 
@@ -154,6 +193,7 @@ def _validate_and_normalize_value(
 	"""递归校验和归一化单个字段/对象的值（类型、枚举、边界等），不合法时警告。"""
 	if val is None:
 		return
+	schema = _normalize_schema_node(schema)
 	param_root: dict = ctx["param_root"]
 	warn: Callable[[str], None] = ctx["warn"]
 	path_s = ".".join(str(p) for p in path) or "(root)"
@@ -166,6 +206,7 @@ def _validate_and_normalize_value(
 		for br in branches:
 			if not isinstance(br, dict):
 				continue
+			br = _normalize_schema_node(br)
 			st = br.get("type")
 			if st == "string" and isinstance(val, str):
 				_validate_and_normalize_value(val, br, ctx=ctx, path=path)
@@ -173,7 +214,10 @@ def _validate_and_normalize_value(
 			if st == "array" and isinstance(val, list):
 				_validate_and_normalize_value(val, br, ctx=ctx, path=path)
 				return
-		warn(f"`{path_s}` 期望 oneOf（string 或 string 数组），实际为 {type(val).__name__}")
+			if st == "object" and isinstance(val, dict):
+				_validate_and_normalize_value(val, br, ctx=ctx, path=path)
+				return
+		warn(f"`{path_s}` 不符合 schema oneOf 任一分支，实际为 {type(val).__name__}")
 		return
 
 	st = schema.get("type")

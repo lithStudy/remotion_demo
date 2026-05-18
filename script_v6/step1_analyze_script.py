@@ -6,6 +6,7 @@ Step 1: 口播文案分析（模板驱动 v3）
 
 用法：
   python step1_analyze_script.py --input 文案.txt --output output_dir --name video_name
+  python step1_analyze_script.py ... --skip-validate   # 跳过 scene-scripts 校验
 """
 
 import argparse
@@ -346,6 +347,13 @@ def _cleanup_intermediate_fields(result: dict) -> None:
                 param.pop("totalDurationFrames", None)
 
 
+def _step1_skip_validate(config: dict, *, cli_override: bool = False) -> bool:
+    """CLI --skip-validate 优先于 config.step1_skip_validate。"""
+    if cli_override:
+        return True
+    return bool(config.get("step1_skip_validate", False))
+
+
 def _validate_and_auto_fix(
     result: dict,
     client,
@@ -354,35 +362,29 @@ def _validate_and_auto_fix(
     template_guide: str,
     config: dict,
     ai_logger: AiLogger | None,
+    *,
+    skip_validate: bool = False,
 ) -> dict:
     """
-    对 AI 结果执行校验；若存在告警且配置允许，则调用模型自动修订一次。
+    对 AI 结果执行校验；有告警则调用模型自动修订一次（除非 skip_validate）。
     返回最终（可能已修订）的结果字典。
     """
+    if skip_validate:
+        print("\n⏭️ 已跳过 scene-scripts 校验（step1_skip_validate / --skip-validate）")
+        return result
+
     append_log = ai_logger.append if ai_logger else None
     default_tmpl = config.get("default_template", "CENTER_FOCUS")
 
     _, v_warnings = validate_and_normalize_scene_scripts(
         result, TEMPLATE_REGISTRY, default_template=default_tmpl
     )
-    hard = [w for w in v_warnings if not (isinstance(w, str) and w.startswith("[ADVISORY]"))]
-    if v_warnings:
-        print("\n⚠️ 脚本校验与归一化（请人工复核）：")
-        for w in v_warnings:
-            print(f"   {w}")
-
-    retry_enabled = config.get("step1_retry_on_validate_warnings", True)
     if not v_warnings:
         return result
-    # 仅 advisory 告警时，不应阻断流程；是否自动修订由 retry_enabled 决定
-    if not hard and not retry_enabled:
-        return result
-    # 存在 hard 告警且禁用自动修订：严格失败
-    if hard and not retry_enabled:
-        raise ScriptValidationError(
-            "脚本校验存在告警且已禁用自动修订（严格模式：直接失败）",
-            path="scene-scripts",
-        )
+
+    print("\n⚠️ 脚本校验与归一化（请人工复核）：")
+    for w in v_warnings:
+        print(f"   {w}")
 
     print("\n🔄 根据校验告警尝试自动修订（最多 1 次）…")
     try:
@@ -443,9 +445,10 @@ def analyze_with_llm(
     *,
     llm_provider: str | None = None,
     llm_model: str | None = None,
+    skip_validate: bool = False,
 ) -> dict:
     """
-    调用 LLM（Gemini / DeepSeek）对口播文案进行完整分析，返回场景脚本字典。
+    调用 LLM（Gemini / DeepSeek / MiMo）对口播文案进行完整分析，返回场景脚本字典。
     编排 _run_ai_analysis_pipeline → _cleanup_intermediate_fields → _validate_and_auto_fix。
     """
     client = create_llm_client(config, provider=llm_provider)
@@ -455,6 +458,8 @@ def analyze_with_llm(
         model = str(llm_model).strip()
     elif provider == "deepseek":
         model = config.get("deepseek_model", "deepseek-v4-pro")
+    elif provider == "mimo":
+        model = config.get("mimo_model", "mimo-v2-pro")
     else:
         model = config.get("gemini_model", "gemini-2.0-flash")
 
@@ -465,13 +470,15 @@ def analyze_with_llm(
     template_guide = generate_ai_prompt_guide(image_style, include_examples=False)
 
     print("\n" + "=" * 60)
-    print("🤖 正在调用 Gemini 分析文案（分层次处理 v3）...")
+    print(f"🤖 正在调用 {provider.upper()}({model}) 分析文案（分层次处理 v3）...")
     print("=" * 60 + "\n")
 
     result = _run_ai_analysis_pipeline(client, model, text, template_guide, ai_logger)
     _cleanup_intermediate_fields(result)
     result["fps"] = fps
-    result = _validate_and_auto_fix(result, client, model, text, template_guide, config, ai_logger)
+    result = _validate_and_auto_fix(
+        result, client, model, text, template_guide, config, ai_logger, skip_validate=skip_validate
+    )
 
     return result
 
@@ -487,12 +494,17 @@ def main():
     parser.add_argument("--name", "-n", help="视频名称（英文，不填则读取 config.json）")
     parser.add_argument(
         "--llm-provider",
-        choices=["gemini", "deepseek"],
+        choices=["gemini", "deepseek", "mimo"],
         help="LLM 提供方（默认读取 config.json 的 llm_provider；未配置则 gemini）",
     )
     parser.add_argument(
         "--llm-model",
         help="覆盖模型名（gemini/deepseek 通用覆盖；不填则按 provider 读取 config.json 对应字段）",
+    )
+    parser.add_argument(
+        "--skip-validate",
+        action="store_true",
+        help="跳过 scene-scripts 校验（等同 config step1_skip_validate=true；未跳过时必有告警则自动修订）",
     )
     args = parser.parse_args()
 
@@ -521,12 +533,15 @@ def main():
 
     print(f"📄 读取文案: {len(text)} 字符")
 
+    skip_validate = _step1_skip_validate(config, cli_override=args.skip_validate)
+
     result = analyze_with_llm(
         text,
         config,
         ai_logger,
         llm_provider=args.llm_provider,
         llm_model=args.llm_model,
+        skip_validate=skip_validate,
     )
     _merge_dash_only_captions(result)
     finalize_step1_content_and_anchors(result)

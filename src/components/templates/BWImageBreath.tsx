@@ -51,7 +51,7 @@ export const BWImageBreath: React.FC<BWImageBreathProps> = ({
 	const breatheScale = interpolate(
 		breathePhase,
 		[0, 30, 60],
-		[1, 1.08, 1],
+		[1, 1.04, 1],
 		{ extrapolateLeft: "clamp", extrapolateRight: "clamp" },
 	);
 

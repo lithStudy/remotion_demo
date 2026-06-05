@@ -1,0 +1,1483 @@
+{
+  "topic": "为什么高喊“爱国”的人，总把拳头砸向同胞？",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：U型锁事件",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开篇抽象论断，递进揭示“爱国”标签化的危险本质，适合 TEXT_FOCUS 零图大字压屏强化冲击。",
+          "content": [
+            {
+              "text": "爱国，",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "不该变成伤害同胞的理由。",
+              "startFrame": 21,
+              "durationFrames": 67
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "爱国，",
+                "showFrom": 0
+              },
+              {
+                "text": "不该变成伤害同胞的理由。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "伤害同胞",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 89
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "事件场景平铺叙述，无对比或复杂结构，用CENTER_FOCUS搭配单主图展现暴力场景",
+          "content": [
+            {
+              "text": "2012年，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "西安街头。",
+              "startFrame": 30,
+              "durationFrames": 39
+            },
+            {
+              "text": "有人举起U型锁，",
+              "startFrame": 68,
+              "durationFrames": 48
+            },
+            {
+              "text": "砸穿了一个开日系车同胞的颅骨。",
+              "startFrame": 116,
+              "durationFrames": 76
+            },
+            {
+              "text": "车主当场倒地，",
+              "startFrame": 192,
+              "durationFrames": 44
+            },
+            {
+              "text": "从此五级伤残。",
+              "startFrame": 235,
+              "durationFrames": 50
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/爱国先爱同胞/scene_1_2.png",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "五级伤残",
+                "showFrom": 5,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 285
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "砸人者徒刑与受害者终身伤残并列对照，左右分栏比单图 CENTER_FOCUS 更直观呈现双重代价。",
+          "content": [
+            {
+              "text": "砸人者判了十年，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "受害者瘫痪半辈子。",
+              "startFrame": 43,
+              "durationFrames": 53
+            }
+          ],
+          "order": 3,
+          "param": {
+            "left": {
+              "label": "砸人者·十年",
+              "src": "images/爱国先爱同胞/scene_1_3_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "受害者·瘫半生",
+              "src": "images/爱国先爱同胞/scene_1_3_right.png",
+              "showFrom": 1
+            }
+          },
+          "totalDurationFrames": 96
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "通过“不是…而是…”对比暴力表象与真实伤害，适用COGNITIVE_SHIFT，情绪转折强信号新建镜头",
+          "content": [
+            {
+              "text": "这把锁砸的不是日本车，",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "砸的是一个中国家庭。",
+              "startFrame": 54,
+              "durationFrames": 46
+            }
+          ],
+          "order": 4,
+          "param": {
+            "notText": "日本车",
+            "butText": "一个中国家庭",
+            "butSrc": "images/爱国先爱同胞/scene_1_4.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 101
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PEER_INDUCT",
+          "reasoning": "妻子独自扛家、撑起生计、照料伤残丈夫为三条并列前提，末两句「她做错了什么」「只是嫁给开日本车的男人」归纳收束无辜受害；并列前提→归纳收束，用 PEER_INDUCT。",
+          "content": [
+            {
+              "text": "受害者的妻子，从此一个人扛起整个家。",
+              "startFrame": 0,
+              "durationFrames": 88
+            },
+            {
+              "text": "她撑起家庭的生计，",
+              "startFrame": 87,
+              "durationFrames": 40
+            },
+            {
+              "text": "还要每天照顾伤残的丈夫。",
+              "startFrame": 126,
+              "durationFrames": 55
+            },
+            {
+              "text": "她做错了什么？",
+              "startFrame": 181,
+              "durationFrames": 40
+            },
+            {
+              "text": "她只是嫁给了一个开日本车的男人。",
+              "startFrame": 220,
+              "durationFrames": 65
+            }
+          ],
+          "order": 5,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "images/爱国先爱同胞/scene_1_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "imageSrc": "images/爱国先爱同胞/scene_1_5_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "imageSrc": "images/爱国先爱同胞/scene_1_5_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "images/爱国先爱同胞/scene_1_5.png",
+              "showFrom": 4,
+              "enterEffect": "zoomIn",
+              "tone": "alert"
+            },
+            "anchors": [
+              {
+                "text": "做错了什么？",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 285
+        }
+      ],
+      "audioSrc": "/audio/爱国先爱同胞/scene_1/scene_1.mp3",
+      "totalDurationFrames": 857
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "举证：更多受伤的普通人",
+      "items": [
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "时间地点+事故经过+家属追问，平铺事实铺垫，与 scene_1 问界/U 型锁开场一致用 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "这不是个例。",
+              "startFrame": 0,
+              "durationFrames": 48
+            },
+            {
+              "text": "2024 年，山西一条高速上，",
+              "startFrame": 48,
+              "durationFrames": 78
+            },
+            {
+              "text": "一辆新能源汽车撞上护栏，着火了，",
+              "startFrame": 125,
+              "durationFrames": 91
+            },
+            {
+              "text": "车里三个人没能出来。",
+              "startFrame": 216,
+              "durationFrames": 45
+            },
+            {
+              "text": "家属在网上只问了一句：到底怎么回事？",
+              "startFrame": 260,
+              "durationFrames": 90
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/爱国先爱同胞/scene_2_2.png",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "三个人没能出来",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 351
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CHAT_BUBBLE",
+          "reasoning": "家属只求真相却收到三条网暴话术，典型评论/弹幕体，用 CHAT_BUBBLE 呈现陌生人对受害者的审判。",
+          "content": [
+            {
+              "text": "接下来她收到的不是答案，",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "是铺天盖地的骂声——",
+              "startFrame": 54,
+              "durationFrames": 50
+            },
+            {
+              "text": "骂她抹黑民族品牌，",
+              "startFrame": 103,
+              "durationFrames": 51
+            },
+            {
+              "text": "骂她带节奏，",
+              "startFrame": 153,
+              "durationFrames": 31
+            },
+            {
+              "text": "骂她不爱国。",
+              "startFrame": 184,
+              "durationFrames": 28
+            }
+          ],
+          "order": 3,
+          "param": {
+            "bubbles": [
+              {
+                "bubbleText": "抹黑民族品牌",
+                "showFrom": 2,
+                "align": "right"
+              },
+              {
+                "bubbleText": "带节奏",
+                "showFrom": 3,
+                "align": "right"
+              },
+              {
+                "bubbleText": "不爱国",
+                "showFrom": 4,
+                "align": "right"
+              }
+            ]
+          },
+          "totalDurationFrames": 212
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "失去至亲却在镜头外遭网暴，末两句「她做错了什么」+「只要真相」收束无辜受害，情绪落点用 CENTER_FOCUS 压屏。",
+          "content": [
+            {
+              "text": "她失去了丈夫和孩子，",
+              "startFrame": 0,
+              "durationFrames": 48
+            },
+            {
+              "text": "还要在镜头外承受陌生人的审判。",
+              "startFrame": 48,
+              "durationFrames": 72
+            },
+            {
+              "text": "她做错了什么？",
+              "startFrame": 120,
+              "durationFrames": 36
+            },
+            {
+              "text": "她只是想要一个真相。",
+              "startFrame": 156,
+              "durationFrames": 48
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/爱国先爱同胞/scene_2_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "陌生人的审判",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 204
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "划漆、扎胎、评论区诅咒三种攻击方式并列递进，节拍换图用 BEAT_SEQUENCE 快速呈现对小米车主的多线伤害。",
+          "content": [
+            {
+              "text": "还有最近，很多小米车被攻击。",
+              "startFrame": 0,
+              "durationFrames": 75
+            },
+            {
+              "text": "有人划的是漆，",
+              "startFrame": 74,
+              "durationFrames": 38
+            },
+            {
+              "text": "有人扎的是胎；",
+              "startFrame": 111,
+              "durationFrames": 35
+            },
+            {
+              "text": "还有人连面都不露，只在评论区里诅咒：",
+              "startFrame": 146,
+              "durationFrames": 88
+            },
+            {
+              "text": "绿化带见，撞死你就不舔了，智商鉴定车。",
+              "startFrame": 233,
+              "durationFrames": 104
+            }
+          ],
+          "order": 5,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/爱国先爱同胞/scene_2_5_img0.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 1
+              },
+              {
+                "imageSrc": "images/爱国先爱同胞/scene_2_5_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 2
+              },
+              {
+                "imageSrc": "images/爱国先爱同胞/scene_2_5_img2.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 338
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "「不是祝福而是车祸图与恶评」为强对立翻转，与 scene_1 砸车纠偏镜头一致，用 COGNITIVE_SHIFT 突出期待与现实的落差。",
+          "content": [
+            {
+              "text": "提车时高高兴兴发一条视频，",
+              "startFrame": 0,
+              "durationFrames": 65
+            },
+            {
+              "text": "底下等着她的不是祝福，",
+              "startFrame": 64,
+              "durationFrames": 54
+            },
+            {
+              "text": "是车祸现场的照片和恶毒的问候。",
+              "startFrame": 117,
+              "durationFrames": 79
+            }
+          ],
+          "order": 6,
+          "param": {
+            "notText": "祝福",
+            "butText": "车祸图与恶评",
+            "butSrc": "images/爱国先爱同胞/scene_2_6.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 197
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "与问界案例对称收束：「她做错了什么」+「只是买车」点明无辜，用 CENTER_FOCUS 作 scene_2 案例句尾。",
+          "content": [
+            {
+              "text": "她做错了什么？",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "她只是用自己挣的钱，买了一辆国产车。",
+              "startFrame": 33,
+              "durationFrames": 79
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "images/爱国先爱同胞/scene_2_7.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "买了一辆国产车",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 113
+        }
+      ],
+      "audioSrc": "/audio/爱国先爱同胞/scene_2/scene_2.mp3",
+      "totalDurationFrames": 1415
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "剖析：道德许可与错位",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "转折讽刺→自以为义，CASE_BREAKDOWN 用单图+阶段拆解呈现案例荒诞。",
+          "content": [
+            {
+              "text": "但更讽刺的是，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "这些人从来不觉得自己有问题。",
+              "startFrame": 32,
+              "durationFrames": 55
+            },
+            {
+              "text": "他们觉得自己在“捍卫大义”。",
+              "startFrame": 87,
+              "durationFrames": 59
+            },
+            {
+              "text": "你问他，为什么国家要进口日本车？",
+              "startFrame": 146,
+              "durationFrames": 75
+            },
+            {
+              "text": "为什么国家要让外国人在中国办厂？",
+              "startFrame": 220,
+              "durationFrames": 75
+            },
+            {
+              "text": "他也说不出来。",
+              "startFrame": 294,
+              "durationFrames": 35
+            }
+          ],
+          "order": 6,
+          "param": {
+            "title": "正义幻觉",
+            "imageSrc": "images/爱国先爱同胞/scene_3_6.png",
+            "phases": [
+              {
+                "phaseLabel": "自我辩护",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "国家进口",
+                "showFrom": 3
+              },
+              {
+                "phaseLabel": "外国办厂",
+                "showFrom": 4
+              }
+            ]
+          },
+          "totalDurationFrames": 330
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "砸车、骂选择、审判生活三项并列作恶，PANEL_GRID 三宫格随口播逐格显现。",
+          "content": [
+            {
+              "text": "但他可以理直气壮地砸同胞的车、",
+              "startFrame": 0,
+              "durationFrames": 64
+            },
+            {
+              "text": "骂同胞的选择、",
+              "startFrame": 63,
+              "durationFrames": 35
+            },
+            {
+              "text": "审判同胞的生活。",
+              "startFrame": 98,
+              "durationFrames": 40
+            }
+          ],
+          "order": 7,
+          "param": {
+            "panels": [
+              {
+                "src": "images/爱国先爱同胞/scene_3_7_img0.png",
+                "showFrom": 0,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/爱国先爱同胞/scene_3_7_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/爱国先爱同胞/scene_3_7_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ]
+          },
+          "totalDurationFrames": 138
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "行动作恶→实质揭示，经典的“不是…而是…”认知翻转，COGNITIVE_SHIFT用画面对比强化真相。",
+          "content": [
+            {
+              "text": "他们爱的不是国，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "是那个“我很爱国”的身份标签。",
+              "startFrame": 36,
+              "durationFrames": 72
+            }
+          ],
+          "order": 8,
+          "param": {
+            "notText": "爱的是国家",
+            "butText": "爱的是“爱国标签”",
+            "butSrc": "images/爱国先爱同胞/scene_3_8.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 108
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "正式命名专业术语，CONCEPT_CARD可突出“道德许可效应”并附简短解释动画。",
+          "content": [
+            {
+              "text": "因为有了这个标签，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "他就可以站在道德制高点上，",
+              "startFrame": 38,
+              "durationFrames": 62
+            },
+            {
+              "text": "对任何一个普通人指手画脚。",
+              "startFrame": 99,
+              "durationFrames": 59
+            },
+            {
+              "text": "这种心理机制，",
+              "startFrame": 158,
+              "durationFrames": 38
+            },
+            {
+              "text": "心理学上叫“道德许可效应”。",
+              "startFrame": 195,
+              "durationFrames": 65
+            }
+          ],
+          "order": 10,
+          "param": {
+            "imageSrc": "images/爱国先爱同胞/scene_3_10.png",
+            "conceptName": "道德许可效应",
+            "anchors": []
+          },
+          "totalDurationFrames": 260
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "因果链：贴标签→道德特权→伤害同胞（视作敌人），逐环展开机制传导，CAUSE_CHAIN让观众看清递变。",
+          "content": [
+            {
+              "text": "当一个人给自己贴上“爱国者”的标签，",
+              "startFrame": 0,
+              "durationFrames": 70
+            },
+            {
+              "text": "他就觉得自己获得了某种道德特权。",
+              "startFrame": 69,
+              "durationFrames": 70
+            },
+            {
+              "text": "他可以心安理得地伤害那些“不够爱国”的人，",
+              "startFrame": 139,
+              "durationFrames": 86
+            },
+            {
+              "text": "因为在他眼里，",
+              "startFrame": 224,
+              "durationFrames": 35
+            },
+            {
+              "text": "那些人是“敌人”，",
+              "startFrame": 259,
+              "durationFrames": 38
+            },
+            {
+              "text": "不是“同胞”。",
+              "startFrame": 296,
+              "durationFrames": 34
+            }
+          ],
+          "order": 11,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "自我标签化",
+                "imageSrc": "images/爱国先爱同胞/scene_3_11_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "道德特权",
+                "imageSrc": "images/爱国先爱同胞/scene_3_11_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "伤害他人",
+                "imageSrc": "images/爱国先爱同胞/scene_3_11_img2.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "label": "视作敌人",
+                "imageSrc": "images/爱国先爱同胞/scene_3_11_img3.png",
+                "showFrom": 4,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 331
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "描述极端简化的行为，单图展示这种粗暴二分对现实复杂性的抹杀，中心聚焦即可。",
+          "content": [
+            {
+              "text": "他把复杂的社会议题简化成非黑即白的站队游戏，",
+              "startFrame": 0,
+              "durationFrames": 113
+            },
+            {
+              "text": "把活生生的人简化成“爱国”和“不爱国”两类。",
+              "startFrame": 112,
+              "durationFrames": 100
+            }
+          ],
+          "order": 12,
+          "param": {
+            "imageSrc": "images/爱国先爱同胞/scene_3_12.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "站队游戏",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 212
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "因果链：简化带来虚假掌控感→省略思考判断→跟喊口号→自我安慰，CAUSE_CHAIN 逐环呈现心理机制传导。",
+          "content": [
+            {
+              "text": "这种简化让他获得了一种虚假的掌控感。",
+              "startFrame": 0,
+              "durationFrames": 84
+            },
+            {
+              "text": "他不需要思考，",
+              "startFrame": 83,
+              "durationFrames": 33
+            },
+            {
+              "text": "不需要判断，",
+              "startFrame": 116,
+              "durationFrames": 30
+            },
+            {
+              "text": "只需要跟着喊口号，",
+              "startFrame": 146,
+              "durationFrames": 50
+            },
+            {
+              "text": "就能获得一种“我是好人”的自我安慰。",
+              "startFrame": 195,
+              "durationFrames": 88
+            }
+          ],
+          "order": 13,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "虚假掌控",
+                "imageSrc": "images/爱国先爱同胞/scene_3_13_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "省略思考",
+                "imageSrc": "images/爱国先爱同胞/scene_3_13_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "跟喊口号",
+                "imageSrc": "images/爱国先爱同胞/scene_3_13_img2.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "自我安慰",
+                "imageSrc": "images/爱国先爱同胞/scene_3_13_img3.png",
+                "showFrom": 4,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 283
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TREE_DIAGRAM",
+          "reasoning": "承接上一层「道德错位」，在「伪爱国」结构下逐层展开第二层「经济误判」，TREE_DIAGRAM 呈现层次递进。",
+          "content": [
+            {
+              "text": "这就是问题的第一层：",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "道德错位。",
+              "startFrame": 52,
+              "durationFrames": 35
+            }
+          ],
+          "order": 1,
+          "param": {
+            "root": {
+              "label": "伪爱国",
+              "showFrom": 0,
+              "children": [
+                {
+                  "label": "道德错位",
+                  "showFrom": 1
+                }
+              ]
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 88
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "“不是口号，而是共同体”的认知反转，COGNITIVE_SHIFT用画面对比撕掉免罪金牌，重建正确认知。",
+          "content": [
+            {
+              "text": "他们把“爱国大义高于一切”当成免罪金牌，",
+              "startFrame": 0,
+              "durationFrames": 96
+            },
+            {
+              "text": "可国家从来不是一句悬在空中的口号，",
+              "startFrame": 96,
+              "durationFrames": 80
+            },
+            {
+              "text": "而是由一个个具体的人组成的生活共同体。",
+              "startFrame": 175,
+              "durationFrames": 85
+            }
+          ],
+          "order": 15,
+          "param": {
+            "notText": "悬在空中的口号",
+            "butText": "具体人组成的生活共同体",
+            "butSrc": "images/爱国先爱同胞/scene_3_15.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 261
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "聚焦一句话：爱一个国家，首先应该尊重身边同胞的生命、财产和尊严。",
+          "content": [
+            {
+              "text": "爱一个国家，",
+              "startFrame": 0,
+              "durationFrames": 26
+            },
+            {
+              "text": "首先应该尊重身边同胞的生命、",
+              "startFrame": 25,
+              "durationFrames": 60
+            },
+            {
+              "text": "财产和尊严。",
+              "startFrame": 85,
+              "durationFrames": 28
+            }
+          ],
+          "order": 16,
+          "param": {
+            "anchors": [
+              {
+                "text": "尊重身边同胞的生命",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 113
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "行为铺设→“不是维护，而是破坏”的强烈对比，COGNITIVE_SHIFT让观众看到伪爱国的破坏本质。",
+          "content": [
+            {
+              "text": "你一边高喊爱国，",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "一边羞辱、伤害、牺牲同胞，",
+              "startFrame": 52,
+              "durationFrames": 79
+            },
+            {
+              "text": "本质上不是在维护谁，",
+              "startFrame": 130,
+              "durationFrames": 47
+            },
+            {
+              "text": "而是在破坏",
+              "startFrame": 177,
+              "durationFrames": 30
+            },
+            {
+              "text": "公共信任与共同体认同。",
+              "startFrame": 207,
+              "durationFrames": 62
+            }
+          ],
+          "order": 17,
+          "param": {
+            "notText": "维护谁",
+            "butText": "破坏公共信任与认同",
+            "butSrc": "images/爱国先爱同胞/scene_3_17.png",
+            "notContentIndex": 2,
+            "butContentIndex": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 269
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片收束式对仗金句，无需画面辅助，TEXT_FOCUS让文字本身形成有力撞击。",
+          "content": [
+            {
+              "text": "没有信任，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "秩序就只剩恐惧；",
+              "startFrame": 27,
+              "durationFrames": 52
+            },
+            {
+              "text": "没有认同，",
+              "startFrame": 78,
+              "durationFrames": 27
+            },
+            {
+              "text": "团结就只剩口号。",
+              "startFrame": 104,
+              "durationFrames": 43
+            }
+          ],
+          "order": 18,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "没有信任，秩序就只剩恐惧；",
+                "showFrom": 0
+              },
+              {
+                "text": "没有认同，团结就只剩口号。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "信任",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "认同",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "恐惧",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "口号",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 148
+        }
+      ],
+      "audioSrc": "/audio/爱国先爱同胞/scene_3/scene_3.mp3",
+      "totalDurationFrames": 2538
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "剖析：经济误判",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TREE_DIAGRAM",
+          "reasoning": "承接上一层「道德错位」，在「伪爱国」结构下逐层展开第二层「经济误判」，TREE_DIAGRAM 呈现层次递进。",
+          "content": [
+            {
+              "text": "再往下一层，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "是经济误判。",
+              "startFrame": 27,
+              "durationFrames": 39
+            }
+          ],
+          "order": 1,
+          "param": {
+            "root": {
+              "label": "伪爱国",
+              "showFrom": 0,
+              "children": [
+                {
+                  "label": "道德错位",
+                  "showFrom": 0
+                },
+                {
+                  "label": "经济误判",
+                  "showFrom": 1
+                }
+              ]
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 66
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用伪爱国常见论调，QUOTE_CITATION 以引述体裁呈现靶子观点，为后续认知翻转做铺垫。",
+          "content": [
+            {
+              "text": "他们常说“中国人买外国货就是给外国送钱”",
+              "startFrame": 0,
+              "durationFrames": 116
+            }
+          ],
+          "order": 2,
+          "param": {
+            "quoteDisplayText": "中国人买外国货就是给外国送钱",
+            "quoteSource": "常见论调",
+            "anchors": []
+          },
+          "totalDurationFrames": 116
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确呈现‘听起来…其实是…’的认知翻转，属于典型对错/强导向结构，应选用 COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "这句话听起来热血，",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "其实是把现代经济说成了单向输血。",
+              "startFrame": 52,
+              "durationFrames": 96
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "听起来热血",
+            "butText": "单向输血",
+            "butSrc": "images/爱国先爱同胞/scene_4_3.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 149
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "提出核心概念‘双向交换’并展开解释，符合 CONCEPT_CARD 对新概念定义与阐释的表达需求。",
+          "content": [
+            {
+              "text": "真实世界里，",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "消费是双向交换：",
+              "startFrame": 31,
+              "durationFrames": 45
+            },
+            {
+              "text": "你买到更合适的商品，",
+              "startFrame": 76,
+              "durationFrames": 48
+            },
+            {
+              "text": "国内也在仓储、",
+              "startFrame": 124,
+              "durationFrames": 46
+            },
+            {
+              "text": "物流、",
+              "startFrame": 170,
+              "durationFrames": 20
+            },
+            {
+              "text": "售后等环节创造就业和税收。",
+              "startFrame": 189,
+              "durationFrames": 69
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/爱国先爱同胞/scene_4_4.png",
+            "conceptName": "双向交换",
+            "anchors": []
+          },
+          "totalDurationFrames": 259
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "补充事实作为证据，无强烈对比或分点结构，适合用 CENTER_FOCUS 平实叙述。",
+          "content": [
+            {
+              "text": "还有很多所谓“外国货”早已在中国研发、制造、雇人，",
+              "startFrame": 0,
+              "durationFrames": 123
+            },
+            {
+              "text": "他们也在为国人创造就业和税收。",
+              "startFrame": 122,
+              "durationFrames": 74
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/爱国先爱同胞/scene_4_5.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 196
+        }
+      ],
+      "audioSrc": "/audio/爱国先爱同胞/scene_4/scene_4.mp3",
+      "totalDurationFrames": 785
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "召唤：普通人托起的国家",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "「无论道德还是经济」以左右分栏呈现双维度铺垫，引出后文核心论断。",
+          "content": [
+            {
+              "text": "可无论道德还是经济，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "归根到底，",
+              "startFrame": 50,
+              "durationFrames": 27
+            },
+            {
+              "text": "我们都绕不开一个最简单的事实：",
+              "startFrame": 76,
+              "durationFrames": 62
+            }
+          ],
+          "order": 1,
+          "param": {
+            "left": {
+              "label": "道德维度",
+              "src": "images/爱国先爱同胞/scene_5_1_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "经济维度",
+              "src": "images/爱国先爱同胞/scene_5_1_right.png",
+              "showFrom": 0
+            }
+          },
+          "totalDurationFrames": 138
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "「国家不是抽象符号而是具体的人组成的生活」为全段核心金句，TEXT_FOCUS 纯字压屏强化认知转换。",
+          "content": [
+            {
+              "text": "国家不只是抽象的符号，",
+              "startFrame": 0,
+              "durationFrames": 58
+            },
+            {
+              "text": "更是由千千万万具体的人组成的生活。",
+              "startFrame": 57,
+              "durationFrames": 91
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "国家不只是抽象的符号，",
+                "showFrom": 0
+              },
+              {
+                "text": "更是由千千万万具体的人组成的生活。",
+                "showFrom": 1
+              },
+              {
+                "text": "组成的生活。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "抽象的符号",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "具体的人",
+                "color": "#22C55E"
+              },
+              {
+                "coreSentenceAnchor": "组成的生活",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 149
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "明确的因果链条：用错误“爱国”行为（因）→ 真正伤害的是信任与温度（果），适合CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "当你用“爱国”去伤害身边的收银员、店员、打工人，",
+              "startFrame": 0,
+              "durationFrames": 119
+            },
+            {
+              "text": "你真正伤害的，",
+              "startFrame": 118,
+              "durationFrames": 36
+            },
+            {
+              "text": "是普通人之间那点本来就不多的信任与温度。",
+              "startFrame": 154,
+              "durationFrames": 91
+            }
+          ],
+          "order": 3,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "伤害同胞",
+                "imageSrc": "images/爱国先爱同胞/scene_5_3_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "伤害温度",
+                "imageSrc": "images/爱国先爱同胞/scene_5_3_img1.png",
+                "showFrom": 2,
+                "enterEffect": "breathe"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 246
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "第二个“不是…而是…”结构，继续驱动认知转变，强化真正的爱国定义，独立使用COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "而真正的爱国，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "从来不是把同胞推向对立面，",
+              "startFrame": 37,
+              "durationFrames": 68
+            },
+            {
+              "text": "而是把每一个普通人的苦与乐、泪与汗，",
+              "startFrame": 104,
+              "durationFrames": 92
+            },
+            {
+              "text": "都当成值得被看见的事。",
+              "startFrame": 196,
+              "durationFrames": 59
+            }
+          ],
+          "order": 4,
+          "param": {
+            "notText": "把同胞推向对立面",
+            "butText": "当成值得被看见的事",
+            "butSrc": "images/爱国先爱同胞/scene_5_4.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 256
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "「不是靠喊得最凶的人」与「靠默默托举的人」构成明确对错对照，DOS_AND_DONTS 左右分栏比放大镜更贴「不是…而是…」叙事。",
+          "content": [
+            {
+              "text": "因为这个国家，",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "从来不是靠喊得最凶的人撑起来的，",
+              "startFrame": 31,
+              "durationFrames": 78
+            },
+            {
+              "text": "而是靠千千万万在最底层默默流汗、",
+              "startFrame": 109,
+              "durationFrames": 105
+            },
+            {
+              "text": "默默承受、",
+              "startFrame": 213,
+              "durationFrames": 28
+            },
+            {
+              "text": "默默托举的人，",
+              "startFrame": 241,
+              "durationFrames": 35
+            },
+            {
+              "text": "一点一滴垒起来的。",
+              "startFrame": 276,
+              "durationFrames": 48
+            }
+          ],
+          "order": 5,
+          "param": {
+            "left": {
+              "label": "❌ 喊得最凶",
+              "src": "images/爱国先爱同胞/scene_5_5_left.png",
+              "showFrom": 1
+            },
+            "right": {
+              "label": "✅ 默默托举",
+              "src": "images/爱国先爱同胞/scene_5_5_right.png",
+              "showFrom": 2
+            }
+          },
+          "totalDurationFrames": 324
+        }
+      ],
+      "audioSrc": "/audio/爱国先爱同胞/scene_5/scene_5.mp3",
+      "totalDurationFrames": 1112
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "结语：空谈者必变节",
+      "items": [
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片级短促强结论，无需配图，独立金句冲击 → 选 TEXT_FOCUS；与后续解释拆分为两个镜头以强化节奏。",
+          "content": [
+            {
+              "text": "不要只爱一个抽象的词，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "也要爱组成这个词的一个个具体的人。",
+              "startFrame": 38,
+              "durationFrames": 78
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "爱抽象的词，",
+                "showFrom": 0
+              },
+              {
+                "text": "也要爱组成这个词的一个个具体的人",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "抽象的词",
+                "color": "#22C55E"
+              },
+              {
+                "coreSentenceAnchor": "具体的人",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 116
+        }
+      ],
+      "audioSrc": "/audio/爱国先爱同胞/scene_6/scene_6.mp3",
+      "totalDurationFrames": 118
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "爱国爱同胞",
+    "subtitle": "爱抽象的词，也要爱具体的人",
+    "themeColor": "#059669",
+    "badge": "深度解读 · 理性思考",
+    "seriesLabel": "社会热点深读",
+    "seriesLabelEn": "SOCIAL DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

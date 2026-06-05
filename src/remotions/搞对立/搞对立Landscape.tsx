@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, interpolate, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame } from "remotion";
 
 import { RemotionLayoutMetricsProvider } from "../../components";
 import { 搞对立MainBody } from "./搞对立MainBody";
@@ -23,6 +23,12 @@ export const 搞对立Landscape: React.FC = () => {
 
     return (
         <AbsoluteFill style={{ background: "#0f172a" }}>
+            <Audio
+                src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
+                loop
+                volume={0.10}
+                name="Background music"
+            />
             <div
                 style={{
 

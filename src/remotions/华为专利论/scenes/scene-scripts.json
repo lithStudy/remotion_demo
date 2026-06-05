@@ -1,0 +1,2269 @@
+{
+  "topic": "15万件专利的真相：你每抬一次脚，都可能踩中“地雷”",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入·专利丛林",
+      "items": [
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "突出 15 万件这一核心数值，数据强调，选 KPI_HERO。",
+          "content": [
+            {
+              "text": "华为拥有全球专利数量超过15万件。",
+              "startFrame": 0,
+              "durationFrames": 95
+            },
+            {
+              "text": "全球第一。",
+              "startFrame": 94,
+              "durationFrames": 34
+            }
+          ],
+          "order": 1,
+          "param": {
+            "blocks": [
+              {
+                "value": 15,
+                "suffix": "+万件",
+                "label": "全球专利数量",
+                "showFrom": 0,
+                "useGrouping": true
+              }
+            ],
+            "countDuration": 28,
+            "anchors": []
+          },
+          "totalDurationFrames": 129
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "突出六亿多美元的许可费收入数值，选 KPI_HERO。",
+          "content": [
+            {
+              "text": "每年光收许可费，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "就六亿多美元。",
+              "startFrame": 43,
+              "durationFrames": 48
+            }
+          ],
+          "order": 3,
+          "param": {
+            "blocks": [
+              {
+                "value": 6,
+                "suffix": " +亿美元",
+                "label": "许可费",
+                "useGrouping": true,
+                "showFrom": 1
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 92
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "提问引导两种可能反应，单图中心聚焦呈现悬念，选 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "你听到这些数字，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "第一反应是什么？",
+              "startFrame": 36,
+              "durationFrames": 35
+            },
+            {
+              "text": "厉害？",
+              "startFrame": 70,
+              "durationFrames": 17
+            },
+            {
+              "text": "民族骄傲？",
+              "startFrame": 87,
+              "durationFrames": 28
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_1_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "厉害",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              },
+              {
+                "text": "民族骄傲",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 115
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "转折引导句，叙事角色转向揭露，独立成镜，平铺叙述选 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "我今天要告诉你另一件事。",
+              "startFrame": 0,
+              "durationFrames": 58
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_1_5.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 58
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确“不是…而是…”认知转变结构，选 COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "这里面，",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "有相当大一块，",
+              "startFrame": 21,
+              "durationFrames": 38
+            },
+            {
+              "text": "不是技术，",
+              "startFrame": 58,
+              "durationFrames": 22
+            },
+            {
+              "text": "是法律地雷。",
+              "startFrame": 80,
+              "durationFrames": 40
+            }
+          ],
+          "order": 6,
+          "param": {
+            "notText": "技术",
+            "butText": "法律地雷",
+            "butSrc": "images/华为专利论/scene_1_6.png",
+            "notContentIndex": 2,
+            "butContentIndex": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 121
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对关键词“专利丛林”进行命名解释，选 CONCEPT_CARD。",
+          "content": [
+            {
+              "text": "名字就叫—",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "专利丛林。",
+              "startFrame": 26,
+              "durationFrames": 44
+            },
+            {
+              "text": "什么叫专利丛林？",
+              "startFrame": 69,
+              "durationFrames": 44
+            },
+            {
+              "text": "打个比方。",
+              "startFrame": 113,
+              "durationFrames": 21
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_1_7.png",
+            "conceptName": "专利丛林",
+            "anchors": []
+          },
+          "totalDurationFrames": 134
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "从正常情境到两次侵占声明，形成 3 个递进节拍，选 BEAT_SEQUENCE。",
+          "content": [
+            {
+              "text": "你住的小区，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "本来一条路就能回家。",
+              "startFrame": 29,
+              "durationFrames": 47
+            },
+            {
+              "text": "突然有人宣布：",
+              "startFrame": 76,
+              "durationFrames": 35
+            },
+            {
+              "text": "你左脚踩的这块砖，",
+              "startFrame": 111,
+              "durationFrames": 46
+            },
+            {
+              "text": "归我。",
+              "startFrame": 157,
+              "durationFrames": 30
+            },
+            {
+              "text": "你右脚踩的那块砖，",
+              "startFrame": 186,
+              "durationFrames": 47
+            },
+            {
+              "text": "也归我。",
+              "startFrame": 233,
+              "durationFrames": 34
+            }
+          ],
+          "order": 9,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/华为专利论/scene_1_9_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/华为专利论/scene_1_9_img1.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert",
+                "showFrom": 3
+              },
+              {
+                "imageSrc": "images/华为专利论/scene_1_9_img2.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 268
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "加价威胁后果的平铺叙述，单图中心聚焦呈现压迫感，选 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "跨门槛三步，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "每一步都要交钱。",
+              "startFrame": 36,
+              "durationFrames": 44
+            },
+            {
+              "text": "你不交？",
+              "startFrame": 79,
+              "durationFrames": 28
+            },
+            {
+              "text": "告你侵权。",
+              "startFrame": 106,
+              "durationFrames": 36
+            }
+          ],
+          "order": 10,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_1_10.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "交钱",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              },
+              {
+                "text": "告你侵权",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 143
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "揭露真实动机：不是修路而是堵路，形成「不是…而是…」认知翻转，选 COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "更恶心的是，",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "他们根本不想修路。",
+              "startFrame": 33,
+              "durationFrames": 43
+            },
+            {
+              "text": "他们只想让你走不了。",
+              "startFrame": 76,
+              "durationFrames": 42
+            }
+          ],
+          "order": 11,
+          "param": {
+            "notText": "修路",
+            "butText": "让你走不了",
+            "butSrc": "images/华为专利论/scene_1_11.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 118
+        }
+      ],
+      "audioSrc": "/audio/华为专利论/scene_1/scene_1.mp3",
+      "totalDurationFrames": 1177
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析·注水创新",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CONCEPT_CARD",
+          "reasoning": "提出第一类注水创新的类别标签，需闪卡式命名强调「常识当发明」，选 CONCEPT_CARD。",
+          "content": [
+            {
+              "text": "先说最不要脸的一类：",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "把常识当发明。",
+              "startFrame": 50,
+              "durationFrames": 53
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_2_1.png",
+            "conceptName": "常识当发明",
+            "anchors": []
+          },
+          "totalDurationFrames": 103
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "连续设问引出程序员视角，平缓叙述、单图居中即可，选 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "你打开手机，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "图标会动吧？",
+              "startFrame": 30,
+              "durationFrames": 30
+            },
+            {
+              "text": "会放大、会淡入淡出吧？",
+              "startFrame": 60,
+              "durationFrames": 52
+            },
+            {
+              "text": "这在程序员眼里，",
+              "startFrame": 111,
+              "durationFrames": 38
+            },
+            {
+              "text": "有专业名字。",
+              "startFrame": 148,
+              "durationFrames": 41
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_2_2.png",
+            "enterEffect": "zoomIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 189
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "「分层渲染」与「透明度渐变」两个术语并列对照，左右分屏并排展示 → 选 SPLIT_COMPARE。",
+          "content": [
+            {
+              "text": "分层渲染。",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "透明度渐变。",
+              "startFrame": 38,
+              "durationFrames": 44
+            },
+            {
+              "text": "翻成白话就是：",
+              "startFrame": 81,
+              "durationFrames": 41
+            },
+            {
+              "text": "把图片分几层动，",
+              "startFrame": 122,
+              "durationFrames": 51
+            },
+            {
+              "text": "让它慢慢变亮、变暗。",
+              "startFrame": 172,
+              "durationFrames": 62
+            }
+          ],
+          "order": 3,
+          "param": {
+            "leftSrc": "images/华为专利论/scene_2_3_left.png",
+            "rightSrc": "images/华为专利论/scene_2_3_right.png",
+            "leftLabel": "分层渲染",
+            "rightLabel": "透明度渐变",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 234
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促有力的评价语，强调技术早已过时，属金句冲击，无需配图 → 选 TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "这是十年前的入门课。",
+              "startFrame": 0,
+              "durationFrames": 52
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              "这是十年前的入门课。"
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 52
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "转折引出华为的争议行为，单句叙述，无特别结构 → 选 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "可华为偏要把这些拆开申请专利。",
+              "startFrame": 0,
+              "durationFrames": 68
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_2_6.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "拆开",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 68
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "三个并列的专利拆分例子，短小且各需独立配图，适合宫格展示 → 选 PANEL_GRID；避免单item过长，拆开列举。",
+          "content": [
+            {
+              "text": "图标前景放大一层，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "算一件。",
+              "startFrame": 50,
+              "durationFrames": 24
+            },
+            {
+              "text": "背景再放大一层，",
+              "startFrame": 74,
+              "durationFrames": 38
+            },
+            {
+              "text": "又是一件。",
+              "startFrame": 111,
+              "durationFrames": 27
+            },
+            {
+              "text": "淡入淡出，",
+              "startFrame": 137,
+              "durationFrames": 29
+            },
+            {
+              "text": "再一件。",
+              "startFrame": 165,
+              "durationFrames": 24
+            }
+          ],
+          "order": 7,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为专利论/scene_2_7_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为专利论/scene_2_7_img1.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为专利论/scene_2_7_img2.png",
+                "showFrom": 4,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 190
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "后三个并列例子，延续宫格展示；原文连续列举过长，拆为两个 PANEL_GRID 保持视觉节奏。",
+          "content": [
+            {
+              "text": "弹簧动画，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "再一件。",
+              "startFrame": 34,
+              "durationFrames": 27
+            },
+            {
+              "text": "手机上的开机动画，",
+              "startFrame": 61,
+              "durationFrames": 47
+            },
+            {
+              "text": "一件。",
+              "startFrame": 108,
+              "durationFrames": 23
+            },
+            {
+              "text": "车载多屏拼接放同一段动画，",
+              "startFrame": 130,
+              "durationFrames": 69
+            },
+            {
+              "text": "又一件。",
+              "startFrame": 199,
+              "durationFrames": 22
+            }
+          ],
+          "order": 8,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为专利论/scene_2_8_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为专利论/scene_2_8_img1.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为专利论/scene_2_8_img2.png",
+                "showFrom": 4,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 222
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "锁定核心短语“同一个开机画面”，强调重复申请的荒诞，高价值焦点 → 选 MAGNIFYING_GLASS。",
+          "content": [
+            {
+              "text": "同一个“开机画面”，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "硬拆成几十上百个专利。",
+              "startFrame": 37,
+              "durationFrames": 70
+            }
+          ],
+          "order": 9,
+          "param": {
+            "anchors": [
+              {
+                "text": "几十上百个专利",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 107
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "两个并行的类比例子，短小且可独立配图，用宫格强化并列感 → 选 PANEL_GRID。",
+          "content": [
+            {
+              "text": "这就像有人，把本来的进屋动作，拆成了不同的技术。",
+              "startFrame": 0,
+              "durationFrames": 115
+            },
+            {
+              "text": "“推门”是一件；",
+              "startFrame": 114,
+              "durationFrames": 32
+            },
+            {
+              "text": "“抬脚”是一件；",
+              "startFrame": 146,
+              "durationFrames": 44
+            },
+            {
+              "text": "“放脚”又是一件。",
+              "startFrame": 189,
+              "durationFrames": 40
+            }
+          ],
+          "order": 10,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为专利论/scene_2_10_img0.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为专利论/scene_2_10_img1.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 230
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "推至荒谬的结论，短促有力，强调不合理性，属金句冲击 → 选 TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "你回家进门，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "理论上要交三次钱。",
+              "startFrame": 29,
+              "durationFrames": 48
+            }
+          ],
+          "order": 11,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "你回家进门，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "理论上要交三次钱。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "交三次钱",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 78
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "以反问否定创新，再直指“注水”，形成不是…而是…式的认知翻转 → 选 COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "这是在创新吗？",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "这是在注水。",
+              "startFrame": 34,
+              "durationFrames": 32
+            }
+          ],
+          "order": 12,
+          "param": {
+            "notText": "创新",
+            "butText": "注水",
+            "butSrc": "images/华为专利论/scene_2_12.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 66
+        }
+      ],
+      "audioSrc": "/audio/华为专利论/scene_2/scene_2.mp3",
+      "totalDurationFrames": 1537
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "剖析·分案碰瓷",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CONCEPT_CARD",
+          "reasoning": "提出一个类别概念，需要解释，适合用概念卡片定义“时光倒流式狙击”。",
+          "content": [
+            {
+              "text": "第二类，",
+              "startFrame": 0,
+              "durationFrames": 21
+            },
+            {
+              "text": "最冷血的：",
+              "startFrame": 20,
+              "durationFrames": 33
+            },
+            {
+              "text": "时光倒流式狙击。",
+              "startFrame": 53,
+              "durationFrames": 65
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_3_1.png",
+            "conceptName": "时光倒流式狙击",
+            "anchors": []
+          },
+          "totalDurationFrames": 118
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓解释分案申请的定义与初衷，单图居中叙述，选 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "专利申请中有一种叫做分案申请，",
+              "startFrame": 0,
+              "durationFrames": 90
+            },
+            {
+              "text": "本来是好事。",
+              "startFrame": 89,
+              "durationFrames": 30
+            },
+            {
+              "text": "意思是：",
+              "startFrame": 118,
+              "durationFrames": 22
+            },
+            {
+              "text": "一份专利申请里，",
+              "startFrame": 140,
+              "durationFrames": 42
+            },
+            {
+              "text": "如果塞了两个不相关发明，",
+              "startFrame": 182,
+              "durationFrames": 55
+            },
+            {
+              "text": "拆开来审，",
+              "startFrame": 236,
+              "durationFrames": 28
+            },
+            {
+              "text": "各算各的。",
+              "startFrame": 264,
+              "durationFrames": 27
+            },
+            {
+              "text": "合理。",
+              "startFrame": 290,
+              "durationFrames": 27
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_3_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 317
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短小转折金句，冲击力强，适合纯文字聚焦，无需配图。",
+          "content": [
+            {
+              "text": "可华为把它玩成了时光机。",
+              "startFrame": 0,
+              "durationFrames": 64
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "可华为把它玩成了时光机。",
+                "showFrom": 0,
+                "endFrom": 0
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "时光机",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 64
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "案例还原，展现专利分身，适合案例拆解模板，叙事弧完整。",
+          "content": [
+            {
+              "text": "说个实案。",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "2024 年，",
+              "startFrame": 26,
+              "durationFrames": 34
+            },
+            {
+              "text": "华为起诉联发科。",
+              "startFrame": 60,
+              "durationFrames": 45
+            },
+            {
+              "text": "核心专利之一，",
+              "startFrame": 104,
+              "durationFrames": 41
+            },
+            {
+              "text": "2011 年才提交。",
+              "startFrame": 145,
+              "durationFrames": 47
+            },
+            {
+              "text": "但它不是新东西。",
+              "startFrame": 191,
+              "durationFrames": 35
+            },
+            {
+              "text": "它是从 2007 年那份老申请里，",
+              "startFrame": 226,
+              "durationFrames": 93
+            },
+            {
+              "text": "拆出来的“分身”。",
+              "startFrame": 318,
+              "durationFrames": 44
+            }
+          ],
+          "order": 4,
+          "param": {
+            "title": "专利分身术",
+            "imageSrc": "images/华为专利论/scene_3_4.png",
+            "phases": [
+              {
+                "phaseLabel": "引出案例",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "表面时间线",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "真相揭露",
+                "showFrom": 5
+              },
+              {
+                "phaseLabel": "分身概念",
+                "showFrom": 7
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 363
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "定义母案与分案，并解释分案的核心优势，适合概念卡片。",
+          "content": [
+            {
+              "text": "什么意思？",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "先在 2007 年占一个坑。",
+              "startFrame": 43,
+              "durationFrames": 70
+            },
+            {
+              "text": "这份老申请，",
+              "startFrame": 113,
+              "durationFrames": 40
+            },
+            {
+              "text": "叫母案。",
+              "startFrame": 152,
+              "durationFrames": 31
+            },
+            {
+              "text": "后面拆出来的新申请，",
+              "startFrame": 183,
+              "durationFrames": 54
+            },
+            {
+              "text": "叫分案。",
+              "startFrame": 236,
+              "durationFrames": 34
+            },
+            {
+              "text": "分案的厉害之处在于：",
+              "startFrame": 270,
+              "durationFrames": 54
+            },
+            {
+              "text": "它看起来是后来提交的，",
+              "startFrame": 324,
+              "durationFrames": 52
+            },
+            {
+              "text": "却能往前借用母案的时间。",
+              "startFrame": 375,
+              "durationFrames": 63
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_3_5.png",
+            "conceptName": "分案时间回溯",
+            "anchors": []
+          },
+          "totalDurationFrames": 438
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "STEP_LIST",
+          "reasoning": "明确的操作步骤顺序，可抽象为占坑、等芯片、等标准、等上市、调整权利要求的步骤列表。",
+          "content": [
+            {
+              "text": "于是玩法就变了。",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "先把坑占住。",
+              "startFrame": 43,
+              "durationFrames": 36
+            },
+            {
+              "text": "等联发科、",
+              "startFrame": 78,
+              "durationFrames": 30
+            },
+            {
+              "text": "三星把芯片做出来。",
+              "startFrame": 108,
+              "durationFrames": 48
+            },
+            {
+              "text": "等行业标准定下来。",
+              "startFrame": 156,
+              "durationFrames": 47
+            },
+            {
+              "text": "等产品上市。",
+              "startFrame": 203,
+              "durationFrames": 40
+            },
+            {
+              "text": "再调整专利保护范围。",
+              "startFrame": 242,
+              "durationFrames": 65
+            },
+            {
+              "text": "也就是修改权利要求。",
+              "startFrame": 306,
+              "durationFrames": 59
+            }
+          ],
+          "order": 6,
+          "param": {
+            "title": "专利陷阱三步走",
+            "steps": [
+              {
+                "text": "先占坑",
+                "showFrom": 1
+              },
+              {
+                "text": "等产品上市",
+                "showFrom": 5
+              },
+              {
+                "text": "调整保护范围",
+                "showFrom": 6
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 366
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "结论性揭示，使用中心聚焦，呈现产品被精准套住的视觉冲击；落点句不够突出，故用中性表达。",
+          "content": [
+            {
+              "text": "最后发生什么？",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "你已经公开的产品，",
+              "startFrame": 36,
+              "durationFrames": 45
+            },
+            {
+              "text": "突然被它精准套住。",
+              "startFrame": 80,
+              "durationFrames": 55
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_3_7.png",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "精准套住",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 136
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "租房比喻：模糊签约→十年投入→补充条款→法院见，四步因果传导清晰，适合 CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "这就像你 2007 年签了一份模糊租房合同。",
+              "startFrame": 0,
+              "durationFrames": 102
+            },
+            {
+              "text": "房东说没事，",
+              "startFrame": 101,
+              "durationFrames": 30
+            },
+            {
+              "text": "先放着。",
+              "startFrame": 130,
+              "durationFrames": 21
+            },
+            {
+              "text": "你花十年把房子装修好、",
+              "startFrame": 151,
+              "durationFrames": 48
+            },
+            {
+              "text": "生意做起来了。",
+              "startFrame": 199,
+              "durationFrames": 38
+            },
+            {
+              "text": "2024 年他拿出补充条款：",
+              "startFrame": 236,
+              "durationFrames": 72
+            },
+            {
+              "text": "你阳台面积算我的，",
+              "startFrame": 308,
+              "durationFrames": 47
+            },
+            {
+              "text": "月租翻倍。",
+              "startFrame": 355,
+              "durationFrames": 30
+            },
+            {
+              "text": "你不签？",
+              "startFrame": 384,
+              "durationFrames": 18
+            },
+            {
+              "text": "法院见。",
+              "startFrame": 402,
+              "durationFrames": 28
+            }
+          ],
+          "order": 8,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "模糊签约",
+                "imageSrc": "images/华为专利论/scene_3_8_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "十年投入",
+                "imageSrc": "images/华为专利论/scene_3_8_img1.png",
+                "showFrom": 3,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "label": "补充条款",
+                "imageSrc": "images/华为专利论/scene_3_8_img2.png",
+                "showFrom": 5,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "label": "法院见",
+                "imageSrc": "images/华为专利论/scene_3_8_img3.png",
+                "showFrom": 8,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 430
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确否定错误观念，提出正确看法，适合认知转变模板。",
+          "content": [
+            {
+              "text": "这不是保护研发成果。",
+              "startFrame": 0,
+              "durationFrames": 50
+            },
+            {
+              "text": "这是事后碰瓷。",
+              "startFrame": 49,
+              "durationFrames": 39
+            }
+          ],
+          "order": 10,
+          "param": {
+            "notText": "保护研发成果",
+            "butText": "事后碰瓷",
+            "butSrc": "images/华为专利论/scene_3_10.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 89
+        }
+      ],
+      "audioSrc": "/audio/华为专利论/scene_3/scene_3.mp3",
+      "totalDurationFrames": 2318
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "剖析·凑数专利",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CONCEPT_CARD",
+          "reasoning": "独立概念标签，用于点明兜底分类，适合以概念卡片呈现，无需配图。",
+          "content": [
+            {
+              "text": "第三类：",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "垃圾专利当炮灰。",
+              "startFrame": 21,
+              "durationFrames": 55
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_4_1.png",
+            "conceptName": "凑数专利",
+            "anchors": []
+          },
+          "totalDurationFrames": 77
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "认知转变结构：“不是只A，也有B”，COGNITIVE_SHIFT可突显从旧印象到新认知的跳跃。",
+          "content": [
+            {
+              "text": "华为不是只会申请高大上的通信专利。",
+              "startFrame": 0,
+              "durationFrames": 98
+            },
+            {
+              "text": "还有工业化流水线一样的“凑数专利”。",
+              "startFrame": 97,
+              "durationFrames": 99
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "只会高大上通信专利",
+            "butText": "流水线凑数专利",
+            "butSrc": "images/华为专利论/scene_4_2.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 196
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "节拍递进：唬人名称→像火箭发射，适合BEAT_SEQUENCE分步展示。因后续拆解内容较长，此处独立成段利于聚焦。",
+          "content": [
+            {
+              "text": "2016 年打三星，",
+              "startFrame": 0,
+              "durationFrames": 54
+            },
+            {
+              "text": "有些专利名字特别唬人，",
+              "startFrame": 53,
+              "durationFrames": 59
+            },
+            {
+              "text": "什么扩展物理下行链路控制信道。",
+              "startFrame": 112,
+              "durationFrames": 94
+            },
+            {
+              "text": "听起来像火箭发射。",
+              "startFrame": 206,
+              "durationFrames": 53
+            }
+          ],
+          "order": 3,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/华为专利论/scene_4_3_img0.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "images/华为专利论/scene_4_3_img1.png",
+                "enterEffect": "fadeIn",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "images/华为专利论/scene_4_3_img2.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 259
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "继续节拍递进：解释真相→专家诊断→结论纸老虎，形成三段式转折，BEAT_SEQUENCE让画面跟随节奏变化。",
+          "content": [
+            {
+              "text": "翻成白话，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "就是手机和基站之间，",
+              "startFrame": 32,
+              "durationFrames": 55
+            },
+            {
+              "text": "怎么安排通信资源的一段规则。",
+              "startFrame": 87,
+              "durationFrames": 65
+            },
+            {
+              "text": "专家一拆，",
+              "startFrame": 152,
+              "durationFrames": 28
+            },
+            {
+              "text": "技术含量极低。",
+              "startFrame": 179,
+              "durationFrames": 36
+            },
+            {
+              "text": "就是术语堆出来的纸老虎。",
+              "startFrame": 215,
+              "durationFrames": 57
+            }
+          ],
+          "order": 4,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/华为专利论/scene_4_4_img0.png",
+                "enterEffect": "fadeIn",
+                "tone": "calm",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/华为专利论/scene_4_4_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 273
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "解释「实用新型」为低配版专利，平缓叙述、单图居中呈现即可，选 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "还有中国的实用新型。",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "你可以把它理解成：",
+              "startFrame": 52,
+              "durationFrames": 44
+            },
+            {
+              "text": "低配版专利。",
+              "startFrame": 96,
+              "durationFrames": 38
+            },
+            {
+              "text": "主要看材料形式过不过关。",
+              "startFrame": 133,
+              "durationFrames": 56
+            },
+            {
+              "text": "不太深挖技术到底有多新。",
+              "startFrame": 188,
+              "durationFrames": 70
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_4_5.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "实用新型",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              },
+              {
+                "text": "低配版专利",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 259
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "逻辑收束：下证快成本低→华为存在不少，递进呈现小结论，BEAT_SEQUENCE强化跳跃感。",
+          "content": [
+            {
+              "text": "所以下证快，",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "成本低。",
+              "startFrame": 33,
+              "durationFrames": 28
+            },
+            {
+              "text": "华为体系里，",
+              "startFrame": 61,
+              "durationFrames": 30
+            },
+            {
+              "text": "这类东西不少。",
+              "startFrame": 90,
+              "durationFrames": 35
+            }
+          ],
+          "order": 6,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/华为专利论/scene_4_6_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/华为专利论/scene_4_6_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 1
+              }
+            ],
+            "anchors": [
+              {
+                "text": "下证快",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              },
+              {
+                "text": "成本低",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 126
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "完整案例弧：提问引出一产品→细节还原→网友质疑收束，符合“个案→误判/推论→纠偏→收束”的叙事弧，选CASE_BREAKDOWN。",
+          "content": [
+            {
+              "text": "最出圈的是什么？",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "赛力斯车载便器。",
+              "startFrame": 37,
+              "durationFrames": 48
+            },
+            {
+              "text": "座椅下面藏马桶，",
+              "startFrame": 84,
+              "durationFrames": 50
+            },
+            {
+              "text": "滑轨拉出来，",
+              "startFrame": 133,
+              "durationFrames": 32
+            },
+            {
+              "text": "用完推回去。",
+              "startFrame": 165,
+              "durationFrames": 38
+            },
+            {
+              "text": "网友都笑了：",
+              "startFrame": 202,
+              "durationFrames": 42
+            },
+            {
+              "text": "这也能叫专利？",
+              "startFrame": 244,
+              "durationFrames": 48
+            }
+          ],
+          "order": 7,
+          "param": {
+            "title": "赛力斯车载便器",
+            "imageSrc": "images/华为专利论/scene_4_7.png",
+            "phases": [
+              {
+                "phaseLabel": "出圈之问",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "荒诞真相",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "网友群嘲",
+                "showFrom": 5
+              },
+              {
+                "phaseLabel": "质疑收束",
+                "showFrom": 6
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 293
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "设问否定工业价值后，「唯一的作用」引出三条并列解释，单标题多句展开，选 METHOD_STACK。",
+          "content": [
+            {
+              "text": "你问它对汽车工业有什么推动？",
+              "startFrame": 0,
+              "durationFrames": 64
+            },
+            {
+              "text": "没有。",
+              "startFrame": 63,
+              "durationFrames": 24
+            },
+            {
+              "text": "它唯一的作用，",
+              "startFrame": 87,
+              "durationFrames": 33
+            },
+            {
+              "text": "是帮专利总数再 +1。",
+              "startFrame": 119,
+              "durationFrames": 55
+            },
+            {
+              "text": "是谈判桌上多一张牌。",
+              "startFrame": 174,
+              "durationFrames": 62
+            },
+            {
+              "text": "是宣传稿里多一个“创新”数字。",
+              "startFrame": 235,
+              "durationFrames": 79
+            }
+          ],
+          "order": 8,
+          "param": {
+            "title": "唯一的作用",
+            "imageSrc": "images/华为专利论/scene_4_8.png",
+            "notes": [
+              {
+                "text": "专利总数 +1",
+                "showFrom": 3
+              },
+              {
+                "text": "谈判多一张牌",
+                "showFrom": 4
+              },
+              {
+                "text": "宣传稿多一个数字",
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 315
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "结论段以单图居中承载反问句，聚焦“科技光环 vs 凑数专利”的反差，用 CENTER_FOCUS 稳定输出冲击。",
+          "content": [
+            {
+              "text": "一家天天讲 6G、AI、芯片的公司，",
+              "startFrame": 0,
+              "durationFrames": 90
+            },
+            {
+              "text": "武器库里混着这种货色。",
+              "startFrame": 89,
+              "durationFrames": 55
+            },
+            {
+              "text": "你还信“件件都是硬核科技”吗？",
+              "startFrame": 144,
+              "durationFrames": 66
+            }
+          ],
+          "order": 9,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_4_9.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 210
+        }
+      ],
+      "audioSrc": "/audio/华为专利论/scene_4/scene_4.mp3",
+      "totalDurationFrames": 2005
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "剖析·专利封锁",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "reasoning": "决策树：Step 5 — 存在“不是…而是…”强对立翻转（不是不想创新，是请不起律师团），选 COGNITIVE_SHIFT；自检：符合条件，且未误用 SPLIT_COMPARE。",
+          "template": "COGNITIVE_SHIFT",
+          "content": [
+            {
+              "text": "经济学早就证明：",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "电信、软件这种复杂行业，",
+              "startFrame": 37,
+              "durationFrames": 67
+            },
+            {
+              "text": "专利越密，",
+              "startFrame": 103,
+              "durationFrames": 29
+            },
+            {
+              "text": "小公司越不敢进场。",
+              "startFrame": 132,
+              "durationFrames": 53
+            },
+            {
+              "text": "不是他们不想创新，",
+              "startFrame": 184,
+              "durationFrames": 46
+            },
+            {
+              "text": "是他们请不起律师团。",
+              "startFrame": 230,
+              "durationFrames": 52
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "不想创新",
+            "butText": "请不起律师团",
+            "butSrc": "images/华为专利论/scene_5_2.png",
+            "notContentIndex": 5,
+            "butContentIndex": 6,
+            "anchors": []
+          },
+          "totalDurationFrames": 282
+        },
+        {
+          "narrativeType": "CASE",
+          "reasoning": "决策树：未命中前序步骤，平缓叙述，单图即可展示华为专利网络，选 CENTER_FOCUS；自检：未连续超过 2 个 CENTER_FOCUS，整体比例不超 60%。",
+          "template": "CENTER_FOCUS",
+          "content": [
+            {
+              "text": "华为在局部技术节点上，",
+              "startFrame": 0,
+              "durationFrames": 63
+            },
+            {
+              "text": "织几百上千张重叠的网。",
+              "startFrame": 62,
+              "durationFrames": 65
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_5_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 127
+        },
+        {
+          "narrativeType": "CASE",
+          "reasoning": "决策树：Step 8 默认 — 高潮发问+结论，无结构化语义，选 CENTER_FOCUS；自检：与上一 item 同为 CENTER_FOCUS，连续 2 个，仍在安全阈值内。",
+          "template": "CENTER_FOCUS",
+          "content": [
+            {
+              "text": "你想做兼容设备？",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "想改一点交互？",
+              "startFrame": 43,
+              "durationFrames": 38
+            },
+            {
+              "text": "一脚踩雷。",
+              "startFrame": 80,
+              "durationFrames": 29
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_5_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "踩雷",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 110
+        }
+      ],
+      "audioSrc": "/audio/华为专利论/scene_5/scene_5.mp3",
+      "totalDurationFrames": 520
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "反转·屠龙变恶龙",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "过渡句+背景引入，单一平缓叙事，无强烈结构，用 CENTER_FOCUS 保持中性过渡。短句与后续背景合并后满足长度要求。",
+          "content": [
+            {
+              "text": "最后说最让人心寒的反转。",
+              "startFrame": 0,
+              "durationFrames": 68
+            },
+            {
+              "text": "2013 年，华为还是受害者。",
+              "startFrame": 67,
+              "durationFrames": 70
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_6_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "受害者",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 138
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "节拍递进：IDC 施压 → 华为反击获胜 → 身份评价，递进鲜明，适合用 BEAT_SEQUENCE 分三段展现因果演变。",
+          "content": [
+            {
+              "text": "美国公司 IDC，",
+              "startFrame": 0,
+              "durationFrames": 41
+            },
+            {
+              "text": "拿标准专利漫天要价，",
+              "startFrame": 40,
+              "durationFrames": 59
+            },
+            {
+              "text": "还强行搭售。",
+              "startFrame": 99,
+              "durationFrames": 41
+            },
+            {
+              "text": "华为告它反垄断，",
+              "startFrame": 139,
+              "durationFrames": 41
+            },
+            {
+              "text": "告赢了。",
+              "startFrame": 179,
+              "durationFrames": 26
+            },
+            {
+              "text": "那时它是屠龙少年。",
+              "startFrame": 205,
+              "durationFrames": 63
+            }
+          ],
+          "order": 2,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/华为专利论/scene_6_2_img0.png",
+                "enterEffect": "breathe",
+                "tone": "alert",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/华为专利论/scene_6_2_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "calm",
+                "showFrom": 3
+              },
+              {
+                "imageSrc": "images/华为专利论/scene_6_2_img2.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert",
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 268
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "转折问句后的现状与行为延伸，单图中心聚焦呈现专利规模与向产业链收费的逻辑。",
+          "content": [
+            {
+              "text": "今天呢？",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "它手里攥着十六万件专利。",
+              "startFrame": 21,
+              "durationFrames": 61
+            },
+            {
+              "text": "也开始用专利池，",
+              "startFrame": 81,
+              "durationFrames": 39
+            },
+            {
+              "text": "向产业链收过路费。",
+              "startFrame": 120,
+              "durationFrames": 50
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_6_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "十六万件专利",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              },
+              {
+                "text": "专利池",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              },
+              {
+                "text": "过路费",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 170
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "三个并列的例子，每点需独立配图展示收过路费的范围，适合 PANEL_GRID 宫格呈现。",
+          "content": [
+            {
+              "text": "芯片厂要谈。",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "路由器厂要谈。",
+              "startFrame": 36,
+              "durationFrames": 35
+            },
+            {
+              "text": "整机厂也要谈。",
+              "startFrame": 70,
+              "durationFrames": 36
+            },
+            {
+              "text": "它曾经恨过的那套玩法，",
+              "startFrame": 105,
+              "durationFrames": 51
+            },
+            {
+              "text": "现在用得比谁都熟。",
+              "startFrame": 156,
+              "durationFrames": 45
+            }
+          ],
+          "order": 4,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为专利论/scene_6_4_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为专利论/scene_6_4_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为专利论/scene_6_4_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 202
+        }
+      ],
+      "audioSrc": "/audio/华为专利论/scene_6/scene_6.mp3",
+      "totalDurationFrames": 777
+    },
+    {
+      "sceneId": "scene_7",
+      "sceneName": "召唤·护创新还是护垄断",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对“专利制度的本意”这一概念进行解释，适合概念卡片模板。",
+          "content": [
+            {
+              "text": "专利制度的本意，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "是保护真正的发明，",
+              "startFrame": 36,
+              "durationFrames": 44
+            },
+            {
+              "text": "让后来者能站在巨人肩上。",
+              "startFrame": 79,
+              "durationFrames": 69
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为专利论/scene_7_1.png",
+            "conceptName": "专利制度",
+            "anchors": []
+          },
+          "totalDurationFrames": 149
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "并列四个讽刺比喻，每个‘把A当B’可独立配图，适合宫格展示。",
+          "content": [
+            {
+              "text": "可当巨头把 KPI当信仰，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "把分案当时光机，",
+              "startFrame": 58,
+              "durationFrames": 44
+            },
+            {
+              "text": "把马桶当政绩，",
+              "startFrame": 102,
+              "durationFrames": 44
+            },
+            {
+              "text": "把标准池当注水战场。",
+              "startFrame": 146,
+              "durationFrames": 62
+            },
+            {
+              "text": "受伤的是谁？",
+              "startFrame": 207,
+              "durationFrames": 35
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为专利论/scene_7_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为专利论/scene_7_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/华为专利论/scene_7_2_img2.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为专利论/scene_7_2_img3.png",
+                "showFrom": 3,
+                "enterEffect": "slideLeft"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 243
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "提问后列出三个受伤方，可分别用宫格配图。",
+          "content": [
+            {
+              "text": "是每个消费者为此多付的专利许可，",
+              "startFrame": 0,
+              "durationFrames": 79
+            },
+            {
+              "text": "是那些被吓退的小团队。",
+              "startFrame": 78,
+              "durationFrames": 55
+            },
+            {
+              "text": "是整个社会多出来的合规成本。",
+              "startFrame": 133,
+              "durationFrames": 62
+            }
+          ],
+          "order": 3,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为专利论/scene_7_3_img0.png",
+                "showFrom": 0,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/华为专利论/scene_7_3_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为专利论/scene_7_3_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 195
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "「可以尊重真贡献」与「必须拒绝专利数量即良心」构成明确对错对照，DOS_AND_DONTS 左右避坑分栏比认知翻转卡更贴「可以…但必须拒绝…」叙事。",
+          "content": [
+            {
+              "text": "我们可以尊重华为在通信工程上的真贡献。",
+              "startFrame": 0,
+              "durationFrames": 98
+            },
+            {
+              "text": "但必须拒绝把“专利数量”当成“技术良心”。",
+              "startFrame": 97,
+              "durationFrames": 107
+            }
+          ],
+          "order": 4,
+          "param": {
+            "left": {
+              "label": "❌ 专利数量即良心",
+              "src": "images/华为专利论/scene_7_4_left.png",
+              "showFrom": 1
+            },
+            "right": {
+              "label": "✅ 尊重真贡献",
+              "src": "images/华为专利论/scene_7_4_right.png",
+              "showFrom": 0
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 204
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片收尾反问，「不是…而是…」对比后落在核心提问，适合 TEXT_FOCUS 零图大字压屏定格金句。",
+          "content": [
+            {
+              "text": "剥掉泡沫之后，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "该问的不是谁专利多。",
+              "startFrame": 38,
+              "durationFrames": 60
+            },
+            {
+              "text": "而是—",
+              "startFrame": 98,
+              "durationFrames": 21
+            },
+            {
+              "text": "这些专利，",
+              "startFrame": 118,
+              "durationFrames": 33
+            },
+            {
+              "text": "到底是在护创新，",
+              "startFrame": 151,
+              "durationFrames": 41
+            },
+            {
+              "text": "还是在护垄断？",
+              "startFrame": 192,
+              "durationFrames": 37
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "该问的不是谁专利多",
+                "showFrom": 1,
+                "endFrom": 1
+              },
+              {
+                "text": "到底是在护创新，",
+                "showFrom": 4,
+                "endFrom": 5
+              },
+              {
+                "text": "还是在护垄断？",
+                "showFrom": 5,
+                "endFrom": 5
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "护创新",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "护垄断",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 229
+        }
+      ],
+      "audioSrc": "/audio/华为专利论/scene_7/scene_7.mp3",
+      "totalDurationFrames": 1020
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "华为专利论",
+    "subtitle": "专利不一定是科技，也可能是“地雷”",
+    "themeColor": "#FF6900",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

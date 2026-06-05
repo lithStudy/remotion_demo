@@ -1,0 +1,1773 @@
+{
+  "topic": "不加班，收入一定降？真相可能正相反",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：偷换收入概念",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "以常见说法作为开场引述，QUOTE_CITATION 用引用体裁呈现「不加班工资骤降」这一靶子观点，为后续拆解做铺垫。",
+          "content": [
+            {
+              "text": "「不加班，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "工资9000变6000！」",
+              "startFrame": 30,
+              "durationFrames": 57
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteDisplayText": "不加班，工资9000变6000！",
+            "quoteSource": "常见说法",
+            "anchors": []
+          },
+          "totalDurationFrames": 87
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平铺陈述现象及初步主观评价，没有强烈对比或递进结构，用CENTER_FOCUS保持自然叙述。",
+          "content": [
+            {
+              "text": "很多人把这句话，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "当成劳动法不能严格落实的理由。",
+              "startFrame": 37,
+              "durationFrames": 74
+            },
+            {
+              "text": "这话听着像实话。",
+              "startFrame": 110,
+              "durationFrames": 51
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/劳动法落实/scene_1_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 161
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "富士康流水线工人与字节程序员两类典型职业并置对照，SPLIT_COMPARE 左右分屏突出不同行业却共同依赖加班费。",
+          "content": [
+            {
+              "text": "毕竟不管是富士康的流水线工人，",
+              "startFrame": 0,
+              "durationFrames": 74
+            },
+            {
+              "text": "还是字节的程序员，",
+              "startFrame": 73,
+              "durationFrames": 47
+            },
+            {
+              "text": "很多人的薪资构成里，",
+              "startFrame": 120,
+              "durationFrames": 52
+            },
+            {
+              "text": "加班费确实是很重要的一部分。",
+              "startFrame": 171,
+              "durationFrames": 59
+            }
+          ],
+          "order": 3,
+          "param": {
+            "leftSrc": "images/劳动法落实/scene_1_3_left.png",
+            "rightSrc": "images/劳动法落实/scene_1_3_right.png",
+            "leftLabel": "流水线工人",
+            "rightLabel": "程序员",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 230
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "概念偷换的因果传导：点出误区→加班费减少→偷换为收入必减，CAUSE_CHAIN 逐环展示偷换机制。",
+          "content": [
+            {
+              "text": "但这里有一个滑坡谬误：",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "它把“加班少了”，",
+              "startFrame": 51,
+              "durationFrames": 36
+            },
+            {
+              "text": "滑坡成了“收入一定少了”。",
+              "startFrame": 87,
+              "durationFrames": 67
+            }
+          ],
+          "order": 4,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "加班少",
+                "imageSrc": "images/劳动法落实/scene_1_4_img0.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "收入减少",
+                "imageSrc": "images/劳动法落实/scene_1_4_img1.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 154
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "设问引入新分析维度，没有需要强调的关键词或特殊结构，用CENTER_FOCUS自然过渡。",
+          "content": [
+            {
+              "text": "打工人的工时确实变少了，",
+              "startFrame": 0,
+              "durationFrames": 69
+            },
+            {
+              "text": "但社会上的活，",
+              "startFrame": 68,
+              "durationFrames": 38
+            },
+            {
+              "text": "总量变了吗？",
+              "startFrame": 105,
+              "durationFrames": 35
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/劳动法落实/scene_1_5.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 141
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PEER_INDUCT",
+          "reasoning": "订单、项目、客户三条并列前提铺陈，末句「活没少」归纳收束社会工作量未减，符合并列前提→归纳的 PEER_INDUCT。",
+          "content": [
+            {
+              "text": "订单还在。",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "项目还在。",
+              "startFrame": 31,
+              "durationFrames": 30
+            },
+            {
+              "text": "客户还在。",
+              "startFrame": 61,
+              "durationFrames": 29
+            },
+            {
+              "text": "活没少。",
+              "startFrame": 89,
+              "durationFrames": 35
+            },
+            {
+              "text": "只是不能再让三个人，",
+              "startFrame": 124,
+              "durationFrames": 46
+            },
+            {
+              "text": "干五个人的时长。",
+              "startFrame": 170,
+              "durationFrames": 45
+            }
+          ],
+          "order": 6,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "images/劳动法落实/scene_1_6_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "imageSrc": "images/劳动法落实/scene_1_6_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "imageSrc": "images/劳动法落实/scene_1_6_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "images/劳动法落实/scene_1_6.png",
+              "showFrom": 3,
+              "enterEffect": "zoomIn",
+              "tone": "alert"
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 215
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "问句引出因果推论：工作量不变→必须分给更多人，适合 CAUSE_CHAIN 展示机制传导。",
+          "content": [
+            {
+              "text": "那会发生什么？",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "同样多的活，",
+              "startFrame": 38,
+              "durationFrames": 30
+            },
+            {
+              "text": "必须分给更多人干。",
+              "startFrame": 67,
+              "durationFrames": 40
+            }
+          ],
+          "order": 8,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "工作量不变",
+                "imageSrc": "images/劳动法落实/scene_1_8_img0.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "分给更多人",
+                "imageSrc": "images/劳动法落实/scene_1_8_img1.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 108
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "因果传导链：招人→就业率上升→工资总额不降，适合箭头/流程图展示机制传导。",
+          "content": [
+            {
+              "text": "公司想交付，",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "就得多招人。",
+              "startFrame": 33,
+              "durationFrames": 40
+            },
+            {
+              "text": "就业率往上走。",
+              "startFrame": 73,
+              "durationFrames": 42
+            },
+            {
+              "text": "社会的工资总额就不会往下走，",
+              "startFrame": 114,
+              "durationFrames": 80
+            },
+            {
+              "text": "贫富差距也能进一步缩小。",
+              "startFrame": 194,
+              "durationFrames": 72
+            }
+          ],
+          "order": 9,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "需招人",
+                "imageSrc": "images/劳动法落实/scene_1_9_img0.png",
+                "showFrom": 1
+              },
+              {
+                "label": "就业率上升",
+                "imageSrc": "images/劳动法落实/scene_1_9_img1.png",
+                "showFrom": 2
+              },
+              {
+                "label": "工资总额不降",
+                "imageSrc": "images/劳动法落实/scene_1_9_img2.png",
+                "showFrom": 3
+              },
+              {
+                "label": "贫富差距缩小",
+                "imageSrc": "images/劳动法落实/scene_1_9_img3.png",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 267
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "结论句加补充解释，整体平铺叙述，未形成新的对比或节拍递进。",
+          "content": [
+            {
+              "text": "真正被压缩的，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "是老板的利润。",
+              "startFrame": 37,
+              "durationFrames": 36
+            },
+            {
+              "text": "他们需要多雇人，",
+              "startFrame": 73,
+              "durationFrames": 38
+            },
+            {
+              "text": "多交社保。",
+              "startFrame": 110,
+              "durationFrames": 32
+            }
+          ],
+          "order": 10,
+          "param": {
+            "imageSrc": "images/劳动法落实/scene_1_10.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "利润",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 142
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "收束对比‘不是…而是…’，纠正认知，适合用COGNITIVE_SHIFT强化立场反转。",
+          "content": [
+            {
+              "text": "所以反对最凶的，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "从来不是打工人，",
+              "startFrame": 37,
+              "durationFrames": 36
+            },
+            {
+              "text": "是舍不得分利润的人。",
+              "startFrame": 73,
+              "durationFrames": 47
+            }
+          ],
+          "order": 11,
+          "param": {
+            "notText": "打工人",
+            "butText": "舍不得分利润的人",
+            "butSrc": "images/劳动法落实/scene_1_11.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 120
+        }
+      ],
+      "audioSrc": "/audio/劳动法落实/scene_1/scene_1.mp3",
+      "totalDurationFrames": 1622
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "反转：劣质企业该倒闭",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引述他人质疑「公司要倒闭、利润微薄」，属于引用/证言体裁，用 QUOTE_CITATION 呈现；首句为引语引导，正文从 showFrom 1 起打字展示。",
+          "content": [
+            {
+              "text": "有人马上说。",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "那很多公司要倒闭。",
+              "startFrame": 31,
+              "durationFrames": 54
+            },
+            {
+              "text": "他们的利润本来就很微薄。",
+              "startFrame": 85,
+              "durationFrames": 59
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteDisplayText": "那很多公司要倒闭。他们的利润本来就很微薄。",
+            "quoteSource": "质疑者",
+            "showFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 144
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "假设→结论的强逻辑金句，短促有力无需配图，用 TEXT_FOCUS 纯大字压屏强化冲击。",
+          "content": [
+            {
+              "text": "我说得直接一点。",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "如果一家公司，",
+              "startFrame": 37,
+              "durationFrames": 33
+            },
+            {
+              "text": "只能靠压榨员工来活下去，",
+              "startFrame": 69,
+              "durationFrames": 58
+            },
+            {
+              "text": "那就赶紧让他倒闭好了。",
+              "startFrame": 127,
+              "durationFrames": 50
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "如果一家公司，",
+                "showFrom": 1
+              },
+              {
+                "text": "只能靠压榨员工来活下去，",
+                "showFrom": 2
+              },
+              {
+                "text": "那就赶紧让他倒闭好了。",
+                "showFrom": 3
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "压榨员工",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "倒闭",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 177
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "公司倒闭→腾出资源→更优企业接手的因果传导链，适合用CAUSE_CHAIN逐环展示。",
+          "content": [
+            {
+              "text": "它腾出来的订单。",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "腾出来的客户。",
+              "startFrame": 35,
+              "durationFrames": 33
+            },
+            {
+              "text": "会有效率更高、",
+              "startFrame": 68,
+              "durationFrames": 36
+            },
+            {
+              "text": "商业模式更合理的企业接手。",
+              "startFrame": 104,
+              "durationFrames": 63
+            }
+          ],
+          "order": 3,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "腾出资源",
+                "imageSrc": "images/劳动法落实/scene_2_3_img0.png",
+                "showFrom": 0,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "label": "高效接手",
+                "imageSrc": "images/劳动法落实/scene_2_3_img1.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "label": "市场优化",
+                "imageSrc": "images/劳动法落实/scene_2_3_img2.png",
+                "showFrom": 3,
+                "enterEffect": "breathe"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 167
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "否定错误认知、树立正确认知，形成强对比认知转变，用COGNITIVE_SHIFT实现。",
+          "content": [
+            {
+              "text": "市场不需要人矿。",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "市场需要真本事。",
+              "startFrame": 42,
+              "durationFrames": 42
+            }
+          ],
+          "order": 4,
+          "param": {
+            "notText": "需要人矿",
+            "butText": "需要真本事",
+            "butSrc": "images/劳动法落实/scene_2_4.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 85
+        }
+      ],
+      "audioSrc": "/audio/劳动法落实/scene_2/scene_2.mp3",
+      "totalDurationFrames": 574
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "论证：消费时间被抽走",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "铺垫引入内需话题，纠正「产能过剩」误区的前序叙述，适合 CONCEPT_CARD 闪卡式概念锚定。",
+          "content": [
+            {
+              "text": "接下来我们看内需，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "有人说我们产能过剩了，",
+              "startFrame": 42,
+              "durationFrames": 56
+            },
+            {
+              "text": "很多东西生产出来烂在仓库里，",
+              "startFrame": 98,
+              "durationFrames": 68
+            },
+            {
+              "text": "但我告诉你，",
+              "startFrame": 165,
+              "durationFrames": 26
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/劳动法落实/scene_3_1.png",
+            "conceptName": "内需不足",
+            "anchors": []
+          },
+          "totalDurationFrames": 191
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "否定「产能过剩」、确立「内需不足」的强结论金句，短促有力无需配图 → TEXT_FOCUS 纯大字压屏。",
+          "content": [
+            {
+              "text": "从来没有什么产能过剩，",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "只有内需不足。",
+              "startFrame": 52,
+              "durationFrames": 43
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "从来没有什么产能过剩，",
+                "showFrom": 0
+              },
+              {
+                "text": "只有内需不足。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "内需不足",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 95
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "人的双重角色「生产者」与「消费者」并置对照，SPLIT_COMPARE 左右分屏突出同一人的两种身份。",
+          "content": [
+            {
+              "text": "人既是生产者，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "同时也是消费者。",
+              "startFrame": 36,
+              "durationFrames": 44
+            }
+          ],
+          "order": 3,
+          "param": {
+            "leftSrc": "images/劳动法落实/scene_3_3_left.png",
+            "rightSrc": "images/劳动法落实/scene_3_3_right.png",
+            "leftLabel": "生产者",
+            "rightLabel": "消费者",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 80
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "明确因果传导：生产时间拉满 → 消费时间榨干，适合 CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "你把生产时间拉满，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "消费时间就被榨干。",
+              "startFrame": 39,
+              "durationFrames": 45
+            }
+          ],
+          "order": 4,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "生产时间拉满",
+                "imageSrc": "images/劳动法落实/scene_3_4_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "消费时间被榨干",
+                "imageSrc": "images/劳动法落实/scene_3_4_img1.png",
+                "showFrom": 1
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 85
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "三个连续的生活画面（上班→通勤→躺平）构成节拍递进，适合 BEAT_SEQUENCE。",
+          "content": [
+            {
+              "text": "一个人每天上班十二小时，",
+              "startFrame": 0,
+              "durationFrames": 56
+            },
+            {
+              "text": "通勤一两个小时，",
+              "startFrame": 55,
+              "durationFrames": 38
+            },
+            {
+              "text": "回到家只想躺着。",
+              "startFrame": 92,
+              "durationFrames": 38
+            }
+          ],
+          "order": 5,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/劳动法落实/scene_3_5_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "images/劳动法落实/scene_3_5_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "images/劳动法落实/scene_3_5_img2.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 131
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "四个并列的消费反问，形成宫格展示，适合 PANEL_GRID。",
+          "content": [
+            {
+              "text": "电影谁去看？",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "旅游谁去玩？",
+              "startFrame": 29,
+              "durationFrames": 35
+            },
+            {
+              "text": "餐厅谁去吃？",
+              "startFrame": 64,
+              "durationFrames": 32
+            },
+            {
+              "text": "商场谁去逛？",
+              "startFrame": 96,
+              "durationFrames": 36
+            }
+          ],
+          "order": 6,
+          "param": {
+            "panels": [
+              {
+                "src": "images/劳动法落实/scene_3_6_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/劳动法落实/scene_3_6_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/劳动法落实/scene_3_6_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/劳动法落实/scene_3_6_img3.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 132
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "STAT_COMPARE",
+          "reasoning": "展示中国 2.27 小时 vs 美英德 5 小时的两项数据对比，适合 STAT_COMPARE。",
+          "content": [
+            {
+              "text": "社科院2017年，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "有过一组调查。",
+              "startFrame": 43,
+              "durationFrames": 41
+            },
+            {
+              "text": "除掉工作和睡觉，",
+              "startFrame": 84,
+              "durationFrames": 42
+            },
+            {
+              "text": "中国人每天休闲，",
+              "startFrame": 125,
+              "durationFrames": 41
+            },
+            {
+              "text": "平均只有2.27小时。",
+              "startFrame": 165,
+              "durationFrames": 67
+            },
+            {
+              "text": "美国、德国、英国，",
+              "startFrame": 232,
+              "durationFrames": 67
+            },
+            {
+              "text": "大约是5小时。",
+              "startFrame": 298,
+              "durationFrames": 40
+            },
+            {
+              "text": "深圳更惨。",
+              "startFrame": 338,
+              "durationFrames": 30
+            },
+            {
+              "text": "不到2小时。",
+              "startFrame": 367,
+              "durationFrames": 35
+            }
+          ],
+          "order": 7,
+          "param": {
+            "bars": [
+              {
+                "label": "中国",
+                "value": 2.27,
+                "showFrom": 4
+              },
+              {
+                "label": "美/德/英国",
+                "value": 5,
+                "showFrom": 5
+              },
+              {
+                "label": "深圳",
+                "value": 1.9,
+                "showFrom": 7
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 403
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "深圳极端数据→国家目标→996 系统性破坏，三段递进揭示矛盾，适合 BEAT_SEQUENCE。",
+          "content": [
+            {
+              "text": "国家要扩大内需。",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "996却在系统性抽走一个社会的消费时间。",
+              "startFrame": 45,
+              "durationFrames": 96
+            }
+          ],
+          "order": 8,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/劳动法落实/scene_3_8_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/劳动法落实/scene_3_8_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 1
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 142
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促有力、无需配图的金句总结，适合 TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "消费没了时间，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "内需就只剩口号。",
+              "startFrame": 38,
+              "durationFrames": 40
+            }
+          ],
+          "order": 9,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "消费没了时间，",
+                "showFrom": 0
+              },
+              {
+                "text": "内需就只剩口号。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 78
+        }
+      ],
+      "audioSrc": "/audio/劳动法落实/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1336
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "论证：没时间生娃",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "标题式核心（人口问题也一样）+两句误解与真相的展开，符合 METHOD_STACK，主次分明",
+          "content": [
+            {
+              "text": "人口问题也一样。",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "不是年轻人不想生娃。",
+              "startFrame": 50,
+              "durationFrames": 54
+            },
+            {
+              "text": "是他们真的没时间。",
+              "startFrame": 103,
+              "durationFrames": 49
+            }
+          ],
+          "order": 1,
+          "param": {
+            "title": "人口问题也一样",
+            "imageSrc": "images/劳动法落实/scene_4_1.png",
+            "notes": [
+              {
+                "text": "不是不想生娃",
+                "showFrom": 1
+              },
+              {
+                "text": "而是真的没时间",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 152
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "单一场景白描，无对比/步骤/清单结构 → 选 CENTER_FOCUS 用单图承载口播",
+          "content": [
+            {
+              "text": "一个人下班之后，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "连洗澡、",
+              "startFrame": 38,
+              "durationFrames": 28
+            },
+            {
+              "text": "吃饭、",
+              "startFrame": 65,
+              "durationFrames": 17
+            },
+            {
+              "text": "睡觉，",
+              "startFrame": 81,
+              "durationFrames": 22
+            },
+            {
+              "text": "都要像赶任务一样完成。",
+              "startFrame": 103,
+              "durationFrames": 57
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/劳动法落实/scene_4_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "赶任务",
+                "showFrom": 4,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "woosh"
+              }
+            ]
+          },
+          "totalDurationFrames": 161
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "两个连续反问形成递进质问节奏 → 选 BEAT_SEQUENCE 分两拍展示",
+          "content": [
+            {
+              "text": "你让他怎么经营亲密关系？",
+              "startFrame": 0,
+              "durationFrames": 56
+            },
+            {
+              "text": "怎么照顾孩子？",
+              "startFrame": 55,
+              "durationFrames": 38
+            }
+          ],
+          "order": 3,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/劳动法落实/scene_4_3_img0.png",
+                "enterEffect": "breathe"
+              },
+              {
+                "imageSrc": "images/劳动法落实/scene_4_3_img1.png",
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 93
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "独立短促金句，全片级强结论 → 选 TEXT_FOCUS 纯文字冲击，无需配图",
+          "content": [
+            {
+              "text": "生育不是一句口号。",
+              "startFrame": 0,
+              "durationFrames": 50
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "生育不是一句口号。",
+                "showFrom": 0
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 50
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "PANEL_GRID",
+          "reasoning": "三个并列需求点，每点独立可视图标 → 选 PANEL_GRID 三格宫展示",
+          "content": [
+            {
+              "text": "它需要时间。",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "需要情绪。",
+              "startFrame": 33,
+              "durationFrames": 30
+            },
+            {
+              "text": "需要稳定预期。",
+              "startFrame": 63,
+              "durationFrames": 35
+            }
+          ],
+          "order": 5,
+          "param": {
+            "panels": [
+              {
+                "src": "images/劳动法落实/scene_4_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/劳动法落实/scene_4_5_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/劳动法落实/scene_4_5_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 98
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "由前提推导至结论的完整陈述，无显性因果链关键词 → 选 CENTER_FOCUS 单图聚焦人物无力感",
+          "content": [
+            {
+              "text": "一个二十四小时待岗的人，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "很难相信自己有能力，",
+              "startFrame": 50,
+              "durationFrames": 47
+            },
+            {
+              "text": "再承担一个家庭。",
+              "startFrame": 97,
+              "durationFrames": 38
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/劳动法落实/scene_4_6.png",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "待岗",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 135
+        }
+      ],
+      "audioSrc": "/audio/劳动法落实/scene_4/scene_4.mp3",
+      "totalDurationFrames": 689
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "论证：创新源于闲暇",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "标题式核心（还有创新也一样）+多句论证展开，符合 METHOD_STACK，主次分明",
+          "content": [
+            {
+              "text": "还有创新也一样。",
+              "startFrame": 0,
+              "durationFrames": 48
+            },
+            {
+              "text": "世界上绝大多数历史性的创新，",
+              "startFrame": 48,
+              "durationFrames": 69
+            },
+            {
+              "text": "都不是在工位上憋出来的。",
+              "startFrame": 116,
+              "durationFrames": 65
+            },
+            {
+              "text": "很多时候，",
+              "startFrame": 181,
+              "durationFrames": 27
+            },
+            {
+              "text": "是从闲暇里长出来的。",
+              "startFrame": 207,
+              "durationFrames": 70
+            }
+          ],
+          "order": 1,
+          "param": {
+            "title": "创新",
+            "imageSrc": "images/劳动法落实/scene_5_1.png",
+            "notes": [
+              {
+                "text": "历史性创新不在工位",
+                "showFrom": 2
+              },
+              {
+                "text": "创新从闲暇里长出来",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 278
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "设问引入案例，单一问题句，无对比或列表，用 CENTER_FOCUS 聚焦。",
+          "content": [
+            {
+              "text": "英伟达，",
+              "startFrame": 0,
+              "durationFrames": 21
+            },
+            {
+              "text": "最早干什么？",
+              "startFrame": 20,
+              "durationFrames": 33
+            },
+            {
+              "text": "给被中国家长嫌弃的臭打游戏的，",
+              "startFrame": 53,
+              "durationFrames": 81
+            },
+            {
+              "text": "做更好的显卡。",
+              "startFrame": 134,
+              "durationFrames": 41
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/劳动法落实/scene_5_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 175
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "转折引出英伟达成为 AI 时代卡脖子巨头，单图居中聚焦结论，锚点强调「卡脖子」。",
+          "content": [
+            {
+              "text": "可谁能想到，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "到了人工智能时代，",
+              "startFrame": 34,
+              "durationFrames": 46
+            },
+            {
+              "text": "显卡成了卡脖子的巨头。",
+              "startFrame": 80,
+              "durationFrames": 60
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/劳动法落实/scene_5_5.png",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "卡脖子",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 141
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "对称引入第二个案例，设问句，用 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "莱特兄弟呢？",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "两个修自行车的。",
+              "startFrame": 31,
+              "durationFrames": 41
+            },
+            {
+              "text": "靠业余时间，鼓捣飞机。",
+              "startFrame": 72,
+              "durationFrames": 59
+            },
+            {
+              "text": "然后他们搞定了人类的飞天梦想。",
+              "startFrame": 130,
+              "durationFrames": 80
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/劳动法落实/scene_5_6.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 211
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "「不只…更…」强结论金句，短促有力无需配图 → TEXT_FOCUS 纯大字压屏强调「闲暇」。",
+          "content": [
+            {
+              "text": "创新不只需要勤奋。",
+              "startFrame": 0,
+              "durationFrames": 62
+            },
+            {
+              "text": "更需要闲暇。",
+              "startFrame": 61,
+              "durationFrames": 39
+            }
+          ],
+          "order": 10,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "创新不只需要勤奋。",
+                "showFrom": 0
+              },
+              {
+                "text": "更需要闲暇。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "闲暇",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 100
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "PANEL_GRID",
+          "reasoning": "三个并列价值点，结构清晰且相对独立，适合 PANEL_GRID 宫格展示。",
+          "content": [
+            {
+              "text": "有闲暇才能发呆。",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "有闲暇才能试错。",
+              "startFrame": 43,
+              "durationFrames": 46
+            },
+            {
+              "text": "有闲暇，",
+              "startFrame": 89,
+              "durationFrames": 29
+            },
+            {
+              "text": "才会把脑子里的幻想，",
+              "startFrame": 117,
+              "durationFrames": 60
+            },
+            {
+              "text": "转变成改变人类的发明和创造。",
+              "startFrame": 177,
+              "durationFrames": 80
+            }
+          ],
+          "order": 11,
+          "param": {
+            "panels": [
+              {
+                "src": "images/劳动法落实/scene_5_11_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/劳动法落实/scene_5_11_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/劳动法落实/scene_5_11_img2.png",
+                "showFrom": 3,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 242
+        }
+      ],
+      "audioSrc": "/audio/劳动法落实/scene_5/scene_5.mp3",
+      "totalDurationFrames": 1146
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "号召：八小时是底线",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "开篇强调错误做法，平缓叙述，无需特殊结构，用CENTER_FOCUS聚焦引出话题。",
+          "content": [
+            {
+              "text": "最后，",
+              "startFrame": 0,
+              "durationFrames": 15
+            },
+            {
+              "text": "我必须强调，",
+              "startFrame": 14,
+              "durationFrames": 35
+            },
+            {
+              "text": "所谓我们必须靠压榨人力，",
+              "startFrame": 49,
+              "durationFrames": 68
+            },
+            {
+              "text": "完成原始积累。",
+              "startFrame": 116,
+              "durationFrames": 47
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/劳动法落实/scene_6_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 164
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "两句并列批判金句，成语冲击力强，无需配图 → TEXT_FOCUS 纯大字压屏。",
+          "content": [
+            {
+              "text": "理论上是刻舟求剑。",
+              "startFrame": 0,
+              "durationFrames": 48
+            },
+            {
+              "text": "实践上是饮鸩止渴。",
+              "startFrame": 48,
+              "durationFrames": 57
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "理论上是刻舟求剑。",
+                "showFrom": 0
+              },
+              {
+                "text": "实践上是饮鸩止渴。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "刻舟求剑",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "饮鸩止渴",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 105
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "四个并列的错误表现，适合PANEL_GRID四宫格逐一陈列，直观展现劣质模式的多个维度。",
+          "content": [
+            {
+              "text": "只会堆人，堆时间。",
+              "startFrame": 0,
+              "durationFrames": 60
+            },
+            {
+              "text": "技术创新不动。",
+              "startFrame": 60,
+              "durationFrames": 36
+            },
+            {
+              "text": "管理升级不动。",
+              "startFrame": 96,
+              "durationFrames": 35
+            },
+            {
+              "text": "商业模式不动。",
+              "startFrame": 130,
+              "durationFrames": 42
+            },
+            {
+              "text": "这永远不可能完成产业升级。",
+              "startFrame": 172,
+              "durationFrames": 71
+            }
+          ],
+          "order": 3,
+          "param": {
+            "panels": [
+              {
+                "src": "images/劳动法落实/scene_6_3_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/劳动法落实/scene_6_3_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/劳动法落实/scene_6_3_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/劳动法落实/scene_6_3_img3.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "产业升级",
+                "showFrom": 4,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 244
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "标题式核心观点（落实八小时不降薪）+两句解释展开，符合METHOD_STACK，主次分明。",
+          "content": [
+            {
+              "text": "落实八小时，",
+              "startFrame": 0,
+              "durationFrames": 29
+            },
+            {
+              "text": "不会制造全民降薪。",
+              "startFrame": 28,
+              "durationFrames": 52
+            },
+            {
+              "text": "它会把该干的活，分给该有的人。",
+              "startFrame": 79,
+              "durationFrames": 69
+            },
+            {
+              "text": "它会逼出更多岗位。逼走劣质模式。",
+              "startFrame": 147,
+              "durationFrames": 94
+            }
+          ],
+          "order": 5,
+          "param": {
+            "title": "八小时不降薪",
+            "imageSrc": "images/劳动法落实/scene_6_5.png",
+            "notes": [
+              {
+                "text": "总工时不变，分配更合理",
+                "showFrom": 1
+              },
+              {
+                "text": "打破加班文化，创造就业公平",
+                "showFrom": 3
+              },
+              {
+                "text": "倒逼企业雇佣，淘汰低效模式",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 242
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "八小时与双休两句并列纠正「摆设/福利」的错误认知，左右对照；第三句「底线」口播收束。",
+          "content": [
+            {
+              "text": "八小时不应该是摆设。",
+              "startFrame": 0,
+              "durationFrames": 57
+            },
+            {
+              "text": "双休也不应该是福利。",
+              "startFrame": 56,
+              "durationFrames": 51
+            },
+            {
+              "text": "他们是底线。",
+              "startFrame": 106,
+              "durationFrames": 33
+            }
+          ],
+          "order": 6,
+          "param": {
+            "leftSrc": "images/劳动法落实/scene_6_6_left.png",
+            "rightSrc": "images/劳动法落实/scene_6_6_right.png",
+            "leftLabel": "八小时",
+            "rightLabel": "双休",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": [
+              {
+                "text": "底线",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 140
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "四句并列「留时间」收束金句，节奏整齐，无需配图 → TEXT_FOCUS 纯大字压屏。",
+          "content": [
+            {
+              "text": "我们需要底线给我们留时间，",
+              "startFrame": 0,
+              "durationFrames": 57
+            },
+            {
+              "text": "留时间给内需。",
+              "startFrame": 56,
+              "durationFrames": 39
+            },
+            {
+              "text": "留时间给家庭。",
+              "startFrame": 94,
+              "durationFrames": 35
+            },
+            {
+              "text": "留时间给创新。",
+              "startFrame": 129,
+              "durationFrames": 36
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "我们需要底线给我们留时间，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "留时间给内需",
+                "showFrom": 1
+              },
+              {
+                "text": "留时间给家庭",
+                "showFrom": 2
+              },
+              {
+                "text": "留时间给创新",
+                "showFrom": 3
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "内需",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "家庭",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "创新",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 166
+        }
+      ],
+      "audioSrc": "/audio/劳动法落实/scene_6/scene_6.mp3",
+      "totalDurationFrames": 1060
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "劳动法落实论",
+    "subtitle": "落实劳动法，产业才能升级",
+    "themeColor": "#059669",
+    "badge": "深度解读 · 理性思考",
+    "seriesLabel": "社会热点深读",
+    "seriesLabelEn": "SOCIAL DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

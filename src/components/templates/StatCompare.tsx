@@ -40,11 +40,48 @@ const BAR_FILL_DELAY_FRAMES = 18;
 /** 柱高与数字滚至目标 */
 const BAR_FILL_SPRING_FRAMES = 42;
 
+const MAX_DECIMAL_PLACES = 8;
+
+/** 未传 decimalPlaces 时，由终值推断小数位数（整数为 0） */
+function inferDecimalPlaces(value: number): number {
+	if (!Number.isFinite(value)) {
+		return 0;
+	}
+	const r = Math.round(value);
+	if (Math.abs(value - r) < 1e-9) {
+		return 0;
+	}
+	const s = String(value);
+	if (/[eE]/.test(s)) {
+		return inferDecimalPlaces(Number(value.toFixed(MAX_DECIMAL_PLACES)));
+	}
+	const dot = s.indexOf(".");
+	if (dot === -1) {
+		return 0;
+	}
+	return Math.min(MAX_DECIMAL_PLACES, Math.max(0, s.length - dot - 1));
+}
+
+function formatStatNumber(n: number, decimalPlaces: number): string {
+	if (!Number.isFinite(n)) {
+		return "0";
+	}
+	const rounded = Number(n.toFixed(Math.max(0, decimalPlaces)));
+	if (decimalPlaces <= 0) {
+		return String(Math.round(rounded));
+	}
+	return rounded.toLocaleString("zh-CN", {
+		useGrouping: false,
+		minimumFractionDigits: decimalPlaces,
+		maximumFractionDigits: decimalPlaces,
+	});
+}
+
 export const templateMeta = {
 	"name": "STAT_COMPARE",
 	"componentExport": "BWStatCompare",
 	"description":
-		"适用：2～6 项 KPI 并列对比；条形高度反映相对大小；bars 每条必填 showFrom（content 下标），从对应口播句的 startFrame 起显示该柱，已出现的柱体作为一组始终画布水平居中。\n差异：左右场景图对比用 SPLIT_COMPARE；单数字强调用 KPI_HERO。\n参数：bars（2～6 条：label、value、showFrom）；可选 anchors（与 bars.showFrom 同为 content 下标）；兼容旧版 leftValue/rightValue/leftLabel/rightLabel（两柱同帧入场）。",
+		"适用：2～6 项 KPI 并列对比；条形高度反映相对大小；bars 每条必填 showFrom（content 下标），从对应口播句的 startFrame 起显示该柱，已出现的柱体作为一组始终画布水平居中。\n差异：左右场景图对比用 SPLIT_COMPARE；单数字强调用 KPI_HERO。\n参数：bars（2～6 条：label、value、showFrom；value 可为整数或小数，可选 decimalPlaces）；可选 anchors（与 bars.showFrom 同为 content 下标）；兼容旧版 leftValue/rightValue/leftLabel/rightLabel（两柱同帧入场）。",
 	"psychology": "对比效应",
 	"image_count": "0",
 	"param_schema": {
@@ -55,13 +92,17 @@ export const templateMeta = {
 				"minItems": 2,
 				"maxItems": 6,
 				"description":
-					"多条柱状对比；每项须含 label、value（非负整数）、showFrom（content 下标），从该条 startFrame 起显示本柱",
+					"多条柱状对比；每项须含 label、value（非负数，整数或小数）、showFrom（content 下标），从该条 startFrame 起显示本柱",
 				"items": {
 					"type": "object",
 					"required": ["label", "value", "showFrom"],
 					"properties": {
 						"label": { "type": "string", "description": "短标签" },
-						"value": { "type": "integer", "description": "数值（非负整数）" },
+						"value": { "type": "number", "description": "数值（非负，整数或小数）" },
+						"decimalPlaces": {
+							"type": "integer",
+							"description": "小数位数；缺省按 value 自动推断",
+						},
 						"showFrom": {
 							"type": "integer",
 							"format": "content_index",
@@ -71,8 +112,8 @@ export const templateMeta = {
 					},
 				},
 			},
-			"leftValue": { "type": "integer", "description": "左侧数值（非负整数），旧版两柱模式" },
-			"rightValue": { "type": "integer", "description": "右侧数值（非负整数），旧版两柱模式" },
+			"leftValue": { "type": "number", "description": "左侧数值（非负），旧版两柱模式" },
+			"rightValue": { "type": "number", "description": "右侧数值（非负），旧版两柱模式" },
 			"leftLabel": { "type": "string", "description": "左侧标签" },
 			"rightLabel": { "type": "string", "description": "右侧标签" },
 			"anchors": {
@@ -118,6 +159,8 @@ export const templateMeta = {
 export interface StatCompareBarItem {
 	label: string;
 	value: number;
+	/** 小数位数；缺省按 value 自动推断 */
+	decimalPlaces?: number;
 	/** content 下标（0-based），该柱从对应条的 startFrame 起显示 */
 	showFrom: number;
 }
@@ -137,6 +180,7 @@ const fontStack =
 type ResolvedBar = {
 	label: string;
 	value: number;
+	decimalPlaces: number;
 	color: string;
 	/** bars 模式：content 下标；旧版双柱不用此字段 */
 	showFrom?: number;
@@ -144,29 +188,44 @@ type ResolvedBar = {
 	legacySimultaneous?: boolean;
 };
 
+function resolveDecimalPlaces(value: number, explicit?: number): number {
+	if (explicit !== undefined && Number.isInteger(explicit)) {
+		return Math.min(MAX_DECIMAL_PLACES, Math.max(0, explicit));
+	}
+	return inferDecimalPlaces(value);
+}
+
 function buildResolvedBars(props: BWStatCompareProps): ResolvedBar[] {
 	const { bars, leftValue = 0, rightValue = 0, leftLabel = "", rightLabel = "" } = props;
 	if (bars && Array.isArray(bars) && bars.length >= 2) {
-		return bars.slice(0, 6).map((b, i) => ({
-			label: typeof b.label === "string" ? b.label : "",
-			value: Math.max(0, Math.round(Number(b.value) || 0)),
-			showFrom:
-				typeof b.showFrom === "number" && Number.isInteger(b.showFrom)
-					? b.showFrom
-					: 0,
-			color: BAR_COLORS[i % BAR_COLORS.length]!,
-		}));
+		return bars.slice(0, 6).map((b, i) => {
+			const value = Math.max(0, Number(b.value) || 0);
+			return {
+				label: typeof b.label === "string" ? b.label : "",
+				value,
+				decimalPlaces: resolveDecimalPlaces(value, b.decimalPlaces),
+				showFrom:
+					typeof b.showFrom === "number" && Number.isInteger(b.showFrom)
+						? b.showFrom
+						: 0,
+				color: BAR_COLORS[i % BAR_COLORS.length]!,
+			};
+		});
 	}
+	const left = Math.max(0, Number(leftValue) || 0);
+	const right = Math.max(0, Number(rightValue) || 0);
 	return [
 		{
 			label: leftLabel,
-			value: Math.max(0, Math.round(Number(leftValue) || 0)),
+			value: left,
+			decimalPlaces: inferDecimalPlaces(left),
 			color: BAR_COLORS[0]!,
 			legacySimultaneous: true,
 		},
 		{
 			label: rightLabel,
-			value: Math.max(0, Math.round(Number(rightValue) || 0)),
+			value: right,
+			decimalPlaces: inferDecimalPlaces(right),
 			color: BAR_COLORS[1]!,
 			legacySimultaneous: true,
 		},
@@ -270,15 +329,14 @@ export const BWStatCompare: React.FC<BWStatCompareProps> = (props) => {
 									extrapolateLeft: "clamp",
 									extrapolateRight: "clamp",
 								});
-					const shown =
+					const raw =
 						fillT < 0
 							? 0
-							: Math.round(
-									interpolate(fillP, [0, 1], [0, b.value], {
-										extrapolateLeft: "clamp",
-										extrapolateRight: "clamp",
-									}),
-								);
+							: interpolate(fillP, [0, 1], [0, b.value], {
+									extrapolateLeft: "clamp",
+									extrapolateRight: "clamp",
+								});
+					const shown = formatStatNumber(raw, b.decimalPlaces);
 
 					const labelOpacity = interpolate(entranceP, [0.35, 0.88], [0, 1], {
 						extrapolateLeft: "clamp",

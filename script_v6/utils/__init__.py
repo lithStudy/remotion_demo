@@ -136,11 +136,11 @@ class AiLogger:
     初始化时创建带时间戳的日志文件，通过 append() 追加写入。
     """
 
-    def __init__(self, output_dir: Path, video_name: str) -> None:
+    def __init__(self, output_dir: Path, video_name: str, *, step: str = "step1") -> None:
         log_dir = output_dir / "logs"
         log_dir.mkdir(parents=True, exist_ok=True)
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-        self.path: Path = log_dir / f"{video_name}_step1_ai_{ts}.log"
+        self.path: Path = log_dir / f"{video_name}_{step}_ai_{ts}.log"
 
     def append(self, block: str) -> None:
         """追加一段日志文本到文件。"""

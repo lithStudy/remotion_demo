@@ -16,13 +16,13 @@ export const 搞对立MainBody: React.FC = () => (
         <Sequence durationInFrames={COVER_DURATION_FRAMES}>
             <LandscapeCoverPoster
                 title="搞对立"
-                    subtitle="为什么你一开口讲理，就被骂“搞对立”？"
-                    themeColor="#2563EB"
-                    badge="认识自我 · 理性思考"
-                    seriesLabel="认知心理学"
-                    seriesLabelEn="COGNITIVE PSYCHOLOGY"
-                    methodologySteps={["觉察", "归因", "调整"]}
-                    methodologyStepsEn="OBSERVE · ATTRIBUTE · ADJUST"
+                    subtitle="我们需要允许辩论的互联网"
+                    themeColor="#059669"
+                    badge="深度解读 · 理性思考"
+                    seriesLabel="社会热点深读"
+                    seriesLabelEn="SOCIAL DEEP DIVE"
+                    methodologySteps={["争议", "数据", "结论"]}
+                    methodologyStepsEn="DEBATE · DATA · VERDICT"
             />
         </Sequence>
         <Sequence from={COVER_DURATION_FRAMES} durationInFrames={MAIN_DURATION_搞对立}>

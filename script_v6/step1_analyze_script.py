@@ -1,31 +1,34 @@
 #!/usr/bin/env python3
 """
 Step 1: 口播文案分析（模板驱动 v3）
-将口播文案拆解为场景脚本 JSON，AI 分三步处理：
-1) 场景拆分 2) Item 模板选型 3) Item 参数细化。
+从 scene-split-draft.json（Step0 产出）继续：Item 分镜+模板匹配 → 参数细化 → scene-scripts.json。
 
 用法：
-  python step1_analyze_script.py --input 文案.txt --output output_dir --name video_name
+  python step1_analyze_script.py \\
+    --input scene-split-draft.json \\
+    --source-text 文案.txt \\
+    --output output_dir --name video_name
+
   python step1_analyze_script.py ... --skip-validate   # 跳过 scene-scripts 校验
 """
 
 import argparse
 import json
 import re
-import shutil
 import sys
 from pathlib import Path
 
 from scene_script_validate import validate_and_normalize_scene_scripts
 from scene_timing import finalize_step1_content_and_anchors
+from pipeline_cleanup import cleanup_before_step1
+from scene_split_draft import load_scene_split_draft
 from step1_analysis import (
     analyze_items_for_scene,
     analyze_param_for_item,
-    analyze_scenes,
     gemini_fix_after_warnings,
 )
-from template_registry import TEMPLATE_REGISTRY, generate_ai_prompt_guide
-from utils.llm_utils import create_llm_client
+from step_llm import create_llm_runtime
+from template_registry import TEMPLATE_REGISTRY
 from utils import AiLogger, load_config, load_env
 from validation_errors import ScriptValidationError
 
@@ -33,7 +36,6 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
-
 
 # ─────────────────────────────────────────────────────────────
 # 质量指标收集
@@ -80,39 +82,6 @@ def _collect_template_quality_metrics(scenes: list[dict]) -> dict:
         "single_step_ratio": single_step_ratio,
         "mixed_group_scenes": mixed_group_scenes,
     }
-
-
-# ─────────────────────────────────────────────────────────────
-# 清理 / 资源管理
-# ─────────────────────────────────────────────────────────────
-
-def _cleanup_related_resources(video_name: str, output_dir: Path, config: dict, script_dir: Path) -> None:
-    """Step1 执行前清理与当前视频相关的历史产物，避免旧资源干扰新生成结果。"""
-    project_root = Path(config.get("project_root", script_dir.parent))
-    scenes_dir = project_root / "src" / "remotions" / video_name / "scenes"
-    images_dir = project_root / "public" / "images" / video_name
-    audio_dir = project_root / "public" / "audio" / video_name
-
-    output_script_path = output_dir / "scene-scripts.json"
-    cleanup_targets = [scenes_dir, images_dir, audio_dir]
-    if output_script_path != cleanup_targets[0]:
-        cleanup_targets.append(output_script_path)
-
-    print("\n🧹 Step1 预清理相关资源...")
-    removed_any = False
-    for target in cleanup_targets:
-        if target.is_dir():
-            shutil.rmtree(target)
-            print(f"   ✅ 已删除目录: {target}")
-            removed_any = True
-            continue
-        if target.is_file():
-            target.unlink()
-            print(f"   ✅ 已删除文件: {target}")
-            removed_any = True
-
-    if not removed_any:
-        print("   ℹ️ 未发现可清理的历史资源")
 
 
 # ─────────────────────────────────────────────────────────────
@@ -271,27 +240,22 @@ def _merge_dash_only_captions(scene_scripts: dict) -> None:
 # AI 分析管线（拆分为职责单一的子函数）
 # ─────────────────────────────────────────────────────────────
 
-def _run_ai_analysis_pipeline(
+def _run_items_and_params_pipeline(
     client,
     model: str,
-    text: str,
+    result: dict,
     template_guide: str,
     ai_logger: AiLogger | None,
 ) -> dict:
     """
-    纯 AI 编排：依次执行场景拆分、Item 分镜+模板匹配、Item 参数细化三个阶段。
-    返回带有 scenes / topic 等字段的原始结果字典。
+    阶段 2 + 3：Item 分镜/模板匹配与参数细化。
+    要求 result 已含 topic 与 scenes（每项含 text，尚无 items）。
     """
     append_log = ai_logger.append if ai_logger else None
-
-    # 阶段 1：场景拆分
-    result = analyze_scenes(client, model, text, append_ai_log=append_log)
     scenes = result.get("scenes", [])
-    print(f"   ✅ [Step 1/3] 完成，拆解为 {len(scenes)} 个 Scene。")
-
-    # 阶段 2：两阶段 Item 分析（2A 分镜 + 2B 模板匹配）
-    print("   [Step 2/3] 正在两阶段拆解 Items（2A 分镜 + 2B 模板匹配）...")
     topic = result.get("topic", "未命名主题")
+
+    print("   [Step 2/3] 正在两阶段拆解 Items（2A 分镜 + 2B 模板匹配）...")
     for scene in scenes:
         analyze_items_for_scene(
             client, model, topic, scene, template_guide, append_ai_log=append_log
@@ -312,13 +276,19 @@ def _run_ai_analysis_pipeline(
             f"{quality_metrics['mixed_group_scenes']}"
         )
 
-    # 阶段 3：逐 Item 参数细化
     print("   [Step 3/3] 正在循环拆解 Text 与 Anchors...")
     for scene in scenes:
         scene_text_full = scene.get("text", "")
         for item in scene.get("items", []):
-            # 清除 Step2 可能产生的冗余 AI 注入字段，确保 Step3 参数纯净
-            allowed_keys = {"order", "narrativeType", "reasoning", "template", "text", "groupKey", "content"}
+            allowed_keys = {
+                "order",
+                "narrativeType",
+                "reasoning",
+                "template",
+                "text",
+                "groupKey",
+                "content",
+            }
             for rk in [k for k in list(item.keys()) if k not in allowed_keys]:
                 item.pop(rk)
 
@@ -333,6 +303,21 @@ def _run_ai_analysis_pipeline(
 
     print("   ✅ [Step 3/3] 完成。")
     return result
+
+
+def _run_ai_analysis_pipeline(
+    client,
+    model: str,
+    scene_split: dict,
+    template_guide: str,
+    ai_logger: AiLogger | None,
+) -> dict:
+    """从 Step0 场景草稿继续：Item 分镜+模板匹配 → Item 参数细化。"""
+    scenes = scene_split.get("scenes", [])
+    print(f"   📂 使用场景草稿，共 {len(scenes)} 个 Scene。")
+    return _run_items_and_params_pipeline(
+        client, model, scene_split, template_guide, ai_logger
+    )
 
 
 def _cleanup_intermediate_fields(result: dict) -> None:
@@ -440,6 +425,7 @@ def _validate_and_auto_fix(
 
 def analyze_with_llm(
     text: str,
+    scene_split: dict,
     config: dict,
     ai_logger: AiLogger | None,
     *,
@@ -448,32 +434,26 @@ def analyze_with_llm(
     skip_validate: bool = False,
 ) -> dict:
     """
-    调用 LLM（Gemini / DeepSeek / MiMo）对口播文案进行完整分析，返回场景脚本字典。
+    从场景草稿继续分析，返回 scene-scripts 字典。
     编排 _run_ai_analysis_pipeline → _cleanup_intermediate_fields → _validate_and_auto_fix。
     """
-    client = create_llm_client(config, provider=llm_provider)
-
-    provider = str(getattr(client, "provider", "gemini")).lower().strip()
-    if llm_model and str(llm_model).strip():
-        model = str(llm_model).strip()
-    elif provider == "deepseek":
-        model = config.get("deepseek_model", "deepseek-v4-pro")
-    elif provider == "mimo":
-        model = config.get("mimo_model", "mimo-v2-pro")
-    else:
-        model = config.get("gemini_model", "gemini-2.0-flash")
+    client, model, provider, template_guide = create_llm_runtime(
+        config, llm_provider=llm_provider, llm_model=llm_model
+    )
 
     fps = config.get("fps", 30)
-    image_style = config.get("image_style", "简洁线条插画风格，无背景，无文字")
-
-    # 模板选择阶段不提供示例，避免模型在 Step2 过拟合样例
-    template_guide = generate_ai_prompt_guide(image_style, include_examples=False)
 
     print("\n" + "=" * 60)
-    print(f"🤖 正在调用 {provider.upper()}({model}) 分析文案（分层次处理 v3）...")
+    print(f"🤖 正在调用 {provider.upper()}({model}) 分析 Item 与参数...")
     print("=" * 60 + "\n")
 
-    result = _run_ai_analysis_pipeline(client, model, text, template_guide, ai_logger)
+    result = _run_ai_analysis_pipeline(
+        client,
+        model,
+        scene_split,
+        template_guide,
+        ai_logger,
+    )
     _cleanup_intermediate_fields(result)
     result["fps"] = fps
     result = _validate_and_auto_fix(
@@ -489,7 +469,17 @@ def analyze_with_llm(
 
 def main():
     parser = argparse.ArgumentParser(description="Step 1: 口播文案分析（模板驱动 v3）")
-    parser.add_argument("--input", "-i", required=True, help="口播文案文件路径")
+    parser.add_argument(
+        "--input",
+        "-i",
+        required=True,
+        help="场景拆分草稿 scene-split-draft.json（Step0 产出）",
+    )
+    parser.add_argument(
+        "--source-text",
+        required=True,
+        help="口播原文 .txt（用于校验与自动修订）",
+    )
     parser.add_argument("--output", "-o", required=True, help="输出目录路径")
     parser.add_argument("--name", "-n", help="视频名称（英文，不填则读取 config.json）")
     parser.add_argument(
@@ -512,31 +502,40 @@ def main():
     load_env(script_dir)
     config = load_config(script_dir)
 
-    input_path = Path(args.input)
-    if not input_path.exists():
-        print(f"❌ 文案文件不存在: {input_path}")
+    draft_path = Path(args.input)
+    source_text_path = Path(args.source_text)
+    if not draft_path.exists():
+        print(f"❌ 场景拆分草稿不存在: {draft_path}")
+        return False
+    if not source_text_path.exists():
+        print(f"❌ 口播原文不存在: {source_text_path}")
         return False
 
     video_name = args.name or config.get("package_name", "my_video")
     output_dir = Path(args.output)
 
-    _cleanup_related_resources(video_name, output_dir, config, script_dir)
+    cleanup_before_step1(video_name, output_dir, config, script_dir)
 
-    ai_logger = AiLogger(output_dir, video_name)
+    ai_logger = AiLogger(output_dir, video_name, step="step1")
 
-    with open(input_path, "r", encoding="utf-8") as f:
+    scene_split = load_scene_split_draft(draft_path)
+    print(f"📂 已加载场景拆分草稿: {draft_path}")
+    print(f"   🎬 场景数: {len(scene_split.get('scenes', []))}")
+
+    with open(source_text_path, "r", encoding="utf-8") as f:
         text = f.read().strip()
 
     if not text:
-        print("❌ 文案内容为空")
+        print("❌ 口播原文内容为空")
         return False
 
-    print(f"📄 读取文案: {len(text)} 字符")
+    print(f"📄 读取口播原文: {len(text)} 字符 ({source_text_path})")
 
     skip_validate = _step1_skip_validate(config, cli_override=args.skip_validate)
 
     result = analyze_with_llm(
         text,
+        scene_split,
         config,
         ai_logger,
         llm_provider=args.llm_provider,
@@ -569,6 +568,7 @@ def main():
     print(f"   📝 文案条目: {total_items}")
     print(f"   🎨 模板分布: {template_counts}")
     print(f"   💾 保存到: {output_path}")
+    print(f"   📋 场景草稿: {draft_path}")
     print(f"   🧾 AI日志: {ai_logger.path}")
 
     return True

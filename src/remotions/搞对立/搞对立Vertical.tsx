@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, interpolate, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame } from "remotion";
 
 import { RemotionLayoutMetricsProvider, VERTICAL_SHELL_BG, VerticalBottomBrandBar } from "../../components";
 import { 搞对立MainBody } from "./搞对立MainBody";
@@ -34,6 +34,12 @@ export const 搞对立Vertical: React.FC = () => {
 
     return (
         <AbsoluteFill style={{ background: VERTICAL_SHELL_BG }}>
+            <Audio
+                src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
+                loop
+                volume={0.10}
+                name="Background music"
+            />
             <搞对立TopStaticHeadline canvasW={VERTICAL_CANVAS_W} topBandH={VERTICAL_PLAY_TOP} />
             <div
                 style={{

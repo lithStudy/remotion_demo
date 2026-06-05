@@ -10,7 +10,7 @@ metadata:
 {
   "name": "STAT_COMPARE",
   "componentExport": "BWStatCompare",
-  "description": "适用：2～6 项 KPI 并列对比；条形高度反映相对大小；bars 每条必填 showFrom（content 下标），从对应口播句的 startFrame 起显示该柱，已出现的柱体作为一组始终画布水平居中。\n差异：左右场景图对比用 SPLIT_COMPARE；单数字强调用 KPI_HERO。\n参数：bars（2～6 条：label、value、showFrom）；可选 anchors（与 bars.showFrom 同为 content 下标）；兼容旧版 leftValue/rightValue/leftLabel/rightLabel（两柱同帧入场）。",
+  "description": "适用：2～6 项 KPI 并列对比；条形高度反映相对大小；bars 每条必填 showFrom（content 下标），从对应口播句的 startFrame 起显示该柱，已出现的柱体作为一组始终画布水平居中。\n差异：左右场景图对比用 SPLIT_COMPARE；单数字强调用 KPI_HERO。\n参数：bars（2～6 条：label、value、showFrom；value 可为整数或小数，可选 decimalPlaces）；可选 anchors（与 bars.showFrom 同为 content 下标）；兼容旧版 leftValue/rightValue/leftLabel/rightLabel（两柱同帧入场）。",
   "psychology": "对比效应",
   "image_count": "0",
   "param_schema": {
@@ -20,7 +20,7 @@ metadata:
         "type": "array",
         "minItems": 2,
         "maxItems": 6,
-        "description": "多条柱状对比；每项须含 label、value（非负整数）、showFrom（content 下标），从该条 startFrame 起显示本柱",
+        "description": "多条柱状对比；每项须含 label、value（非负数，整数或小数）、showFrom（content 下标），从该条 startFrame 起显示本柱",
         "items": {
           "type": "object",
           "required": [
@@ -34,8 +34,12 @@ metadata:
               "description": "短标签"
             },
             "value": {
+              "type": "number",
+              "description": "数值（非负，整数或小数）"
+            },
+            "decimalPlaces": {
               "type": "integer",
-              "description": "数值（非负整数）"
+              "description": "小数位数；缺省按 value 自动推断"
             },
             "showFrom": {
               "type": "integer",
@@ -46,12 +50,12 @@ metadata:
         }
       },
       "leftValue": {
-        "type": "integer",
-        "description": "左侧数值（非负整数），旧版两柱模式"
+        "type": "number",
+        "description": "左侧数值（非负），旧版两柱模式"
       },
       "rightValue": {
-        "type": "integer",
-        "description": "右侧数值（非负整数），旧版两柱模式"
+        "type": "number",
+        "description": "右侧数值（非负），旧版两柱模式"
       },
       "leftLabel": {
         "type": "string",

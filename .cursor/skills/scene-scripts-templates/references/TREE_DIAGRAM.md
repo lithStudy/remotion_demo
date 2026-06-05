@@ -20,10 +20,15 @@ metadata:
     "properties": {
       "root": {
         "type": "object",
-        "required": ["label"],
+        "required": [
+          "label"
+        ],
         "description": "根节点",
         "properties": {
-          "label": { "type": "string", "description": "节点文本，建议 2～12 字" },
+          "label": {
+            "type": "string",
+            "description": "节点文本，建议 2～12 字"
+          },
           "showFrom": {
             "type": "integer",
             "format": "content_index",
@@ -34,18 +39,27 @@ metadata:
             "minItems": 1,
             "maxItems": 4,
             "description": "子节点列表",
-            "items": { "$ref": "#/$defs/treeNode" }
+            "items": {
+              "$ref": "#/$defs/treeNode"
+            }
           }
         }
       }
     },
-    "required": ["root"],
+    "required": [
+      "root"
+    ],
     "$defs": {
       "treeNode": {
         "type": "object",
-        "required": ["label"],
+        "required": [
+          "label"
+        ],
         "properties": {
-          "label": { "type": "string", "description": "节点文本" },
+          "label": {
+            "type": "string",
+            "description": "节点文本"
+          },
           "showFrom": {
             "type": "integer",
             "format": "content_index",
@@ -55,7 +69,9 @@ metadata:
             "type": "array",
             "minItems": 1,
             "maxItems": 4,
-            "items": { "$ref": "#/$defs/treeNode" }
+            "items": {
+              "$ref": "#/$defs/treeNode"
+            }
           }
         }
       }
@@ -72,16 +88,38 @@ metadata:
             "label": "被制裁",
             "showFrom": 1,
             "children": [
-              { "label": "惩罚性制裁", "showFrom": 2 },
-              { "label": "制约性制裁", "showFrom": 3 }
+              {
+                "label": "惩罚性制裁",
+                "showFrom": 2,
+                "children": [
+                  {
+                    "label": "星通事件",
+                    "showFrom": 3
+                  },
+                  {
+                    "label": "孟女士PPT事件",
+                    "showFrom": 4
+                  }
+                ]
+              },
+              {
+                "label": "制约性制裁",
+                "showFrom": 3
+              }
             ]
           },
           {
             "label": "被去华为化",
             "showFrom": 4,
             "children": [
-              { "label": "技术原因", "showFrom": 5 },
-              { "label": "法理原因", "showFrom": 6 }
+              {
+                "label": "技术原因",
+                "showFrom": 5
+              },
+              {
+                "label": "法理原因",
+                "showFrom": 6
+              }
             ]
           }
         ]

@@ -2,17 +2,17 @@
 """
 口播视频生成管线 (Narrator Video Pipeline)
 
-自动化流程：文案 → 场景拆解 → AI配图 → TTS语音 → Remotion动画代码
+自动化流程：文案 → 场景拆解 → 脚本分析 → AI配图 → TTS语音 → Remotion动画代码
 
 用法：
-  # 完整流程
+  # 完整流程（Step 0 → 4）
   python pipeline.py --input 文案.txt --name my_video
 
   # 从指定步骤开始（跳过已完成的步骤）
-  python pipeline.py --input 文案.txt --name my_video --start 2
+  python pipeline.py --input 文案.txt --name my_video --start 1
 
   # 只运行指定步骤
-  python pipeline.py --input 文案.txt --name my_video --only 3
+  python pipeline.py --input 文案.txt --name my_video --only 0
 """
 
 import argparse
@@ -20,6 +20,8 @@ import json
 import subprocess
 import sys
 from pathlib import Path
+
+from scene_split_draft import SCENE_SPLIT_DRAFT_FILENAME
 
 
 def run_step(step_num: int, script_name: str, args: list, cwd: Path) -> bool:
@@ -48,15 +50,16 @@ def main():
         epilog="""
 示例:
   python pipeline.py --input 文案.txt --name bitcoin
-  python pipeline.py --input 文案.txt --name bitcoin --start 2
+  python pipeline.py --input 文案.txt --name bitcoin --only 0
+  python pipeline.py --input 文案.txt --name bitcoin --start 1
   python pipeline.py --input 文案.txt --name bitcoin --only 4
         """,
     )
     parser.add_argument("--input", "-i", required=True, help="口播文案文件路径")
     parser.add_argument("--name", "-n", help="视频名称（英文，用作目录名，不填则读取 config.json 中的 package_name）")
-    parser.add_argument("--start", type=int, default=1, choices=[1, 2, 3, 4],
-                        help="从第几步开始（默认1）")
-    parser.add_argument("--only", type=int, choices=[1, 2, 3, 4],
+    parser.add_argument("--start", type=int, default=0, choices=[0, 1, 2, 3, 4],
+                        help="从第几步开始（默认0）")
+    parser.add_argument("--only", type=int, choices=[0, 1, 2, 3, 4],
                         help="只运行指定步骤")
     parser.add_argument(
         "--preview-image",
@@ -84,17 +87,14 @@ def main():
     input_path = Path(args.input).resolve()
     name = args.name or config.get("package_name", "my_video")
 
-    # 中间产物路径
     scenes_dir = project_root / "src" / "remotions" / name / "scenes"
+    scene_split_draft = scenes_dir / SCENE_SPLIT_DRAFT_FILENAME
     scripts_json = scenes_dir / "scene-scripts.json"
     images_dir = project_root / "public" / "images" / name
     audio_dir = project_root / "public" / "audio" / name
 
-    # 对于 step 1，输出到 scenes_dir
-    step1_output = scenes_dir
-
-    start = args.only if args.only else args.start
-    end = args.only if args.only else 4
+    start = args.only if args.only is not None else args.start
+    end = args.only if args.only is not None else 4
 
     print(f"\n🎬 口播视频生成管线")
     print(f"   📄 文案: {input_path}")
@@ -102,15 +102,22 @@ def main():
     print(f"   📂 项目: {project_root}")
     print(f"   🔢 步骤: {start} → {end}")
 
-    step1_args = [
+    step0_args = [
         "--input", str(input_path),
-        "--output", str(step1_output),
+        "--output", str(scenes_dir),
+        "--name", name,
+    ]
+    step1_args = [
+        "--input", str(scene_split_draft),
+        "--source-text", str(input_path),
+        "--output", str(scenes_dir),
         "--name", name,
     ]
     if args.skip_validate:
         step1_args.append("--skip-validate")
 
     steps = {
+        0: ("step0_split_scenes.py", step0_args),
         1: ("step1_analyze_script.py", step1_args),
         2: ("step2_generate_images.py", [
             "--input", str(scripts_json),
@@ -118,7 +125,7 @@ def main():
         ]),
         3: ("step3_generate_audio.py", [
             "--input", str(scripts_json),
-            "--output", str(audio_dir)            
+            "--output", str(audio_dir),
         ]),
         4: ("step4_generate_remotion.py", [
             "--input", str(scripts_json),
@@ -131,9 +138,10 @@ def main():
         if not run_step(step_num, script_name, step_args, script_dir):
             print(f"\n💥 管线在 Step {step_num} 中断")
             print(f"   修复后可使用 --start {step_num} 从此步骤重新开始")
+            if step_num == 0:
+                print(f"   审阅场景草稿: {scene_split_draft}")
             return
 
-    # 仅执行 Step1 时，自动触发一次无音频占位图预览
     if args.only == 1:
         print(f"\n{'='*60}")
         print("🧪 自动执行动画预览（无音频 + 固定图片）")
@@ -152,6 +160,8 @@ def main():
     print(f"🎉 管线完成！")
     print(f"{'='*60}")
     print(f"\n📂 生成文件:")
+    if scene_split_draft.is_file():
+        print(f"   场景草稿: {scene_split_draft}")
     print(f"   脚本: {scripts_json}")
     print(f"   配图: {images_dir}")
     print(f"   音频: {audio_dir}")

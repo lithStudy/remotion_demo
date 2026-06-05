@@ -12,6 +12,7 @@ import {
 	type TemplateBaseProps,
 } from "./shared";
 import { TemplateContentRenderer } from "./TemplateContentRenderer";
+import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 
 const resolveSideStartFrame = (
 	showFrom: number | undefined,
@@ -94,6 +95,7 @@ export const BWSplitCompare: React.FC<BWSplitCompareProps> = ({
 	leftShowFrom,
 	rightShowFrom,
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -218,6 +220,7 @@ export const BWSplitCompare: React.FC<BWSplitCompareProps> = ({
 					transform: `translate(-50%, -50%) scaleY(${lineProgress})`,
 				}}
 			/>
+			<TemplateDefaultAnchors content={content} anchors={anchors} />
 			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>

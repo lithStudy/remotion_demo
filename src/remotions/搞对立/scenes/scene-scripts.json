@@ -11,21 +11,28 @@
           "reasoning": "定义“搞对立”为万能灵药，属于概念命名与解释，适合CONCEPT_CARD聚焦该术语。",
           "content": [
             {
-              "text": "现在的互联网，"
+              "text": "现在的互联网，",
+              "startFrame": 0,
+              "durationFrames": 35
             },
             {
-              "text": "有个词成了封杀博主的“万能灵药”，"
+              "text": "有个词成了封杀博主的“万能灵药”，",
+              "startFrame": 34,
+              "durationFrames": 68
             },
             {
-              "text": "叫“搞对立”。"
+              "text": "叫“搞对立”。",
+              "startFrame": 102,
+              "durationFrames": 34
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一个红色药丸胶囊，表面刻有交叉闪电与箭头构成的冲突图案，象征被用作万用借口的对立情绪",
+            "imageSrc": "images/搞对立/scene_1_1.png",
             "conceptName": "搞对立",
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 137
         },
         {
           "narrativeType": "CASE",
@@ -33,36 +40,43 @@
           "reasoning": "三个并列的典型例子，形成排比清单，每个例子可独立配图，PANEL_GRID最匹配。",
           "content": [
             {
-              "text": "两性话题是搞对立，"
+              "text": "两性话题是搞对立，",
+              "startFrame": 0,
+              "durationFrames": 54
             },
             {
-              "text": "劳资争议是搞对立，"
+              "text": "劳资争议是搞对立，",
+              "startFrame": 53,
+              "durationFrames": 53
             },
             {
-              "text": "城乡差异是搞对立，"
+              "text": "城乡差异是搞对立，",
+              "startFrame": 105,
+              "durationFrames": 56
             }
           ],
           "order": 2,
           "param": {
             "panels": [
               {
-                "src": "蓝色男性符号与粉色女性符号相对，中间有闪电",
+                "src": "images/搞对立/scene_1_2_img0.png",
                 "showFrom": 0,
                 "enterEffect": "zoomIn"
               },
               {
-                "src": "戴安全帽的工人与穿西装的老板面对面，脚下地面裂开",
+                "src": "images/搞对立/scene_1_2_img1.png",
                 "showFrom": 1,
                 "enterEffect": "slideLeft"
               },
               {
-                "src": "左侧高楼林立，右侧金黄麦田，中间一条笔直的分界线",
+                "src": "images/搞对立/scene_1_2_img2.png",
                 "showFrom": 2,
                 "enterEffect": "fadeIn"
               }
             ],
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 162
         },
         {
           "narrativeType": "CASE",
@@ -70,18 +84,23 @@
           "reasoning": "递进式夸张举例，单独成句，无清单或对照结构，用CENTER_FOCUS平铺叙述即可。",
           "content": [
             {
-              "text": "甚至连豆腐脑吃甜的还是咸的，"
+              "text": "甚至连豆腐脑吃甜的还是咸的，",
+              "startFrame": 0,
+              "durationFrames": 81
             },
             {
-              "text": "吵得凶了都能扣上一顶“搞对立”的大帽子。"
+              "text": "吵得凶了都能扣上一顶“搞对立”的大帽子。",
+              "startFrame": 80,
+              "durationFrames": 99
             }
           ],
           "order": 3,
           "param": {
-            "imageSrc": "一碗豆腐脑被从中劈开，左半边浇着红糖姜汁和煮熟的花生，右半边淋上酱油卤汁和葱花虾皮，两种风味之间有一道微光勾勒的分界线，上方隐隐浮现相互冲撞的箭头剪影",
+            "imageSrc": "images/搞对立/scene_1_3.png",
             "enterEffect": "zoomIn",
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 179
         },
         {
           "narrativeType": "CONCLUSION",
@@ -89,23 +108,30 @@
           "reasoning": "从“温情面纱”到“无赖属性”的认知转变，符合COGNITIVE_SHIFT的“撕开假象”逻辑。",
           "content": [
             {
-              "text": "但我今天想撕开这个词的温情面纱，"
+              "text": "但我今天想撕开这个词的温情面纱，",
+              "startFrame": 0,
+              "durationFrames": 79
             },
             {
-              "text": "聊聊它的无赖属性。"
+              "text": "聊聊它的无赖属性。",
+              "startFrame": 78,
+              "durationFrames": 50
             }
           ],
           "order": 4,
           "param": {
             "notText": "温情面纱",
             "butText": "无赖属性",
-            "butSrc": "撕开的面具下露出一个诡辩者狡黠的狞笑，背景是扭曲的辩论台",
+            "butSrc": "images/搞对立/scene_1_4.png",
             "notContentIndex": 0,
             "butContentIndex": 1,
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 128
         }
-      ]
+      ],
+      "audioSrc": "/audio/搞对立/scene_1/scene_1.mp3",
+      "totalDurationFrames": 607
     },
     {
       "sceneId": "scene_2",
@@ -113,157 +139,213 @@
       "items": [
         {
           "narrativeType": "LOGIC",
-          "template": "CONCEPT_CARD",
-          "reasoning": "直接点出核心概念“定义模糊”，是对论点的命名解释，适合用 CONCEPT_CARD 强化概念认知。",
+          "template": "TEXT_FOCUS",
+          "reasoning": "点出“定义太模糊”这一核心论断，短促有力，无需配图，适合 TEXT_FOCUS 大字冲击。",
           "content": [
             {
-              "text": "“搞对立”这个词，"
+              "text": "“搞对立”这个词，",
+              "startFrame": 0,
+              "durationFrames": 44
             },
             {
-              "text": "最无赖的地方在于它的定义模糊。"
+              "text": "最无赖的地方在于它的定义太模糊了。",
+              "startFrame": 43,
+              "durationFrames": 90
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "一个轮廓模糊的对抗场景，两个半透明、边缘朦胧的人影面对面站立，彼此伸出手指指向对方，中间漂浮着问号形状的雾气，整体如隔着一层毛玻璃，没有明确界限",
-            "conceptName": "搞对立",
-            "anchors": []
-          }
+            "coreSentence": [
+              "“搞对立”",
+              "最无赖的地方在于",
+              "它的定义太模糊了"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "无赖",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "定义太模糊",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 133
         },
         {
           "narrativeType": "LOGIC",
-          "template": "BEAT_SEQUENCE",
-          "reasoning": "前两句铺垫有标准，末句转为质疑“对立”无标准，形成铺垫→疑问的递进节拍，适合 BEAT_SEQUENCE。",
+          "template": "PEER_INDUCT",
+          "reasoning": "造谣、辱骂两条「有标准」的前提并列铺陈，末句「但什么是对立？」归纳收束为无标准之问；并列前提→归纳，适合 PEER_INDUCT。",
           "content": [
             {
-              "text": "在法律和公德里，"
+              "text": "在法律和公德里，",
+              "startFrame": 0,
+              "durationFrames": 44
             },
             {
-              "text": "造谣有事实标准，"
+              "text": "造谣有事实标准，",
+              "startFrame": 43,
+              "durationFrames": 42
             },
             {
-              "text": "辱骂有言辞标准。"
+              "text": "辱骂有言辞标准。",
+              "startFrame": 85,
+              "durationFrames": 54
             },
             {
-              "text": "但什么是对立？"
+              "text": "但什么是对立？",
+              "startFrame": 138,
+              "durationFrames": 46
             }
           ],
           "order": 2,
           "param": {
-            "stages": [
+            "premises": [
               {
-                "imageSrc": "庄重的法庭内景，一座金色天平放在厚重法典上，自然光从高窗洒入",
-                "enterEffect": "breathe",
-                "tone": "calm"
-              },
-              {
-                "imageSrc": "一张办公桌，放大镜悬停在散落的文件上方，镜片清晰映出文字轮廓",
+                "imageSrc": "images/搞对立/scene_2_2_img0.png",
                 "enterEffect": "slideBottom",
-                "tone": "calm"
+                "showFrom": 1
               },
               {
-                "imageSrc": "昏暗背景中，一张嘴的特写，唇齿间迸出尖锐的声波纹路",
+                "imageSrc": "images/搞对立/scene_2_2_img1.png",
                 "enterEffect": "slideBottom",
-                "tone": "calm"
-              },
-              {
-                "imageSrc": "迷雾笼罩的旷野，一个人影站在岔路口，地面投下长长的困惑阴影",
-                "enterEffect": "zoomIn",
-                "tone": "alert"
+                "showFrom": 2
               }
             ],
-            "anchors": []
-          }
+            "conclusion": {
+              "imageSrc": "images/搞对立/scene_2_2.png",
+              "enterEffect": "zoomIn",
+              "showFrom": 3,
+              "tone": "alert"
+            }
+          },
+          "totalDurationFrames": 185
         },
         {
           "narrativeType": "CASE",
-          "template": "PANEL_GRID",
-          "reasoning": "两个并列例子说明同一现象，每个例子可配独立画面，适合 PANEL_GRID 宫格展示。",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "提出加班费诉求→被扣煽动劳资对立，因→果传导清晰，适合 CAUSE_CHAIN。",
           "content": [
             {
-              "text": "你说“老板应该给加班费”，"
+              "text": "你说“农村医保报销比例该向城市看齐”，",
+              "startFrame": 0,
+              "durationFrames": 92
             },
             {
-              "text": "有人说你煽动劳资对立；"
-            },
-            {
-              "text": "你说“女性不该在职场被歧视”，"
-            },
-            {
-              "text": "有人说你制造性别对立。"
+              "text": "有人说你制造城乡对立；",
+              "startFrame": 91,
+              "durationFrames": 57
             }
           ],
           "order": 3,
           "param": {
-            "panels": [
+            "layout": "horizontal",
+            "nodes": [
               {
-                "src": "一个员工站在老板桌前，举起计算器显示加班时长，老板身体后仰",
+                "label": "医保同权",
+                "imageSrc": "images/搞对立/scene_2_3_img0.png",
                 "showFrom": 0,
                 "enterEffect": "fadeIn"
               },
               {
-                "src": "一只手指着工人，背景有闪电和工厂轮廓，象征劳资冲突",
+                "label": "城乡对立",
+                "imageSrc": "images/搞对立/scene_2_3_img1.png",
                 "showFrom": 1,
-                "enterEffect": "fadeIn"
-              },
-              {
-                "src": "会议室里一位女性举手发言，旁边同事表情不屑，桌上文件散落",
-                "showFrom": 2,
-                "enterEffect": "fadeIn"
-              },
-              {
-                "src": "一男一女背对站立，中间有裂痕，各自抱着手臂表情愤怒",
-                "showFrom": 3,
                 "enterEffect": "fadeIn"
               }
             ],
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 149
         },
         {
-          "narrativeType": "LOGIC",
-          "template": "BEAT_SEQUENCE",
-          "reasoning": "由反问“发现了吗？”引入，紧接条件解释与比喻递进，形成问→释的节拍结构，适合 BEAT_SEQUENCE。",
+          "narrativeType": "CASE",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "提出反职场歧视→被扣制造性别对立，因→果传导清晰，适合 CAUSE_CHAIN。",
           "content": [
             {
-              "text": "发现了吗？"
+              "text": "你说“现代西医就是比传统中医有效”，",
+              "startFrame": 0,
+              "durationFrames": 82
             },
             {
-              "text": "只要你提出的观点触及了某个群体的既得利益，"
-            },
-            {
-              "text": "或者是撕开了社会本来就存在的伤口，"
-            },
-            {
-              "text": "这个词就会像回旋镖一样飞向你。"
+              "text": "有人说你制造中西医对立。",
+              "startFrame": 81,
+              "durationFrames": 62
             }
           ],
           "order": 4,
           "param": {
-            "stages": [
+            "layout": "horizontal",
+            "nodes": [
               {
-                "imageSrc": "一个困惑的人脸特写，背景模糊，光线柔和，带有微妙的问号轮廓影子",
-                "enterEffect": "breathe",
-                "tone": "calm"
+                "label": "现代医学更科学",
+                "imageSrc": "images/搞对立/scene_2_4_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
               },
               {
-                "imageSrc": "天平的一端压着重重的钱袋，另一端是握紧的拳头，背景是昏暗的剪影",
-                "enterEffect": "slideBottom",
-                "tone": "alert"
-              },
-              {
-                "imageSrc": "一道撕裂的布料特写，下方透出暗红的光，如同裂开的伤口",
-                "enterEffect": "slideBottom",
-                "tone": "alert"
-              },
-              {
-                "imageSrc": "一支飞旋的回旋镖朝镜头袭来，背景是激烈的旋涡气流",
-                "enterEffect": "slideBottom",
-                "tone": "alert"
+                "label": "中西医对立",
+                "imageSrc": "images/搞对立/scene_2_4_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
               }
             ],
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 143
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "同一子话题内从发问→触及利益→撕开伤口→回旋镖收束，单主图贯穿；CASE_BREAKDOWN 右侧阶段轨用 showFrom 对齐各句口播下标。",
+          "content": [
+            {
+              "text": "发现了吗？",
+              "startFrame": 0,
+              "durationFrames": 23
+            },
+            {
+              "text": "只要你提出的观点触及了某个群体的既得利益，",
+              "startFrame": 22,
+              "durationFrames": 99
+            },
+            {
+              "text": "或者是撕开了社会本来就存在的伤口，",
+              "startFrame": 120,
+              "durationFrames": 82
+            },
+            {
+              "text": "这个词就会像回旋镖一样飞向你。",
+              "startFrame": 202,
+              "durationFrames": 81
+            }
+          ],
+          "order": 5,
+          "param": {
+            "title": "回旋镖机制",
+            "imageSrc": "images/搞对立/scene_2_5.png",
+            "phases": [
+              {
+                "phaseLabel": "发问",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "触及利益",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "撕开伤口",
+                "showFrom": 2
+              },
+              {
+                "phaseLabel": "回旋镖",
+                "showFrom": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 283
         },
         {
           "narrativeType": "CONCLUSION",
@@ -271,21 +353,26 @@
           "reasoning": "“不解决…只解决…”的鲜明对照，扭转对“解决”一词的认知，是典型的认知转变，适合 COGNITIVE_SHIFT。",
           "content": [
             {
-              "text": "它不解决矛盾，"
+              "text": "它不解决矛盾，",
+              "startFrame": 0,
+              "durationFrames": 35
             },
             {
-              "text": "它只解决那个指出矛盾的人。"
+              "text": "它只解决那个指出矛盾的人。",
+              "startFrame": 34,
+              "durationFrames": 71
             }
           ],
-          "order": 5,
+          "order": 6,
           "param": {
             "notText": "解决矛盾",
             "butText": "解决指出矛盾的人",
-            "butSrc": "一个人被捂住嘴拖离，而他刚才指出的地面裂缝仍在渗脓",
+            "butSrc": "images/搞对立/scene_2_6.png",
             "notContentIndex": 0,
             "butContentIndex": 1,
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 106
         },
         {
           "narrativeType": "LOGIC",
@@ -293,101 +380,121 @@
           "reasoning": "提出第二个核心概念“混淆呈现与制造”，需要概念卡片强化术语记忆，适合 CONCEPT_CARD。",
           "content": [
             {
-              "text": "这个词的第二个无赖之处，"
+              "text": "这个词的第二个无赖之处，",
+              "startFrame": 0,
+              "durationFrames": 52
             },
             {
-              "text": "是它卑劣地混淆了“呈现矛盾”与“制造矛盾”。"
-            }
-          ],
-          "order": 6,
-          "param": {
-            "imageSrc": "一个抽象的图标，两个原本分开的箭头或线条，一个指向左边写着“呈现”，一个指向右边写着“制造”，但被一个漩涡或扭曲的滤镜模糊了界限，混合在一起，暗示概念的混淆。",
-            "conceptName": "呈现矛盾与制造矛盾",
-            "anchors": []
-          }
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "BEAT_SEQUENCE",
-          "reasoning": "先以脓疮比喻矛盾本存，再以柳叶刀比喻博主行为，喻体递进明显，适合 BEAT_SEQUENCE。",
-          "content": [
-            {
-              "text": "矛盾是本来就存在的，"
-            },
-            {
-              "text": "就像脓疮长在身上。"
-            },
-            {
-              "text": "博主的言论只是那把划开脓疮的柳叶刀。"
+              "text": "是它卑劣地混淆了“呈现矛盾”与“制造矛盾”。",
+              "startFrame": 51,
+              "durationFrames": 105
             }
           ],
           "order": 7,
           "param": {
-            "stages": [
-              {
-                "imageSrc": "一块岩石表面出现一道裂痕，光线从裂缝中透出，象征隐藏的矛盾",
-                "enterEffect": "breathe",
-                "tone": "calm"
-              },
-              {
-                "imageSrc": "皮肤特写，一个红色的脓疮鼓起，表面有紧张感",
-                "enterEffect": "slideBottom",
-                "tone": "alert"
-              },
-              {
-                "imageSrc": "一把银色柳叶刀切入脓疮，脓血流出，画面冲击力强",
-                "enterEffect": "slideBottom",
-                "tone": "alert"
-              }
-            ],
+            "imageSrc": "images/搞对立/scene_2_7.png",
+            "conceptName": "呈现 ≠ 制造",
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 156
         },
         {
           "narrativeType": "LOGIC",
-          "template": "BEAT_SEQUENCE",
-          "reasoning": "分号自然断出三拍递进：不划开→划开后→被扣帽，揭示错误逻辑的节奏感强，适合 BEAT_SEQUENCE。",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "脓疮与柳叶刀两个比喻落点明确，需用 MAGNIFYING_GLASS 锁定核心喻词，强化「矛盾本存→言论划开」的洞察。",
           "content": [
             {
-              "text": "现在的逻辑却是："
+              "text": "矛盾是本来就存在的，",
+              "startFrame": 0,
+              "durationFrames": 42
             },
             {
-              "text": "你不划开，"
+              "text": "就像脓疮长在身上。",
+              "startFrame": 41,
+              "durationFrames": 42
             },
             {
-              "text": "这病就不存在；"
+              "text": "博主的言论只是那把划开脓疮的柳叶刀。",
+              "startFrame": 82,
+              "durationFrames": 91
             },
             {
-              "text": "你一旦划开了，"
-            },
-            {
-              "text": "脓血流出来了，"
-            },
-            {
-              "text": "你就是那个“制造伤口”的人。"
+              "text": "只有划开他，才能治疗他。",
+              "startFrame": 173,
+              "durationFrames": 70
             }
           ],
           "order": 8,
           "param": {
-            "stages": [
+            "anchors": [
               {
-                "imageSrc": "昏暗房间中一个人外表平静，但皮肤下隐约可见脓疮的轮廓，光线暧昧，安静氛围",
-                "enterEffect": "breathe",
-                "tone": "calm"
+                "text": "脓疮",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
               },
               {
-                "imageSrc": "特写：一把柳叶刀切开皮肤，暗色的脓血喷涌而出，明亮的光线照在伤口上，背景模糊",
-                "enterEffect": "slideBottom",
-                "tone": "alert"
-              },
-              {
-                "imageSrc": "一只手指着持柳叶刀的人，指责的神情，背景扭曲的光影，充满误解与冤屈的氛围",
-                "enterEffect": "slideBottom",
-                "tone": "alert"
+                "text": "柳叶刀",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
               }
-            ],
-            "anchors": []
-          }
+            ]
+          },
+          "totalDurationFrames": 244
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "口播拆成「不划开→病不存在」与「划开→被扣制造伤口」两段并列的错误逻辑，DOS_AND_DONTS 左右避坑对照比三拍 BEAT_SEQUENCE 更贴对错分栏。",
+          "content": [
+            {
+              "text": "现在的逻辑却是：",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "你不划开，",
+              "startFrame": 38,
+              "durationFrames": 31
+            },
+            {
+              "text": "这病就不存在；",
+              "startFrame": 68,
+              "durationFrames": 35
+            },
+            {
+              "text": "你一旦划开了，",
+              "startFrame": 103,
+              "durationFrames": 33
+            },
+            {
+              "text": "脓血流出来了，",
+              "startFrame": 136,
+              "durationFrames": 35
+            },
+            {
+              "text": "你就是那个“制造伤口”的人。",
+              "startFrame": 171,
+              "durationFrames": 54
+            }
+          ],
+          "order": 9,
+          "param": {
+            "left": {
+              "label": "❌ 不划开",
+              "src": "images/搞对立/scene_2_9_left.png",
+              "showFrom": 1
+            },
+            "right": {
+              "label": "❌ 划开被扣帽",
+              "src": "images/搞对立/scene_2_9_right.png",
+              "showFrom": 3
+            }
+          },
+          "totalDurationFrames": 225
         },
         {
           "narrativeType": "CONCLUSION",
@@ -395,10 +502,12 @@
           "reasoning": "短促反问金句，直击荒谬核心，无需配图，适合 TEXT_FOCUS 全片冲击。",
           "content": [
             {
-              "text": "这不就是掩耳盗铃吗？"
+              "text": "这不就是掩耳盗铃吗？",
+              "startFrame": 0,
+              "durationFrames": 45
             }
           ],
-          "order": 9,
+          "order": 10,
           "param": {
             "coreSentence": [
               "这不就是掩耳盗铃吗？"
@@ -409,97 +518,108 @@
                 "color": "#EF4444"
               }
             ]
-          }
+          },
+          "totalDurationFrames": 45
         },
         {
           "narrativeType": "LOGIC",
-          "template": "BEAT_SEQUENCE",
-          "reasoning": "先述“不怪矛盾怪照灯人”，再补具体嫌弃点，形成递进节拍，适合 BEAT_SEQUENCE。",
+          "template": "CENTER_FOCUS",
+          "reasoning": "四句口播共用「不怪矛盾、怪照灯人」的提灯隐喻，单图居中比四拍 BEAT_SEQUENCE 更稳，适合 CENTER_FOCUS。",
           "content": [
             {
-              "text": "他们不怪矛盾本身，"
+              "text": "他们不怪矛盾本身，",
+              "startFrame": 0,
+              "durationFrames": 44
             },
             {
-              "text": "反而怪那个把灯照进黑暗里的人，"
+              "text": "反而怪那个把灯照进黑暗里的人，",
+              "startFrame": 43,
+              "durationFrames": 71
             },
             {
-              "text": "嫌灯光太刺眼，"
+              "text": "嫌灯光太刺眼，",
+              "startFrame": 114,
+              "durationFrames": 36
             },
             {
-              "text": "嫌阴影太难看。"
-            }
-          ],
-          "order": 10,
-          "param": {
-            "stages": [
-              {
-                "imageSrc": "Dark abstract background with faint, blurry shapes representing underlying social conflicts, warm amber light barely illuminating the edges",
-                "enterEffect": "breathe",
-                "tone": "calm"
-              },
-              {
-                "imageSrc": "A hand holding a lantern pierces into the darkness, casting a sharp beam of light, revealing hidden figures and cracks in the wall",
-                "enterEffect": "slideBottom",
-                "tone": "alert"
-              },
-              {
-                "imageSrc": "Close-up of a face squinting and turning away, harsh white light glaring into the eyes, lens flare effect",
-                "enterEffect": "zoomIn",
-                "tone": "alert"
-              },
-              {
-                "imageSrc": "Deep distorted shadow stretching and twisting on an uneven wall, grotesque and exaggerated, stark contrast with the bright spotlight source",
-                "enterEffect": "fadeIn",
-                "tone": "alert"
-              }
-            ],
-            "anchors": []
-          }
-        },
-        {
-          "narrativeType": "LOGIC",
-          "template": "BEAT_SEQUENCE",
-          "reasoning": "设问→原因→后果三段递进，逻辑紧凑，适合 BEAT_SEQUENCE 打包展示；不宜拆散因设问句过短。",
-          "content": [
-            {
-              "text": "为什么“搞对立”三个字这么好用？"
-            },
-            {
-              "text": "因为它是一种情绪化的降维打击。"
-            },
-            {
-              "text": "一旦给你扣上这顶帽子，"
-            },
-            {
-              "text": "就意味着剥夺了你进行理性辩论的正当性。"
+              "text": "嫌阴影太难看。",
+              "startFrame": 150,
+              "durationFrames": 40
             }
           ],
           "order": 11,
           "param": {
-            "stages": [
+            "imageSrc": "images/搞对立/scene_2_11.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
               {
-                "imageSrc": "一个人头顶悬浮巨大问号，思考状，抽象背景",
-                "enterEffect": "breathe",
-                "tone": "calm"
+                "text": "灯光太刺眼",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight"
               },
               {
-                "imageSrc": "拳头重重砸下，能量冲击波，情绪化打击",
-                "enterEffect": "slideBottom",
-                "tone": "alert"
+                "text": "阴影太难看",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "highlight"
+              }
+            ]
+          },
+          "totalDurationFrames": 190
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "设问→情绪化降维→扣帽→剥夺理性辩论权，四步为因→果传导链，适合 CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "为什么“搞对立”三个字这么好用？",
+              "startFrame": 0,
+              "durationFrames": 72
+            },
+            {
+              "text": "因为它是一种情绪化的降维打击。",
+              "startFrame": 72,
+              "durationFrames": 72
+            },
+            {
+              "text": "一旦给你扣上这顶帽子，",
+              "startFrame": 144,
+              "durationFrames": 50
+            },
+            {
+              "text": "就意味着剥夺了你进行理性辩论的正当性。",
+              "startFrame": 193,
+              "durationFrames": 94
+            }
+          ],
+          "order": 12,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "情绪化",
+                "imageSrc": "images/搞对立/scene_2_12_img0.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
               },
               {
-                "imageSrc": "一顶无形的帽子阴影落在一人头上，象征扣帽子",
-                "enterEffect": "zoomIn",
-                "tone": "alert"
+                "label": "扣帽子",
+                "imageSrc": "images/搞对立/scene_2_12_img1.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
               },
               {
-                "imageSrc": "辩论者嘴巴被胶带封住，无法说话，理性对话被剥夺",
-                "enterEffect": "slideBottom",
-                "tone": "alert"
+                "label": "剥夺正当性",
+                "imageSrc": "images/搞对立/scene_2_12_img2.png",
+                "showFrom": 3,
+                "enterEffect": "slideBottom"
               }
             ],
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 287
         },
         {
           "narrativeType": "LOGIC",
@@ -507,30 +627,39 @@
           "reasoning": "关键在于“破坏者”这一身份标签的赋值过程，需要聚焦锁定，适合 MAGNIFYING_GLASS 突出核心语词。",
           "content": [
             {
-              "text": "无论你的数据多详实、"
+              "text": "无论你的数据多详实、",
+              "startFrame": 0,
+              "durationFrames": 51
             },
             {
-              "text": "逻辑多严密，"
+              "text": "逻辑多严密，",
+              "startFrame": 50,
+              "durationFrames": 39
             },
             {
-              "text": "只要对方抛出“你在搞对立”，"
+              "text": "只要对方抛出“你在搞对立”，",
+              "startFrame": 88,
+              "durationFrames": 57
             },
             {
-              "text": "你就瞬间从一个“讨论者”变成了“破坏者”。"
+              "text": "你就瞬间从一个“讨论者”变成了“破坏者”。",
+              "startFrame": 145,
+              "durationFrames": 96
             }
           ],
-          "order": 12,
+          "order": 13,
           "param": {
             "anchors": [
               {
-                "text": "破坏者",
+                "text": "“讨论者”变成“破坏者”",
                 "showFrom": 3,
                 "color": "#EF4444",
                 "anim": "popIn",
                 "audioEffect": "impact_thud"
               }
             ]
-          }
+          },
+          "totalDurationFrames": 242
         },
         {
           "narrativeType": "CONCLUSION",
@@ -538,29 +667,40 @@
           "reasoning": "用“不需要…只需要…”的对比揭示虚伪本质，再以破折号定义修饰，是认知转变的经典结构，适合 COGNITIVE_SHIFT。",
           "content": [
             {
-              "text": "它不需要讲理，"
+              "text": "它不需要讲理，",
+              "startFrame": 0,
+              "durationFrames": 34
             },
             {
-              "text": "它只需要讲“和谐”—"
+              "text": "它只需要讲“和谐”—",
+              "startFrame": 33,
+              "durationFrames": 42
             },
             {
-              "text": "一种维持表面平静、"
+              "text": "一种维持表面平静、",
+              "startFrame": 75,
+              "durationFrames": 52
             },
             {
-              "text": "实则扼杀讨论的虚伪和谐。"
+              "text": "实则扼杀讨论的虚伪和谐。",
+              "startFrame": 126,
+              "durationFrames": 67
             }
           ],
-          "order": 13,
+          "order": 14,
           "param": {
             "notText": "讲理",
             "butText": "讲“和谐”",
-            "butSrc": "平静湖面下暗藏漩涡",
+            "butSrc": "images/搞对立/scene_2_14.png",
             "notContentIndex": 0,
             "butContentIndex": 1,
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 194
         }
-      ]
+      ],
+      "audioSrc": "/audio/搞对立/scene_2/scene_2.mp3",
+      "totalDurationFrames": 2576
     },
     {
       "sceneId": "scene_3",
@@ -572,10 +712,14 @@
           "reasoning": "短促强结论，适合全片级金句冲击，无需配图，锁定观点核心。",
           "content": [
             {
-              "text": "一个健康的社会，"
+              "text": "一个健康的社会，",
+              "startFrame": 0,
+              "durationFrames": 42
             },
             {
-              "text": "不应该害怕对立。"
+              "text": "不应该害怕对立。",
+              "startFrame": 41,
+              "durationFrames": 44
             }
           ],
           "order": 1,
@@ -590,7 +734,8 @@
                 "color": "#EF4444"
               }
             ]
-          }
+          },
+          "totalDurationFrames": 86
         },
         {
           "narrativeType": "LOGIC",
@@ -598,24 +743,28 @@
           "reasoning": "对“真正的共识”这一核心概念进行定义性解释，适合概念卡片展开。",
           "content": [
             {
-              "text": "真正的共识，"
+              "text": "真正的共识，",
+              "startFrame": 0,
+              "durationFrames": 36
             },
             {
-              "text": "是在无数次激烈的对立、"
+              "text": "是在无数次激烈的对立、碰撞和辩论中，",
+              "startFrame": 36,
+              "durationFrames": 92
             },
             {
-              "text": "碰撞和辩论中，"
-            },
-            {
-              "text": "最终筛选出来的公约数。"
+              "text": "最终筛选出来的公约数。",
+              "startFrame": 127,
+              "durationFrames": 57
             }
           ],
           "order": 2,
           "param": {
-            "imageSrc": "一个抽象图标：多股方向各异的尖锐箭头相互碰撞，穿过一个漏斗状筛网，最终汇聚成一枚发光、平滑的共鸣符号。",
+            "imageSrc": "images/搞对立/scene_3_2.png",
             "conceptName": "真正的共识",
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 185
         },
         {
           "narrativeType": "LOGIC",
@@ -623,10 +772,14 @@
           "reasoning": "因果推理清晰：因（对立被压制）→ 果（只剩平庸），符合因果链的传导示意。",
           "content": [
             {
-              "text": "如果所有的不同意见都被定义为“搞对立”，"
+              "text": "如果所有的不同意见都被定义为“搞对立”，",
+              "startFrame": 0,
+              "durationFrames": 81
             },
             {
-              "text": "那么剩下的只会是千篇一律的废话和死水微澜的平庸。"
+              "text": "那么剩下的只会是千篇一律的废话和死水微澜的平庸。",
+              "startFrame": 80,
+              "durationFrames": 123
             }
           ],
           "order": 3,
@@ -635,21 +788,24 @@
             "nodes": [
               {
                 "label": "打压异见",
-                "imageSrc": "一只手捂住另一张嘴的简笔画",
+                "imageSrc": "images/搞对立/scene_3_3_img0.png",
                 "showFrom": 0,
                 "enterEffect": "fadeIn"
               },
               {
                 "label": "产出平庸",
-                "imageSrc": "复印机不断吐出相同纸张的简笔画",
+                "imageSrc": "images/搞对立/scene_3_3_img1.png",
                 "showFrom": 1,
                 "enterEffect": "fadeIn"
               }
             ],
             "anchors": []
-          }
+          },
+          "totalDurationFrames": 204
         }
-      ]
+      ],
+      "audioSrc": "/audio/搞对立/scene_3/scene_3.mp3",
+      "totalDurationFrames": 475
     },
     {
       "sceneId": "scene_4",
@@ -661,59 +817,91 @@
           "reasoning": "全片核心警告，短促有力，无需配图，适合金句冲击→ TEXT_FOCUS；整句为独立号召，表达结构单一，单独成镜。",
           "content": [
             {
-              "text": "别让“搞对立”成了封杀思考的挡箭牌。"
+              "text": "别让“搞对立”成了封杀思考的挡箭牌。",
+              "startFrame": 0,
+              "durationFrames": 78
             }
           ],
           "order": 1,
           "param": {
             "coreSentence": [
-              "别让“搞对立”成了封杀思考的挡箭牌。"
+              "别让“搞对立”",
+              "成了封杀思考的挡箭牌。"
             ],
-            "coreSentenceAnchors": []
-          }
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "封杀",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 78
         },
         {
           "narrativeType": "CONCLUSION",
-          "template": "COGNITIVE_SHIFT",
-          "reasoning": "典型的“不是…而是…”认知纠偏结构，表达对比→ COGNITIVE_SHIFT；对比不可拆，否则破坏逻辑完整性，故保持单镜。",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片核心警告，短促有力，无需配图，适合金句冲击→ TEXT_FOCUS；整句为独立号召，表达结构单一，单独成镜。",
           "content": [
             {
-              "text": "我们需要的不是一个没有对立的互联网，"
+              "text": "我们需要的不是一个没有对立的互联网，",
+              "startFrame": 0,
+              "durationFrames": 78
             },
             {
-              "text": "而是一个即便对立，"
+              "text": "而是一个即便对立，",
+              "startFrame": 77,
+              "durationFrames": 41
             },
             {
-              "text": "也能坐下来把道理讲透的环境。"
+              "text": "也能坐下来把道理讲透的环境。",
+              "startFrame": 117,
+              "durationFrames": 70
             }
           ],
-          "order": 2,
+          "order": 1,
           "param": {
-            "notText": "没有对立的互联网",
-            "butText": "对立中讲透道理",
-            "butSrc": "两个人坐在圆桌前平和地讨论，桌上放着打开的笔记本和茶杯，窗外阳光透入，手势理性有礼",
-            "notContentIndex": 0,
-            "butContentIndex": 1,
-            "anchors": []
-          }
+            "coreSentence": [
+              {
+                "text": "即便对立",
+                "showFrom": 1
+              },
+              {
+                "text": "也能坐下来把道理讲透的环境。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "即便对立",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "把道理讲透",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 188
         }
-      ]
+      ],
+      "audioSrc": "/audio/搞对立/scene_4/scene_4.mp3",
+      "totalDurationFrames": 267
     }
   ],
   "fps": 30,
   "cover": {
     "durationFrames": 5,
     "title": "搞对立",
-    "subtitle": "为什么你一开口讲理，就被骂“搞对立”？",
-    "themeColor": "#2563EB",
-    "badge": "认识自我 · 理性思考",
-    "seriesLabel": "认知心理学",
-    "seriesLabelEn": "COGNITIVE PSYCHOLOGY",
+    "subtitle": "我们需要允许辩论的互联网",
+    "themeColor": "#059669",
+    "badge": "深度解读 · 理性思考",
+    "seriesLabel": "社会热点深读",
+    "seriesLabelEn": "SOCIAL DEEP DIVE",
     "methodologySteps": [
-      "觉察",
-      "归因",
-      "调整"
+      "争议",
+      "数据",
+      "结论"
     ],
-    "methodologyStepsEn": "OBSERVE · ATTRIBUTE · ADJUST"
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
   }
 }

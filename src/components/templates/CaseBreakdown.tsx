@@ -176,12 +176,12 @@ export const BWCaseBreakdown: React.FC<BWCaseBreakdownProps> = ({
 								display: "flex",
 								flexDirection: "row",
 								alignItems: "stretch",
-								minHeight: hasNext ? 72 : 56,
+								minHeight: hasNext ? 110 : 80,
 							}}
 						>
 							<div
 								style={{
-									width: 36,
+									width: 40,
 									display: "flex",
 									flexDirection: "column",
 									alignItems: "center",
@@ -190,14 +190,14 @@ export const BWCaseBreakdown: React.FC<BWCaseBreakdownProps> = ({
 							>
 								<div
 									style={{
-										width: 20,
-										height: 20,
+										width: 24,
+										height: 24,
 										borderRadius: "50%",
 										backgroundColor: isDone || isCurrent ? BW_TEXT : "#E5E7EB",
 										border: isCurrent ? "3px solid #111" : "2px solid #D1D5DB",
 										transform: `scale(${dotScale})`,
 										boxSizing: "content-box",
-										marginTop: 18,
+										marginTop: 22,
 									}}
 								/>
 								{hasNext ? (
@@ -205,8 +205,8 @@ export const BWCaseBreakdown: React.FC<BWCaseBreakdownProps> = ({
 										style={{
 											flex: 1,
 											width: 3,
-											minHeight: 28,
-											marginTop: 10,
+											minHeight: 40,
+											marginTop: 14,
 											backgroundColor: isDone ? "#CBD5E1" : "#E5E7EB",
 											borderRadius: 2,
 										}}
@@ -216,19 +216,19 @@ export const BWCaseBreakdown: React.FC<BWCaseBreakdownProps> = ({
 							<div
 								style={{
 									flex: 1,
-									paddingLeft: 12,
-									paddingBottom: hasNext ? 8 : 0,
+									paddingLeft: 16,
+									paddingBottom: hasNext ? 24 : 0,
 									display: "flex",
 									alignItems: "flex-start",
 								}}
 							>
 								<div
 									style={{
-										fontSize: isCurrent ? 48 : 40,
+										fontSize: isCurrent ? 60 : 52,
 										fontWeight: isCurrent ? 900 : isDone ? 800 : 600,
 										color: isCurrent || isDone ? "#1F2937" : "#9CA3AF",
-										lineHeight: 1.35,
-										letterSpacing: "0.06em",
+										lineHeight: 1.5,
+										letterSpacing: "0.04em",
 										fontFamily:
 											'"Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif',
 									}}

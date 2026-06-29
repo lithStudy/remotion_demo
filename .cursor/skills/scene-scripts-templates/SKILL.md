@@ -1,6 +1,6 @@
 ---
 name: scene-scripts-templates
-description: "scene-scripts.json 中可用的模板详情，在编辑或生成 `scene-scripts.json`时，用于了解如何正确使用模板，响应用户的验证、修改模板的请求。模板包括：BEAT_SEQUENCE、CASE_BREAKDOWN、CAUSE_CHAIN、CENTER_FOCUS、CHAT_BUBBLE、CHECKLIST_REVEAL、COGNITIVE_SHIFT、CONCEPT_CARD、DATA_TABLE、DOS_AND_DONTS、KPI_HERO、MAGNIFYING_GLASS、METHOD_STACK、PANEL_GRID、PEER_INDUCT、PROGRESS_RING、QUOTE_CITATION、SPLIT_COMPARE、STAT_COMPARE、STEP_LIST、TEXT_FOCUS、TIMELINE、TREE_DIAGRAM。"
+description: "scene-scripts.json 中可用的模板详情，在编辑或生成 `scene-scripts.json`时，用于了解如何正确使用模板，响应用户的验证、修改模板的请求。模板包括：BEAT_SEQUENCE、CASE_BREAKDOWN、CAUSE_CHAIN、CENTER_FOCUS、CHAT_BUBBLE、CHECKLIST_REVEAL、COGNITIVE_SHIFT、CONCEPT_CARD、DATA_TABLE、DOS_AND_DONTS、KPI_HERO、MAGNIFYING_GLASS、METHOD_STACK、PANEL_GRID、PEER_INDUCT、PROGRESS_RING、PUNCH_CAPTION、QUOTE_CITATION、SPLIT_COMPARE、STAT_COMPARE、STEP_LIST、TEXT_FOCUS、TIMELINE、TREE_DIAGRAM。"
 metadata:
   tags: remotion, scene-scripts, templateMeta, json
 ---
@@ -18,6 +18,7 @@ metadata:
 - 未知或非法 `template` 时，管线可能回退到默认模板（当前配置为 **`CENTER_FOCUS`**）。
 - `param` 内不应长期存放 `content` 或 `totalDurationFrames`（校验会剔除）；时长与分句权威在 `item` 上。
 - **TEXT_FOCUS** 使用 `param.coreSentence`（非空 string[]，每元素一行）与 `param.coreSentenceAnchors`（非普通 `anchors`）；锚点短语须为各段按顺序直接拼接后的子串。
+- **PUNCH_CAPTION** 使用 `param.punches`（必填；每项 **`text`（居中大字）+ `showFrom`（content 下标）** 必填，可选 `enterEffect` / `tone`）；大屏文案以 punches[].text 为准，口播/底字幕仍走 content[]；`anchors` 的 `text` 宜为对应 punches[].text 的子串。
 - 带 `anchors` 的模板：`showFrom` 为 **content 数组的 0-based 下标**，不是时间轴帧号。
 
 ## 图片类字段
@@ -49,6 +50,7 @@ metadata:
 - **PANEL_GRID**: `references/PANEL_GRID.md`
 - **PEER_INDUCT**: `references/PEER_INDUCT.md`
 - **PROGRESS_RING**: `references/PROGRESS_RING.md`
+- **PUNCH_CAPTION**: `references/PUNCH_CAPTION.md`
 - **QUOTE_CITATION**: `references/QUOTE_CITATION.md`
 - **SPLIT_COMPARE**: `references/SPLIT_COMPARE.md`
 - **STAT_COMPARE**: `references/STAT_COMPARE.md`

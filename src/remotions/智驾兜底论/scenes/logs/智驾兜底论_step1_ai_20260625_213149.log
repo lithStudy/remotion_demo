@@ -1,0 +1,5884 @@
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:31:50
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：华为智驾兜底？那是你多付4000块买的保险
+- **当前场景**：引入：兜底疑云
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+华为智驾兜底了！
+这几天真是铺天盖地的营销号。
+
+看过的智慧人群纷纷夸赞。
+华为真有担当。
+智驾终于安全了。
+
+我知道你很激动，但是你先别激动。
+官方公告里，根本没有“兜底”这两个字。
+按这些哄蒙系营销号一贯的作风，我们必须保持怀疑态度。
+真的是兜底吗？
+
+## 可用模板（共 23 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:32:58
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "华为智驾兜底了！",
+      "narrativeType": "HOOK",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "金句式开场冲击，短促强结论，无需配图，典型 TEXT_FOCUS 表达。"
+    },
+    {
+      "text": "这几天真是铺天盖地的营销号。",
+      "narrativeType": "TRANSITION",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "平铺叙述背景氛围，无对比/清单/节拍等结构，用 CENTER_FOCUS 中性呈现。"
+    },
+    {
+      "text": "看过的智慧人群纷纷夸赞。华为真有担当。智驾终于安全了。",
+      "narrativeType": "CASE",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "high",
+      "reasoning": "并列三个夸赞假象，每条可独立配图宫格展示，适合 PANEL_GRID 多例证表达。"
+    },
+    {
+      "text": "我知道你很激动，但是你先别激动。",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "直接对观众进行认知纠正，‘你以为…但其实…’的典型认知转折，选 COGNITIVE_SHIFT。"
+    },
+    {
+      "text": "官方公告里，根本没有“兜底”这两个字。按这些哄蒙系营销号一贯的作风，我们必须保持怀疑态度。真的是兜底吗？",
+      "narrativeType": "LOGIC",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "证据→推论→反问，三步递进构成完整的节拍链，BEAT_SEQUENCE 可分段显现这一逻辑过程。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:32:58
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：华为智驾兜底？那是你多付4000块买的保险
+- **当前场景**：剖析：三点揭露
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+这三件事，看完就清楚了。
+
+第一，你要先买高阶功能包。
+
+这不是白送。
+
+不是全员覆盖。
+
+你要先掏一笔钱，才有资格谈所谓兜底。
+
+6月底前，一次买断3.2万。
+
+7月1日涨到3.6万。
+
+为了这个权益，你还要多付4000。
+
+所谓多出来的兜底，本质上就是用这4000块，买了个智驾补充险。
+
+第二，并不是优先赔付。
+
+出事故以后，
+
+先走交强险。
+
+再走商业险。
+
+两层保险都赔不够了。
+
+才轮到所谓的兜底。
+
+厂家不是第一责任人。
+
+你自己的保险，才是第一层。
+
+智驾的问题，依然还是让你来先承担损失。
+
+第三，这个所谓兜底，也不是无条件全包。
+
+要正常使用智驾。
+
+那么什么叫正常？谁来定义正常？谁能确认是否正常？
+
+都是厂家说了算。
+
+巡航场景里，小额车损还有500元门槛。
+
+大额车损，只是按车损险赔付金额的10%补。最高不超过5万元。
+
+人员和三者损失，也是超出强制险和商业险上限之后，才按规则补。
+
+商业三者险，100万起步很常见了，加上交强险20万，
+
+绝大多数事故，这两层就够了。更别说辅助驾驶的场景了。
+
+额外的保险当然有价值。
+
+可它不是兜底。
+
+它叫补差。
+
+它叫第三层保障。
+
+它叫智驾险加强版。
+
+## 可用模板（共 23 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:35:31
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "这三件事，看完就清楚了。",
+      "narrativeType": "HOOK",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "短促引子，引出三点剖析，无数据/对比/步骤结构，平缓叙述适合 CENTER_FOCUS。",
+      "estimatedSeconds": 2.0
+    },
+    {
+      "text": "第一，你要先买高阶功能包。这不是白送。不是全员覆盖。你要先掏一笔钱，才有资格谈所谓兜底。",
+      "narrativeType": "LOGIC",
+      "template": "METHOD_STACK",
+      "expressionTag": "method",
+      "confidence": "high",
+      "reasoning": "一个标题式核心观点‘你要先买高阶功能包’ + 三句解释展开，符合 METHOD_STACK 结构。",
+      "estimatedSeconds": 7.1
+    },
+    {
+      "text": "6月底前，一次买断3.2万。7月1日涨到3.6万。",
+      "narrativeType": "DATA",
+      "template": "STAT_COMPARE",
+      "expressionTag": "data",
+      "confidence": "high",
+      "reasoning": "两个时间点的价格数值前后对比，可抽象为非负整数，适合 STAT_COMPARE。",
+      "estimatedSeconds": 4.0
+    },
+    {
+      "text": "为了这个权益，你还要多付4000。",
+      "narrativeType": "DATA",
+      "template": "KPI_HERO",
+      "expressionTag": "data",
+      "confidence": "medium",
+      "reasoning": "强调单一核心数值4000元，使用 KPI_HERO 放大焦点；虽然不是典型完成度，但作为突出数字冲击力仍合适。",
+      "estimatedSeconds": 2.7
+    },
+    {
+      "text": "所谓多出来的兜底，本质上就是用这4000块，买了个智驾补充险。",
+      "narrativeType": "LOGIC",
+      "template": "CONCEPT_CARD",
+      "expressionTag": "concept",
+      "confidence": "high",
+      "reasoning": "对‘多出来的兜底’进行概念定义，揭示其本质为‘智驾补充险’，适合 CONCEPT_CARD。",
+      "estimatedSeconds": 4.4
+    },
+    {
+      "text": "第二，并不是优先赔付。出事故以后，先走交强险。再走商业险。两层保险都赔不够了。才轮到所谓的兜底。",
+      "narrativeType": "LOGIC",
+      "template": "STEP_LIST",
+      "expressionTag": "steps",
+      "confidence": "high",
+      "reasoning": "明确的三步赔付顺序（交强险→商业险→兜底），每条步骤简短，符合 STEP_LIST。",
+      "estimatedSeconds": 7.1
+    },
+    {
+      "text": "厂家不是第一责任人。你自己的保险，才是第一层。智驾的问题，依然还是让你来先承担损失。",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "强对照‘不是厂家…而是你自己的保险’，修正观众认知，适合 COGNITIVE_SHIFT。",
+      "estimatedSeconds": 6.7
+    },
+    {
+      "text": "第三，这个所谓兜底，也不是无条件全包。要正常使用智驾。那么什么叫正常？谁来定义正常？谁能确认是否正常？都是厂家说了算。",
+      "narrativeType": "LOGIC",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "从‘要正常使用’引出连续质疑，再到‘厂家说了算’的收束，问答递进适合 BEAT_SEQUENCE。",
+      "estimatedSeconds": 10.2
+    },
+    {
+      "text": "巡航场景里，小额车损还有500元门槛。大额车损，只是按车损险赔付金额的10%补。最高不超过5万元。人员和三者损失，也是超出强制险和商业险上限之后，才按规则补。",
+      "narrativeType": "CASE",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "medium",
+      "reasoning": "三条并列的赔付规则（小额车损、大额车损、人员三者），可用三宫格 PANEL_GRID 清晰展示；字数略超50但结构一致，拆分会削弱并列感。",
+      "estimatedSeconds": 11.3
+    },
+    {
+      "text": "商业三者险，100万起步很常见了，加上交强险20万，绝大多数事故，这两层就够了。更别说辅助驾驶的场景了。",
+      "narrativeType": "LOGIC",
+      "template": "CAUSE_CHAIN",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "从‘高额保险’到‘足够覆盖’再到‘辅助驾驶更无需兜底’的因果传导，适合 CAUSE_CHAIN。",
+      "estimatedSeconds": 8.4
+    },
+    {
+      "text": "额外的保险当然有价值。可它不是兜底。它叫补差。它叫第三层保障。它叫智驾险加强版。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "全片核心结论，否认知觉谬误并层层命名，短促金句适合 TEXT_FOCUS 冲击。",
+      "estimatedSeconds": 7.6
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:35:31
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：华为智驾兜底？那是你多付4000块买的保险
+- **当前场景**：反转·真正兜底
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+所以兜底两个字，看着像保障，本质是营销。
+
+它算准了普通人不看条款。
+
+算准了大家只看标题。
+
+算准了“兜底”两个字，比“智驾险”好听。
+
+于是它把一个付费权益。
+
+包装成厂家担当。
+
+把一个二层补偿。
+
+包装成无忧驾驶。
+
+把一个低概率场景。
+
+包装成日常安全感。
+
+这不是信息解释。
+
+这是宣传升级。
+
+
+什么才叫兜底？比亚迪已经打样了。
+
+用户不用先动自己的保险。
+
+不影响自己的保费权益。
+
+厂家直接承担对应责任。
+
+这才符合普通人对“兜底”的直觉。
+
+
+消费者不是不能接受保险。
+
+也不是不能接受付费权益。
+
+但是不能接受，你用一个高尚的词，来掩盖一个精明的账本。
+
+某些营销号，你涨点良心吧！
+
+## 可用模板（共 23 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:37:01
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "所以兜底两个字，看着像保障，本质是营销。",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "直接给出认知转变：看似保障实为营销，适合 COGNITIVE_SHIFT 展示‘不是…而是…’的冲击感。"
+    },
+    {
+      "text": "它算准了普通人不看条款。算准了大家只看标题。算准了“兜底”两个字，比“智驾险”好听。",
+      "narrativeType": "LOGIC",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "high",
+      "reasoning": "三个并列的‘算准了’实例，每人一句独立节拍，适合用 PANEL_GRID 三宫格分别展示。"
+    },
+    {
+      "text": "于是它把一个付费权益。包装成厂家担当。把一个二层补偿。包装成无忧驾驶。把一个低概率场景。包装成日常安全感。",
+      "narrativeType": "CASE",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "high",
+      "reasoning": "三组‘把…包装成…’的并列对比，每组一图，宫格展示具体包装套路。"
+    },
+    {
+      "text": "这不是信息解释。这是宣传升级。",
+      "narrativeType": "CONCLUSION",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "明确‘不是…而是…’的认知对照，用 COGNITIVE_SHIFT 强化反转结论。"
+    },
+    {
+      "text": "什么才叫兜底？比亚迪已经打样了。",
+      "narrativeType": "TRANSITION",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "medium",
+      "reasoning": "设问→回答，形成两拍递进，引出正面例证，适合 BEAT_SEQUENCE 分步展示。"
+    },
+    {
+      "text": "用户不用先动自己的保险。不影响自己的保费权益。厂家直接承担对应责任。",
+      "narrativeType": "CASE",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "high",
+      "reasoning": "三个并列的‘真正兜底’做法，每人一句，用 PANEL_GRID 展示清晰对比。"
+    },
+    {
+      "text": "这才符合普通人对“兜底”的直觉。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "短促收束金句，无需配图，用 TEXT_FOCUS 锁定核心结论。"
+    },
+    {
+      "text": "消费者不是不能接受保险。也不是不能接受付费权益。但是不能接受，你用一个高尚的词，来掩盖一个精明的账本。某些营销号，你涨点良心吧！",
+      "narrativeType": "CONCLUSION",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "让步铺垫→转折揭示→喊话呼吁，三拍情绪递进，用 BEAT_SEQUENCE 完成最终收束。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:37:01
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+华为智驾兜底了！
+这几天真是铺天盖地的营销号。
+
+看过的智慧人群纷纷夸赞。
+华为真有担当。
+智驾终于安全了。
+
+我知道你很激动，但是你先别激动。
+官方公告里，根本没有“兜底”这两个字。
+按这些哄蒙系营销号一贯的作风，我们必须保持怀疑态度。
+真的是兜底吗？
+
+
+## 🎯 待处理的目标文案
+华为智驾兜底了！
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "华为智驾兜底了！"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:37:16
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "华为智驾兜底了！",
+        "showFrom": 0,
+        "endFrom": 0
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "兜底了",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:37:16
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+华为智驾兜底了！
+这几天真是铺天盖地的营销号。
+
+看过的智慧人群纷纷夸赞。
+华为真有担当。
+智驾终于安全了。
+
+我知道你很激动，但是你先别激动。
+官方公告里，根本没有“兜底”这两个字。
+按这些哄蒙系营销号一贯的作风，我们必须保持怀疑态度。
+真的是兜底吗？
+
+
+## 🎯 待处理的目标文案
+这几天真是铺天盖地的营销号。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "这几天真是铺天盖地的营销号。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:37:23
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "imageSrc": "手机屏幕涌现大量推送通知和相似头像的扁平风格插图", "enterEffect": "fadeIn" } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:37:23
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+华为智驾兜底了！
+这几天真是铺天盖地的营销号。
+
+看过的智慧人群纷纷夸赞。
+华为真有担当。
+智驾终于安全了。
+
+我知道你很激动，但是你先别激动。
+官方公告里，根本没有“兜底”这两个字。
+按这些哄蒙系营销号一贯的作风，我们必须保持怀疑态度。
+真的是兜底吗？
+
+
+## 🎯 待处理的目标文案
+看过的智慧人群纷纷夸赞。华为真有担当。智驾终于安全了。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "看过的智慧人群纷纷夸赞。"
+  },
+  {
+    "index": 1,
+    "text": "华为真有担当。"
+  },
+  {
+    "index": 2,
+    "text": "智驾终于安全了。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:37:33
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "panels": [
+      {
+        "src": "一群人纷纷竖起大拇指的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "一个机器人张开双臂撑起保护伞的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "一辆自动驾驶汽车平稳行驶在路上，周围有绿色安全盾牌的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:37:33
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+华为智驾兜底了！
+这几天真是铺天盖地的营销号。
+
+看过的智慧人群纷纷夸赞。
+华为真有担当。
+智驾终于安全了。
+
+我知道你很激动，但是你先别激动。
+官方公告里，根本没有“兜底”这两个字。
+按这些哄蒙系营销号一贯的作风，我们必须保持怀疑态度。
+真的是兜底吗？
+
+
+## 🎯 待处理的目标文案
+我知道你很激动，但是你先别激动。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "我知道你很激动，"
+  },
+  {
+    "index": 1,
+    "text": "但是你先别激动。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:37:51
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "notText": "你很激动", "butText": "先别激动", "butSrc": "一个做出停止手势的人，表情平静，背景简洁", "notContentIndex": 0, "butContentIndex": 1 } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:37:51
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+华为智驾兜底了！
+这几天真是铺天盖地的营销号。
+
+看过的智慧人群纷纷夸赞。
+华为真有担当。
+智驾终于安全了。
+
+我知道你很激动，但是你先别激动。
+官方公告里，根本没有“兜底”这两个字。
+按这些哄蒙系营销号一贯的作风，我们必须保持怀疑态度。
+真的是兜底吗？
+
+
+## 🎯 待处理的目标文案
+官方公告里，根本没有“兜底”这两个字。按这些哄蒙系营销号一贯的作风，我们必须保持怀疑态度。真的是兜底吗？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "官方公告里，"
+  },
+  {
+    "index": 1,
+    "text": "根本没有“兜底”这两个字。"
+  },
+  {
+    "index": 2,
+    "text": "按这些哄蒙系营销号一贯的作风，"
+  },
+  {
+    "index": 3,
+    "text": "我们必须保持怀疑态度。"
+  },
+  {
+    "index": 4,
+    "text": "真的是兜底吗？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:38:08
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "一份打开的官方公告文件，放大镜在文件上移动，没有找到“兜底”字样，文件背景严肃。",
+        "enterEffect": "breathe",
+        "tone": "calm",
+        "showFrom": 0
+      },
+      {
+        "imageSrc": "一群穿着夸张的营销号人物在喧嚣地举着手机和喇叭，屏幕闪烁“兜底”字样，气氛浮躁。",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 2
+      },
+      {
+        "imageSrc": "一个巨大的红色问号浮现，背景黑暗，人物表情质疑，光线聚焦在问号上。",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 4
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:38:08
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这三件事，看完就清楚了。
+
+第一，你要先买高阶功能包。
+
+这不是白送。
+
+不是全员覆盖。
+
+你要先掏一笔钱，才有资格谈所谓兜底。
+
+6月底前，一次买断3.2万。
+
+7月1日涨到3.6万。
+
+为了这个权益，你还要多付4000。
+
+所谓多出来的兜底，本质上就是用这4000块，买了个智驾补充险。
+
+第二，并不是优先赔付。
+
+出事故以后，
+
+先走交强险。
+
+再走商业险。
+
+两层保险都赔不够了。
+
+才轮到所谓的兜底。
+
+厂家不是第一责任人。
+
+你自己的保险，才是第一层。
+
+智驾的问题，依然还是让你来先承担损失。
+
+第三，这个所谓兜底，也不是无条件全包。
+
+要正常使用智驾。
+
+那么什么叫正常？谁来定义正常？谁能确认是否正常？
+
+都是厂家说了算。
+
+巡航场景里，小额车损还有500元门槛。
+
+大额车损，只是按车损险赔付金额的10%补。最高不超过5万元。
+
+人员和三者损失，也是超出强制险和商业险上限之后，才按规则补。
+
+商业三者险，100万起步很常见了，加上交强险20万，
+
+绝大多数事故，这两层就够了。更别说辅助驾驶的场景了。
+
+额外的保险当然有价值。
+
+可它不是兜底。
+
+它叫补差。
+
+它叫第三层保障。
+
+它叫智驾险加强版。
+
+
+## 🎯 待处理的目标文案
+这三件事，看完就清楚了。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "这三件事，"
+  },
+  {
+    "index": 1,
+    "text": "看完就清楚了。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:38:19
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"imageSrc": "一张简洁的清单，上面排列着三个圆形编号标记", "enterEffect": "fadeIn"}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:38:19
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这三件事，看完就清楚了。
+
+第一，你要先买高阶功能包。
+
+这不是白送。
+
+不是全员覆盖。
+
+你要先掏一笔钱，才有资格谈所谓兜底。
+
+6月底前，一次买断3.2万。
+
+7月1日涨到3.6万。
+
+为了这个权益，你还要多付4000。
+
+所谓多出来的兜底，本质上就是用这4000块，买了个智驾补充险。
+
+第二，并不是优先赔付。
+
+出事故以后，
+
+先走交强险。
+
+再走商业险。
+
+两层保险都赔不够了。
+
+才轮到所谓的兜底。
+
+厂家不是第一责任人。
+
+你自己的保险，才是第一层。
+
+智驾的问题，依然还是让你来先承担损失。
+
+第三，这个所谓兜底，也不是无条件全包。
+
+要正常使用智驾。
+
+那么什么叫正常？谁来定义正常？谁能确认是否正常？
+
+都是厂家说了算。
+
+巡航场景里，小额车损还有500元门槛。
+
+大额车损，只是按车损险赔付金额的10%补。最高不超过5万元。
+
+人员和三者损失，也是超出强制险和商业险上限之后，才按规则补。
+
+商业三者险，100万起步很常见了，加上交强险20万，
+
+绝大多数事故，这两层就够了。更别说辅助驾驶的场景了。
+
+额外的保险当然有价值。
+
+可它不是兜底。
+
+它叫补差。
+
+它叫第三层保障。
+
+它叫智驾险加强版。
+
+
+## 🎯 待处理的目标文案
+第一，你要先买高阶功能包。这不是白送。不是全员覆盖。你要先掏一笔钱，才有资格谈所谓兜底。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "第一，"
+  },
+  {
+    "index": 1,
+    "text": "你要先买高阶功能包。"
+  },
+  {
+    "index": 2,
+    "text": "这不是白送。"
+  },
+  {
+    "index": 3,
+    "text": "不是全员覆盖。"
+  },
+  {
+    "index": 4,
+    "text": "你要先掏一笔钱，"
+  },
+  {
+    "index": 5,
+    "text": "才有资格谈所谓兜底。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：METHOD_STACK
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "该 item 的方法名/提醒标题/观点标题，建议 4~12 个字"
+    },
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "单张主图描述，用于承接这个方法或观点"
+    },
+    "notes": {
+      "type": "array",
+      "description": "可选；解释短语数组。每项含 text 与 showFrom；showFrom 为 content 下标（0-based，非帧数），须在 0～(content 条数-1) 内",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "解释短语"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "title",
+    "imageSrc"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 5 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "METHOD_STACK",
+  "param": {
+    "title": "警惕情绪画面",
+    "imageSrc": "被耸动新闻画面包围、神情紧张的人物简笔画",
+    "notes": [
+      {
+        "text": "先识别这是情绪刺激",
+        "showFrom": 1
+      },
+      {
+        "text": "再追问它是否只是离奇个案",
+        "showFrom": 3
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:38:36
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "title": "先掏钱才有兜底资格",
+    "imageSrc": "一只递出钞票的手，屏幕显示汽车方向盘功能图标，周围有金币和虚线边框暗示资格限制",
+    "notes": [
+      {
+        "text": "高阶功能包需单独购买",
+        "showFrom": 1
+      },
+      {
+        "text": "这不是白送",
+        "showFrom": 2
+      },
+      {
+        "text": "不是全员覆盖",
+        "showFrom": 3
+      },
+      {
+        "text": "先掏钱才有兜底资格",
+        "showFrom": 4
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:38:36
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这三件事，看完就清楚了。
+
+第一，你要先买高阶功能包。
+
+这不是白送。
+
+不是全员覆盖。
+
+你要先掏一笔钱，才有资格谈所谓兜底。
+
+6月底前，一次买断3.2万。
+
+7月1日涨到3.6万。
+
+为了这个权益，你还要多付4000。
+
+所谓多出来的兜底，本质上就是用这4000块，买了个智驾补充险。
+
+第二，并不是优先赔付。
+
+出事故以后，
+
+先走交强险。
+
+再走商业险。
+
+两层保险都赔不够了。
+
+才轮到所谓的兜底。
+
+厂家不是第一责任人。
+
+你自己的保险，才是第一层。
+
+智驾的问题，依然还是让你来先承担损失。
+
+第三，这个所谓兜底，也不是无条件全包。
+
+要正常使用智驾。
+
+那么什么叫正常？谁来定义正常？谁能确认是否正常？
+
+都是厂家说了算。
+
+巡航场景里，小额车损还有500元门槛。
+
+大额车损，只是按车损险赔付金额的10%补。最高不超过5万元。
+
+人员和三者损失，也是超出强制险和商业险上限之后，才按规则补。
+
+商业三者险，100万起步很常见了，加上交强险20万，
+
+绝大多数事故，这两层就够了。更别说辅助驾驶的场景了。
+
+额外的保险当然有价值。
+
+可它不是兜底。
+
+它叫补差。
+
+它叫第三层保障。
+
+它叫智驾险加强版。
+
+
+## 🎯 待处理的目标文案
+6月底前，一次买断3.2万。7月1日涨到3.6万。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "6月底前，"
+  },
+  {
+    "index": 1,
+    "text": "一次买断3.2万。"
+  },
+  {
+    "index": 2,
+    "text": "7月1日涨到3.6万。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：STAT_COMPARE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "bars": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "多条柱状对比；每项须含 label、value（非负数，整数或小数）、showFrom（content 下标），从该条 startFrame 起显示本柱",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "value",
+          "showFrom"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "短标签"
+          },
+          "value": {
+            "type": "number",
+            "description": "数值（非负，整数或小数）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "小数位数；缺省按 value 自动推断"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该柱出现时机：content 数组下标（0-based），取该条 startFrame 作为入场起点"
+          }
+        }
+      }
+    },
+    "leftValue": {
+      "type": "number",
+      "description": "左侧数值（非负），旧版两柱模式"
+    },
+    "rightValue": {
+      "type": "number",
+      "description": "右侧数值（非负），旧版两柱模式"
+    },
+    "leftLabel": {
+      "type": "string",
+      "description": "左侧标签"
+    },
+    "rightLabel": {
+      "type": "string",
+      "description": "右侧标签"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；顶部锚点词列表，showFrom 为 content 下标（取该条 startFrame），与 KPI_HERO / DATA_TABLE 一致",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "锚点词文案"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "STAT_COMPARE",
+  "param": {
+    "bars": [
+      {
+        "label": "去年",
+        "value": 32,
+        "showFrom": 0
+      },
+      {
+        "label": "今年",
+        "value": 68,
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:38:47
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"bars":[{"label":"6月底前","value":3.2,"showFrom":0},{"label":"涨到3.6万","value":3.6,"showFrom":2}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:38:47
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这三件事，看完就清楚了。
+
+第一，你要先买高阶功能包。
+
+这不是白送。
+
+不是全员覆盖。
+
+你要先掏一笔钱，才有资格谈所谓兜底。
+
+6月底前，一次买断3.2万。
+
+7月1日涨到3.6万。
+
+为了这个权益，你还要多付4000。
+
+所谓多出来的兜底，本质上就是用这4000块，买了个智驾补充险。
+
+第二，并不是优先赔付。
+
+出事故以后，
+
+先走交强险。
+
+再走商业险。
+
+两层保险都赔不够了。
+
+才轮到所谓的兜底。
+
+厂家不是第一责任人。
+
+你自己的保险，才是第一层。
+
+智驾的问题，依然还是让你来先承担损失。
+
+第三，这个所谓兜底，也不是无条件全包。
+
+要正常使用智驾。
+
+那么什么叫正常？谁来定义正常？谁能确认是否正常？
+
+都是厂家说了算。
+
+巡航场景里，小额车损还有500元门槛。
+
+大额车损，只是按车损险赔付金额的10%补。最高不超过5万元。
+
+人员和三者损失，也是超出强制险和商业险上限之后，才按规则补。
+
+商业三者险，100万起步很常见了，加上交强险20万，
+
+绝大多数事故，这两层就够了。更别说辅助驾驶的场景了。
+
+额外的保险当然有价值。
+
+可它不是兜底。
+
+它叫补差。
+
+它叫第三层保障。
+
+它叫智驾险加强版。
+
+
+## 🎯 待处理的目标文案
+为了这个权益，你还要多付4000。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "为了这个权益，"
+  },
+  {
+    "index": 1,
+    "text": "你还要多付4000。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：KPI_HERO
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "number",
+      "description": "单指标模式：滚动终值（整数或小数）；若提供 blocks 则可省略"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "单指标：数字左侧"
+    },
+    "suffix": {
+      "type": "string",
+      "description": "单指标：数字右侧单位"
+    },
+    "label": {
+      "type": "string",
+      "description": "单指标：数字上方标签（与 blocks[].label 同视觉层级）"
+    },
+    "useGrouping": {
+      "type": "boolean",
+      "description": "单指标：千分位（小数时作用于整数部分）"
+    },
+    "decimalPlaces": {
+      "type": "integer",
+      "description": "单指标：小数位数，缺省按 value 自动推断"
+    },
+    "blocks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "多指标：每项 value、showFrom（content 下标）；可选 prefix、suffix、label、useGrouping",
+      "items": {
+        "type": "object",
+        "required": [
+          "value",
+          "showFrom"
+        ],
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "终值，整数或小数（如 2.5 万人）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "小数位数，缺省按 value 自动推断（如 2.5→1）"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该块出现时机：content 下标，取该条 startFrame"
+          },
+          "prefix": {
+            "type": "string"
+          },
+          "suffix": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string",
+            "description": "数字上方标签（多列时字号已加大）"
+          },
+          "useGrouping": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "countDuration": {
+      "type": "integer",
+      "description": "数字从 0 滚到目标值的 spring 时长（帧），默认 28"
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "KPI_HERO",
+  "param": {
+    "blocks": [
+      {
+        "value": 87,
+        "suffix": "%",
+        "label": "满意度",
+        "showFrom": 0
+      },
+      {
+        "value": 62,
+        "suffix": "%",
+        "label": "留存",
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:39:05
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "blocks": [
+      {
+        "value": 4000,
+        "showFrom": 1,
+        "label": "额外费用",
+        "useGrouping": false,
+        "decimalPlaces": 0
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:39:05
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这三件事，看完就清楚了。
+
+第一，你要先买高阶功能包。
+
+这不是白送。
+
+不是全员覆盖。
+
+你要先掏一笔钱，才有资格谈所谓兜底。
+
+6月底前，一次买断3.2万。
+
+7月1日涨到3.6万。
+
+为了这个权益，你还要多付4000。
+
+所谓多出来的兜底，本质上就是用这4000块，买了个智驾补充险。
+
+第二，并不是优先赔付。
+
+出事故以后，
+
+先走交强险。
+
+再走商业险。
+
+两层保险都赔不够了。
+
+才轮到所谓的兜底。
+
+厂家不是第一责任人。
+
+你自己的保险，才是第一层。
+
+智驾的问题，依然还是让你来先承担损失。
+
+第三，这个所谓兜底，也不是无条件全包。
+
+要正常使用智驾。
+
+那么什么叫正常？谁来定义正常？谁能确认是否正常？
+
+都是厂家说了算。
+
+巡航场景里，小额车损还有500元门槛。
+
+大额车损，只是按车损险赔付金额的10%补。最高不超过5万元。
+
+人员和三者损失，也是超出强制险和商业险上限之后，才按规则补。
+
+商业三者险，100万起步很常见了，加上交强险20万，
+
+绝大多数事故，这两层就够了。更别说辅助驾驶的场景了。
+
+额外的保险当然有价值。
+
+可它不是兜底。
+
+它叫补差。
+
+它叫第三层保障。
+
+它叫智驾险加强版。
+
+
+## 🎯 待处理的目标文案
+所谓多出来的兜底，本质上就是用这4000块，买了个智驾补充险。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "所谓多出来的兜底，"
+  },
+  {
+    "index": 1,
+    "text": "本质上就是用这4000块，"
+  },
+  {
+    "index": 2,
+    "text": "买了个智驾补充险。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CONCEPT_CARD
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "概念图标描述"
+    },
+    "conceptName": {
+      "type": "string",
+      "description": "概念名称"
+    }
+  },
+  "required": [
+    "imageSrc",
+    "conceptName"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CONCEPT_CARD",
+  "param": {
+    "imageSrc": "过滤器/筛网简笔画图标",
+    "conceptName": "幸存者偏差"
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:39:16
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "imageSrc": "一张钞票的角落被折叠成一个小盾牌形状，象征用金钱购买保障", "conceptName": "智驾补充险" } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:39:16
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这三件事，看完就清楚了。
+
+第一，你要先买高阶功能包。
+
+这不是白送。
+
+不是全员覆盖。
+
+你要先掏一笔钱，才有资格谈所谓兜底。
+
+6月底前，一次买断3.2万。
+
+7月1日涨到3.6万。
+
+为了这个权益，你还要多付4000。
+
+所谓多出来的兜底，本质上就是用这4000块，买了个智驾补充险。
+
+第二，并不是优先赔付。
+
+出事故以后，
+
+先走交强险。
+
+再走商业险。
+
+两层保险都赔不够了。
+
+才轮到所谓的兜底。
+
+厂家不是第一责任人。
+
+你自己的保险，才是第一层。
+
+智驾的问题，依然还是让你来先承担损失。
+
+第三，这个所谓兜底，也不是无条件全包。
+
+要正常使用智驾。
+
+那么什么叫正常？谁来定义正常？谁能确认是否正常？
+
+都是厂家说了算。
+
+巡航场景里，小额车损还有500元门槛。
+
+大额车损，只是按车损险赔付金额的10%补。最高不超过5万元。
+
+人员和三者损失，也是超出强制险和商业险上限之后，才按规则补。
+
+商业三者险，100万起步很常见了，加上交强险20万，
+
+绝大多数事故，这两层就够了。更别说辅助驾驶的场景了。
+
+额外的保险当然有价值。
+
+可它不是兜底。
+
+它叫补差。
+
+它叫第三层保障。
+
+它叫智驾险加强版。
+
+
+## 🎯 待处理的目标文案
+第二，并不是优先赔付。出事故以后，先走交强险。再走商业险。两层保险都赔不够了。才轮到所谓的兜底。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "第二，"
+  },
+  {
+    "index": 1,
+    "text": "并不是优先赔付。"
+  },
+  {
+    "index": 2,
+    "text": "出事故以后，"
+  },
+  {
+    "index": 3,
+    "text": "先走交强险。"
+  },
+  {
+    "index": 4,
+    "text": "再走商业险。"
+  },
+  {
+    "index": 5,
+    "text": "两层保险都赔不够了。"
+  },
+  {
+    "index": 6,
+    "text": "才轮到所谓的兜底。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：STEP_LIST
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "可选；步骤列表上方标题，建议 4～14 字"
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "showFrom": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "对应 content 数组的下标（0-based）；该步在 content[showFrom].startFrame 帧开始入场。不传则按 staggerDelay 与序号顺延。"
+              }
+            },
+            "required": [
+              "text"
+            ]
+          }
+        ]
+      },
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "步骤（可选）。可为字符串，或 { text, showFrom? }（showFrom=content 下标）；不传则从 content 提取。每条 text 建议不超过 10 字。"
+    }
+  },
+  "required": []
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 6 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "STEP_LIST",
+  "param": {
+    "title": "流程概览",
+    "steps": [
+      {
+        "text": "第一步",
+        "showFrom": 0
+      },
+      {
+        "text": "第二步",
+        "showFrom": 1
+      },
+      {
+        "text": "第三步",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:39:33
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "steps": [
+      {
+        "text": "先走交强险",
+        "showFrom": 3
+      },
+      {
+        "text": "再走商业险",
+        "showFrom": 4
+      },
+      {
+        "text": "两层不够才兜底",
+        "showFrom": 5
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:39:33
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这三件事，看完就清楚了。
+
+第一，你要先买高阶功能包。
+
+这不是白送。
+
+不是全员覆盖。
+
+你要先掏一笔钱，才有资格谈所谓兜底。
+
+6月底前，一次买断3.2万。
+
+7月1日涨到3.6万。
+
+为了这个权益，你还要多付4000。
+
+所谓多出来的兜底，本质上就是用这4000块，买了个智驾补充险。
+
+第二，并不是优先赔付。
+
+出事故以后，
+
+先走交强险。
+
+再走商业险。
+
+两层保险都赔不够了。
+
+才轮到所谓的兜底。
+
+厂家不是第一责任人。
+
+你自己的保险，才是第一层。
+
+智驾的问题，依然还是让你来先承担损失。
+
+第三，这个所谓兜底，也不是无条件全包。
+
+要正常使用智驾。
+
+那么什么叫正常？谁来定义正常？谁能确认是否正常？
+
+都是厂家说了算。
+
+巡航场景里，小额车损还有500元门槛。
+
+大额车损，只是按车损险赔付金额的10%补。最高不超过5万元。
+
+人员和三者损失，也是超出强制险和商业险上限之后，才按规则补。
+
+商业三者险，100万起步很常见了，加上交强险20万，
+
+绝大多数事故，这两层就够了。更别说辅助驾驶的场景了。
+
+额外的保险当然有价值。
+
+可它不是兜底。
+
+它叫补差。
+
+它叫第三层保障。
+
+它叫智驾险加强版。
+
+
+## 🎯 待处理的目标文案
+厂家不是第一责任人。你自己的保险，才是第一层。智驾的问题，依然还是让你来先承担损失。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "厂家不是第一责任人。"
+  },
+  {
+    "index": 1,
+    "text": "你自己的保险，"
+  },
+  {
+    "index": 2,
+    "text": "才是第一层。"
+  },
+  {
+    "index": 3,
+    "text": "智驾的问题，"
+  },
+  {
+    "index": 4,
+    "text": "依然还是让你来先承担损失。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:39:55
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "厂家第一责任人",
+    "butText": "你的保险第一层",
+    "butSrc": "一个人手持保险单文件，被透明保护罩笼罩，象征个人保险是第一层保护",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:39:55
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这三件事，看完就清楚了。
+
+第一，你要先买高阶功能包。
+
+这不是白送。
+
+不是全员覆盖。
+
+你要先掏一笔钱，才有资格谈所谓兜底。
+
+6月底前，一次买断3.2万。
+
+7月1日涨到3.6万。
+
+为了这个权益，你还要多付4000。
+
+所谓多出来的兜底，本质上就是用这4000块，买了个智驾补充险。
+
+第二，并不是优先赔付。
+
+出事故以后，
+
+先走交强险。
+
+再走商业险。
+
+两层保险都赔不够了。
+
+才轮到所谓的兜底。
+
+厂家不是第一责任人。
+
+你自己的保险，才是第一层。
+
+智驾的问题，依然还是让你来先承担损失。
+
+第三，这个所谓兜底，也不是无条件全包。
+
+要正常使用智驾。
+
+那么什么叫正常？谁来定义正常？谁能确认是否正常？
+
+都是厂家说了算。
+
+巡航场景里，小额车损还有500元门槛。
+
+大额车损，只是按车损险赔付金额的10%补。最高不超过5万元。
+
+人员和三者损失，也是超出强制险和商业险上限之后，才按规则补。
+
+商业三者险，100万起步很常见了，加上交强险20万，
+
+绝大多数事故，这两层就够了。更别说辅助驾驶的场景了。
+
+额外的保险当然有价值。
+
+可它不是兜底。
+
+它叫补差。
+
+它叫第三层保障。
+
+它叫智驾险加强版。
+
+
+## 🎯 待处理的目标文案
+第三，这个所谓兜底，也不是无条件全包。要正常使用智驾。那么什么叫正常？谁来定义正常？谁能确认是否正常？都是厂家说了算。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "第三，"
+  },
+  {
+    "index": 1,
+    "text": "这个所谓兜底，"
+  },
+  {
+    "index": 2,
+    "text": "也不是无条件全包。"
+  },
+  {
+    "index": 3,
+    "text": "要正常使用智驾。"
+  },
+  {
+    "index": 4,
+    "text": "那么什么叫正常？"
+  },
+  {
+    "index": 5,
+    "text": "谁来定义正常？"
+  },
+  {
+    "index": 6,
+    "text": "谁能确认是否正常？"
+  },
+  {
+    "index": 7,
+    "text": "都是厂家说了算。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:40:11
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "一张合同纸被撕成两半，碎片飘落，背景为深灰色调，象征条款的破裂",
+        "enterEffect": "breathe",
+        "tone": "alert"
+      },
+      {
+        "imageSrc": "迷雾笼罩的道路上竖起一个巨大的问号路标，看不清前方，象征定义模糊的规则",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      },
+      {
+        "imageSrc": "多重铁门层层交叠，每扇门后藏着不同的阴影，象征解释权层层嵌套",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      },
+      {
+        "imageSrc": "一只巨大的手掌按下规则手册，其余背景模糊，象征最终解释权绝对归属",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:40:11
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这三件事，看完就清楚了。
+
+第一，你要先买高阶功能包。
+
+这不是白送。
+
+不是全员覆盖。
+
+你要先掏一笔钱，才有资格谈所谓兜底。
+
+6月底前，一次买断3.2万。
+
+7月1日涨到3.6万。
+
+为了这个权益，你还要多付4000。
+
+所谓多出来的兜底，本质上就是用这4000块，买了个智驾补充险。
+
+第二，并不是优先赔付。
+
+出事故以后，
+
+先走交强险。
+
+再走商业险。
+
+两层保险都赔不够了。
+
+才轮到所谓的兜底。
+
+厂家不是第一责任人。
+
+你自己的保险，才是第一层。
+
+智驾的问题，依然还是让你来先承担损失。
+
+第三，这个所谓兜底，也不是无条件全包。
+
+要正常使用智驾。
+
+那么什么叫正常？谁来定义正常？谁能确认是否正常？
+
+都是厂家说了算。
+
+巡航场景里，小额车损还有500元门槛。
+
+大额车损，只是按车损险赔付金额的10%补。最高不超过5万元。
+
+人员和三者损失，也是超出强制险和商业险上限之后，才按规则补。
+
+商业三者险，100万起步很常见了，加上交强险20万，
+
+绝大多数事故，这两层就够了。更别说辅助驾驶的场景了。
+
+额外的保险当然有价值。
+
+可它不是兜底。
+
+它叫补差。
+
+它叫第三层保障。
+
+它叫智驾险加强版。
+
+
+## 🎯 待处理的目标文案
+巡航场景里，小额车损还有500元门槛。大额车损，只是按车损险赔付金额的10%补。最高不超过5万元。人员和三者损失，也是超出强制险和商业险上限之后，才按规则补。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "巡航场景里，"
+  },
+  {
+    "index": 1,
+    "text": "小额车损还有500元门槛。"
+  },
+  {
+    "index": 2,
+    "text": "大额车损，"
+  },
+  {
+    "index": 3,
+    "text": "只是按车损险赔付金额的10%补。"
+  },
+  {
+    "index": 4,
+    "text": "最高不超过5万元。"
+  },
+  {
+    "index": 5,
+    "text": "人员和三者损失，"
+  },
+  {
+    "index": 6,
+    "text": "也是超出强制险和商业险上限之后，"
+  },
+  {
+    "index": 7,
+    "text": "才按规则补。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:40:43
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "panels": [
+      {
+        "src": "一辆轿车在高速公路上巡航行驶的远景，道路标线清晰",
+        "showFrom": 0,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "src": "道路上突然出现一道夸张的红色高门槛，门槛前散落着五枚金币",
+        "showFrom": 1,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "一个圆饼图，只有十分之一的细小扇形被高亮，其余部分灰暗",
+        "showFrom": 3,
+        "enterEffect": "slideLeft"
+      },
+      {
+        "src": "一个逐渐升高的柱状图，顶端被一条粗红线封顶，无法再增长",
+        "showFrom": 4,
+        "enterEffect": "breathe"
+      },
+      {
+        "src": "三层透明保护罩层叠保护着三个人形图标，最外层标有加号符号",
+        "showFrom": 5,
+        "enterEffect": "fadeIn"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:40:43
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这三件事，看完就清楚了。
+
+第一，你要先买高阶功能包。
+
+这不是白送。
+
+不是全员覆盖。
+
+你要先掏一笔钱，才有资格谈所谓兜底。
+
+6月底前，一次买断3.2万。
+
+7月1日涨到3.6万。
+
+为了这个权益，你还要多付4000。
+
+所谓多出来的兜底，本质上就是用这4000块，买了个智驾补充险。
+
+第二，并不是优先赔付。
+
+出事故以后，
+
+先走交强险。
+
+再走商业险。
+
+两层保险都赔不够了。
+
+才轮到所谓的兜底。
+
+厂家不是第一责任人。
+
+你自己的保险，才是第一层。
+
+智驾的问题，依然还是让你来先承担损失。
+
+第三，这个所谓兜底，也不是无条件全包。
+
+要正常使用智驾。
+
+那么什么叫正常？谁来定义正常？谁能确认是否正常？
+
+都是厂家说了算。
+
+巡航场景里，小额车损还有500元门槛。
+
+大额车损，只是按车损险赔付金额的10%补。最高不超过5万元。
+
+人员和三者损失，也是超出强制险和商业险上限之后，才按规则补。
+
+商业三者险，100万起步很常见了，加上交强险20万，
+
+绝大多数事故，这两层就够了。更别说辅助驾驶的场景了。
+
+额外的保险当然有价值。
+
+可它不是兜底。
+
+它叫补差。
+
+它叫第三层保障。
+
+它叫智驾险加强版。
+
+
+## 🎯 待处理的目标文案
+商业三者险，100万起步很常见了，加上交强险20万，绝大多数事故，这两层就够了。更别说辅助驾驶的场景了。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "商业三者险，"
+  },
+  {
+    "index": 1,
+    "text": "100万起步很常见了，"
+  },
+  {
+    "index": 2,
+    "text": "加上交强险20万，"
+  },
+  {
+    "index": 3,
+    "text": "绝大多数事故，"
+  },
+  {
+    "index": 4,
+    "text": "这两层就够了。"
+  },
+  {
+    "index": 5,
+    "text": "更别说辅助驾驶的场景了。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CAUSE_CHAIN
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "layout": {
+      "type": "string",
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "default": "horizontal",
+      "description": "链的排布方向；横屏/常规叙事默认 horizontal，竖屏可设 vertical"
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "因果节点；showFrom 为 content 数组下标（0-based），入场时刻取该条 startFrame",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "imageSrc",
+          "showFrom"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "节点短标签，建议 2～8 字"
+          },
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该环节隐喻配图"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；顶部依次展示锚点词并保留为列表，showFrom 为 content 下标（0-based，非帧数）；保持克制，只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "nodes"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 6 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CAUSE_CHAIN",
+  "param": {
+    "layout": "horizontal",
+    "nodes": [
+      {
+        "label": "刺激",
+        "imageSrc": "闪电击中大脑的简笔画",
+        "showFrom": 0
+      },
+      {
+        "label": "解读",
+        "imageSrc": "放大镜看信息的简笔画",
+        "showFrom": 1
+      },
+      {
+        "label": "行动",
+        "imageSrc": "按下按钮的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:41:29
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "layout": "horizontal",
+    "nodes": [
+      {
+        "label": "百万三者",
+        "imageSrc": "一张标注了100万的商业保险单简笔画，放在汽车旁边",
+        "showFrom": 0
+      },
+      {
+        "label": "交强险20万",
+        "imageSrc": "加一份交强险单据，与上一张保单重叠，形成双保险的视觉效果",
+        "showFrom": 2
+      },
+      {
+        "label": "覆盖大多数",
+        "imageSrc": "一把保护伞罩住多辆小汽车，表示大多数事故被保障",
+        "showFrom": 3
+      }
+    ],
+    "anchors": [
+      {
+        "text": "100万起步",
+        "showFrom": 1,
+        "color": "#000000",
+        "anim": "popIn",
+        "audioEffect": "ping"
+      },
+      {
+        "text": "这两层就够了",
+        "showFrom": 4,
+        "color": "#EF4444",
+        "anim": "highlight",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:41:29
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+这三件事，看完就清楚了。
+
+第一，你要先买高阶功能包。
+
+这不是白送。
+
+不是全员覆盖。
+
+你要先掏一笔钱，才有资格谈所谓兜底。
+
+6月底前，一次买断3.2万。
+
+7月1日涨到3.6万。
+
+为了这个权益，你还要多付4000。
+
+所谓多出来的兜底，本质上就是用这4000块，买了个智驾补充险。
+
+第二，并不是优先赔付。
+
+出事故以后，
+
+先走交强险。
+
+再走商业险。
+
+两层保险都赔不够了。
+
+才轮到所谓的兜底。
+
+厂家不是第一责任人。
+
+你自己的保险，才是第一层。
+
+智驾的问题，依然还是让你来先承担损失。
+
+第三，这个所谓兜底，也不是无条件全包。
+
+要正常使用智驾。
+
+那么什么叫正常？谁来定义正常？谁能确认是否正常？
+
+都是厂家说了算。
+
+巡航场景里，小额车损还有500元门槛。
+
+大额车损，只是按车损险赔付金额的10%补。最高不超过5万元。
+
+人员和三者损失，也是超出强制险和商业险上限之后，才按规则补。
+
+商业三者险，100万起步很常见了，加上交强险20万，
+
+绝大多数事故，这两层就够了。更别说辅助驾驶的场景了。
+
+额外的保险当然有价值。
+
+可它不是兜底。
+
+它叫补差。
+
+它叫第三层保障。
+
+它叫智驾险加强版。
+
+
+## 🎯 待处理的目标文案
+额外的保险当然有价值。可它不是兜底。它叫补差。它叫第三层保障。它叫智驾险加强版。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "额外的保险当然有价值。"
+  },
+  {
+    "index": 1,
+    "text": "可它不是兜底。"
+  },
+  {
+    "index": 2,
+    "text": "它叫补差。"
+  },
+  {
+    "index": 3,
+    "text": "它叫第三层保障。"
+  },
+  {
+    "index": 4,
+    "text": "它叫智驾险加强版。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:41:57
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "额外的保险当然有价值。",
+        "showFrom": 0,
+        "endFrom": 1
+      },
+      {
+        "text": "可它不是兜底。",
+        "showFrom": 1,
+        "endFrom": 2
+      },
+      {
+        "text": "它叫补差。\n它叫第三层保障。\n它叫智驾险加强版。",
+        "showFrom": 2,
+        "endFrom": 4
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "补差",
+        "color": "#EF4444"
+      },
+      {
+        "coreSentenceAnchor": "第三层保障",
+        "color": "#EF4444"
+      },
+      {
+        "coreSentenceAnchor": "智驾险加强版",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:41:57
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+所以兜底两个字，看着像保障，本质是营销。
+
+它算准了普通人不看条款。
+
+算准了大家只看标题。
+
+算准了“兜底”两个字，比“智驾险”好听。
+
+于是它把一个付费权益。
+
+包装成厂家担当。
+
+把一个二层补偿。
+
+包装成无忧驾驶。
+
+把一个低概率场景。
+
+包装成日常安全感。
+
+这不是信息解释。
+
+这是宣传升级。
+
+
+什么才叫兜底？比亚迪已经打样了。
+
+用户不用先动自己的保险。
+
+不影响自己的保费权益。
+
+厂家直接承担对应责任。
+
+这才符合普通人对“兜底”的直觉。
+
+
+消费者不是不能接受保险。
+
+也不是不能接受付费权益。
+
+但是不能接受，你用一个高尚的词，来掩盖一个精明的账本。
+
+某些营销号，你涨点良心吧！
+
+
+## 🎯 待处理的目标文案
+所以兜底两个字，看着像保障，本质是营销。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "所以兜底两个字，"
+  },
+  {
+    "index": 1,
+    "text": "看着像保障，"
+  },
+  {
+    "index": 2,
+    "text": "本质是营销。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:42:16
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "像保障",
+    "butText": "是营销",
+    "butSrc": "一个被撕开的精美礼盒，里面露出密密麻麻的条款和计算器，背景是诱人的广告牌",
+    "notContentIndex": 1,
+    "butContentIndex": 2
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:42:16
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+所以兜底两个字，看着像保障，本质是营销。
+
+它算准了普通人不看条款。
+
+算准了大家只看标题。
+
+算准了“兜底”两个字，比“智驾险”好听。
+
+于是它把一个付费权益。
+
+包装成厂家担当。
+
+把一个二层补偿。
+
+包装成无忧驾驶。
+
+把一个低概率场景。
+
+包装成日常安全感。
+
+这不是信息解释。
+
+这是宣传升级。
+
+
+什么才叫兜底？比亚迪已经打样了。
+
+用户不用先动自己的保险。
+
+不影响自己的保费权益。
+
+厂家直接承担对应责任。
+
+这才符合普通人对“兜底”的直觉。
+
+
+消费者不是不能接受保险。
+
+也不是不能接受付费权益。
+
+但是不能接受，你用一个高尚的词，来掩盖一个精明的账本。
+
+某些营销号，你涨点良心吧！
+
+
+## 🎯 待处理的目标文案
+它算准了普通人不看条款。算准了大家只看标题。算准了“兜底”两个字，比“智驾险”好听。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "它算准了普通人不看条款。"
+  },
+  {
+    "index": 1,
+    "text": "算准了大家只看标题。"
+  },
+  {
+    "index": 2,
+    "text": "算准了“兜底”两个字，"
+  },
+  {
+    "index": 3,
+    "text": "比“智驾险”好听。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:42:37
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "panels": [
+      {
+        "src": "一个人背对镜头，面前桌上摊开密密麻麻写满小字的文件，他直接抬手将文件快速翻过，不屑细看",
+        "showFrom": 0,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "src": "放大镜只聚焦在一个大大的标题上，标题周围的小字全部模糊虚化，象征只看标题",
+        "showFrom": 1,
+        "enterEffect": "slideLeft"
+      },
+      {
+        "src": "一只宽大的网兜稳稳接住正在坠落的人，给人安全兜底的感觉",
+        "showFrom": 2,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "一只耳朵一侧飘着悦耳的音符，另一侧是刺耳的警报波形，音符一侧明显更受青睐",
+        "showFrom": 3,
+        "enterEffect": "fadeIn"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:42:37
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+所以兜底两个字，看着像保障，本质是营销。
+
+它算准了普通人不看条款。
+
+算准了大家只看标题。
+
+算准了“兜底”两个字，比“智驾险”好听。
+
+于是它把一个付费权益。
+
+包装成厂家担当。
+
+把一个二层补偿。
+
+包装成无忧驾驶。
+
+把一个低概率场景。
+
+包装成日常安全感。
+
+这不是信息解释。
+
+这是宣传升级。
+
+
+什么才叫兜底？比亚迪已经打样了。
+
+用户不用先动自己的保险。
+
+不影响自己的保费权益。
+
+厂家直接承担对应责任。
+
+这才符合普通人对“兜底”的直觉。
+
+
+消费者不是不能接受保险。
+
+也不是不能接受付费权益。
+
+但是不能接受，你用一个高尚的词，来掩盖一个精明的账本。
+
+某些营销号，你涨点良心吧！
+
+
+## 🎯 待处理的目标文案
+于是它把一个付费权益。包装成厂家担当。把一个二层补偿。包装成无忧驾驶。把一个低概率场景。包装成日常安全感。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "于是它把一个付费权益。"
+  },
+  {
+    "index": 1,
+    "text": "包装成厂家担当。"
+  },
+  {
+    "index": 2,
+    "text": "把一个二层补偿。"
+  },
+  {
+    "index": 3,
+    "text": "包装成无忧驾驶。"
+  },
+  {
+    "index": 4,
+    "text": "把一个低概率场景。"
+  },
+  {
+    "index": 5,
+    "text": "包装成日常安全感。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:43:04
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "panels": [
+      {
+        "src": "一只手将贴着价格标签的商品放在台面上",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "同一个商品被一只戴着手套的手放入闪闪发光的盾形勋章盒中",
+        "showFrom": 1,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "src": "一份布满细小纹路和隐秘印章的保险单合同，纸张边缘微卷",
+        "showFrom": 2,
+        "enterEffect": "slideBottom"
+      },
+      {
+        "src": "一辆轿车在阳光普照的宽阔高速公路上畅行，天空蔚蓝",
+        "showFrom": 3,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "src": "一个巨大转盘上，指针指向一个极其狭窄的扇形区域，其余区域为灰色",
+        "showFrom": 4,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "温馨客厅里一家三口坐在沙发上微笑，身后墙上有一个巨大的心形锁图案",
+        "showFrom": 5,
+        "enterEffect": "fadeIn"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:43:04
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+所以兜底两个字，看着像保障，本质是营销。
+
+它算准了普通人不看条款。
+
+算准了大家只看标题。
+
+算准了“兜底”两个字，比“智驾险”好听。
+
+于是它把一个付费权益。
+
+包装成厂家担当。
+
+把一个二层补偿。
+
+包装成无忧驾驶。
+
+把一个低概率场景。
+
+包装成日常安全感。
+
+这不是信息解释。
+
+这是宣传升级。
+
+
+什么才叫兜底？比亚迪已经打样了。
+
+用户不用先动自己的保险。
+
+不影响自己的保费权益。
+
+厂家直接承担对应责任。
+
+这才符合普通人对“兜底”的直觉。
+
+
+消费者不是不能接受保险。
+
+也不是不能接受付费权益。
+
+但是不能接受，你用一个高尚的词，来掩盖一个精明的账本。
+
+某些营销号，你涨点良心吧！
+
+
+## 🎯 待处理的目标文案
+这不是信息解释。这是宣传升级。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "这不是信息解释。"
+  },
+  {
+    "index": 1,
+    "text": "这是宣传升级。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:43:17
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"notText":"信息解释","butText":"宣传升级","butSrc":"聚光灯照亮升级后的舞台，装饰华丽的海报墙","notContentIndex":0,"butContentIndex":1}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:43:17
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+所以兜底两个字，看着像保障，本质是营销。
+
+它算准了普通人不看条款。
+
+算准了大家只看标题。
+
+算准了“兜底”两个字，比“智驾险”好听。
+
+于是它把一个付费权益。
+
+包装成厂家担当。
+
+把一个二层补偿。
+
+包装成无忧驾驶。
+
+把一个低概率场景。
+
+包装成日常安全感。
+
+这不是信息解释。
+
+这是宣传升级。
+
+
+什么才叫兜底？比亚迪已经打样了。
+
+用户不用先动自己的保险。
+
+不影响自己的保费权益。
+
+厂家直接承担对应责任。
+
+这才符合普通人对“兜底”的直觉。
+
+
+消费者不是不能接受保险。
+
+也不是不能接受付费权益。
+
+但是不能接受，你用一个高尚的词，来掩盖一个精明的账本。
+
+某些营销号，你涨点良心吧！
+
+
+## 🎯 待处理的目标文案
+什么才叫兜底？比亚迪已经打样了。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "什么才叫兜底？"
+  },
+  {
+    "index": 1,
+    "text": "比亚迪已经打样了。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:43:34
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "一个男人手持放大镜仔细阅读合同，表情疑惑",
+        "enterEffect": "breathe",
+        "tone": "calm"
+      },
+      {
+        "imageSrc": "一辆比亚迪汉EV在阳光下行驶，车后出现一道金色标杆光环，象征打样与担当",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:43:34
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+所以兜底两个字，看着像保障，本质是营销。
+
+它算准了普通人不看条款。
+
+算准了大家只看标题。
+
+算准了“兜底”两个字，比“智驾险”好听。
+
+于是它把一个付费权益。
+
+包装成厂家担当。
+
+把一个二层补偿。
+
+包装成无忧驾驶。
+
+把一个低概率场景。
+
+包装成日常安全感。
+
+这不是信息解释。
+
+这是宣传升级。
+
+
+什么才叫兜底？比亚迪已经打样了。
+
+用户不用先动自己的保险。
+
+不影响自己的保费权益。
+
+厂家直接承担对应责任。
+
+这才符合普通人对“兜底”的直觉。
+
+
+消费者不是不能接受保险。
+
+也不是不能接受付费权益。
+
+但是不能接受，你用一个高尚的词，来掩盖一个精明的账本。
+
+某些营销号，你涨点良心吧！
+
+
+## 🎯 待处理的目标文案
+用户不用先动自己的保险。不影响自己的保费权益。厂家直接承担对应责任。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "用户不用先动自己的保险。"
+  },
+  {
+    "index": 1,
+    "text": "不影响自己的保费权益。"
+  },
+  {
+    "index": 2,
+    "text": "厂家直接承担对应责任。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:43:46
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "panels": [
+      {
+        "src": "一个司机挥手拒绝保险理赔文件，脸上带着轻松的微笑",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "一张保费权益证书完好闪亮，旁边有一个向上的绿色箭头",
+        "showFrom": 1,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "src": "一只带有车企标志的手掌稳稳托起责任担子，背景有盾牌轮廓",
+        "showFrom": 2,
+        "enterEffect": "fadeIn"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:43:46
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+所以兜底两个字，看着像保障，本质是营销。
+
+它算准了普通人不看条款。
+
+算准了大家只看标题。
+
+算准了“兜底”两个字，比“智驾险”好听。
+
+于是它把一个付费权益。
+
+包装成厂家担当。
+
+把一个二层补偿。
+
+包装成无忧驾驶。
+
+把一个低概率场景。
+
+包装成日常安全感。
+
+这不是信息解释。
+
+这是宣传升级。
+
+
+什么才叫兜底？比亚迪已经打样了。
+
+用户不用先动自己的保险。
+
+不影响自己的保费权益。
+
+厂家直接承担对应责任。
+
+这才符合普通人对“兜底”的直觉。
+
+
+消费者不是不能接受保险。
+
+也不是不能接受付费权益。
+
+但是不能接受，你用一个高尚的词，来掩盖一个精明的账本。
+
+某些营销号，你涨点良心吧！
+
+
+## 🎯 待处理的目标文案
+这才符合普通人对“兜底”的直觉。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "这才符合普通人对“兜底”的直觉。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:43:55
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "这才符合普通人对“兜底”的直觉。",
+        "showFrom": 0
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-25 21:43:55
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+所以兜底两个字，看着像保障，本质是营销。
+
+它算准了普通人不看条款。
+
+算准了大家只看标题。
+
+算准了“兜底”两个字，比“智驾险”好听。
+
+于是它把一个付费权益。
+
+包装成厂家担当。
+
+把一个二层补偿。
+
+包装成无忧驾驶。
+
+把一个低概率场景。
+
+包装成日常安全感。
+
+这不是信息解释。
+
+这是宣传升级。
+
+
+什么才叫兜底？比亚迪已经打样了。
+
+用户不用先动自己的保险。
+
+不影响自己的保费权益。
+
+厂家直接承担对应责任。
+
+这才符合普通人对“兜底”的直觉。
+
+
+消费者不是不能接受保险。
+
+也不是不能接受付费权益。
+
+但是不能接受，你用一个高尚的词，来掩盖一个精明的账本。
+
+某些营销号，你涨点良心吧！
+
+
+## 🎯 待处理的目标文案
+消费者不是不能接受保险。也不是不能接受付费权益。但是不能接受，你用一个高尚的词，来掩盖一个精明的账本。某些营销号，你涨点良心吧！
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "消费者不是不能接受保险。"
+  },
+  {
+    "index": 1,
+    "text": "也不是不能接受付费权益。"
+  },
+  {
+    "index": 2,
+    "text": "但是不能接受，"
+  },
+  {
+    "index": 3,
+    "text": "你用一个高尚的词，"
+  },
+  {
+    "index": 4,
+    "text": "来掩盖一个精明的账本。"
+  },
+  {
+    "index": 5,
+    "text": "某些营销号，"
+  },
+  {
+    "index": 6,
+    "text": "你涨点良心吧！"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-25 21:44:26
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "一个普通人正在仔细阅读一份保险文件，旁边放着权益卡，表情平静，柔和色调，简约插画",
+        "enterEffect": "breathe",
+        "tone": "calm",
+        "showFrom": 0
+      },
+      {
+        "imageSrc": "华丽的金色词汇招牌后面，露出一本旧账本和算盘，象征精明计算，对比鲜明，警示色调",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 2
+      },
+      {
+        "imageSrc": "一只手敲打胸口，背景手机屏幕显示社交媒体宣传内容，夸张漫画风，红色调",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 5
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------

@@ -89,6 +89,7 @@ def _build_main_skill_body(registry: dict[str, dict], config: dict, subskills_pa
 		f"- 未知或非法 `template` 时，管线可能回退到默认模板（当前配置为 **`{default_tmpl}`**）。",
 		"- `param` 内不应长期存放 `content` 或 `totalDurationFrames`（校验会剔除）；时长与分句权威在 `item` 上。",
 		"- **TEXT_FOCUS** 使用 `param.coreSentence`（非空 string[]，每元素一行）与 `param.coreSentenceAnchors`（非普通 `anchors`）；锚点短语须为各段按顺序直接拼接后的子串。",
+		"- **PUNCH_CAPTION** 使用 `param.punches`（必填；每项 **`text`（居中大字）+ `showFrom`（content 下标）** 必填，可选 `enterEffect` / `tone`）；大屏文案以 punches[].text 为准，口播/底字幕仍走 content[]；`anchors` 的 `text` 宜为对应 punches[].text 的子串。",
 		"- 带 `anchors` 的模板：`showFrom` 为 **content 数组的 0-based 下标**，不是时间轴帧号。",
 		"",
 		"## 图片类字段",

@@ -1,0 +1,1091 @@
+{
+  "topic": "秦桧跪了千年，但那个真正该跪的人，你质疑过吗？",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入·谁更该跪",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开篇强问句、纯大字冲击、无需配图 → 选择 TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "你觉得赵构和秦桧，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "谁更应该跪在岳飞的墓前？",
+              "startFrame": 42,
+              "durationFrames": 60
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "你觉得赵构和秦桧，",
+                "showFrom": 0
+              },
+              {
+                "text": "谁更应该跪在岳飞的墓前？",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "岳飞的墓",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 103
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "叙述历史事实与评价，两段均属同一叙事角色，合并后形成完整铺陈，适合单图平缓呈现。",
+          "content": [
+            {
+              "text": "千百年来。",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "西湖边的秦桧铁像 受尽唾骂。",
+              "startFrame": 29,
+              "durationFrames": 83
+            },
+            {
+              "text": "秦桧杀害岳飞，",
+              "startFrame": 112,
+              "durationFrames": 40
+            },
+            {
+              "text": "确实是罪有应得。",
+              "startFrame": 151,
+              "durationFrames": 40
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/权利与责任/scene_1_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 191
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "递进质问中有两个清晰落点——「最高统治者的默许」点出幕后权力，「凭什么」收束反问，用 MAGNIFYING_GLASS 锁定关键词而非多图换场。",
+          "content": [
+            {
+              "text": "但问题来了。",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "如果没有最高统治者的默许。",
+              "startFrame": 32,
+              "durationFrames": 64
+            },
+            {
+              "text": "一个文臣。",
+              "startFrame": 96,
+              "durationFrames": 30
+            },
+            {
+              "text": "凭什么能夺走抗金统帅的性命？",
+              "startFrame": 125,
+              "durationFrames": 63
+            }
+          ],
+          "order": 3,
+          "param": {
+            "anchors": [
+              {
+                "text": "最高统治者的默许",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "凭什么",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 188
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "明确并列三种可能性，每点有独立简述，适合用PANEL_GRID宫格展现三个并列分点。",
+          "content": [
+            {
+              "text": "整件事，",
+              "startFrame": 0,
+              "durationFrames": 25
+            },
+            {
+              "text": "要么赵构有意授权，",
+              "startFrame": 24,
+              "durationFrames": 43
+            },
+            {
+              "text": "防止二圣归来。",
+              "startFrame": 66,
+              "durationFrames": 36
+            },
+            {
+              "text": "要么赵构昏庸无道，",
+              "startFrame": 101,
+              "durationFrames": 46
+            },
+            {
+              "text": "听信谗言。",
+              "startFrame": 147,
+              "durationFrames": 36
+            },
+            {
+              "text": "要么赵构御下无方，",
+              "startFrame": 183,
+              "durationFrames": 53
+            },
+            {
+              "text": "酿成祸事。",
+              "startFrame": 235,
+              "durationFrames": 31
+            }
+          ],
+          "order": 4,
+          "param": {
+            "panels": [
+              {
+                "src": "images/权利与责任/scene_1_4_img0.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/权利与责任/scene_1_4_img1.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/权利与责任/scene_1_4_img2.png",
+                "showFrom": 5,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 267
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "前因（掌握最高决策权）导致后果（应为最大责任承担者），逻辑因果链，适合用CAUSE_CHAIN展示传导。",
+          "content": [
+            {
+              "text": "但不管哪个理由。",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "既然赵构手握最高决策权，",
+              "startFrame": 36,
+              "durationFrames": 71
+            },
+            {
+              "text": "那么他都应该是最大责任承担者。",
+              "startFrame": 106,
+              "durationFrames": 67
+            }
+          ],
+          "order": 5,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "最高决策权",
+                "imageSrc": "images/权利与责任/scene_1_5_img0.png",
+                "showFrom": 1
+              },
+              {
+                "label": "最大责任",
+                "imageSrc": "images/权利与责任/scene_1_5_img1.png",
+                "showFrom": 2
+              }
+            ],
+            "anchors": [
+              {
+                "text": "最大责任",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 173
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "揭露性的单句陈述，有转折但无强结构对照，单图强化意象即可，用CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "他躲在权力帷幕的后面，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "却把千古骂名甩给了执行者。",
+              "startFrame": 50,
+              "durationFrames": 63
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/权利与责任/scene_1_6.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "权力帷幕",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "woosh"
+              }
+            ]
+          },
+          "totalDurationFrames": 113
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促有力的假设结论，全片金句，无需配图，直接用TEXT_FOCUS冲击观众。",
+          "content": [
+            {
+              "text": "如果决策者不需要为结果负责，",
+              "startFrame": 0,
+              "durationFrames": 62
+            },
+            {
+              "text": "那么决策者就能肆无忌惮。",
+              "startFrame": 61,
+              "durationFrames": 55
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "如果决策者不需要为结果负责，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "那么决策者就能肆无忌惮。",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 116
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "极简金句，独立论点，符合TEXT_FOCUS的短促强结论属性。",
+          "content": [
+            {
+              "text": "权力越大。",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "责任就越大。",
+              "startFrame": 29,
+              "durationFrames": 30
+            }
+          ],
+          "order": 8,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "权力越大。",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "责任就越大。",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "责任",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 59
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "陈述普遍认知，为下句的认知转变做铺垫，平实叙述，用CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "让秦桧下跪。",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "是老百姓对作恶者的惩罚。",
+              "startFrame": 39,
+              "durationFrames": 58
+            }
+          ],
+          "order": 9,
+          "param": {
+            "imageSrc": "images/权利与责任/scene_1_9.png",
+            "anchors": []
+          },
+          "totalDurationFrames": 98
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "纠正前句旧认知，从惩罚升华到权利责任的看清，符合COGNITIVE_SHIFT的认知转变模式。",
+          "content": [
+            {
+              "text": "让赵构下跪。",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "才是对权利与责任的看清。",
+              "startFrame": 36,
+              "durationFrames": 62
+            }
+          ],
+          "order": 10,
+          "param": {
+            "notText": "惩罚作恶者",
+            "butText": "权力与责任看清",
+            "butSrc": "images/权利与责任/scene_1_10.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 98
+        }
+      ],
+      "audioSrc": "/audio/权利与责任/scene_1/scene_1.mp3",
+      "totalDurationFrames": 1404
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "反驳·执行歪了",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用对方观点作为反驳的靶子，符合引用类模板；16字恰好在3.6秒内，不需要拆分。",
+          "content": [
+            {
+              "text": "有人会说。",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "上意是好的，",
+              "startFrame": 32,
+              "durationFrames": 31
+            },
+            {
+              "text": "只是下面执行歪了。",
+              "startFrame": 63,
+              "durationFrames": 42
+            },
+            {
+              "text": "这是最无耻的说法。",
+              "startFrame": 104,
+              "durationFrames": 38
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteDisplayText": "上意是好的。只是下面执行歪了。",
+            "quoteSource": "常见托词",
+            "showFrom": 0,
+            "anchors": []
+          },
+          "totalDurationFrames": 143
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "明确展开三个并列的可能性原因，用PANEL_GRID三宫格分别配图，引导句自然并入标题，整体字数34字在50以内。",
+          "content": [
+            {
+              "text": "下面执行歪了。",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "原因有很多。",
+              "startFrame": 41,
+              "durationFrames": 36
+            },
+            {
+              "text": "可能是上面没有清晰表达。",
+              "startFrame": 77,
+              "durationFrames": 59
+            },
+            {
+              "text": "可能是没有足够监管。",
+              "startFrame": 135,
+              "durationFrames": 48
+            },
+            {
+              "text": "可能是下面能力太差。",
+              "startFrame": 183,
+              "durationFrames": 46
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "images/权利与责任/scene_2_2_img0.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/权利与责任/scene_2_2_img1.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/权利与责任/scene_2_2_img2.png",
+                "showFrom": 4,
+                "enterEffect": "slideLeft"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 230
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束到「上面失职」的强结论，短促有力无需配图，用TEXT_FOCUS大字冲击；「上面失职」高亮强调。",
+          "content": [
+            {
+              "text": "不管什么原因。",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "执行歪了。",
+              "startFrame": 34,
+              "durationFrames": 33
+            },
+            {
+              "text": "就是上面失职。",
+              "startFrame": 66,
+              "durationFrames": 41
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "不管什么原因。",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "执行歪了。",
+                "showFrom": 1
+              },
+              {
+                "text": "就是上面失职。",
+                "showFrom": 2,
+                "endFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "上面失职",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 108
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "三个「你没有」构成失职因果链（沟通→监管→选人），每环对应一环传导，用CAUSE_CHAIN展示机制链条。",
+          "content": [
+            {
+              "text": "你没有做好沟通。",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "你没有做好监管。",
+              "startFrame": 33,
+              "durationFrames": 34
+            },
+            {
+              "text": "你没有选对人。",
+              "startFrame": 67,
+              "durationFrames": 48
+            }
+          ],
+          "order": 5,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "沟通失职",
+                "imageSrc": "images/权利与责任/scene_2_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "breathe"
+              },
+              {
+                "label": "监管失职",
+                "imageSrc": "images/权利与责任/scene_2_5_img1.png",
+                "showFrom": 1,
+                "enterEffect": "breathe"
+              },
+              {
+                "label": "选人失职",
+                "imageSrc": "images/权利与责任/scene_2_5_img2.png",
+                "showFrom": 2,
+                "enterEffect": "breathe"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 116
+        }
+      ],
+      "audioSrc": "/audio/权利与责任/scene_2/scene_2.mp3",
+      "totalDurationFrames": 597
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "比喻·方向盘与权责对等",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "该段通过四个节拍递进：提出观点→决策者握方向盘→底层执行者只有做事权利→再强调决策者定方向分资源，形成对比与递进，适合BEAT_SEQUENCE。",
+          "content": [
+            {
+              "text": "我们必须强调权责对等。",
+              "startFrame": 0,
+              "durationFrames": 63
+            },
+            {
+              "text": "因为决策者握着方向盘。",
+              "startFrame": 62,
+              "durationFrames": 52
+            },
+            {
+              "text": "底层执行者。",
+              "startFrame": 114,
+              "durationFrames": 42
+            },
+            {
+              "text": "只有做事的权利。",
+              "startFrame": 155,
+              "durationFrames": 44
+            },
+            {
+              "text": "方向是你定的。",
+              "startFrame": 199,
+              "durationFrames": 38
+            },
+            {
+              "text": "资源是你分配的。",
+              "startFrame": 236,
+              "durationFrames": 51
+            }
+          ],
+          "order": 1,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/权利与责任/scene_3_1_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/权利与责任/scene_3_1_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 2
+              },
+              {
+                "imageSrc": "images/权利与责任/scene_3_1_img2.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 288
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "该段展示因果链条：决策者握方向盘（前文铺垫）→大巴冲悬崖→握方向盘的人最该问责，因果传导明确，适合CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "大巴冲下悬崖。",
+              "startFrame": 0,
+              "durationFrames": 41
+            },
+            {
+              "text": "只有握方向盘的人是最该被问责的。",
+              "startFrame": 40,
+              "durationFrames": 71
+            }
+          ],
+          "order": 2,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "坠崖事故",
+                "imageSrc": "images/权利与责任/scene_3_2_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "司机问责",
+                "imageSrc": "images/权利与责任/scene_3_2_img1.png",
+                "showFrom": 1
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 112
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "该段定义“人类文明进步”的核心内涵，即权力与责任绑定的历史，是概念诠释，适合CONCEPT_CARD。",
+          "content": [
+            {
+              "text": "人类文明进步。",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "就是把权力与责任绑定的历史。",
+              "startFrame": 38,
+              "durationFrames": 65
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/权利与责任/scene_3_3.png",
+            "conceptName": "权责绑定",
+            "anchors": []
+          },
+          "totalDurationFrames": 103
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "过去皇帝让大臣顶罪 vs 现在法治把权力关进笼子，构成明确的「旧做法 vs 新规范」左右对照，适合 DOS_AND_DONTS。",
+          "content": [
+            {
+              "text": "过去。",
+              "startFrame": 0,
+              "durationFrames": 20
+            },
+            {
+              "text": "皇帝出了事可以找大臣顶罪。",
+              "startFrame": 19,
+              "durationFrames": 62
+            },
+            {
+              "text": "现在。",
+              "startFrame": 80,
+              "durationFrames": 24
+            },
+            {
+              "text": "现代法治把权力关进制度的笼子。",
+              "startFrame": 104,
+              "durationFrames": 72
+            }
+          ],
+          "order": 4,
+          "param": {
+            "left": {
+              "label": "❌ 过去",
+              "src": "images/权利与责任/scene_3_4_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 现在",
+              "src": "images/权利与责任/scene_3_4_right.png",
+              "showFrom": 2
+            }
+          },
+          "totalDurationFrames": 177
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对“权责法定”这一专有名词进行命名和解释，适合CONCEPT_CARD。",
+          "content": [
+            {
+              "text": "这个笼子的铁柱。",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "叫权责法定。",
+              "startFrame": 37,
+              "durationFrames": 52
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/权利与责任/scene_3_5.png",
+            "conceptName": "权责法定",
+            "anchors": []
+          },
+          "totalDurationFrames": 89
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "该句作为过渡句，引出下文宣告内容，没有复杂的结构，平铺叙述，适合CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "重大决策终身责任追究。",
+              "startFrame": 0,
+              "durationFrames": 68
+            },
+            {
+              "text": "就是在宣告。",
+              "startFrame": 67,
+              "durationFrames": 33
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/权利与责任/scene_3_6.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "重大决策终身责任追究",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 101
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片收束的强结论，以对仗句强调权责对等的后果，短促有力，无需配图，适合TEXT_FOCUS作为金句冲击。",
+          "content": [
+            {
+              "text": "你调动了多大的资源。",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "就绑上多重的炸药包。",
+              "startFrame": 51,
+              "durationFrames": 55
+            },
+            {
+              "text": "享受了权力的光环。",
+              "startFrame": 105,
+              "durationFrames": 52
+            },
+            {
+              "text": "就必须扛住决策的重量。",
+              "startFrame": 156,
+              "durationFrames": 59
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "你调动了多大资源。",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "就绑上多重炸药包。",
+                "showFrom": 1,
+                "endFrom": 1
+              },
+              {
+                "text": "享受了权力的光环。",
+                "showFrom": 2,
+                "endFrom": 2
+              },
+              {
+                "text": "就必须扛住决策的重量。",
+                "showFrom": 3,
+                "endFrom": 3
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 215
+        }
+      ],
+      "audioSrc": "/audio/权利与责任/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1083
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "升华·权力与制度",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "引导性过渡，从画面引出核心观点，属于平缓叙述，无对比、分点等强结构，适合 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "凝视岳飞的背影。",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "我们更应该看清权力的本质。",
+              "startFrame": 43,
+              "durationFrames": 56
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/权利与责任/scene_4_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "权力的本质",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 99
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确“不是……而是……”认知转折，符合 COGNITIVE_SHIFT 模板，将一个观念纠正为另一个观念。",
+          "content": [
+            {
+              "text": "真正的社会进步。",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "不是期盼好皇帝。",
+              "startFrame": 37,
+              "durationFrames": 42
+            },
+            {
+              "text": "而是建立一套制度。",
+              "startFrame": 78,
+              "durationFrames": 42
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "期盼好皇帝",
+            "butText": "建立一套制度",
+            "butSrc": "images/权利与责任/scene_4_2.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 121
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "标题式核心“让所有决策者都敬畏责任”，后面用两个“不让”具体解释如何实现，符合 METHOD_STACK 的核心+解释展开结构。",
+          "content": [
+            {
+              "text": "让所有决策者都敬畏责任。",
+              "startFrame": 0,
+              "durationFrames": 62
+            },
+            {
+              "text": "不让执行者独自背锅。",
+              "startFrame": 61,
+              "durationFrames": 57
+            },
+            {
+              "text": "不让决策者隐身遁形。",
+              "startFrame": 117,
+              "durationFrames": 51
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "权责对等",
+            "imageSrc": "images/权利与责任/scene_4_3.png",
+            "notes": [
+              {
+                "text": "敬畏责任是制度的基础",
+                "showFrom": 0
+              },
+              {
+                "text": "明确责任归属，不让个人背锅",
+                "showFrom": 1
+              },
+              {
+                "text": "透明公开，让决策者无处遁形",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 168
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "两句对仗金句「没有制约→灾难」与「不需担责→霸权」构成左右对照，SPLIT_COMPARE 分屏并列呈现全片级结论。",
+          "content": [
+            {
+              "text": "没有制约的权力。",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "是灾难。",
+              "startFrame": 39,
+              "durationFrames": 26
+            },
+            {
+              "text": "不需担责的权力。",
+              "startFrame": 65,
+              "durationFrames": 43
+            },
+            {
+              "text": "是霸权",
+              "startFrame": 107,
+              "durationFrames": 29
+            }
+          ],
+          "order": 4,
+          "param": {
+            "leftSrc": "images/权利与责任/scene_4_4_left.png",
+            "rightSrc": "images/权利与责任/scene_4_4_right.png",
+            "leftLabel": "灾难",
+            "rightLabel": "霸权",
+            "leftShowFrom": 0,
+            "rightShowFrom": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 136
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束全片的觉醒金句，与上一组对仗结论分离，三行递进形成最终暴击。",
+          "content": [
+            {
+              "text": "当百姓都觉得",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "最该跪在岳飞墓前的，是赵构的时候",
+              "startFrame": 32,
+              "durationFrames": 79
+            },
+            {
+              "text": "这个社会就是真的觉醒了",
+              "startFrame": 111,
+              "durationFrames": 52
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "当百姓都觉得",
+                "showFrom": 0
+              },
+              {
+                "text": "最该跪在岳飞墓前的，是赵构",
+                "showFrom": 1
+              },
+              {
+                "text": "这个社会，就是真的觉醒了",
+                "showFrom": 2,
+                "endFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "赵构",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "真的觉醒",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 163
+        }
+      ],
+      "audioSrc": "/audio/权利与责任/scene_4/scene_4.mp3",
+      "totalDurationFrames": 688
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "权利与责任",
+    "subtitle": "秦桧跪了千年，但那个真正该跪的人，你质疑过吗？",
+    "themeColor": "#059669",
+    "badge": "深度解读 · 理性思考",
+    "seriesLabel": "社会热点深读",
+    "seriesLabelEn": "SOCIAL DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

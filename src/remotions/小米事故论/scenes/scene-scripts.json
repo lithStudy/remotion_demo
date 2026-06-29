@@ -1,0 +1,1537 @@
+{
+  "topic": "小米事故刷屏，但起火率可能低于你的车",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "开篇",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "独立开篇提问，短促冲击，用TEXT_FOCUS锁定核心悬念，无需配图。",
+          "content": [
+            {
+              "text": "小米车，",
+              "startFrame": 0,
+              "durationFrames": 29
+            },
+            {
+              "text": "真的更容易出事吗？",
+              "startFrame": 28,
+              "durationFrames": 50
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "小米车，",
+                "showFrom": 0
+              },
+              {
+                "text": "真的更容易出事吗？",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 78
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确“不是…而是…”的认知转折结构，适用COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "作为一个有理智的人，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "看一个品牌有没有问题，",
+              "startFrame": 43,
+              "durationFrames": 52
+            },
+            {
+              "text": "不应该是看热搜，",
+              "startFrame": 94,
+              "durationFrames": 36
+            },
+            {
+              "text": "而是看数据。",
+              "startFrame": 130,
+              "durationFrames": 29
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "看热搜",
+            "butText": "看数据",
+            "butSrc": "images/小米事故论/scene_1_2.png",
+            "notContentIndex": 2,
+            "butContentIndex": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 160
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "三个并列案例，每个需独立配图，适合PANEL_GRID宫格展示，保持同一镜头内的列举节奏。",
+          "content": [
+            {
+              "text": "你刷到的标题，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "通常很吓人。",
+              "startFrame": 38,
+              "durationFrames": 39
+            },
+            {
+              "text": "小米又起火了。",
+              "startFrame": 76,
+              "durationFrames": 37
+            },
+            {
+              "text": "小米又撞了。",
+              "startFrame": 112,
+              "durationFrames": 31
+            },
+            {
+              "text": "小米又上绿化带了。",
+              "startFrame": 143,
+              "durationFrames": 55
+            }
+          ],
+          "order": 3,
+          "param": {
+            "panels": [
+              {
+                "src": "images/小米事故论/scene_1_3_img0.png",
+                "showFrom": 2,
+                "enterEffect": "breathe"
+              },
+              {
+                "src": "images/小米事故论/scene_1_3_img1.png",
+                "showFrom": 3,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/小米事故论/scene_1_3_img2.png",
+                "showFrom": 4,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 198
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "从举例过渡到心理感受，落脚在关键疑问上，用MAGNIFYING_GLASS聚焦“这车是不是有问题？”这个锚点。",
+          "content": [
+            {
+              "text": "看多了，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "你会产生一个感觉：",
+              "startFrame": 27,
+              "durationFrames": 40
+            },
+            {
+              "text": "这车是不是有问题？",
+              "startFrame": 66,
+              "durationFrames": 41
+            }
+          ],
+          "order": 4,
+          "param": {
+            "anchors": [
+              {
+                "text": "有问题",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 107
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "先肯定后转折，形成“感觉真实≠概率真实”的认知翻转，适用COGNITIVE_SHIFT，且合并后未超长。",
+          "content": [
+            {
+              "text": "这个感觉，",
+              "startFrame": 0,
+              "durationFrames": 21
+            },
+            {
+              "text": "当然真实。",
+              "startFrame": 20,
+              "durationFrames": 30
+            },
+            {
+              "text": "但感觉真实，",
+              "startFrame": 50,
+              "durationFrames": 30
+            },
+            {
+              "text": "不等于概率真实。",
+              "startFrame": 79,
+              "durationFrames": 38
+            }
+          ],
+          "order": 5,
+          "param": {
+            "notText": "感觉真实",
+            "butText": "概率真实",
+            "butSrc": "images/小米事故论/scene_1_5.png",
+            "notContentIndex": 1,
+            "butContentIndex": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 117
+        }
+      ],
+      "audioSrc": "/audio/小米事故论/scene_1/scene_1.mp3",
+      "totalDurationFrames": 661
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "数据为实",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开头直接抛出最敏感的关键词‘起火’，用纯文字聚焦制造冲击，无需配图，适合独立金句镜头。",
+          "content": [
+            {
+              "text": "我们先说最敏感的：",
+              "startFrame": 0,
+              "durationFrames": 41
+            },
+            {
+              "text": "起火。",
+              "startFrame": 40,
+              "durationFrames": 28
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "我们先说最敏感的。",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "起火。",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "起火",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 68
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "口播含 6 起事故、34 万保有量两组硬数字，用 KPI_HERO 多列随句递进锚定事故基数与估算口径，再引出燃烧比例。",
+          "content": [
+            {
+              "text": "从2025年全年",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "公开报道的燃烧事故，",
+              "startFrame": 45,
+              "durationFrames": 47
+            },
+            {
+              "text": "总共只有6起，",
+              "startFrame": 92,
+              "durationFrames": 42
+            },
+            {
+              "text": "按当时34万保有量估算，",
+              "startFrame": 134,
+              "durationFrames": 72
+            },
+            {
+              "text": "碰撞后燃烧比例，",
+              "startFrame": 206,
+              "durationFrames": 43
+            }
+          ],
+          "order": 2,
+          "param": {
+            "blocks": [
+              {
+                "value": 6,
+                "suffix": "起",
+                "label": "燃烧事故",
+                "showFrom": 2
+              },
+              {
+                "value": 34,
+                "suffix": "万",
+                "label": "保有量",
+                "showFrom": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 249
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "DATA_TABLE",
+          "reasoning": "三组起火率横向对比，适合用数据表格模板展示小米、新能源整体与燃油车的比例差异。",
+          "content": [
+            {
+              "text": "大约是0.00117%。",
+              "startFrame": 0,
+              "durationFrames": 72
+            },
+            {
+              "text": "而新能源整体起火率，",
+              "startFrame": 71,
+              "durationFrames": 55
+            },
+            {
+              "text": "约为0.0018%。",
+              "startFrame": 126,
+              "durationFrames": 66
+            },
+            {
+              "text": "燃油车约为0.015%。",
+              "startFrame": 191,
+              "durationFrames": 90
+            },
+            {
+              "text": "看到了吗，",
+              "startFrame": 281,
+              "durationFrames": 24
+            },
+            {
+              "text": "你以为新能源比燃油车更容易烧起来，",
+              "startFrame": 305,
+              "durationFrames": 88
+            },
+            {
+              "text": "但其实新能源比燃油车着火事故少一半",
+              "startFrame": 392,
+              "durationFrames": 88
+            },
+            {
+              "text": " 你以为小米比其他电动车更容易烧起来，",
+              "startFrame": 480,
+              "durationFrames": 96
+            },
+            {
+              "text": "但其实小米相比整个行业着火事故更低。",
+              "startFrame": 576,
+              "durationFrames": 103
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "起火率对比",
+            "columns": [
+              "类别",
+              "比例"
+            ],
+            "rows": [
+              {
+                "cells": [
+                  "小米燃烧比例",
+                  "0.00117%"
+                ],
+                "showFrom": 0
+              },
+              {
+                "cells": [
+                  "新能源整体起火率",
+                  "0.0018%"
+                ],
+                "showFrom": 1
+              },
+              {
+                "cells": [
+                  "燃油车",
+                  "0.015%"
+                ],
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 679
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促有力的金句型结论，只有7个字，适合纯文字冲击收束前面的对比。",
+          "content": [
+            {
+              "text": "是不是有点反直觉？",
+              "startFrame": 0,
+              "durationFrames": 41
+            },
+            {
+              "text": "你刷到很多，",
+              "startFrame": 40,
+              "durationFrames": 36
+            },
+            {
+              "text": "不等于概率很高。",
+              "startFrame": 76,
+              "durationFrames": 37
+            }
+          ],
+          "order": 6,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "你刷到很多，",
+                "showFrom": 1
+              },
+              {
+                "text": "不等于概率很高。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "不等于",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "概率",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 113
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "再次出现‘不是…而是…’认知纠正，将错误认知静置自燃与正确诱因并列，适合认知转换模板。",
+          "content": [
+            {
+              "text": "更关键的是，",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "公开通报里的多数火情，",
+              "startFrame": 31,
+              "durationFrames": 56
+            },
+            {
+              "text": "不是静置自燃。",
+              "startFrame": 87,
+              "durationFrames": 36
+            },
+            {
+              "text": "都是严重碰撞后起火。",
+              "startFrame": 122,
+              "durationFrames": 55
+            },
+            {
+              "text": "外部火源引燃。",
+              "startFrame": 177,
+              "durationFrames": 35
+            },
+            {
+              "text": "或者其他复杂诱因。",
+              "startFrame": 212,
+              "durationFrames": 44
+            }
+          ],
+          "order": 7,
+          "param": {
+            "notText": "静置自燃",
+            "butText": "外部诱因",
+            "butSrc": "images/小米事故论/scene_2_7.png",
+            "notContentIndex": 2,
+            "butContentIndex": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 257
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "对前文起火诱因做出最终定性，短句收束，适合金句冲击。",
+          "content": [
+            {
+              "text": "目前也没有一例说明，",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "小米存在系统缺陷性的自燃。",
+              "startFrame": 45,
+              "durationFrames": 78
+            }
+          ],
+          "order": 8,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "目前也没有一例说明，",
+                "showFrom": 0
+              },
+              {
+                "text": "小米存在系统缺陷性的自燃。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "系统缺陷性",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 123
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "引出极具偏见的标签‘绿化带战神’，需要聚焦这个关键词进行审视，搭配解释偏见色彩。",
+          "content": [
+            {
+              "text": "再说事故率。",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "很多人一看到事故视频，",
+              "startFrame": 32,
+              "durationFrames": 48
+            },
+            {
+              "text": "就下意识得出结论：",
+              "startFrame": 80,
+              "durationFrames": 42
+            },
+            {
+              "text": "绿化带战神。",
+              "startFrame": 122,
+              "durationFrames": 42
+            },
+            {
+              "text": "这是一个极具偏见色彩的标签。",
+              "startFrame": 163,
+              "durationFrames": 75
+            }
+          ],
+          "order": 9,
+          "param": {
+            "anchors": [
+              {
+                "text": "绿化带战神",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 238
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "「既没有交通部事故率数据，也没有保险公司出险率数据」为并列缺失对照，左右分屏比叠在同一引用镜头更清晰。",
+          "content": [
+            {
+              "text": "实际上，事故率没有公开可查的数据，",
+              "startFrame": 0,
+              "durationFrames": 89
+            },
+            {
+              "text": "既没有交通部的交通事故率数据，",
+              "startFrame": 88,
+              "durationFrames": 67
+            },
+            {
+              "text": "也没有保险公司的出险率数据。",
+              "startFrame": 154,
+              "durationFrames": 68
+            }
+          ],
+          "order": 10,
+          "param": {
+            "leftSrc": "images/小米事故论/scene_2_10_left.png",
+            "rightSrc": "images/小米事故论/scene_2_10_right.png",
+            "leftLabel": "交通部",
+            "rightLabel": "保险公司",
+            "leftShowFrom": 1,
+            "rightShowFrom": 2
+          },
+          "totalDurationFrames": 223
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用网上传言‘小米的事故率高到离谱’，适合用引用卡片呈现传言内容。",
+          "content": [
+            {
+              "text": "但是网上却有很多人张嘴就来：",
+              "startFrame": 0,
+              "durationFrames": 66
+            },
+            {
+              "text": "小米的事故率高到离谱。",
+              "startFrame": 65,
+              "durationFrames": 58
+            },
+            {
+              "text": "这就完全是造谣了。",
+              "startFrame": 122,
+              "durationFrames": 44
+            },
+            {
+              "text": "高在哪里？你们有任何数据支撑吗？",
+              "startFrame": 166,
+              "durationFrames": 82
+            }
+          ],
+          "order": 11,
+          "param": {
+            "quoteSource": "网络传言",
+            "quoteDisplayText": "小米的出现率高到离谱。",
+            "showFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 248
+        }
+      ],
+      "audioSrc": "/audio/小米事故论/scene_2/scene_2.mp3",
+      "totalDurationFrames": 2197
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "反思",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "转折句，隐含“否认”与“承认特点”之间的认知切换，用COGNITIVE_SHIFT表达虽有问题但仍需正视特点的微妙立场。",
+          "content": [
+            {
+              "text": "但是也不能否认，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "小米SU7有几个特点。",
+              "startFrame": 34,
+              "durationFrames": 53
+            }
+          ],
+          "order": 1,
+          "param": {
+            "notText": "否认优点",
+            "butText": "有几个特点",
+            "butSrc": "images/小米事故论/scene_3_1.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 88
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "明确三个并列特点，每点简短独立（≤10字），适合用PANEL_GRID分宫格展示三项属性。",
+          "content": [
+            {
+              "text": "第一，",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "车主年轻。",
+              "startFrame": 18,
+              "durationFrames": 29
+            },
+            {
+              "text": "第二，",
+              "startFrame": 47,
+              "durationFrames": 12
+            },
+            {
+              "text": "性能强。",
+              "startFrame": 59,
+              "durationFrames": 30
+            },
+            {
+              "text": "第三，",
+              "startFrame": 88,
+              "durationFrames": 19
+            },
+            {
+              "text": "交付初期新手多。",
+              "startFrame": 107,
+              "durationFrames": 52
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "images/小米事故论/scene_3_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/小米事故论/scene_3_2_img1.png",
+                "showFrom": 2
+              },
+              {
+                "src": "images/小米事故论/scene_3_2_img2.png",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 159
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "对上文分点的总结推论，单一结论句，无需复杂结构，平缓托出结论用CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "这几个因素叠在一起，",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "确实是相对更容易出现事故的情况。",
+              "startFrame": 46,
+              "durationFrames": 75
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/小米事故论/scene_3_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 122
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "强对比“不是车的问题”→“工具无法决定使用”，推翻常见归因，用COGNITIVE_SHIFT显化认知扭转。",
+          "content": [
+            {
+              "text": "但这不是小米车本身的问题，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "车只是工具，",
+              "startFrame": 58,
+              "durationFrames": 38
+            },
+            {
+              "text": "它如何被使用是工具无法决定的。",
+              "startFrame": 96,
+              "durationFrames": 75
+            }
+          ],
+          "order": 4,
+          "param": {
+            "notText": "车本身的问题",
+            "butText": "只是工具",
+            "butSrc": "images/小米事故论/scene_3_4.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 171
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用第三方权威报告及结论，完整呈现来源+研究结果+推论，符合QUOTE_CITATION的引用论证模式。",
+          "content": [
+            {
+              "text": "J.D. Power，",
+              "startFrame": 0,
+              "durationFrames": 29
+            },
+            {
+              "text": "著名的第三方消费者洞察机构。",
+              "startFrame": 28,
+              "durationFrames": 69
+            },
+            {
+              "text": "在它的2025年研究报告中，",
+              "startFrame": 97,
+              "durationFrames": 69
+            },
+            {
+              "text": "小米SU7拿到过，",
+              "startFrame": 165,
+              "durationFrames": 47
+            },
+            {
+              "text": "大型纯电动细分市场，",
+              "startFrame": 212,
+              "durationFrames": 55
+            },
+            {
+              "text": "新车质量排名最高。",
+              "startFrame": 267,
+              "durationFrames": 47
+            },
+            {
+              "text": "这也侧面印证了小米车的质量并不存在问题。",
+              "startFrame": 313,
+              "durationFrames": 101
+            }
+          ],
+          "order": 5,
+          "param": {
+            "quoteSource": "J.D. Power 2025年研究报告",
+            "quoteDisplayText": "小米SU7，大型纯电动细分市场，新车质量排名最高。",
+            "showFrom": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 414
+        }
+      ],
+      "audioSrc": "/audio/小米事故论/scene_3/scene_3.mp3",
+      "totalDurationFrames": 954
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "错觉剖析",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "引子提问，无数据或强结构，用CENTER_FOCUS平实引出话题。",
+          "content": [
+            {
+              "text": "那为什么很多人还是觉得，",
+              "startFrame": 0,
+              "durationFrames": 45
+            },
+            {
+              "text": "小米问题特别多？",
+              "startFrame": 44,
+              "durationFrames": 50
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/小米事故论/scene_4_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 94
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "观点核心‘品牌太响’加两句解释展开，典型METHOD_STACK结构，作为列举分点之一。",
+          "content": [
+            {
+              "text": "第一，",
+              "startFrame": 0,
+              "durationFrames": 16
+            },
+            {
+              "text": "车的保有量太大。",
+              "startFrame": 15,
+              "durationFrames": 34
+            },
+            {
+              "text": "2026年1月，小米汽车总交付量就已经超过了60万辆",
+              "startFrame": 48,
+              "durationFrames": 134
+            },
+            {
+              "text": "就算一年只有0.1%的事故率，",
+              "startFrame": 181,
+              "durationFrames": 77
+            },
+            {
+              "text": "那也是600起事故。",
+              "startFrame": 257,
+              "durationFrames": 47
+            },
+            {
+              "text": "加上小米自带的流量属性，你看到的新闻自然多",
+              "startFrame": 304,
+              "durationFrames": 116
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "保有量太大",
+            "imageSrc": "images/小米事故论/scene_4_2.png",
+            "notes": [
+              {
+                "text": "交付超60万辆，基数巨大",
+                "showFrom": 2
+              },
+              {
+                "text": "0.1%事故率也有600起",
+                "showFrom": 4
+              },
+              {
+                "text": "自带流量，新闻自然多",
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 421
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "核心观点‘算法追着恐惧跑’加具体行为解释，METHOD_STACK展示。",
+          "content": [
+            {
+              "text": "第二，",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "算法会追着兴趣跑。",
+              "startFrame": 18,
+              "durationFrames": 48
+            },
+            {
+              "text": "当你刷到小米汽车事故的视频，",
+              "startFrame": 66,
+              "durationFrames": 60
+            },
+            {
+              "text": "你多停留两秒，",
+              "startFrame": 126,
+              "durationFrames": 36
+            },
+            {
+              "text": "算法就会觉得你对这种视频感兴趣，",
+              "startFrame": 162,
+              "durationFrames": 82
+            },
+            {
+              "text": "它就多喂你十条。",
+              "startFrame": 243,
+              "durationFrames": 43
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "算法追着恐惧跑",
+            "imageSrc": "images/小米事故论/scene_4_3.png",
+            "notes": [
+              {
+                "text": "停留就是喂养算法",
+                "showFrom": 3
+              },
+              {
+                "text": "越多推荐越强化恐惧回路",
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 287
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "观点‘重复制造真实感’加例子解释，用METHOD_STACK清晰呈现。",
+          "content": [
+            {
+              "text": "第三，",
+              "startFrame": 0,
+              "durationFrames": 20
+            },
+            {
+              "text": "重复会制造真实感。",
+              "startFrame": 19,
+              "durationFrames": 56
+            },
+            {
+              "text": "同一起事故，",
+              "startFrame": 75,
+              "durationFrames": 28
+            },
+            {
+              "text": "不同角度剪三遍。",
+              "startFrame": 102,
+              "durationFrames": 46
+            },
+            {
+              "text": "你以为是三起事故。",
+              "startFrame": 148,
+              "durationFrames": 40
+            },
+            {
+              "text": "其实都是一件事。",
+              "startFrame": 187,
+              "durationFrames": 42
+            }
+          ],
+          "order": 4,
+          "param": {
+            "title": "重复制造真实感",
+            "imageSrc": "images/小米事故论/scene_4_4.png",
+            "notes": [
+              {
+                "text": "同一事故被切分成不同视角",
+                "showFrom": 2
+              },
+              {
+                "text": "你误以为发生了多次",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 230
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "攻击者借题发挥的观点，加上手段和印象形成的解释，仍属观点+解释，METHOD_STACK。",
+          "content": [
+            {
+              "text": "第四，",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "某些下作的攻击者也会借题发挥。",
+              "startFrame": 18,
+              "durationFrames": 70
+            },
+            {
+              "text": "把事故、",
+              "startFrame": 88,
+              "durationFrames": 23
+            },
+            {
+              "text": "人为操作、",
+              "startFrame": 111,
+              "durationFrames": 28
+            },
+            {
+              "text": "旧视频，",
+              "startFrame": 138,
+              "durationFrames": 27
+            },
+            {
+              "text": "混在同一个标签里。",
+              "startFrame": 164,
+              "durationFrames": 51
+            },
+            {
+              "text": "最后留给你的，",
+              "startFrame": 214,
+              "durationFrames": 31
+            },
+            {
+              "text": "就只剩一个印象：",
+              "startFrame": 245,
+              "durationFrames": 40
+            },
+            {
+              "text": "小米怎么天天出事？",
+              "startFrame": 284,
+              "durationFrames": 45
+            }
+          ],
+          "order": 5,
+          "param": {
+            "title": "借题发挥的陷阱",
+            "imageSrc": "images/小米事故论/scene_4_5.png",
+            "notes": [
+              {
+                "text": "恶意炒作攻击者",
+                "showFrom": 1
+              },
+              {
+                "text": "混淆事故与人为",
+                "showFrom": 5
+              },
+              {
+                "text": "重复暗示制造偏见",
+                "showFrom": 8
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 329
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "总起‘大脑相信重复’后两个递进例子，构成节拍递进，用BEAT_SEQUENCE表现节奏感。",
+          "content": [
+            {
+              "text": "我们的大脑，",
+              "startFrame": 0,
+              "durationFrames": 20
+            },
+            {
+              "text": "天生相信重复。",
+              "startFrame": 19,
+              "durationFrames": 40
+            },
+            {
+              "text": "一件事出现十次，",
+              "startFrame": 58,
+              "durationFrames": 43
+            },
+            {
+              "text": "我们就觉得它常见。",
+              "startFrame": 101,
+              "durationFrames": 40
+            },
+            {
+              "text": "一件事刷屏三天，",
+              "startFrame": 140,
+              "durationFrames": 45
+            },
+            {
+              "text": "我们就觉得它严重。",
+              "startFrame": 185,
+              "durationFrames": 41
+            }
+          ],
+          "order": 6,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/小米事故论/scene_4_6_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "images/小米事故论/scene_4_6_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 2
+              },
+              {
+                "imageSrc": "images/小米事故论/scene_4_6_img2.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 226
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确‘不是…而是…’结构，认知转折，用COGNITIVE_SHIFT强调纠偏结论。",
+          "content": [
+            {
+              "text": "但互联网的重复，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "不是现实的重复。",
+              "startFrame": 36,
+              "durationFrames": 38
+            },
+            {
+              "text": "它是流量的重复。",
+              "startFrame": 73,
+              "durationFrames": 42
+            },
+            {
+              "text": "是情绪的重复。",
+              "startFrame": 115,
+              "durationFrames": 42
+            },
+            {
+              "text": "是算法的重复。",
+              "startFrame": 156,
+              "durationFrames": 40
+            }
+          ],
+          "order": 7,
+          "param": {
+            "notText": "现实的重复",
+            "butText": "流量、情绪与算法的重复",
+            "butSrc": "images/小米事故论/scene_4_7.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 197
+        }
+      ],
+      "audioSrc": "/audio/小米事故论/scene_4/scene_4.mp3",
+      "totalDurationFrames": 1782
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "总结",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "反问句「难道小米不能被质疑吗？」是全段落点，用 MAGNIFYING_GLASS 锁定「不能被质疑」这一争议焦点；「当然不是」作回应锚点。",
+          "content": [
+            {
+              "text": "讲到这里，",
+              "startFrame": 0,
+              "durationFrames": 26
+            },
+            {
+              "text": "有些人会急。",
+              "startFrame": 25,
+              "durationFrames": 38
+            },
+            {
+              "text": "难道小米不能被质疑吗？",
+              "startFrame": 62,
+              "durationFrames": 45
+            },
+            {
+              "text": "当然不是。",
+              "startFrame": 106,
+              "durationFrames": 33
+            }
+          ],
+          "order": 1,
+          "param": {
+            "anchors": [
+              {
+                "text": "不能被质疑",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "当然不是",
+                "showFrom": 3,
+                "color": "#111111",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 140
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "三个并列论点，每点配图，适合 PANEL_GRID。",
+          "content": [
+            {
+              "text": "车企当然要被质疑。",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "安全当然要被追问。",
+              "startFrame": 43,
+              "durationFrames": 42
+            },
+            {
+              "text": "每一起事故，",
+              "startFrame": 84,
+              "durationFrames": 33
+            },
+            {
+              "text": "都该查清责任。",
+              "startFrame": 117,
+              "durationFrames": 32
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "images/小米事故论/scene_5_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/小米事故论/scene_5_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/小米事故论/scene_5_2_img2.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 150
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "三个细化例子并列，适合 PANEL_GRID 宫格展示。",
+          "content": [
+            {
+              "text": "尤其是辅助驾驶。",
+              "startFrame": 0,
+              "durationFrames": 41
+            },
+            {
+              "text": "尤其是车门结构。",
+              "startFrame": 40,
+              "durationFrames": 42
+            },
+            {
+              "text": "尤其是碰撞后的逃生窗口。",
+              "startFrame": 81,
+              "durationFrames": 63
+            }
+          ],
+          "order": 3,
+          "param": {
+            "panels": [
+              {
+                "src": "images/小米事故论/scene_5_3_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/小米事故论/scene_5_3_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/小米事故论/scene_5_3_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 144
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "先强调问题严重性、反对轻描淡写，再引出质疑与愤怒需有尺度，递进观点用 CENTER_FOCUS 单图平缓托出。",
+          "content": [
+            {
+              "text": "这些不是小问题。",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "也不能被一句概率低，",
+              "startFrame": 39,
+              "durationFrames": 42
+            },
+            {
+              "text": "轻轻带过。",
+              "startFrame": 80,
+              "durationFrames": 27
+            },
+            {
+              "text": "但质疑也要有尺子。",
+              "startFrame": 106,
+              "durationFrames": 45
+            },
+            {
+              "text": "愤怒也要有分母。",
+              "startFrame": 151,
+              "durationFrames": 50
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/小米事故论/scene_5_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "尺子",
+                "showFrom": 3,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": null
+              },
+              {
+                "text": "分母",
+                "showFrom": 4,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 201
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "三个方法论并列金句，纯文字大字聚焦节奏，无需配图。",
+          "content": [
+            {
+              "text": "看事故，要看原因。",
+              "startFrame": 0,
+              "durationFrames": 48
+            },
+            {
+              "text": "看安全，要看概率。",
+              "startFrame": 47,
+              "durationFrames": 56
+            },
+            {
+              "text": "看质量，要看数据。",
+              "startFrame": 102,
+              "durationFrames": 56
+            }
+          ],
+          "order": 6,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "看事故，要看原因。",
+                "showFrom": 0
+              },
+              {
+                "text": "看安全，要看概率。",
+                "showFrom": 1
+              },
+              {
+                "text": "看质量，要看数据。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "原因",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "概率",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "数据",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 159
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "明确“不是…而是…”结论暴击收束，用纯文字冲击呈现对照结构。",
+          "content": [
+            {
+              "text": "否则，",
+              "startFrame": 0,
+              "durationFrames": 23
+            },
+            {
+              "text": "你不是在寻找真相。",
+              "startFrame": 22,
+              "durationFrames": 38
+            },
+            {
+              "text": "你只是在被算法和负面营销，",
+              "startFrame": 60,
+              "durationFrames": 62
+            },
+            {
+              "text": "投喂情绪。",
+              "startFrame": 121,
+              "durationFrames": 32
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "否则，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "你不是在寻找真相。",
+                "showFrom": 1
+              },
+              {
+                "text": "你只是在被算法和负面营销",
+                "showFrom": 2
+              },
+              {
+                "text": "投喂情绪",
+                "showFrom": 3
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "寻找真相",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "投喂情绪",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 153
+        }
+      ],
+      "audioSrc": "/audio/小米事故论/scene_5/scene_5.mp3",
+      "totalDurationFrames": 946
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "小米事故论",
+    "subtitle": "绿化带战神，情绪的偏见标签",
+    "themeColor": "#FF6900",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

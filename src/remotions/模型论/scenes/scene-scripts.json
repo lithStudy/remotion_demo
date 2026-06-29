@@ -1,0 +1,1479 @@
+{
+  "topic": "你崇拜的盘古大模型，也许只是段固定程序",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入·盘古模型迷雾",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "陈述现象与常见误解，两句话属同一语义块且合并后仅29字，选CENTER_FOCUS平缓引入主题。",
+          "content": [
+            {
+              "text": "很多人被华为的「盘古大模型」绕晕了。",
+              "startFrame": 0,
+              "durationFrames": 82
+            },
+            {
+              "text": "觉得盘古模型开天辟地，",
+              "startFrame": 81,
+              "durationFrames": 50
+            },
+            {
+              "text": "是最早的AI领先者。",
+              "startFrame": 130,
+              "durationFrames": 48
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/模型论/scene_1_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "盘古大模型",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 179
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "强烈行动宣言，转折鲜明，短促有力，选TEXT_FOCUS作为金句冲击，无需配图。",
+          "content": [
+            {
+              "text": "我今天只做一件事：",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "把各种冠以「模型」的词，",
+              "startFrame": 45,
+              "durationFrames": 52
+            },
+            {
+              "text": "从华为嘴里抢回来，",
+              "startFrame": 97,
+              "durationFrames": 44
+            },
+            {
+              "text": "重新定义一遍。",
+              "startFrame": 140,
+              "durationFrames": 38
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "把各种冠以「模型」的词，",
+                "showFrom": 1
+              },
+              {
+                "text": "从华为嘴里抢回来，",
+                "showFrom": 2
+              },
+              {
+                "text": "重新定义一遍。",
+                "showFrom": 3
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "模型",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "重新定义",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 178
+        }
+      ],
+      "audioSrc": "/audio/模型论/scene_1/scene_1.mp3",
+      "totalDurationFrames": 358
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析·模型即固定程序",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平铺叙述引出话题，无特殊结构，使用中央聚焦模板平实呈现。",
+          "content": [
+            {
+              "text": "先说模型，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "在程序的世界里，",
+              "startFrame": 32,
+              "durationFrames": 36
+            },
+            {
+              "text": "其实「模型」两个字，",
+              "startFrame": 68,
+              "durationFrames": 36
+            },
+            {
+              "text": "什么都能套。",
+              "startFrame": 104,
+              "durationFrames": 28
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/模型论/scene_2_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "模型",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 132
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "两个并列举例（鹅腿模型 / 鼠头鸭脖模型）形成对仗，用左右分屏同时呈现两个荒诞命名，强化「什么都能套模型」的认知失调。",
+          "content": [
+            {
+              "text": "算一只鸭能出几只鹅腿？",
+              "startFrame": 0,
+              "durationFrames": 62
+            },
+            {
+              "text": "程序写好了，",
+              "startFrame": 61,
+              "durationFrames": 31
+            },
+            {
+              "text": "对外可以叫「鹅腿阿姨模型」。",
+              "startFrame": 91,
+              "durationFrames": 55
+            },
+            {
+              "text": "算一只鸭能出几只鼠头？",
+              "startFrame": 145,
+              "durationFrames": 59
+            },
+            {
+              "text": "程序写好了，",
+              "startFrame": 204,
+              "durationFrames": 30
+            },
+            {
+              "text": "对外也可以叫「鼠头鸭脖模型」。",
+              "startFrame": 234,
+              "durationFrames": 56
+            }
+          ],
+          "order": 2,
+          "param": {
+            "leftSrc": "images/模型论/scene_2_2_left.png",
+            "rightSrc": "images/模型论/scene_2_2_right.png",
+            "leftLabel": "鹅腿阿姨模型",
+            "rightLabel": "鼠头鸭脖模型",
+            "leftShowFrom": 0,
+            "rightShowFrom": 3
+          },
+          "totalDurationFrames": 290
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对“模型”给出明确技术定义，概念卡模板适合凸显关键术语及其解释。",
+          "content": [
+            {
+              "text": "在代码世界里，",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": " 「模型」就是一段固定程序。",
+              "startFrame": 33,
+              "durationFrames": 54
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/模型论/scene_2_3.png",
+            "conceptName": "模型",
+            "anchors": []
+          },
+          "totalDurationFrames": 88
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "三段口播呈因果传导关系（固定映射→逻辑固化→与智能无关），因果链模板逐环点亮，凸显机制链条。",
+          "content": [
+            {
+              "text": "输入 A，",
+              "startFrame": 0,
+              "durationFrames": 20
+            },
+            {
+              "text": "输出 B。",
+              "startFrame": 19,
+              "durationFrames": 22
+            },
+            {
+              "text": "逻辑写死了，",
+              "startFrame": 40,
+              "durationFrames": 33
+            },
+            {
+              "text": "规则写死了。",
+              "startFrame": 73,
+              "durationFrames": 32
+            },
+            {
+              "text": "跟智能，",
+              "startFrame": 105,
+              "durationFrames": 19
+            },
+            {
+              "text": "没有半毛钱关系。",
+              "startFrame": 123,
+              "durationFrames": 39
+            }
+          ],
+          "order": 4,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "输入A",
+                "imageSrc": "images/模型论/scene_2_4_img0.png",
+                "enterEffect": "breathe",
+                "showFrom": 0
+              },
+              {
+                "label": "输出B",
+                "imageSrc": "images/模型论/scene_2_4_img1.png",
+                "enterEffect": "breathe",
+                "showFrom": 1
+              }
+            ],
+            "anchors": [
+              {
+                "text": "逻辑写死",
+                "showFrom": 2,
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 162
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CONCEPT_CARD",
+          "reasoning": "转向工业模型话题并给出定义，概念卡再次锁定新术语。",
+          "content": [
+            {
+              "text": "而工业模型，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "就是工业版的固定程序。",
+              "startFrame": 27,
+              "durationFrames": 55
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/模型论/scene_2_5.png",
+            "conceptName": "工业模型",
+            "anchors": []
+          },
+          "totalDurationFrames": 82
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "两个并列功能点，每点独立可配图，宫格模板清晰展示工业模型的应用场景。",
+          "content": [
+            {
+              "text": "预测哪天机床该保养了。",
+              "startFrame": 0,
+              "durationFrames": 62
+            },
+            {
+              "text": "预测哪天要买原材料了。",
+              "startFrame": 61,
+              "durationFrames": 67
+            },
+            {
+              "text": "预测哪天能出多少产品了。",
+              "startFrame": 128,
+              "durationFrames": 69
+            }
+          ],
+          "order": 6,
+          "param": {
+            "panels": [
+              {
+                "src": "images/模型论/scene_2_6_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/模型论/scene_2_6_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/模型论/scene_2_6_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 197
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "通过“不在…在于…”完成认知转折，认知转变模板突出核心对立——算法高级 vs 业务理解。",
+          "content": [
+            {
+              "text": "这些程序当然有价值。",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "但其难点不在算法多高级。",
+              "startFrame": 50,
+              "durationFrames": 63
+            },
+            {
+              "text": "在于你懂不懂业务。",
+              "startFrame": 112,
+              "durationFrames": 42
+            },
+            {
+              "text": "懂业务，就能写。",
+              "startFrame": 154,
+              "durationFrames": 47
+            }
+          ],
+          "order": 7,
+          "param": {
+            "notText": "算法多高级",
+            "butText": "懂业务",
+            "butSrc": "images/模型论/scene_2_7.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 201
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促强结论，不需要配图，纯文字冲击模板最大化收束效果。",
+          "content": [
+            {
+              "text": "但请注意—",
+              "startFrame": 0,
+              "durationFrames": 26
+            },
+            {
+              "text": "这依然是写死的逻辑。",
+              "startFrame": 25,
+              "durationFrames": 1
+            },
+            {
+              "text": "不是 AI。",
+              "startFrame": 0,
+              "durationFrames": 1095
+            }
+          ],
+          "order": 8,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "这依然是写死的逻辑。",
+                "showFrom": 1
+              },
+              {
+                "text": "不是 AI。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "不是 AI",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 116
+        }
+      ],
+      "audioSrc": "/audio/模型论/scene_2/scene_2.mp3",
+      "totalDurationFrames": 1267
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "剖析·真正的大模型",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "提问并列举三个并列的AI称谓，用TEXT_FOCUS逐条大字呈现，无需配图。",
+          "content": [
+            {
+              "text": "那么哪些是AI呢？",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "大语言模型、",
+              "startFrame": 45,
+              "durationFrames": 34
+            },
+            {
+              "text": "AI大模型、",
+              "startFrame": 79,
+              "durationFrames": 27
+            },
+            {
+              "text": "还有“大模型”。",
+              "startFrame": 105,
+              "durationFrames": 29
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "大语言模型",
+                "showFrom": 1
+              },
+              {
+                "text": "AI大模型",
+                "showFrom": 2
+              },
+              {
+                "text": "大模型",
+                "showFrom": 3
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 135
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TIMELINE",
+          "reasoning": "三个称谓按递进顺序解释各自含义与指向，适合用时间轴从左到右串联展示。",
+          "content": [
+            {
+              "text": "大语言模型，是面向开发者的描述，",
+              "startFrame": 0,
+              "durationFrames": 86
+            },
+            {
+              "text": "说明他的底层原理是文本预测。",
+              "startFrame": 85,
+              "durationFrames": 70
+            },
+            {
+              "text": "AI大模型，是面向使用者的描述，",
+              "startFrame": 154,
+              "durationFrames": 77
+            },
+            {
+              "text": "说明他的智能程度。",
+              "startFrame": 231,
+              "durationFrames": 46
+            },
+            {
+              "text": "大模型，是对以上两者的简称，",
+              "startFrame": 276,
+              "durationFrames": 76
+            },
+            {
+              "text": "是习惯用语。",
+              "startFrame": 351,
+              "durationFrames": 35
+            }
+          ],
+          "order": 2,
+          "param": {
+            "images": [
+              {
+                "src": "images/模型论/scene_3_2_img0.png",
+                "enterEffect": "slideLeft",
+                "textIndex": 0,
+                "label": "大语言模型"
+              },
+              {
+                "src": "images/模型论/scene_3_2_img1.png",
+                "enterEffect": "fadeIn",
+                "textIndex": 2,
+                "label": "AI大模型"
+              },
+              {
+                "src": "images/模型论/scene_3_2_img2.png",
+                "enterEffect": "slideLeft",
+                "textIndex": 4,
+                "label": "大模型"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 387
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "强调“大”字的关键性，用放大镜聚焦到“大”字上，突出其重要性。",
+          "content": [
+            {
+              "text": "但不管怎么命名，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "他们都被冠以“大”字，",
+              "startFrame": 36,
+              "durationFrames": 43
+            },
+            {
+              "text": "这个字非常的重要，",
+              "startFrame": 78,
+              "durationFrames": 51
+            }
+          ],
+          "order": 3,
+          "param": {
+            "anchors": [
+              {
+                "text": "大",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 129
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "因果链传导：参数量巨大→像神经元→决定智能上限，适合用因果链模板。",
+          "content": [
+            {
+              "text": "因为模型之所以智能，",
+              "startFrame": 0,
+              "durationFrames": 54
+            },
+            {
+              "text": "完全是因为其参数量巨大，",
+              "startFrame": 53,
+              "durationFrames": 69
+            },
+            {
+              "text": "参数量就像生物的神经元数量，",
+              "startFrame": 122,
+              "durationFrames": 70
+            },
+            {
+              "text": "决定了智能的上限。",
+              "startFrame": 192,
+              "durationFrames": 46
+            }
+          ],
+          "order": 4,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "参数量巨大",
+                "imageSrc": "images/模型论/scene_3_4_img0.png",
+                "showFrom": 1
+              },
+              {
+                "label": "智能上限",
+                "imageSrc": "images/模型论/scene_3_4_img1.png",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 238
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "「不够→草履虫」与「够了→人」构成明确对错对照，DOS_AND_DONTS 左右分栏比认知翻转卡更直观呈现神经元数量阈值差异。",
+          "content": [
+            {
+              "text": "神经元数量不够你就是一只草履虫，",
+              "startFrame": 0,
+              "durationFrames": 79
+            },
+            {
+              "text": "神经元数量够了你才是人。",
+              "startFrame": 78,
+              "durationFrames": 63
+            }
+          ],
+          "order": 5,
+          "param": {
+            "left": {
+              "label": "❌ 参数量小",
+              "src": "images/模型论/scene_3_5_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 参数量大",
+              "src": "images/模型论/scene_3_5_right.png",
+              "showFrom": 1
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 141
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "完整子话题弧：观众疑问→定义澄清→相对纠偏→绝对规模收束，符合「个案现象→推论/误判→纠偏→收束」叙事，选 CASE_BREAKDOWN 单镜讲透「小模型」。",
+          "content": [
+            {
+              "text": "有人会问那“小模型”又是什么呢？",
+              "startFrame": 0,
+              "durationFrames": 64
+            },
+            {
+              "text": "在AI的语境下，",
+              "startFrame": 63,
+              "durationFrames": 38
+            },
+            {
+              "text": "小模型依然指的是大语言模型，",
+              "startFrame": 101,
+              "durationFrames": 83
+            },
+            {
+              "text": "只是参数量相对小一点，",
+              "startFrame": 183,
+              "durationFrames": 58
+            },
+            {
+              "text": "注意，只是“相对”小，",
+              "startFrame": 241,
+              "durationFrames": 56
+            },
+            {
+              "text": "也就是人和狗的区别，",
+              "startFrame": 297,
+              "durationFrames": 57
+            },
+            {
+              "text": "但相对草履虫这种非智能体来说，",
+              "startFrame": 354,
+              "durationFrames": 77
+            },
+            {
+              "text": "参数量依然巨大。",
+              "startFrame": 430,
+              "durationFrames": 46
+            }
+          ],
+          "order": 6,
+          "param": {
+            "title": "小模型",
+            "imageSrc": "images/模型论/scene_3_6.png",
+            "phases": [
+              {
+                "phaseLabel": "依然是大语言模型",
+                "showFrom": 2
+              },
+              {
+                "phaseLabel": "参数量相对一般的模型小",
+                "showFrom": 3
+              },
+              {
+                "phaseLabel": "参数量依然巨大",
+                "showFrom": 7
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 477
+        }
+      ],
+      "audioSrc": "/audio/模型论/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1507
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "反转·华为伪工业大模型",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "讽刺性模拟花粉视角的引用反问，用 QUOTE_CITATION 突出「工业大模型」这一引语与来源。",
+          "content": [
+            {
+              "text": "这个时候花粉可能要高潮了，",
+              "startFrame": 0,
+              "durationFrames": 62
+            },
+            {
+              "text": "那华为那些号称“工业大模型”的一定很牛逼吧。",
+              "startFrame": 61,
+              "durationFrames": 87
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteSource": "花粉",
+            "quoteDisplayText": "那华为那些号称「工业大模型」的一定很牛逼吧。",
+            "showFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 148
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对“我之前说的那些名词”进行定义性解释，本质是概念澄清，适合用CONCEPT_CARD突出‘正常人的约定’。",
+          "content": [
+            {
+              "text": "但是我要告诉你，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "我之前说的那些名词，",
+              "startFrame": 34,
+              "durationFrames": 52
+            },
+            {
+              "text": "是正常的，",
+              "startFrame": 86,
+              "durationFrames": 30
+            },
+            {
+              "text": "诚实的，",
+              "startFrame": 115,
+              "durationFrames": 26
+            },
+            {
+              "text": "正直的人的约定。",
+              "startFrame": 140,
+              "durationFrames": 34
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/模型论/scene_4_2.png",
+            "conceptName": "术语约定",
+            "anchors": []
+          },
+          "totalDurationFrames": 175
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "整个句子是‘不诚实的人→硬说程序是加一大模型→不给验证机会→无法反驳’的因果传导，适合CAUSE_CHAIN分环展示。",
+          "content": [
+            {
+              "text": "如果有些不正常的，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "不诚实的，",
+              "startFrame": 39,
+              "durationFrames": 19
+            },
+            {
+              "text": "不正直的人，",
+              "startFrame": 57,
+              "durationFrames": 28
+            },
+            {
+              "text": "非要说自己的1+1=2的程序，",
+              "startFrame": 85,
+              "durationFrames": 67
+            },
+            {
+              "text": "是工业大模型，",
+              "startFrame": 151,
+              "durationFrames": 39
+            },
+            {
+              "text": "还不给你测试验证的机会，",
+              "startFrame": 189,
+              "durationFrames": 46
+            },
+            {
+              "text": "那谁也没有办法反驳他。",
+              "startFrame": 235,
+              "durationFrames": 53
+            }
+          ],
+          "order": 3,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "滑伪之人",
+                "imageSrc": "images/模型论/scene_4_3_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "虚假宣称",
+                "imageSrc": "images/模型论/scene_4_3_img1.png",
+                "showFrom": 3,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "label": "不给测试",
+                "imageSrc": "images/模型论/scene_4_3_img2.png",
+                "showFrom": 5,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "label": "无从反驳",
+                "imageSrc": "images/模型论/scene_4_3_img3.png",
+                "showFrom": 6,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "“宣称”工业大模型",
+                "showFrom": 4,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 288
+        }
+      ],
+      "audioSrc": "/audio/模型论/scene_4/scene_4.mp3",
+      "totalDurationFrames": 612
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "剖析·2020分水岭",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "引出关键短语“分辨的标准”，需要将视觉焦点锁定到这个高价值锚点上，为后续标准展开做铺垫→选MAGNIFYING_GLASS。",
+          "content": [
+            {
+              "text": "但是我可以告诉你至少一个分辨的标准：",
+              "startFrame": 0,
+              "durationFrames": 89
+            }
+          ],
+          "order": 1,
+          "param": {
+            "anchors": [
+              {
+                "text": "分辨的标准",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 89
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "口播两次锚定「2020年之前」这一分水岭年份，核心数字 2020 适合用 KPI_HERO 大字报强化时间分界点。",
+          "content": [
+            {
+              "text": "如果这个所谓的模型是2020年之前出现的，",
+              "startFrame": 0,
+              "durationFrames": 101
+            },
+            {
+              "text": "那他就一定是非智能的固定程序。",
+              "startFrame": 100,
+              "durationFrames": 69
+            },
+            {
+              "text": "因为在2020年之前，",
+              "startFrame": 169,
+              "durationFrames": 55
+            },
+            {
+              "text": "GPT-3还没有出现。",
+              "startFrame": 223,
+              "durationFrames": 55
+            }
+          ],
+          "order": 2,
+          "param": {
+            "value": 2020,
+            "suffix": "年之前",
+            "label": "GPT-3出现",
+            "useGrouping": false,
+            "anchors": []
+          },
+          "totalDurationFrames": 279
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "多层因果传导：GPT-3出现→验证大力出奇迹→堆参数有用→大模型概念诞生，每环一层因果递进→选CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "是GPT-3的出现验证了大力真的可以出奇迹，",
+              "startFrame": 0,
+              "durationFrames": 113
+            },
+            {
+              "text": "堆参数真的有用，",
+              "startFrame": 112,
+              "durationFrames": 47
+            },
+            {
+              "text": "才有了大模型这个概念的出现。",
+              "startFrame": 159,
+              "durationFrames": 62
+            }
+          ],
+          "order": 3,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "GPT-3 出现",
+                "imageSrc": "images/模型论/scene_5_3_img0.png",
+                "showFrom": 0,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "label": "大力出奇迹",
+                "imageSrc": "images/模型论/scene_5_3_img1.png",
+                "showFrom": 1,
+                "enterEffect": "breathe"
+              },
+              {
+                "label": "大模型概念",
+                "imageSrc": "images/模型论/scene_5_3_img2.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 222
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "QUOTE_CITATION",
+          "reasoning": "模拟观众常见设问「难道就没有其他公司之前就在做了吗」，用 QUOTE_CITATION 以引用体裁突出反问；首句引导不入版心，showFrom 对齐设问句。",
+          "content": [
+            {
+              "text": "有人要问了，",
+              "startFrame": 0,
+              "durationFrames": 29
+            },
+            {
+              "text": "难道就没有其他公司之前就在做了吗？",
+              "startFrame": 28,
+              "durationFrames": 75
+            },
+            {
+              "text": "还真没有，",
+              "startFrame": 102,
+              "durationFrames": 24
+            },
+            {
+              "text": "因为成本问题。",
+              "startFrame": 126,
+              "durationFrames": 35
+            }
+          ],
+          "order": 4,
+          "param": {
+            "quoteSource": "有人问",
+            "quoteDisplayText": "难道就没有其他公司之前就在做了吗？",
+            "showFrom": 1,
+            "anchors": [
+              {
+                "text": "成本问题",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 162
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "核心数据是“3500万美元+”的巨额投入，其他时间与收益描述为辅助信息，适合用单个核心数值冲击画面→选KPI_HERO。",
+          "content": [
+            {
+              "text": "OpenAI从成立到研发GPT-3的过程中，",
+              "startFrame": 0,
+              "durationFrames": 95
+            },
+            {
+              "text": "总计花费了3500万美元+ ，",
+              "startFrame": 94,
+              "durationFrames": 69
+            },
+            {
+              "text": "历时4年，",
+              "startFrame": 163,
+              "durationFrames": 44
+            },
+            {
+              "text": "而这个过程是没有产生任何收益的，",
+              "startFrame": 207,
+              "durationFrames": 74
+            },
+            {
+              "text": "甚至连研究到底有没有价值，也是不知道的。",
+              "startFrame": 280,
+              "durationFrames": 89
+            }
+          ],
+          "order": 5,
+          "param": {
+            "blocks": [
+              {
+                "value": 3500,
+                "suffix": "万美元+",
+                "label": "研发花费",
+                "showFrom": 1,
+                "useGrouping": true
+              },
+              {
+                "value": 4,
+                "suffix": "年",
+                "label": "研发耗时",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 369
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "直接将OpenAI与其他所有公司做对比，突出唯一性与决策差异→选SPLIT_COMPARE。",
+          "content": [
+            {
+              "text": "除了OpenAI这样一家没有盈利目标的公司外，",
+              "startFrame": 0,
+              "durationFrames": 91
+            },
+            {
+              "text": "没有任何一家公司，",
+              "startFrame": 90,
+              "durationFrames": 44
+            },
+            {
+              "text": "能花4年的时间，",
+              "startFrame": 134,
+              "durationFrames": 41
+            },
+            {
+              "text": "烧几千万美元的钱，",
+              "startFrame": 174,
+              "durationFrames": 51
+            },
+            {
+              "text": "来做一件不一定有结果的事情。",
+              "startFrame": 224,
+              "durationFrames": 68
+            }
+          ],
+          "order": 6,
+          "param": {
+            "leftSrc": "images/模型论/scene_5_6_left.png",
+            "rightSrc": "images/模型论/scene_5_6_right.png",
+            "leftLabel": "OpenAI",
+            "rightLabel": "其他公司",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 293
+        }
+      ],
+      "audioSrc": "/audio/模型论/scene_5/scene_5.mp3",
+      "totalDurationFrames": 1412
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "剖析·大语言模型本质",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "问句引出话题后给出正面结论，整体为平铺叙述，无强对比或分点结构，适合用单图平缓呈现。",
+          "content": [
+            {
+              "text": "那2020年之后呢？",
+              "startFrame": 0,
+              "durationFrames": 56
+            },
+            {
+              "text": "确实会有货真价实的“工业大模型”，",
+              "startFrame": 55,
+              "durationFrames": 75
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/模型论/scene_6_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "工业大模型",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 130
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "转折揭示本质，属于认知颠覆（“但…本质上还是…”），然后补充解释弱化差异，符合COGNITIVE_SHIFT的对比揭示模式。",
+          "content": [
+            {
+              "text": "但这个大模型本质上还是“大语言模型”，",
+              "startFrame": 0,
+              "durationFrames": 81
+            },
+            {
+              "text": "只不过是在训练语料上，",
+              "startFrame": 80,
+              "durationFrames": 50
+            },
+            {
+              "text": "多加了一些特定工业领域的数据而已。",
+              "startFrame": 129,
+              "durationFrames": 72
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "工业专用大模型",
+            "butText": "大语言模型+工业语料",
+            "butSrc": "images/模型论/scene_6_2.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 202
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全篇概念等式收束，逐条大字呈现定义关系，纯文字冲击比表格更适合结论暴击。",
+          "content": [
+            {
+              "text": "我们来总结一下，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "模型，等于固定的程序。",
+              "startFrame": 32,
+              "durationFrames": 66
+            },
+            {
+              "text": "工业模型，等于模型加工业数据。",
+              "startFrame": 98,
+              "durationFrames": 87
+            },
+            {
+              "text": "大语言模型等于AI模型等于大模型。",
+              "startFrame": 184,
+              "durationFrames": 86
+            },
+            {
+              "text": "工业大模型等于大语言模型加工业数据，",
+              "startFrame": 269,
+              "durationFrames": 88
+            },
+            {
+              "text": "或者工业大模型等于工业模型加改名。",
+              "startFrame": 356,
+              "durationFrames": 82
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "模型 = 固定程序",
+                "showFrom": 1
+              },
+              {
+                "text": "工业模型 = 模型 + 工业数据",
+                "showFrom": 2
+              },
+              {
+                "text": "大语言模型 = AI模型 = 大模型",
+                "showFrom": 3
+              },
+              {
+                "text": "工业大模型 = 大语言模型 + 工业数据",
+                "showFrom": 4
+              },
+              {
+                "text": "工业大模型（假）= 工业模型 + 改名",
+                "showFrom": 5
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "固定程序",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "AI模型",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "改名",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 439
+        }
+      ],
+      "audioSrc": "/audio/模型论/scene_6/scene_6.mp3",
+      "totalDurationFrames": 772
+    },
+    {
+      "sceneId": "scene_7",
+      "sceneName": "召唤·拒绝假营销",
+      "items": [
+        {
+          "narrativeType": "CASE",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "工业固定程序与改名包装成「工业大模型」构成明确对错对照，DOS_AND_DONTS 左右分栏比单图 CENTER_FOCUS 更直观呈现「名副其实 vs 改名忽悠」。",
+          "content": [
+            {
+              "text": "对于一家公司来说，",
+              "startFrame": 0,
+              "durationFrames": 41
+            },
+            {
+              "text": "工业固定程序，",
+              "startFrame": 40,
+              "durationFrames": 30
+            },
+            {
+              "text": "改个名字叫「工业大模型」。",
+              "startFrame": 69,
+              "durationFrames": 49
+            }
+          ],
+          "order": 1,
+          "param": {
+            "left": {
+              "label": "❌ 改名包装",
+              "src": "images/模型论/scene_7_1_left.png",
+              "showFrom": 2
+            },
+            "right": {
+              "label": "✅ 固定程序",
+              "src": "images/模型论/scene_7_1_right.png",
+              "showFrom": 1
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 119
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "气象监测程序与伪「气象大模型」同样是对错对照，单独成镜保持原子化，用 DOS_AND_DONTS 左右呈现真实程序 vs 改名忽悠。",
+          "content": [
+            {
+              "text": "气象监测程序，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "改个名字叫「气象大模型」。",
+              "startFrame": 37,
+              "durationFrames": 54
+            }
+          ],
+          "order": 2,
+          "param": {
+            "left": {
+              "label": "❌ 改名包装",
+              "src": "images/模型论/scene_7_2_left.png",
+              "showFrom": 1
+            },
+            "right": {
+              "label": "✅ 监测程序",
+              "src": "images/模型论/scene_7_2_right.png",
+              "showFrom": 0
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 91
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "独立金句式评价，短促有力，无需配图，用TEXT_FOCUS强化观点冲击。",
+          "content": [
+            {
+              "text": "成本低，",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "故事大，",
+              "startFrame": 21,
+              "durationFrames": 22
+            },
+            {
+              "text": "PPT 好看。",
+              "startFrame": 43,
+              "durationFrames": 33
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "成本低，",
+                "showFrom": 0
+              },
+              {
+                "text": "故事大，",
+                "showFrom": 1
+              },
+              {
+                "text": "PPT 好看。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 76
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束号召普通人学会分辨真科技与假营销，纯大字金句冲击比认知翻转卡更直接有力。",
+          "content": [
+            {
+              "text": "但对于普通人来说，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "希望你能学会分辨，",
+              "startFrame": 38,
+              "durationFrames": 45
+            },
+            {
+              "text": "哪些是真科技，",
+              "startFrame": 82,
+              "durationFrames": 39
+            },
+            {
+              "text": "哪些是假营销。",
+              "startFrame": 121,
+              "durationFrames": 38
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "希望你能学会分辨",
+                "showFrom": 1
+              },
+              {
+                "text": "哪些是真科技",
+                "showFrom": 2
+              },
+              {
+                "text": "哪些是假营销",
+                "showFrom": 3
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "真科技",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "假营销",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 159
+        }
+      ],
+      "audioSrc": "/audio/模型论/scene_7/scene_7.mp3",
+      "totalDurationFrames": 446
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "模型论",
+    "subtitle": "重新定义模型",
+    "themeColor": "#FF6900",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

@@ -46,6 +46,13 @@ export { BWProgressRing } from "./ProgressRing";
 export type { BWProgressRingProps, ProgressRingBlockItem } from "./ProgressRing";
 export { BWBeatSequence } from "./BeatSequence";
 export type { BWBeatSequenceProps } from "./BeatSequence";
+export { BWPunchCaption } from "./PunchCaption";
+export type {
+	BWPunchCaptionProps,
+	PunchCaptionItem,
+	PunchEnterEffect,
+	PunchTone,
+} from "./PunchCaption";
 export { BWPeerInduct } from "./PeerInduct";
 export type { BWPeerInductProps } from "./PeerInduct";
 export { BWCognitiveShift } from "./CognitiveShift";

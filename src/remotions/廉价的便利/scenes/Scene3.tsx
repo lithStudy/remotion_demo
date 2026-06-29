@@ -1,9 +1,9 @@
 import React from "react";
 import { AbsoluteFill, Sequence, Audio, staticFile } from "remotion";
-import { BWBeatSequence, BWCenterFocus, BWKpiHero, BWPanelGrid } from "../../../components";
+import { BWBeatSequence, BWCenterFocus, BWCognitiveShift, BWMagnifyingGlass, BWSplitCompare } from "../../../components";
 
-// 描绘：廉价汗水图景
-const SCENE_DURATION = 30 + 60 + 60 + 60 + 60 + 60 + 120 + 60 + 90 + 120;
+// 剖析：廉价人力阻碍创新
+const SCENE_DURATION = 120 + 61 + 82 + 120 + 60 + 72 + 76 + 120;
 
 export const calculateScene3Duration = (): number => {
     return SCENE_DURATION;
@@ -12,35 +12,29 @@ export const calculateScene3Duration = (): number => {
 export const Scene3: React.FC = () => {
     return (
         <AbsoluteFill>
-            <Sequence from={0} durationInFrames={30}>
-                <BWCenterFocus content={[{"text": "看看你身边这些画面。", "startFrame": 0, "durationFrames": 30}]} totalDurationFrames={30} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="fadeIn" anchors={[]} />
+            <Sequence from={0} durationInFrames={120}>
+                <BWBeatSequence content={[{"text": "你可能觉得，", "startFrame": 0, "durationFrames": 30}, {"text": "\n我在办公室吹空调，", "startFrame": 30, "durationFrames": 30}, {"text": "\n这跟我有什么关系？", "startFrame": 60, "durationFrames": 30}, {"text": "\n关系大了。", "startFrame": 90, "durationFrames": 30}]} totalDurationFrames={120} stages={[{ imageSrc: staticFile("images/template/scene1_1.png"), enterEffect: "breathe", tone: "calm" }, { imageSrc: staticFile("images/template/scene1_1.png"), enterEffect: "slideBottom" }, { imageSrc: staticFile("images/template/scene1_1.png"), enterEffect: "slideBottom" }, { imageSrc: staticFile("images/template/scene1_1.png"), enterEffect: "slideBottom" }]} anchors={[]} />
             </Sequence>
-            <Sequence from={30} durationInFrames={60}>
-                <BWKpiHero content={[{"text": "流水线上的阿姨，", "startFrame": 0, "durationFrames": 30}, {"text": "一天干12个小时。", "startFrame": 30, "durationFrames": 30}]} totalDurationFrames={60} blocks={[{"value": 12, "prefix": "一天干", "suffix": "个小时", "label": "流水线上的阿姨", "showFrom": 1}]} anchors={[]} />
+            <Sequence from={120} durationInFrames={61}>
+                <BWCenterFocus content={[{"text": "人力便宜这个逻辑，", "startFrame": 0, "durationFrames": 30}, {"text": "\n已经打通了全社会每一个角落。", "startFrame": 30, "durationFrames": 31}]} totalDurationFrames={61} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="fadeIn" anchors={[{"text": "人力便宜", "showFrom": 0, "color": "#EF4444", "anim": "spring", "audioEffect": null}]} />
             </Sequence>
-            <Sequence from={90} durationInFrames={60}>
-                <BWCenterFocus content={[{"text": "组装一个小零件，", "startFrame": 0, "durationFrames": 30}, {"text": "才赚几厘钱。", "startFrame": 30, "durationFrames": 30}]} totalDurationFrames={60} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="fadeIn" anchors={[]} />
+            <Sequence from={181} durationInFrames={82}>
+                <BWCenterFocus content={[{"text": "老板为什么宁愿招三个应届生996试错，", "startFrame": 0, "durationFrames": 42}, {"text": "\n也不肯砸钱搞真正能提效的软件和研发？", "startFrame": 42, "durationFrames": 40}]} totalDurationFrames={82} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="fadeIn" anchors={[{"text": "软件研发", "showFrom": 1, "color": "#EF4444", "anim": "popIn", "audioEffect": "ping"}]} />
             </Sequence>
-            <Sequence from={150} durationInFrames={60}>
-                <BWKpiHero content={[{"text": "就靠这，", "startFrame": 0, "durationFrames": 30}, {"text": "9块9还能赚钱。", "startFrame": 30, "durationFrames": 30}]} totalDurationFrames={60} blocks={[{"value": 9.9, "suffix": "块", "showFrom": 1, "label": "售价", "decimalPlaces": 1, "useGrouping": false}]} countDuration={28} anchors={[]} />
+            <Sequence from={263} durationInFrames={120}>
+                <BWCognitiveShift content={[{"text": "因为软件贵，", "startFrame": 0, "durationFrames": 30}, {"text": "研发有风险。", "startFrame": 30, "durationFrames": 30}, {"text": "\n而你，", "startFrame": 60, "durationFrames": 30}, {"text": "很便宜。", "startFrame": 90, "durationFrames": 30}]} totalDurationFrames={120} notText={"软件贵研发风险"} butText={"你很便宜"} butSrc={staticFile("images/template/scene1_1.png")} notContentIndex={0} butContentIndex={3} anchors={[]} />
             </Sequence>
-            <Sequence from={210} durationInFrames={60}>
-                <BWCenterFocus content={[{"text": "暴雨夜里，", "startFrame": 0, "durationFrames": 30}, {"text": "外卖小哥骑着电动车狂奔。", "startFrame": 30, "durationFrames": 30}]} totalDurationFrames={60} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="fadeIn" anchors={[]} />
+            <Sequence from={383} durationInFrames={60}>
+                <BWMagnifyingGlass content={[{"text": "廉价的人力，", "startFrame": 0, "durationFrames": 30}, {"text": "首先会阻碍创新。", "startFrame": 30, "durationFrames": 30}]} totalDurationFrames={60} anchors={[{"text": "阻碍创新", "showFrom": 1, "color": "#EF4444", "anim": "popIn", "audioEffect": "ping"}]} />
             </Sequence>
-            <Sequence from={270} durationInFrames={60}>
-                <BWCenterFocus content={[{"text": "一单只赚三五块，", "startFrame": 0, "durationFrames": 30}, {"text": "超时平台就扣大钱。", "startFrame": 30, "durationFrames": 30}]} totalDurationFrames={60} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="fadeIn" anchors={[]} />
+            <Sequence from={443} durationInFrames={72}>
+                <BWCenterFocus content={[{"text": "当你只需要花一点点钱就能坐轿子的时候，", "startFrame": 0, "durationFrames": 42}, {"text": "\n你就不会想着造车。", "startFrame": 42, "durationFrames": 30}]} totalDurationFrames={72} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="fadeIn" anchors={[]} />
             </Sequence>
-            <Sequence from={330} durationInFrames={120}>
-                <BWPanelGrid content={[{"text": "为了准时送达，", "startFrame": 0, "durationFrames": 30}, {"text": "他们闯红灯、", "startFrame": 30, "durationFrames": 30}, {"text": "逆行、", "startFrame": 60, "durationFrames": 30}, {"text": "爬楼梯，", "startFrame": 90, "durationFrames": 30}]} totalDurationFrames={120} panels={[{ src: staticFile("images/template/scene1_1.png"), showFrom: 0, enterEffect: "zoomIn" }, { src: staticFile("images/template/scene1_1.png"), showFrom: 1, enterEffect: "slideLeft" }, { src: staticFile("images/template/scene1_1.png"), showFrom: 2, enterEffect: "slideLeft" }, { src: staticFile("images/template/scene1_1.png"), showFrom: 3, enterEffect: "slideBottom" }]} anchors={[]} />
+            <Sequence from={515} durationInFrames={76}>
+                <BWCenterFocus content={[{"text": "当你只需要花一点点钱就能让人扇扇子的时候，", "startFrame": 0, "durationFrames": 46}, {"text": "\n你就不会想着造电风扇。", "startFrame": 46, "durationFrames": 30}]} totalDurationFrames={76} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="fadeIn" anchors={[{"text": "扇扇子", "showFrom": 0, "color": "#000000", "anim": "spring", "audioEffect": null}, {"text": "电风扇", "showFrom": 1, "color": "#000000", "anim": "spring", "audioEffect": null}]} />
             </Sequence>
-            <Sequence from={450} durationInFrames={60}>
-                <BWCenterFocus content={[{"text": "汗水混着雨水，", "startFrame": 0, "durationFrames": 30}, {"text": "腿都快跑断了。", "startFrame": 30, "durationFrames": 30}]} totalDurationFrames={60} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="fadeIn" anchors={[]} />
-            </Sequence>
-            <Sequence from={510} durationInFrames={90}>
-                <BWCenterFocus content={[{"text": "半夜一点，", "startFrame": 0, "durationFrames": 30}, {"text": "客服秒回你。", "startFrame": 30, "durationFrames": 30}, {"text": "态度好到甩欧美几条街。", "startFrame": 60, "durationFrames": 30}]} totalDurationFrames={90} imageSrc={staticFile("images/template/scene1_1.png")} enterEffect="fadeIn" anchors={[{"text": "甩欧美几条街", "showFrom": 2, "color": "#EF4444", "anim": "spring", "audioEffect": "impact_thud"}]} />
-            </Sequence>
-            <Sequence from={600} durationInFrames={120}>
-                <BWBeatSequence content={[{"text": "背后呢？", "startFrame": 0, "durationFrames": 30}, {"text": "三四千底薪的年轻人，", "startFrame": 30, "durationFrames": 30}, {"text": "背着回复速度的KPI，", "startFrame": 60, "durationFrames": 30}, {"text": "连上厕所都要掐表。", "startFrame": 90, "durationFrames": 30}]} totalDurationFrames={120} stages={[{ imageSrc: staticFile("images/template/scene1_1.png"), enterEffect: "breathe", tone: "calm" }, { imageSrc: staticFile("images/template/scene1_1.png"), enterEffect: "slideBottom", tone: "alert" }, { imageSrc: staticFile("images/template/scene1_1.png"), enterEffect: "slideBottom", tone: "alert" }, { imageSrc: staticFile("images/template/scene1_1.png"), enterEffect: "zoomIn", tone: "alert" }]} anchors={[]} />
+            <Sequence from={591} durationInFrames={120}>
+                <BWSplitCompare content={[{"text": "创新很耗时，", "startFrame": 0, "durationFrames": 30}, {"text": "创新很贵，", "startFrame": 30, "durationFrames": 30}, {"text": "而你，", "startFrame": 60, "durationFrames": 30}, {"text": "很便宜。", "startFrame": 90, "durationFrames": 30}]} totalDurationFrames={120} leftSrc={staticFile("images/template/scene1_1.png")} rightSrc={staticFile("images/template/scene1_1.png")} leftLabel={"创新"} rightLabel={"廉价人力"} leftShowFrom={0} rightShowFrom={2} anchors={[]} />
             </Sequence>
 
         </AbsoluteFill>

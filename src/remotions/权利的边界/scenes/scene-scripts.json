@@ -1,0 +1,2018 @@
+{
+  "topic": "我曾以为最震撼的话是横渠四句，直到看见这13个字",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入·破房子震撼",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "设问式开篇，无对比、递进或数据，属于平缓叙述；用 CENTER_FOCUS 单图居中聚焦即可引起注意。",
+          "content": [
+            {
+              "text": "如果必须在人类历史的浩瀚星河中，",
+              "startFrame": 0,
+              "durationFrames": 68
+            },
+            {
+              "text": "选出一句最让我震撼、",
+              "startFrame": 67,
+              "durationFrames": 50
+            },
+            {
+              "text": "也最动心的话。",
+              "startFrame": 116,
+              "durationFrames": 39
+            },
+            {
+              "text": "在学生时代，",
+              "startFrame": 154,
+              "durationFrames": 33
+            },
+            {
+              "text": "我一定会毫不犹豫地诵出张载的横渠四句：",
+              "startFrame": 187,
+              "durationFrames": 90
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/权利的边界/scene_1_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 278
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "QUOTE_CITATION",
+          "reasoning": "直接引用张载名言，符合 QUOTE_CITATION 的引用场景，可突出原文权威感。",
+          "content": [
+            {
+              "text": "为天地立心，",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "为生民立命，",
+              "startFrame": 33,
+              "durationFrames": 32
+            },
+            {
+              "text": "为往圣继绝学，",
+              "startFrame": 65,
+              "durationFrames": 42
+            },
+            {
+              "text": "为万世开太平。",
+              "startFrame": 106,
+              "durationFrames": 43
+            }
+          ],
+          "order": 3,
+          "param": {
+            "quoteSource": "张载",
+            "anchors": []
+          },
+          "totalDurationFrames": 150
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "对过去心态的自我剖析，属于中性叙述；用 CENTER_FOCUS 配单图即可。",
+          "content": [
+            {
+              "text": "那时的我，",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "满眼都是宏大叙事，",
+              "startFrame": 18,
+              "durationFrames": 42
+            },
+            {
+              "text": "满心都是天下苍生。",
+              "startFrame": 60,
+              "durationFrames": 43
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/权利的边界/scene_1_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 103
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "转折叙述，从社会经历过渡到知乎发现新观点；单图居中即可平稳承接上下文，无需多段节拍切换。",
+          "content": [
+            {
+              "text": "直到走进社会，经历了一些事情，",
+              "startFrame": 0,
+              "durationFrames": 69
+            },
+            {
+              "text": "然后突然有一天，",
+              "startFrame": 68,
+              "durationFrames": 34
+            },
+            {
+              "text": "我看到了另外一句话：",
+              "startFrame": 102,
+              "durationFrames": 39
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": " ",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 141
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "QUOTE_CITATION",
+          "reasoning": "核心名言引用，作为对比案例；QUOTE_CITATION 可突出名言的冲击力。",
+          "content": [
+            {
+              "text": "“我有一间破房子，",
+              "startFrame": 0,
+              "durationFrames": 50
+            },
+            {
+              "text": "风能进，",
+              "startFrame": 49,
+              "durationFrames": 20
+            },
+            {
+              "text": "雨能进，",
+              "startFrame": 68,
+              "durationFrames": 24
+            },
+            {
+              "text": "国王不能进。”",
+              "startFrame": 92,
+              "durationFrames": 26
+            }
+          ],
+          "order": 6,
+          "param": {
+            "quoteDisplayText": "我有一间破房子，风能进，雨能进，国王不能进。",
+            "quoteSource": "知乎",
+            "anchors": []
+          },
+          "totalDurationFrames": 118
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "个人沉浸式体验的叙述，没有特殊结构；用 CENTER_FOCUS 配画面即可传达凝视感。",
+          "content": [
+            {
+              "text": "记忆里，",
+              "startFrame": 0,
+              "durationFrames": 24
+            },
+            {
+              "text": "那天的我凝视着屏幕，",
+              "startFrame": 24,
+              "durationFrames": 53
+            },
+            {
+              "text": "久久无法移开视线。",
+              "startFrame": 76,
+              "durationFrames": 42
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "images/权利的边界/scene_1_7.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 118
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "典型的“不是…而是…”认知纠偏结构，合并后 27 字；COGNITIVE_SHIFT 适合呈现核心心态转变与金句收束。",
+          "content": [
+            {
+              "text": "那不是一种被大风大浪席卷的冲击。",
+              "startFrame": 0,
+              "durationFrames": 78
+            },
+            {
+              "text": "而是一种锥心刺骨、",
+              "startFrame": 77,
+              "durationFrames": 44
+            },
+            {
+              "text": "前所未有的震撼。",
+              "startFrame": 121,
+              "durationFrames": 41
+            }
+          ],
+          "order": 8,
+          "param": {
+            "notText": "大风大浪席卷的冲击",
+            "butText": "锥心刺骨的震撼",
+            "butSrc": "images/权利的边界/scene_1_8.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 162
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开篇感悟，平缓引入个人觉醒，无数据无对比，用 TEXT_FOCUS 零图大字压信噪比。",
+          "content": [
+            {
+              "text": "在习惯于宏大叙事的世界面前，",
+              "startFrame": 0,
+              "durationFrames": 68
+            },
+            {
+              "text": "我从字里行间深刻感受到了“个体”的尊严。",
+              "startFrame": 67,
+              "durationFrames": 98
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "在习惯于宏大叙事的世界面前，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "我从字里行间深刻感受到了",
+                "showFrom": 1
+              },
+              {
+                "text": "个体的尊严。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "个体",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 166
+        }
+      ],
+      "audioSrc": "/audio/权利的边界/scene_1/scene_1.mp3",
+      "totalDurationFrames": 1234
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析·规则锋利",
+      "items": [
+        {
+          "narrativeType": "CASE",
+          "template": "PEER_INDUCT",
+          "reasoning": "风、雨、寒冷三条并列前提铺陈破屋的无力，末句归纳为偏偏能挡住国王的反差，符合并列前提→归纳收束的 PEER_INDUCT。",
+          "content": [
+            {
+              "text": "一间破房子，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "它挡不住风。",
+              "startFrame": 41,
+              "durationFrames": 31
+            },
+            {
+              "text": "挡不住雨。",
+              "startFrame": 72,
+              "durationFrames": 33
+            },
+            {
+              "text": "挡不住寒冷和贫穷。",
+              "startFrame": 104,
+              "durationFrames": 43
+            },
+            {
+              "text": "但它偏偏能挡住这个世界上最强的人。国王。",
+              "startFrame": 147,
+              "durationFrames": 117
+            }
+          ],
+          "order": 2,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "images/权利的边界/scene_2_2_img0.png",
+                "enterEffect": "slideBottom",
+                "showFrom": 1
+              },
+              {
+                "imageSrc": "images/权利的边界/scene_2_2_img1.png",
+                "enterEffect": "slideBottom",
+                "showFrom": 2
+              },
+              {
+                "imageSrc": "images/权利的边界/scene_2_2_img2.png",
+                "enterEffect": "slideBottom",
+                "showFrom": 3
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "images/权利的边界/scene_2_2.png",
+              "enterEffect": "zoomIn",
+              "showFrom": 4,
+              "tone": "alert"
+            }
+          },
+          "totalDurationFrames": 265
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "设问引出的‘不是…而是…’认知翻转，揭示规则才是力量本源，适合 Cognitive shift。",
+          "content": [
+            {
+              "text": "但这里真正强的，",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "从来不是那堵墙。",
+              "startFrame": 46,
+              "durationFrames": 39
+            },
+            {
+              "text": "而是墙背后的规则。",
+              "startFrame": 85,
+              "durationFrames": 45
+            }
+          ],
+          "order": 4,
+          "param": {
+            "notText": "那堵墙",
+            "butText": "墙背后的规则",
+            "butSrc": "images/权利的边界/scene_2_4.png",
+            "notContentIndex": 0,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 131
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "三句并列解释风、雨、国王的隐喻，构成三宫格对比展示，适合 Panel grid。",
+          "content": [
+            {
+              "text": "风能进，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "是自然的力量。",
+              "startFrame": 26,
+              "durationFrames": 39
+            },
+            {
+              "text": "雨能进，",
+              "startFrame": 64,
+              "durationFrames": 22
+            },
+            {
+              "text": "是贫穷的现实。",
+              "startFrame": 86,
+              "durationFrames": 39
+            },
+            {
+              "text": "国王不能进，",
+              "startFrame": 124,
+              "durationFrames": 27
+            },
+            {
+              "text": "是权利的边界。",
+              "startFrame": 150,
+              "durationFrames": 40
+            }
+          ],
+          "order": 5,
+          "param": {
+            "panels": [
+              {
+                "src": "images/权利的边界/scene_2_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/权利的边界/scene_2_5_img1.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/权利的边界/scene_2_5_img2.png",
+                "showFrom": 4,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 190
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "收束总结，陈述锋利之处的内涵，平缓点题，适合 Center focus 结尾。",
+          "content": [
+            {
+              "text": "这就是这句话的锋利之处。",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "它把一个社会最底层的文明标准，",
+              "startFrame": 52,
+              "durationFrames": 65
+            },
+            {
+              "text": "压缩进了一间破房子里。",
+              "startFrame": 116,
+              "durationFrames": 52
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/权利的边界/scene_2_6.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "文明标准",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 168
+        }
+      ],
+      "audioSrc": "/audio/权利的边界/scene_2/scene_2.mp3",
+      "totalDurationFrames": 754
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "反转·权利底层",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述引出常见误解，无特殊结构，用 CENTER_FOCUS 锚定视觉重心。",
+          "content": [
+            {
+              "text": "很多人理解权利，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "第一反应是我要拥有什么。",
+              "startFrame": 39,
+              "durationFrames": 46
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/权利的边界/scene_3_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 86
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "四个并列的“我要……”构成明确分点，适合宫格并列展示，表达对权利的常见列举。",
+          "content": [
+            {
+              "text": "我要有钱。",
+              "startFrame": 0,
+              "durationFrames": 23
+            },
+            {
+              "text": "我要有地位。",
+              "startFrame": 22,
+              "durationFrames": 24
+            },
+            {
+              "text": "我要有资源。",
+              "startFrame": 46,
+              "durationFrames": 28
+            },
+            {
+              "text": "我要有话语权。",
+              "startFrame": 73,
+              "durationFrames": 35
+            },
+            {
+              "text": "这些当然重要。",
+              "startFrame": 108,
+              "durationFrames": 31
+            },
+            {
+              "text": "可它们都不是最底层的东西。",
+              "startFrame": 138,
+              "durationFrames": 57
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "images/权利的边界/scene_3_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/权利的边界/scene_3_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/权利的边界/scene_3_2_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/权利的边界/scene_3_2_img3.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 196
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "直指核心概念的命名式定义，适用 CONCEPT_CARD 突出“权利最底层”这个新概念。",
+          "content": [
+            {
+              "text": "最底层的东西，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "对别人说不的权利。",
+              "startFrame": 30,
+              "durationFrames": 41
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/权利的边界/scene_3_4.png",
+            "conceptName": "说不的权利",
+            "anchors": []
+          },
+          "totalDurationFrames": 72
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "三个“尤其是”形成递增强调，BEAT_SEQUENCE 恰好支撑逐句加强的冲击节奏；短句合并避免单句过碎。",
+          "content": [
+            {
+              "text": "尤其是强者。",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "尤其是权力。",
+              "startFrame": 32,
+              "durationFrames": 34
+            },
+            {
+              "text": "尤其是那个一句话就能改变你命运的人。",
+              "startFrame": 66,
+              "durationFrames": 72
+            }
+          ],
+          "order": 5,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/权利的边界/scene_3_5_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "images/权利的边界/scene_3_5_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "images/权利的边界/scene_3_5_img2.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 139
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "口播先否定「高处客气」并揭示交换/忌惮本质，再转向「低处边界」的正确定义，构成明确的错误认知 vs 真正权利对照，DOS_AND_DONTS 比节拍递进更贴左右对错叙事。",
+          "content": [
+            {
+              "text": "真正的权利，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "不是你站在高处时，",
+              "startFrame": 30,
+              "durationFrames": 46
+            },
+            {
+              "text": "别人对你客气。",
+              "startFrame": 76,
+              "durationFrames": 34
+            },
+            {
+              "text": "那可能只是交换。",
+              "startFrame": 110,
+              "durationFrames": 35
+            },
+            {
+              "text": "也可能只是忌惮。",
+              "startFrame": 144,
+              "durationFrames": 43
+            },
+            {
+              "text": "真正的权利，",
+              "startFrame": 187,
+              "durationFrames": 34
+            },
+            {
+              "text": "是你站在低处时，",
+              "startFrame": 221,
+              "durationFrames": 40
+            },
+            {
+              "text": "别人依然不能随便越界。",
+              "startFrame": 260,
+              "durationFrames": 52
+            }
+          ],
+          "order": 6,
+          "param": {
+            "left": {
+              "label": "❌ 高处客气",
+              "src": "images/权利的边界/scene_3_6_left.png",
+              "showFrom": 1
+            },
+            "right": {
+              "label": "✅ 低处边界",
+              "src": "images/权利的边界/scene_3_6_right.png",
+              "showFrom": 5
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 313
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "低处个案从破屋情境→一无所有→转折揭示边界→法治收束，单主图贯穿、右侧阶段轨对齐口播，适合 CASE_BREAKDOWN。",
+          "content": [
+            {
+              "text": "你住在破屋里。",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "你没钱。",
+              "startFrame": 34,
+              "durationFrames": 26
+            },
+            {
+              "text": "没势。",
+              "startFrame": 60,
+              "durationFrames": 21
+            },
+            {
+              "text": "没背景。",
+              "startFrame": 80,
+              "durationFrames": 31
+            },
+            {
+              "text": "你看起来什么都没有。",
+              "startFrame": 111,
+              "durationFrames": 43
+            },
+            {
+              "text": "但有一件事，是你永远不能失去的。",
+              "startFrame": 153,
+              "durationFrames": 75
+            },
+            {
+              "text": "那就是未经允许，",
+              "startFrame": 227,
+              "durationFrames": 42
+            },
+            {
+              "text": "任何人不能闯入你的边界。",
+              "startFrame": 269,
+              "durationFrames": 54
+            },
+            {
+              "text": "这才是法治最硬的部分。",
+              "startFrame": 322,
+              "durationFrames": 51
+            }
+          ],
+          "order": 8,
+          "param": {
+            "title": "破屋里的边界",
+            "imageSrc": "images/权利的边界/scene_3_8.png",
+            "phases": [
+              {
+                "phaseLabel": "低处处境",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "一无所有",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "不能失去",
+                "showFrom": 5
+              },
+              {
+                "phaseLabel": "法治底线",
+                "showFrom": 7
+              }
+            ]
+          },
+          "totalDurationFrames": 374
+        }
+      ],
+      "audioSrc": "/audio/权利的边界/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1178
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "命名·权力借口",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "口播先否定「让人人都变强者」的不现实期待，再转向「让强者也必须停一下」的法治本质，构成明确的错误认知 vs 正确定义对照，DOS_AND_DONTS 比认知翻转更贴左右对错叙事。",
+          "content": [
+            {
+              "text": "法治不是把每个人都变成强者。",
+              "startFrame": 0,
+              "durationFrames": 79
+            },
+            {
+              "text": "那不现实。",
+              "startFrame": 78,
+              "durationFrames": 44
+            },
+            {
+              "text": "法治真正做的，",
+              "startFrame": 122,
+              "durationFrames": 44
+            },
+            {
+              "text": "是让强者也必须停一下。",
+              "startFrame": 165,
+              "durationFrames": 56
+            }
+          ],
+          "order": 1,
+          "param": {
+            "left": {
+              "label": "❌ 让人变强",
+              "src": "images/权利的边界/scene_4_1_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 强者须停",
+              "src": "images/权利的边界/scene_4_1_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 222
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "STEP_LIST",
+          "reasoning": "四个并列的短要求（均≤5字），构成明确的行动步骤清单，适合STEP_LIST分条展示。",
+          "content": [
+            {
+              "text": "他要解释。",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "要申请。",
+              "startFrame": 32,
+              "durationFrames": 29
+            },
+            {
+              "text": "要经过程序。",
+              "startFrame": 61,
+              "durationFrames": 33
+            },
+            {
+              "text": "要承担责任。",
+              "startFrame": 93,
+              "durationFrames": 33
+            }
+          ],
+          "order": 2,
+          "param": {
+            "steps": [
+              {
+                "text": "他要解释。",
+                "showFrom": 0
+              },
+              {
+                "text": "要申请。",
+                "showFrom": 1
+              },
+              {
+                "text": "要经过程序。",
+                "showFrom": 2
+              },
+              {
+                "text": "要承担责任。",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 127
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "引用普遍抱怨并以反问递进到陷阱揭示，整体仍以单段过渡叙述为主，用 CENTER_FOCUS 单图居中承载即可。",
+          "content": [
+            {
+              "text": "很多人会觉得，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "这太麻烦了。",
+              "startFrame": 39,
+              "durationFrames": 32
+            },
+            {
+              "text": "抓紧办事不好吗？",
+              "startFrame": 70,
+              "durationFrames": 35
+            },
+            {
+              "text": "遇到问题直接冲进去，不是更快吗？",
+              "startFrame": 105,
+              "durationFrames": 65
+            },
+            {
+              "text": "这就是最大的陷阱。",
+              "startFrame": 170,
+              "durationFrames": 50
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/权利的边界/scene_4_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "最大的陷阱",
+                "showFrom": 4,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 220
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促有力、揭示权力本质的金句，无需配图，适合TEXT_FOCUS形成视觉冲击。",
+          "content": [
+            {
+              "text": "权力最喜欢借口。",
+              "startFrame": 0,
+              "durationFrames": 45
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              "权力最喜欢借口。"
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 45
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "三个性质不同的借口平行列举，结构对称，适合PANEL_GRID分三格独立展示，每格配图标或文字。",
+          "content": [
+            {
+              "text": "效率，",
+              "startFrame": 0,
+              "durationFrames": 18
+            },
+            {
+              "text": "是它最常用的借口。",
+              "startFrame": 17,
+              "durationFrames": 40
+            },
+            {
+              "text": "安全，",
+              "startFrame": 56,
+              "durationFrames": 16
+            },
+            {
+              "text": "是它最漂亮的借口。",
+              "startFrame": 72,
+              "durationFrames": 43
+            },
+            {
+              "text": "大局，",
+              "startFrame": 114,
+              "durationFrames": 19
+            },
+            {
+              "text": "是它最难反驳的借口。",
+              "startFrame": 133,
+              "durationFrames": 42
+            }
+          ],
+          "order": 5,
+          "param": {
+            "panels": [
+              {
+                "src": "images/权利的边界/scene_4_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/权利的边界/scene_4_5_img1.png",
+                "showFrom": 2
+              },
+              {
+                "src": "images/权利的边界/scene_4_5_img2.png",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 175
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "从“借口推开门”导致“门不再是门”再导致“只是摆设”，因果链明确，适合CAUSE_CHAIN逐环展示。",
+          "content": [
+            {
+              "text": "可一旦这些借口，",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "可以随便推开一扇普通人的门。",
+              "startFrame": 33,
+              "durationFrames": 59
+            },
+            {
+              "text": "那扇门就不再是门。",
+              "startFrame": 92,
+              "durationFrames": 42
+            },
+            {
+              "text": "它只是摆设。",
+              "startFrame": 133,
+              "durationFrames": 34
+            }
+          ],
+          "order": 6,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "借口推门",
+                "imageSrc": "images/权利的边界/scene_4_6_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "门成摆设",
+                "imageSrc": "images/权利的边界/scene_4_6_img1.png",
+                "showFrom": 2
+              }
+            ]
+          },
+          "totalDurationFrames": 168
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "用“不”直接纠正错误认知（以为是隐私损失，其实是边界感损失），符合认知转变模式，选COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "你以为损失的，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "只是一个人的隐私。",
+              "startFrame": 30,
+              "durationFrames": 59
+            },
+            {
+              "text": "不。",
+              "startFrame": 89,
+              "durationFrames": 5
+            },
+            {
+              "text": "损失的是所有人的边界感。",
+              "startFrame": 93,
+              "durationFrames": 63
+            }
+          ],
+          "order": 7,
+          "param": {
+            "notText": "只损失个人隐私",
+            "butText": "损失所有人边界感",
+            "butSrc": "images/权利的边界/scene_4_7.png",
+            "notContentIndex": 1,
+            "butContentIndex": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 156
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "TIMELINE",
+          "reasoning": "按“今天→明天→后天”逐步扩展受害者范围，时间递进明显，适合TIMELINE展示过程演变。",
+          "content": [
+            {
+              "text": "今天它可以为了效率进他的门。",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "明天它也可以为了安全进你的门。",
+              "startFrame": 58,
+              "durationFrames": 59
+            },
+            {
+              "text": "后天它就可以为了大局，",
+              "startFrame": 117,
+              "durationFrames": 53
+            },
+            {
+              "text": "进入每一个人的门。",
+              "startFrame": 169,
+              "durationFrames": 35
+            }
+          ],
+          "order": 8,
+          "param": {
+            "images": [
+              {
+                "src": "images/权利的边界/scene_4_8_img0.png",
+                "enterEffect": "slideLeft",
+                "textIndex": 0
+              },
+              {
+                "src": "images/权利的边界/scene_4_8_img1.png",
+                "enterEffect": "fadeIn",
+                "textIndex": 1
+              },
+              {
+                "src": "images/权利的边界/scene_4_8_img2.png",
+                "enterEffect": "slideLeft",
+                "textIndex": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 205
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "承上启下的推论陈述，语气平缓，单一结论，无对比或列表结构，用CENTER_FOCUS聚焦这句话。",
+          "content": [
+            {
+              "text": "门一旦失去意义，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "家也会失去意义。",
+              "startFrame": 32,
+              "durationFrames": 42
+            }
+          ],
+          "order": 9,
+          "param": {
+            "imageSrc": "images/权利的边界/scene_4_9.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 75
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "用“不是…而是…”重新定义“家”，纠正物理空间观念，建立精神边界概念，适用COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "家不是四面墙。",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "家是一个人最后能说“不”的地方。",
+              "startFrame": 38,
+              "durationFrames": 63
+            }
+          ],
+          "order": 10,
+          "param": {
+            "notText": "四面墙",
+            "butText": "最后能说“不”的地方",
+            "butSrc": "images/权利的边界/scene_4_10.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 101
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "从“不能拒绝”导致“不是生活在家”再导致“只是暂时被允许”，因果传导清晰，适合CAUSE_CHAIN点明终极危机。",
+          "content": [
+            {
+              "text": "如果连这里都不能拒绝，",
+              "startFrame": 0,
+              "durationFrames": 50
+            },
+            {
+              "text": "那人就不是生活在家里。",
+              "startFrame": 49,
+              "durationFrames": 43
+            },
+            {
+              "text": "他只是暂时被允许待在那里。",
+              "startFrame": 91,
+              "durationFrames": 56
+            }
+          ],
+          "order": 11,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "失去拒绝权",
+                "imageSrc": "images/权利的边界/scene_4_11_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "家不再是家",
+                "imageSrc": "images/权利的边界/scene_4_11_img1.png",
+                "showFrom": 1
+              },
+              {
+                "label": "暂时被允许",
+                "imageSrc": "images/权利的边界/scene_4_11_img2.png",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 148
+        }
+      ],
+      "audioSrc": "/audio/权利的边界/scene_4/scene_4.mp3",
+      "totalDurationFrames": 1639
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "召唤·文明测试",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CONCEPT_CARD",
+          "reasoning": "点明核心概念“国王不能进”，适合用概念卡引出关键词，后续再展开解释。",
+          "content": [
+            {
+              "text": "这就是“国王不能进”的真正含义。",
+              "startFrame": 0,
+              "durationFrames": 64
+            },
+            {
+              "text": "它不是一句浪漫的话。",
+              "startFrame": 63,
+              "durationFrames": 39
+            },
+            {
+              "text": "它是一句冷峻的制度判断。",
+              "startFrame": 101,
+              "durationFrames": 56
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/权利的边界/scene_5_1.png",
+            "conceptName": "国王不能进",
+            "anchors": []
+          },
+          "totalDurationFrames": 157
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "两个「不要看」并列对照成功者与富人，各自配有解释，构成左右分屏对比结构，适合 SPLIT_COMPARE；后续「要看」另拆为冲击性单镜。",
+          "content": [
+            {
+              "text": "一个社会，",
+              "startFrame": 0,
+              "durationFrames": 24
+            },
+            {
+              "text": "能不能保护普通人，",
+              "startFrame": 23,
+              "durationFrames": 40
+            },
+            {
+              "text": "不要看它怎样对待成功者。",
+              "startFrame": 63,
+              "durationFrames": 45
+            },
+            {
+              "text": "成功者本来就有人保护。",
+              "startFrame": 108,
+              "durationFrames": 56
+            },
+            {
+              "text": "不要看它怎样对待富人。",
+              "startFrame": 163,
+              "durationFrames": 42
+            },
+            {
+              "text": "富人有资源保护自己。",
+              "startFrame": 205,
+              "durationFrames": 55
+            }
+          ],
+          "order": 3,
+          "param": {
+            "leftSrc": "images/权利的边界/scene_5_3_left.png",
+            "rightSrc": "images/权利的边界/scene_5_3_right.png",
+            "leftLabel": "成功者",
+            "rightLabel": "富人",
+            "leftShowFrom": 2,
+            "rightShowFrom": 4,
+            "anchors": []
+          },
+          "totalDurationFrames": 260
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "正面落点句，无需配图，用金句冲击锁定真正的保护对象，形成与前面反例的强对比。",
+          "content": [
+            {
+              "text": "要看它怎样对待一个住在破房子里的人。",
+              "startFrame": 0,
+              "durationFrames": 79
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              "要看它怎样对待一个住在破房子里的人。"
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 79
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "三个并列缺失的排比，适合用宫格三图并列展示弱势者的“无”，强化画面记忆。",
+          "content": [
+            {
+              "text": "当一个人没有身份光环。",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "没有舆论声量。",
+              "startFrame": 46,
+              "durationFrames": 39
+            },
+            {
+              "text": "没有讨价还价的筹码。",
+              "startFrame": 85,
+              "durationFrames": 44
+            }
+          ],
+          "order": 5,
+          "param": {
+            "panels": [
+              {
+                "src": "images/权利的边界/scene_5_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/权利的边界/scene_5_5_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/权利的边界/scene_5_5_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 130
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "连续三个提问递进，构成压力测试的节拍，用 BEAT_SEQUENCE 分步呈现质问的强度升级。",
+          "content": [
+            {
+              "text": "他还能不能关上门？",
+              "startFrame": 0,
+              "durationFrames": 50
+            },
+            {
+              "text": "他关上门以后，",
+              "startFrame": 49,
+              "durationFrames": 36
+            },
+            {
+              "text": "强者会不会停下？",
+              "startFrame": 85,
+              "durationFrames": 45
+            },
+            {
+              "text": "权力会不会承认，",
+              "startFrame": 129,
+              "durationFrames": 39
+            },
+            {
+              "text": "这里不是我的地方？",
+              "startFrame": 167,
+              "durationFrames": 38
+            }
+          ],
+          "order": 6,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/权利的边界/scene_5_6_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/权利的边界/scene_5_6_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 2
+              },
+              {
+                "imageSrc": "images/权利的边界/scene_5_6_img2.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 205
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全段收束的结论，极短强冲击，适合纯文字金句模版，与开头的概念引出形成闭环。",
+          "content": [
+            {
+              "text": "这才是文明的压力测试。",
+              "startFrame": 0,
+              "durationFrames": 54
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "这才是文明的压力测试。",
+                "showFrom": 0
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "压力测试",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 54
+        }
+      ],
+      "audioSrc": "/audio/权利的边界/scene_5/scene_5.mp3",
+      "totalDurationFrames": 885
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "提醒·两个边界",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平铺引出三个提醒的过渡段，无对比、清单或焦点结构，用一个居中图文呈现即可。",
+          "content": [
+            {
+              "text": "普通人理解这句话，",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "也不能只把它当作一句浪漫的话。",
+              "startFrame": 33,
+              "durationFrames": 61
+            },
+            {
+              "text": "它有两个现实提醒。",
+              "startFrame": 93,
+              "durationFrames": 42
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/权利的边界/scene_6_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 136
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "第一点提醒：认知转变（不要只看承诺，要看不能做什么）+ 展开解释（好听的话≠被约束，真正的约束是能否被拦住），构成标题+多句展开，用 METHOD_STACK。",
+          "content": [
+            {
+              "text": "第一，",
+              "startFrame": 0,
+              "durationFrames": 18
+            },
+            {
+              "text": "看权力时，",
+              "startFrame": 17,
+              "durationFrames": 30
+            },
+            {
+              "text": "不要只看它承诺什么。",
+              "startFrame": 46,
+              "durationFrames": 45
+            },
+            {
+              "text": "要看它不能做什么。",
+              "startFrame": 91,
+              "durationFrames": 47
+            },
+            {
+              "text": "一个权力说了很多好听的话，",
+              "startFrame": 138,
+              "durationFrames": 58
+            },
+            {
+              "text": "不代表它被约束了。",
+              "startFrame": 196,
+              "durationFrames": 42
+            },
+            {
+              "text": "真正的约束，",
+              "startFrame": 237,
+              "durationFrames": 32
+            },
+            {
+              "text": "是它想进打破边界时，",
+              "startFrame": 269,
+              "durationFrames": 51
+            },
+            {
+              "text": "有没有人能拦住它。",
+              "startFrame": 319,
+              "durationFrames": 42
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "看权力边界",
+            "imageSrc": "images/权利的边界/scene_6_2.png",
+            "notes": [
+              {
+                "text": "不只看它承诺什么",
+                "showFrom": 2
+              },
+              {
+                "text": "看它不能做什么",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 361
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "第二点提醒：认知转变（不要嫌程序麻烦，慢是保护普通人）+ 四个并列慢场景展开 + 收束（你不是主人），构成标题+多句展开，用 METHOD_STACK。",
+          "content": [
+            {
+              "text": "第二，",
+              "startFrame": 0,
+              "durationFrames": 17
+            },
+            {
+              "text": "看规则时，",
+              "startFrame": 16,
+              "durationFrames": 30
+            },
+            {
+              "text": "不要嫌程序麻烦。",
+              "startFrame": 45,
+              "durationFrames": 40
+            },
+            {
+              "text": "程序看起来慢。",
+              "startFrame": 85,
+              "durationFrames": 36
+            },
+            {
+              "text": "可它保护的，",
+              "startFrame": 120,
+              "durationFrames": 22
+            },
+            {
+              "text": "正是普通人。",
+              "startFrame": 142,
+              "durationFrames": 33
+            },
+            {
+              "text": "敲门很慢。",
+              "startFrame": 174,
+              "durationFrames": 28
+            },
+            {
+              "text": "授权很慢。",
+              "startFrame": 202,
+              "durationFrames": 31
+            },
+            {
+              "text": "审查很慢。",
+              "startFrame": 232,
+              "durationFrames": 34
+            },
+            {
+              "text": "留下记录也很慢。",
+              "startFrame": 266,
+              "durationFrames": 42
+            },
+            {
+              "text": "但这些慢，",
+              "startFrame": 308,
+              "durationFrames": 29
+            },
+            {
+              "text": "都是在告诉权力，",
+              "startFrame": 336,
+              "durationFrames": 37
+            },
+            {
+              "text": "你不是主人。",
+              "startFrame": 372,
+              "durationFrames": 33
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "看规则边界",
+            "imageSrc": "images/权利的边界/scene_6_3.png",
+            "notes": [
+              {
+                "text": "不要嫌程序麻烦",
+                "showFrom": 3
+              },
+              {
+                "text": "慢是保护普通人",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 406
+        }
+      ],
+      "audioSrc": "/audio/权利的边界/scene_6/scene_6.mp3",
+      "totalDurationFrames": 906
+    },
+    {
+      "sceneId": "scene_7",
+      "sceneName": "升华·边界文明",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "落点句“靠的不是锁”揭示关键洞察，用放大镜锁定否定词“不是锁”，把观众注意力从物理门锁引向更底层的边界。",
+          "content": [
+            {
+              "text": "所以，",
+              "startFrame": 0,
+              "durationFrames": 21
+            },
+            {
+              "text": "一间破房子挡住国王，",
+              "startFrame": 20,
+              "durationFrames": 56
+            },
+            {
+              "text": "靠的不是锁。",
+              "startFrame": 76,
+              "durationFrames": 22
+            }
+          ],
+          "order": 1,
+          "param": {
+            "anchors": [
+              {
+                "text": "不是锁",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 99
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "转折揭示核心概念“一条线”，引出全文关键隐喻，用CONCEPT_CARD对术语进行定格解释，为后续“线外/线内”对比做铺垫。",
+          "content": [
+            {
+              "text": "靠的是所有人都承认，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "哪怕他再弱，",
+              "startFrame": 42,
+              "durationFrames": 33
+            },
+            {
+              "text": "这里也有一条线。",
+              "startFrame": 75,
+              "durationFrames": 33
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/权利的边界/scene_7_2.png",
+            "conceptName": "私人边界",
+            "anchors": []
+          },
+          "totalDurationFrames": 108
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "明确的两方并列对比：线外vs线内、公共权力vs私人生活，SPLIT_COMPARE直接适配这种二分对立结构。",
+          "content": [
+            {
+              "text": "线外，",
+              "startFrame": 0,
+              "durationFrames": 21
+            },
+            {
+              "text": "是公共权力。",
+              "startFrame": 20,
+              "durationFrames": 39
+            },
+            {
+              "text": "线内，",
+              "startFrame": 58,
+              "durationFrames": 19
+            },
+            {
+              "text": "是私人生活。",
+              "startFrame": 77,
+              "durationFrames": 38
+            }
+          ],
+          "order": 3,
+          "param": {
+            "leftSrc": "images/权利的边界/scene_7_3_left.png",
+            "rightSrc": "images/权利的边界/scene_7_3_right.png",
+            "leftLabel": "公共权力",
+            "rightLabel": "私人生活",
+            "leftShowFrom": 0,
+            "rightShowFrom": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 115
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "两个“可以…但不能…”的并列限制分点，各有独立意象（权力/国家），用PANEL_GRID宫格分别配图呈现，强化边界约束的视觉记忆。",
+          "content": [
+            {
+              "text": "权力可以强大。",
+              "startFrame": 0,
+              "durationFrames": 37
+            },
+            {
+              "text": "但不能无处不在。",
+              "startFrame": 36,
+              "durationFrames": 43
+            },
+            {
+              "text": "国家确实重要。",
+              "startFrame": 79,
+              "durationFrames": 43
+            },
+            {
+              "text": "但不能吞掉每一个人的门槛。",
+              "startFrame": 121,
+              "durationFrames": 51
+            }
+          ],
+          "order": 4,
+          "param": {
+            "panels": [
+              {
+                "src": "images/权利的边界/scene_7_4_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/权利的边界/scene_7_4_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/权利的边界/scene_7_4_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/权利的边界/scene_7_4_img3.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 173
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "三个“可以”并列的让步铺垫，从小到大（房子→墙→生活），用BEAT_SEQUENCE递进营造退无可退的紧迫感，为后文转折蓄势。",
+          "content": [
+            {
+              "text": "房子可以破。",
+              "startFrame": 0,
+              "durationFrames": 29
+            },
+            {
+              "text": "墙可以漏。",
+              "startFrame": 28,
+              "durationFrames": 28
+            },
+            {
+              "text": "生活可以艰难。",
+              "startFrame": 55,
+              "durationFrames": 46
+            }
+          ],
+          "order": 5,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/权利的边界/scene_7_5_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "images/权利的边界/scene_7_5_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "images/权利的边界/scene_7_5_img2.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 102
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片核心金句，短促有力，直指边界价值，TEXT_FOCUS将全部视觉聚焦文字，无需配图，冲击力最大化。",
+          "content": [
+            {
+              "text": "但只要那条边界还在，",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "普通人就还有站立的地方。",
+              "startFrame": 45,
+              "durationFrames": 61
+            }
+          ],
+          "order": 6,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "但只要那条边界还在，",
+                "showFrom": 0
+              },
+              {
+                "text": "普通人就还有站立的地方。",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "那条边界",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 106
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "典型“不是…而是…”认知转变结构，从自然侵蚀到权力入侵，并叠加自我麻痹的恐怖，COGNITIVE_SHIFT完美承载转折的戏剧性。",
+          "content": [
+            {
+              "text": "真正可怕的，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "不是风进来了，",
+              "startFrame": 26,
+              "durationFrames": 28
+            },
+            {
+              "text": "不是雨进来了。",
+              "startFrame": 53,
+              "durationFrames": 34
+            },
+            {
+              "text": "而是有一天，",
+              "startFrame": 87,
+              "durationFrames": 33
+            },
+            {
+              "text": "国王进来了。",
+              "startFrame": 120,
+              "durationFrames": 32
+            },
+            {
+              "text": "大家还觉得，",
+              "startFrame": 151,
+              "durationFrames": 30
+            },
+            {
+              "text": "这很正常。",
+              "startFrame": 180,
+              "durationFrames": 30
+            }
+          ],
+          "order": 7,
+          "param": {
+            "notText": "风雨进来",
+            "butText": "国王进来了",
+            "butSrc": "images/权利的边界/scene_7_7.png",
+            "notContentIndex": 1,
+            "butContentIndex": 4,
+            "anchors": []
+          },
+          "totalDurationFrames": 210
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片终极金句，从房子升维到文明，纯大字零图压信噪比，TEXT_FOCUS 定格全片主题。",
+          "content": [
+            {
+              "text": "那一刻，",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "破掉的就不是房子。",
+              "startFrame": 18,
+              "durationFrames": 38
+            },
+            {
+              "text": "是文明本身。",
+              "startFrame": 56,
+              "durationFrames": 52
+            }
+          ],
+          "order": 8,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "那一刻，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "破掉的就不是房子。",
+                "showFrom": 1
+              },
+              {
+                "text": "是文明本身。",
+                "showFrom": 2,
+                "endFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "文明本身",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 109
+        }
+      ],
+      "audioSrc": "/audio/权利的边界/scene_7/scene_7.mp3",
+      "totalDurationFrames": 1021
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "权利的边界",
+    "subtitle": "我有一间破房子，风能进，雨能进，国王不能进",
+    "themeColor": "#059669",
+    "badge": "深度解读 · 理性思考",
+    "seriesLabel": "社会热点深读",
+    "seriesLabelEn": "SOCIAL DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

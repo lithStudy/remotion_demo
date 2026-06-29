@@ -1,0 +1,1545 @@
+{
+  "topic": "他砸了巨头的高墙，还给你递了子弹",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "开篇",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "引出人物及受佩服的核心理由，平铺叙述无明显结构，用单图平铺即可。",
+          "content": [
+            {
+              "text": "我以前最佩服的人，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "是雷军。",
+              "startFrame": 38,
+              "durationFrames": 31
+            },
+            {
+              "text": "一个白手起家的人，",
+              "startFrame": 68,
+              "durationFrames": 43
+            },
+            {
+              "text": "说着科技平权，",
+              "startFrame": 111,
+              "durationFrames": 35
+            },
+            {
+              "text": "把原本昂贵的科技产品变成普通大众的工具。",
+              "startFrame": 146,
+              "durationFrames": 89
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/AI普惠执剑人/scene_1_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "雷军",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 235
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "三段递进：转折引出新人物→给出尊称→强化态度，情绪逐步升级，适合节拍序列展示。",
+          "content": [
+            {
+              "text": "但 DeepSeek 出来以后，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "我最佩服的人，",
+              "startFrame": 41,
+              "durationFrames": 32
+            },
+            {
+              "text": "变成了梁文锋。",
+              "startFrame": 73,
+              "durationFrames": 35
+            },
+            {
+              "text": "有人叫他梁圣。",
+              "startFrame": 107,
+              "durationFrames": 39
+            },
+            {
+              "text": "说实话，",
+              "startFrame": 145,
+              "durationFrames": 27
+            },
+            {
+              "text": "我一点都不觉得夸张。",
+              "startFrame": 171,
+              "durationFrames": 53
+            }
+          ],
+          "order": 2,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/AI普惠执剑人/scene_1_2_img0.png",
+                "enterEffect": "fadeIn",
+                "tone": "calm",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/AI普惠执剑人/scene_1_2_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 225
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "明确对比雷军与梁文锋的贡献，分属两个并列方，用分屏对比展示恰好匹配。",
+          "content": [
+            {
+              "text": "雷军让普通人，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "用上了好硬件。",
+              "startFrame": 34,
+              "durationFrames": 36
+            },
+            {
+              "text": "梁文锋做的，",
+              "startFrame": 70,
+              "durationFrames": 32
+            },
+            {
+              "text": "却是贯彻了极致的开源精神，",
+              "startFrame": 101,
+              "durationFrames": 71
+            },
+            {
+              "text": "允许普通人，",
+              "startFrame": 172,
+              "durationFrames": 35
+            },
+            {
+              "text": "用最便宜的途径，",
+              "startFrame": 207,
+              "durationFrames": 39
+            },
+            {
+              "text": "用上最前沿的人工智能。",
+              "startFrame": 245,
+              "durationFrames": 57
+            }
+          ],
+          "order": 3,
+          "param": {
+            "leftSrc": "images/AI普惠执剑人/scene_1_3_left.png",
+            "rightSrc": "images/AI普惠执剑人/scene_1_3_right.png",
+            "leftLabel": "硬件普惠",
+            "rightLabel": "AI普惠",
+            "leftShowFrom": 0,
+            "rightShowFrom": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 303
+        }
+      ],
+      "audioSrc": "/audio/AI普惠执剑人/scene_1/scene_1.mp3",
+      "totalDurationFrames": 764
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "研发",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "并列否定式陈述，结构平铺、无极端对比或清单 → 选CENTER_FOCUS；两句话意群紧密，合并避免碎片",
+          "content": [
+            {
+              "text": "纵观Deepseek从V1到V4的迭代。",
+              "startFrame": 0,
+              "durationFrames": 92
+            },
+            {
+              "text": "梁文锋从来没有用过什么高大上的名词来包装。",
+              "startFrame": 91,
+              "durationFrames": 89
+            },
+            {
+              "text": "从来没有遥遥领先式的喊话。",
+              "startFrame": 180,
+              "durationFrames": 62
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/AI普惠执剑人/scene_2_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 242
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "转折递进结构（勤恳研发→突然拿出硬技术），适合BEAT_SEQUENCE分节拍呈现",
+          "content": [
+            {
+              "text": "只是勤勤恳恳的做研发，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "然后突然有一天，",
+              "startFrame": 50,
+              "durationFrames": 34
+            },
+            {
+              "text": "拿出来一堆硬技术。",
+              "startFrame": 84,
+              "durationFrames": 42
+            }
+          ],
+          "order": 3,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/AI普惠执剑人/scene_2_3_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "images/AI普惠执剑人/scene_2_3_img1.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 126
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "PANEL_GRID",
+          "reasoning": "三个并列成果（论文、数据、模型）可独立配图 → 选PANEL_GRID宫格展示",
+          "content": [
+            {
+              "text": "详实的论文，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "牛逼的数据，",
+              "startFrame": 36,
+              "durationFrames": 32
+            },
+            {
+              "text": "经得起检验的AI模型。",
+              "startFrame": 67,
+              "durationFrames": 61
+            }
+          ],
+          "order": 4,
+          "param": {
+            "panels": [
+              {
+                "src": "images/AI普惠执剑人/scene_2_4_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/AI普惠执剑人/scene_2_4_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/AI普惠执剑人/scene_2_4_img2.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 129
+        }
+      ],
+      "audioSrc": "/audio/AI普惠执剑人/scene_2/scene_2.mp3",
+      "totalDurationFrames": 498
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "技术",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "开头用“不是…而是…”的对比结构否定炫技、肯定务实下刀，属于认知转变，选COGNITIVE_SHIFT贴合。",
+          "content": [
+            {
+              "text": "它的技术创新，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "从来不会炫技名词。",
+              "startFrame": 30,
+              "durationFrames": 42
+            },
+            {
+              "text": "而是从架构、算法、训练工程三个地方，",
+              "startFrame": 72,
+              "durationFrames": 96
+            },
+            {
+              "text": "同时下刀。",
+              "startFrame": 168,
+              "durationFrames": 28
+            }
+          ],
+          "order": 1,
+          "param": {
+            "notText": "炫技名词",
+            "butText": "架构算法工程",
+            "butSrc": "images/AI普惠执剑人/scene_3_1.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 196
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "以“架构上”为核心方法点，后跟两句解释（省显存→能处理更长内容、服务更多用户），构成方法+解释的METHOD_STACK。",
+          "content": [
+            {
+              "text": "架构上，",
+              "startFrame": 0,
+              "durationFrames": 24
+            },
+            {
+              "text": "它让模型更省显存。",
+              "startFrame": 24,
+              "durationFrames": 62
+            },
+            {
+              "text": "同样一台机器，",
+              "startFrame": 85,
+              "durationFrames": 36
+            },
+            {
+              "text": "能处理更长的内容，",
+              "startFrame": 121,
+              "durationFrames": 45
+            },
+            {
+              "text": "服务更多用户。",
+              "startFrame": 165,
+              "durationFrames": 43
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "架构更省显存",
+            "imageSrc": "images/AI普惠执剑人/scene_3_2.png",
+            "notes": [
+              {
+                "text": "减少单个模型显存占用",
+                "showFrom": 1
+              },
+              {
+                "text": "提升单机处理容量",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 209
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "以「算法上」为核心方法点，后跟减少对标注依赖、自主推理、R1 行业影响等多句展开，构成 METHOD_STACK。",
+          "content": [
+            {
+              "text": "算法上，",
+              "startFrame": 0,
+              "durationFrames": 21
+            },
+            {
+              "text": "它让模型不用那么依赖昂贵的人工标注，",
+              "startFrame": 20,
+              "durationFrames": 81
+            },
+            {
+              "text": "也能自己在训练中学会推理。",
+              "startFrame": 101,
+              "durationFrames": 63
+            },
+            {
+              "text": "DeepSeek R1的出现，",
+              "startFrame": 163,
+              "durationFrames": 45
+            },
+            {
+              "text": "甚至震动了全球AI的整个行业。",
+              "startFrame": 208,
+              "durationFrames": 75
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "自主推理",
+            "imageSrc": "images/AI普惠执剑人/scene_3_3.png",
+            "notes": [
+              {
+                "text": "减少对昂贵人工标注的依赖",
+                "showFrom": 1
+              },
+              {
+                "text": "训练中自主学会推理",
+                "showFrom": 2
+              },
+              {
+                "text": "R1 震动全球 AI 行业",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 284
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "以「工程上」为核心方法点，后跟压缩显存带宽通信浪费、显卡不足仍能顶尖训练等多句展开，构成 METHOD_STACK。",
+          "content": [
+            {
+              "text": "工程上，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "它把训练过程里的显存、",
+              "startFrame": 26,
+              "durationFrames": 59
+            },
+            {
+              "text": "带宽、",
+              "startFrame": 85,
+              "durationFrames": 18
+            },
+            {
+              "text": "通信浪费，",
+              "startFrame": 102,
+              "durationFrames": 32
+            },
+            {
+              "text": "一层一层压下去。",
+              "startFrame": 134,
+              "durationFrames": 40
+            },
+            {
+              "text": "让中国在没有足够显卡的情况下，",
+              "startFrame": 174,
+              "durationFrames": 78
+            },
+            {
+              "text": "也能训练出全球顶尖的AI模型。",
+              "startFrame": 251,
+              "durationFrames": 82
+            }
+          ],
+          "order": 5,
+          "param": {
+            "title": "层层压低浪费",
+            "imageSrc": "images/AI普惠执剑人/scene_3_5.png",
+            "notes": [
+              {
+                "text": "压缩显存、带宽、通信浪费",
+                "showFrom": 1
+              },
+              {
+                "text": "显卡不足仍能顶尖训练",
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 333
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "两句「不是只能」分别否定对中国 AI 与中国科研的刻板印象，左右分屏对照旧认知与新能力，选 SPLIT_COMPARE。",
+          "content": [
+            {
+              "text": "DeepSeek的出现，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "说明中国 AI 不是只能跟随。",
+              "startFrame": 34,
+              "durationFrames": 68
+            },
+            {
+              "text": "中国科研，",
+              "startFrame": 102,
+              "durationFrames": 31
+            },
+            {
+              "text": "也不是只能做应用层创新。",
+              "startFrame": 133,
+              "durationFrames": 65
+            }
+          ],
+          "order": 7,
+          "param": {
+            "leftSrc": "images/AI普惠执剑人/scene_3_7_left.png",
+            "rightSrc": "images/AI普惠执剑人/scene_3_7_right.png",
+            "leftLabel": "只能跟随",
+            "rightLabel": "底层原创",
+            "leftShowFrom": 1,
+            "rightShowFrom": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 198
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片收束金句，短促有力，无需配图，用TEXT_FOCUS实现冲击。",
+          "content": [
+            {
+              "text": "只要算法足够锋利，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "工程足够扎实，",
+              "startFrame": 43,
+              "durationFrames": 38
+            },
+            {
+              "text": "我们也能站到全球AI技术牌桌中央。",
+              "startFrame": 80,
+              "durationFrames": 83
+            }
+          ],
+          "order": 8,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "只要算法足够锋利，",
+                "showFrom": 0
+              },
+              {
+                "text": "工程足够扎实，",
+                "showFrom": 1
+              },
+              {
+                "text": "我们也能站到全球技术牌桌中央。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 164
+        }
+      ],
+      "audioSrc": "/audio/AI普惠执剑人/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1383
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "开源",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "转折铺垫，无特殊结构，用单图平缓叙述引出开源主题。",
+          "content": [
+            {
+              "text": "但梁文锋真正让我佩服的，",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "还不是技术。",
+              "startFrame": 54,
+              "durationFrames": 35
+            },
+            {
+              "text": "是他开源。",
+              "startFrame": 89,
+              "durationFrames": 30
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/AI普惠执剑人/scene_4_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 120
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "三点并列开源内容，适合用宫格独立配图展示，强化覆盖面。",
+          "content": [
+            {
+              "text": "模型权重开源。",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "训练方法开源。",
+              "startFrame": 52,
+              "durationFrames": 43
+            },
+            {
+              "text": "关键技术开源。",
+              "startFrame": 94,
+              "durationFrames": 44
+            }
+          ],
+          "order": 3,
+          "param": {
+            "panels": [
+              {
+                "src": "images/AI普惠执剑人/scene_4_3_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/AI普惠执剑人/scene_4_3_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/AI普惠执剑人/scene_4_3_img2.png",
+                "showFrom": 2,
+                "enterEffect": "breathe"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 139
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "解释开源动机与具体做法，单图配口播即可，无需复杂结构。",
+          "content": [
+            {
+              "text": "生怕小公司用不起大型模型，",
+              "startFrame": 0,
+              "durationFrames": 66
+            },
+            {
+              "text": "甚至贴心的提供了轻量级蒸馏模型。",
+              "startFrame": 65,
+              "durationFrames": 81
+            },
+            {
+              "text": "让一台消费级显卡也能跑起来。",
+              "startFrame": 145,
+              "durationFrames": 68
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/AI普惠执剑人/scene_4_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "蒸馏模型",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 214
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "设问制造悬念，引导观众进入反常识解释，短句适合文字聚焦。",
+          "content": [
+            {
+              "text": "这件事有多反常识？",
+              "startFrame": 0,
+              "durationFrames": 48
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "这件事有多反常识？",
+                "showFrom": 0
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 48
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "核心数据“上百亿美元”适合用KPI数字放大强调，凸显成本之高。",
+          "content": [
+            {
+              "text": "你要知道，",
+              "startFrame": 0,
+              "durationFrames": 21
+            },
+            {
+              "text": "光是模型的研发和训练，",
+              "startFrame": 20,
+              "durationFrames": 57
+            },
+            {
+              "text": "就需要花费了上百亿美元。",
+              "startFrame": 77,
+              "durationFrames": 54
+            }
+          ],
+          "order": 8,
+          "param": {
+            "value": 100,
+            "suffix": "+亿美元",
+            "label": "模型研发训练",
+            "useGrouping": false,
+            "decimalPlaces": 0,
+            "countDuration": 28,
+            "anchors": []
+          },
+          "totalDurationFrames": 131
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "连续四个“就是”形成排比递进，节拍序列强化闭源价值的冲击力。",
+          "content": [
+            {
+              "text": "这些东西如果放在闭源公司手里，",
+              "startFrame": 0,
+              "durationFrames": 63
+            },
+            {
+              "text": "就是估值，",
+              "startFrame": 62,
+              "durationFrames": 28
+            },
+            {
+              "text": "就是护城河，",
+              "startFrame": 89,
+              "durationFrames": 29
+            },
+            {
+              "text": "就是生态入口。",
+              "startFrame": 117,
+              "durationFrames": 36
+            },
+            {
+              "text": "就是上千亿美元商业版图的底层资产。",
+              "startFrame": 153,
+              "durationFrames": 97
+            }
+          ],
+          "order": 10,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/AI普惠执剑人/scene_4_10_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "images/AI普惠执剑人/scene_4_10_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "images/AI普惠执剑人/scene_4_10_img2.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              },
+              {
+                "imageSrc": "images/AI普惠执剑人/scene_4_10_img3.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 251
+        }
+      ],
+      "audioSrc": "/audio/AI普惠执剑人/scene_4/scene_4.mp3",
+      "totalDurationFrames": 902
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "对比",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "设问引出对比话题，单一问句结构 → 用 CENTER_FOCUS 平铺呈现。",
+          "content": [
+            {
+              "text": "这种级别的技术资产，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "正常公司会怎么做？",
+              "startFrame": 41,
+              "durationFrames": 40
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/AI普惠执剑人/scene_5_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 81
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "STEP_LIST",
+          "reasoning": "正常公司的五种封锁方式，形成极短的并列步骤（每条≤4字）→ 适合 STEP_LIST 逐条展示。",
+          "content": [
+            {
+              "text": "锁起来。",
+              "startFrame": 0,
+              "durationFrames": 18
+            },
+            {
+              "text": "收费。",
+              "startFrame": 17,
+              "durationFrames": 24
+            },
+            {
+              "text": "分层。",
+              "startFrame": 41,
+              "durationFrames": 26
+            },
+            {
+              "text": "限量。",
+              "startFrame": 67,
+              "durationFrames": 23
+            },
+            {
+              "text": "绑定生态。",
+              "startFrame": 89,
+              "durationFrames": 32
+            },
+            {
+              "text": "把每一次调用，",
+              "startFrame": 121,
+              "durationFrames": 38
+            },
+            {
+              "text": "都变成利润。",
+              "startFrame": 158,
+              "durationFrames": 34
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "常规做法",
+            "steps": [
+              {
+                "text": "锁起来",
+                "showFrom": 0
+              },
+              {
+                "text": "收费",
+                "showFrom": 1
+              },
+              {
+                "text": "分层",
+                "showFrom": 2
+              },
+              {
+                "text": "限量",
+                "showFrom": 3
+              },
+              {
+                "text": "绑定生态",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 193
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "明确点出“最核心的东西”，可作为高价值锚定短语放大 → MAGNIFYING_GLASS 聚焦。",
+          "content": [
+            {
+              "text": "可梁文锋没有这么做。",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "他把最值钱的东西，",
+              "startFrame": 50,
+              "durationFrames": 44
+            },
+            {
+              "text": "直接交给了全世界。",
+              "startFrame": 93,
+              "durationFrames": 45
+            }
+          ],
+          "order": 5,
+          "param": {
+            "anchors": [
+              {
+                "text": "交给了全世界",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 139
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "具体说明开源受众的陈述句，无特殊结构 → CENTER_FOCUS 默认承载。",
+          "content": [
+            {
+              "text": "任何公司，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "任何个人极客，",
+              "startFrame": 27,
+              "durationFrames": 36
+            },
+            {
+              "text": "都能拿到 DeepSeek 的模型权重。",
+              "startFrame": 63,
+              "durationFrames": 65
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/AI普惠执剑人/scene_5_6.png",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "模型权重",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 128
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CHECKLIST_REVEAL",
+          "reasoning": "三条易用与免费的好处收束，适合逐项打勾显现 → CHECKLIST_REVEAL 增强收束感。",
+          "content": [
+            {
+              "text": "开箱部署。",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "本地运行。",
+              "startFrame": 32,
+              "durationFrames": 34
+            },
+            {
+              "text": "不用向梁文锋交一分钱。",
+              "startFrame": 66,
+              "durationFrames": 68
+            }
+          ],
+          "order": 7,
+          "param": {
+            "title": "核心开源，完全免费",
+            "rows": [
+              {
+                "text": "开箱部署",
+                "showFrom": 0
+              },
+              {
+                "text": "本地运行",
+                "showFrom": 1
+              },
+              {
+                "text": "完全免费",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 134
+        }
+      ],
+      "audioSrc": "/audio/AI普惠执剑人/scene_5/scene_5.mp3",
+      "totalDurationFrames": 675
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "反垄断",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "先否定再揭示真意，形成情绪转折的金句序列，短句有力无需配图，用 TEXT_FOCUS 强化文字冲击。",
+          "content": [
+            {
+              "text": "这不是普通的开源。",
+              "startFrame": 0,
+              "durationFrames": 54
+            },
+            {
+              "text": "这是把一颗抵御 AI 垄断的子弹，",
+              "startFrame": 53,
+              "durationFrames": 69
+            },
+            {
+              "text": "发到每个人手里。",
+              "startFrame": 122,
+              "durationFrames": 33
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "这不是普通的开源。",
+                "showFrom": 0
+              },
+              {
+                "text": "这是把一颗抵御 AI 垄断的子弹，",
+                "showFrom": 1
+              },
+              {
+                "text": "发到每个人手里。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 155
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "用墙的比喻引入，紧接着墙里墙外双方列举，构成鲜明的对比结构，适合 SPLIT_COMPARE 呈现对立两方；原 item3 字数不足 12 字，按合并规则并入。",
+          "content": [
+            {
+              "text": "过去，AI 像一座高墙，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "墙里是 OpenAI、Google、Anthropic 这些巨头，",
+              "startFrame": 58,
+              "durationFrames": 106
+            },
+            {
+              "text": "墙外则是中小企业、普通开发者、创业者。",
+              "startFrame": 164,
+              "durationFrames": 99
+            }
+          ],
+          "order": 2,
+          "param": {
+            "leftSrc": "images/AI普惠执剑人/scene_6_2_left.png",
+            "rightSrc": "images/AI普惠执剑人/scene_6_2_right.png",
+            "leftLabel": "墙内巨头",
+            "rightLabel": "墙外普通人",
+            "leftShowFrom": 2,
+            "rightShowFrom": 6,
+            "anchors": []
+          },
+          "totalDurationFrames": 264
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "否定表面现象，揭示真实限制，是典型的‘不是…而是…’认知转变，COGNITIVE_SHIFT 恰好匹配这种对照。",
+          "content": [
+            {
+              "text": "墙外的人不是没有AI创新的想法。",
+              "startFrame": 0,
+              "durationFrames": 75
+            },
+            {
+              "text": "他们只是付不起算力税。",
+              "startFrame": 74,
+              "durationFrames": 49
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "没有AI创新想法",
+            "butText": "付不起算力税",
+            "butSrc": "images/AI普惠执剑人/scene_6_3.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 123
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "与上一 item 结构相同，另一个‘不是…而是…’的独立分论点，保持模板一致，分别呈现作茧自缚的两个方面。",
+          "content": [
+            {
+              "text": "他们不是没有AI使用的场景。",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "他们只是买不起最强模型。",
+              "startFrame": 58,
+              "durationFrames": 57
+            }
+          ],
+          "order": 4,
+          "param": {
+            "notText": "没有AI使用的场景",
+            "butText": "买不起最强模型",
+            "butSrc": "images/AI普惠执剑人/scene_6_4.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 116
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "收束全段、动作性结论，无需复杂结构，单图聚焦即可；字数 12 字刚好满足独立镜头最低长度。",
+          "content": [
+            {
+              "text": "DeepSeek 把这堵墙，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "砸开了一个洞。",
+              "startFrame": 37,
+              "durationFrames": 31
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/AI普惠执剑人/scene_6_5.png",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "砸开",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 68
+        }
+      ],
+      "audioSrc": "/audio/AI普惠执剑人/scene_6/scene_6.mp3",
+      "totalDurationFrames": 727
+    },
+    {
+      "sceneId": "scene_7",
+      "sceneName": "普惠",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "两句话用平铺叙述解释“意义”并举例，属同一意义展开；合并后46字未超50字，叙事平稳无强对比，选 CENTER_FOCUS 作为默认单图叙述。",
+          "content": [
+            {
+              "text": "这件事的意义，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "是为普通人在AI时代重新分配机会。",
+              "startFrame": 34,
+              "durationFrames": 85
+            },
+            {
+              "text": "一个小开发者、一个小公司，",
+              "startFrame": 119,
+              "durationFrames": 66
+            },
+            {
+              "text": "都能以极致的价格用上最前沿的AI。",
+              "startFrame": 184,
+              "durationFrames": 91
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/AI普惠执剑人/scene_7_1.png",
+            "anchors": []
+          },
+          "totalDurationFrames": 276
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "仅7字的全片级金句结论，短促有力，无需配图，直接用 TEXT_FOCUS 强化冲击力。",
+          "content": [
+            {
+              "text": "这就是 AI 普惠。",
+              "startFrame": 0,
+              "durationFrames": 42
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "这就是 AI 普惠。",
+                "showFrom": 0,
+                "endFrom": 0
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "AI 普惠",
+                "color": "#000000"
+              }
+            ]
+          },
+          "totalDurationFrames": 42
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "设问与原因在一个连续因果叙述中，30字未超45字，且无强对比结构，保持单镜头平铺展示。",
+          "content": [
+            {
+              "text": "我为什么说他配得上“梁圣”这个称呼？",
+              "startFrame": 0,
+              "durationFrames": 77
+            },
+            {
+              "text": "因为他在一个最容易垄断的行业里，",
+              "startFrame": 76,
+              "durationFrames": 64
+            },
+            {
+              "text": "做了最反垄断的选择",
+              "startFrame": 139,
+              "durationFrames": 50
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/AI普惠执剑人/scene_7_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "梁圣",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 189
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "三个平行“明明可以”构成反面并列例子清单，每句可独立配图，宫格展示效果最佳；拆分自后续转折句以避免超过50字。",
+          "content": [
+            {
+              "text": "他明明可以靠闭源收费。",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "他明明可以筑起商业帝国。",
+              "startFrame": 51,
+              "durationFrames": 60
+            },
+            {
+              "text": "他明明可以把每个开发者，",
+              "startFrame": 111,
+              "durationFrames": 47
+            },
+            {
+              "text": "都变成他的客户。",
+              "startFrame": 158,
+              "durationFrames": 40
+            }
+          ],
+          "order": 4,
+          "param": {
+            "panels": [
+              {
+                "src": "images/AI普惠执剑人/scene_7_4_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/AI普惠执剑人/scene_7_4_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/AI普惠执剑人/scene_7_4_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 198
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "转折后的正面选择，核心动作“把剑递了出去”是全段高光锚点，用 MAGNIFYING_GLASS 锁定放大；两句叙述同一动作，合并后26字不影响表达。",
+          "content": [
+            {
+              "text": "但他选择把剑递了出去。",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "递给了每一个可能被 AI 巨头收割的人。",
+              "startFrame": 50,
+              "durationFrames": 80
+            }
+          ],
+          "order": 5,
+          "param": {
+            "anchors": [
+              {
+                "text": "把剑递了出去",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "AI巨头收割",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 130
+        }
+      ],
+      "audioSrc": "/audio/AI普惠执剑人/scene_7/scene_7.mp3",
+      "totalDurationFrames": 835
+    },
+    {
+      "sceneId": "scene_8",
+      "sceneName": "总结",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "用「不是…而是…」的强对照重新定义 DeepSeek，属于认知转变，适合 COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "DeepSeek 不是一个普通模型。",
+              "startFrame": 0,
+              "durationFrames": 62
+            },
+            {
+              "text": "它是一场技术普惠运动。",
+              "startFrame": 61,
+              "durationFrames": 51
+            }
+          ],
+          "order": 1,
+          "param": {
+            "notText": "普通模型",
+            "butText": "技术普惠运动",
+            "butSrc": "images/AI普惠执剑人/scene_8_1.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 112
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "同样通过否定到肯定的转折赋予人物新身份，认知转变结构明显，选用 COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "梁文锋也不只是一个 AI 创业者。",
+              "startFrame": 0,
+              "durationFrames": 74
+            },
+            {
+              "text": "他更像一个执剑人。",
+              "startFrame": 73,
+              "durationFrames": 45
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "AI 创业者",
+            "butText": "执剑人",
+            "butSrc": "images/AI普惠执剑人/scene_8_2.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 118
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "具象化动作描述，无强结构信号，画面中心聚焦于「拔剑」动作，适合 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "在 AI 巨头准备垄断未来的时候，",
+              "startFrame": 0,
+              "durationFrames": 72
+            },
+            {
+              "text": "他把剑拔出来。",
+              "startFrame": 72,
+              "durationFrames": 40
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/AI普惠执剑人/scene_8_3.png",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "拔剑",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "woosh"
+              }
+            ]
+          },
+          "totalDurationFrames": 112
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促、强结论的金句，具有全片收束的冲击力，无需配图即可聚焦文字，选用 TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "然后告诉普通人：",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "这把剑，",
+              "startFrame": 37,
+              "durationFrames": 22
+            },
+            {
+              "text": "你们也可以用。",
+              "startFrame": 58,
+              "durationFrames": 34
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "然后告诉普通人：",
+                "showFrom": 0
+              },
+              {
+                "text": "这把剑，",
+                "showFrom": 1
+              },
+              {
+                "text": "你们也可以用。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "普通人",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "你们也可以用",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 93
+        }
+      ],
+      "audioSrc": "/audio/AI普惠执剑人/scene_8/scene_8.mp3",
+      "totalDurationFrames": 435
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "AI普惠执剑人",
+    "subtitle": "在最容易垄断的行业里，他做了最反垄断的选择",
+    "themeColor": "#FF6900",
+    "surface": "light",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

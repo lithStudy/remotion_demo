@@ -1,0 +1,634 @@
+{
+  "topic": "都说小米营销很土，其实它最尊重你的智商。",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：土味硬核营销",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用他人对小米营销的评价，属于典型引述/证言结构，用 QUOTE_CITATION 突出「有人说」的引用感。",
+          "content": [
+            {
+              "text": "有人说，"
+            },
+            {
+              "text": "小米不愧是屌丝营销公司，"
+            },
+            {
+              "text": "别人都在讲品牌调性，"
+            },
+            {
+              "text": "讲生活方式，"
+            },
+            {
+              "text": "讲大师设计。"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteDisplayText": "小米不愧是屌丝营销公司，别人都在讲品牌调性，讲生活方式，讲大师设计。",
+            "quoteSource": "网络评价",
+            "showFrom": 1,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用小米标志性口号，属于品牌典型引用，适合用引用卡片突出其土味营销核心。",
+          "content": [
+            {
+              "text": "小米呢？"
+            },
+            {
+              "text": "动不动就是“不服跑个分”。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "quoteDisplayText": "不服跑个分",
+            "quoteSource": "小米广告语",
+            "showFrom": 1,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "转折性过渡句，从外界评价转向个人真实感受，无需要特殊视觉化，使用默认聚焦。",
+          "content": [
+            {
+              "text": "但作为掏真金白银买单的消费者，"
+            },
+            {
+              "text": "今天我必须得说一句："
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "一位消费者真诚地举手，准备说出心里话的简笔画图标",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "结论性感叹句，单图居中收束即可，无需分段节拍切换，使用CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "我简直太喜欢小米这种“土味”的硬核营销了！"
+            },
+            {
+              "text": "这才是真正尊重我们智商的做法。"
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "半透明的大脑轮廓中流动着数据流与芯片模组，一旁是手机跑分高分界面，象征硬核营销对消费者智商的尊重",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析：跑分防坑标尺",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "PEER_INDUCT",
+          "reasoning": "回忆场景、盲盒比喻、导购天花乱坠三条并列前提铺陈旧时代购机痛点，末句「处理器未知」归纳收束，符合并列前提→归纳的 PEER_INDUCT。",
+          "content": [
+            {
+              "text": "咱们回忆一下，"
+            },
+            {
+              "text": "回到十多年前，"
+            },
+            {
+              "text": "买手机就像开盲盒。"
+            },
+            {
+              "text": "导购嘴里天花乱坠，"
+            },
+            {
+              "text": "你根本不知道手机壳底下装的是什么级别的处理器。"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "一个神秘礼品盒打开，里面赫然是一台未拆封的手机，盲盒般的惊喜与未知",
+                "enterEffect": "slideBottom",
+                "showFrom": 2
+              },
+              {
+                "imageSrc": "导购员夸张地张嘴说话，嘴里飘出绚丽虚假的花朵，天花乱坠的视觉效果",
+                "enterEffect": "slideBottom",
+                "showFrom": 3
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "一个手机后盖被撬开，内部主板位置只有一个巨大的发光问号，神秘莫测",
+              "enterEffect": "zoomIn",
+              "showFrom": 4,
+              "tone": "alert"
+            }
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "QUOTE_CITATION",
+          "reasoning": "明确引用小米第一代的口号‘不服跑个分’，并赋予其打破行业潜规则的历史意义，属于典型的名言/口号引用结构，适合用QUOTE_CITATION强化冲击力。",
+          "content": [
+            {
+              "text": "是小米第一代喊出的那句“不服跑个分”，"
+            },
+            {
+              "text": "直接扯下了当时“高价低配”的遮羞布。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "quoteSource": "小米第一代",
+            "quoteDisplayText": "不服跑个分",
+            "showFrom": 0,
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片级短促强结论，自问自答形成情绪转折，字数极短且无需配图，适合用TEXT_FOCUS做金句冲击，形成视觉停顿。",
+          "content": [
+            {
+              "text": "跑分俗吗？"
+            },
+            {
+              "text": "俗。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "跑分俗吗？",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "俗",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "俗",
+                "color": "#EF4444"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "先定义‘防坑标尺’这一核心概念，再落点到‘一分钱一分货’的高价值锚点结论，存在清晰的‘聚焦关键概念→提炼核心道理’结构，适合用MAGNIFYING_GLASS突出‘防坑标尺’这一隐喻。",
+          "content": [
+            {
+              "text": "但它给了一个不懂技术的普通人，"
+            },
+            {
+              "text": "一个最直观、"
+            },
+            {
+              "text": "最量化的防坑标尺。"
+            },
+            {
+              "text": "它告诉你："
+            },
+            {
+              "text": "一分钱，"
+            },
+            {
+              "text": "就该买到一分货。"
+            }
+          ],
+          "order": 4,
+          "param": {
+            "anchors": [
+              {
+                "text": "防坑标尺",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "一分钱，就该买到一分货",
+                "showFrom": 4,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "命名：理工男浪漫",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓过渡句，为后续案例做铺垫，无强烈结构，适合单图居中叙述。",
+          "content": [
+            {
+              "text": "到了今天，"
+            },
+            {
+              "text": "这种工程师文化一点没变。"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "一名工程师坐在监测屏幕前，屏幕上显示电动汽车的电量下降曲线",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "同一电池续航验证子话题：设问→驳斥PPT→开直播→高管实测→网友围观真曲线，单主图贯穿、右侧阶段轨对齐各句下标，适合 CASE_BREAKDOWN。",
+          "content": [
+            {
+              "text": "你说你的电池耐用？"
+            },
+            {
+              "text": "别拿实验室的PPT数据糊弄我，"
+            },
+            {
+              "text": "咱们直接开个直播。"
+            },
+            {
+              "text": "高管自己开着车，"
+            },
+            {
+              "text": "从满电跑到趴窝，"
+            },
+            {
+              "text": "几十万网友盯着看真实的掉电曲线。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "电池续航直播验",
+            "imageSrc": "一位高管坐在电动车驾驶座，手握方向盘，仪表盘电量从100%逐渐降至0%，背景是直播界面，显示大量网友实时观看",
+            "phases": [
+              {
+                "phaseLabel": "质疑续航",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "拒绝纸面",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "直播开验",
+                "showFrom": 2
+              },
+              {
+                "phaseLabel": "真曲线",
+                "showFrom": 5
+              }
+            ],
+            "anchors": [
+              {
+                "text": "掉电曲线",
+                "showFrom": 5,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "同一用料验证子话题：设问→应允→大卸八块→防撞梁/电机/线束逐项公开→收束摆台面，单主图贯穿、右侧阶段轨对齐各句下标，适合 CASE_BREAKDOWN。",
+          "content": [
+            {
+              "text": "你说你的用料扎实？"
+            },
+            {
+              "text": "好，"
+            },
+            {
+              "text": "直接把车大卸八块，"
+            },
+            {
+              "text": "防撞梁多厚、"
+            },
+            {
+              "text": "电机什么结构、"
+            },
+            {
+              "text": "线束怎么走的，"
+            },
+            {
+              "text": "明明白白摆在台面上。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "用料拆解透明验",
+            "imageSrc": "一辆汽车大卸八块分解展示，防撞梁、电机、线束等零件整齐摆在台面上供检验",
+            "phases": [
+              {
+                "phaseLabel": "质疑用料",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "动手拆解",
+                "showFrom": 2
+              },
+              {
+                "phaseLabel": "逐项验明",
+                "showFrom": 3
+              },
+              {
+                "phaseLabel": "透明收束",
+                "showFrom": 6
+              }
+            ],
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "简短有力的评价结论，无需配图，纯文字冲击，TEXT_FOCUS聚焦核心态度。",
+          "content": [
+            {
+              "text": "这种营销，"
+            },
+            {
+              "text": "没有任何滤镜，"
+            },
+            {
+              "text": "也没有任何花里胡哨的形容词。"
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "这种营销，",
+                "showFrom": 0
+              },
+              {
+                "text": "没有任何滤镜，",
+                "showFrom": 1
+              },
+              {
+                "text": "也没有任何花里胡哨的形容词。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": []
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引经据典式点题，核心金句来自经典名言，用QUOTE_CITATION卡片突出引用。",
+          "content": [
+            {
+              "text": "它就是一种极致的理工男浪漫："
+            },
+            {
+              "text": "Talk is cheap,"
+            },
+            {
+              "text": "show me the code."
+            }
+          ],
+          "order": 5,
+          "param": {
+            "quoteSource": "Linus Torvalds",
+            "showFrom": 1,
+            "anchors": []
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "反转揭示：高级的底牌",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "单句揭示常见营销手法的本质，平铺叙述，无对比、数据等强结构，适合用CENTER_FOCUS聚焦配图。",
+          "content": [
+            {
+              "text": "那些看似高大上的营销，"
+            },
+            {
+              "text": "往往是在制造信息壁垒，"
+            },
+            {
+              "text": "让你为了“感觉”去溢价买单。"
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "一个消费者站在迷雾弥漫的高墙前，高墙由杂乱的数据碎片组成，象征信息壁垒；消费者手中的钞票正递向一个悬浮的、发光的问号形状商品，交易光效暗示溢价，整体氛围压抑神秘",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "信息壁垒",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": null
+              }
+            ]
+          }
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "转折指出小米的截然不同做法，虽与前句形成对比，但独立成句后仅为事实陈述，用CENTER_FOCUS即可。",
+          "content": [
+            {
+              "text": "而小米的拆机、"
+            },
+            {
+              "text": "跑分、"
+            },
+            {
+              "text": "续航直播，"
+            },
+            {
+              "text": "是在打破信息壁垒。"
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "一部手机被拆开，露出内部精密零件，正在被直播解析的特写",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "明确因果传导：扒开揉碎技术（因）→ 清楚知道每块钱买到什么（果），适合用CAUSE_CHAIN串联两环。",
+          "content": [
+            {
+              "text": "它把晦涩难懂的技术，"
+            },
+            {
+              "text": "扒开了揉碎了端到你面前，"
+            },
+            {
+              "text": "让你清楚地知道，"
+            },
+            {
+              "text": "你花的每一块钱，"
+            },
+            {
+              "text": "到底买到了什么。"
+            }
+          ],
+          "order": 3,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "晦涩技术",
+                "imageSrc": "一个被锁链缠绕的复杂齿轮组，表面有问号迷雾",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "透明拆解",
+                "imageSrc": "一只手掰开拼图，内部零件飞散重组为清晰图形",
+                "showFrom": 1,
+                "enterEffect": "breathe"
+              },
+              {
+                "label": "价值清晰",
+                "imageSrc": "一枚硬币落入透明容器，底部显现对勾图案",
+                "showFrom": 4,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "独立设问短句，属于全片级转折钩子，无需配图，适合TEXT_FOCUS形成强冲击。",
+          "content": [
+            {
+              "text": "什么是高级？"
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              "什么是高级？"
+            ],
+            "coreSentenceAnchors": []
+          }
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "两个并列的“敢于”行为分点，每点宜独立配图展示，符合PANEL_GRID的宫格并列结构。",
+          "content": [
+            {
+              "text": "敢于把底牌翻给消费者看，"
+            },
+            {
+              "text": "敢于把产品扒光了接受全网拿着放大镜去审视。"
+            }
+          ],
+          "order": 5,
+          "param": {
+            "panels": [
+              {
+                "src": "一只手将一张背面朝上的底牌翻转过来，牌面正对观众，周围有微弱的光芒",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "一个电子产品外壳被掀开，内部零件裸露，一只巨大的放大镜正聚焦于零件细节，背景中有无数眼睛的虚影",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          }
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "总结性金句，点明主题，短促有力，适合纯文字强冲击的TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "这，"
+            },
+            {
+              "text": "才是最大的自信，"
+            },
+            {
+              "text": "也是最高级的营销。"
+            }
+          ],
+          "order": 6,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "这，才是最大的自信，",
+                "showFrom": 0
+              },
+              {
+                "text": "也是最高级的营销。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": []
+          }
+        }
+      ]
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "小米营销论",
+    "subtitle": "都说小米营销很土，其实它最尊重你的智商。",
+    "themeColor": "#2563EB",
+    "badge": "认识自我 · 理性思考",
+    "seriesLabel": "认知心理学",
+    "seriesLabelEn": "COGNITIVE PSYCHOLOGY",
+    "methodologySteps": [
+      "觉察",
+      "归因",
+      "调整"
+    ],
+    "methodologyStepsEn": "OBSERVE · ATTRIBUTE · ADJUST"
+  }
+}

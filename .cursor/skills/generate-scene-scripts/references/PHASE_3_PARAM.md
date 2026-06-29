@@ -46,9 +46,20 @@
 "imageSrc": "A person standing in front of a mirror, simplified silhouette"
 ```
 
+#### PUNCH_CAPTION 大屏文案
+
+`param.punches` 为必填数组；每项：
+- **`text`**（必填）：居中暴击大字，可与 content 口播措辞不同（宜更短更有力）
+- **`showFrom`**（必填）：content 数组 0-based 下标，决定该句出现的口播时机
+- `enterEffect` / `tone`：可选
+
+content[] 仍保留完整口播原文（供 TTS 与底部小字幕）；**禁止**用 content 代替 punches[].text 作为大屏主文案。
+
 #### enterEffect 字段
 
-图片入场特效，合法值：`breathe` | `slideLeft` | `slideBottom` | `zoomIn` | `fadeIn`
+**图片入场**（`CENTER_FOCUS`、`BEAT_SEQUENCE` 等含配图模板）：合法值 `breathe` | `slideLeft` | `slideBottom` | `zoomIn` | `fadeIn`
+
+**PUNCH_CAPTION 文字暴击入场**（`param.punches[i].enterEffect`）：合法值 `snap` | `popIn` | `slideUp` | `shake`；省略 `tone` 时首条 `calm`、其余 `alert`；省略 `enterEffect` 时 `calm` 默认 `snap`、`alert` 默认 `shake`
 
 #### content_index 类字段（format: content_index）
 
@@ -119,12 +130,13 @@ TEXT_FOCUS 模板**不使用** `anchors`，而使用：
 | QUOTE_CITATION | `quoteSource`, `quoteDisplayText`(可选), `showFrom`(可选), `anchors` |
 | CONCEPT_CARD | `imageSrc`(image_prompt), `conceptName`, `anchors` |
 | TEXT_FOCUS | `coreSentence`(string[]), `coreSentenceAnchors` |
+| PUNCH_CAPTION | `punches`(必填；每项 **`text` + `showFrom`** 必填，可选 `enterEffect`/`tone`), `anchors` |
 | STAT_COMPARE | `leftLabel`, `leftValue`, `rightLabel`, `rightValue`, `anchors` |
 | SPLIT_COMPARE | `leftTitle`, `rightTitle`, `leftSrc`(image_prompt), `rightSrc`(image_prompt), `anchors` |
 | DOS_AND_DONTS | `left` / `right`（各含 `label`、`src`(image_prompt)、可选 `showFrom`：有 content 时间轴且值 < 条数时为 **content 下标**，否则为 **帧号**）, `anchors` |
 | STEP_LIST | `steps`(string[]), `anchors` |
 | METHOD_STACK | `methodTitle`, `methodSrc`(image_prompt), `anchors` |
-| BEAT_SEQUENCE | `beats`(数组，每项含 `imageSrc`), `anchors` |
+| BEAT_SEQUENCE | `stages`(数组，每项含 `imageSrc`), `anchors` |
 | CAUSE_CHAIN | `nodes`(数组，每项含 `label` + `imageSrc`), `anchors` |
 | PANEL_GRID | `panels`(数组，每项含 `imageSrc` + `showFrom`), `anchors` |
 | CASE_BREAKDOWN | `caseSrc`(image_prompt), `caseLabel`, `anchors` |

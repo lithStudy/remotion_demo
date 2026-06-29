@@ -8,15 +8,17 @@ import {
 	getSafeImageSrc,
 	useImageEnterStyle,
 	type ImageEnterEffect,
+	type TemplateAnchorsProps,
 	type TemplateBaseProps,
 } from "./shared";
+import { TemplateDefaultAnchors } from "./TemplateAnchorsLayer";
 import { TemplateContentRenderer, normalizeContent } from "./TemplateContentRenderer";
 
 export const templateMeta = {
 	"name": "CAUSE_CHAIN",
 	"componentExport": "BWCauseChain",
 	"description":
-		"适用：同一镜头内讲清「因→果→再果」传导、机制链条；每段口播对应链上一环。\n差异：有时间刻度/年代演进用 TIMELINE；单标题+多句解释用 METHOD_STACK；左右对照用 SPLIT_COMPARE；情绪递进换图用 BEAT_SEQUENCE。\n参数：nodes 2～4 项，每项 label（短标签）、imageSrc、showFrom（content 下标 0-based，非帧数）；可选 layout 为 horizontal（默认，左→右链）或 vertical（竖向堆叠，适配竖屏）。",
+		"适用：同一镜头内讲清「因→果→再果」传导、机制链条；每段口播对应链上一环。\n差异：有时间刻度/年代演进用 TIMELINE；单标题+多句解释用 METHOD_STACK；左右对照用 SPLIT_COMPARE；情绪递进换图用 BEAT_SEQUENCE。\n参数：nodes 2～4 项，每项 label（短标签）、imageSrc、showFrom（content 下标 0-based，非帧数）；可选 layout 为 horizontal（默认，左→右链）或 vertical（竖向堆叠，适配竖屏）；anchors 可选，顶部依次展示关键词并绑定音效。",
 	"psychology": "因果可视化",
 	"image_count": "2-4",
 	"content_min_items": 2,
@@ -58,6 +60,33 @@ export const templateMeta = {
 					},
 				},
 			},
+			"anchors": {
+				"type": "array",
+				"description":
+					"可选；顶部依次展示锚点词并保留为列表，showFrom 为 content 下标（0-based，非帧数）；保持克制，只提取整段里真正的高潮、反转或核心名词",
+				"items": {
+					"type": "object",
+					"required": ["text", "showFrom"],
+					"properties": {
+						"text": { "type": "string", "description": "要展示的锚点词" },
+						"showFrom": {
+							"type": "integer",
+							"format": "content_index",
+							"description":
+								"content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃",
+						},
+						"color": { "type": "string" },
+						"anim": {
+							"type": "string",
+							"enum": ["spring", "slideUp", "popIn", "highlight"],
+						},
+						"audioEffect": {
+							"type": "string",
+							"enum": ["impact_thud", "ping", "woosh"],
+						},
+					},
+				},
+			},
 		},
 		"required": ["nodes"],
 	},
@@ -81,7 +110,7 @@ export type CauseChainNodeItem = {
 	enterEffect?: ImageEnterEffect;
 };
 
-export interface BWCauseChainProps extends TemplateBaseProps {
+export interface BWCauseChainProps extends TemplateBaseProps, TemplateAnchorsProps {
 	nodes: CauseChainNodeItem[];
 	layout?: "vertical" | "horizontal";
 }
@@ -228,6 +257,7 @@ export const BWCauseChain: React.FC<BWCauseChainProps> = ({
 	nodes,
 	layout = "horizontal",
 	content,
+	anchors,
 	audioSrc,
 	children,
 	style,
@@ -289,6 +319,7 @@ export const BWCauseChain: React.FC<BWCauseChainProps> = ({
 					</React.Fragment>
 				))}
 			</div>
+			<TemplateDefaultAnchors content={content} anchors={anchors} />
 			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 			{children}
 		</AbsoluteFill>

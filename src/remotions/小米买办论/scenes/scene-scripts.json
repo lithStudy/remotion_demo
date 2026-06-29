@@ -1,0 +1,1190 @@
+{
+  "topic": "你信小米是买办？这两个理由全错了",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入·买办论两大理由",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开篇直接抛出买办标签与两大理由，无需配图，用 TEXT_FOCUS 零图大字做钩子冲击，突出「买办」「海外」「制裁」等关键词。",
+          "content": [
+            {
+              "text": "小米是买办，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "因为他的注册地在海外，",
+              "startFrame": 32,
+              "durationFrames": 47
+            },
+            {
+              "text": "还有没被美国制裁。",
+              "startFrame": 79,
+              "durationFrames": 45
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "小米是买办，",
+                "showFrom": 0
+              },
+              {
+                "text": "因为他的注册地在海外，",
+                "showFrom": 1
+              },
+              {
+                "text": "还有没被美国制裁。",
+                "showFrom": 2,
+                "endFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "买办",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "海外",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "制裁",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 125
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "讽刺转引出分析，属平缓过渡，无对比/分点等强结构，用CENTER_FOCUS保持自然焦点。",
+          "content": [
+            {
+              "text": "这种智慧言论太多了，还总是拿华为出来对比。",
+              "startFrame": 0,
+              "durationFrames": 104
+            },
+            {
+              "text": "所以今天我们来分析一下。",
+              "startFrame": 103,
+              "durationFrames": 46
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/小米买办论/scene_1_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 149
+        }
+      ],
+      "audioSrc": "/audio/小米买办论/scene_1/scene_1.mp3",
+      "totalDurationFrames": 276
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "注册地指控",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "转述网络流传的注册地指控，QUOTE_CITATION 以引用体裁呈现「很多人说」类观点，为后文反驳立靶。",
+          "content": [
+            {
+              "text": "先看第一个。",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "很多人说，",
+              "startFrame": 26,
+              "durationFrames": 24
+            },
+            {
+              "text": "小米注册地不在中国，",
+              "startFrame": 50,
+              "durationFrames": 43
+            },
+            {
+              "text": "所以是买办。",
+              "startFrame": 92,
+              "durationFrames": 24
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteSource": "常见说法",
+            "quoteDisplayText": "小米注册地不在中国，所以是买办。",
+            "showFrom": 2
+          },
+          "totalDurationFrames": 117
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "列举四家注册在开曼的中国公司，形成并列反例，适合宫格配图展示。",
+          "content": [
+            {
+              "text": "但除了小米，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "阿里、",
+              "startFrame": 27,
+              "durationFrames": 21
+            },
+            {
+              "text": "腾讯、",
+              "startFrame": 48,
+              "durationFrames": 20
+            },
+            {
+              "text": "百度，",
+              "startFrame": 67,
+              "durationFrames": 21
+            },
+            {
+              "text": "甚至所谓的国产之光中芯国际，",
+              "startFrame": 88,
+              "durationFrames": 70
+            },
+            {
+              "text": "注册都在开曼。",
+              "startFrame": 158,
+              "durationFrames": 39
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "images/小米买办论/scene_2_2_img0.png",
+                "showFrom": 1,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/小米买办论/scene_2_2_img1.png",
+                "showFrom": 2,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/小米买办论/scene_2_2_img2.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/小米买办论/scene_2_2_img3.png",
+                "showFrom": 4,
+                "enterEffect": "breathe"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 198
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确‘不是…而是…’的认知修正结构，适合用对比模板强调正确观点。",
+          "content": [
+            {
+              "text": "这不是例外。",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "这是大部分上市公司标准操作。",
+              "startFrame": 33,
+              "durationFrames": 78
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "一个例外",
+            "butText": "上市公司标准操作",
+            "butSrc": "images/小米买办论/scene_2_3.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 112
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "一个核心原因（标题）加上三条具体好处展开，形成“标题+解释”的推荐理由式结构。",
+          "content": [
+            {
+              "text": "原因是，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "开曼的资本市场更成熟。",
+              "startFrame": 26,
+              "durationFrames": 60
+            },
+            {
+              "text": "能以更低成本融到更多钱。",
+              "startFrame": 85,
+              "durationFrames": 77
+            },
+            {
+              "text": "全球税率更低。",
+              "startFrame": 162,
+              "durationFrames": 44
+            }
+          ],
+          "order": 4,
+          "param": {
+            "title": "注册开曼的原因",
+            "imageSrc": "images/小米买办论/scene_2_4.png",
+            "notes": [
+              {
+                "text": "成熟的资本市场能吸引全球资本",
+                "showFrom": 1
+              },
+              {
+                "text": "低成本融资利于快速扩张",
+                "showFrom": 2
+              },
+              {
+                "text": "更低的全球税率利于结算",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 206
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "因果传导链：不上市→特殊股权结构→无法在外国注册，每个环节可分配独立画面，无时间轴。",
+          "content": [
+            {
+              "text": "华为为什么不这么做？",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "不是他更高尚，而是因为华为不上市。",
+              "startFrame": 46,
+              "durationFrames": 80
+            },
+            {
+              "text": "它的股权结构，",
+              "startFrame": 126,
+              "durationFrames": 34
+            },
+            {
+              "text": "是员工持股加创始人控制。",
+              "startFrame": 159,
+              "durationFrames": 66
+            },
+            {
+              "text": "这种结构，",
+              "startFrame": 225,
+              "durationFrames": 26
+            },
+            {
+              "text": "在中国以外任何一个国家，",
+              "startFrame": 250,
+              "durationFrames": 52
+            },
+            {
+              "text": "都不可能合法注册。",
+              "startFrame": 301,
+              "durationFrames": 39
+            }
+          ],
+          "order": 5,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "不上市",
+                "imageSrc": "images/小米买办论/scene_2_5_img0.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "特殊股权",
+                "imageSrc": "images/小米买办论/scene_2_5_img1.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "label": "无法海外注册",
+                "imageSrc": "images/小米买办论/scene_2_5_img2.png",
+                "showFrom": 5,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "无法注册",
+                "showFrom": 6,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 341
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "短促的‘不是…而是…’纠正结论，属于金句冲击，但内置对比结构最适合认知转换模板。",
+          "content": [
+            {
+              "text": "不是他不想。",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "而是，",
+              "startFrame": 26,
+              "durationFrames": 7
+            },
+            {
+              "text": "他不能。",
+              "startFrame": 32,
+              "durationFrames": 22
+            }
+          ],
+          "order": 6,
+          "param": {
+            "notText": "他不想",
+            "butText": "他不能",
+            "butSrc": "images/小米买办论/scene_2_6.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 55
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片收束的短结论，无需配图，纯文字聚焦以强化冲击力。",
+          "content": [
+            {
+              "text": "所以，",
+              "startFrame": 0,
+              "durationFrames": 15
+            },
+            {
+              "text": "注册地这个指控，",
+              "startFrame": 14,
+              "durationFrames": 34
+            },
+            {
+              "text": "站不住。",
+              "startFrame": 47,
+              "durationFrames": 19
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "所以，注册地这个指控，",
+                "showFrom": 0,
+                "endFrom": 1
+              },
+              {
+                "text": "站不住。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "站不住",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 67
+        }
+      ],
+      "audioSrc": "/audio/小米买办论/scene_2/scene_2.mp3",
+      "totalDurationFrames": 1095
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "制裁指控",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "转述网络流传的制裁指控，QUOTE_CITATION 以引用体裁呈现错误说法；末句事实反转保留在口播中，为后文展开立靶。",
+          "content": [
+            {
+              "text": "再看第二个。",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "小米没被制裁，",
+              "startFrame": 31,
+              "durationFrames": 41
+            },
+            {
+              "text": "所以是买办。",
+              "startFrame": 72,
+              "durationFrames": 36
+            },
+            {
+              "text": "其实小米也被制裁过。",
+              "startFrame": 108,
+              "durationFrames": 47
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteSource": "常见说法",
+            "quoteDisplayText": "小米没被制裁，所以是买办。",
+            "showFrom": 1
+          },
+          "totalDurationFrames": 155
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "明确因果结构：列入清单→理由为与军方有联系，用CAUSE_CHAIN展示传导链条。",
+          "content": [
+            {
+              "text": "2020年，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "美国国防部和财政部，",
+              "startFrame": 32,
+              "durationFrames": 53
+            },
+            {
+              "text": "把小米列入制裁清单。",
+              "startFrame": 85,
+              "durationFrames": 49
+            },
+            {
+              "text": "理由是，",
+              "startFrame": 133,
+              "durationFrames": 24
+            },
+            {
+              "text": "小米跟中国军方有联系。",
+              "startFrame": 157,
+              "durationFrames": 70
+            }
+          ],
+          "order": 2,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "美方机构",
+                "imageSrc": "images/小米买办论/scene_3_2_img0.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "列入清单",
+                "imageSrc": "images/小米买办论/scene_3_2_img1.png",
+                "showFrom": 2,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "label": "涉军指控",
+                "imageSrc": "images/小米买办论/scene_3_2_img2.png",
+                "showFrom": 4,
+                "enterEffect": "slideLeft"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 227
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "完整的案例叙事弧：提问→行动→程序→判决→移除，符合CASE_BREAKDOWN的个案展示要求。",
+          "content": [
+            {
+              "text": "小米怎么做的？",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "它拿起了法律武器。",
+              "startFrame": 34,
+              "durationFrames": 47
+            },
+            {
+              "text": "指控美国国防部和财政部的行为，",
+              "startFrame": 81,
+              "durationFrames": 82
+            },
+            {
+              "text": "违反了《行政程序法》。",
+              "startFrame": 162,
+              "durationFrames": 43
+            },
+            {
+              "text": "法院审理后，",
+              "startFrame": 205,
+              "durationFrames": 32
+            },
+            {
+              "text": "判决小米胜诉。",
+              "startFrame": 237,
+              "durationFrames": 41
+            },
+            {
+              "text": "美国政府必须把小米从清单里移除。",
+              "startFrame": 277,
+              "durationFrames": 90
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "小米反制裁胜诉",
+            "imageSrc": "images/小米买办论/scene_3_3.png",
+            "phases": [
+              {
+                "phaseLabel": "困境质疑",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "法律反击",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "法院胜诉",
+                "showFrom": 4
+              },
+              {
+                "phaseLabel": "制裁移除",
+                "showFrom": 6
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 367
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平铺陈述华为第一条理由，无对比/步骤结构，用CENTER_FOCUS配合单图口播。",
+          "content": [
+            {
+              "text": "华为为什么不行？",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "一方面，",
+              "startFrame": 41,
+              "durationFrames": 20
+            },
+            {
+              "text": "华为孟女士违反了美国禁令，",
+              "startFrame": 61,
+              "durationFrames": 55
+            },
+            {
+              "text": "向伊朗转卖设备，",
+              "startFrame": 115,
+              "durationFrames": 40
+            },
+            {
+              "text": "她认罪了。",
+              "startFrame": 154,
+              "durationFrames": 27
+            },
+            {
+              "text": "别说打不打的赢，",
+              "startFrame": 181,
+              "durationFrames": 41
+            },
+            {
+              "text": "华为有脸打官司吗？",
+              "startFrame": 222,
+              "durationFrames": 50
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/小米买办论/scene_3_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "认罪",
+                "showFrom": 4,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 272
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "阐述华为的第二条理由，对网络基建进行解释，适合CENTER_FOCUS平叙。",
+          "content": [
+            {
+              "text": "另一方面，",
+              "startFrame": 0,
+              "durationFrames": 26
+            },
+            {
+              "text": "华为的主营业务，",
+              "startFrame": 25,
+              "durationFrames": 39
+            },
+            {
+              "text": "是网络基建。",
+              "startFrame": 63,
+              "durationFrames": 35
+            },
+            {
+              "text": "这是最底层的通讯链路。",
+              "startFrame": 97,
+              "durationFrames": 59
+            },
+            {
+              "text": "基站、核心网、传输设备，",
+              "startFrame": 156,
+              "durationFrames": 79
+            },
+            {
+              "text": "直接决定一个国家的主干网络能不能被远程控制。",
+              "startFrame": 234,
+              "durationFrames": 104
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/小米买办论/scene_3_5.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "主干网络",
+                "showFrom": 5,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 339
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "与上文华为形成对比，但本段自身是平叙小米终端特性，用CENTER_FOCUS承载。",
+          "content": [
+            {
+              "text": "而小米主营是终端设备。",
+              "startFrame": 0,
+              "durationFrames": 68
+            },
+            {
+              "text": "手机、电视、手环。",
+              "startFrame": 67,
+              "durationFrames": 62
+            },
+            {
+              "text": "有问题，",
+              "startFrame": 128,
+              "durationFrames": 24
+            },
+            {
+              "text": "也只是威胁终端使用者。",
+              "startFrame": 152,
+              "durationFrames": 47
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/小米买办论/scene_3_6.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "威胁终端使用者",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 200
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "明确将华为与小米用输电网vs家电进行两方对比，适合SPLIT_COMPARE左右分屏展示。",
+          "content": [
+            {
+              "text": "就像电网一样。",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "华为的业务相当于是做输电线路和变电站，",
+              "startFrame": 32,
+              "durationFrames": 114
+            },
+            {
+              "text": "控制了就能远程切断一个省的电。",
+              "startFrame": 146,
+              "durationFrames": 74
+            },
+            {
+              "text": "小米就像是做家里的用电设备，",
+              "startFrame": 220,
+              "durationFrames": 77
+            },
+            {
+              "text": "家里的灯泡坏了，",
+              "startFrame": 296,
+              "durationFrames": 42
+            },
+            {
+              "text": "只影响你一个房间。",
+              "startFrame": 337,
+              "durationFrames": 42
+            }
+          ],
+          "order": 7,
+          "param": {
+            "leftSrc": "images/小米买办论/scene_3_7_left.png",
+            "rightSrc": "images/小米买办论/scene_3_7_right.png",
+            "leftLabel": "电力基建",
+            "rightLabel": "家用电器",
+            "leftShowFrom": 1,
+            "rightShowFrom": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 380
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "点明业务位置决定威胁程度的核心判断，无需配图，用 TEXT_FOCUS 纯大字聚焦这一结论。",
+          "content": [
+            {
+              "text": "两家公司主营业务所处的位置，",
+              "startFrame": 0,
+              "durationFrames": 70
+            },
+            {
+              "text": "决定了对一个国家的威胁程度。",
+              "startFrame": 69,
+              "durationFrames": 65
+            }
+          ],
+          "order": 8,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "两家公司主营业务所处的位置，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "决定了对一个国家的威胁程度。",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "威胁程度",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 135
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "「不是技术问题而是位置问题」构成明确的避坑对照，DOS_AND_DONTS 左右分栏比 COGNITIVE_SHIFT 更直观呈现两种判断框架。",
+          "content": [
+            {
+              "text": "这不是技术问题，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "设计变电站的并不比设计家电的技术含量高；",
+              "startFrame": 37,
+              "durationFrames": 102
+            },
+            {
+              "text": "这是位置问题，",
+              "startFrame": 138,
+              "durationFrames": 40
+            },
+            {
+              "text": "基建总是比终端更要命。",
+              "startFrame": 177,
+              "durationFrames": 57
+            }
+          ],
+          "order": 9,
+          "param": {
+            "left": {
+              "label": "❌ 技术问题",
+              "src": "images/小米买办论/scene_3_9_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 位置问题",
+              "src": "images/小米买办论/scene_3_9_right.png",
+              "showFrom": 2
+            }
+          },
+          "totalDurationFrames": 235
+        }
+      ],
+      "audioSrc": "/audio/小米买办论/scene_3/scene_3.mp3",
+      "totalDurationFrames": 2310
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "总结",
+      "items": [
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "整个场景的开篇结论，语气肯定，具有强金句冲击力；无需配图，用TEXT_FOCUS直接锁定注意力。",
+          "content": [
+            {
+              "text": "让我们总结一下。",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "买办论的两个理由，",
+              "startFrame": 41,
+              "durationFrames": 45
+            },
+            {
+              "text": "都不成立。",
+              "startFrame": 86,
+              "durationFrames": 26
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "让我们总结一下。",
+                "showFrom": 0
+              },
+              {
+                "text": "买办论的两个理由，",
+                "showFrom": 1
+              },
+              {
+                "text": "都不成立。",
+                "showFrom": 2,
+                "endFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 112
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TREE_DIAGRAM",
+          "reasoning": "小米「注册海外」与「未被制裁」为同一主体下的两条并列分支，各自再展开子原因，用 TREE_DIAGRAM 呈现层次分叉。",
+          "content": [
+            {
+              "text": "对于小米而言，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "注册海外，",
+              "startFrame": 32,
+              "durationFrames": 26
+            },
+            {
+              "text": "是资本市场规律。",
+              "startFrame": 57,
+              "durationFrames": 45
+            },
+            {
+              "text": "未被制裁，",
+              "startFrame": 102,
+              "durationFrames": 27
+            },
+            {
+              "text": "是因为小米主营业务不对国家构成威胁，",
+              "startFrame": 128,
+              "durationFrames": 81
+            },
+            {
+              "text": "并且它堂堂正正的打赢了对政府的官司。",
+              "startFrame": 209,
+              "durationFrames": 83
+            }
+          ],
+          "order": 2,
+          "param": {
+            "root": {
+              "label": "小米",
+              "showFrom": 0,
+              "children": [
+                {
+                  "label": "注册海外",
+                  "showFrom": 1,
+                  "children": [
+                    {
+                      "label": "资本市场规律",
+                      "showFrom": 2
+                    }
+                  ]
+                },
+                {
+                  "label": "未被制裁",
+                  "showFrom": 3,
+                  "children": [
+                    {
+                      "label": "业务无威胁",
+                      "showFrom": 4
+                    },
+                    {
+                      "label": "胜诉政府",
+                      "showFrom": 5
+                    }
+                  ]
+                }
+              ]
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 292
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TREE_DIAGRAM",
+          "reasoning": "华为「不海外注册」与「被制裁」为同一主体下两条并列分支，各自再展开子原因，与上一段小米形成对称树状结构。",
+          "content": [
+            {
+              "text": "对于华为而言，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "不进行海外注册，",
+              "startFrame": 36,
+              "durationFrames": 40
+            },
+            {
+              "text": "是因为他不上市没有必要，",
+              "startFrame": 75,
+              "durationFrames": 51
+            },
+            {
+              "text": "其次他的股权结构也无法在外国注册。",
+              "startFrame": 125,
+              "durationFrames": 93
+            },
+            {
+              "text": "被制裁，",
+              "startFrame": 217,
+              "durationFrames": 22
+            },
+            {
+              "text": "是因为他的业务涉及网络安全，",
+              "startFrame": 239,
+              "durationFrames": 62
+            },
+            {
+              "text": "且有孟小姐案件珠玉在前。",
+              "startFrame": 300,
+              "durationFrames": 63
+            }
+          ],
+          "order": 3,
+          "param": {
+            "root": {
+              "label": "华为",
+              "showFrom": 0,
+              "children": [
+                {
+                  "label": "本地注册",
+                  "showFrom": 1,
+                  "children": [
+                    {
+                      "label": "不上市",
+                      "showFrom": 2
+                    },
+                    {
+                      "label": "股权结构",
+                      "showFrom": 3
+                    }
+                  ]
+                },
+                {
+                  "label": "被制裁",
+                  "showFrom": 4,
+                  "children": [
+                    {
+                      "label": "网络安全",
+                      "showFrom": 5
+                    },
+                    {
+                      "label": "孟小姐案",
+                      "showFrom": 6
+                    }
+                  ]
+                }
+              ]
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 364
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束段第一条「不要…」行为准则，无需配图，用 TEXT_FOCUS 纯大字压屏。",
+          "content": [
+            {
+              "text": "所以，",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "理解了这些，",
+              "startFrame": 18,
+              "durationFrames": 28
+            },
+            {
+              "text": "希望智慧的你，",
+              "startFrame": 45,
+              "durationFrames": 32
+            },
+            {
+              "text": "以后不要再用注册地和制裁，",
+              "startFrame": 77,
+              "durationFrames": 66
+            },
+            {
+              "text": "来判断一家公司是不是买办，",
+              "startFrame": 142,
+              "durationFrames": 58
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "希望智慧的你",
+                "showFrom": 2,
+                "endFrom": 2
+              },
+              {
+                "text": "以后不要再用注册地和制裁",
+                "showFrom": 3,
+                "endFrom": 4
+              },
+              {
+                "text": "来判断一家公司是不是买办",
+                "showFrom": 4,
+                "endFrom": 4
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "买办",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "注册地",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "制裁",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 201
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束段第二条「不要…」行为准则，无需配图，用 TEXT_FOCUS 纯大字压屏。",
+          "content": [
+            {
+              "text": "也不要用这些来拉踩两个同属中国的公司。",
+              "startFrame": 0,
+              "durationFrames": 87
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "拉踩两个同属中国的公司。",
+                "showFrom": 0,
+                "endFrom": 0
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "拉踩",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "中国",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 87
+        }
+      ],
+      "audioSrc": "/audio/小米买办论/scene_4/scene_4.mp3",
+      "totalDurationFrames": 1056
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "小米买办论",
+    "subtitle": "不被制裁，海外注册，所以是买办？",
+    "themeColor": "#FF6900",
+    "surface": "light",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

@@ -17,7 +17,7 @@ export const templateMeta = {
 	"name": "TIMELINE",
 	"componentExport": "BWTimeline",
 	"description":
-		"适用：历史演进、时间顺序、前后对比带明确时间轴。\n差异：无时间线的并列要点用 PANEL_GRID；操作步骤用 STEP_LIST。\n参数：images 3～5 项，按数组顺序从左到右沿轴线均分。",
+		"适用：历史演进、时间顺序、前后对比带明确时间轴。\n差异：无时间线的并列要点用 PANEL_GRID；操作步骤用 STEP_LIST。\n参数：images 3～5 项，按数组顺序从左到右沿轴线均分；每项可选 label，轴上方节点标注在配图上方、轴下方节点标注在配图下方。",
 	"psychology": "叙事连贯性",
 	"image_count": "3-5",
 	"param_schema": {
@@ -44,6 +44,10 @@ export const templateMeta = {
 						},
 						"textIndex": { "type": "integer", "format": "content_index" },
 						"startFrame": { "type": "integer" },
+						"label": {
+							"type": "string",
+							"description": "节点短标注（建议 2～12 字）；轴上方节点显示在配图上方，轴下方节点显示在配图下方",
+						},
 					},
 				},
 			},
@@ -54,16 +58,19 @@ export const templateMeta = {
 		"template": "TIMELINE",
 		"param": {
 			"images": [
-				{ "src": "1990年代电脑图标", "enterEffect": "slideLeft" },
-				{ "src": "2010年代笔记本图标", "enterEffect": "fadeIn" },
-				{ "src": "2020年代手机图标", "enterEffect": "slideLeft" },
+				{ "src": "1990年代电脑图标", "enterEffect": "slideLeft", "label": "1990s" },
+				{ "src": "2010年代笔记本图标", "enterEffect": "fadeIn", "label": "2010s" },
+				{ "src": "2020年代手机图标", "enterEffect": "slideLeft", "label": "2020s" },
 			],
 		},
 	},
 } as const;
 
 /** TIMELINE 单节点：无 position，横坐标仅由 images 顺序与数量决定 */
-export type TimelineImageItem = Omit<MultiImageItem, "position">;
+export type TimelineImageItem = Omit<MultiImageItem, "position"> & {
+	/** 短标注；轴上方节点在配图上方，轴下方节点在配图下方 */
+	label?: string;
+};
 
 export interface BWTimelineProps extends TemplateBaseProps, TemplateAnchorsProps {
 	images: TimelineImageItem[];
@@ -78,9 +85,11 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 	style,
 }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, height } = useVideoConfig();
 	const contentItems = content ?? [];
 	const imgSize = images.length >= 5 ? 150 : images.length === 4 ? 170 : 200;
+	const labelFontSize = Math.round(Math.min(58, height * 0.054));
+	const axisGap = 22;
 	const autoXFracs =
 		images.length <= 1
 			? [0.5]
@@ -132,7 +141,20 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 				});
 				const visible = frame >= appearFrame;
 				const isAbove = i % 2 === 0;
-				const iconTop = isAbove ? "28%" : "52%";
+				const stackTransform = isAbove
+					? `translate(-50%, calc(-100% - ${axisGap}px)) scale(${visible ? nodeSpring : 0.5})`
+					: `translate(-50%, ${axisGap}px) scale(${visible ? nodeSpring : 0.5})`;
+				const labelStyle: React.CSSProperties = {
+					fontSize: labelFontSize,
+					fontWeight: 800,
+					color: BW_TEXT,
+					textAlign: "center",
+					lineHeight: 1.2,
+					width: "100%",
+					padding: "0 6px",
+					whiteSpace: "nowrap",
+					letterSpacing: 0.5,
+				};
 				return (
 					<React.Fragment key={i}>
 						<div
@@ -151,19 +173,36 @@ export const BWTimeline: React.FC<BWTimelineProps> = ({
 								zIndex: 2,
 							}}
 						/>
-						<Img
-							src={getSafeImageSrc(img.src)}
+						<div
 							style={{
 								position: "absolute",
 								left: `${xFrac * 100}%`,
-								top: iconTop,
-								transform: `translate(-50%, 0) scale(${visible ? nodeSpring : 0.5})`,
-								width: imgSize,
-								height: imgSize,
-								objectFit: "contain",
+								top: `${timelineY}%`,
+								transform: stackTransform,
+								display: "flex",
+								flexDirection: "column",
+								alignItems: "center",
+								gap: 10,
+								width: imgSize + 48,
 								opacity: visible ? nodeSpring : 0,
+								zIndex: 1,
 							}}
-						/>
+						>
+							{isAbove && img.label ? (
+								<div style={labelStyle}>{img.label}</div>
+							) : null}
+							<Img
+								src={getSafeImageSrc(img.src)}
+								style={{
+									width: imgSize,
+									height: imgSize,
+									objectFit: "contain",
+								}}
+							/>
+							{!isAbove && img.label ? (
+								<div style={labelStyle}>{img.label}</div>
+							) : null}
+						</div>
 					</React.Fragment>
 				);
 			})}

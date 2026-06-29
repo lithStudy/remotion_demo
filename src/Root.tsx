@@ -18,8 +18,6 @@ import { 小米挖孔机盖事件, 小米挖孔机盖事件竖屏, 小米挖孔�
 import { 小米挖孔机盖事件封面横屏, 小米挖孔机盖事件封面竖屏 } from "./remotions/小米挖孔机盖事件/小米挖孔机盖事件CoverStills";
 import { 华为的5g迷思, 华为的5g迷思竖屏, 华为的5g迷思Schema, TOTAL_DURATION_华为的5G迷思 } from "./remotions/华为的5G迷思/华为的5g迷思";
 import { 华为的5g迷思封面横屏, 华为的5g迷思封面竖屏 } from "./remotions/华为的5G迷思/华为的5g迷思CoverStills";
-import { 廉价的便利, 廉价的便利竖屏, 廉价的便利Schema, TOTAL_DURATION_廉价的便利 } from "./remotions/廉价的便利/廉价的便利";
-import { 廉价的便利封面横屏, 廉价的便利封面竖屏 } from "./remotions/廉价的便利/廉价的便利CoverStills";
 import { 华为依赖论, 华为依赖论竖屏, 华为依赖论Schema, TOTAL_DURATION_华为依赖论 } from "./remotions/华为依赖论/华为依赖论";
 import { 华为依赖论封面横屏, 华为依赖论封面竖屏 } from "./remotions/华为依赖论/华为依赖论CoverStills";
 import { 华为制裁论, 华为制裁论竖屏, 华为制裁论Schema, TOTAL_DURATION_华为制裁论 } from "./remotions/华为制裁论/华为制裁论";
@@ -42,6 +40,40 @@ import { 华为专利论, 华为专利论竖屏, 华为专利论Schema, TOTAL_DU
 import { 华为专利论封面横屏, 华为专利论封面竖屏 } from "./remotions/华为专利论/华为专利论CoverStills";
 import { 劳动法落实, 劳动法落实竖屏, 劳动法落实Schema, TOTAL_DURATION_劳动法落实 } from "./remotions/劳动法落实/劳动法落实";
 import { 劳动法落实封面横屏, 劳动法落实封面竖屏 } from "./remotions/劳动法落实/劳动法落实CoverStills";
+import { MyVideo, MyVideo竖屏, MyVideoSchema, TOTAL_DURATION_MY_VIDEO } from "./remotions/my_video/MyVideo";
+import { MyVideo封面横屏, MyVideo封面竖屏 } from "./remotions/my_video/MyVideoCoverStills";
+import { 纳税人, 纳税人竖屏, 纳税人Schema, TOTAL_DURATION_纳税人 } from "./remotions/纳税人/纳税人";
+import { 纳税人封面横屏, 纳税人封面竖屏 } from "./remotions/纳税人/纳税人CoverStills";
+import { 华为韬定律, 华为韬定律竖屏, 华为韬定律Schema, TOTAL_DURATION_华为韬定律 } from "./remotions/华为韬定律/华为韬定律";
+import { 华为韬定律封面横屏, 华为韬定律封面竖屏 } from "./remotions/华为韬定律/华为韬定律CoverStills";
+import { 权利的边界, 权利的边界竖屏, 权利的边界Schema, TOTAL_DURATION_权利的边界 } from "./remotions/权利的边界/权利的边界";
+import { 权利的边界封面横屏, 权利的边界封面竖屏 } from "./remotions/权利的边界/权利的边界CoverStills";
+import { Ai普惠执剑人, Ai普惠执剑人竖屏, Ai普惠执剑人Schema, TOTAL_DURATION_AI普惠执剑人 } from "./remotions/AI普惠执剑人/Ai普惠执剑人";
+import { Ai普惠执剑人封面横屏, Ai普惠执剑人封面竖屏 } from "./remotions/AI普惠执剑人/Ai普惠执剑人CoverStills";
+import { 小米事故论, 小米事故论竖屏, 小米事故论Schema, TOTAL_DURATION_小米事故论 } from "./remotions/小米事故论/小米事故论";
+import { 小米事故论封面横屏, 小米事故论封面竖屏 } from "./remotions/小米事故论/小米事故论CoverStills";
+import { 大模型先驱论, 大模型先驱论竖屏, 大模型先驱论Schema, TOTAL_DURATION_大模型先驱论 } from "./remotions/大模型先驱论/大模型先驱论";
+import { 大模型先驱论封面横屏, 大模型先驱论封面竖屏 } from "./remotions/大模型先驱论/大模型先驱论CoverStills";
+import { 大模型先驱科普, 大模型先驱科普竖屏, 大模型先驱科普Schema, TOTAL_DURATION_大模型先驱科普 } from "./remotions/大模型先驱科普/大模型先驱科普";
+import { 大模型先驱科普封面横屏, 大模型先驱科普封面竖屏 } from "./remotions/大模型先驱科普/大模型先驱科普CoverStills";
+import { 小米买办论, 小米买办论竖屏, 小米买办论Schema, TOTAL_DURATION_小米买办论 } from "./remotions/小米买办论/小米买办论";
+import { 小米买办论封面横屏, 小米买办论封面竖屏 } from "./remotions/小米买办论/小米买办论CoverStills";
+import { 小米营销论, 小米营销论竖屏, 小米营销论Schema, TOTAL_DURATION_小米营销论 } from "./remotions/小米营销论/小米营销论";
+import { 小米营销论封面横屏, 小米营销论封面竖屏 } from "./remotions/小米营销论/小米营销论CoverStills";
+import { 汽车质量论, 汽车质量论竖屏, 汽车质量论Schema, TOTAL_DURATION_汽车质量论 } from "./remotions/汽车质量论/汽车质量论";
+import { 汽车质量论封面横屏, 汽车质量论封面竖屏 } from "./remotions/汽车质量论/汽车质量论CoverStills";
+import { 智驾兜底论, 智驾兜底论竖屏, 智驾兜底论Schema, TOTAL_DURATION_智驾兜底论 } from "./remotions/智驾兜底论/智驾兜底论";
+import { 智驾兜底论封面横屏, 智驾兜底论封面竖屏 } from "./remotions/智驾兜底论/智驾兜底论CoverStills";
+import { 权利与责任, 权利与责任竖屏, 权利与责任Schema, TOTAL_DURATION_权利与责任 } from "./remotions/权利与责任/权利与责任";
+import { 权利与责任封面横屏, 权利与责任封面竖屏 } from "./remotions/权利与责任/权利与责任CoverStills";
+import { 千亿研发, 千亿研发竖屏, 千亿研发Schema, TOTAL_DURATION_千亿研发 } from "./remotions/千亿研发/千亿研发";
+import { 千亿研发封面横屏, 千亿研发封面竖屏 } from "./remotions/千亿研发/千亿研发CoverStills";
+import { 模型论, 模型论竖屏, 模型论Schema, TOTAL_DURATION_模型论 } from "./remotions/模型论/模型论";
+import { 模型论封面横屏, 模型论封面竖屏 } from "./remotions/模型论/模型论CoverStills";
+import { 华为高价论, 华为高价论竖屏, 华为高价论Schema, TOTAL_DURATION_华为高价论 } from "./remotions/华为高价论/华为高价论";
+import { 华为高价论封面横屏, 华为高价论封面竖屏 } from "./remotions/华为高价论/华为高价论CoverStills";
+import { 廉价的便利, 廉价的便利竖屏, 廉价的便利Schema, TOTAL_DURATION_廉价的便利 } from "./remotions/廉价的便利/廉价的便利";
+import { 廉价的便利封面横屏, 廉价的便利封面竖屏 } from "./remotions/廉价的便利/廉价的便利CoverStills";
 // Each <Composition> is an entry in the sidebar!
 
 export const RemotionRoot: React.FC = () => {
@@ -59,100 +91,6 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{}}
       />
 
-
-
-
-      {/* 廉价的便利 - 横屏 1920×1080（自动生成） */}
-      <Composition
-        id="廉价的便利"
-        component={廉价的便利}
-        durationInFrames={TOTAL_DURATION_廉价的便利}
-        fps={30}
-        width={1920}
-        height={1080}
-        schema={廉价的便利Schema}
-        defaultProps={{}}
-      />
-
-      {/* 廉价的便利竖屏 - 竖屏 1080×1920（自动生成） */}
-      <Composition
-        id="廉价的便利竖屏"
-        component={廉价的便利竖屏}
-        durationInFrames={TOTAL_DURATION_廉价的便利}
-        fps={30}
-        width={1080}
-        height={1920}
-        schema={廉价的便利Schema}
-        defaultProps={{}}
-      />
-      {/* 廉价的便利封面横屏 - 横屏封面 still 1920×1080 */}
-      <Composition
-        id="廉价的便利封面横屏"
-        component={廉价的便利封面横屏}
-        durationInFrames={1}
-        fps={30}
-        width={1920}
-        height={1080}
-        defaultProps={{}}
-      />
-
-      {/* 廉价的便利封面竖屏 - 3:4 封面 still 1080×1440 */}
-      <Composition
-        id="廉价的便利封面竖屏"
-        component={廉价的便利封面竖屏}
-        durationInFrames={1}
-        fps={30}
-        width={1080}
-        height={1440}
-        defaultProps={{}}
-      />
-
-
-
-      {/* 小米掀翻蚂蚁市场 - 横屏 1920×1080（自动生成） */}
-      <Composition
-        id="小米掀翻蚂蚁市场"
-        component={小米掀翻蚂蚁市场}
-        durationInFrames={TOTAL_DURATION_小米掀翻蚂蚁市场}
-        fps={30}
-        width={1920}
-        height={1080}
-        schema={小米掀翻蚂蚁市场Schema}
-        defaultProps={{}}
-      />
-
-      {/* 小米掀翻蚂蚁市场竖屏 - 竖屏 1080×1920（自动生成） */}
-      <Composition
-        id="小米掀翻蚂蚁市场竖屏"
-        component={小米掀翻蚂蚁市场竖屏}
-        durationInFrames={TOTAL_DURATION_小米掀翻蚂蚁市场}
-        fps={30}
-        width={1080}
-        height={1920}
-        schema={小米掀翻蚂蚁市场Schema}
-        defaultProps={{}}
-      />
-      {/* 小米掀翻蚂蚁市场封面横屏 - 横屏封面 still 1920×1080 */}
-      <Composition
-        id="小米掀翻蚂蚁市场封面横屏"
-        component={小米掀翻蚂蚁市场封面横屏}
-        durationInFrames={1}
-        fps={30}
-        width={1920}
-        height={1080}
-        defaultProps={{}}
-      />
-
-      {/* 小米掀翻蚂蚁市场封面竖屏 - 3:4 封面 still 1080×1440 */}
-      <Composition
-        id="小米掀翻蚂蚁市场封面竖屏"
-        component={小米掀翻蚂蚁市场封面竖屏}
-        durationInFrames={1}
-        fps={30}
-        width={1080}
-        height={1440}
-        defaultProps={{}}
-      />
 
 
 
@@ -205,33 +143,33 @@ export const RemotionRoot: React.FC = () => {
 
 
 
-      {/* 华为专利论 - 横屏 1920×1080（自动生成） */}
+      {/* 小米营销论 - 横屏 1920×1080（自动生成） */}
       <Composition
-        id="华为专利论"
-        component={华为专利论}
-        durationInFrames={TOTAL_DURATION_华为专利论}
+        id="小米营销论"
+        component={小米营销论}
+        durationInFrames={TOTAL_DURATION_小米营销论}
         fps={30}
         width={1920}
         height={1080}
-        schema={华为专利论Schema}
+        schema={小米营销论Schema}
         defaultProps={{}}
       />
 
-      {/* 华为专利论竖屏 - 竖屏 1080×1920（自动生成） */}
+      {/* 小米营销论竖屏 - 竖屏 1080×1920（自动生成） */}
       <Composition
-        id="华为专利论竖屏"
-        component={华为专利论竖屏}
-        durationInFrames={TOTAL_DURATION_华为专利论}
+        id="小米营销论竖屏"
+        component={小米营销论竖屏}
+        durationInFrames={TOTAL_DURATION_小米营销论}
         fps={30}
         width={1080}
         height={1920}
-        schema={华为专利论Schema}
+        schema={小米营销论Schema}
         defaultProps={{}}
       />
-      {/* 华为专利论封面横屏 - 横屏封面 still 1920×1080 */}
+      {/* 小米营销论封面横屏 - 横屏封面 still 1920×1080 */}
       <Composition
-        id="华为专利论封面横屏"
-        component={华为专利论封面横屏}
+        id="小米营销论封面横屏"
+        component={小米营销论封面横屏}
         durationInFrames={1}
         fps={30}
         width={1920}
@@ -239,10 +177,10 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{}}
       />
 
-      {/* 华为专利论封面竖屏 - 3:4 封面 still 1080×1440 */}
+      {/* 小米营销论封面竖屏 - 3:4 封面 still 1080×1440 */}
       <Composition
-        id="华为专利论封面竖屏"
-        component={华为专利论封面竖屏}
+        id="小米营销论封面竖屏"
+        component={小米营销论封面竖屏}
         durationInFrames={1}
         fps={30}
         width={1080}
@@ -251,33 +189,33 @@ export const RemotionRoot: React.FC = () => {
       />
 
 
-      {/* 劳动法落实 - 横屏 1920×1080（自动生成） */}
+      {/* 华为高价论 - 横屏 1920×1080（自动生成） */}
       <Composition
-        id="劳动法落实"
-        component={劳动法落实}
-        durationInFrames={TOTAL_DURATION_劳动法落实}
+        id="华为高价论"
+        component={华为高价论}
+        durationInFrames={TOTAL_DURATION_华为高价论}
         fps={30}
         width={1920}
         height={1080}
-        schema={劳动法落实Schema}
+        schema={华为高价论Schema}
         defaultProps={{}}
       />
 
-      {/* 劳动法落实竖屏 - 竖屏 1080×1920（自动生成） */}
+      {/* 华为高价论竖屏 - 竖屏 1080×1920（自动生成） */}
       <Composition
-        id="劳动法落实竖屏"
-        component={劳动法落实竖屏}
-        durationInFrames={TOTAL_DURATION_劳动法落实}
+        id="华为高价论竖屏"
+        component={华为高价论竖屏}
+        durationInFrames={TOTAL_DURATION_华为高价论}
         fps={30}
         width={1080}
         height={1920}
-        schema={劳动法落实Schema}
+        schema={华为高价论Schema}
         defaultProps={{}}
       />
-      {/* 劳动法落实封面横屏 - 横屏封面 still 1920×1080 */}
+      {/* 华为高价论封面横屏 - 横屏封面 still 1920×1080 */}
       <Composition
-        id="劳动法落实封面横屏"
-        component={劳动法落实封面横屏}
+        id="华为高价论封面横屏"
+        component={华为高价论封面横屏}
         durationInFrames={1}
         fps={30}
         width={1920}
@@ -285,10 +223,54 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{}}
       />
 
-      {/* 劳动法落实封面竖屏 - 3:4 封面 still 1080×1440 */}
+      {/* 华为高价论封面竖屏 - 3:4 封面 still 1080×1440 */}
       <Composition
-        id="劳动法落实封面竖屏"
-        component={劳动法落实封面竖屏}
+        id="华为高价论封面竖屏"
+        component={华为高价论封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
+        defaultProps={{}}
+      />
+      {/* 廉价的便利 - 横屏 1920×1080（自动生成） */}
+      <Composition
+        id="廉价的便利"
+        component={廉价的便利}
+        durationInFrames={TOTAL_DURATION_廉价的便利}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={廉价的便利Schema}
+        defaultProps={{}}
+      />
+
+      {/* 廉价的便利竖屏 - 竖屏 1080×1920（自动生成） */}
+      <Composition
+        id="廉价的便利竖屏"
+        component={廉价的便利竖屏}
+        durationInFrames={TOTAL_DURATION_廉价的便利}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={廉价的便利Schema}
+        defaultProps={{}}
+      />
+      {/* 廉价的便利封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="廉价的便利封面横屏"
+        component={廉价的便利封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 廉价的便利封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="廉价的便利封面竖屏"
+        component={廉价的便利封面竖屏}
         durationInFrames={1}
         fps={30}
         width={1080}

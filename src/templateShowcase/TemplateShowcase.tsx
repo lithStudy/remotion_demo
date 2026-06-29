@@ -16,6 +16,7 @@ import {
 	BWStatCompare,
 	BWProgressRing,
 	BWBeatSequence,
+	BWPunchCaption,
 	BWPeerInduct,
 	BWCognitiveShift,
 	BWMethodStack,
@@ -59,6 +60,13 @@ const SC_BEAT_CONTENT: ContentItem[] = [
 	{ text: "看到规律就等于财富密码？", startFrame: 0, durationFrames: 28 },
 	{ text: "那是幻觉。", startFrame: 28, durationFrames: 22 },
 	{ text: "持续误解就是慢性自杀。", startFrame: 50, durationFrames: 25 },
+];
+
+const SC_PUNCH_CONTENT: ContentItem[] = [
+	{ text: "什么？", startFrame: 0, durationFrames: 22 },
+	{ text: "你说我瞎说？", startFrame: 22, durationFrames: 24 },
+	{ text: "你是不相信中国的科技力量吗？", startFrame: 46, durationFrames: 28 },
+	{ text: "你是不爱国吗？", startFrame: 74, durationFrames: 24 },
 ];
 
 const SC_PEER_INDUCT_CONTENT: ContentItem[] = [
@@ -193,6 +201,28 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					anchors={[{ text: "财富密码", showFrom: 0, color: "#FF8C00", anim: "popIn" }]}
 				/>
 				<BWSubtitle position="top" text="BEAT_SEQUENCE · 节拍递进（一问一驳一锤）" startFrame={0} />
+			</>
+		),
+	},
+	{
+		key: "punch-caption",
+		durationInFrames: durationFromContent(SC_PUNCH_CONTENT),
+		content: (
+			<>
+				<BWPunchCaption
+					content={SC_PUNCH_CONTENT}
+					punches={[
+						{ text: "什么？", showFrom: 0, enterEffect: "popIn", tone: "calm" },
+						{ text: "你说我瞎说？", showFrom: 1, enterEffect: "snap", tone: "alert" },
+						{ text: "不信科技力量？", showFrom: 2, enterEffect: "shake", tone: "alert" },
+						{ text: "不爱国？", showFrom: 3, enterEffect: "shake", tone: "alert" },
+					]}
+					anchors={[
+						{ text: "科技力量", showFrom: 2, color: "#EF4444" },
+						{ text: "不爱国", showFrom: 3, color: "#EF4444" },
+					]}
+				/>
+				<BWSubtitle position="top" text="PUNCH_CAPTION · 暴击字幕（连击质问）" startFrame={0} />
 			</>
 		),
 	},
@@ -602,9 +632,9 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 			<>
 				<BWTimeline
 					images={[
-						{ src: img("images/template/scene4_1.png"), startFrame: 0 },
-						{ src: img("images/template/scene4_2.png"), startFrame: 15 },
-						{ src: img("images/template/scene4_3.png"), startFrame: 30 },
+						{ src: img("images/template/scene4_1.png"), startFrame: 0, label: "阶段一" },
+						{ src: img("images/template/scene4_2.png"), startFrame: 15, label: "阶段二" },
+						{ src: img("images/template/scene4_3.png"), startFrame: 30, label: "阶段三" },
 					]}
 				/>
 				<BWSubtitle position="top" text="TIMELINE · 时间序列" startFrame={0} />

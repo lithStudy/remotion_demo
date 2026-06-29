@@ -645,7 +645,7 @@ def _vertical_headline_meta(
     cover_still: dict | None,
     pascal: str,
     config: dict,
-) -> tuple[str, str, str, str, str]:
+) -> tuple[str, str, str, str, str, str]:
     """竖屏顶栏固定标题：与封面 cover.title 一致；勿用首场景 sceneName（会与进度条第一段混淆）。"""
     headline = ""
     if cover and isinstance(cover.get("title"), str):
@@ -658,6 +658,12 @@ def _vertical_headline_meta(
             headline = vt.strip()
     if not headline:
         headline = pascal
+
+    subtitle = ""
+    if cover and isinstance(cover.get("subtitle"), str) and cover["subtitle"].strip():
+        subtitle = cover["subtitle"].strip()
+    if not subtitle and cover_still and isinstance(cover_still.get("subtitle"), str):
+        subtitle = cover_still["subtitle"].strip()
 
     sub = ""
     if cover and isinstance(cover.get("seriesLabel"), str) and cover["seriesLabel"].strip():
@@ -684,7 +690,7 @@ def _vertical_headline_meta(
         theme = str(config.get("cover_theme_color") or "#2563EB")
 
     soft = _theme_accent_soft(theme)
-    return headline, sub, sub_en, theme, soft
+    return headline, subtitle, sub, sub_en, theme, soft
 
 
 def generate_constants_tsx(
@@ -1074,7 +1080,7 @@ def generate_vertical_chrome_tsx(
     cover_still: dict | None,
     config: dict,
 ) -> str:
-    h, sub, sub_en, theme, theme_soft = _vertical_headline_meta(
+    h, subtitle, sub, sub_en, theme, theme_soft = _vertical_headline_meta(
         cover, cover_still, pascal, config
     )
     head = (
@@ -1086,6 +1092,7 @@ def generate_vertical_chrome_tsx(
         'const FONT_STACK =\n'
         '    \'"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif\';\n\n'
         f"const STATIC_HEADLINE = {json.dumps(h, ensure_ascii=False)};\n"
+        f"const STATIC_HEADLINE_SUBTITLE = {json.dumps(subtitle, ensure_ascii=False)};\n"
         f"const STATIC_HEADLINE_SUB = {json.dumps(sub, ensure_ascii=False)};\n"
         f"const STATIC_HEADLINE_SUB_EN = {json.dumps(sub_en, ensure_ascii=False)};\n"
         f"const THEME_ACCENT = {json.dumps(theme, ensure_ascii=False)};\n"
@@ -1192,6 +1199,23 @@ def generate_vertical_chrome_tsx(
         "            >\n"
         "                {STATIC_HEADLINE}\n"
         "            </div>\n"
+        "            {STATIC_HEADLINE_SUBTITLE ? (\n"
+        "                <div\n"
+        "                    style={{\n"
+        "                        marginTop: 24,\n"
+        "                        fontSize: 30,\n"
+        "                        fontWeight: 600,\n"
+        "                        fontFamily: FONT_STACK,\n"
+        "                        color: \"rgba(248, 250, 252, 0.82)\",\n"
+        "                        letterSpacing: \"0.06em\",\n"
+        "                        textAlign: \"center\",\n"
+        "                        lineHeight: 1.38,\n"
+        "                        maxWidth: \"100%\",\n"
+        "                    }}\n"
+        "                >\n"
+        "                    {STATIC_HEADLINE_SUBTITLE}\n"
+        "                </div>\n"
+        "            ) : null}\n"
         "            <div\n"
         "                style={{\n"
         "                    marginTop: 10,\n"

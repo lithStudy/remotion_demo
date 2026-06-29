@@ -137,6 +137,8 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 		visibleNotes.length > 0 ? getNoteStartFrame(visibleNotes[0], items) : null;
 	/** 首条 note 出现前，主图相对最终尺寸的放大倍数（仅 scale，不改变布局占位） */
 	const LARGE_IMAGE_SCALE = 2;
+	/** 缩小动画结束后的主图 scale（相对容器基准尺寸） */
+	const FINAL_IMAGE_SCALE = 0.82;
 	/** 从首条 note 出现起，缩小动画所持续的帧数（越大越慢） */
 	const SHRINK_DURATION_FRAMES = 20;
 	/** 缩小曲线：`back` 第二参数越大，过冲越明显 */
@@ -161,8 +163,8 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 			: frame < firstNoteStartFrame
 				? LARGE_IMAGE_SCALE
 				: Math.max(
-						0.985, // 缩小过冲时允许的最小 scale，避免画面过小发虚
-						interpolate(shrinkEase, [0, 1], [LARGE_IMAGE_SCALE, 1], {
+						FINAL_IMAGE_SCALE * 0.97, // 缩小过冲时允许的最小 scale，避免画面过小发虚
+						interpolate(shrinkEase, [0, 1], [LARGE_IMAGE_SCALE, FINAL_IMAGE_SCALE], {
 							extrapolateLeft: "clamp",
 							extrapolateRight: "extend",
 						}),
@@ -194,7 +196,7 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 					position: "absolute",
 					left: "8%",
 					right: "8%",
-					top: "14%",
+					top: "9%",
 					display: "flex",
 					flexDirection: "column",
 					alignItems: "center",
@@ -226,8 +228,8 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 					position: "absolute",
 					left: "10%",
 					right: "10%",
-					top: "28%",
-					bottom: "18%",
+					top: "22%",
+					bottom: "16%",
 					display: "flex",
 					flexDirection: "column",
 					alignItems: "stretch",
@@ -240,8 +242,8 @@ export const BWMethodStack: React.FC<BWMethodStackProps> = ({
 					style={{
 						flex: "0 0 auto",
 						alignSelf: "center",
-						width: "clamp(260px, 24vw, 420px)",
-						maxHeight: "min(34vh, 440px)",
+						width: "clamp(200px, 18vw, 320px)",
+						maxHeight: "min(26vh, 320px)",
 						aspectRatio: "4 / 3",
 						borderRadius: 28,
 						backgroundColor: "#F8FAFC",

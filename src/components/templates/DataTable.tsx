@@ -123,7 +123,8 @@ const DataTableRowView: React.FC<{
 	startFrame: number;
 	isStriped: boolean;
 	fontSize: number;
-}> = ({ cells, startFrame, isStriped, fontSize }) => {
+	cellPadding: string;
+}> = ({ cells, startFrame, isStriped, fontSize, cellPadding }) => {
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
 	const rel = frame - startFrame;
@@ -156,7 +157,7 @@ const DataTableRowView: React.FC<{
 				<div
 					key={i}
 					style={{
-						padding: "16px 14px",
+						padding: cellPadding,
 						fontSize,
 						fontWeight: i === 0 ? 700 : 600,
 						color: BW_TEXT,
@@ -185,7 +186,10 @@ export const BWDataTable: React.FC<BWDataTableProps> = ({
 	style,
 }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, width, height } = useVideoConfig();
+	const isPortrait = height > width;
+	const scale = width / 1080;
+	const horizontalPad = Math.round(width * (isPortrait ? 0.035 : 0.1));
 	const items = normalizeContent(content);
 	const slice = (columns ?? [])
 		.slice(0, 5)
@@ -208,30 +212,36 @@ export const BWDataTable: React.FC<BWDataTableProps> = ({
 		extrapolateLeft: "clamp",
 		extrapolateRight: "clamp",
 	});
-	const headerFont = colCount >= 5 ? 30 : colCount === 2 ? 40 : 34;
-	const cellFont = colCount >= 5 ? 28 : colCount === 2 ? 50 : 32;
+	const headerFontBase = colCount >= 5 ? 36 : colCount === 2 ? 52 : 42;
+	const cellFontBase = colCount >= 5 ? 34 : colCount === 2 ? 58 : 40;
+	const headerFont = Math.round(headerFontBase * Math.max(scale, 0.9));
+	const cellFont = Math.round(cellFontBase * Math.max(scale, 0.9));
+	const titleFontSize = Math.round((isPortrait ? 62 : 55) * Math.max(scale, 0.9));
+	const cellPadding = `${Math.round(20 * Math.max(scale, 0.9))}px ${Math.round(16 * Math.max(scale, 0.9))}px`;
+	const titleMarginBottom = Math.round(32 * Math.max(scale, 0.9));
 
 	return (
 		<AbsoluteFill style={style}>
 			<div
 				style={{
 					position: "absolute",
-					left: 300,
-					right: 300,
-					top: title ? "20%" : "22%",
-					bottom: "22%",
+					left: horizontalPad,
+					right: horizontalPad,
+					top: title ? (isPortrait ? "15%" : "18%") : isPortrait ? "17%" : "20%",
+					bottom: isPortrait ? "18%" : "20%",
 					display: "flex",
 					flexDirection: "column",
 					alignItems: "stretch",
+					justifyContent: "center",
 				}}
 			>
 				{title ? (
 					<div
 						style={{
-							fontSize: 55,
+							fontSize: titleFontSize,
 							fontWeight: 800,
 							color: BW_TEXT,
-							marginBottom: 40,
+							marginBottom: titleMarginBottom,
 							textAlign: "center",
 							fontFamily: fontStack,
 						}}
@@ -241,8 +251,8 @@ export const BWDataTable: React.FC<BWDataTableProps> = ({
 				) : null}
 				<div
 					style={{
-						borderRadius: 14,
-						border: `2px solid ${BW_TEXT}`,
+						borderRadius: Math.round(16 * Math.max(scale, 0.9)),
+						border: `${Math.max(2, Math.round(2.5 * scale))}px solid ${BW_TEXT}`,
 						overflow: "hidden",
 						boxShadow: "0 10px 36px rgba(0,0,0,0.06)",
 						opacity: headerOpacity,
@@ -260,7 +270,7 @@ export const BWDataTable: React.FC<BWDataTableProps> = ({
 							<div
 								key={i}
 								style={{
-									padding: "16px 14px",
+									padding: cellPadding,
 									fontSize: headerFont,
 									fontWeight: 800,
 									fontFamily: fontStack,
@@ -280,6 +290,7 @@ export const BWDataTable: React.FC<BWDataTableProps> = ({
 							startFrame={starts[i] ?? 0}
 							isStriped={i % 2 === 0}
 							fontSize={cellFont}
+							cellPadding={cellPadding}
 						/>
 					))}
 				</div>

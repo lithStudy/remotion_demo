@@ -16,7 +16,7 @@
 
 每个 item 的 `template` 必须是以下合法值之一：
 
-`BEAT_SEQUENCE` / `CASE_BREAKDOWN` / `CAUSE_CHAIN` / `CENTER_FOCUS` / `CHAT_BUBBLE` / `CHECKLIST_REVEAL` / `COGNITIVE_SHIFT` / `CONCEPT_CARD` / `DOS_AND_DONTS` / `KPI_HERO` / `MAGNIFYING_GLASS` / `METHOD_STACK` / `PANEL_GRID` / `PROGRESS_RING` / `QUOTE_CITATION` / `SPLIT_COMPARE` / `STAT_COMPARE` / `STEP_LIST` / `TEXT_FOCUS` / `TIMELINE`
+`BEAT_SEQUENCE` / `CASE_BREAKDOWN` / `CAUSE_CHAIN` / `CENTER_FOCUS` / `CHAT_BUBBLE` / `CHECKLIST_REVEAL` / `COGNITIVE_SHIFT` / `CONCEPT_CARD` / `DOS_AND_DONTS` / `KPI_HERO` / `MAGNIFYING_GLASS` / `METHOD_STACK` / `PANEL_GRID` / `PROGRESS_RING` / `PUNCH_CAPTION` / `QUOTE_CITATION` / `SPLIT_COMPARE` / `STAT_COMPARE` / `STEP_LIST` / `TEXT_FOCUS` / `TIMELINE`
 
 ### 3. item 必须有 content
 
@@ -40,6 +40,7 @@
 - QUOTE_CITATION: `quoteSource`
 - CONCEPT_CARD: `conceptName`
 - TEXT_FOCUS: `coreSentence`
+- PUNCH_CAPTION: `punches`（每项含 `text`、`showFrom`）
 - STAT_COMPARE: `leftLabel`, `leftValue`, `rightLabel`, `rightValue`
 
 ### 7. anchors.showFrom 合法性
@@ -64,7 +65,9 @@ param 中标记为 `format: content_index` 的整数字段（如 `notContentInde
 ### 10. 枚举字段合法性
 
 param 中有 `enum` 约束的字符串字段，值必须在枚举列表内。常见的：
-- `enterEffect`：`breathe` / `slideLeft` / `slideBottom` / `zoomIn` / `fadeIn`
+- `enterEffect`（图片）：`breathe` / `slideLeft` / `slideBottom` / `zoomIn` / `fadeIn`
+- `enterEffect`（PUNCH_CAPTION punches）：`snap` / `popIn` / `slideUp` / `shake`
+- `tone`（PUNCH_CAPTION / BEAT_SEQUENCE）：`calm` / `alert`
 
 ## 建议级规则
 
@@ -83,7 +86,7 @@ param 中有 `enum` 约束的字符串字段，值必须在枚举列表内。常
 
 ### 14. 数组字段长度范围
 
-param 中数组类字段（如 `steps`、`beats`、`nodes`、`panels`、`events`、`checkItems`），若 schema 定义了 `minItems` / `maxItems`，长度应在范围内。
+param 中数组类字段（如 `steps`、`stages`、`punches`、`nodes`、`panels`、`events`、`checkItems`），若 schema 定义了 `minItems` / `maxItems`，长度应在范围内。
 
 ### 15. 连续 CENTER_FOCUS 检查
 

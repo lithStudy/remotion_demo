@@ -1,0 +1,373 @@
+{
+  "topic": "为什么你只信华为财报，不信我编的？",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：虚假财报数据",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "KPI_HERO",
+          "reasoning": "单个核心数值“3000亿元”的数据引述，适合用KPI_HERO强调数值冲击，同时承载引用源信息。",
+          "content": [
+            {
+              "text": "据财报显示，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "截止2026年6月份，",
+              "startFrame": 34,
+              "durationFrames": 55
+            },
+            {
+              "text": "仅仅半年不到，",
+              "startFrame": 89,
+              "durationFrames": 39
+            },
+            {
+              "text": "小米研发费用已投入3000亿元。",
+              "startFrame": 127,
+              "durationFrames": 83
+            }
+          ],
+          "order": 1,
+          "param": {
+            "blocks": [
+              {
+                "value": 6,
+                "suffix": "月",
+                "label": "截止时间",
+                "showFrom": 1,
+                "decimalPlaces": 0
+              },
+              {
+                "value": 0.5,
+                "suffix": "年",
+                "label": "耗时不到",
+                "showFrom": 2,
+                "decimalPlaces": 1
+              },
+              {
+                "value": 3000,
+                "suffix": "亿元",
+                "label": "小米研发费用",
+                "showFrom": 3,
+                "useGrouping": true,
+                "decimalPlaces": 0
+              }
+            ],
+            "countDuration": 28,
+            "anchors": []
+          },
+          "totalDurationFrames": 211
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促强反问，金句冲击，无需配图，用TEXT_FOCUS突出讽刺情绪转折。",
+          "content": [
+            {
+              "text": "太牛逼了，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "这就是中国的科技力量吗？",
+              "startFrame": 27,
+              "durationFrames": 52
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "太牛逼了，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "这就是中国的科技力量吗？",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "中国的科技力量",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 79
+        }
+      ],
+      "audioSrc": "/audio/千亿研发/scene_1/scene_1.mp3",
+      "totalDurationFrames": 292
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "质疑：爱国绑架预设",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "PUNCH_CAPTION",
+          "reasoning": "连续四个短促反问，情绪层层上升；居中纯黑大字逐句暴击，保留底部小字幕，无需配图。",
+          "content": [
+            {
+              "text": "什么？",
+              "startFrame": 0,
+              "durationFrames": 16
+            },
+            {
+              "text": "你说我瞎说？",
+              "startFrame": 15,
+              "durationFrames": 36
+            },
+            {
+              "text": "你是不相信中国的科技力量吗？",
+              "startFrame": 51,
+              "durationFrames": 58
+            },
+            {
+              "text": "你是不爱国吗？",
+              "startFrame": 108,
+              "durationFrames": 32
+            }
+          ],
+          "order": 1,
+          "param": {
+            "punches": [
+              {
+                "text": "什么？",
+                "showFrom": 0,
+                "enterEffect": "popIn",
+                "tone": "calm"
+              },
+              {
+                "text": "你说我瞎说？",
+                "showFrom": 1,
+                "enterEffect": "snap",
+                "tone": "alert"
+              },
+              {
+                "text": "你是不相信中国的科技力量吗？",
+                "showFrom": 2,
+                "enterEffect": "shake",
+                "tone": "alert"
+              },
+              {
+                "text": "你是不爱国吗？",
+                "showFrom": 3,
+                "enterEffect": "shake",
+                "tone": "alert"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "科技力量",
+                "showFrom": 2,
+                "color": "#EF4444"
+              },
+              {
+                "text": "不爱国",
+                "showFrom": 3,
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 140
+        }
+      ],
+      "audioSrc": "/audio/千亿研发/scene_2/scene_2.mp3",
+      "totalDurationFrames": 142
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "反转：自曝编造财报",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "PUNCH_CAPTION",
+          "reasoning": "三连击：疑惑反问→追问来源→自曝编造，短句情绪递进；居中纯黑大字逐句暴击，无需配图。",
+          "content": [
+            {
+              "text": "什么？",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "哪里的财报？",
+              "startFrame": 18,
+              "durationFrames": 36
+            },
+            {
+              "text": "当然是我编的了。",
+              "startFrame": 54,
+              "durationFrames": 51
+            }
+          ],
+          "order": 1,
+          "param": {
+            "punches": [
+              {
+                "text": "哪里的财报？",
+                "showFrom": 1,
+                "enterEffect": "shake",
+                "tone": "alert"
+              },
+              {
+                "text": "当然是我编的了",
+                "showFrom": 2,
+                "enterEffect": "shake",
+                "tone": "alert"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "我编的",
+                "showFrom": 2,
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 105
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "「吹牛不用上税」与「正向谣言无人追究」两句并列构成双重狡辩，语义上左右对照，适合 SPLIT_COMPARE 分屏呈现。",
+          "content": [
+            {
+              "text": "反正吹牛又不用上税，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "也不会有人追究我的正向谣言。",
+              "startFrame": 42,
+              "durationFrames": 53
+            }
+          ],
+          "order": 2,
+          "param": {
+            "leftSrc": "images/千亿研发/scene_3_2_left.png",
+            "rightSrc": "images/千亿研发/scene_3_2_right.png",
+            "leftLabel": "吹牛免税",
+            "rightLabel": "正向谣言",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 96
+        }
+      ],
+      "audioSrc": "/audio/千亿研发/scene_3/scene_3.mp3",
+      "totalDurationFrames": 202
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "揭示：双标与审计质疑",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "「信华为财报」与「不信我的」构成明确双重标准对照，DOS_AND_DONTS 左右分栏比认知翻转卡更直观呈现双标逻辑。",
+          "content": [
+            {
+              "text": "等下，",
+              "startFrame": 0,
+              "durationFrames": 18
+            },
+            {
+              "text": "既然你们愿意相信华为财报，",
+              "startFrame": 17,
+              "durationFrames": 58
+            },
+            {
+              "text": "为什么就不能相信我的？",
+              "startFrame": 75,
+              "durationFrames": 50
+            }
+          ],
+          "order": 1,
+          "param": {
+            "left": {
+              "label": "信华为财报",
+              "src": "images/千亿研发/scene_4_1_left.png",
+              "showFrom": 1
+            },
+            "right": {
+              "label": "不信我的",
+              "src": "images/千亿研发/scene_4_1_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 125
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "连续两问直指双标本质与审计缺失，短促质问适合 TEXT_FOCUS 纯大字暴击收尾。",
+          "content": [
+            {
+              "text": "你们是不是双标？",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "不都没有独立三方审计吗？",
+              "startFrame": 34,
+              "durationFrames": 58
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "你们是不是双标？",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "不都没有独立三方审计吗？",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "双标",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "独立三方审计",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 93
+        }
+      ],
+      "audioSrc": "/audio/千亿研发/scene_4/scene_4.mp3",
+      "totalDurationFrames": 219
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "千亿研发",
+    "subtitle": "吹牛嘛，谁不会？",
+    "themeColor": "#F59E0B",
+    "badge": "日常观察 · 有趣视角",
+    "seriesLabel": "日常调侃",
+    "seriesLabelEn": "DAILY TAKE",
+    "methodologySteps": [
+      "现象",
+      "吐槽",
+      "真相"
+    ],
+    "methodologyStepsEn": "SCENE · SNARK · TRUTH"
+  }
+}

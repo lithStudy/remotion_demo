@@ -67,6 +67,37 @@
 **禁止在 item 上出现**：`text`（中间产物，后处理删除）
 **禁止在 param 中出现**：`content`、`totalDurationFrames`（这两者只属于 item 顶层，由后续 Step3 写入）
 
+## 常用 param 示例片段
+
+### PUNCH_CAPTION（暴击字幕 · 连击质问）
+
+```json
+{
+  "order": 1,
+  "narrativeType": "LOGIC",
+  "template": "PUNCH_CAPTION",
+  "reasoning": "连续短促反问，居中纯黑大字逐句暴击，无需配图。",
+  "content": [
+    { "text": "什么？" },
+    { "text": "你说我瞎说？" },
+    { "text": "你是不相信中国的科技力量吗？" },
+    { "text": "你是不爱国吗？" }
+  ],
+  "param": {
+    "punches": [
+      { "text": "什么？", "showFrom": 0, "enterEffect": "popIn", "tone": "calm" },
+      { "text": "你说我瞎说？", "showFrom": 1, "enterEffect": "snap", "tone": "alert" },
+      { "text": "不信科技力量？", "showFrom": 2, "enterEffect": "shake", "tone": "alert" },
+      { "text": "不爱国？", "showFrom": 3, "enterEffect": "shake", "tone": "alert" }
+    ],
+    "anchors": [
+      { "text": "科技力量", "showFrom": 2, "color": "#EF4444" },
+      { "text": "不爱国", "showFrom": 3, "color": "#EF4444" }
+    ]
+  }
+}
+```
+
 ## Cover 结构
 
 cover 对象根据 `script_v6/config.json` 中的配置注入。
@@ -102,6 +133,17 @@ cover 对象根据 `script_v6/config.json` 中的配置注入。
 | `methodologyStepsEn` | `cover_methodology_steps_en` | |
 
 若 `cover_duration_frames` ≤ 0 或未配置，则不写入 cover。
+
+### 主题预设
+
+`themeColor` / `badge` / `seriesLabel` / `seriesLabelEn` / `methodologySteps` / `methodologyStepsEn` 应成套取自下列主题预设，按内容定位选择其一：
+
+| 主题 | themeColor | badge | seriesLabel | seriesLabelEn | methodologySteps | methodologyStepsEn |
+|------|-----------|-------|-------------|---------------|------------------|--------------------|
+| 认知心理学 | `#2563EB` | 认识自我 · 理性思考 | 认知心理学 | COGNITIVE PSYCHOLOGY | 觉察 / 归因 / 调整 | OBSERVE · ATTRIBUTE · ADJUST |
+| 社会热点深读 | `#059669` | 深度解读 · 理性思考 | 社会热点深读 | SOCIAL DEEP DIVE | 争议 / 数据 / 结论 | DEBATE · DATA · VERDICT |
+| 科技热点深读 | `#FF6900` | 深度解读 · 数据与事实 | 科技热点深读 | TECH DEEP DIVE | 争议 / 数据 / 结论 | DEBATE · DATA · VERDICT |
+| 日常调侃 | `#F59E0B` | 日常观察 · 有趣视角 | 日常调侃 | DAILY TAKE | 现象 / 吐槽 / 真相 | SCENE · SNARK · TRUTH |
 
 ## 精简完整示例
 

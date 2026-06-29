@@ -9,6 +9,7 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
+import { measureText } from "@remotion/layout-utils";
 import {
 	BW_TEXT,
 	normalizeContent,
@@ -326,6 +327,58 @@ const KpiHeroValueCell: React.FC<{
 	layout: AnimatedCellLayout;
 }> = ({ block, enterFrame, frame, fps, countDuration, fontSize, layout }) => {
 	const localFrame = frame - enterFrame;
+
+	// 用终值（最宽态）测量整行宽度，超过列宽时整行等比缩放，避免被 overflow 裁切且不抖动
+	const fitScale = useMemo(() => {
+		const finalNumber = formatKpiNumber(
+			block.value,
+			block.useGrouping,
+			block.decimalPlaces,
+		);
+		const affixSize = fontSize * 0.42;
+		const numberW = measureText({
+			text: finalNumber,
+			fontFamily: fontStack,
+			fontSize,
+			fontWeight: 900,
+			letterSpacing: "0.01em",
+		}).width;
+		const prefixW = block.prefix
+			? measureText({
+					text: block.prefix,
+					fontFamily: fontStack,
+					fontSize: affixSize,
+					fontWeight: 900,
+				}).width
+			: 0;
+		const suffixW = block.suffix
+			? measureText({
+					text: block.suffix,
+					fontFamily: fontStack,
+					fontSize: affixSize,
+					fontWeight: 800,
+				}).width
+			: 0;
+		const groups = 1 + (block.prefix ? 1 : 0) + (block.suffix ? 1 : 0);
+		const columnGap = 0.1 * fontSize * (groups - 1);
+		const innerPadding = 4;
+		const totalW = prefixW + numberW + suffixW + columnGap + innerPadding;
+		// 列内再留 6px 安全边，确保不贴边
+		const availW = Math.max(0, layout.width - 6);
+		if (totalW <= 0 || totalW <= availW) {
+			return 1;
+		}
+		return availW / totalW;
+	}, [
+		block.value,
+		block.useGrouping,
+		block.decimalPlaces,
+		block.prefix,
+		block.suffix,
+		fontSize,
+		layout.width,
+	]);
+
 	if (localFrame < 0) {
 		return null;
 	}
@@ -445,6 +498,8 @@ const KpiHeroValueCell: React.FC<{
 					letterSpacing: "0.01em",
 					textAlign: "center",
 					whiteSpace: "nowrap",
+					transform: `scale(${fitScale})`,
+					transformOrigin: "center",
 				}}
 			>
 				{block.prefix ? (
@@ -545,7 +600,7 @@ export const BWKpiHero: React.FC<BWKpiHeroProps> = ({
 		4,
 	) as 1 | 2 | 3 | 4;
 	const fontSize = FONT_FOR_VISIBLE_COUNT[visibleCount];
-	const horizontalPad = 0.06;
+	const horizontalPad = 0.02;
 	const innerW = width * (1 - 2 * horizontalPad);
 
 	return (

@@ -1,0 +1,2207 @@
+{
+  "topic": "华为‘定律’包装术：把厨房收纳，说成物理革命",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入·科学神话",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开篇金句揭露包装术本质，短促有力，用TEXT_FOCUS纯大字冲击最大化。",
+          "content": [
+            {
+              "text": "华为韬定律，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "最不要脸的地方在于，",
+              "startFrame": 39,
+              "durationFrames": 50
+            },
+            {
+              "text": "它把普通工程题，",
+              "startFrame": 88,
+              "durationFrames": 44
+            },
+            {
+              "text": "包装成了科学神话。",
+              "startFrame": 132,
+              "durationFrames": 49
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "华为韬定律，",
+                "showFrom": 0,
+                "endFrom": 3
+              },
+              {
+                "text": "把普通工程题，",
+                "showFrom": 2,
+                "endFrom": 3
+              },
+              {
+                "text": "包装成了科学神话。",
+                "showFrom": 3,
+                "endFrom": 3
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "韬定律",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "科学神话",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 181
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平铺叙述人们对定律的敬畏，并列举牛顿、摩尔定律后引出质疑，单图居中承载口播即可。",
+          "content": [
+            {
+              "text": "很多人一听定律，",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "就肃然起敬。",
+              "startFrame": 31,
+              "durationFrames": 36
+            },
+            {
+              "text": "牛顿有定律。",
+              "startFrame": 67,
+              "durationFrames": 35
+            },
+            {
+              "text": "摩尔有定律。",
+              "startFrame": 102,
+              "durationFrames": 29
+            },
+            {
+              "text": "现在华为也有定律？",
+              "startFrame": 130,
+              "durationFrames": 54
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/华为韬定律/scene_1_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "定律",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring"
+              },
+              {
+                "text": "华为",
+                "showFrom": 4,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 184
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "直接对比“发现新物理”与“换高级名字”，属于典型的认知转变，选用COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "问题来了：",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "它到底发现了新物理？",
+              "startFrame": 31,
+              "durationFrames": 43
+            },
+            {
+              "text": "还是换了个高级名字？",
+              "startFrame": 74,
+              "durationFrames": 48
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "新物理发现",
+            "butText": "高级包装",
+            "butSrc": "images/华为韬定律/scene_1_3.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 123
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "用生活化场景铺垫后，落点落在设问「正常办法是什么？」，用放大镜锁定核心问题，引导观众进入思考。",
+          "content": [
+            {
+              "text": "我们先用生活话讲。",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "你家厨房太小。",
+              "startFrame": 42,
+              "durationFrames": 35
+            },
+            {
+              "text": "你做饭很慢。",
+              "startFrame": 77,
+              "durationFrames": 35
+            },
+            {
+              "text": "正常办法是什么？",
+              "startFrame": 112,
+              "durationFrames": 36
+            }
+          ],
+          "order": 4,
+          "param": {
+            "anchors": [
+              {
+                "text": "厨房太小",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring"
+              },
+              {
+                "text": "正常办法",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 149
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "三个并列的解决建议，每项可独立配图，宫格展示直观，故选用PANEL_GRID。",
+          "content": [
+            {
+              "text": "换更大的厨房。",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "买更好的灶。",
+              "startFrame": 31,
+              "durationFrames": 29
+            },
+            {
+              "text": "优化动线。",
+              "startFrame": 59,
+              "durationFrames": 35
+            }
+          ],
+          "order": 5,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为韬定律/scene_1_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/华为韬定律/scene_1_5_img1.png",
+                "showFrom": 1,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为韬定律/scene_1_5_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 95
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "同一厨房个案内从有人提出→否定常规→包装成定律→展开三板斧收纳，单主图贯穿、右侧阶段轨对齐口播，适合 CASE_BREAKDOWN。",
+          "content": [
+            {
+              "text": "现在有人说，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "不用。",
+              "startFrame": 30,
+              "durationFrames": 18
+            },
+            {
+              "text": "我发明了一个厨房时间压缩定律。",
+              "startFrame": 48,
+              "durationFrames": 66
+            },
+            {
+              "text": "把锅叠起来。",
+              "startFrame": 113,
+              "durationFrames": 34
+            },
+            {
+              "text": "把碗挂起来。",
+              "startFrame": 147,
+              "durationFrames": 34
+            },
+            {
+              "text": "把灶台分层。",
+              "startFrame": 181,
+              "durationFrames": 36
+            }
+          ],
+          "order": 6,
+          "param": {
+            "title": "厨房时间压缩定律",
+            "imageSrc": "images/华为韬定律/scene_1_6.png",
+            "phases": [
+              {
+                "phaseLabel": "把锅叠起来。",
+                "showFrom": 3
+              },
+              {
+                "phaseLabel": "把碗挂起来。",
+                "showFrom": 4
+              },
+              {
+                "phaseLabel": "把灶台分层。",
+                "showFrom": 5
+              }
+            ]
+          },
+          "totalDurationFrames": 218
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "从表面“高级”到本质“收纳”“动线”再到否定“新物理”“新定律”，是层层递进的认知揭示，用COGNITIVE_SHIFT集中呈现去魅过程。",
+          "content": [
+            {
+              "text": "听起来很高级。",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "但本质是什么？",
+              "startFrame": 37,
+              "durationFrames": 38
+            },
+            {
+              "text": "还是厨房收纳。",
+              "startFrame": 74,
+              "durationFrames": 36
+            },
+            {
+              "text": "还是动线优化。",
+              "startFrame": 110,
+              "durationFrames": 40
+            },
+            {
+              "text": "不是新物理。",
+              "startFrame": 149,
+              "durationFrames": 36
+            },
+            {
+              "text": "不是新定律。",
+              "startFrame": 185,
+              "durationFrames": 37
+            }
+          ],
+          "order": 8,
+          "param": {
+            "notText": "新物理与定律",
+            "butText": "厨房收纳与动线优化",
+            "butSrc": "images/华为韬定律/scene_1_8.png",
+            "notContentIndex": 4,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 223
+        }
+      ],
+      "audioSrc": "/audio/华为韬定律/scene_1/scene_1.mp3",
+      "totalDurationFrames": 1172
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析·时间缩微",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "引入术语“韬定律”并直接解释其核心，适合用概念卡片突出“时间缩微”这一关键定义。",
+          "content": [
+            {
+              "text": "所谓韬定律，",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "也是这个问题。",
+              "startFrame": 33,
+              "durationFrames": 35
+            },
+            {
+              "text": "它讲的核心，",
+              "startFrame": 68,
+              "durationFrames": 31
+            },
+            {
+              "text": "是时间缩微。",
+              "startFrame": 99,
+              "durationFrames": 31
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为韬定律/scene_2_1.png",
+            "conceptName": "时间缩微",
+            "anchors": []
+          },
+          "totalDurationFrames": 130
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "STEP_LIST",
+          "reasoning": "三个短促的“让…”句构成并列解释，可抽取为3条步骤清单，用步骤列表逐条强调。",
+          "content": [
+            {
+              "text": "听起来很玄。",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "但翻译成人话，",
+              "startFrame": 34,
+              "durationFrames": 35
+            },
+            {
+              "text": "就是让芯片内部，",
+              "startFrame": 69,
+              "durationFrames": 43
+            },
+            {
+              "text": "信号跑得更快。",
+              "startFrame": 112,
+              "durationFrames": 37
+            },
+            {
+              "text": "让等待时间更短。",
+              "startFrame": 148,
+              "durationFrames": 41
+            },
+            {
+              "text": "让系统协作更紧。",
+              "startFrame": 188,
+              "durationFrames": 47
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "加速三要点",
+            "steps": [
+              {
+                "text": "信号跑得更快。",
+                "showFrom": 3
+              },
+              {
+                "text": "让等待时间更短。",
+                "showFrom": 4
+              },
+              {
+                "text": "让系统协作更紧。",
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 236
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "「当然重要」与「并不新」构成明确对错对照，DOS_AND_DONTS 左右分栏比节拍序列更直观呈现设问-肯定-反驳结构。",
+          "content": [
+            {
+              "text": "这重要吗？",
+              "startFrame": 0,
+              "durationFrames": 26
+            },
+            {
+              "text": "当然重要。",
+              "startFrame": 25,
+              "durationFrames": 34
+            },
+            {
+              "text": "但新吗？",
+              "startFrame": 59,
+              "durationFrames": 29
+            },
+            {
+              "text": "并不新。",
+              "startFrame": 87,
+              "durationFrames": 28
+            }
+          ],
+          "order": 4,
+          "param": {
+            "left": {
+              "label": "✅ 当然重要",
+              "src": "images/华为韬定律/scene_2_4_left.png",
+              "showFrom": 1
+            },
+            "right": {
+              "label": "❌ 并不新",
+              "src": "images/华为韬定律/scene_2_4_right.png",
+              "showFrom": 3
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 115
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平实的总述句，无数据或对比结构，用中心聚焦配合单图即可。",
+          "content": [
+            {
+              "text": "半导体工程里，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "降低延迟，",
+              "startFrame": 39,
+              "durationFrames": 27
+            },
+            {
+              "text": "本来就是基本目标。",
+              "startFrame": 65,
+              "durationFrames": 35
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/华为韬定律/scene_2_5.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 101
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "STEP_LIST",
+          "reasoning": "五条并列的工程动作，每一条都很简短，可抽取为清晰步骤清单，用步骤列表展示。",
+          "content": [
+            {
+              "text": "电路里的等待时间要降。",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "信号节奏要对齐。",
+              "startFrame": 54,
+              "durationFrames": 50
+            },
+            {
+              "text": "线路要优化。",
+              "startFrame": 103,
+              "durationFrames": 33
+            },
+            {
+              "text": "功耗要压住。",
+              "startFrame": 135,
+              "durationFrames": 30
+            },
+            {
+              "text": "封装要改进。",
+              "startFrame": 165,
+              "durationFrames": 41
+            }
+          ],
+          "order": 6,
+          "param": {
+            "title": "半导体工程基本目标",
+            "steps": [
+              {
+                "text": "电路里的等待时间要降。",
+                "showFrom": 0
+              },
+              {
+                "text": "信号节奏要对齐。",
+                "showFrom": 1
+              },
+              {
+                "text": "线路要优化。",
+                "showFrom": 2
+              },
+              {
+                "text": "功耗要压住。",
+                "showFrom": 3
+              },
+              {
+                "text": "封装要改进。",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 206
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "鲜明的“不是…而是…”对比，用认知切换模板收束全段，强化结论冲击力。",
+          "content": [
+            {
+              "text": "这些不是玄学。",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "这是工程师每天都在啃的硬骨头。",
+              "startFrame": 36,
+              "durationFrames": 72
+            }
+          ],
+          "order": 7,
+          "param": {
+            "notText": "玄学",
+            "butText": "工程师啃硬骨头",
+            "butSrc": "images/华为韬定律/scene_2_7.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 108
+        }
+      ],
+      "audioSrc": "/audio/华为韬定律/scene_2/scene_2.mp3",
+      "totalDurationFrames": 895
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "反转·逻辑折叠",
+      "items": [
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "独立金句式结论，短促有力，无需配图，用TEXT_FOCUS锁定核心观点。",
+          "content": [
+            {
+              "text": "把基本功包装成定律，",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "这就是营销属性。",
+              "startFrame": 54,
+              "durationFrames": 43
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "把基本功包装成定律，",
+                "showFrom": 0,
+                "endFrom": 1
+              },
+              {
+                "text": "这就是营销属性。",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "营销属性",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 98
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "对专业术语“逻辑折叠”进行解释+比喻，适合CONCEPT_CARD强化概念形象；开头的口语过渡因字数过短合并，不单独拆分。",
+          "content": [
+            {
+              "text": "更具体一点。",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "所谓逻辑折叠，",
+              "startFrame": 27,
+              "durationFrames": 39
+            },
+            {
+              "text": "说白了，",
+              "startFrame": 65,
+              "durationFrames": 26
+            },
+            {
+              "text": "就是把芯片从平面，",
+              "startFrame": 90,
+              "durationFrames": 51
+            },
+            {
+              "text": "往立体方向堆。",
+              "startFrame": 140,
+              "durationFrames": 41
+            },
+            {
+              "text": "像城市没地了，",
+              "startFrame": 180,
+              "durationFrames": 39
+            },
+            {
+              "text": "就开始盖高楼。",
+              "startFrame": 218,
+              "durationFrames": 39
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/华为韬定律/scene_3_2.png",
+            "conceptName": "逻辑折叠",
+            "anchors": []
+          },
+          "totalDurationFrames": 258
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "先扬后抑的转折金句，核心落在否定独创性，用 TEXT_FOCUS 零图大字比节拍序列更突出转折冲击力。",
+          "content": [
+            {
+              "text": "这当然非常有价值。",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "但问题是，",
+              "startFrame": 43,
+              "durationFrames": 26
+            },
+            {
+              "text": "这并不是华为独创的路线。",
+              "startFrame": 69,
+              "durationFrames": 59
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "这当然非常有价值。",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "这并不是华为独创的路线。",
+                "showFrom": 2,
+                "endFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "不是华为独创",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 128
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "PANEL_GRID",
+          "reasoning": "三个技术方向的并列证据，每条均为独立观点且需配图，用PANEL_GRID宫格展示更直观；总字数约35字，避免过冗。",
+          "content": [
+            {
+              "text": "立体堆叠早就在研究。",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "不同芯片组合早就在做。",
+              "startFrame": 54,
+              "durationFrames": 52
+            },
+            {
+              "text": "更紧密的连接方式，也早就在推进。",
+              "startFrame": 105,
+              "durationFrames": 77
+            }
+          ],
+          "order": 4,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为韬定律/scene_3_4_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为韬定律/scene_3_4_img1.png",
+                "showFrom": 1
+              },
+              {
+                "src": "images/华为韬定律/scene_3_4_img2.png",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 183
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "PANEL_GRID",
+          "reasoning": "三家公司并列举证，与前一个技术方向证据组分属不同层面，拆分后每条极短但配图清晰，PANEL_GRID适合展示公司logo阵列。",
+          "content": [
+            {
+              "text": "台积电在做。",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "英特尔在做。",
+              "startFrame": 37,
+              "durationFrames": 29
+            },
+            {
+              "text": "英伟达也在用。",
+              "startFrame": 65,
+              "durationFrames": 39
+            }
+          ],
+          "order": 5,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为韬定律/scene_3_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为韬定律/scene_3_5_img1.png",
+                "showFrom": 1
+              },
+              {
+                "src": "images/华为韬定律/scene_3_5_img2.png",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 104
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "鲜明的认知反转对比——从真实的“工程路线”到华为包装的“定律革命”，COGNITIVE_SHIFT突出转变感，强化批评效果；两句话短促集中，不宜再拆。",
+          "content": [
+            {
+              "text": "行业里叫工程路线。",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "华为叙事里，",
+              "startFrame": 52,
+              "durationFrames": 33
+            },
+            {
+              "text": "却变成了定律革命。",
+              "startFrame": 85,
+              "durationFrames": 43
+            }
+          ],
+          "order": 6,
+          "param": {
+            "notText": "工程路线",
+            "butText": "定律革命",
+            "butSrc": "images/华为韬定律/scene_3_6.png",
+            "notContentIndex": 0,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 128
+        }
+      ],
+      "audioSrc": "/audio/华为韬定律/scene_3/scene_3.mp3",
+      "totalDurationFrames": 898
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "揭示·定律革命",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "独立金句强调关键性，适合全片级短促强结论，无需配图，选用TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "这一步，非常关键。",
+              "startFrame": 0,
+              "durationFrames": 55
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "这一步，非常关键",
+                "showFrom": 0
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 55
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "同一工程路线子话题内从总起→成本→良率→散热与可靠逐维展开，单主图贯穿、右侧阶段轨对齐口播，适合 CASE_BREAKDOWN。",
+          "content": [
+            {
+              "text": "工程路线，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "可以讨论成本。",
+              "startFrame": 30,
+              "durationFrames": 32
+            },
+            {
+              "text": "可以讨论良率。",
+              "startFrame": 62,
+              "durationFrames": 29
+            },
+            {
+              "text": "可以讨论散热。",
+              "startFrame": 90,
+              "durationFrames": 42
+            },
+            {
+              "text": "可以讨论可靠性。",
+              "startFrame": 131,
+              "durationFrames": 38
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "工程路线多维",
+            "imageSrc": "images/华为韬定律/scene_4_2.png",
+            "phases": [
+              {
+                "phaseLabel": "讨论成本",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "讨论良率",
+                "showFrom": 2
+              },
+              {
+                "phaseLabel": "讨论散热",
+                "showFrom": 3
+              },
+              {
+                "phaseLabel": "讨论可靠性",
+                "showFrom": 4
+              }
+            ]
+          },
+          "totalDurationFrames": 169
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "三个误导性误解并列展开，清晰分点，适合PANEL_GRID逐格呈现，强化误导的危害。",
+          "content": [
+            {
+              "text": "但定律革命，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "不一样。",
+              "startFrame": 26,
+              "durationFrames": 21
+            },
+            {
+              "text": "它会让普通人误以为：",
+              "startFrame": 46,
+              "durationFrames": 40
+            },
+            {
+              "text": "我们已经改写规则了。",
+              "startFrame": 86,
+              "durationFrames": 44
+            },
+            {
+              "text": "我们已经绕过封锁了。",
+              "startFrame": 129,
+              "durationFrames": 48
+            },
+            {
+              "text": "我们已经追平先进制程了。",
+              "startFrame": 177,
+              "durationFrames": 64
+            }
+          ],
+          "order": 4,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为韬定律/scene_4_4_img0.png",
+                "showFrom": 3,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为韬定律/scene_4_4_img1.png",
+                "showFrom": 4,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/华为韬定律/scene_4_4_img2.png",
+                "showFrom": 5,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 241
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "「盲目自大」与「井底之蛙视角」形成认知对照，用 SPLIT_COMPARE 左右并排揭示自以为全知与实际视野局限的反差，强化警示。",
+          "content": [
+            {
+              "text": "这就很危险，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "这会让很多人陷入一种盲目的自大之中，",
+              "startFrame": 32,
+              "durationFrames": 86
+            },
+            {
+              "text": "以井底之蛙的视角自以为看遍了整个世界。",
+              "startFrame": 117,
+              "durationFrames": 93
+            }
+          ],
+          "order": 5,
+          "param": {
+            "leftSrc": "images/华为韬定律/scene_4_5_left.png",
+            "rightSrc": "images/华为韬定律/scene_4_5_right.png",
+            "leftLabel": "盲目自大",
+            "rightLabel": "井底视角",
+            "leftShowFrom": 1,
+            "rightShowFrom": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 211
+        }
+      ],
+      "audioSrc": "/audio/华为韬定律/scene_4/scene_4.mp3",
+      "totalDurationFrames": 677
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "例证·营销套路",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "引入背景，平铺叙述，无特殊结构，选CENTER_FOCUS保持画面焦点。",
+          "content": [
+            {
+              "text": "实际上，",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "华为相关的营销号干的这种破事已经不是第一次了。",
+              "startFrame": 21,
+              "durationFrames": 95
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为韬定律/scene_5_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 117
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "本真与营销号曲解形成明确对错对照，DOS_AND_DONTS 左右分栏比认知翻转卡更直观呈现「事实 vs 谣言」。",
+          "content": [
+            {
+              "text": "三进制专利，",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "本来只是局部电路优化。",
+              "startFrame": 33,
+              "durationFrames": 52
+            },
+            {
+              "text": "到了营销号嘴里，",
+              "startFrame": 85,
+              "durationFrames": 39
+            },
+            {
+              "text": "就变成了打破美国计算标准。",
+              "startFrame": 123,
+              "durationFrames": 62
+            }
+          ],
+          "order": 2,
+          "param": {
+            "left": {
+              "label": "❌ 打破美国计算标准",
+              "src": "images/华为韬定律/scene_5_2_left.png",
+              "showFrom": 3
+            },
+            "right": {
+              "label": "✅ 局部电路优化",
+              "src": "images/华为韬定律/scene_5_2_right.png",
+              "showFrom": 1
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 185
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "同样为事实与谣言并列对照，延续左右避坑结构，独立成镜避免单镜过长。",
+          "content": [
+            {
+              "text": "光子芯片，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "本来主要解决数据传输。",
+              "startFrame": 29,
+              "durationFrames": 63
+            },
+            {
+              "text": "到了营销号嘴里，",
+              "startFrame": 91,
+              "durationFrames": 39
+            },
+            {
+              "text": "就变成了光刻机要过时了",
+              "startFrame": 129,
+              "durationFrames": 55
+            },
+            {
+              "text": "。",
+              "startFrame": 184,
+              "durationFrames": 3
+            }
+          ],
+          "order": 3,
+          "param": {
+            "left": {
+              "label": "❌ 光刻机要过时",
+              "src": "images/华为韬定律/scene_5_3_left.png",
+              "showFrom": 3
+            },
+            "right": {
+              "label": "✅ 解决数据传输",
+              "src": "images/华为韬定律/scene_5_3_right.png",
+              "showFrom": 1
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 187
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "第三个案例，结构与前两个一致，左右分栏持续强化事实与谣言的对照效果。",
+          "content": [
+            {
+              "text": "四重图案化，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "本来是用更大代价的工艺，",
+              "startFrame": 32,
+              "durationFrames": 60
+            },
+            {
+              "text": "补偿没有先进光刻机的短板。",
+              "startFrame": 92,
+              "durationFrames": 69
+            },
+            {
+              "text": "到了营销号嘴里，",
+              "startFrame": 161,
+              "durationFrames": 34
+            },
+            {
+              "text": "就变成了中国版光刻厂。",
+              "startFrame": 195,
+              "durationFrames": 62
+            }
+          ],
+          "order": 4,
+          "param": {
+            "left": {
+              "label": "❌ 中国版光刻厂",
+              "src": "images/华为韬定律/scene_5_4_left.png",
+              "showFrom": 4
+            },
+            "right": {
+              "label": "✅ 更大代价补偿短板",
+              "src": "images/华为韬定律/scene_5_4_right.png",
+              "showFrom": 1
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 257
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促金句收束全篇，无需配图，TEXT_FOCUS放大冲击力，强调核心结论。",
+          "content": [
+            {
+              "text": "你看，",
+              "startFrame": 0,
+              "durationFrames": 18
+            },
+            {
+              "text": "套路从来没变过。",
+              "startFrame": 17,
+              "durationFrames": 44
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "套路从来没变过。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 62
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CHECKLIST_REVEAL",
+          "reasoning": "收束式列举三大套路，适合CHECKLIST_REVEAL逐项打勾显现，强化要点复诵，替代大图并列的PANEL_GRID。",
+          "content": [
+            {
+              "text": "工程补偿，",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "说成弯道超车。",
+              "startFrame": 31,
+              "durationFrames": 46
+            },
+            {
+              "text": "局部优化，",
+              "startFrame": 77,
+              "durationFrames": 28
+            },
+            {
+              "text": "说成体系革命。",
+              "startFrame": 104,
+              "durationFrames": 34
+            },
+            {
+              "text": "技术路线，",
+              "startFrame": 138,
+              "durationFrames": 32
+            },
+            {
+              "text": "说成改写规则。",
+              "startFrame": 169,
+              "durationFrames": 44
+            }
+          ],
+          "order": 6,
+          "param": {
+            "title": "营销号套路",
+            "rows": [
+              {
+                "text": "工程补偿 → 弯道超车",
+                "showFrom": 1
+              },
+              {
+                "text": "局部优化 → 体系革命",
+                "showFrom": 3
+              },
+              {
+                "text": "技术路线 → 改写规则",
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 214
+        }
+      ],
+      "audioSrc": "/audio/华为韬定律/scene_5/scene_5.mp3",
+      "totalDurationFrames": 1021
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "剖析·四大伤害",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全文核心过渡句，用金句冲击模板强调总论点。",
+          "content": [
+            {
+              "text": "真正伤害中国科技的，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "也正是这里。",
+              "startFrame": 42,
+              "durationFrames": 34
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "真正伤害中国科技的，",
+                "showFrom": 0
+              },
+              {
+                "text": "也正是这里。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "伤害",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 77
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "第一点危害同一子话题内从点名→伤害定性→正道三法→错误收束，单主图贯穿、右侧阶段轨对齐口播，适合 CASE_BREAKDOWN。",
+          "content": [
+            {
+              "text": "第一，",
+              "startFrame": 0,
+              "durationFrames": 16
+            },
+            {
+              "text": "它伤害求真文化。",
+              "startFrame": 15,
+              "durationFrames": 33
+            },
+            {
+              "text": "科技进步，",
+              "startFrame": 47,
+              "durationFrames": 24
+            },
+            {
+              "text": "靠承认差距。",
+              "startFrame": 71,
+              "durationFrames": 38
+            },
+            {
+              "text": "靠长期死磕。",
+              "startFrame": 109,
+              "durationFrames": 37
+            },
+            {
+              "text": "靠把问题拆细。",
+              "startFrame": 145,
+              "durationFrames": 36
+            },
+            {
+              "text": "不是靠把短板改名。",
+              "startFrame": 181,
+              "durationFrames": 51
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "伤害求真文化",
+            "imageSrc": "images/华为韬定律/scene_6_2.png",
+            "phases": [
+              {
+                "phaseLabel": "危害点名",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "正道三法",
+                "showFrom": 3
+              },
+              {
+                "phaseLabel": "拒绝改名",
+                "showFrom": 6
+              }
+            ]
+          },
+          "totalDurationFrames": 232
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "四个平行领域的诚实做法例子，每个简短独立，适合四宫格展示。",
+          "content": [
+            {
+              "text": "先进制程受限，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "那就诚实说受限。",
+              "startFrame": 43,
+              "durationFrames": 42
+            },
+            {
+              "text": "芯片设计软件不足，",
+              "startFrame": 85,
+              "durationFrames": 52
+            },
+            {
+              "text": "那就补设计软件。",
+              "startFrame": 136,
+              "durationFrames": 46
+            },
+            {
+              "text": "材料不够，",
+              "startFrame": 182,
+              "durationFrames": 29
+            },
+            {
+              "text": "那就补材料。",
+              "startFrame": 210,
+              "durationFrames": 34
+            },
+            {
+              "text": "光刻难，",
+              "startFrame": 244,
+              "durationFrames": 24
+            },
+            {
+              "text": "那就攻光刻。",
+              "startFrame": 268,
+              "durationFrames": 31
+            }
+          ],
+          "order": 5,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为韬定律/scene_6_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为韬定律/scene_6_5_img1.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/华为韬定律/scene_6_5_img2.png",
+                "showFrom": 4,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为韬定律/scene_6_5_img3.png",
+                "showFrom": 6,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 299
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "从预警→问题未解→口号先胜的因果传导，CAUSE_CHAIN 逐环揭示机制链条。",
+          "content": [
+            {
+              "text": "最怕的是：",
+              "startFrame": 0,
+              "durationFrames": 23
+            },
+            {
+              "text": "问题还没解决。",
+              "startFrame": 22,
+              "durationFrames": 39
+            },
+            {
+              "text": "口号先胜利了。",
+              "startFrame": 61,
+              "durationFrames": 33
+            }
+          ],
+          "order": 6,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "问题未解",
+                "imageSrc": "images/华为韬定律/scene_6_6_img0.png",
+                "showFrom": 1
+              },
+              {
+                "label": "口号先胜",
+                "imageSrc": "images/华为韬定律/scene_6_6_img1.png",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 94
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "第二点危害同一子话题内从点名→误导定性→叙事带跑资金→硬骨头无人啃，单主图贯穿、右侧阶段轨对齐口播，适合 CASE_BREAKDOWN。",
+          "content": [
+            {
+              "text": "第二，",
+              "startFrame": 0,
+              "durationFrames": 16
+            },
+            {
+              "text": "它误导资源配置。",
+              "startFrame": 15,
+              "durationFrames": 44
+            },
+            {
+              "text": "资本市场最爱听故事。",
+              "startFrame": 58,
+              "durationFrames": 50
+            },
+            {
+              "text": "一听光模块。",
+              "startFrame": 108,
+              "durationFrames": 31
+            },
+            {
+              "text": "一听韬定律。",
+              "startFrame": 138,
+              "durationFrames": 42
+            },
+            {
+              "text": "一听改写规则。",
+              "startFrame": 179,
+              "durationFrames": 43
+            },
+            {
+              "text": "资金就开始沸腾。",
+              "startFrame": 222,
+              "durationFrames": 42
+            },
+            {
+              "text": "可钱一旦被叙事带跑。",
+              "startFrame": 263,
+              "durationFrames": 47
+            },
+            {
+              "text": "真正慢的硬骨头，",
+              "startFrame": 310,
+              "durationFrames": 43
+            },
+            {
+              "text": "就没人愿意啃。",
+              "startFrame": 353,
+              "durationFrames": 31
+            }
+          ],
+          "order": 7,
+          "param": {
+            "title": "误导资源配置",
+            "imageSrc": "images/华为韬定律/scene_6_7.png",
+            "phases": [
+              {
+                "phaseLabel": "危害点名",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "误导配置",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "资金沸腾",
+                "showFrom": 6
+              },
+              {
+                "phaseLabel": "无人攻坚",
+                "showFrom": 9
+              }
+            ]
+          },
+          "totalDurationFrames": 384
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "四个‘慢’领域并列，PANEL_GRID 可分宫格具象展示每个慢领域。",
+          "content": [
+            {
+              "text": "基础软件慢。",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "材料验证慢。",
+              "startFrame": 41,
+              "durationFrames": 36
+            },
+            {
+              "text": "工艺爬坡慢。",
+              "startFrame": 77,
+              "durationFrames": 38
+            },
+            {
+              "text": "人才培养慢。",
+              "startFrame": 114,
+              "durationFrames": 38
+            },
+            {
+              "text": "但这些慢东西，",
+              "startFrame": 152,
+              "durationFrames": 41
+            },
+            {
+              "text": "才是真科技。",
+              "startFrame": 192,
+              "durationFrames": 42
+            }
+          ],
+          "order": 10,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为韬定律/scene_6_10_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为韬定律/scene_6_10_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/华为韬定律/scene_6_10_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为韬定律/scene_6_10_img3.png",
+                "showFrom": 3,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "真科技",
+                "showFrom": 5,
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 234
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "两组「不等于」并列对照市场表象与产业实绩，SPLIT_COMPARE 左右分屏揭示概念炒作与硬科技之间的落差。",
+          "content": [
+            {
+              "text": "概念涨停，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "不等于产业突破。",
+              "startFrame": 30,
+              "durationFrames": 38
+            },
+            {
+              "text": "市值沸腾，",
+              "startFrame": 68,
+              "durationFrames": 27
+            },
+            {
+              "text": "不等于晶圆良率。",
+              "startFrame": 94,
+              "durationFrames": 43
+            }
+          ],
+          "order": 12,
+          "param": {
+            "leftSrc": "images/华为韬定律/scene_6_12_left.png",
+            "rightSrc": "images/华为韬定律/scene_6_12_right.png",
+            "leftLabel": "概念涨停",
+            "rightLabel": "产业突破",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 137
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "第三点危害同一子话题内从点名→绑架定性→质疑被扣帽→三重污名收束，单主图贯穿、右侧阶段轨对齐口播，适合 CASE_BREAKDOWN。",
+          "content": [
+            {
+              "text": "第三，",
+              "startFrame": 0,
+              "durationFrames": 23
+            },
+            {
+              "text": "它制造道德绑架。",
+              "startFrame": 22,
+              "durationFrames": 37
+            },
+            {
+              "text": "正常的技术质疑，",
+              "startFrame": 59,
+              "durationFrames": 36
+            },
+            {
+              "text": "很容易被扣帽子。",
+              "startFrame": 95,
+              "durationFrames": 42
+            },
+            {
+              "text": "你说散热难，",
+              "startFrame": 136,
+              "durationFrames": 34
+            },
+            {
+              "text": "有人说你不支持国产。",
+              "startFrame": 170,
+              "durationFrames": 51
+            },
+            {
+              "text": "你说良率低，",
+              "startFrame": 220,
+              "durationFrames": 29
+            },
+            {
+              "text": "有人说你递刀子。",
+              "startFrame": 248,
+              "durationFrames": 36
+            },
+            {
+              "text": "你说概念包装，",
+              "startFrame": 284,
+              "durationFrames": 30
+            },
+            {
+              "text": "有人说你崇洋媚外。",
+              "startFrame": 314,
+              "durationFrames": 37
+            }
+          ],
+          "order": 13,
+          "param": {
+            "title": "制造道德绑架",
+            "imageSrc": "images/华为韬定律/scene_6_13.png",
+            "phases": [
+              {
+                "phaseLabel": "道德绑架",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "质疑扣帽",
+                "showFrom": 3
+              },
+              {
+                "phaseLabel": "三重污名",
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 352
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促收束，用金句冲击从举例转向后果。",
+          "content": [
+            {
+              "text": "这就完蛋了。",
+              "startFrame": 0,
+              "durationFrames": 34
+            }
+          ],
+          "order": 16,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "这就完蛋了。",
+                "showFrom": 0,
+                "endFrom": 0
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 34
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "清晰的因果传导：饭圈化→沉默装懂→所有人演→无人说真话，CAUSE_CHAIN 逐环揭示。",
+          "content": [
+            {
+              "text": "科学讨论一旦饭圈化。",
+              "startFrame": 0,
+              "durationFrames": 57
+            },
+            {
+              "text": "专家会沉默。",
+              "startFrame": 56,
+              "durationFrames": 33
+            },
+            {
+              "text": "工程师会沉默。",
+              "startFrame": 89,
+              "durationFrames": 39
+            },
+            {
+              "text": "投资人会装懂。",
+              "startFrame": 127,
+              "durationFrames": 41
+            },
+            {
+              "text": "最后，",
+              "startFrame": 167,
+              "durationFrames": 17
+            },
+            {
+              "text": "所有人都在演。",
+              "startFrame": 183,
+              "durationFrames": 36
+            },
+            {
+              "text": "没有人敢说真话。",
+              "startFrame": 219,
+              "durationFrames": 36
+            }
+          ],
+          "order": 17,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "饭圈化",
+                "imageSrc": "images/华为韬定律/scene_6_17_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "研发沉默",
+                "imageSrc": "images/华为韬定律/scene_6_17_img1.png",
+                "showFrom": 1
+              },
+              {
+                "label": "投资人装懂",
+                "imageSrc": "images/华为韬定律/scene_6_17_img2.png",
+                "showFrom": 3
+              },
+              {
+                "label": "都是演员",
+                "imageSrc": "images/华为韬定律/scene_6_17_img3.png",
+                "showFrom": 5
+              }
+            ],
+            "anchors": [
+              {
+                "text": "无人说真话",
+                "showFrom": 6,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 256
+        }
+      ],
+      "audioSrc": "/audio/华为韬定律/scene_6/scene_6.mp3",
+      "totalDurationFrames": 2098
+    },
+    {
+      "sceneId": "scene_7",
+      "sceneName": "召唤·真正自强",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "这是认知转折的前半句，单独成镜引出问题，但未完成“不是…而是…”扭转，故用平叙镜头保持注意力，避免强结构，合并会导致全段超50字故拆分。",
+          "content": [
+            {
+              "text": "所以，",
+              "startFrame": 0,
+              "durationFrames": 20
+            },
+            {
+              "text": "华为韬定律最大的问题，",
+              "startFrame": 19,
+              "durationFrames": 58
+            },
+            {
+              "text": "不是它有没有工程价值。",
+              "startFrame": 77,
+              "durationFrames": 47
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为韬定律/scene_7_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "最大的问题",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 125
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "「工程探索」与「学术权威」形成真实 vs 包装的对照，DOS_AND_DONTS 左右分栏揭示把探索包装成权威的错误叙事。",
+          "content": [
+            {
+              "text": "而是它把工程探索，",
+              "startFrame": 0,
+              "durationFrames": 45
+            },
+            {
+              "text": "包装成学术权威。",
+              "startFrame": 44,
+              "durationFrames": 51
+            }
+          ],
+          "order": 2,
+          "param": {
+            "left": {
+              "label": "❌ 学术权威",
+              "src": "images/华为韬定律/scene_7_2_left.png",
+              "showFrom": 1
+            },
+            "right": {
+              "label": "✅ 工程探索",
+              "src": "images/华为韬定律/scene_7_2_right.png",
+              "showFrom": 0
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 95
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "「局部改良」与「规则改写」并列对照，左右分栏持续强化事实与包装之间的落差。",
+          "content": [
+            {
+              "text": "把局部改良，",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "包装成规则改写。",
+              "startFrame": 33,
+              "durationFrames": 51
+            }
+          ],
+          "order": 3,
+          "param": {
+            "left": {
+              "label": "❌ 规则改写",
+              "src": "images/华为韬定律/scene_7_3_left.png",
+              "showFrom": 1
+            },
+            "right": {
+              "label": "✅ 局部改良",
+              "src": "images/华为韬定律/scene_7_3_right.png",
+              "showFrom": 0
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 85
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "「艰难优化」与「全面胜利」第三组对照，延续左右避坑结构，三组包装逐一揭穿。",
+          "content": [
+            {
+              "text": "把艰难优化，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "包装成全面胜利。",
+              "startFrame": 29,
+              "durationFrames": 52
+            }
+          ],
+          "order": 4,
+          "param": {
+            "left": {
+              "label": "❌ 全面胜利",
+              "src": "images/华为韬定律/scene_7_4_left.png",
+              "showFrom": 1
+            },
+            "right": {
+              "label": "✅ 艰难优化",
+              "src": "images/华为韬定律/scene_7_4_right.png",
+              "showFrom": 0
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 81
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "「品牌/流量/股价赢」与「耐心/诚实/敬畏输」六组并列得失，PANEL_GRID 宫格逐格显现，比节拍击打更能呈现多维对照结构。",
+          "content": [
+            {
+              "text": "这套话术，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "短期很爽。",
+              "startFrame": 26,
+              "durationFrames": 32
+            },
+            {
+              "text": "品牌赢了。",
+              "startFrame": 57,
+              "durationFrames": 26
+            },
+            {
+              "text": "流量赢了。",
+              "startFrame": 82,
+              "durationFrames": 26
+            },
+            {
+              "text": "股价也赢了。",
+              "startFrame": 107,
+              "durationFrames": 31
+            },
+            {
+              "text": "但中国科技，",
+              "startFrame": 138,
+              "durationFrames": 32
+            },
+            {
+              "text": "输了耐心。",
+              "startFrame": 169,
+              "durationFrames": 29
+            },
+            {
+              "text": "输了诚实。",
+              "startFrame": 198,
+              "durationFrames": 28
+            },
+            {
+              "text": "输了对物理规律的敬畏。",
+              "startFrame": 225,
+              "durationFrames": 54
+            }
+          ],
+          "order": 5,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为韬定律/scene_7_5_img0.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/华为韬定律/scene_7_5_img1.png",
+                "showFrom": 3,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/华为韬定律/scene_7_5_img2.png",
+                "showFrom": 4,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/华为韬定律/scene_7_5_img3.png",
+                "showFrom": 6,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/华为韬定律/scene_7_5_img4.png",
+                "showFrom": 7,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/华为韬定律/scene_7_5_img5.png",
+                "showFrom": 8,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 280
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片收束金句，零图大字压信噪比，用 TEXT_FOCUS 锁定「承认不足、继续烧」的核心结论。",
+          "content": [
+            {
+              "text": "真正的自强，",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "不是重新定义开水，",
+              "startFrame": 31,
+              "durationFrames": 40
+            },
+            {
+              "text": "而是承认五十度的水还不够。",
+              "startFrame": 70,
+              "durationFrames": 56
+            },
+            {
+              "text": "然后继续烧。",
+              "startFrame": 126,
+              "durationFrames": 40
+            }
+          ],
+          "order": 8,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "真正的自强，不是重新定义“开水”",
+                "showFrom": 0,
+                "endFrom": 3
+              },
+              {
+                "text": "而是承认五十度的水还不够",
+                "showFrom": 2,
+                "endFrom": 3
+              },
+              {
+                "text": "然后继续烧",
+                "showFrom": 3,
+                "endFrom": 3
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "真正的自强",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "还不够",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "继续烧",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 166
+        }
+      ],
+      "audioSrc": "/audio/华为韬定律/scene_7/scene_7.mp3",
+      "totalDurationFrames": 831
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "华为韬定律",
+    "subtitle": "华为‘定律’包装术：把厨房收纳，说成物理革命",
+    "themeColor": "#FF6900",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}

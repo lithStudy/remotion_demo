@@ -8,11 +8,11 @@ const FONT_STACK =
     '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
 
 const STATIC_HEADLINE = "廉价的便利";
-const STATIC_HEADLINE_SUBTITLE = "你享受的便利，悄悄让你自己变成了代价";
-const STATIC_HEADLINE_SUB = "认知心理学";
-const STATIC_HEADLINE_SUB_EN = "COGNITIVE PSYCHOLOGY";
-const THEME_ACCENT = "#2563EB";
-const THEME_ACCENT_SOFT = "#2563EBD9";
+const STATIC_HEADLINE_SUBTITLE = "廉价的便利，是一记回旋镖";
+const STATIC_HEADLINE_SUB = "社会热点深读";
+const STATIC_HEADLINE_SUB_EN = "SOCIAL DEEP DIVE";
+const THEME_ACCENT = "#059669";
+const THEME_ACCENT_SOFT = "#059669D9";
 
 type TopStaticHeadlineProps = {
     canvasW: number;

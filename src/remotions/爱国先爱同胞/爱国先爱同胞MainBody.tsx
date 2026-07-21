@@ -16,7 +16,7 @@ export const 爱国先爱同胞MainBody: React.FC = () => (
         <Sequence durationInFrames={COVER_DURATION_FRAMES}>
             <LandscapeCoverPoster
                 title="爱国爱同胞"
-                    subtitle="爱抽象的词，也要爱具体的人"
+                    subtitle="爱抽象的词，也要看见具体的人"
                     themeColor="#059669"
                     badge="深度解读 · 理性思考"
                     seriesLabel="社会热点深读"

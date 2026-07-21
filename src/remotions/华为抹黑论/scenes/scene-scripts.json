@@ -1,0 +1,803 @@
+{
+  "topic": "你以为他在抹黑华为，其实他只是在陈述事实",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：抹黑还是事实",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引入外界言论作为引子，适合引用模板突出‘有人说’的间接引述感，制造悬念。",
+          "content": [
+            {
+              "text": "有人说，",
+              "startFrame": 0,
+              "durationFrames": 17
+            },
+            {
+              "text": "很多人在网上无端抹黑华为。",
+              "startFrame": 16,
+              "durationFrames": 76
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteSource": "网友",
+            "quoteDisplayText": "很多人在网上无端抹黑华为。",
+            "anchors": []
+          },
+          "totalDurationFrames": 92
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "核心是对比‘称述事实’和‘抹黑’两个概念，用对比模板直观呈现二者差异，帮助观众辨析。",
+          "content": [
+            {
+              "text": "这些人，",
+              "startFrame": 0,
+              "durationFrames": 25
+            },
+            {
+              "text": "可能不太能分清楚什么叫陈述事实，",
+              "startFrame": 24,
+              "durationFrames": 74
+            },
+            {
+              "text": "什么叫抹黑。",
+              "startFrame": 97,
+              "durationFrames": 28
+            }
+          ],
+          "order": 2,
+          "param": {
+            "leftSrc": "images/华为抹黑论/scene_1_2_left.png",
+            "rightSrc": "images/华为抹黑论/scene_1_2_right.png",
+            "leftLabel": "陈述事实",
+            "rightLabel": "抹黑",
+            "leftShowFrom": 1,
+            "rightShowFrom": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 125
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓叙述行动目的，过渡到下文的专题内容，采用默认单图聚焦模板保持视觉稳定。",
+          "content": [
+            {
+              "text": "所以我专门做一个小专题，",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "来帮大家分辨一下，",
+              "startFrame": 54,
+              "durationFrames": 40
+            },
+            {
+              "text": "以免有些人破坏华为的口碑。",
+              "startFrame": 93,
+              "durationFrames": 67
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/华为抹黑论/scene_1_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "破坏口碑",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 161
+        }
+      ],
+      "audioSrc": "/audio/华为抹黑论/scene_1/scene_1.mp3",
+      "totalDurationFrames": 379
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析：抹黑与事实清单",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。",
+          "content": [
+            {
+              "text": "说华为的手机很垃圾，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "这是抹黑；",
+              "startFrame": 50,
+              "durationFrames": 28
+            },
+            {
+              "text": "说华为手机P10混用闪存芯片，",
+              "startFrame": 77,
+              "durationFrames": 75
+            },
+            {
+              "text": "这是讲事实。",
+              "startFrame": 151,
+              "durationFrames": 29
+            }
+          ],
+          "order": 1,
+          "param": {
+            "left": {
+              "label": "❌ 手机很垃圾",
+              "src": "images/华为抹黑论/scene_2_1_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ P10混用闪存",
+              "src": "images/华为抹黑论/scene_2_1_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 181
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。",
+          "content": [
+            {
+              "text": "说华为手机质量有问题，",
+              "startFrame": 0,
+              "durationFrames": 58
+            },
+            {
+              "text": "这是抹黑；",
+              "startFrame": 57,
+              "durationFrames": 29
+            },
+            {
+              "text": "说华为Mate 20Pro存在大规模明显的绿屏缺陷，",
+              "startFrame": 86,
+              "durationFrames": 122
+            },
+            {
+              "text": "这是讲事实。",
+              "startFrame": 207,
+              "durationFrames": 36
+            }
+          ],
+          "order": 2,
+          "param": {
+            "left": {
+              "label": "❌ 质量有问题",
+              "src": "images/华为抹黑论/scene_2_2_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ Mate20绿屏缺陷",
+              "src": "images/华为抹黑论/scene_2_2_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 244
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。",
+          "content": [
+            {
+              "text": "说华为虚假宣传，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "这是抹黑；",
+              "startFrame": 50,
+              "durationFrames": 31
+            },
+            {
+              "text": "说华为P9用单反相机的照片充当手机拍摄的效果图宣传，",
+              "startFrame": 80,
+              "durationFrames": 144
+            },
+            {
+              "text": "这是讲事实。",
+              "startFrame": 224,
+              "durationFrames": 34
+            }
+          ],
+          "order": 3,
+          "param": {
+            "left": {
+              "label": "❌ 虚假宣传",
+              "src": "images/华为抹黑论/scene_2_3_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ P9单反冒充拍照",
+              "src": "images/华为抹黑论/scene_2_3_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 259
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。",
+          "content": [
+            {
+              "text": "说华为喜欢造假，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "这是抹黑；",
+              "startFrame": 41,
+              "durationFrames": 31
+            },
+            {
+              "text": "说华为P30 Pro拍月亮用AI伪造照片，",
+              "startFrame": 72,
+              "durationFrames": 96
+            },
+            {
+              "text": "这是讲事实。",
+              "startFrame": 168,
+              "durationFrames": 32
+            }
+          ],
+          "order": 4,
+          "param": {
+            "left": {
+              "label": "❌ 喜欢造假",
+              "src": "images/华为抹黑论/scene_2_4_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ P30 AI伪造月亮",
+              "src": "images/华为抹黑论/scene_2_4_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 200
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。",
+          "content": [
+            {
+              "text": "说华为不守法，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "这是抹黑；",
+              "startFrame": 34,
+              "durationFrames": 30
+            },
+            {
+              "text": "说华为倒卖被美国严令禁止的商品到伊朗，",
+              "startFrame": 64,
+              "durationFrames": 101
+            },
+            {
+              "text": "这是讲事实。",
+              "startFrame": 164,
+              "durationFrames": 35
+            }
+          ],
+          "order": 5,
+          "param": {
+            "left": {
+              "label": "❌ 不守法",
+              "src": "images/华为抹黑论/scene_2_5_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 倒卖禁品到伊朗",
+              "src": "images/华为抹黑论/scene_2_5_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 200
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。",
+          "content": [
+            {
+              "text": "说华为依靠抄袭起家，",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "这是抹黑；",
+              "startFrame": 51,
+              "durationFrames": 26
+            },
+            {
+              "text": "说华为复制思科源代码，",
+              "startFrame": 76,
+              "durationFrames": 47
+            },
+            {
+              "text": "这是讲事实。",
+              "startFrame": 123,
+              "durationFrames": 31
+            }
+          ],
+          "order": 6,
+          "param": {
+            "left": {
+              "label": "❌ 抄袭起家",
+              "src": "images/华为抹黑论/scene_2_6_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 复制思科源码",
+              "src": "images/华为抹黑论/scene_2_6_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 154
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。",
+          "content": [
+            {
+              "text": "说华为搞间谍战，",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "这是抹黑；",
+              "startFrame": 45,
+              "durationFrames": 31
+            },
+            {
+              "text": "说华为窃取摩托罗拉专有无线网络切换技术，",
+              "startFrame": 76,
+              "durationFrames": 105
+            },
+            {
+              "text": "这是讲事实。",
+              "startFrame": 181,
+              "durationFrames": 34
+            }
+          ],
+          "order": 7,
+          "param": {
+            "left": {
+              "label": "❌ 搞间谍战",
+              "src": "images/华为抹黑论/scene_2_7_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 窃取摩托罗拉技术",
+              "src": "images/华为抹黑论/scene_2_7_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 216
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。",
+          "content": [
+            {
+              "text": "说华为低质高价，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "这是抹黑；",
+              "startFrame": 43,
+              "durationFrames": 34
+            },
+            {
+              "text": "说华为把六八零芯片的手机卖2000，",
+              "startFrame": 77,
+              "durationFrames": 83
+            },
+            {
+              "text": "这是讲事实。",
+              "startFrame": 160,
+              "durationFrames": 37
+            }
+          ],
+          "order": 8,
+          "param": {
+            "left": {
+              "label": "❌ 低质高价",
+              "src": "images/华为抹黑论/scene_2_8_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 680芯片卖2000",
+              "src": "images/华为抹黑论/scene_2_8_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 198
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。",
+          "content": [
+            {
+              "text": "说华为不遵守劳动法，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "这是抹黑；",
+              "startFrame": 50,
+              "durationFrames": 32
+            },
+            {
+              "text": "说华为用奋斗者协议让员工自愿放弃带薪年休假工资，",
+              "startFrame": 81,
+              "durationFrames": 136
+            },
+            {
+              "text": "这是讲事实。",
+              "startFrame": 217,
+              "durationFrames": 34
+            }
+          ],
+          "order": 9,
+          "param": {
+            "left": {
+              "label": "❌ 不遵守劳动法",
+              "src": "images/华为抹黑论/scene_2_9_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 奋斗者协议放弃年假",
+              "src": "images/华为抹黑论/scene_2_9_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 251
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。",
+          "content": [
+            {
+              "text": "说华为心黑手辣，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "这是抹黑；",
+              "startFrame": 43,
+              "durationFrames": 31
+            },
+            {
+              "text": "说华为将李洪元无端扣押251天，",
+              "startFrame": 74,
+              "durationFrames": 91
+            },
+            {
+              "text": "这是讲事实。",
+              "startFrame": 164,
+              "durationFrames": 35
+            }
+          ],
+          "order": 10,
+          "param": {
+            "left": {
+              "label": "❌ 心黑手辣",
+              "src": "images/华为抹黑论/scene_2_10_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 李洪元扣押251天",
+              "src": "images/华为抹黑论/scene_2_10_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 200
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。",
+          "content": [
+            {
+              "text": "说华为喜欢剥削员工，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "这是抹黑；",
+              "startFrame": 41,
+              "durationFrames": 24
+            },
+            {
+              "text": "说华为大量使用外包OD，",
+              "startFrame": 65,
+              "durationFrames": 58
+            },
+            {
+              "text": "这是讲事实。",
+              "startFrame": 123,
+              "durationFrames": 31
+            }
+          ],
+          "order": 11,
+          "param": {
+            "left": {
+              "label": "❌ 剥削员工",
+              "src": "images/华为抹黑论/scene_2_11_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 大量外包OD",
+              "src": "images/华为抹黑论/scene_2_11_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 154
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。",
+          "content": [
+            {
+              "text": "说华为不尊重知识产权，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "这是抹黑；",
+              "startFrame": 58,
+              "durationFrames": 27
+            },
+            {
+              "text": "说华为通过修改安卓源代码宣称自研，",
+              "startFrame": 85,
+              "durationFrames": 86
+            },
+            {
+              "text": "这是讲事实。",
+              "startFrame": 170,
+              "durationFrames": 33
+            }
+          ],
+          "order": 12,
+          "param": {
+            "left": {
+              "label": "❌ 不尊重知识产权",
+              "src": "images/华为抹黑论/scene_2_12_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 改安卓称自研",
+              "src": "images/华为抹黑论/scene_2_12_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 203
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。",
+          "content": [
+            {
+              "text": "说华为惯用行贿手段，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "这是抹黑；",
+              "startFrame": 50,
+              "durationFrames": 30
+            },
+            {
+              "text": "说华为贿赂中国移动重庆公司董事长沈长富，",
+              "startFrame": 79,
+              "durationFrames": 99
+            },
+            {
+              "text": "这是讲事实。",
+              "startFrame": 177,
+              "durationFrames": 33
+            }
+          ],
+          "order": 13,
+          "param": {
+            "left": {
+              "label": "❌ 惯用行贿",
+              "src": "images/华为抹黑论/scene_2_13_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 贿赂沈长富",
+              "src": "images/华为抹黑论/scene_2_13_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 210
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。",
+          "content": [
+            {
+              "text": "说华为惯用套壳换标手段忽悠消费者，",
+              "startFrame": 0,
+              "durationFrames": 107
+            },
+            {
+              "text": "这是抹黑；",
+              "startFrame": 106,
+              "durationFrames": 37
+            },
+            {
+              "text": "说华为用400块的联想套壳华为卖2000，",
+              "startFrame": 142,
+              "durationFrames": 96
+            },
+            {
+              "text": "这是讲事实。",
+              "startFrame": 238,
+              "durationFrames": 33
+            }
+          ],
+          "order": 14,
+          "param": {
+            "left": {
+              "label": "❌ 套壳换标忽悠",
+              "src": "images/华为抹黑论/scene_2_14_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 400块联想套壳卖2000",
+              "src": "images/华为抹黑论/scene_2_14_right.png",
+              "showFrom": 2
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 272
+        }
+      ],
+      "audioSrc": "/audio/华为抹黑论/scene_2/scene_2.mp3",
+      "totalDurationFrames": 2938
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "反转：罄竹难书，证据在此",
+      "items": [
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "该段为结论加补充解释，结构是平铺陈述观点和原因，无数据对比、步骤或强对照，适合用 CENTER_FOCUS 以简洁构图承载关键观点。",
+          "content": [
+            {
+              "text": "抹黑华为的太多了，",
+              "startFrame": 0,
+              "durationFrames": 45
+            },
+            {
+              "text": "简直是罄竹难书。",
+              "startFrame": 44,
+              "durationFrames": 44
+            },
+            {
+              "text": "篇幅有限，",
+              "startFrame": 88,
+              "durationFrames": 27
+            },
+            {
+              "text": "就不再一一列举了。",
+              "startFrame": 114,
+              "durationFrames": 33
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为抹黑论/scene_3_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "罄竹难书",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 148
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "此句为引导性过渡，提示观众查阅证据，内容简短且无复杂结构，用 TEXT_FOCUS 纯大字呈现指引信息即可。",
+          "content": [
+            {
+              "text": "以上事实，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "尽可私信与我获取证据。",
+              "startFrame": 26,
+              "durationFrames": 54
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "以上事实，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "尽可私信与我获取证据。",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 80
+        }
+      ],
+      "audioSrc": "/audio/华为抹黑论/scene_3/scene_3.mp3",
+      "totalDurationFrames": 229
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "华为抹黑论",
+    "subtitle": "分清楚抹黑与陈述事实",
+    "themeColor": "#F59E0B",
+    "badge": "日常观察 · 有趣视角",
+    "seriesLabel": "日常调侃",
+    "seriesLabelEn": "DAILY TAKE",
+    "methodologySteps": [
+      "现象",
+      "吐槽",
+      "真相"
+    ],
+    "methodologyStepsEn": "SCENE · SNARK · TRUTH"
+  }
+}

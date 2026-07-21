@@ -1,0 +1,3391 @@
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:51:24
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：你以为他在抹黑华为，其实他只是在陈述事实
+- **当前场景**：引入：抹黑还是事实
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+有人说，很多人在网上无端抹黑华为。
+这些人，可能不太能分清楚什么叫称述事实，什么叫抹黑。
+
+所以我专门做一个小专题，来帮大家分辨一下，以免有些人破坏华为的口碑。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:52:02
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "有人说，很多人在网上无端抹黑华为。",
+      "narrativeType": "HOOK",
+      "template": "QUOTE_CITATION",
+      "expressionTag": "quote",
+      "confidence": "medium",
+      "reasoning": "引入外界言论作为引子，适合引用模板突出‘有人说’的间接引述感，制造悬念。"
+    },
+    {
+      "text": "这些人，可能不太能分清楚什么叫称述事实，什么叫抹黑。",
+      "narrativeType": "LOGIC",
+      "template": "SPLIT_COMPARE",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "核心是对比‘称述事实’和‘抹黑’两个概念，用对比模板直观呈现二者差异，帮助观众辨析。"
+    },
+    {
+      "text": "所以我专门做一个小专题，来帮大家分辨一下，以免有些人破坏华为的口碑。",
+      "narrativeType": "TRANSITION",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "medium",
+      "reasoning": "平缓叙述行动目的，过渡到下文的专题内容，采用默认单图聚焦模板保持视觉稳定。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:52:02
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：你以为他在抹黑华为，其实他只是在陈述事实
+- **当前场景**：剖析：抹黑与事实清单
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+说华为的手机很垃圾，这是抹黑；
+说华为手机P10混用闪存芯片，这是讲事实。
+
+说华为手机质量有问题，这是抹黑；
+说华为Mate 20Pro存在大规模明显的绿屏缺陷，这是讲事实。
+
+说华为虚假宣传，这是抹黑；
+说华为P9用单反相机的照片充当手机拍摄的效果图宣传，这是讲事实。
+
+说华为喜欢造假，这是抹黑；
+说华为P30 Pro拍月亮用AI伪造照片，这是讲事实。
+
+说华为不守法，这是抹黑；
+说华为倒卖被美国严令禁止的商品到伊朗，这是讲事实。
+
+说华为依靠抄袭起家，这是抹黑；
+说华为复制思科源代码，这是讲事实。
+
+说华为搞间谍战，这是抹黑；
+说华为窃取摩托罗拉专有无线网络切换技术，这是讲事实。
+
+说华为低质高价，这是抹黑；
+说华为把680芯片的手机卖2000，这是讲事实。
+
+说华为不遵守劳动法，这是抹黑；
+说华为用奋斗者协议让员工自愿放弃带薪年休假工资，这是讲事实。
+
+说华为心黑手辣，这是抹黑；
+说华为将李洪元无端扣押251天，这是讲事实。
+
+说华为喜欢剥削员工，这是抹黑；
+说华为大量使用外包OD，这是讲事实。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:52:54
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "说华为的手机很垃圾，这是抹黑；说华为手机P10混用闪存芯片，这是讲事实。",
+      "narrativeType": "LOGIC",
+      "template": "DOS_AND_DONTS",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。"
+    },
+    {
+      "text": "说华为手机质量有问题，这是抹黑；说华为Mate 20Pro存在大规模明显的绿屏缺陷，这是讲事实。",
+      "narrativeType": "LOGIC",
+      "template": "DOS_AND_DONTS",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。"
+    },
+    {
+      "text": "说华为虚假宣传，这是抹黑；说华为P9用单反相机的照片充当手机拍摄的效果图宣传，这是讲事实。",
+      "narrativeType": "LOGIC",
+      "template": "DOS_AND_DONTS",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。"
+    },
+    {
+      "text": "说华为喜欢造假，这是抹黑；说华为P30 Pro拍月亮用AI伪造照片，这是讲事实。",
+      "narrativeType": "LOGIC",
+      "template": "DOS_AND_DONTS",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。"
+    },
+    {
+      "text": "说华为不守法，这是抹黑；说华为倒卖被美国严令禁止的商品到伊朗，这是讲事实。",
+      "narrativeType": "LOGIC",
+      "template": "DOS_AND_DONTS",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。"
+    },
+    {
+      "text": "说华为依靠抄袭起家，这是抹黑；说华为复制思科源代码，这是讲事实。",
+      "narrativeType": "LOGIC",
+      "template": "DOS_AND_DONTS",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。"
+    },
+    {
+      "text": "说华为搞间谍战，这是抹黑；说华为窃取摩托罗拉专有无线网络切换技术，这是讲事实。",
+      "narrativeType": "LOGIC",
+      "template": "DOS_AND_DONTS",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。"
+    },
+    {
+      "text": "说华为低质高价，这是抹黑；说华为把680芯片的手机卖2000，这是讲事实。",
+      "narrativeType": "LOGIC",
+      "template": "DOS_AND_DONTS",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。"
+    },
+    {
+      "text": "说华为不遵守劳动法，这是抹黑；说华为用奋斗者协议让员工自愿放弃带薪年休假工资，这是讲事实。",
+      "narrativeType": "LOGIC",
+      "template": "DOS_AND_DONTS",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。"
+    },
+    {
+      "text": "说华为心黑手辣，这是抹黑；说华为将李洪元无端扣押251天，这是讲事实。",
+      "narrativeType": "LOGIC",
+      "template": "DOS_AND_DONTS",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。"
+    },
+    {
+      "text": "说华为喜欢剥削员工，这是抹黑；说华为大量使用外包OD，这是讲事实。",
+      "narrativeType": "LOGIC",
+      "template": "DOS_AND_DONTS",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "该段为错误指责与事实澄清的对比结构，适合用DOS_AND_DONTS模板呈现对错对比。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:52:54
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：你以为他在抹黑华为，其实他只是在陈述事实
+- **当前场景**：反转：罄竹难书，证据在此
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+抹黑华为的太多了，简直是罄竹难书。
+篇幅有限，就不再一一列举了。
+
+以上事实，请于正文部分获取证据。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:53:27
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "抹黑华为的太多了，简直是罄竹难书。篇幅有限，就不再一一列举了。",
+      "narrativeType": "CONCLUSION",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "该段为结论加补充解释，结构是平铺陈述观点和原因，无数据对比、步骤或强对照，适合用 CENTER_FOCUS 以简洁构图承载关键观点。"
+    },
+    {
+      "text": "以上事实，请于正文部分获取证据。",
+      "narrativeType": "TRANSITION",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "此句为引导性过渡，提示观众查阅证据，内容简短且无复杂结构，用 CENTER_FOCUS 直接呈现指引信息即可。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:53:27
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+有人说，很多人在网上无端抹黑华为。
+这些人，可能不太能分清楚什么叫称述事实，什么叫抹黑。
+
+所以我专门做一个小专题，来帮大家分辨一下，以免有些人破坏华为的口碑。
+
+
+## 🎯 待处理的目标文案
+有人说，很多人在网上无端抹黑华为。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "有人说，"
+  },
+  {
+    "index": 1,
+    "text": "很多人在网上无端抹黑华为。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：QUOTE_CITATION
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "quoteSource": {
+      "type": "string",
+      "description": "引言来源"
+    },
+    "quoteDisplayText": {
+      "type": "string",
+      "description": "版心引用正文（打字机效果）；不传则使用 content 拼接结果"
+    },
+    "showFrom": {
+      "type": "integer",
+      "description": "content 下标（0-based）。仅打字正文从该条 startFrame 起再入场；开引号与 quoteSource 仍从 item 起点出现。未传 quoteDisplayText 时正文从该条起拼接"
+    }
+  },
+  "required": [
+    "quoteSource"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "QUOTE_CITATION",
+  "param": {
+    "quoteDisplayText": "我思故我在",
+    "quoteSource": "《思考，快与慢》"
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:53:47
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"quoteSource": "网友", "quoteDisplayText": "很多人在网上无端抹黑华为。"}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:53:47
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+有人说，很多人在网上无端抹黑华为。
+这些人，可能不太能分清楚什么叫称述事实，什么叫抹黑。
+
+所以我专门做一个小专题，来帮大家分辨一下，以免有些人破坏华为的口碑。
+
+
+## 🎯 待处理的目标文案
+这些人，可能不太能分清楚什么叫称述事实，什么叫抹黑。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "这些人，"
+  },
+  {
+    "index": 1,
+    "text": "可能不太能分清楚什么叫称述事实，"
+  },
+  {
+    "index": 2,
+    "text": "什么叫抹黑。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：SPLIT_COMPARE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "leftSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "左侧图片描述"
+    },
+    "rightSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "右侧图片描述"
+    },
+    "leftLabel": {
+      "type": "string",
+      "description": "左侧标签（2～6 字为宜）"
+    },
+    "rightLabel": {
+      "type": "string",
+      "description": "右侧标签（2～6 字为宜）"
+    },
+    "leftShowFrom": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "左侧图与标签出现的时刻：取 content 数组下标（0-based），入场帧为该条的 startFrame；省略或越界则从 0 帧起"
+    },
+    "rightShowFrom": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "右侧图与标签出现的时刻：取 content 数组下标（0-based），入场帧为该条的 startFrame；省略或越界则从 0 帧起"
+    }
+  },
+  "required": [
+    "leftSrc",
+    "rightSrc",
+    "leftLabel",
+    "rightLabel"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "SPLIT_COMPARE",
+  "param": {
+    "leftSrc": "传统低效工作图标",
+    "rightSrc": "高效数字工具图标",
+    "leftLabel": "旧方法",
+    "rightLabel": "新方法"
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:53:53
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "leftSrc": "一张整洁的办公桌，桌上摆着一份清晰的报告文档和一支笔，背景明亮，象征客观陈述",
+    "rightSrc": "一只沾满墨渍的手用黑笔在纸张上乱涂乱画，纸张有撕裂痕迹，背景阴暗，象征恶意诋毁",
+    "leftLabel": "称述事实",
+    "rightLabel": "抹黑",
+    "leftShowFrom": 1,
+    "rightShowFrom": 2
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:53:53
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+有人说，很多人在网上无端抹黑华为。
+这些人，可能不太能分清楚什么叫称述事实，什么叫抹黑。
+
+所以我专门做一个小专题，来帮大家分辨一下，以免有些人破坏华为的口碑。
+
+
+## 🎯 待处理的目标文案
+所以我专门做一个小专题，来帮大家分辨一下，以免有些人破坏华为的口碑。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "所以我专门做一个小专题，"
+  },
+  {
+    "index": 1,
+    "text": "来帮大家分辨一下，"
+  },
+  {
+    "index": 2,
+    "text": "以免有些人破坏华为的口碑。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:54:04
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "一个人站在白板前，白板上画着对号与叉号的对比图",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "破坏口碑",
+        "showFrom": 2,
+        "color": "#EF4444",
+        "anim": "spring",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:54:04
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+说华为的手机很垃圾，这是抹黑；
+说华为手机P10混用闪存芯片，这是讲事实。
+
+说华为手机质量有问题，这是抹黑；
+说华为Mate 20Pro存在大规模明显的绿屏缺陷，这是讲事实。
+
+说华为虚假宣传，这是抹黑；
+说华为P9用单反相机的照片充当手机拍摄的效果图宣传，这是讲事实。
+
+说华为喜欢造假，这是抹黑；
+说华为P30 Pro拍月亮用AI伪造照片，这是讲事实。
+
+说华为不守法，这是抹黑；
+说华为倒卖被美国严令禁止的商品到伊朗，这是讲事实。
+
+说华为依靠抄袭起家，这是抹黑；
+说华为复制思科源代码，这是讲事实。
+
+说华为搞间谍战，这是抹黑；
+说华为窃取摩托罗拉专有无线网络切换技术，这是讲事实。
+
+说华为低质高价，这是抹黑；
+说华为把680芯片的手机卖2000，这是讲事实。
+
+说华为不遵守劳动法，这是抹黑；
+说华为用奋斗者协议让员工自愿放弃带薪年休假工资，这是讲事实。
+
+说华为心黑手辣，这是抹黑；
+说华为将李洪元无端扣押251天，这是讲事实。
+
+说华为喜欢剥削员工，这是抹黑；
+说华为大量使用外包OD，这是讲事实。
+
+
+## 🎯 待处理的目标文案
+说华为的手机很垃圾，这是抹黑；说华为手机P10混用闪存芯片，这是讲事实。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "说华为的手机很垃圾，"
+  },
+  {
+    "index": 1,
+    "text": "这是抹黑；"
+  },
+  {
+    "index": 2,
+    "text": "说华为手机P10混用闪存芯片，"
+  },
+  {
+    "index": 3,
+    "text": "这是讲事实。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：DOS_AND_DONTS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "left": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    },
+    "right": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    }
+  },
+  "required": [
+    "left",
+    "right"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "DOS_AND_DONTS",
+  "param": {
+    "left": {
+      "label": "❌ 别这样",
+      "src": "盲目跟风的人简笔画图标",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 正确做法",
+      "src": "理性分析图表的人简笔画图标",
+      "showFrom": 1
+    }
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:54:17
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "left": {
+      "label": "❌ 抹黑",
+      "src": "一个人拿着扩音器大声造谣的简笔画图标",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 讲事实",
+      "src": "一个人拿着放大镜仔细检查芯片的简笔画图标",
+      "showFrom": 2
+    }
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:54:17
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+说华为的手机很垃圾，这是抹黑；
+说华为手机P10混用闪存芯片，这是讲事实。
+
+说华为手机质量有问题，这是抹黑；
+说华为Mate 20Pro存在大规模明显的绿屏缺陷，这是讲事实。
+
+说华为虚假宣传，这是抹黑；
+说华为P9用单反相机的照片充当手机拍摄的效果图宣传，这是讲事实。
+
+说华为喜欢造假，这是抹黑；
+说华为P30 Pro拍月亮用AI伪造照片，这是讲事实。
+
+说华为不守法，这是抹黑；
+说华为倒卖被美国严令禁止的商品到伊朗，这是讲事实。
+
+说华为依靠抄袭起家，这是抹黑；
+说华为复制思科源代码，这是讲事实。
+
+说华为搞间谍战，这是抹黑；
+说华为窃取摩托罗拉专有无线网络切换技术，这是讲事实。
+
+说华为低质高价，这是抹黑；
+说华为把680芯片的手机卖2000，这是讲事实。
+
+说华为不遵守劳动法，这是抹黑；
+说华为用奋斗者协议让员工自愿放弃带薪年休假工资，这是讲事实。
+
+说华为心黑手辣，这是抹黑；
+说华为将李洪元无端扣押251天，这是讲事实。
+
+说华为喜欢剥削员工，这是抹黑；
+说华为大量使用外包OD，这是讲事实。
+
+
+## 🎯 待处理的目标文案
+说华为手机质量有问题，这是抹黑；说华为Mate 20Pro存在大规模明显的绿屏缺陷，这是讲事实。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "说华为手机质量有问题，"
+  },
+  {
+    "index": 1,
+    "text": "这是抹黑；"
+  },
+  {
+    "index": 2,
+    "text": "说华为Mate 20Pro存在大规模明显的绿屏缺陷，"
+  },
+  {
+    "index": 3,
+    "text": "这是讲事实。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：DOS_AND_DONTS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "left": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    },
+    "right": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    }
+  },
+  "required": [
+    "left",
+    "right"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "DOS_AND_DONTS",
+  "param": {
+    "left": {
+      "label": "❌ 别这样",
+      "src": "盲目跟风的人简笔画图标",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 正确做法",
+      "src": "理性分析图表的人简笔画图标",
+      "showFrom": 1
+    }
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:54:26
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "left": {
+      "label": "❌ 抹黑",
+      "src": "模糊的人影在大声喊叫，周围有破碎的手机零件和混乱的线条，表现虚假指控",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 讲事实",
+      "src": "一个人手持放大镜仔细观察手机屏幕，屏幕上有一片明显的绿色光晕，旁边放着检测报告",
+      "showFrom": 2
+    }
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:54:26
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+说华为的手机很垃圾，这是抹黑；
+说华为手机P10混用闪存芯片，这是讲事实。
+
+说华为手机质量有问题，这是抹黑；
+说华为Mate 20Pro存在大规模明显的绿屏缺陷，这是讲事实。
+
+说华为虚假宣传，这是抹黑；
+说华为P9用单反相机的照片充当手机拍摄的效果图宣传，这是讲事实。
+
+说华为喜欢造假，这是抹黑；
+说华为P30 Pro拍月亮用AI伪造照片，这是讲事实。
+
+说华为不守法，这是抹黑；
+说华为倒卖被美国严令禁止的商品到伊朗，这是讲事实。
+
+说华为依靠抄袭起家，这是抹黑；
+说华为复制思科源代码，这是讲事实。
+
+说华为搞间谍战，这是抹黑；
+说华为窃取摩托罗拉专有无线网络切换技术，这是讲事实。
+
+说华为低质高价，这是抹黑；
+说华为把680芯片的手机卖2000，这是讲事实。
+
+说华为不遵守劳动法，这是抹黑；
+说华为用奋斗者协议让员工自愿放弃带薪年休假工资，这是讲事实。
+
+说华为心黑手辣，这是抹黑；
+说华为将李洪元无端扣押251天，这是讲事实。
+
+说华为喜欢剥削员工，这是抹黑；
+说华为大量使用外包OD，这是讲事实。
+
+
+## 🎯 待处理的目标文案
+说华为虚假宣传，这是抹黑；说华为P9用单反相机的照片充当手机拍摄的效果图宣传，这是讲事实。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "说华为虚假宣传，"
+  },
+  {
+    "index": 1,
+    "text": "这是抹黑；"
+  },
+  {
+    "index": 2,
+    "text": "说华为P9用单反相机的照片充当手机拍摄的效果图宣传，"
+  },
+  {
+    "index": 3,
+    "text": "这是讲事实。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：DOS_AND_DONTS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "left": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    },
+    "right": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    }
+  },
+  "required": [
+    "left",
+    "right"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "DOS_AND_DONTS",
+  "param": {
+    "left": {
+      "label": "❌ 别这样",
+      "src": "盲目跟风的人简笔画图标",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 正确做法",
+      "src": "理性分析图表的人简笔画图标",
+      "showFrom": 1
+    }
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:54:48
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "left": {
+      "label": "❌ 抹黑",
+      "src": "一个人张嘴说话，周围有扭曲的谎言气泡，背景灰暗",
+      "showFrom": 1
+    },
+    "right": {
+      "label": "✅ 讲事实",
+      "src": "一只手拿着放大镜对准一份文件，清晰的光线照亮细节，背景明亮",
+      "showFrom": 3
+    }
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:54:48
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+说华为的手机很垃圾，这是抹黑；
+说华为手机P10混用闪存芯片，这是讲事实。
+
+说华为手机质量有问题，这是抹黑；
+说华为Mate 20Pro存在大规模明显的绿屏缺陷，这是讲事实。
+
+说华为虚假宣传，这是抹黑；
+说华为P9用单反相机的照片充当手机拍摄的效果图宣传，这是讲事实。
+
+说华为喜欢造假，这是抹黑；
+说华为P30 Pro拍月亮用AI伪造照片，这是讲事实。
+
+说华为不守法，这是抹黑；
+说华为倒卖被美国严令禁止的商品到伊朗，这是讲事实。
+
+说华为依靠抄袭起家，这是抹黑；
+说华为复制思科源代码，这是讲事实。
+
+说华为搞间谍战，这是抹黑；
+说华为窃取摩托罗拉专有无线网络切换技术，这是讲事实。
+
+说华为低质高价，这是抹黑；
+说华为把680芯片的手机卖2000，这是讲事实。
+
+说华为不遵守劳动法，这是抹黑；
+说华为用奋斗者协议让员工自愿放弃带薪年休假工资，这是讲事实。
+
+说华为心黑手辣，这是抹黑；
+说华为将李洪元无端扣押251天，这是讲事实。
+
+说华为喜欢剥削员工，这是抹黑；
+说华为大量使用外包OD，这是讲事实。
+
+
+## 🎯 待处理的目标文案
+说华为喜欢造假，这是抹黑；说华为P30 Pro拍月亮用AI伪造照片，这是讲事实。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "说华为喜欢造假，"
+  },
+  {
+    "index": 1,
+    "text": "这是抹黑；"
+  },
+  {
+    "index": 2,
+    "text": "说华为P30 Pro拍月亮用AI伪造照片，"
+  },
+  {
+    "index": 3,
+    "text": "这是讲事实。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：DOS_AND_DONTS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "left": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    },
+    "right": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    }
+  },
+  "required": [
+    "left",
+    "right"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "DOS_AND_DONTS",
+  "param": {
+    "left": {
+      "label": "❌ 别这样",
+      "src": "盲目跟风的人简笔画图标",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 正确做法",
+      "src": "理性分析图表的人简笔画图标",
+      "showFrom": 1
+    }
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:55:04
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "left": {
+      "label": "❌ 抹黑",
+      "src": "一人对着空气捏造谣言，脸部扭曲夸张，背后有破碎的假新闻气泡",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 讲事实",
+      "src": "手机支架上的设备镜头中月亮清晰，屏幕上AI算法精准标注环形山轮廓",
+      "showFrom": 2
+    }
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:55:04
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+说华为的手机很垃圾，这是抹黑；
+说华为手机P10混用闪存芯片，这是讲事实。
+
+说华为手机质量有问题，这是抹黑；
+说华为Mate 20Pro存在大规模明显的绿屏缺陷，这是讲事实。
+
+说华为虚假宣传，这是抹黑；
+说华为P9用单反相机的照片充当手机拍摄的效果图宣传，这是讲事实。
+
+说华为喜欢造假，这是抹黑；
+说华为P30 Pro拍月亮用AI伪造照片，这是讲事实。
+
+说华为不守法，这是抹黑；
+说华为倒卖被美国严令禁止的商品到伊朗，这是讲事实。
+
+说华为依靠抄袭起家，这是抹黑；
+说华为复制思科源代码，这是讲事实。
+
+说华为搞间谍战，这是抹黑；
+说华为窃取摩托罗拉专有无线网络切换技术，这是讲事实。
+
+说华为低质高价，这是抹黑；
+说华为把680芯片的手机卖2000，这是讲事实。
+
+说华为不遵守劳动法，这是抹黑；
+说华为用奋斗者协议让员工自愿放弃带薪年休假工资，这是讲事实。
+
+说华为心黑手辣，这是抹黑；
+说华为将李洪元无端扣押251天，这是讲事实。
+
+说华为喜欢剥削员工，这是抹黑；
+说华为大量使用外包OD，这是讲事实。
+
+
+## 🎯 待处理的目标文案
+说华为不守法，这是抹黑；说华为倒卖被美国严令禁止的商品到伊朗，这是讲事实。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "说华为不守法，"
+  },
+  {
+    "index": 1,
+    "text": "这是抹黑；"
+  },
+  {
+    "index": 2,
+    "text": "说华为倒卖被美国严令禁止的商品到伊朗，"
+  },
+  {
+    "index": 3,
+    "text": "这是讲事实。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：DOS_AND_DONTS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "left": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    },
+    "right": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    }
+  },
+  "required": [
+    "left",
+    "right"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "DOS_AND_DONTS",
+  "param": {
+    "left": {
+      "label": "❌ 别这样",
+      "src": "盲目跟风的人简笔画图标",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 正确做法",
+      "src": "理性分析图表的人简笔画图标",
+      "showFrom": 1
+    }
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:55:17
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "left": { "label": "❌ 不实指控", "src": "一个人戴着墨镜扭曲事实的黑白插画，表情阴险，背景灰暗", "showFrom": 0 }, "right": { "label": "✅ 事实证据", "src": "一个人放大镜聚焦一份有官方印章的文件，背景明亮，神情坚定", "showFrom": 2 } } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:55:17
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+说华为的手机很垃圾，这是抹黑；
+说华为手机P10混用闪存芯片，这是讲事实。
+
+说华为手机质量有问题，这是抹黑；
+说华为Mate 20Pro存在大规模明显的绿屏缺陷，这是讲事实。
+
+说华为虚假宣传，这是抹黑；
+说华为P9用单反相机的照片充当手机拍摄的效果图宣传，这是讲事实。
+
+说华为喜欢造假，这是抹黑；
+说华为P30 Pro拍月亮用AI伪造照片，这是讲事实。
+
+说华为不守法，这是抹黑；
+说华为倒卖被美国严令禁止的商品到伊朗，这是讲事实。
+
+说华为依靠抄袭起家，这是抹黑；
+说华为复制思科源代码，这是讲事实。
+
+说华为搞间谍战，这是抹黑；
+说华为窃取摩托罗拉专有无线网络切换技术，这是讲事实。
+
+说华为低质高价，这是抹黑；
+说华为把680芯片的手机卖2000，这是讲事实。
+
+说华为不遵守劳动法，这是抹黑；
+说华为用奋斗者协议让员工自愿放弃带薪年休假工资，这是讲事实。
+
+说华为心黑手辣，这是抹黑；
+说华为将李洪元无端扣押251天，这是讲事实。
+
+说华为喜欢剥削员工，这是抹黑；
+说华为大量使用外包OD，这是讲事实。
+
+
+## 🎯 待处理的目标文案
+说华为依靠抄袭起家，这是抹黑；说华为复制思科源代码，这是讲事实。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "说华为依靠抄袭起家，"
+  },
+  {
+    "index": 1,
+    "text": "这是抹黑；"
+  },
+  {
+    "index": 2,
+    "text": "说华为复制思科源代码，"
+  },
+  {
+    "index": 3,
+    "text": "这是讲事实。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：DOS_AND_DONTS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "left": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    },
+    "right": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    }
+  },
+  "required": [
+    "left",
+    "right"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "DOS_AND_DONTS",
+  "param": {
+    "left": {
+      "label": "❌ 别这样",
+      "src": "盲目跟风的人简笔画图标",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 正确做法",
+      "src": "理性分析图表的人简笔画图标",
+      "showFrom": 1
+    }
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:55:28
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"left": {"label": "❌ 抹黑", "src": "一个简笔画人物在临摹他人作品，表示抄袭", "showFrom": 0}, "right": {"label": "✅ 讲事实", "src": "一台笔记本电脑屏幕上显示代码，一只手按Ctrl+C复制代码", "showFrom": 2}}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:55:28
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+说华为的手机很垃圾，这是抹黑；
+说华为手机P10混用闪存芯片，这是讲事实。
+
+说华为手机质量有问题，这是抹黑；
+说华为Mate 20Pro存在大规模明显的绿屏缺陷，这是讲事实。
+
+说华为虚假宣传，这是抹黑；
+说华为P9用单反相机的照片充当手机拍摄的效果图宣传，这是讲事实。
+
+说华为喜欢造假，这是抹黑；
+说华为P30 Pro拍月亮用AI伪造照片，这是讲事实。
+
+说华为不守法，这是抹黑；
+说华为倒卖被美国严令禁止的商品到伊朗，这是讲事实。
+
+说华为依靠抄袭起家，这是抹黑；
+说华为复制思科源代码，这是讲事实。
+
+说华为搞间谍战，这是抹黑；
+说华为窃取摩托罗拉专有无线网络切换技术，这是讲事实。
+
+说华为低质高价，这是抹黑；
+说华为把680芯片的手机卖2000，这是讲事实。
+
+说华为不遵守劳动法，这是抹黑；
+说华为用奋斗者协议让员工自愿放弃带薪年休假工资，这是讲事实。
+
+说华为心黑手辣，这是抹黑；
+说华为将李洪元无端扣押251天，这是讲事实。
+
+说华为喜欢剥削员工，这是抹黑；
+说华为大量使用外包OD，这是讲事实。
+
+
+## 🎯 待处理的目标文案
+说华为搞间谍战，这是抹黑；说华为窃取摩托罗拉专有无线网络切换技术，这是讲事实。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "说华为搞间谍战，"
+  },
+  {
+    "index": 1,
+    "text": "这是抹黑；"
+  },
+  {
+    "index": 2,
+    "text": "说华为窃取摩托罗拉专有无线网络切换技术，"
+  },
+  {
+    "index": 3,
+    "text": "这是讲事实。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：DOS_AND_DONTS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "left": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    },
+    "right": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    }
+  },
+  "required": [
+    "left",
+    "right"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "DOS_AND_DONTS",
+  "param": {
+    "left": {
+      "label": "❌ 别这样",
+      "src": "盲目跟风的人简笔画图标",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 正确做法",
+      "src": "理性分析图表的人简笔画图标",
+      "showFrom": 1
+    }
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:55:36
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "left": {
+      "label": "❌ 抹黑",
+      "src": "暗中监视的间谍形象简笔画",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 讲事实",
+      "src": "网络技术盗窃的简笔画",
+      "showFrom": 2
+    }
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:55:36
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+说华为的手机很垃圾，这是抹黑；
+说华为手机P10混用闪存芯片，这是讲事实。
+
+说华为手机质量有问题，这是抹黑；
+说华为Mate 20Pro存在大规模明显的绿屏缺陷，这是讲事实。
+
+说华为虚假宣传，这是抹黑；
+说华为P9用单反相机的照片充当手机拍摄的效果图宣传，这是讲事实。
+
+说华为喜欢造假，这是抹黑；
+说华为P30 Pro拍月亮用AI伪造照片，这是讲事实。
+
+说华为不守法，这是抹黑；
+说华为倒卖被美国严令禁止的商品到伊朗，这是讲事实。
+
+说华为依靠抄袭起家，这是抹黑；
+说华为复制思科源代码，这是讲事实。
+
+说华为搞间谍战，这是抹黑；
+说华为窃取摩托罗拉专有无线网络切换技术，这是讲事实。
+
+说华为低质高价，这是抹黑；
+说华为把680芯片的手机卖2000，这是讲事实。
+
+说华为不遵守劳动法，这是抹黑；
+说华为用奋斗者协议让员工自愿放弃带薪年休假工资，这是讲事实。
+
+说华为心黑手辣，这是抹黑；
+说华为将李洪元无端扣押251天，这是讲事实。
+
+说华为喜欢剥削员工，这是抹黑；
+说华为大量使用外包OD，这是讲事实。
+
+
+## 🎯 待处理的目标文案
+说华为低质高价，这是抹黑；说华为把680芯片的手机卖2000，这是讲事实。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "说华为低质高价，"
+  },
+  {
+    "index": 1,
+    "text": "这是抹黑；"
+  },
+  {
+    "index": 2,
+    "text": "说华为把680芯片的手机卖2000，"
+  },
+  {
+    "index": 3,
+    "text": "这是讲事实。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：DOS_AND_DONTS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "left": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    },
+    "right": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    }
+  },
+  "required": [
+    "left",
+    "right"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "DOS_AND_DONTS",
+  "param": {
+    "left": {
+      "label": "❌ 别这样",
+      "src": "盲目跟风的人简笔画图标",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 正确做法",
+      "src": "理性分析图表的人简笔画图标",
+      "showFrom": 1
+    }
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:55:49
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"left":{"label":"❌ 抹黑","src":"一个价格牌上写着高昂的数字，旁边是性能低下的手机","showFrom":0},"right":{"label":"✅ 讲事实","src":"一部手机旁的放大镜显示出处理器型号和价格标签的对比","showFrom":2}}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:55:49
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+说华为的手机很垃圾，这是抹黑；
+说华为手机P10混用闪存芯片，这是讲事实。
+
+说华为手机质量有问题，这是抹黑；
+说华为Mate 20Pro存在大规模明显的绿屏缺陷，这是讲事实。
+
+说华为虚假宣传，这是抹黑；
+说华为P9用单反相机的照片充当手机拍摄的效果图宣传，这是讲事实。
+
+说华为喜欢造假，这是抹黑；
+说华为P30 Pro拍月亮用AI伪造照片，这是讲事实。
+
+说华为不守法，这是抹黑；
+说华为倒卖被美国严令禁止的商品到伊朗，这是讲事实。
+
+说华为依靠抄袭起家，这是抹黑；
+说华为复制思科源代码，这是讲事实。
+
+说华为搞间谍战，这是抹黑；
+说华为窃取摩托罗拉专有无线网络切换技术，这是讲事实。
+
+说华为低质高价，这是抹黑；
+说华为把680芯片的手机卖2000，这是讲事实。
+
+说华为不遵守劳动法，这是抹黑；
+说华为用奋斗者协议让员工自愿放弃带薪年休假工资，这是讲事实。
+
+说华为心黑手辣，这是抹黑；
+说华为将李洪元无端扣押251天，这是讲事实。
+
+说华为喜欢剥削员工，这是抹黑；
+说华为大量使用外包OD，这是讲事实。
+
+
+## 🎯 待处理的目标文案
+说华为不遵守劳动法，这是抹黑；说华为用奋斗者协议让员工自愿放弃带薪年休假工资，这是讲事实。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "说华为不遵守劳动法，"
+  },
+  {
+    "index": 1,
+    "text": "这是抹黑；"
+  },
+  {
+    "index": 2,
+    "text": "说华为用奋斗者协议让员工自愿放弃带薪年休假工资，"
+  },
+  {
+    "index": 3,
+    "text": "这是讲事实。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：DOS_AND_DONTS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "left": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    },
+    "right": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    }
+  },
+  "required": [
+    "left",
+    "right"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "DOS_AND_DONTS",
+  "param": {
+    "left": {
+      "label": "❌ 别这样",
+      "src": "盲目跟风的人简笔画图标",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 正确做法",
+      "src": "理性分析图表的人简笔画图标",
+      "showFrom": 1
+    }
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:55:58
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"left":{"label":"❌ 抹黑","src":"一只手拿着笔在纸上胡乱画叉，背景模糊的警告标志","showFrom":1},"right":{"label":"✅ 讲事实","src":"一只手握着放大镜仔细查看一份清晰的文件，旁边有明亮的灯泡","showFrom":3}}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:55:58
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+说华为的手机很垃圾，这是抹黑；
+说华为手机P10混用闪存芯片，这是讲事实。
+
+说华为手机质量有问题，这是抹黑；
+说华为Mate 20Pro存在大规模明显的绿屏缺陷，这是讲事实。
+
+说华为虚假宣传，这是抹黑；
+说华为P9用单反相机的照片充当手机拍摄的效果图宣传，这是讲事实。
+
+说华为喜欢造假，这是抹黑；
+说华为P30 Pro拍月亮用AI伪造照片，这是讲事实。
+
+说华为不守法，这是抹黑；
+说华为倒卖被美国严令禁止的商品到伊朗，这是讲事实。
+
+说华为依靠抄袭起家，这是抹黑；
+说华为复制思科源代码，这是讲事实。
+
+说华为搞间谍战，这是抹黑；
+说华为窃取摩托罗拉专有无线网络切换技术，这是讲事实。
+
+说华为低质高价，这是抹黑；
+说华为把680芯片的手机卖2000，这是讲事实。
+
+说华为不遵守劳动法，这是抹黑；
+说华为用奋斗者协议让员工自愿放弃带薪年休假工资，这是讲事实。
+
+说华为心黑手辣，这是抹黑；
+说华为将李洪元无端扣押251天，这是讲事实。
+
+说华为喜欢剥削员工，这是抹黑；
+说华为大量使用外包OD，这是讲事实。
+
+
+## 🎯 待处理的目标文案
+说华为心黑手辣，这是抹黑；说华为将李洪元无端扣押251天，这是讲事实。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "说华为心黑手辣，"
+  },
+  {
+    "index": 1,
+    "text": "这是抹黑；"
+  },
+  {
+    "index": 2,
+    "text": "说华为将李洪元无端扣押251天，"
+  },
+  {
+    "index": 3,
+    "text": "这是讲事实。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：DOS_AND_DONTS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "left": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    },
+    "right": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    }
+  },
+  "required": [
+    "left",
+    "right"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "DOS_AND_DONTS",
+  "param": {
+    "left": {
+      "label": "❌ 别这样",
+      "src": "盲目跟风的人简笔画图标",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 正确做法",
+      "src": "理性分析图表的人简笔画图标",
+      "showFrom": 1
+    }
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:56:12
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "left": {
+      "label": "❌ 抹黑",
+      "src": "一个阴影中的人面目狰狞，伸出黑手抓向一个发光的华为标志，背景暗红",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 讲事实",
+      "src": "一位律师站在法庭上，手持文件，文件上有一道红圈标记的251天时间线，背景明亮",
+      "showFrom": 2
+    }
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:56:12
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+说华为的手机很垃圾，这是抹黑；
+说华为手机P10混用闪存芯片，这是讲事实。
+
+说华为手机质量有问题，这是抹黑；
+说华为Mate 20Pro存在大规模明显的绿屏缺陷，这是讲事实。
+
+说华为虚假宣传，这是抹黑；
+说华为P9用单反相机的照片充当手机拍摄的效果图宣传，这是讲事实。
+
+说华为喜欢造假，这是抹黑；
+说华为P30 Pro拍月亮用AI伪造照片，这是讲事实。
+
+说华为不守法，这是抹黑；
+说华为倒卖被美国严令禁止的商品到伊朗，这是讲事实。
+
+说华为依靠抄袭起家，这是抹黑；
+说华为复制思科源代码，这是讲事实。
+
+说华为搞间谍战，这是抹黑；
+说华为窃取摩托罗拉专有无线网络切换技术，这是讲事实。
+
+说华为低质高价，这是抹黑；
+说华为把680芯片的手机卖2000，这是讲事实。
+
+说华为不遵守劳动法，这是抹黑；
+说华为用奋斗者协议让员工自愿放弃带薪年休假工资，这是讲事实。
+
+说华为心黑手辣，这是抹黑；
+说华为将李洪元无端扣押251天，这是讲事实。
+
+说华为喜欢剥削员工，这是抹黑；
+说华为大量使用外包OD，这是讲事实。
+
+
+## 🎯 待处理的目标文案
+说华为喜欢剥削员工，这是抹黑；说华为大量使用外包OD，这是讲事实。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "说华为喜欢剥削员工，"
+  },
+  {
+    "index": 1,
+    "text": "这是抹黑；"
+  },
+  {
+    "index": 2,
+    "text": "说华为大量使用外包OD，"
+  },
+  {
+    "index": 3,
+    "text": "这是讲事实。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：DOS_AND_DONTS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "left": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    },
+    "right": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    }
+  },
+  "required": [
+    "left",
+    "right"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "DOS_AND_DONTS",
+  "param": {
+    "left": {
+      "label": "❌ 别这样",
+      "src": "盲目跟风的人简笔画图标",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 正确做法",
+      "src": "理性分析图表的人简笔画图标",
+      "showFrom": 1
+    }
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:56:32
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"left": {"label": "❌ 抹黑", "src": "一只夸张的卡通嘴巴，正在吐出弯曲的谎言线条，背景有问号", "showFrom": 0}, "right": {"label": "✅ 讲事实", "src": "一只手拿着一只放大镜，正对着一份写满数据的文件，文件上的数字清晰可见", "showFrom": 2}}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:56:32
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+抹黑华为的太多了，简直是罄竹难书。
+篇幅有限，就不再一一列举了。
+
+以上事实，请于正文部分获取证据。
+
+
+## 🎯 待处理的目标文案
+抹黑华为的太多了，简直是罄竹难书。篇幅有限，就不再一一列举了。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "抹黑华为的太多了，"
+  },
+  {
+    "index": 1,
+    "text": "简直是罄竹难书。"
+  },
+  {
+    "index": 2,
+    "text": "篇幅有限，"
+  },
+  {
+    "index": 3,
+    "text": "就不再一一列举了。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:56:44
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "华为标志剪影被众多黑色墨点围绕并扩散",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "罄竹难书",
+        "showFrom": 1,
+        "color": "#EF4444",
+        "anim": "popIn",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-13 22:56:44
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+抹黑华为的太多了，简直是罄竹难书。
+篇幅有限，就不再一一列举了。
+
+以上事实，请于正文部分获取证据。
+
+
+## 🎯 待处理的目标文案
+以上事实，请于正文部分获取证据。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "以上事实，"
+  },
+  {
+    "index": 1,
+    "text": "请于正文部分获取证据。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-13 22:56:49
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "一份摊开的文件或文件夹图标，带有放大镜或红色印章的特写，简洁商务风格",
+    "enterEffect": "fadeIn",
+    "anchors": []
+  }
+}
+-------------------------------------------------------------------------------------------

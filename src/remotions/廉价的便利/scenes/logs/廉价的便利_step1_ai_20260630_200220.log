@@ -1,0 +1,7159 @@
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:02:21
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：为什么快递越快，你的工资越涨不上去？
+- **当前场景**：引入：极致便利的幻觉
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+在中国生活实在太便利了！
+9块9包邮的产品一大把，
+深更半夜点外卖，还能半小时就给送到了。
+客服24小时在线，都是秒回。
+
+很多人张口就来，自豪得不行。
+“这一切，都因为咱们基建牛逼！高铁、5G，世界第一！”
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:03:31
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "在中国生活实在太便利了！",
+      "narrativeType": "HOOK",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "开场感叹句，引出主题，无复杂结构，单图平缓叙述即可 → 选 CENTER_FOCUS。"
+    },
+    {
+      "text": "9块9包邮的产品一大把，深更半夜点外卖，还能半小时就给送到了。客服24小时在线，都是秒回。",
+      "narrativeType": "CASE",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "high",
+      "reasoning": "三个并列的具体便利例子，每个都需要独立配图，形成宫格并列 → 选 PANEL_GRID。合并前检查：三个例子同属列举结构且连续，拆分会破坏并列感，合并后 45 字未超限。"
+    },
+    {
+      "text": "很多人张口就来，自豪得不行。",
+      "narrativeType": "TRANSITION",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "引出引语的过渡句，平铺叙述人们的常见反应，单图即可 → 选 CENTER_FOCUS。字数 14 字，刚好满足独立镜头最低长度，且与后接引语叙事角色不同，故独立成镜。"
+    },
+    {
+      "text": "“这一切，都因为咱们基建牛逼！高铁、5G，世界第一！”",
+      "narrativeType": "LOGIC",
+      "template": "QUOTE_CITATION",
+      "expressionTag": "quote",
+      "confidence": "high",
+      "reasoning": "直接引语，表达一种自豪的归因逻辑，适合用引文卡片展示 → 选 QUOTE_CITATION。原文含引号，一并保留以确保逐字一致。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:03:31
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：为什么快递越快，你的工资越涨不上去？
+- **当前场景**：反转：最后三公里的人腿代价
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+对了一半。
+基建确实把物流成本砸下来了。
+可算法再牛，也爬不上六楼。
+最后三公里，永远靠两条人腿在跑。
+真正撑起这极致便利的，
+不是钢筋水泥，
+而是极其廉价的人力，和不要命的汗水。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:04:12
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "对了一半。基建确实把物流成本砸下来了。可算法再牛，也爬不上六楼。最后三公里，永远靠两条人腿在跑。",
+      "narrativeType": "LOGIC",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "本段是典型的节拍递进：从半肯定（对了一半）到具体解释（基建砸成本）再转折（算法爬不上楼）最终落到现状结论（最后三公里靠人腿），层层递进符合BEAT_SEQUENCE叙事弧。"
+    },
+    {
+      "text": "真正撑起这极致便利的，不是钢筋水泥，而是极其廉价的人力，和不要命的汗水。",
+      "narrativeType": "CONCLUSION",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "明确使用“不是…而是…”对照结构，揭示便利背后的真正原因，属于强认知转变，适合COGNITIVE_SHIFT。与前一段叙事角色发生跳变，拆分为独立镜头。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:04:12
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：为什么快递越快，你的工资越涨不上去？
+- **当前场景**：剖析：廉价人力的具体画像
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+看看你身边这些画面。
+流水线上的阿姨，一天干12个小时。
+组装一个小零件，才赚几厘钱。
+
+暴雨夜里，外卖小哥骑着电动车狂奔。
+一单只赚三五块，超时平台就扣钱。
+为了准时送达，他们闯红灯、逆行、爬楼梯，
+汗水混着雨水，腿都快跑断了。
+
+半夜一点，客服秒回你。
+态度好到甩欧美几条街。
+背后呢？三四千底薪的年轻人，
+背着回复速度的KPI，连上厕所都要掐表。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:04:30
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "看看你身边这些画面。",
+      "narrativeType": "TRANSITION",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "平缓引导性叙述，引出后续具体画像，单图即可，无特殊结构。"
+    },
+    {
+      "text": "流水线上的阿姨，一天干12个小时。",
+      "narrativeType": "CASE",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "具体案例描述，平铺事实，单图配文，无对比或节拍递进。"
+    },
+    {
+      "text": "组装一个小零件，才赚几厘钱。",
+      "narrativeType": "CASE",
+      "template": "KPI_HERO",
+      "expressionTag": "data",
+      "confidence": "high",
+      "reasoning": "强调单个核心数值“几厘钱”，极低收入形成冲击，适合KPI_HERO突出数据。"
+    },
+    {
+      "text": "暴雨夜里，外卖小哥骑着电动车狂奔。",
+      "narrativeType": "CASE",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "场景刻画，情绪铺垫，单图配合，无结构化表达。"
+    },
+    {
+      "text": "一单只赚三五块，超时平台就扣钱。",
+      "narrativeType": "CASE",
+      "template": "CAUSE_CHAIN",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "因果传导：每单收入低 → 超时扣钱，形成压力链条，适合CAUSE_CHAIN。"
+    },
+    {
+      "text": "为了准时送达，他们闯红灯、逆行、爬楼梯，",
+      "narrativeType": "CASE",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "动作节拍递进：闯红灯→逆行→爬楼梯，逐级强化紧迫感，拆为独立镜头展现递进。"
+    },
+    {
+      "text": "汗水混着雨水，腿都快跑断了。",
+      "narrativeType": "CASE",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "收束性描述，聚焦于疲惫与挣扎的意象，无需复杂结构，单图强化情绪。"
+    },
+    {
+      "text": "半夜一点，客服秒回你。",
+      "narrativeType": "CASE",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "引出新案例，平铺事实，简单叙述。"
+    },
+    {
+      "text": "态度好到甩欧美几条街。",
+      "narrativeType": "CASE",
+      "template": "KPI_HERO",
+      "expressionTag": "data",
+      "confidence": "high",
+      "reasoning": "强调对比结果“甩欧美几条街”，隐含数据对比，适合KPI_HERO突出结论。"
+    },
+    {
+      "text": "背后呢？三四千底薪的年轻人，",
+      "narrativeType": "CASE",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "从表面良好态度转向背后真相，揭示反差，符合“不是…而是…”的认知转换。"
+    },
+    {
+      "text": "背着回复速度的KPI，连上厕所都要掐表。",
+      "narrativeType": "CASE",
+      "template": "CAUSE_CHAIN",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "因果压力传导：KPI要求 → 极端时间控制，形成链条式递进。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:04:30
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：为什么快递越快，你的工资越涨不上去？
+- **当前场景**：剖析：廉价人力的连锁恶果
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+你可能觉得，
+我在办公室吹空调，
+这跟我有什么关系？
+关系大了。
+人力便宜这个逻辑，
+已经打通了全社会每一个角落。
+
+廉价的人力，首先会阻碍创新。
+当你只需要花一点点钱就能坐轿子的时候，
+你就不会想着造车。
+当你只需要花一点点钱就能让人扇扇子的时候，
+你就不会想着造电风扇。
+创新很耗时，创新很贵，而你，很便宜。
+
+廉价的人力，还会制造内卷。
+企业习惯用低人力成本赚钱，
+打工人工资就上不去。
+大家兜里没钱，
+只能消费降级，追求更便宜的东西。
+企业为了提供更低的价格，
+就只能继续压榨打工人。
+这就形成了循环，
+也就造就了内卷。
+
+我们每个人，
+既是享受廉价便利的消费者，
+又是被死死压榨的打工人。
+逃不掉。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:04:51
+attempt: 1/3
+
+[OUTPUT]
+```json
+{
+  "items": [
+    {
+      "text": "你可能觉得，我在办公室吹空调，这跟我有什么关系？关系大了。",
+      "narrativeType": "HOOK",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "开头是提问→转折→震撼结论的情绪递进结构，三段节奏紧密，"铺垫疑问→反驳→收束冲击"，适合BEAT_SEQUENCE分拍呈现。"
+    },
+    {
+      "text": "人力便宜这个逻辑，已经打通了全社会每一个角落。",
+      "narrativeType": "TRANSITION",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "承上启下的过渡句，单一论断平铺，无强结构，用CENTER_FOCUS平缓呈现即可。"
+    },
+    {
+      "text": "廉价的人力，首先会阻碍创新。当你只需要花一点点钱就能坐轿子的时候，你就不会想着造车。当你只需要花一点点钱就能让人扇扇子的时候，你就不会想着造电风扇。创新很耗时，创新很贵，而你，很便宜。",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "核心是揭示"廉价人力→抑制创新"的认知反转，用轿子vs造车、扇子vs电风扇两组对照，最后落到"你，很便宜"的反常识结论，符合COGNITIVE_SHIFT"打破原有认知"的结构。"
+    },
+    {
+      "text": "廉价的人力，还会制造内卷。企业习惯用低人力成本赚钱，打工人工资就上不去。大家兜里没钱，只能消费降级，追求更便宜的东西。企业为了提供更低的价格，就只能继续压榨打工人。这就形成了循环，也就造就了内卷。",
+      "narrativeType": "LOGIC",
+      "template": "CAUSE_CHAIN",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "完整的因果传导链：低人力成本→工资低→消费降级→企业继续压榨→循环形成。每环层层相扣，无时间轴，适合CAUSE_CHAIN展示机制传导。"
+    },
+    {
+      "text": "我们每个人，既是享受廉价便利的消费者，又是被死死压榨的打工人。逃不掉。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "全文收束金句揭示矛盾身份与无奈，短促锋利无需配图，"逃不掉"三个字是极强锚点，适合TEXT_FOCUS黑底白字冲击。"
+    }
+  ]
+}
+```
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:04:51
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是专业短视频编导，擅长镜头节奏设计。请将场景文案按「观众注意力节奏」拆解为独立镜头（Item），**本阶段只决定在哪里切分，不涉及任何模板**。
+
+## 🎥 视频大背景
+- **核心主题**：为什么快递越快，你的工资越涨不上去？
+- **当前场景**：剖析：廉价人力的连锁恶果
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+你可能觉得，
+我在办公室吹空调，
+这跟我有什么关系？
+关系大了。
+人力便宜这个逻辑，
+已经打通了全社会每一个角落。
+
+廉价的人力，首先会阻碍创新。
+当你只需要花一点点钱就能坐轿子的时候，
+你就不会想着造车。
+当你只需要花一点点钱就能让人扇扇子的时候，
+你就不会想着造电风扇。
+创新很耗时，创新很贵，而你，很便宜。
+
+廉价的人力，还会制造内卷。
+企业习惯用低人力成本赚钱，
+打工人工资就上不去。
+大家兜里没钱，
+只能消费降级，追求更便宜的东西。
+企业为了提供更低的价格，
+就只能继续压榨打工人。
+这就形成了循环，
+也就造就了内卷。
+
+我们每个人，
+既是享受廉价便利的消费者，
+又是被死死压榨的打工人。
+逃不掉。
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句/强转折句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+- 若单个建议/方法内部是 `标题 + 解释句 + 原因句/结果句`，默认**必须保留为一个 item**；不要把一个方法内部再切碎
+- 不同建议 / 不同方法之间，若各自已经形成独立叙事动作或独立画面目标，**不要为了后续统一模板而强行合并**
+- 若你决定拆开同一建议组，两个 item 的 `splitSignal` 必须为 `strong`，且 `reasoning` 中明确写出“视觉主体已更换”
+
+## 📋 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "分配给该镜头的完整口播原文片段（必须原封不动）",
+      "narrativeRole": "hook | explain | example | contrast | data | conclude | transition",
+      "visualFocus": "一句话描述该镜头的视觉重心（如：两人对话场景、数据图表、人物特写）",
+      "emotionTone": "calm | rising | peak | resolving",
+      "splitSignal": "strong | medium | weak（该镜头相对上一镜头的切分信号强度，第一个填 strong）",
+      "estimatedSeconds": 5.0,
+      "reasoning": "切分信号强度判断理由 -> 字数/预估秒数 -> 叙事角色 -> 与前后镜头关系"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:06:41
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "你可能觉得，我在办公室吹空调，这跟我有什么关系？关系大了。",
+      "narrativeRole": "hook",
+      "visualFocus": "一个白领坐在办公桌前，表情漫不经心，随即转向镜头反问",
+      "emotionTone": "rising",
+      "splitSignal": "strong",
+      "estimatedSeconds": 2.9,
+      "reasoning": "强信号：场景从观众预设切换到否定转折，叙事角色为hook引入，情绪由平缓上升 -> 13字/约2.9秒 -> 为开场设问，与下一镜头的解释形成强烈对比"
+    },
+    {
+      "text": "人力便宜这个逻辑，已经打通了全社会每一个角落。",
+      "narrativeRole": "explain",
+      "visualFocus": "动态图形：一张‘人力便宜’标签扩散至建筑、工厂、办公室等全场景",
+      "emotionTone": "calm",
+      "splitSignal": "strong",
+      "estimatedSeconds": 3.3,
+      "reasoning": "强信号：从hook的设问/转折切换到冷静的全局解释，叙事角色彻底转换为explain -> 15字/约3.3秒 -> 为第一轮论述兜底，画面与情绪皆与前镜不同"
+    },
+    {
+      "text": "廉价的人力，首先会阻碍创新。",
+      "narrativeRole": "explain",
+      "visualFocus": "单人面对镜头，后景出现‘阻碍创新’大字，画面陡然严肃",
+      "emotionTone": "calm",
+      "splitSignal": "strong",
+      "estimatedSeconds": 2.9,
+      "reasoning": "强信号：从‘打通角落’的全局解释转到具体论点‘阻碍创新’，话题切换，视觉重心从社会全景转为人物论点头 -> 13字/约2.9秒 -> 为后续举例做准备"
+    },
+    {
+      "text": "当你只需要花一点点钱就能坐轿子的时候，你就不会想着造车。当你只需要花一点点钱就能让人扇扇子的时候，你就不会想着造电风扇。",
+      "narrativeRole": "example",
+      "visualFocus": "动画对比：古代的轿子与人力扇子 → 脑中浮现汽车和电风扇却被‘便宜’念头打消",
+      "emotionTone": "calm",
+      "splitSignal": "strong",
+      "estimatedSeconds": 9.8,
+      "reasoning": "强信号：从论点直接转入具象例子，叙事角色从explain转为example -> 44字/约9.8秒，虽稍长但仍在对仗排比的容忍范围内，两个例子信号弱必须合并 -> 与后接结论形成例证-总结结构"
+    },
+    {
+      "text": "创新很耗时，创新很贵，而你，很便宜。",
+      "narrativeRole": "conclude",
+      "visualFocus": "镜头推向说话人的面部，强调‘而你，很便宜’，画面略微收敛",
+      "emotionTone": "rising",
+      "splitSignal": "strong",
+      "estimatedSeconds": 2.9,
+      "reasoning": "强信号：从举例切换到总结结论，叙事角色由example转为conclude，情绪从平静逐渐上升 -> 13字/约2.9秒 -> 与前例形成强收束，为切换下一论点蓄力"
+    },
+    {
+      "text": "廉价的人力，还会制造内卷。",
+      "narrativeRole": "explain",
+      "visualFocus": "画面切为急促工作的打工人群，标题‘制造内卷’出现在中间",
+      "emotionTone": "calm",
+      "splitSignal": "strong",
+      "estimatedSeconds": 2.4,
+      "reasoning": "强信号：从‘阻碍创新’结论彻底转向第二个核心论点‘制造内卷’，话题与视觉主体完全更换 -> 11字/约2.4秒，虽短但作为独立论点起到强调作用，不强制合并 -> 引导观众关注内卷机制"
+    },
+    {
+      "text": "企业习惯用低人力成本赚钱，打工人工资就上不去。大家兜里没钱，只能消费降级，追求更便宜的东西。",
+      "narrativeRole": "explain",
+      "visualFocus": "工厂流水线旁，工资条数字很小，镜头转到消费者无奈选择低价商品",
+      "emotionTone": "calm",
+      "splitSignal": "medium",
+      "estimatedSeconds": 6.7,
+      "reasoning": "中等信号：同一论点内的因果链前半段，从‘制造内卷’转入具体解释，叙事角色仍是explain，视觉重心从人群海报变为具体因果场景 -> 30字/约6.7秒 -> 与下一镜形成内卷循环的递进"
+    },
+    {
+      "text": "企业为了提供更低的价格，就只能继续压榨打工人。这就形成了循环，也就造就了内卷。",
+      "narrativeRole": "explain",
+      "visualFocus": "循环箭头动画：企业压价 → 压榨工资 → 消费降级 → 再压价，最后定格在‘内卷’",
+      "emotionTone": "rising",
+      "splitSignal": "medium",
+      "estimatedSeconds": 6.2,
+      "reasoning": "中等信号：同一因果链的后半段，继续解释循环形成，叙事角色未变，情绪由平静逐渐上升 -> 28字/约6.2秒 -> 与前一镜共同完成内卷机制的解释，但视觉焦点转为循环图示，允许新镜"
+    },
+    {
+      "text": "我们每个人，既是享受廉价便利的消费者，又是被死死压榨的打工人。逃不掉。",
+      "narrativeRole": "conclude",
+      "visualFocus": "半屏是消费者笑着购物，半屏是打工人深夜加班，中间的人神情疲惫",
+      "emotionTone": "resolving",
+      "splitSignal": "strong",
+      "estimatedSeconds": 4.9,
+      "reasoning": "强信号：从内卷循环解释转向总结个人双重身份，叙事角色变为conclude，情绪到达顶点后收束为无奈 -> 22字/约4.9秒 -> 全片终结，强行唤起共鸣"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:06:41
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是动画模板选型专家。根据 **2A 分镜**产出的 items 元数据，为本场景的每个镜头选定最佳 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：为什么快递越快，你的工资越涨不上去？
+- **当前场景**：剖析：廉价人力的连锁恶果
+
+## 📋 已分镜的 Items（来自 2A，勿改其中字段；仅用于决策）
+[
+  {
+    "text": "你可能觉得，我在办公室吹空调，这跟我有什么关系？关系大了。",
+    "narrativeRole": "hook",
+    "visualFocus": "一个白领坐在办公桌前，表情漫不经心，随即转向镜头反问",
+    "emotionTone": "rising",
+    "splitSignal": "strong",
+    "estimatedSeconds": 2.9,
+    "reasoning": "强信号：场景从观众预设切换到否定转折，叙事角色为hook引入，情绪由平缓上升 -> 13字/约2.9秒 -> 为开场设问，与下一镜头的解释形成强烈对比"
+  },
+  {
+    "text": "人力便宜这个逻辑，已经打通了全社会每一个角落。",
+    "narrativeRole": "explain",
+    "visualFocus": "动态图形：一张‘人力便宜’标签扩散至建筑、工厂、办公室等全场景",
+    "emotionTone": "calm",
+    "splitSignal": "strong",
+    "estimatedSeconds": 3.3,
+    "reasoning": "强信号：从hook的设问/转折切换到冷静的全局解释，叙事角色彻底转换为explain -> 15字/约3.3秒 -> 为第一轮论述兜底，画面与情绪皆与前镜不同"
+  },
+  {
+    "text": "廉价的人力，首先会阻碍创新。",
+    "narrativeRole": "explain",
+    "visualFocus": "单人面对镜头，后景出现‘阻碍创新’大字，画面陡然严肃",
+    "emotionTone": "calm",
+    "splitSignal": "strong",
+    "estimatedSeconds": 2.9,
+    "reasoning": "强信号：从‘打通角落’的全局解释转到具体论点‘阻碍创新’，话题切换，视觉重心从社会全景转为人物论点头 -> 13字/约2.9秒 -> 为后续举例做准备"
+  },
+  {
+    "text": "当你只需要花一点点钱就能坐轿子的时候，你就不会想着造车。当你只需要花一点点钱就能让人扇扇子的时候，你就不会想着造电风扇。",
+    "narrativeRole": "example",
+    "visualFocus": "动画对比：古代的轿子与人力扇子 → 脑中浮现汽车和电风扇却被‘便宜’念头打消",
+    "emotionTone": "calm",
+    "splitSignal": "strong",
+    "estimatedSeconds": 9.8,
+    "reasoning": "强信号：从论点直接转入具象例子，叙事角色从explain转为example -> 44字/约9.8秒，虽稍长但仍在对仗排比的容忍范围内，两个例子信号弱必须合并 -> 与后接结论形成例证-总结结构"
+  },
+  {
+    "text": "创新很耗时，创新很贵，而你，很便宜。",
+    "narrativeRole": "conclude",
+    "visualFocus": "镜头推向说话人的面部，强调‘而你，很便宜’，画面略微收敛",
+    "emotionTone": "rising",
+    "splitSignal": "strong",
+    "estimatedSeconds": 2.9,
+    "reasoning": "强信号：从举例切换到总结结论，叙事角色由example转为conclude，情绪从平静逐渐上升 -> 13字/约2.9秒 -> 与前例形成强收束，为切换下一论点蓄力"
+  },
+  {
+    "text": "廉价的人力，还会制造内卷。",
+    "narrativeRole": "explain",
+    "visualFocus": "画面切为急促工作的打工人群，标题‘制造内卷’出现在中间",
+    "emotionTone": "calm",
+    "splitSignal": "strong",
+    "estimatedSeconds": 2.4,
+    "reasoning": "强信号：从‘阻碍创新’结论彻底转向第二个核心论点‘制造内卷’，话题与视觉主体完全更换 -> 11字/约2.4秒，虽短但作为独立论点起到强调作用，不强制合并 -> 引导观众关注内卷机制"
+  },
+  {
+    "text": "企业习惯用低人力成本赚钱，打工人工资就上不去。大家兜里没钱，只能消费降级，追求更便宜的东西。",
+    "narrativeRole": "explain",
+    "visualFocus": "工厂流水线旁，工资条数字很小，镜头转到消费者无奈选择低价商品",
+    "emotionTone": "calm",
+    "splitSignal": "medium",
+    "estimatedSeconds": 6.7,
+    "reasoning": "中等信号：同一论点内的因果链前半段，从‘制造内卷’转入具体解释，叙事角色仍是explain，视觉重心从人群海报变为具体因果场景 -> 30字/约6.7秒 -> 与下一镜形成内卷循环的递进"
+  },
+  {
+    "text": "企业为了提供更低的价格，就只能继续压榨打工人。这就形成了循环，也就造就了内卷。",
+    "narrativeRole": "explain",
+    "visualFocus": "循环箭头动画：企业压价 → 压榨工资 → 消费降级 → 再压价，最后定格在‘内卷’",
+    "emotionTone": "rising",
+    "splitSignal": "medium",
+    "estimatedSeconds": 6.2,
+    "reasoning": "中等信号：同一因果链的后半段，继续解释循环形成，叙事角色未变，情绪由平静逐渐上升 -> 28字/约6.2秒 -> 与前一镜共同完成内卷机制的解释，但视觉焦点转为循环图示，允许新镜"
+  },
+  {
+    "text": "我们每个人，既是享受廉价便利的消费者，又是被死死压榨的打工人。逃不掉。",
+    "narrativeRole": "conclude",
+    "visualFocus": "半屏是消费者笑着购物，半屏是打工人深夜加班，中间的人神情疲惫",
+    "emotionTone": "resolving",
+    "splitSignal": "strong",
+    "estimatedSeconds": 4.9,
+    "reasoning": "强信号：从内卷循环解释转向总结个人双重身份，叙事角色变为conclude，情绪到达顶点后收束为无奈 -> 22字/约4.9秒 -> 全片终结，强行唤起共鸣"
+  }
+]
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 选型决策流程
+
+对**每个待输出的 item**，分析text内容，寻找适合表达的画面模板，按以下顺序**自上向下**查找，**命中第一条即停止**。
+
+### 决策树
+
+**Step 1 — 数据型**（`narrativeRole` 为 data，或 `text` 含明确数值/百分比/倍率且强调量化结论）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（须能在口播中合理抽象出两个非负整数含义；若抽象勉强则勿选）
+- 单指标完成度/占比结论 → `PROGRESS_RING`
+- 单指标大字报（一个核心数）→ `KPI_HERO`
+
+**Step 2 — 对错 / 双方案对立**
+- 明确「别这样 vs 要这样」「错误做法 vs 正确做法」→ `DOS_AND_DONTS`
+- **双方行为/立场对照**（你方 vs 他方/对方；讲道理 vs 甩链接；分号「；」两侧描述**对立**两方而非单纯并列举例）→ `SPLIT_COMPARE`  
+  - 与并列多分点区分：**对仗用双分屏**；**同一论证下多个平级例子**用合并 + `PANEL_GRID`，不要强行 `SPLIT_COMPARE`。
+
+**Step 3 — 结构化多分点 / 清单 / 节拍**
+- **2～4 个可独立成画的并列主题**（宫格，每块一图），且**当前 item 的 `text` 里真实展开了多个分点**（非仅总起句）→ `PANEL_GRID`（`panels` 条数须与真实并列分点一致，且不超过 schema `maxItems`）
+- **短步骤 / 强清单**（第一步…第二步… 或多条极短分点），无配图诉求 → `STEP_LIST`（**单条仅一个分点**不要用；**「标题 + 长解释」**不要用，见下）
+- **同一案例/子话题、单主图讲透**，口播 **4～6 句** 呈「个案现象→常人推论或误判→纠偏（其实/你没看到等）→收束」等**故事化案例弧**，且希望用**阶段轨**随字幕下标推进 → `CASE_BREAKDOWN`（与 `METHOD_STACK` 区分：后者是**方法/观点标题 + 要点解释堆叠**；与 `BEAT_SEQUENCE` 区分：后者**多图**随节拍切换）
+- **一个标题式核心（方法/建议/观点/卖点/亮点/结论） + 随后 2～4 句解释展开**（同一 item 内）→ `METHOD_STACK`
+- **同一论证、同一镜头内 2～4 段口播呈情绪/叙事递进**（铺垫→转折→收束锤；质问→揭示→定调；案例场景逐层升级），且**需要多图随段切换以强化节奏击打** → `BEAT_SEQUENCE`
+  - **必要条件**：存在可感知的**情绪或叙事张力升级**（不是仅因句法分段、有问号就命中）；换图是为了「击打/加压」，而非「回答修辞问题」。
+  - **反例（勿选）**：
+    - **设问-自问自答 / 修辞性过渡**：如「这重要吗？当然重要。但新吗？并不新。」——对同一话题做维度确认（重要）与维度否定（不新），情绪平稳、论证铺垫为主 → `CENTER_FOCUS`（单图即可，勿为每句问答配一图）；
+    - **并列维度分别肯定/否定**：两个属性各自一问一答、无递进弧，勿因「有问号 + 多句」误判为节拍；
+    - **平缓 TRANSITION / LOGIC 段**：仅承上启下、定调或纠偏预期，无案例升级或情绪加压 → `CENTER_FOCUS`。
+- **因果链 / 机制传导**（因为…所以…导致…；同一 item 内 2～4 环，每环对应一句口播且**各环一图**，**非**年代/时间刻度演进）→ `CAUSE_CHAIN`（与 `TIMELINE` 区分：无「去年/阶段/年代」时间轴语义；与 `METHOD_STACK` 区分：非「一个标题 + 多句解释」）
+
+**Step 4 — 引用 / 术语 / 聚焦强调**
+- 名言、著作、研究引用 → `QUOTE_CITATION`
+- 首次抛出需要“命名/标签化”的术语、概念、产品名、品牌关键词 → `CONCEPT_CARD`
+- **需要把观众注意力“锁定在一个关键词/短语/关键细节/核心发现”上**，且你能预期后续可为分段 `content` 配置 **至少 1 个高价值锚点短语** → `MAGNIFYING_GLASS`；**拿不准则不要选**（后续参数阶段需非空 `anchors`）  
+  - **必要条件（缺一不可）**：该 item 内必须存在 1～2 句“落点句”（如「关键在于 X」「核心卖点是 X」「真正重要的是 X」「结论是 X」「这一点决定了…」），并且其余口播主要是在围绕这个落点解释/展开。  
+  - **禁止打包**：不要把“多个机制 + 多个例子 + 多个结论”全部塞进同一个 `MAGNIFYING_GLASS`（这类更适合 `BEAT_SEQUENCE` 分节拍，或拆成多个 item）。  
+  - **与合并联动**：若你打算合并相邻条目来做 `MAGNIFYING_GLASS`，除非合并后仍满足合并硬限制（尤其 **≤ 60 字**）且仍只有一个清晰落点，否则禁止为此合并。
+
+**Step 5 — 高情绪 / 金句**
+- 「不是…而是…」强对立翻转（纠偏、观点翻转、定位重述均可）→ `COGNITIVE_SHIFT`
+- 全片级金句、零图大字冲击 → `TEXT_FOCUS`（`narrativeRole=hook` **单独不足以**选本模板，须语气上真是短促强结论）；参数阶段大屏主文案用非空 `coreSentence`（string[]，每元素一行）；大屏高亮用 `coreSentenceAnchors`（每项 `coreSentenceAnchor` + 可选 `color`，子串须出现在各段 `coreSentence` 按顺序拼接后的全文内），**不要**填 `anchors` / `showFrom`
+
+**Step 6 — 对话 / 发问 / 心声**
+- 仅在满足以下 **强信号** 时才选 `CHAT_BUBBLE`（任一命中即可）：  
+  - **显式对话格式**：出现 A：B：、多句互相回应、或“我：…/你：…”等对话回合；  
+  - **显式弹幕/评论体**：出现“弹幕：/网友：/评论：/有人说：”等角色化心声（而非普通叙述）。  
+- **反例（不要误选）**：仅有“你是不是也…”这类单句发问，后面紧跟场景举例/陈述来做开场共鸣时，通常应按 HOOK 处理，优先 `CENTER_FOCUS`（除非确实写成对话回合或弹幕体）。
+
+**Step 7 — 时间轴**
+- 有明确时间先后/阶段演进（去年→今年→未来 等）→ `TIMELINE`（2～3 个时间点/阶段）
+
+**Step 7.5 — 收束清单**
+- **收束段、行动检查项、要点复诵**：口播逐条对应清单行，需要**逐项显现 + 打勾**的闭环感，且**非**「第一/第二」编号短步骤体、**非**并列大图组 → `CHECKLIST_REVEAL`（与 `STEP_LIST` 区分：后者是步骤序号清单且无打勾语义；勿为用模板而碎镜）
+
+**Step 8 — 默认**
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## 🚨 选型避坑与自检清单（输出 JSON 前须过一遍）
+
+1. **`CENTER_FOCUS` 禁令**：禁止「能合并却拆碎」后全选 `CENTER_FOCUS`。同一 scene 内**连续 2 个及以上** `CENTER_FOCUS`
+2. **全场景 `CENTER_FOCUS` 比例**：若超过约 **60%**，视为异常，须重新检查是否遗漏结构化语义。
+3. **`PANEL_GRID`**：口播里**真实并列分点/并列举例**的数量须与后续 param 的 **`panels` 条数**一致（**2～4 项**，且不超过 schema `maxItems`）。**禁止**把同一句内的多处逗号停顿误当成多个并列主体；**禁止**按「一行字幕 = 一宫格」设想（`content` 行数通常多于 `panels`）。每项 `showFrom` 须指向该分点对应的 **content 下标**，且规划上须**覆盖到该 item 口播最后一句**。总起句+后续分点应依赖 **Item 合并** 后再选。
+4. **`STEP_LIST` 滥用**：单分点、「标题+长解释」须用 `METHOD_STACK` 或改分镜合并；全 scene 单分点 `STEP_LIST` 过多须重审 Step 3。
+5. **`SPLIT_COMPARE` vs 并列举例**：把“同一观点下的多个平级例子/场景罗列”（如通勤/开会/健身等）误当成双方对立，是最常见误选；这类通常优先 `CENTER_FOCUS`（开场共鸣）或在确需并列展示时选 `PANEL_GRID`，不要强行 `SPLIT_COMPARE`。
+6. **`MAGNIFYING_GLASS`**：没有明确“落点句/关键词/关键细节”就不要选；选则须在 `reasoning` 中说明锚点从哪句/哪类信息提取，并且必须存在清晰落点；禁止用它打包多个机制/多个例子/多个结论。
+7. **相邻 `BEAT_SEQUENCE`**：考虑在选型阶段合并为一个 item（仍需满足合并硬限制，尤其字数 ≤ 60）。
+8. **`BEAT_SEQUENCE` 滥用**：设问-自问自答、修辞性过渡、对不同维度分别肯定/否定（如「重要吗→是；新吗→否」）**不是**节拍递进；`narrativeType=TRANSITION` 且无情绪加压时，默认 `CENTER_FOCUS`。选 `BEAT_SEQUENCE` 须在 `reasoning` 中说明**哪几段之间存在张力升级**，而非仅列举「设问/肯定/反驳」句型。
+
+---
+
+## 📋 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "reasoning": "决策树：Step___ -> ...；自检：...",
+      "template": "选定的模板名称（必须来自「可用模板」列表）",
+      "text": "口播原文"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:07:39
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "narrativeType": "HOOK",
+      "reasoning": "决策树：Step8 默认 -> 设问自答式hook，无多分点、无数据、无结构化特征，使用单图聚焦即可；自检：非BEAT_SEQUENCE适用（设问-自答平稳过渡），无连续CENTER_FOCUS风险。",
+      "template": "CENTER_FOCUS",
+      "text": "你可能觉得，我在办公室吹空调，这跟我有什么关系？关系大了。"
+    },
+    {
+      "narrativeType": "LOGIC",
+      "reasoning": "决策树：Step4 -> 首次抛出需要标签化的核心概念“人力便宜逻辑”，标签扩散全场景，适合做概念卡。",
+      "template": "CONCEPT_CARD",
+      "text": "人力便宜这个逻辑，已经打通了全社会每一个角落。"
+    },
+    {
+      "narrativeType": "LOGIC",
+      "reasoning": "决策树：Step8 默认 -> 短论点句，画面为单人+大字，无多分点、无数据，平缓叙述适用单图聚焦。",
+      "template": "CENTER_FOCUS",
+      "text": "廉价的人力，首先会阻碍创新。"
+    },
+    {
+      "narrativeType": "CASE",
+      "reasoning": "决策树：Step3 -> 2个并列例子（轿子→车、扇子→电风扇）真实展开，每例一图，适用PANEL_GRID（2 panels）；非SPLIT_COMPARE（无对立双方）。",
+      "template": "PANEL_GRID",
+      "text": "当你只需要花一点点钱就能坐轿子的时候，你就不会想着造车。当你只需要花一点点钱就能让人扇扇子的时候，你就不会想着造电风扇。"
+    },
+    {
+      "narrativeType": "CONCLUSION",
+      "reasoning": "决策树：Step5 -> 短促强结论，隐含“创新昂贵 vs 你便宜”的强对立收束，适合大字冲击金句。",
+      "template": "TEXT_FOCUS",
+      "text": "创新很耗时，创新很贵，而你，很便宜。"
+    },
+    {
+      "narrativeType": "LOGIC",
+      "reasoning": "决策树：Step4 -> 首次抛出核心概念“制造内卷”，画面打上标签，适合做概念卡。",
+      "template": "CONCEPT_CARD",
+      "text": "廉价的人力，还会制造内卷。"
+    },
+    {
+      "narrativeType": "LOGIC",
+      "reasoning": "决策树：Step3 -> 因果链传导：低人力成本→工资低→消费降级，3环因果，每环一图，适用CAUSE_CHAIN。",
+      "template": "CAUSE_CHAIN",
+      "text": "企业习惯用低人力成本赚钱，打工人工资就上不去。大家兜里没钱，只能消费降级，追求更便宜的东西。"
+    },
+    {
+      "narrativeType": "LOGIC",
+      "reasoning": "决策树：Step3 -> 因果链循环：压价→压榨工资→消费降级→再压价，形成内卷，适用CAUSE_CHAIN展示循环。",
+      "template": "CAUSE_CHAIN",
+      "text": "企业为了提供更低的价格，就只能继续压榨打工人。这就形成了循环，也就造就了内卷。"
+    },
+    {
+      "narrativeType": "CONCLUSION",
+      "reasoning": "决策树：Step2 -> 双方身份对立对照：享受便宜的消费者 vs 被压榨的打工人，分屏对比，适用SPLIT_COMPARE。",
+      "template": "SPLIT_COMPARE",
+      "text": "我们每个人，既是享受廉价便利的消费者，又是被死死压榨的打工人。逃不掉。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:07:39
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：为什么快递越快，你的工资越涨不上去？
+- **当前场景**：召唤：别再为廉价便利沾沾自喜
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+一个国家真正发达的标志，
+从来不是你能多便宜地使唤别人。
+而是，
+一个送货员、一个清洁工、一个小文员，
+付出每天8小时的正常劳动，
+就能换来体面的收入，
+养得起家，
+拥有作为人的基本生活时间和娱乐时间。
+
+别再为“廉价的便利”沾沾自喜了。
+你以为你只是在享受别人被压榨换来的便宜，
+其实在这个巨大的齿轮里，
+迟早有一天，
+你也会成为别人享受便利的代价。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:09:19
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "一个国家真正发达的标志，从来不是你能多便宜地使唤别人。",
+      "narrativeType": "LOGIC",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "单独呈现否定部分，作为定义的反面铺陈，无需复杂结构 → 用 CENTER_FOCUS 平稳叙述，为后面正面展开留出空间。"
+    },
+    {
+      "text": "而是，一个送货员、一个清洁工、一个小文员，付出每天8小时的正常劳动，",
+      "narrativeType": "LOGIC",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "high",
+      "reasoning": "明确列出三个并列角色，需独立配图（送货员/清洁工/小文员）→ 用 PANEL_GRID 宫格展示，并将共同条件「付出每天8小时的正常劳动」作为公共说明。"
+    },
+    {
+      "text": "就能换来体面的收入，养得起家，拥有作为人的基本生活时间和娱乐时间。",
+      "narrativeType": "LOGIC",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "high",
+      "reasoning": "三个并列结果（体面收入/养家/生活与娱乐时间），各自可独立配图 → 再使用 PANEL_GRID 宫格展示，与前一条形成对象→结果的递进。"
+    },
+    {
+      "text": "别再为“廉价的便利”沾沾自喜了。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "强烈劝诫句，无需配图，纯文字冲击 → 用 TEXT_FOCUS 放大警示，作为行动召唤。"
+    },
+    {
+      "text": "你以为你只是在享受别人被压榨换来的便宜，",
+      "narrativeType": "LOGIC",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "展示常见的错误认知，为后续真相揭示做铺垫 → 用 CENTER_FOCUS 平实带入，维持观众注意力。"
+    },
+    {
+      "text": "其实在这个巨大的齿轮里，迟早有一天，你也会成为别人享受便利的代价。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "全篇收束式结论，揭示镜像代价，冲击力强 → 用 TEXT_FOCUS 放大这句话，形成最终的精神敲击。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:09:19
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+在中国生活实在太便利了！
+9块9包邮的产品一大把，
+深更半夜点外卖，还能半小时就给送到了。
+客服24小时在线，都是秒回。
+
+很多人张口就来，自豪得不行。
+“这一切，都因为咱们基建牛逼！高铁、5G，世界第一！”
+
+
+## 🎯 待处理的目标文案
+在中国生活实在太便利了！
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "在中国生活实在太便利了！"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:09:25
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "一个现代城市公寓里，年轻人轻松点击手机屏幕，几分钟后门铃响起，外卖员微笑递上热腾腾的食物，窗外高楼林立，夜晚灯光璀璨",
+    "enterEffect": "fadeIn"
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:09:25
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+在中国生活实在太便利了！
+9块9包邮的产品一大把，
+深更半夜点外卖，还能半小时就给送到了。
+客服24小时在线，都是秒回。
+
+很多人张口就来，自豪得不行。
+“这一切，都因为咱们基建牛逼！高铁、5G，世界第一！”
+
+
+## 🎯 待处理的目标文案
+9块9包邮的产品一大把，深更半夜点外卖，还能半小时就给送到了。客服24小时在线，都是秒回。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "9块9包邮的产品一大把，"
+  },
+  {
+    "index": 1,
+    "text": "深更半夜点外卖，"
+  },
+  {
+    "index": 2,
+    "text": "还能半小时就给送到了。"
+  },
+  {
+    "index": 3,
+    "text": "客服24小时在线，"
+  },
+  {
+    "index": 4,
+    "text": "都是秒回。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:09:34
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"panels":[{"src":"一大堆包裹堆积如山，每个快递盒上贴着醒目的9.9元红色价签","showFrom":0,"enterEffect":"zoomIn"},{"src":"深夜，手机屏幕亮着外卖App点餐界面，窗外漆黑一片，时钟指向凌晨2点","showFrom":1,"enterEffect":"fadeIn"},{"src":"外卖骑手骑着电动车在街道上飞速穿梭，手表指针快速转动，显示半小时计时","showFrom":2,"enterEffect":"slideLeft"},{"src":"电脑屏幕上显示在线客服聊天窗口，窗口一角有一个不断旋转的24小时时钟图标","showFrom":3,"enterEffect":"fadeIn"},{"src":"聊天对话框中，消息一条接一条瞬间弹出，回复速度极快，几乎没有延迟","showFrom":4,"enterEffect":"slideBottom"}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:09:34
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+在中国生活实在太便利了！
+9块9包邮的产品一大把，
+深更半夜点外卖，还能半小时就给送到了。
+客服24小时在线，都是秒回。
+
+很多人张口就来，自豪得不行。
+“这一切，都因为咱们基建牛逼！高铁、5G，世界第一！”
+
+
+## 🎯 待处理的目标文案
+很多人张口就来，自豪得不行。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "很多人张口就来，"
+  },
+  {
+    "index": 1,
+    "text": "自豪得不行。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:09:38
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "一群中国人面带自信笑容，张开嘴侃侃而谈的插画风格场景",
+    "enterEffect": "fadeIn",
+    "anchors": []
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:09:38
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+在中国生活实在太便利了！
+9块9包邮的产品一大把，
+深更半夜点外卖，还能半小时就给送到了。
+客服24小时在线，都是秒回。
+
+很多人张口就来，自豪得不行。
+“这一切，都因为咱们基建牛逼！高铁、5G，世界第一！”
+
+
+## 🎯 待处理的目标文案
+“这一切，都因为咱们基建牛逼！高铁、5G，世界第一！”
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "“这一切，"
+  },
+  {
+    "index": 1,
+    "text": "都因为咱们基建牛逼！"
+  },
+  {
+    "index": 2,
+    "text": "高铁、"
+  },
+  {
+    "index": 3,
+    "text": "5G，"
+  },
+  {
+    "index": 4,
+    "text": "世界第一！”"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：QUOTE_CITATION
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "quoteSource": {
+      "type": "string",
+      "description": "引言来源"
+    },
+    "quoteDisplayText": {
+      "type": "string",
+      "description": "版心引用正文（打字机效果）；不传则使用 content 拼接结果"
+    },
+    "showFrom": {
+      "type": "integer",
+      "description": "content 下标（0-based）。仅打字正文从该条 startFrame 起再入场；开引号与 quoteSource 仍从 item 起点出现。未传 quoteDisplayText 时正文从该条起拼接"
+    }
+  },
+  "required": [
+    "quoteSource"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "QUOTE_CITATION",
+  "param": {
+    "quoteDisplayText": "我思故我在",
+    "quoteSource": "《思考，快与慢》"
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:09:55
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "quoteDisplayText": "这一切，都因为咱们基建牛逼！高铁、5G，世界第一！", "quoteSource": "很多人" } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:09:55
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+对了一半。
+基建确实把物流成本砸下来了。
+可算法再牛，也爬不上六楼。
+最后三公里，永远靠两条人腿在跑。
+真正撑起这极致便利的，
+不是钢筋水泥，
+而是极其廉价的人力，和不要命的汗水。
+
+
+## 🎯 待处理的目标文案
+对了一半。基建确实把物流成本砸下来了。可算法再牛，也爬不上六楼。最后三公里，永远靠两条人腿在跑。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "对了一半。"
+  },
+  {
+    "index": 1,
+    "text": "基建确实把物流成本砸下来了。"
+  },
+  {
+    "index": 2,
+    "text": "可算法再牛，"
+  },
+  {
+    "index": 3,
+    "text": "也爬不上六楼。"
+  },
+  {
+    "index": 4,
+    "text": "最后三公里，"
+  },
+  {
+    "index": 5,
+    "text": "永远靠两条人腿在跑。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:10:13
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "高速公路、铁路、物流仓库等基础设施交织的画面，集装箱堆积，卡车行驶，光线明亮，体现物流成本降低",
+        "enterEffect": "breathe",
+        "tone": "calm",
+        "showFrom": 0
+      },
+      {
+        "imageSrc": "一个复杂的算法流程图闪现，然后视角转向一栋老旧的六层居民楼，楼梯陡峭，一个快递员正艰难地爬楼梯，表情疲惫",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 2
+      },
+      {
+        "imageSrc": "最后一公里的街道，快递员在烈日或雨中奔跑，双腿特写，汗流浃背，背景模糊的城市景观，强调人力的辛劳",
+        "enterEffect": "zoomIn",
+        "tone": "alert",
+        "showFrom": 4
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:10:13
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+对了一半。
+基建确实把物流成本砸下来了。
+可算法再牛，也爬不上六楼。
+最后三公里，永远靠两条人腿在跑。
+真正撑起这极致便利的，
+不是钢筋水泥，
+而是极其廉价的人力，和不要命的汗水。
+
+
+## 🎯 待处理的目标文案
+真正撑起这极致便利的，不是钢筋水泥，而是极其廉价的人力，和不要命的汗水。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "真正撑起这极致便利的，"
+  },
+  {
+    "index": 1,
+    "text": "不是钢筋水泥，"
+  },
+  {
+    "index": 2,
+    "text": "而是极其廉价的人力，"
+  },
+  {
+    "index": 3,
+    "text": "和不要命的汗水。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:10:26
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "钢筋水泥",
+    "butText": "廉价人力与拼命汗水",
+    "butSrc": "一名外卖骑手在烈日下大汗淋漓爬楼梯送货，汗珠飞溅，背影疲惫而坚决",
+    "notContentIndex": 1,
+    "butContentIndex": 2
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:10:26
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+看看你身边这些画面。
+流水线上的阿姨，一天干12个小时。
+组装一个小零件，才赚几厘钱。
+
+暴雨夜里，外卖小哥骑着电动车狂奔。
+一单只赚三五块，超时平台就扣钱。
+为了准时送达，他们闯红灯、逆行、爬楼梯，
+汗水混着雨水，腿都快跑断了。
+
+半夜一点，客服秒回你。
+态度好到甩欧美几条街。
+背后呢？三四千底薪的年轻人，
+背着回复速度的KPI，连上厕所都要掐表。
+
+
+## 🎯 待处理的目标文案
+看看你身边这些画面。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "看看你身边这些画面。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:10:31
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"imageSrc":"多画面分屏展示不同职业的普通劳动者：女工在流水线前、外卖骑手在雨中疾驰、年轻客服在深夜接电话","enterEffect":"fadeIn","anchors":[]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:10:31
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+看看你身边这些画面。
+流水线上的阿姨，一天干12个小时。
+组装一个小零件，才赚几厘钱。
+
+暴雨夜里，外卖小哥骑着电动车狂奔。
+一单只赚三五块，超时平台就扣钱。
+为了准时送达，他们闯红灯、逆行、爬楼梯，
+汗水混着雨水，腿都快跑断了。
+
+半夜一点，客服秒回你。
+态度好到甩欧美几条街。
+背后呢？三四千底薪的年轻人，
+背着回复速度的KPI，连上厕所都要掐表。
+
+
+## 🎯 待处理的目标文案
+流水线上的阿姨，一天干12个小时。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "流水线上的阿姨，"
+  },
+  {
+    "index": 1,
+    "text": "一天干12个小时。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:10:39
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"imageSrc": "拥挤的工厂流水线，一位中年女工坐在工位上，双手快速组装小零件，背景是其他工人和机器", "enterEffect": "fadeIn", "anchors": []}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:10:39
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+看看你身边这些画面。
+流水线上的阿姨，一天干12个小时。
+组装一个小零件，才赚几厘钱。
+
+暴雨夜里，外卖小哥骑着电动车狂奔。
+一单只赚三五块，超时平台就扣钱。
+为了准时送达，他们闯红灯、逆行、爬楼梯，
+汗水混着雨水，腿都快跑断了。
+
+半夜一点，客服秒回你。
+态度好到甩欧美几条街。
+背后呢？三四千底薪的年轻人，
+背着回复速度的KPI，连上厕所都要掐表。
+
+
+## 🎯 待处理的目标文案
+组装一个小零件，才赚几厘钱。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "组装一个小零件，"
+  },
+  {
+    "index": 1,
+    "text": "才赚几厘钱。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：KPI_HERO
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "number",
+      "description": "单指标模式：滚动终值（整数或小数）；若提供 blocks 则可省略"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "单指标：数字左侧"
+    },
+    "suffix": {
+      "type": "string",
+      "description": "单指标：数字右侧单位"
+    },
+    "label": {
+      "type": "string",
+      "description": "单指标：数字上方标签（与 blocks[].label 同视觉层级）"
+    },
+    "useGrouping": {
+      "type": "boolean",
+      "description": "单指标：千分位（小数时作用于整数部分）"
+    },
+    "decimalPlaces": {
+      "type": "integer",
+      "description": "单指标：小数位数，缺省按 value 自动推断"
+    },
+    "blocks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "多指标：每项 value、showFrom（content 下标）；可选 prefix、suffix、label、useGrouping",
+      "items": {
+        "type": "object",
+        "required": [
+          "value",
+          "showFrom"
+        ],
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "终值，整数或小数（如 2.5 万人）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "小数位数，缺省按 value 自动推断（如 2.5→1）"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该块出现时机：content 下标，取该条 startFrame"
+          },
+          "prefix": {
+            "type": "string"
+          },
+          "suffix": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string",
+            "description": "数字上方标签（多列时字号已加大）"
+          },
+          "useGrouping": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "countDuration": {
+      "type": "integer",
+      "description": "数字从 0 滚到目标值的 spring 时长（帧），默认 28"
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "KPI_HERO",
+  "param": {
+    "blocks": [
+      {
+        "value": 87,
+        "suffix": "%",
+        "label": "满意度",
+        "showFrom": 0
+      },
+      {
+        "value": 62,
+        "suffix": "%",
+        "label": "留存",
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:11:11
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"blocks": [{"value": 3, "suffix": "厘", "showFrom": 1}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:11:11
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+看看你身边这些画面。
+流水线上的阿姨，一天干12个小时。
+组装一个小零件，才赚几厘钱。
+
+暴雨夜里，外卖小哥骑着电动车狂奔。
+一单只赚三五块，超时平台就扣钱。
+为了准时送达，他们闯红灯、逆行、爬楼梯，
+汗水混着雨水，腿都快跑断了。
+
+半夜一点，客服秒回你。
+态度好到甩欧美几条街。
+背后呢？三四千底薪的年轻人，
+背着回复速度的KPI，连上厕所都要掐表。
+
+
+## 🎯 待处理的目标文案
+暴雨夜里，外卖小哥骑着电动车狂奔。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "暴雨夜里，"
+  },
+  {
+    "index": 1,
+    "text": "外卖小哥骑着电动车狂奔。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:11:20
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "暴雨中的夜晚，一位外卖小哥骑着电动车在街道上快速行驶，雨滴飞溅",
+    "enterEffect": "fadeIn",
+    "anchors": []
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:11:20
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+看看你身边这些画面。
+流水线上的阿姨，一天干12个小时。
+组装一个小零件，才赚几厘钱。
+
+暴雨夜里，外卖小哥骑着电动车狂奔。
+一单只赚三五块，超时平台就扣钱。
+为了准时送达，他们闯红灯、逆行、爬楼梯，
+汗水混着雨水，腿都快跑断了。
+
+半夜一点，客服秒回你。
+态度好到甩欧美几条街。
+背后呢？三四千底薪的年轻人，
+背着回复速度的KPI，连上厕所都要掐表。
+
+
+## 🎯 待处理的目标文案
+一单只赚三五块，超时平台就扣钱。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "一单只赚三五块，"
+  },
+  {
+    "index": 1,
+    "text": "超时平台就扣钱。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CAUSE_CHAIN
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "layout": {
+      "type": "string",
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "default": "horizontal",
+      "description": "链的排布方向；横屏/常规叙事默认 horizontal，竖屏可设 vertical"
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "因果节点；showFrom 为 content 数组下标（0-based），入场时刻取该条 startFrame",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "imageSrc",
+          "showFrom"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "节点短标签，建议 2～8 字"
+          },
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该环节隐喻配图"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；顶部依次展示锚点词并保留为列表，showFrom 为 content 下标（0-based，非帧数）；保持克制，只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "nodes"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 6 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CAUSE_CHAIN",
+  "param": {
+    "layout": "horizontal",
+    "nodes": [
+      {
+        "label": "刺激",
+        "imageSrc": "闪电击中大脑的简笔画",
+        "showFrom": 0
+      },
+      {
+        "label": "解读",
+        "imageSrc": "放大镜看信息的简笔画",
+        "showFrom": 1
+      },
+      {
+        "label": "行动",
+        "imageSrc": "按下按钮的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:11:34
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "layout": "horizontal", "nodes": [ { "label": "低单价", "imageSrc": "一个外卖箱旁边堆着几枚硬币的简笔画", "showFrom": 0, "enterEffect": "slideLeft" }, { "label": "平台扣钱", "imageSrc": "一个计时器滴答作响，红色罚单从天而降的简笔画", "showFrom": 1, "enterEffect": "slideBottom" } ] } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:11:34
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+看看你身边这些画面。
+流水线上的阿姨，一天干12个小时。
+组装一个小零件，才赚几厘钱。
+
+暴雨夜里，外卖小哥骑着电动车狂奔。
+一单只赚三五块，超时平台就扣钱。
+为了准时送达，他们闯红灯、逆行、爬楼梯，
+汗水混着雨水，腿都快跑断了。
+
+半夜一点，客服秒回你。
+态度好到甩欧美几条街。
+背后呢？三四千底薪的年轻人，
+背着回复速度的KPI，连上厕所都要掐表。
+
+
+## 🎯 待处理的目标文案
+为了准时送达，他们闯红灯、逆行、爬楼梯，
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "为了准时送达，"
+  },
+  {
+    "index": 1,
+    "text": "他们闯红灯、"
+  },
+  {
+    "index": 2,
+    "text": "逆行、"
+  },
+  {
+    "index": 3,
+    "text": "爬楼梯，"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:11:45
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "外卖箱绑在电动车后座，手机屏幕显示倒计时，雨中车灯闪烁，骑士神色焦急",
+        "enterEffect": "breathe",
+        "tone": "calm"
+      },
+      {
+        "imageSrc": "雨夜路口，外卖电动车正冲过红灯，旁侧车辆急刹，水花飞溅",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      },
+      {
+        "imageSrc": "逆行道上，电动车与对面来车擦身而过，行人惊慌躲闪",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      },
+      {
+        "imageSrc": "老旧居民楼，骑手提着外卖袋飞奔上楼，额角汗水滴落，脚步沉重",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:11:45
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+看看你身边这些画面。
+流水线上的阿姨，一天干12个小时。
+组装一个小零件，才赚几厘钱。
+
+暴雨夜里，外卖小哥骑着电动车狂奔。
+一单只赚三五块，超时平台就扣钱。
+为了准时送达，他们闯红灯、逆行、爬楼梯，
+汗水混着雨水，腿都快跑断了。
+
+半夜一点，客服秒回你。
+态度好到甩欧美几条街。
+背后呢？三四千底薪的年轻人，
+背着回复速度的KPI，连上厕所都要掐表。
+
+
+## 🎯 待处理的目标文案
+汗水混着雨水，腿都快跑断了。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "汗水混着雨水，"
+  },
+  {
+    "index": 1,
+    "text": "腿都快跑断了。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:11:54
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "暴雨中，外卖骑手在街道上奔跑，全身被雨水和汗水浸透，表情疲惫",
+    "enterEffect": "fadeIn",
+    "anchors": []
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:11:54
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+看看你身边这些画面。
+流水线上的阿姨，一天干12个小时。
+组装一个小零件，才赚几厘钱。
+
+暴雨夜里，外卖小哥骑着电动车狂奔。
+一单只赚三五块，超时平台就扣钱。
+为了准时送达，他们闯红灯、逆行、爬楼梯，
+汗水混着雨水，腿都快跑断了。
+
+半夜一点，客服秒回你。
+态度好到甩欧美几条街。
+背后呢？三四千底薪的年轻人，
+背着回复速度的KPI，连上厕所都要掐表。
+
+
+## 🎯 待处理的目标文案
+半夜一点，客服秒回你。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "半夜一点，"
+  },
+  {
+    "index": 1,
+    "text": "客服秒回你。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:12:02
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "imageSrc": "一个客服人员在深夜的电脑前快速回复消息的场景，简洁插图风格", "enterEffect": "fadeIn", "anchors": [] } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:12:02
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+看看你身边这些画面。
+流水线上的阿姨，一天干12个小时。
+组装一个小零件，才赚几厘钱。
+
+暴雨夜里，外卖小哥骑着电动车狂奔。
+一单只赚三五块，超时平台就扣钱。
+为了准时送达，他们闯红灯、逆行、爬楼梯，
+汗水混着雨水，腿都快跑断了。
+
+半夜一点，客服秒回你。
+态度好到甩欧美几条街。
+背后呢？三四千底薪的年轻人，
+背着回复速度的KPI，连上厕所都要掐表。
+
+
+## 🎯 待处理的目标文案
+态度好到甩欧美几条街。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "态度好到甩欧美几条街。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：KPI_HERO
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "number",
+      "description": "单指标模式：滚动终值（整数或小数）；若提供 blocks 则可省略"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "单指标：数字左侧"
+    },
+    "suffix": {
+      "type": "string",
+      "description": "单指标：数字右侧单位"
+    },
+    "label": {
+      "type": "string",
+      "description": "单指标：数字上方标签（与 blocks[].label 同视觉层级）"
+    },
+    "useGrouping": {
+      "type": "boolean",
+      "description": "单指标：千分位（小数时作用于整数部分）"
+    },
+    "decimalPlaces": {
+      "type": "integer",
+      "description": "单指标：小数位数，缺省按 value 自动推断"
+    },
+    "blocks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "多指标：每项 value、showFrom（content 下标）；可选 prefix、suffix、label、useGrouping",
+      "items": {
+        "type": "object",
+        "required": [
+          "value",
+          "showFrom"
+        ],
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "终值，整数或小数（如 2.5 万人）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "小数位数，缺省按 value 自动推断（如 2.5→1）"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该块出现时机：content 下标，取该条 startFrame"
+          },
+          "prefix": {
+            "type": "string"
+          },
+          "suffix": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string",
+            "description": "数字上方标签（多列时字号已加大）"
+          },
+          "useGrouping": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "countDuration": {
+      "type": "integer",
+      "description": "数字从 0 滚到目标值的 spring 时长（帧），默认 28"
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "KPI_HERO",
+  "param": {
+    "blocks": [
+      {
+        "value": 87,
+        "suffix": "%",
+        "label": "满意度",
+        "showFrom": 0
+      },
+      {
+        "value": 62,
+        "suffix": "%",
+        "label": "留存",
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:12:27
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"blocks":[{"value":9.8,"suffix":"分","label":"态度评分","showFrom":0}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:12:27
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+看看你身边这些画面。
+流水线上的阿姨，一天干12个小时。
+组装一个小零件，才赚几厘钱。
+
+暴雨夜里，外卖小哥骑着电动车狂奔。
+一单只赚三五块，超时平台就扣钱。
+为了准时送达，他们闯红灯、逆行、爬楼梯，
+汗水混着雨水，腿都快跑断了。
+
+半夜一点，客服秒回你。
+态度好到甩欧美几条街。
+背后呢？三四千底薪的年轻人，
+背着回复速度的KPI，连上厕所都要掐表。
+
+
+## 🎯 待处理的目标文案
+背后呢？三四千底薪的年轻人，
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "背后呢？"
+  },
+  {
+    "index": 1,
+    "text": "三四千底薪的年轻人，"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:12:33
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "态度好轻松",
+    "butText": "高压低薪",
+    "butSrc": "年轻人坐在电脑前，面前放着计时器，表情焦急，墙上挂着KPI图表",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:12:33
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+看看你身边这些画面。
+流水线上的阿姨，一天干12个小时。
+组装一个小零件，才赚几厘钱。
+
+暴雨夜里，外卖小哥骑着电动车狂奔。
+一单只赚三五块，超时平台就扣钱。
+为了准时送达，他们闯红灯、逆行、爬楼梯，
+汗水混着雨水，腿都快跑断了。
+
+半夜一点，客服秒回你。
+态度好到甩欧美几条街。
+背后呢？三四千底薪的年轻人，
+背着回复速度的KPI，连上厕所都要掐表。
+
+
+## 🎯 待处理的目标文案
+背着回复速度的KPI，连上厕所都要掐表。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "背着回复速度的KPI，"
+  },
+  {
+    "index": 1,
+    "text": "连上厕所都要掐表。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CAUSE_CHAIN
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "layout": {
+      "type": "string",
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "default": "horizontal",
+      "description": "链的排布方向；横屏/常规叙事默认 horizontal，竖屏可设 vertical"
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "因果节点；showFrom 为 content 数组下标（0-based），入场时刻取该条 startFrame",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "imageSrc",
+          "showFrom"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "节点短标签，建议 2～8 字"
+          },
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该环节隐喻配图"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；顶部依次展示锚点词并保留为列表，showFrom 为 content 下标（0-based，非帧数）；保持克制，只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "nodes"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 6 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CAUSE_CHAIN",
+  "param": {
+    "layout": "horizontal",
+    "nodes": [
+      {
+        "label": "刺激",
+        "imageSrc": "闪电击中大脑的简笔画",
+        "showFrom": 0
+      },
+      {
+        "label": "解读",
+        "imageSrc": "放大镜看信息的简笔画",
+        "showFrom": 1
+      },
+      {
+        "label": "行动",
+        "imageSrc": "按下按钮的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:12:44
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "layout": "horizontal",
+    "nodes": [
+      {
+        "label": "KPI重压",
+        "imageSrc": "一个客服人员被一堆计时器和回复速度仪表盘包围，表情焦虑的简笔画",
+        "showFrom": 0,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "label": "掐表如厕",
+        "imageSrc": "一个人冲向厕所，手腕上戴着一个巨大的秒表，表情慌张的简笔画",
+        "showFrom": 1,
+        "enterEffect": "fadeIn"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:12:44
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你可能觉得，
+我在办公室吹空调，
+这跟我有什么关系？
+关系大了。
+人力便宜这个逻辑，
+已经打通了全社会每一个角落。
+
+廉价的人力，首先会阻碍创新。
+当你只需要花一点点钱就能坐轿子的时候，
+你就不会想着造车。
+当你只需要花一点点钱就能让人扇扇子的时候，
+你就不会想着造电风扇。
+创新很耗时，创新很贵，而你，很便宜。
+
+廉价的人力，还会制造内卷。
+企业习惯用低人力成本赚钱，
+打工人工资就上不去。
+大家兜里没钱，
+只能消费降级，追求更便宜的东西。
+企业为了提供更低的价格，
+就只能继续压榨打工人。
+这就形成了循环，
+也就造就了内卷。
+
+我们每个人，
+既是享受廉价便利的消费者，
+又是被死死压榨的打工人。
+逃不掉。
+
+
+## 🎯 待处理的目标文案
+你可能觉得，我在办公室吹空调，这跟我有什么关系？关系大了。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "你可能觉得，"
+  },
+  {
+    "index": 1,
+    "text": "我在办公室吹空调，"
+  },
+  {
+    "index": 2,
+    "text": "这跟我有什么关系？"
+  },
+  {
+    "index": 3,
+    "text": "关系大了。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:12:55
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "宽敞的办公室内，一个上班族坐在电脑前，旁边的立式空调吹出凉风，人物扭头看向镜头，表情疑惑又带着思索",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "关系大了",
+        "showFrom": 3,
+        "color": "#EF4444",
+        "anim": "spring",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:12:55
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你可能觉得，
+我在办公室吹空调，
+这跟我有什么关系？
+关系大了。
+人力便宜这个逻辑，
+已经打通了全社会每一个角落。
+
+廉价的人力，首先会阻碍创新。
+当你只需要花一点点钱就能坐轿子的时候，
+你就不会想着造车。
+当你只需要花一点点钱就能让人扇扇子的时候，
+你就不会想着造电风扇。
+创新很耗时，创新很贵，而你，很便宜。
+
+廉价的人力，还会制造内卷。
+企业习惯用低人力成本赚钱，
+打工人工资就上不去。
+大家兜里没钱，
+只能消费降级，追求更便宜的东西。
+企业为了提供更低的价格，
+就只能继续压榨打工人。
+这就形成了循环，
+也就造就了内卷。
+
+我们每个人，
+既是享受廉价便利的消费者，
+又是被死死压榨的打工人。
+逃不掉。
+
+
+## 🎯 待处理的目标文案
+人力便宜这个逻辑，已经打通了全社会每一个角落。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "人力便宜这个逻辑，"
+  },
+  {
+    "index": 1,
+    "text": "已经打通了全社会每一个角落。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CONCEPT_CARD
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "概念图标描述"
+    },
+    "conceptName": {
+      "type": "string",
+      "description": "概念名称"
+    }
+  },
+  "required": [
+    "imageSrc",
+    "conceptName"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CONCEPT_CARD",
+  "param": {
+    "imageSrc": "过滤器/筛网简笔画图标",
+    "conceptName": "幸存者偏差"
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:13:01
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"imageSrc": "一个简化的人形图标，身上带有钱币符号，周围有扩散的箭头或网络线条覆盖城市轮廓", "conceptName": "廉价人力"}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:13:01
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你可能觉得，
+我在办公室吹空调，
+这跟我有什么关系？
+关系大了。
+人力便宜这个逻辑，
+已经打通了全社会每一个角落。
+
+廉价的人力，首先会阻碍创新。
+当你只需要花一点点钱就能坐轿子的时候，
+你就不会想着造车。
+当你只需要花一点点钱就能让人扇扇子的时候，
+你就不会想着造电风扇。
+创新很耗时，创新很贵，而你，很便宜。
+
+廉价的人力，还会制造内卷。
+企业习惯用低人力成本赚钱，
+打工人工资就上不去。
+大家兜里没钱，
+只能消费降级，追求更便宜的东西。
+企业为了提供更低的价格，
+就只能继续压榨打工人。
+这就形成了循环，
+也就造就了内卷。
+
+我们每个人，
+既是享受廉价便利的消费者，
+又是被死死压榨的打工人。
+逃不掉。
+
+
+## 🎯 待处理的目标文案
+廉价的人力，首先会阻碍创新。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "廉价的人力，"
+  },
+  {
+    "index": 1,
+    "text": "首先会阻碍创新。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:13:09
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"imageSrc":"一个简笔画的办公室场景，一个人坐在办公桌前，身后有人力轿子和手持扇子的仆人，而远处的电风扇模型被搁置在角落，象征创新被廉价人力阻碍。","enterEffect":"fadeIn","anchors":[{"text":"廉价的人力","showFrom":0,"color":"#EF4444","anim":"spring"}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:13:09
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你可能觉得，
+我在办公室吹空调，
+这跟我有什么关系？
+关系大了。
+人力便宜这个逻辑，
+已经打通了全社会每一个角落。
+
+廉价的人力，首先会阻碍创新。
+当你只需要花一点点钱就能坐轿子的时候，
+你就不会想着造车。
+当你只需要花一点点钱就能让人扇扇子的时候，
+你就不会想着造电风扇。
+创新很耗时，创新很贵，而你，很便宜。
+
+廉价的人力，还会制造内卷。
+企业习惯用低人力成本赚钱，
+打工人工资就上不去。
+大家兜里没钱，
+只能消费降级，追求更便宜的东西。
+企业为了提供更低的价格，
+就只能继续压榨打工人。
+这就形成了循环，
+也就造就了内卷。
+
+我们每个人，
+既是享受廉价便利的消费者，
+又是被死死压榨的打工人。
+逃不掉。
+
+
+## 🎯 待处理的目标文案
+当你只需要花一点点钱就能坐轿子的时候，你就不会想着造车。当你只需要花一点点钱就能让人扇扇子的时候，你就不会想着造电风扇。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "当你只需要花一点点钱就能坐轿子的时候，"
+  },
+  {
+    "index": 1,
+    "text": "你就不会想着造车。"
+  },
+  {
+    "index": 2,
+    "text": "当你只需要花一点点钱就能让人扇扇子的时候，"
+  },
+  {
+    "index": 3,
+    "text": "你就不会想着造电风扇。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:13:23
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "panels": [
+      {
+        "src": "轿夫抬着华丽轿子，乘客悠闲坐着，手里递出几枚铜钱",
+        "showFrom": 0,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "src": "发明家站在各种交通工具草稿前，对着汽车图纸画叉，旁边放着轿子",
+        "showFrom": 1,
+        "enterEffect": "slideLeft"
+      },
+      {
+        "src": "一位女士半躺着，身后仆人手持大蒲扇扇风，表情舒适",
+        "showFrom": 2,
+        "enterEffect": "slideBottom"
+      },
+      {
+        "src": "老式电风扇设计图被团成纸团扔在角落，背景中仆人仍在扇扇子",
+        "showFrom": 3,
+        "enterEffect": "zoomIn"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:13:23
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你可能觉得，
+我在办公室吹空调，
+这跟我有什么关系？
+关系大了。
+人力便宜这个逻辑，
+已经打通了全社会每一个角落。
+
+廉价的人力，首先会阻碍创新。
+当你只需要花一点点钱就能坐轿子的时候，
+你就不会想着造车。
+当你只需要花一点点钱就能让人扇扇子的时候，
+你就不会想着造电风扇。
+创新很耗时，创新很贵，而你，很便宜。
+
+廉价的人力，还会制造内卷。
+企业习惯用低人力成本赚钱，
+打工人工资就上不去。
+大家兜里没钱，
+只能消费降级，追求更便宜的东西。
+企业为了提供更低的价格，
+就只能继续压榨打工人。
+这就形成了循环，
+也就造就了内卷。
+
+我们每个人，
+既是享受廉价便利的消费者，
+又是被死死压榨的打工人。
+逃不掉。
+
+
+## 🎯 待处理的目标文案
+创新很耗时，创新很贵，而你，很便宜。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "创新很耗时，"
+  },
+  {
+    "index": 1,
+    "text": "创新很贵，"
+  },
+  {
+    "index": 2,
+    "text": "而你，"
+  },
+  {
+    "index": 3,
+    "text": "很便宜。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:13:43
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      { "text": "创新很耗时，", "showFrom": 0, "endFrom": 0 },
+      { "text": "创新很贵，", "showFrom": 1, "endFrom": 1 },
+      { "text": "而你，很便宜。", "showFrom": 2, "endFrom": 3 }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "很便宜",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:13:43
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你可能觉得，
+我在办公室吹空调，
+这跟我有什么关系？
+关系大了。
+人力便宜这个逻辑，
+已经打通了全社会每一个角落。
+
+廉价的人力，首先会阻碍创新。
+当你只需要花一点点钱就能坐轿子的时候，
+你就不会想着造车。
+当你只需要花一点点钱就能让人扇扇子的时候，
+你就不会想着造电风扇。
+创新很耗时，创新很贵，而你，很便宜。
+
+廉价的人力，还会制造内卷。
+企业习惯用低人力成本赚钱，
+打工人工资就上不去。
+大家兜里没钱，
+只能消费降级，追求更便宜的东西。
+企业为了提供更低的价格，
+就只能继续压榨打工人。
+这就形成了循环，
+也就造就了内卷。
+
+我们每个人，
+既是享受廉价便利的消费者，
+又是被死死压榨的打工人。
+逃不掉。
+
+
+## 🎯 待处理的目标文案
+廉价的人力，还会制造内卷。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "廉价的人力，"
+  },
+  {
+    "index": 1,
+    "text": "还会制造内卷。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CONCEPT_CARD
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "概念图标描述"
+    },
+    "conceptName": {
+      "type": "string",
+      "description": "概念名称"
+    }
+  },
+  "required": [
+    "imageSrc",
+    "conceptName"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CONCEPT_CARD",
+  "param": {
+    "imageSrc": "过滤器/筛网简笔画图标",
+    "conceptName": "幸存者偏差"
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:13:50
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "一个简化的人形剪影被一圈扭曲环绕的箭头层层箍紧，箭头向内挤压，形成螺旋状漩涡，象征无止境的恶性竞争",
+    "conceptName": "内卷"
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:13:50
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你可能觉得，
+我在办公室吹空调，
+这跟我有什么关系？
+关系大了。
+人力便宜这个逻辑，
+已经打通了全社会每一个角落。
+
+廉价的人力，首先会阻碍创新。
+当你只需要花一点点钱就能坐轿子的时候，
+你就不会想着造车。
+当你只需要花一点点钱就能让人扇扇子的时候，
+你就不会想着造电风扇。
+创新很耗时，创新很贵，而你，很便宜。
+
+廉价的人力，还会制造内卷。
+企业习惯用低人力成本赚钱，
+打工人工资就上不去。
+大家兜里没钱，
+只能消费降级，追求更便宜的东西。
+企业为了提供更低的价格，
+就只能继续压榨打工人。
+这就形成了循环，
+也就造就了内卷。
+
+我们每个人，
+既是享受廉价便利的消费者，
+又是被死死压榨的打工人。
+逃不掉。
+
+
+## 🎯 待处理的目标文案
+企业习惯用低人力成本赚钱，打工人工资就上不去。大家兜里没钱，只能消费降级，追求更便宜的东西。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "企业习惯用低人力成本赚钱，"
+  },
+  {
+    "index": 1,
+    "text": "打工人工资就上不去。"
+  },
+  {
+    "index": 2,
+    "text": "大家兜里没钱，"
+  },
+  {
+    "index": 3,
+    "text": "只能消费降级，"
+  },
+  {
+    "index": 4,
+    "text": "追求更便宜的东西。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CAUSE_CHAIN
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "layout": {
+      "type": "string",
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "default": "horizontal",
+      "description": "链的排布方向；横屏/常规叙事默认 horizontal，竖屏可设 vertical"
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "因果节点；showFrom 为 content 数组下标（0-based），入场时刻取该条 startFrame",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "imageSrc",
+          "showFrom"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "节点短标签，建议 2～8 字"
+          },
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该环节隐喻配图"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；顶部依次展示锚点词并保留为列表，showFrom 为 content 下标（0-based，非帧数）；保持克制，只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "nodes"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 6 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CAUSE_CHAIN",
+  "param": {
+    "layout": "horizontal",
+    "nodes": [
+      {
+        "label": "刺激",
+        "imageSrc": "闪电击中大脑的简笔画",
+        "showFrom": 0
+      },
+      {
+        "label": "解读",
+        "imageSrc": "放大镜看信息的简笔画",
+        "showFrom": 1
+      },
+      {
+        "label": "行动",
+        "imageSrc": "按下按钮的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:14:10
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "layout": "horizontal",
+    "nodes": [
+      {
+        "label": "低人力成本",
+        "imageSrc": "工厂流水线上大量工人排成队列，管理者手里的金币堆成小山，简笔画风格",
+        "showFrom": 0,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "label": "工资上不去",
+        "imageSrc": "打工人的钱包张开，里面只有几枚硬币，脸上愁云密布，线条简洁",
+        "showFrom": 1,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "label": "消费降级",
+        "imageSrc": "一个人把购物车里的品牌商品换成普通包装，旁边写着折扣标签，风格简约",
+        "showFrom": 3,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "label": "追求便宜",
+        "imageSrc": "一群人挤在打折摊位前争抢低价商品，地面上散落着廉价标签，简笔画",
+        "showFrom": 4,
+        "enterEffect": "fadeIn"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:14:10
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你可能觉得，
+我在办公室吹空调，
+这跟我有什么关系？
+关系大了。
+人力便宜这个逻辑，
+已经打通了全社会每一个角落。
+
+廉价的人力，首先会阻碍创新。
+当你只需要花一点点钱就能坐轿子的时候，
+你就不会想着造车。
+当你只需要花一点点钱就能让人扇扇子的时候，
+你就不会想着造电风扇。
+创新很耗时，创新很贵，而你，很便宜。
+
+廉价的人力，还会制造内卷。
+企业习惯用低人力成本赚钱，
+打工人工资就上不去。
+大家兜里没钱，
+只能消费降级，追求更便宜的东西。
+企业为了提供更低的价格，
+就只能继续压榨打工人。
+这就形成了循环，
+也就造就了内卷。
+
+我们每个人，
+既是享受廉价便利的消费者，
+又是被死死压榨的打工人。
+逃不掉。
+
+
+## 🎯 待处理的目标文案
+企业为了提供更低的价格，就只能继续压榨打工人。这就形成了循环，也就造就了内卷。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "企业为了提供更低的价格，"
+  },
+  {
+    "index": 1,
+    "text": "就只能继续压榨打工人。"
+  },
+  {
+    "index": 2,
+    "text": "这就形成了循环，"
+  },
+  {
+    "index": 3,
+    "text": "也就造就了内卷。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CAUSE_CHAIN
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "layout": {
+      "type": "string",
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "default": "horizontal",
+      "description": "链的排布方向；横屏/常规叙事默认 horizontal，竖屏可设 vertical"
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "因果节点；showFrom 为 content 数组下标（0-based），入场时刻取该条 startFrame",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "imageSrc",
+          "showFrom"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "节点短标签，建议 2～8 字"
+          },
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该环节隐喻配图"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；顶部依次展示锚点词并保留为列表，showFrom 为 content 下标（0-based，非帧数）；保持克制，只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "nodes"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 6 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CAUSE_CHAIN",
+  "param": {
+    "layout": "horizontal",
+    "nodes": [
+      {
+        "label": "刺激",
+        "imageSrc": "闪电击中大脑的简笔画",
+        "showFrom": 0
+      },
+      {
+        "label": "解读",
+        "imageSrc": "放大镜看信息的简笔画",
+        "showFrom": 1
+      },
+      {
+        "label": "行动",
+        "imageSrc": "按下按钮的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:14:23
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "layout": "horizontal",
+    "nodes": [
+      {
+        "label": "低价压力",
+        "imageSrc": "一家商店橱窗上贴着降价标签，老板焦急地望向车间",
+        "showFrom": 0,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "label": "压榨工人",
+        "imageSrc": "一只巨大的手紧紧攥住一个戴着工帽的小人",
+        "showFrom": 1,
+        "enterEffect": "slideLeft"
+      },
+      {
+        "label": "恶性循环",
+        "imageSrc": "一条蛇咬住自己的尾巴，首尾相连成圆环",
+        "showFrom": 2,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "label": "内卷结局",
+        "imageSrc": "一群人挤在圆形跑道上互相推搡，却原地踏步",
+        "showFrom": 3,
+        "enterEffect": "breathe"
+      }
+    ],
+    "anchors": [
+      {
+        "text": "循环",
+        "showFrom": 2,
+        "color": "#EF4444",
+        "anim": "highlight",
+        "audioEffect": "ping"
+      },
+      {
+        "text": "内卷",
+        "showFrom": 3,
+        "color": "#EF4444",
+        "anim": "spring",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:14:23
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你可能觉得，
+我在办公室吹空调，
+这跟我有什么关系？
+关系大了。
+人力便宜这个逻辑，
+已经打通了全社会每一个角落。
+
+廉价的人力，首先会阻碍创新。
+当你只需要花一点点钱就能坐轿子的时候，
+你就不会想着造车。
+当你只需要花一点点钱就能让人扇扇子的时候，
+你就不会想着造电风扇。
+创新很耗时，创新很贵，而你，很便宜。
+
+廉价的人力，还会制造内卷。
+企业习惯用低人力成本赚钱，
+打工人工资就上不去。
+大家兜里没钱，
+只能消费降级，追求更便宜的东西。
+企业为了提供更低的价格，
+就只能继续压榨打工人。
+这就形成了循环，
+也就造就了内卷。
+
+我们每个人，
+既是享受廉价便利的消费者，
+又是被死死压榨的打工人。
+逃不掉。
+
+
+## 🎯 待处理的目标文案
+我们每个人，既是享受廉价便利的消费者，又是被死死压榨的打工人。逃不掉。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "我们每个人，"
+  },
+  {
+    "index": 1,
+    "text": "既是享受廉价便利的消费者，"
+  },
+  {
+    "index": 2,
+    "text": "又是被死死压榨的打工人。"
+  },
+  {
+    "index": 3,
+    "text": "逃不掉。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：SPLIT_COMPARE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "leftSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "左侧图片描述"
+    },
+    "rightSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "右侧图片描述"
+    },
+    "leftLabel": {
+      "type": "string",
+      "description": "左侧标签（2～6 字为宜）"
+    },
+    "rightLabel": {
+      "type": "string",
+      "description": "右侧标签（2～6 字为宜）"
+    },
+    "leftShowFrom": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "左侧图与标签出现的时刻：取 content 数组下标（0-based），入场帧为该条的 startFrame；省略或越界则从 0 帧起"
+    },
+    "rightShowFrom": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "右侧图与标签出现的时刻：取 content 数组下标（0-based），入场帧为该条的 startFrame；省略或越界则从 0 帧起"
+    }
+  },
+  "required": [
+    "leftSrc",
+    "rightSrc",
+    "leftLabel",
+    "rightLabel"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "SPLIT_COMPARE",
+  "param": {
+    "leftSrc": "传统低效工作图标",
+    "rightSrc": "高效数字工具图标",
+    "leftLabel": "旧方法",
+    "rightLabel": "新方法"
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:14:35
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "leftSrc": "一个人舒适地坐在由廉价人力抬着的轿子上，表情享受，周围是繁华轻松的街景",
+    "rightSrc": "同一个人穿着破旧工装，在阴暗的工厂流水线上被压榨劳作，表情痛苦压抑",
+    "leftLabel": "消费者",
+    "rightLabel": "打工人",
+    "leftShowFrom": 1,
+    "rightShowFrom": 2
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:14:35
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+一个国家真正发达的标志，
+从来不是你能多便宜地使唤别人。
+而是，
+一个送货员、一个清洁工、一个小文员，
+付出每天8小时的正常劳动，
+就能换来体面的收入，
+养得起家，
+拥有作为人的基本生活时间和娱乐时间。
+
+别再为“廉价的便利”沾沾自喜了。
+你以为你只是在享受别人被压榨换来的便宜，
+其实在这个巨大的齿轮里，
+迟早有一天，
+你也会成为别人享受便利的代价。
+
+
+## 🎯 待处理的目标文案
+一个国家真正发达的标志，从来不是你能多便宜地使唤别人。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "一个国家真正发达的标志，"
+  },
+  {
+    "index": 1,
+    "text": "从来不是你能多便宜地使唤别人。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:14:43
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"imageSrc":"一个快递员微笑着把包裹递给一位家庭主妇，阳光洒在整洁的社区街道上","enterEffect":"fadeIn","anchors":[]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:14:43
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+一个国家真正发达的标志，
+从来不是你能多便宜地使唤别人。
+而是，
+一个送货员、一个清洁工、一个小文员，
+付出每天8小时的正常劳动，
+就能换来体面的收入，
+养得起家，
+拥有作为人的基本生活时间和娱乐时间。
+
+别再为“廉价的便利”沾沾自喜了。
+你以为你只是在享受别人被压榨换来的便宜，
+其实在这个巨大的齿轮里，
+迟早有一天，
+你也会成为别人享受便利的代价。
+
+
+## 🎯 待处理的目标文案
+而是，一个送货员、一个清洁工、一个小文员，付出每天8小时的正常劳动，
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "而是，"
+  },
+  {
+    "index": 1,
+    "text": "一个送货员、"
+  },
+  {
+    "index": 2,
+    "text": "一个清洁工、"
+  },
+  {
+    "index": 3,
+    "text": "一个小文员，"
+  },
+  {
+    "index": 4,
+    "text": "付出每天8小时的正常劳动，"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:15:01
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "panels": [
+      {
+        "src": "一位外卖骑手骑着电动车、后座放外卖箱的简笔画",
+        "showFrom": 1,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "src": "一位清洁工穿着荧光背心、拿着扫帚和簸箕在街道清扫的简笔画",
+        "showFrom": 2,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "src": "一位白领小文员坐在办公桌前、盯着电脑屏幕打字的简笔画",
+        "showFrom": 3,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "src": "一个圆形时钟特写，指针指向8点，旁边一位劳动者看表的简笔画",
+        "showFrom": 4,
+        "enterEffect": "zoomIn"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:15:01
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+一个国家真正发达的标志，
+从来不是你能多便宜地使唤别人。
+而是，
+一个送货员、一个清洁工、一个小文员，
+付出每天8小时的正常劳动，
+就能换来体面的收入，
+养得起家，
+拥有作为人的基本生活时间和娱乐时间。
+
+别再为“廉价的便利”沾沾自喜了。
+你以为你只是在享受别人被压榨换来的便宜，
+其实在这个巨大的齿轮里，
+迟早有一天，
+你也会成为别人享受便利的代价。
+
+
+## 🎯 待处理的目标文案
+就能换来体面的收入，养得起家，拥有作为人的基本生活时间和娱乐时间。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "就能换来体面的收入，"
+  },
+  {
+    "index": 1,
+    "text": "养得起家，"
+  },
+  {
+    "index": 2,
+    "text": "拥有作为人的基本生活时间和娱乐时间。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:15:16
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"panels":[{"src":"一位年轻白领面带微笑，在明亮的办公桌前查看平板电脑上的工资单，周围有绿植和温暖的阳光，氛围轻松","showFrom":0,"enterEffect":"zoomIn"},{"src":"温馨的家庭晚餐场景，一家三口围坐在餐桌旁，桌上摆满简单却精致的家常菜，暖黄色灯光笼罩","showFrom":1,"enterEffect":"slideLeft"},{"src":"夕阳下，一个年轻人在宁静的湖边跑步，戴着耳机，表情放松，远处有人野餐、遛狗，代表闲暇时间","showFrom":2,"enterEffect":"fadeIn"}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:15:16
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+一个国家真正发达的标志，
+从来不是你能多便宜地使唤别人。
+而是，
+一个送货员、一个清洁工、一个小文员，
+付出每天8小时的正常劳动，
+就能换来体面的收入，
+养得起家，
+拥有作为人的基本生活时间和娱乐时间。
+
+别再为“廉价的便利”沾沾自喜了。
+你以为你只是在享受别人被压榨换来的便宜，
+其实在这个巨大的齿轮里，
+迟早有一天，
+你也会成为别人享受便利的代价。
+
+
+## 🎯 待处理的目标文案
+别再为“廉价的便利”沾沾自喜了。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "别再为“廉价的便利”沾沾自喜了。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:15:20
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "别再为“廉价的便利”沾沾自喜了。",
+        "showFrom": 0
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "廉价的便利",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:15:20
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+一个国家真正发达的标志，
+从来不是你能多便宜地使唤别人。
+而是，
+一个送货员、一个清洁工、一个小文员，
+付出每天8小时的正常劳动，
+就能换来体面的收入，
+养得起家，
+拥有作为人的基本生活时间和娱乐时间。
+
+别再为“廉价的便利”沾沾自喜了。
+你以为你只是在享受别人被压榨换来的便宜，
+其实在这个巨大的齿轮里，
+迟早有一天，
+你也会成为别人享受便利的代价。
+
+
+## 🎯 待处理的目标文案
+你以为你只是在享受别人被压榨换来的便宜，
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "你以为你只是在享受别人被压榨换来的便宜，"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:15:27
+attempt: 1/3
+
+[OUTPUT]
+{"param": {
+  "imageSrc": "一个面带微笑的人正轻松拿起一杯廉价咖啡，身后深色阴影中勾勒出一个疲惫弯腰的劳动者剪影",
+  "enterEffect": "fadeIn",
+  "anchors": [
+    {
+      "text": "压榨",
+      "showFrom": 0,
+      "color": "#EF4444",
+      "anim": "spring",
+      "audioEffect": "impact_thud"
+    }
+  ]
+}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-06-30 20:15:27
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+一个国家真正发达的标志，
+从来不是你能多便宜地使唤别人。
+而是，
+一个送货员、一个清洁工、一个小文员，
+付出每天8小时的正常劳动，
+就能换来体面的收入，
+养得起家，
+拥有作为人的基本生活时间和娱乐时间。
+
+别再为“廉价的便利”沾沾自喜了。
+你以为你只是在享受别人被压榨换来的便宜，
+其实在这个巨大的齿轮里，
+迟早有一天，
+你也会成为别人享受便利的代价。
+
+
+## 🎯 待处理的目标文案
+其实在这个巨大的齿轮里，迟早有一天，你也会成为别人享受便利的代价。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "其实在这个巨大的齿轮里，"
+  },
+  {
+    "index": 1,
+    "text": "迟早有一天，"
+  },
+  {
+    "index": 2,
+    "text": "你也会成为别人享受便利的代价。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-06-30 20:15:40
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"coreSentence": [{"text": "其实在这个巨大的齿轮里，", "showFrom": 0, "endFrom": 0}, {"text": "迟早有一天，", "showFrom": 1, "endFrom": 1}, {"text": "你也会成为别人享受便利的代价。", "showFrom": 2, "endFrom": 2}], "coreSentenceAnchors": []}}
+-------------------------------------------------------------------------------------------

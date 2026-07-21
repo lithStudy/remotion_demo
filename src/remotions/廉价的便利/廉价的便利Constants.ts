@@ -4,7 +4,6 @@ import { Scene2, calculateScene2Duration } from "./scenes/Scene2";
 import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
 import { Scene4, calculateScene4Duration } from "./scenes/Scene4";
 import { Scene5, calculateScene5Duration } from "./scenes/Scene5";
-import { Scene6, calculateScene6Duration } from "./scenes/Scene6";
 
 export const 廉价的便利Schema = z.object({});
 
@@ -13,12 +12,11 @@ export const SCENE_END_PADDING = 20;
 export const COVER_DURATION_FRAMES = 5;
 
 export const sceneConfigs = [
-    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引入：便利背后的廉价人力" },
-    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "剖析：流水线·外卖·客服" },
-    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "剖析：廉价人力阻碍创新" },
-    { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "剖析：内卷循环与个人困境" },
-    { name: "scene5", duration: calculateScene5Duration() + SCENE_END_PADDING, component: Scene5, label: "反思：真正发达的标准" },
-    { name: "scene6", duration: calculateScene6Duration() + SCENE_END_PADDING, component: Scene6, label: "警示：你也是代价" },
+    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引入：极致便利的幻觉" },
+    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "反转：最后三公里的人腿代价" },
+    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "剖析：廉价人力的具体画像" },
+    { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "剖析：廉价人力的连锁恶果" },
+    { name: "scene5", duration: calculateScene5Duration() + SCENE_END_PADDING, component: Scene5, label: "召唤：别再为廉价便利沾沾自喜" },
 ];
 
 export const MAIN_DURATION_廉价的便利 =

@@ -1,0 +1,6127 @@
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:20:05
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：99.45%的时间里，你都在为用不上的功能买单
+- **当前场景**：引入：成本忽略的陷阱
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+你愿意为不到0.01%的极端天气，多付一倍车钱吗？
+
+现在全网都在吵，智驾到底该不该装毫米波雷达。支持雷达的人说，纯视觉在暴雨、炫光下会失灵。反对的人说，特斯拉已经证明了纯视觉可行。
+
+但这些争论，都忽略了一个最简单的问题。成本。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:21:12
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "你愿意为不到0.01%的极端天气，多付一倍车钱吗？",
+      "narrativeType": "HOOK",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "estimatedSeconds": 4.0,
+      "confidence": "high",
+      "reasoning": "反问钩子，包含数据与代价对比，冲击性强，适合用TEXT_FOCUS突出关键数字。"
+    },
+    {
+      "text": "现在全网都在吵，智驾到底该不该装毫米波雷达。",
+      "narrativeType": "LOGIC",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "estimatedSeconds": 4.4,
+      "confidence": "high",
+      "reasoning": "平缓交代争议背景，无特殊结构，用CENTER_FOCUS搭配单图支撑叙述。"
+    },
+    {
+      "text": "支持雷达的人说，纯视觉在暴雨、炫光下会失灵。",
+      "narrativeType": "CASE",
+      "template": "QUOTE_CITATION",
+      "expressionTag": "quote",
+      "estimatedSeconds": 3.6,
+      "confidence": "high",
+      "reasoning": "明确引用支持方观点，用QUOTE_CITATION强化来源与立场。"
+    },
+    {
+      "text": "反对的人说，特斯拉已经证明了纯视觉可行。",
+      "narrativeType": "CASE",
+      "template": "QUOTE_CITATION",
+      "expressionTag": "quote",
+      "estimatedSeconds": 3.8,
+      "confidence": "high",
+      "reasoning": "反对方观点引用，与前一条形成对比，模板同选QUOTE_CITATION。"
+    },
+    {
+      "text": "但这些争论，都忽略了一个最简单的问题。",
+      "narrativeType": "TRANSITION",
+      "template": "MAGNIFYING_GLASS",
+      "expressionTag": "focus",
+      "estimatedSeconds": 2.9,
+      "confidence": "medium",
+      "reasoning": "将注意力锁定到被忽略的核心问题上，适合MAGNIFYING_GLASS放大“最简单的问题”。"
+    },
+    {
+      "text": "成本。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "estimatedSeconds": 0.4,
+      "confidence": "high",
+      "reasoning": "短促金句点明本质，无需配图，TEXT_FOCUS实现最高冲击力。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:21:12
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：99.45%的时间里，你都在为用不上的功能买单
+- **当前场景**：剖析：雷达训练的成本黑洞
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+毫米波雷达硬件确实贵。一套车规级毫米波雷达，单颗3000到5000元。4颗就是1.2万到2万。这只是采购价。
+
+车企还要承担集成、标定、测试的成本。加起来，一套雷达方案的硬件溢价，可能超过3万。
+
+这还只是硬件。
+
+更贵的是训练。
+
+现在的智驾，本质是神经网络。神经网络的训练，靠的是海量标注数据。纯视觉方案，只需要训练摄像头这一种输入。加了毫米波雷达，你就要同时训练两种信号。
+
+更麻烦的是，两种信号会冲突。
+
+雨天，摄像头模糊，雷达信号强。晴天，摄像头清晰，雷达可能因为金属护栏产生虚警。训练时，你必须同时处理一致和冲突两种情况。
+
+这意味着，训练数据量不是翻一倍，而是指数级上升。
+
+为什么是指数级？
+
+因为冲突场景的数量，远多于单一场景。你需要训练“摄像头可靠、雷达可靠”“摄像头可靠、雷达不可靠”“摄像头不可靠、雷达可靠”“摄像头不可靠、雷达不可靠”四种组合。
+
+每增加一种组合，标注成本、算力成本、时间成本，都不是线性增长，而是指数增长。
+
+最终，这些成本会传导到终端。
+
+车企不会自己吃亏。买单的，是每一个消费者。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:22:51
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "毫米波雷达硬件确实贵。一套车规级毫米波雷达，单颗3000到5000元。4颗就是1.2万到2万。这只是采购价。",
+      "narrativeType": "DATA",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "data",
+      "confidence": "high",
+      "reasoning": "开篇给出硬件成本数据，平铺叙述无强烈对比结构，CENTER_FOCUS 直接呈现文字与可选配图，避免 KPI_HERO 强调单一数值而忽略句子间的推导关系。"
+    },
+    {
+      "text": "车企还要承担集成、标定、测试的成本。加起来，一套雷达方案的硬件溢价，可能超过3万。这还只是硬件。",
+      "narrativeType": "DATA",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "data",
+      "confidence": "high",
+      "reasoning": "继续揭示隐性成本并引出转折句，依然是数据型铺陈；合并‘这还只是硬件’后仍为平铺表达，CENTER_FOCUS 保持叙事流畅。"
+    },
+    {
+      "text": "更贵的是训练。现在的智驾，本质是神经网络。神经网络的训练，靠的是海量标注数据。纯视觉方案，只需要训练摄像头这一种输入。加了毫米波雷达，你就要同时训练两种信号。",
+      "narrativeType": "LOGIC",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "从硬件过渡到训练，解释原理并对比纯视觉与雷达融合，属于连续说理且无分解为多步骤的强特征，适合用 CENTER_FOCUS 支持一段完整的逻辑展开。"
+    },
+    {
+      "text": "更麻烦的是，两种信号会冲突。雨天，摄像头模糊，雷达信号强。晴天，摄像头清晰，雷达可能因为金属护栏产生虚警。训练时，你必须同时处理一致和冲突两种情况。",
+      "narrativeType": "LOGIC",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "medium",
+      "reasoning": "四句形成‘冲突引入→雨天场景→晴天场景→训练应对’的节拍递进，BEAT_SEQUENCE 可让画面随每句递进切换，强化案例对比；并非单纯平铺，因此不选 CENTER_FOCUS。"
+    },
+    {
+      "text": "这意味着，训练数据量不是翻一倍，而是指数级上升。",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "明确的‘不是…而是…’否定与重构，COGNITIVE_SHIFT 直接呈现认知翻转，最适合表现从误区到新结论的冲击。"
+    },
+    {
+      "text": "为什么是指数级？",
+      "narrativeType": "TRANSITION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "独立短问句，起强烈转折和聚焦作用，TEXT_FOCUS 将其放大为金句式提问，增强悬念感；字数虽少但属于独立表达结构，无需合并。"
+    },
+    {
+      "text": "因为冲突场景的数量，远多于单一场景。",
+      "narrativeType": "LOGIC",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "原因陈述句，单一说理，由前文提问自然衔接，CENTER_FOCUS 保持简洁支撑。"
+    },
+    {
+      "text": "你需要训练“摄像头可靠、雷达可靠”“摄像头可靠、雷达不可靠”“摄像头不可靠、雷达可靠”“摄像头不可靠、雷达不可靠”四种组合。",
+      "narrativeType": "LOGIC",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "high",
+      "reasoning": "四种组合是典型的并列例子，适合用 PANEL_GRID 在屏幕上分为四宫格独立展示，形象解释‘指数级’的缘由。"
+    },
+    {
+      "text": "每增加一种组合，标注成本、算力成本、时间成本，都不是线性增长，而是指数增长。",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "再次出现‘不是…而是…’的认知翻转，与前面指数级结论呼应，COGNITIVE_SHIFT 统一格调，强化核心洞察。"
+    },
+    {
+      "text": "最终，这些成本会传导到终端。",
+      "narrativeType": "CONCLUSION",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "引出结论的过渡句，语气平实，配图指向消费者终端示意即可，CENTER_FOCUS 恰到好处。"
+    },
+    {
+      "text": "车企不会自己吃亏。买单的，是每一个消费者。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "全篇收束金句，将成本问题最终落到消费者身上，TEXT_FOCUS 纯粹放大文字冲击，不做多余装饰，一击即中。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:22:51
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：99.45%的时间里，你都在为用不上的功能买单
+- **当前场景**：反转：极端天气的致命谬误
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？
+
+极端天气，这个车你就非开不可吗？
+
+大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？
+
+根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。
+
+2/365，大约是0.55%。
+
+你愿意为0.55%的场景，多付一倍的智驾溢价吗？
+
+更关键的是，即使在极端天气下，智驾系统会怎么做？
+
+现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。
+
+为什么？因为系统自己知道，在这些场景下，它不可靠。
+
+所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+有人会说，安全无价。万一有一次救命呢？
+
+问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。
+
+真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+你为的，是你几乎永远遇不到的那0.55%。
+
+而代价，是你每次买车都要多付的真金白银。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:24:32
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？极端天气，这个车你就非开不可吗？",
+      "narrativeType": "HOOK",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "两个递进式的反问，从购买决策追问到行车必要性，构成‘问→进一步追问’的节拍递进，适合用BEAT_SEQUENCE在一个镜头内分步呈现。"
+    },
+    {
+      "text": "大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？",
+      "narrativeType": "CASE",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "high",
+      "reasoning": "三个场景并列式反问，每个场景都需要独立配图（大暴雨/暴雪/大雾），正好构成2～4个并列分点，选PANEL_GRID以宫格展示。"
+    },
+    {
+      "text": "根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。",
+      "narrativeType": "DATA",
+      "template": "STAT_COMPARE",
+      "expressionTag": "data",
+      "confidence": "high",
+      "reasoning": "两项量化数据对比（不超过5天 vs 不到2天），可抽象出5和2两个非负整数进行直观统计比较，符合STAT_COMPARE的使用场景。"
+    },
+    {
+      "text": "2/365，大约是0.55%。",
+      "narrativeType": "DATA",
+      "template": "KPI_HERO",
+      "expressionTag": "data",
+      "confidence": "high",
+      "reasoning": "由前项数据计算出的核心概率0.55%，短促且有冲击力，适合用KPI_HERO突出单个核心数值。"
+    },
+    {
+      "text": "你愿意为0.55%的场景，多付一倍的智驾溢价吗？",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "以概率数据反问用户，产生强烈冲击，无需配图的短促金句，选TEXT_FOCUS放大结论感。"
+    },
+    {
+      "text": "更关键的是，即使在极端天气下，智驾系统会怎么做？现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。",
+      "narrativeType": "TRANSITION",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "从概率质问转向智驾系统行为，形成‘提问→回答’的节拍递进，在一个镜头内完成转折与事实展现，选BEAT_SEQUENCE。"
+    },
+    {
+      "text": "为什么？因为系统自己知道，在这些场景下，它不可靠。",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "自问自答式因果解释，揭示系统‘降低功能’的底层原因，是典型的认知转折，用COGNITIVE_SHIFT呈现从表面现象到本质认知的转变。"
+    },
+    {
+      "text": "所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。",
+      "narrativeType": "CONCLUSION",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "以‘不是…而是…’的强对比纠正认知，将救命因素从雷达转向人的判断与敬畏，属于认知转换，选COGNITIVE_SHIFT。"
+    },
+    {
+      "text": "有人会说，安全无价。万一有一次救命呢？",
+      "narrativeType": "TRANSITION",
+      "template": "QUOTE_CITATION",
+      "expressionTag": "quote",
+      "confidence": "medium",
+      "reasoning": "引入一种常见但可能被误解的观点，类似引用他人话语，用QUOTE_CITATION突出‘安全无价’的典型说法，为下文反驳铺垫。"
+    },
+    {
+      "text": "问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "以‘问题是’转折，从‘安全无价’的假定转向雷达真实作用的质疑，并揭示系统降级事实，属于认知层面的强烈对比，选COGNITIVE_SHIFT。"
+    },
+    {
+      "text": "真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。",
+      "narrativeType": "CONCLUSION",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "再次强调核心对比认知，用同样的‘不是…而是…’结构收束反驳观点，选COGNITIVE_SHIFT强化认识转变。"
+    },
+    {
+      "text": "你为的，是你几乎永远遇不到的那0.55%。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "指出用户多付费所换取的实质就是那极低概率，短促有力，无配图即可形成金句冲击，选TEXT_FOCUS。"
+    },
+    {
+      "text": "而代价，是你每次买车都要多付的真金白银。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "与前句呼应，点出真实的金钱代价，构成对比性收束，同样适用TEXT_FOCUS强化结论感。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:24:32
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你愿意为不到0.01%的极端天气，多付一倍车钱吗？
+
+现在全网都在吵，智驾到底该不该装毫米波雷达。支持雷达的人说，纯视觉在暴雨、炫光下会失灵。反对的人说，特斯拉已经证明了纯视觉可行。
+
+但这些争论，都忽略了一个最简单的问题。成本。
+
+
+## 🎯 待处理的目标文案
+你愿意为不到0.01%的极端天气，多付一倍车钱吗？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "你愿意为不到0.01%的极端天气，"
+  },
+  {
+    "index": 1,
+    "text": "多付一倍车钱吗？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:24:43
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "coreSentence": [ { "text": "你愿意为不到0.01%的极端天气，", "showFrom": 0, "endFrom": 0 }, { "text": "多付一倍车钱吗？", "showFrom": 1, "endFrom": 1 } ], "coreSentenceAnchors": [] } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:24:43
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你愿意为不到0.01%的极端天气，多付一倍车钱吗？
+
+现在全网都在吵，智驾到底该不该装毫米波雷达。支持雷达的人说，纯视觉在暴雨、炫光下会失灵。反对的人说，特斯拉已经证明了纯视觉可行。
+
+但这些争论，都忽略了一个最简单的问题。成本。
+
+
+## 🎯 待处理的目标文案
+现在全网都在吵，智驾到底该不该装毫米波雷达。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "现在全网都在吵，"
+  },
+  {
+    "index": 1,
+    "text": "智驾到底该不该装毫米波雷达。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:24:54
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"imageSrc": "两个人物剪影激烈争论，中间悬浮着一个雷达传感器的线条图标，背景呈现网络数据流图案", "enterEffect": "fadeIn", "anchors": [{"text": "毫米波雷达", "showFrom": 1, "color": "#000000", "anim": "spring", "audioEffect": "ping"}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:24:54
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你愿意为不到0.01%的极端天气，多付一倍车钱吗？
+
+现在全网都在吵，智驾到底该不该装毫米波雷达。支持雷达的人说，纯视觉在暴雨、炫光下会失灵。反对的人说，特斯拉已经证明了纯视觉可行。
+
+但这些争论，都忽略了一个最简单的问题。成本。
+
+
+## 🎯 待处理的目标文案
+支持雷达的人说，纯视觉在暴雨、炫光下会失灵。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "支持雷达的人说，"
+  },
+  {
+    "index": 1,
+    "text": "纯视觉在暴雨、"
+  },
+  {
+    "index": 2,
+    "text": "炫光下会失灵。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：QUOTE_CITATION
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "quoteSource": {
+      "type": "string",
+      "description": "引言来源"
+    },
+    "quoteDisplayText": {
+      "type": "string",
+      "description": "版心引用正文（打字机效果）；不传则使用 content 拼接结果"
+    },
+    "showFrom": {
+      "type": "integer",
+      "description": "content 下标（0-based）。仅打字正文从该条 startFrame 起再入场；开引号与 quoteSource 仍从 item 起点出现。未传 quoteDisplayText 时正文从该条起拼接"
+    }
+  },
+  "required": [
+    "quoteSource"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "QUOTE_CITATION",
+  "param": {
+    "quoteDisplayText": "我思故我在",
+    "quoteSource": "《思考，快与慢》"
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:25:09
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"quoteSource":"支持雷达的人","quoteDisplayText":"纯视觉在暴雨、炫光下会失灵。"}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:25:09
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你愿意为不到0.01%的极端天气，多付一倍车钱吗？
+
+现在全网都在吵，智驾到底该不该装毫米波雷达。支持雷达的人说，纯视觉在暴雨、炫光下会失灵。反对的人说，特斯拉已经证明了纯视觉可行。
+
+但这些争论，都忽略了一个最简单的问题。成本。
+
+
+## 🎯 待处理的目标文案
+反对的人说，特斯拉已经证明了纯视觉可行。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "反对的人说，"
+  },
+  {
+    "index": 1,
+    "text": "特斯拉已经证明了纯视觉可行。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：QUOTE_CITATION
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "quoteSource": {
+      "type": "string",
+      "description": "引言来源"
+    },
+    "quoteDisplayText": {
+      "type": "string",
+      "description": "版心引用正文（打字机效果）；不传则使用 content 拼接结果"
+    },
+    "showFrom": {
+      "type": "integer",
+      "description": "content 下标（0-based）。仅打字正文从该条 startFrame 起再入场；开引号与 quoteSource 仍从 item 起点出现。未传 quoteDisplayText 时正文从该条起拼接"
+    }
+  },
+  "required": [
+    "quoteSource"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "QUOTE_CITATION",
+  "param": {
+    "quoteDisplayText": "我思故我在",
+    "quoteSource": "《思考，快与慢》"
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:25:17
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "quoteDisplayText": "特斯拉已经证明了纯视觉可行。",
+    "quoteSource": "反对的人说",
+    "showFrom": 1
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:25:17
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你愿意为不到0.01%的极端天气，多付一倍车钱吗？
+
+现在全网都在吵，智驾到底该不该装毫米波雷达。支持雷达的人说，纯视觉在暴雨、炫光下会失灵。反对的人说，特斯拉已经证明了纯视觉可行。
+
+但这些争论，都忽略了一个最简单的问题。成本。
+
+
+## 🎯 待处理的目标文案
+但这些争论，都忽略了一个最简单的问题。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "但这些争论，"
+  },
+  {
+    "index": 1,
+    "text": "都忽略了一个最简单的问题。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：MAGNIFYING_GLASS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "anchors": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "description": "必填且非空（建议 1～2 个高价值锚点）；每项通过 showFrom 对齐 content 分句。锚点应落在“揭示性落点句”或其核心关键词上，不要把整段说明塞满锚点",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要聚焦的关键词/短语"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "anchors"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "MAGNIFYING_GLASS",
+  "param": {
+    "anchors": [
+      {
+        "text": "忽略了基础",
+        "showFrom": 0,
+        "color": "#111111",
+        "anim": "popIn",
+        "audioEffect": "ping"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:25:21
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "anchors": [ { "text": "最简单的问题", "showFrom": 1, "color": "#EF4444", "anim": "popIn", "audioEffect": "ping" } ] } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:25:21
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你愿意为不到0.01%的极端天气，多付一倍车钱吗？
+
+现在全网都在吵，智驾到底该不该装毫米波雷达。支持雷达的人说，纯视觉在暴雨、炫光下会失灵。反对的人说，特斯拉已经证明了纯视觉可行。
+
+但这些争论，都忽略了一个最简单的问题。成本。
+
+
+## 🎯 待处理的目标文案
+成本。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "成本。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:25:29
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "成本。",
+        "showFrom": 0
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "成本",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:25:29
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+毫米波雷达硬件确实贵。一套车规级毫米波雷达，单颗3000到5000元。4颗就是1.2万到2万。这只是采购价。
+
+车企还要承担集成、标定、测试的成本。加起来，一套雷达方案的硬件溢价，可能超过3万。
+
+这还只是硬件。
+
+更贵的是训练。
+
+现在的智驾，本质是神经网络。神经网络的训练，靠的是海量标注数据。纯视觉方案，只需要训练摄像头这一种输入。加了毫米波雷达，你就要同时训练两种信号。
+
+更麻烦的是，两种信号会冲突。
+
+雨天，摄像头模糊，雷达信号强。晴天，摄像头清晰，雷达可能因为金属护栏产生虚警。训练时，你必须同时处理一致和冲突两种情况。
+
+这意味着，训练数据量不是翻一倍，而是指数级上升。
+
+为什么是指数级？
+
+因为冲突场景的数量，远多于单一场景。你需要训练“摄像头可靠、雷达可靠”“摄像头可靠、雷达不可靠”“摄像头不可靠、雷达可靠”“摄像头不可靠、雷达不可靠”四种组合。
+
+每增加一种组合，标注成本、算力成本、时间成本，都不是线性增长，而是指数增长。
+
+最终，这些成本会传导到终端。
+
+车企不会自己吃亏。买单的，是每一个消费者。
+
+
+## 🎯 待处理的目标文案
+毫米波雷达硬件确实贵。一套车规级毫米波雷达，单颗3000到5000元。4颗就是1.2万到2万。这只是采购价。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "毫米波雷达硬件确实贵。"
+  },
+  {
+    "index": 1,
+    "text": "一套车规级毫米波雷达，"
+  },
+  {
+    "index": 2,
+    "text": "单颗3000到5000元。"
+  },
+  {
+    "index": 3,
+    "text": "4颗就是1.2万到2万。"
+  },
+  {
+    "index": 4,
+    "text": "这只是采购价。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:25:39
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"imageSrc": "一枚车规级毫米波雷达传感器特写，金属外壳，放在桌面，旁边有显示价格的标签", "enterEffect": "fadeIn", "anchors": [{"text": "毫米波雷达", "showFrom": 0, "color": "#000000", "anim": "spring", "audioEffect": "ping"}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:25:39
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+毫米波雷达硬件确实贵。一套车规级毫米波雷达，单颗3000到5000元。4颗就是1.2万到2万。这只是采购价。
+
+车企还要承担集成、标定、测试的成本。加起来，一套雷达方案的硬件溢价，可能超过3万。
+
+这还只是硬件。
+
+更贵的是训练。
+
+现在的智驾，本质是神经网络。神经网络的训练，靠的是海量标注数据。纯视觉方案，只需要训练摄像头这一种输入。加了毫米波雷达，你就要同时训练两种信号。
+
+更麻烦的是，两种信号会冲突。
+
+雨天，摄像头模糊，雷达信号强。晴天，摄像头清晰，雷达可能因为金属护栏产生虚警。训练时，你必须同时处理一致和冲突两种情况。
+
+这意味着，训练数据量不是翻一倍，而是指数级上升。
+
+为什么是指数级？
+
+因为冲突场景的数量，远多于单一场景。你需要训练“摄像头可靠、雷达可靠”“摄像头可靠、雷达不可靠”“摄像头不可靠、雷达可靠”“摄像头不可靠、雷达不可靠”四种组合。
+
+每增加一种组合，标注成本、算力成本、时间成本，都不是线性增长，而是指数增长。
+
+最终，这些成本会传导到终端。
+
+车企不会自己吃亏。买单的，是每一个消费者。
+
+
+## 🎯 待处理的目标文案
+车企还要承担集成、标定、测试的成本。加起来，一套雷达方案的硬件溢价，可能超过3万。这还只是硬件。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "车企还要承担集成、"
+  },
+  {
+    "index": 1,
+    "text": "标定、"
+  },
+  {
+    "index": 2,
+    "text": "测试的成本。"
+  },
+  {
+    "index": 3,
+    "text": "加起来，"
+  },
+  {
+    "index": 4,
+    "text": "一套雷达方案的硬件溢价，"
+  },
+  {
+    "index": 5,
+    "text": "可能超过3万。"
+  },
+  {
+    "index": 6,
+    "text": "这还只是硬件。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:25:52
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"imageSrc": "一辆汽车的毫米波雷达传感器特写，背景虚化，旁边有堆积如山的金币，强调硬件成本高昂", "enterEffect": "fadeIn", "anchors": [{"text": "超过3万", "showFrom": 5, "color": "#EF4444", "anim": "spring", "audioEffect": "ping"}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:25:52
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+毫米波雷达硬件确实贵。一套车规级毫米波雷达，单颗3000到5000元。4颗就是1.2万到2万。这只是采购价。
+
+车企还要承担集成、标定、测试的成本。加起来，一套雷达方案的硬件溢价，可能超过3万。
+
+这还只是硬件。
+
+更贵的是训练。
+
+现在的智驾，本质是神经网络。神经网络的训练，靠的是海量标注数据。纯视觉方案，只需要训练摄像头这一种输入。加了毫米波雷达，你就要同时训练两种信号。
+
+更麻烦的是，两种信号会冲突。
+
+雨天，摄像头模糊，雷达信号强。晴天，摄像头清晰，雷达可能因为金属护栏产生虚警。训练时，你必须同时处理一致和冲突两种情况。
+
+这意味着，训练数据量不是翻一倍，而是指数级上升。
+
+为什么是指数级？
+
+因为冲突场景的数量，远多于单一场景。你需要训练“摄像头可靠、雷达可靠”“摄像头可靠、雷达不可靠”“摄像头不可靠、雷达可靠”“摄像头不可靠、雷达不可靠”四种组合。
+
+每增加一种组合，标注成本、算力成本、时间成本，都不是线性增长，而是指数增长。
+
+最终，这些成本会传导到终端。
+
+车企不会自己吃亏。买单的，是每一个消费者。
+
+
+## 🎯 待处理的目标文案
+更贵的是训练。现在的智驾，本质是神经网络。神经网络的训练，靠的是海量标注数据。纯视觉方案，只需要训练摄像头这一种输入。加了毫米波雷达，你就要同时训练两种信号。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "更贵的是训练。"
+  },
+  {
+    "index": 1,
+    "text": "现在的智驾，"
+  },
+  {
+    "index": 2,
+    "text": "本质是神经网络。"
+  },
+  {
+    "index": 3,
+    "text": "神经网络的训练，"
+  },
+  {
+    "index": 4,
+    "text": "靠的是海量标注数据。"
+  },
+  {
+    "index": 5,
+    "text": "纯视觉方案，"
+  },
+  {
+    "index": 6,
+    "text": "只需要训练摄像头这一种输入。"
+  },
+  {
+    "index": 7,
+    "text": "加了毫米波雷达，"
+  },
+  {
+    "index": 8,
+    "text": "你就要同时训练两种信号。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:26:04
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "抽象图标：大脑形状的神经网络连接着数据流和摄像头、雷达图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "训练",
+        "showFrom": 0,
+        "color": "#EF4444",
+        "anim": "spring"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:26:04
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+毫米波雷达硬件确实贵。一套车规级毫米波雷达，单颗3000到5000元。4颗就是1.2万到2万。这只是采购价。
+
+车企还要承担集成、标定、测试的成本。加起来，一套雷达方案的硬件溢价，可能超过3万。
+
+这还只是硬件。
+
+更贵的是训练。
+
+现在的智驾，本质是神经网络。神经网络的训练，靠的是海量标注数据。纯视觉方案，只需要训练摄像头这一种输入。加了毫米波雷达，你就要同时训练两种信号。
+
+更麻烦的是，两种信号会冲突。
+
+雨天，摄像头模糊，雷达信号强。晴天，摄像头清晰，雷达可能因为金属护栏产生虚警。训练时，你必须同时处理一致和冲突两种情况。
+
+这意味着，训练数据量不是翻一倍，而是指数级上升。
+
+为什么是指数级？
+
+因为冲突场景的数量，远多于单一场景。你需要训练“摄像头可靠、雷达可靠”“摄像头可靠、雷达不可靠”“摄像头不可靠、雷达可靠”“摄像头不可靠、雷达不可靠”四种组合。
+
+每增加一种组合，标注成本、算力成本、时间成本，都不是线性增长，而是指数增长。
+
+最终，这些成本会传导到终端。
+
+车企不会自己吃亏。买单的，是每一个消费者。
+
+
+## 🎯 待处理的目标文案
+更麻烦的是，两种信号会冲突。雨天，摄像头模糊，雷达信号强。晴天，摄像头清晰，雷达可能因为金属护栏产生虚警。训练时，你必须同时处理一致和冲突两种情况。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "更麻烦的是，"
+  },
+  {
+    "index": 1,
+    "text": "两种信号会冲突。"
+  },
+  {
+    "index": 2,
+    "text": "雨天，"
+  },
+  {
+    "index": 3,
+    "text": "摄像头模糊，"
+  },
+  {
+    "index": 4,
+    "text": "雷达信号强。"
+  },
+  {
+    "index": 5,
+    "text": "晴天，"
+  },
+  {
+    "index": 6,
+    "text": "摄像头清晰，"
+  },
+  {
+    "index": 7,
+    "text": "雷达可能因为金属护栏产生虚警。"
+  },
+  {
+    "index": 8,
+    "text": "训练时，"
+  },
+  {
+    "index": 9,
+    "text": "你必须同时处理一致和冲突两种情况。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:26:19
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "摄像头与雷达信号相互干扰的抽象碰撞，红蓝波纹交错，中心产生爆炸状闪光",
+        "enterEffect": "breathe",
+        "tone": "alert",
+        "showFrom": 0
+      },
+      {
+        "imageSrc": "雨天车内视角，前挡风玻璃布满水珠导致外界景象模糊，仪表盘上雷达探测信号曲线稳定强烈",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 2
+      },
+      {
+        "imageSrc": "晴天道路旁的金属护栏，护栏反射出刺眼的雷达回波，同时高清摄像头画面中真实障碍物清晰可见",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 5
+      },
+      {
+        "imageSrc": "神经网络训练场景，大量数据流分叉为一致路径与冲突路径，汇聚于逻辑处理核心",
+        "enterEffect": "zoomIn",
+        "tone": "alert",
+        "showFrom": 8
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:26:19
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+毫米波雷达硬件确实贵。一套车规级毫米波雷达，单颗3000到5000元。4颗就是1.2万到2万。这只是采购价。
+
+车企还要承担集成、标定、测试的成本。加起来，一套雷达方案的硬件溢价，可能超过3万。
+
+这还只是硬件。
+
+更贵的是训练。
+
+现在的智驾，本质是神经网络。神经网络的训练，靠的是海量标注数据。纯视觉方案，只需要训练摄像头这一种输入。加了毫米波雷达，你就要同时训练两种信号。
+
+更麻烦的是，两种信号会冲突。
+
+雨天，摄像头模糊，雷达信号强。晴天，摄像头清晰，雷达可能因为金属护栏产生虚警。训练时，你必须同时处理一致和冲突两种情况。
+
+这意味着，训练数据量不是翻一倍，而是指数级上升。
+
+为什么是指数级？
+
+因为冲突场景的数量，远多于单一场景。你需要训练“摄像头可靠、雷达可靠”“摄像头可靠、雷达不可靠”“摄像头不可靠、雷达可靠”“摄像头不可靠、雷达不可靠”四种组合。
+
+每增加一种组合，标注成本、算力成本、时间成本，都不是线性增长，而是指数增长。
+
+最终，这些成本会传导到终端。
+
+车企不会自己吃亏。买单的，是每一个消费者。
+
+
+## 🎯 待处理的目标文案
+这意味着，训练数据量不是翻一倍，而是指数级上升。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "这意味着，"
+  },
+  {
+    "index": 1,
+    "text": "训练数据量不是翻一倍，"
+  },
+  {
+    "index": 2,
+    "text": "而是指数级上升。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:26:28
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"notText":"翻一倍","butText":"指数级上升","butSrc":"一条急剧向上弯曲的指数增长曲线，数据点爆炸式扩散","notContentIndex":1,"butContentIndex":2}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:26:28
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+毫米波雷达硬件确实贵。一套车规级毫米波雷达，单颗3000到5000元。4颗就是1.2万到2万。这只是采购价。
+
+车企还要承担集成、标定、测试的成本。加起来，一套雷达方案的硬件溢价，可能超过3万。
+
+这还只是硬件。
+
+更贵的是训练。
+
+现在的智驾，本质是神经网络。神经网络的训练，靠的是海量标注数据。纯视觉方案，只需要训练摄像头这一种输入。加了毫米波雷达，你就要同时训练两种信号。
+
+更麻烦的是，两种信号会冲突。
+
+雨天，摄像头模糊，雷达信号强。晴天，摄像头清晰，雷达可能因为金属护栏产生虚警。训练时，你必须同时处理一致和冲突两种情况。
+
+这意味着，训练数据量不是翻一倍，而是指数级上升。
+
+为什么是指数级？
+
+因为冲突场景的数量，远多于单一场景。你需要训练“摄像头可靠、雷达可靠”“摄像头可靠、雷达不可靠”“摄像头不可靠、雷达可靠”“摄像头不可靠、雷达不可靠”四种组合。
+
+每增加一种组合，标注成本、算力成本、时间成本，都不是线性增长，而是指数增长。
+
+最终，这些成本会传导到终端。
+
+车企不会自己吃亏。买单的，是每一个消费者。
+
+
+## 🎯 待处理的目标文案
+为什么是指数级？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "为什么是指数级？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:26:33
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "为什么是指数级？",
+        "showFrom": 0,
+        "endFrom": 0
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "指数级",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:26:33
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+毫米波雷达硬件确实贵。一套车规级毫米波雷达，单颗3000到5000元。4颗就是1.2万到2万。这只是采购价。
+
+车企还要承担集成、标定、测试的成本。加起来，一套雷达方案的硬件溢价，可能超过3万。
+
+这还只是硬件。
+
+更贵的是训练。
+
+现在的智驾，本质是神经网络。神经网络的训练，靠的是海量标注数据。纯视觉方案，只需要训练摄像头这一种输入。加了毫米波雷达，你就要同时训练两种信号。
+
+更麻烦的是，两种信号会冲突。
+
+雨天，摄像头模糊，雷达信号强。晴天，摄像头清晰，雷达可能因为金属护栏产生虚警。训练时，你必须同时处理一致和冲突两种情况。
+
+这意味着，训练数据量不是翻一倍，而是指数级上升。
+
+为什么是指数级？
+
+因为冲突场景的数量，远多于单一场景。你需要训练“摄像头可靠、雷达可靠”“摄像头可靠、雷达不可靠”“摄像头不可靠、雷达可靠”“摄像头不可靠、雷达不可靠”四种组合。
+
+每增加一种组合，标注成本、算力成本、时间成本，都不是线性增长，而是指数增长。
+
+最终，这些成本会传导到终端。
+
+车企不会自己吃亏。买单的，是每一个消费者。
+
+
+## 🎯 待处理的目标文案
+因为冲突场景的数量，远多于单一场景。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "因为冲突场景的数量，"
+  },
+  {
+    "index": 1,
+    "text": "远多于单一场景。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:26:45
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "两个圆形区域对比：左侧圆形内充满交织的彩色波形线条，代表冲突场景；右侧圆形内只有一条平滑的波形线，代表单一场景；左侧数量远超右侧，突出冲突场景远多于单一场景的视觉数量对比",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "冲突场景",
+        "showFrom": 0,
+        "color": "#EF4444",
+        "anim": "spring"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:26:45
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+毫米波雷达硬件确实贵。一套车规级毫米波雷达，单颗3000到5000元。4颗就是1.2万到2万。这只是采购价。
+
+车企还要承担集成、标定、测试的成本。加起来，一套雷达方案的硬件溢价，可能超过3万。
+
+这还只是硬件。
+
+更贵的是训练。
+
+现在的智驾，本质是神经网络。神经网络的训练，靠的是海量标注数据。纯视觉方案，只需要训练摄像头这一种输入。加了毫米波雷达，你就要同时训练两种信号。
+
+更麻烦的是，两种信号会冲突。
+
+雨天，摄像头模糊，雷达信号强。晴天，摄像头清晰，雷达可能因为金属护栏产生虚警。训练时，你必须同时处理一致和冲突两种情况。
+
+这意味着，训练数据量不是翻一倍，而是指数级上升。
+
+为什么是指数级？
+
+因为冲突场景的数量，远多于单一场景。你需要训练“摄像头可靠、雷达可靠”“摄像头可靠、雷达不可靠”“摄像头不可靠、雷达可靠”“摄像头不可靠、雷达不可靠”四种组合。
+
+每增加一种组合，标注成本、算力成本、时间成本，都不是线性增长，而是指数增长。
+
+最终，这些成本会传导到终端。
+
+车企不会自己吃亏。买单的，是每一个消费者。
+
+
+## 🎯 待处理的目标文案
+你需要训练“摄像头可靠、雷达可靠”“摄像头可靠、雷达不可靠”“摄像头不可靠、雷达可靠”“摄像头不可靠、雷达不可靠”四种组合。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "你需要训练“摄像头可靠、"
+  },
+  {
+    "index": 1,
+    "text": "雷达可靠”“摄像头可靠、"
+  },
+  {
+    "index": 2,
+    "text": "雷达不可靠”“摄像头不可靠、"
+  },
+  {
+    "index": 3,
+    "text": "雷达可靠”“摄像头不可靠、"
+  },
+  {
+    "index": 4,
+    "text": "雷达不可靠”四种组合。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:27:01
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "panels": [ { "src": "清晰的摄像头图标，旁边有对号；雷达信号波形清晰，旁边有对号", "showFrom": 0, "enterEffect": "fadeIn" }, { "src": "清晰的摄像头图标，旁边有对号；雷达信号波形出现虚警，旁边有叉号", "showFrom": 1, "enterEffect": "fadeIn" }, { "src": "模糊的摄像头图标，旁边有叉号；雷达信号波形清晰，旁边有对号", "showFrom": 2, "enterEffect": "fadeIn" }, { "src": "模糊的摄像头图标，旁边有叉号；雷达信号波形出现虚警，旁边有叉号", "showFrom": 3, "enterEffect": "fadeIn" } ] } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:27:01
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+毫米波雷达硬件确实贵。一套车规级毫米波雷达，单颗3000到5000元。4颗就是1.2万到2万。这只是采购价。
+
+车企还要承担集成、标定、测试的成本。加起来，一套雷达方案的硬件溢价，可能超过3万。
+
+这还只是硬件。
+
+更贵的是训练。
+
+现在的智驾，本质是神经网络。神经网络的训练，靠的是海量标注数据。纯视觉方案，只需要训练摄像头这一种输入。加了毫米波雷达，你就要同时训练两种信号。
+
+更麻烦的是，两种信号会冲突。
+
+雨天，摄像头模糊，雷达信号强。晴天，摄像头清晰，雷达可能因为金属护栏产生虚警。训练时，你必须同时处理一致和冲突两种情况。
+
+这意味着，训练数据量不是翻一倍，而是指数级上升。
+
+为什么是指数级？
+
+因为冲突场景的数量，远多于单一场景。你需要训练“摄像头可靠、雷达可靠”“摄像头可靠、雷达不可靠”“摄像头不可靠、雷达可靠”“摄像头不可靠、雷达不可靠”四种组合。
+
+每增加一种组合，标注成本、算力成本、时间成本，都不是线性增长，而是指数增长。
+
+最终，这些成本会传导到终端。
+
+车企不会自己吃亏。买单的，是每一个消费者。
+
+
+## 🎯 待处理的目标文案
+每增加一种组合，标注成本、算力成本、时间成本，都不是线性增长，而是指数增长。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "每增加一种组合，"
+  },
+  {
+    "index": 1,
+    "text": "标注成本、"
+  },
+  {
+    "index": 2,
+    "text": "算力成本、"
+  },
+  {
+    "index": 3,
+    "text": "时间成本，"
+  },
+  {
+    "index": 4,
+    "text": "都不是线性增长，"
+  },
+  {
+    "index": 5,
+    "text": "而是指数增长。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:27:11
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "线性增长",
+    "butText": "指数增长",
+    "butSrc": "图表中红色曲线急剧攀升，突破边界，散发光晕",
+    "notContentIndex": 4,
+    "butContentIndex": 5
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:27:11
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+毫米波雷达硬件确实贵。一套车规级毫米波雷达，单颗3000到5000元。4颗就是1.2万到2万。这只是采购价。
+
+车企还要承担集成、标定、测试的成本。加起来，一套雷达方案的硬件溢价，可能超过3万。
+
+这还只是硬件。
+
+更贵的是训练。
+
+现在的智驾，本质是神经网络。神经网络的训练，靠的是海量标注数据。纯视觉方案，只需要训练摄像头这一种输入。加了毫米波雷达，你就要同时训练两种信号。
+
+更麻烦的是，两种信号会冲突。
+
+雨天，摄像头模糊，雷达信号强。晴天，摄像头清晰，雷达可能因为金属护栏产生虚警。训练时，你必须同时处理一致和冲突两种情况。
+
+这意味着，训练数据量不是翻一倍，而是指数级上升。
+
+为什么是指数级？
+
+因为冲突场景的数量，远多于单一场景。你需要训练“摄像头可靠、雷达可靠”“摄像头可靠、雷达不可靠”“摄像头不可靠、雷达可靠”“摄像头不可靠、雷达不可靠”四种组合。
+
+每增加一种组合，标注成本、算力成本、时间成本，都不是线性增长，而是指数增长。
+
+最终，这些成本会传导到终端。
+
+车企不会自己吃亏。买单的，是每一个消费者。
+
+
+## 🎯 待处理的目标文案
+最终，这些成本会传导到终端。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "最终，"
+  },
+  {
+    "index": 1,
+    "text": "这些成本会传导到终端。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:27:18
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "一条由金币组成的箭头从复杂的机器设备流向一位普通消费者的钱包，背景简洁科技感",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "成本传导",
+        "showFrom": 1,
+        "color": "#EF4444",
+        "anim": "spring",
+        "audioEffect": "ping"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:27:18
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+毫米波雷达硬件确实贵。一套车规级毫米波雷达，单颗3000到5000元。4颗就是1.2万到2万。这只是采购价。
+
+车企还要承担集成、标定、测试的成本。加起来，一套雷达方案的硬件溢价，可能超过3万。
+
+这还只是硬件。
+
+更贵的是训练。
+
+现在的智驾，本质是神经网络。神经网络的训练，靠的是海量标注数据。纯视觉方案，只需要训练摄像头这一种输入。加了毫米波雷达，你就要同时训练两种信号。
+
+更麻烦的是，两种信号会冲突。
+
+雨天，摄像头模糊，雷达信号强。晴天，摄像头清晰，雷达可能因为金属护栏产生虚警。训练时，你必须同时处理一致和冲突两种情况。
+
+这意味着，训练数据量不是翻一倍，而是指数级上升。
+
+为什么是指数级？
+
+因为冲突场景的数量，远多于单一场景。你需要训练“摄像头可靠、雷达可靠”“摄像头可靠、雷达不可靠”“摄像头不可靠、雷达可靠”“摄像头不可靠、雷达不可靠”四种组合。
+
+每增加一种组合，标注成本、算力成本、时间成本，都不是线性增长，而是指数增长。
+
+最终，这些成本会传导到终端。
+
+车企不会自己吃亏。买单的，是每一个消费者。
+
+
+## 🎯 待处理的目标文案
+车企不会自己吃亏。买单的，是每一个消费者。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "车企不会自己吃亏。"
+  },
+  {
+    "index": 1,
+    "text": "买单的，"
+  },
+  {
+    "index": 2,
+    "text": "是每一个消费者。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:27:28
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "车企不会自己吃亏。",
+        "showFrom": 0
+      },
+      {
+        "text": "买单的，",
+        "showFrom": 1
+      },
+      {
+        "text": "是每一个消费者。",
+        "showFrom": 2
+      }
+    ],
+    "coreSentenceAnchors": []
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:27:28
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？
+
+极端天气，这个车你就非开不可吗？
+
+大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？
+
+根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。
+
+2/365，大约是0.55%。
+
+你愿意为0.55%的场景，多付一倍的智驾溢价吗？
+
+更关键的是，即使在极端天气下，智驾系统会怎么做？
+
+现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。
+
+为什么？因为系统自己知道，在这些场景下，它不可靠。
+
+所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+有人会说，安全无价。万一有一次救命呢？
+
+问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。
+
+真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+你为的，是你几乎永远遇不到的那0.55%。
+
+而代价，是你每次买车都要多付的真金白银。
+
+
+## 🎯 待处理的目标文案
+你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？极端天气，这个车你就非开不可吗？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "你买车的时候，"
+  },
+  {
+    "index": 1,
+    "text": "愿意为不到0.01%的极端天气，"
+  },
+  {
+    "index": 2,
+    "text": "多付一倍的智驾溢价吗？"
+  },
+  {
+    "index": 3,
+    "text": "极端天气，"
+  },
+  {
+    "index": 4,
+    "text": "这个车你就非开不可吗？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:27:45
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "一个购车者站在车旁仰望乌云密布的天空，表情困惑，车旁隐约有问号形状的云层",
+        "enterEffect": "breathe",
+        "tone": "calm",
+        "showFrom": 0
+      },
+      {
+        "imageSrc": "极端暴雨中的前挡风玻璃视线，雨刷疯狂摆动，能见度极低，只有模糊的车灯",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 2
+      },
+      {
+        "imageSrc": "巨大的红色问号悬停在暴风雪封路的场景上，一辆车停在路障前犹豫不前",
+        "enterEffect": "zoomIn",
+        "tone": "alert",
+        "showFrom": 3
+      },
+      {
+        "imageSrc": "浓雾中一辆车调头返回温暖的家，车尾灯拉出红色弧线，远处是晴朗的道路",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 4
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:27:45
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？
+
+极端天气，这个车你就非开不可吗？
+
+大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？
+
+根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。
+
+2/365，大约是0.55%。
+
+你愿意为0.55%的场景，多付一倍的智驾溢价吗？
+
+更关键的是，即使在极端天气下，智驾系统会怎么做？
+
+现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。
+
+为什么？因为系统自己知道，在这些场景下，它不可靠。
+
+所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+有人会说，安全无价。万一有一次救命呢？
+
+问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。
+
+真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+你为的，是你几乎永远遇不到的那0.55%。
+
+而代价，是你每次买车都要多付的真金白银。
+
+
+## 🎯 待处理的目标文案
+大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "大暴雨，"
+  },
+  {
+    "index": 1,
+    "text": "你会出门吗？"
+  },
+  {
+    "index": 2,
+    "text": "暴雪封路，"
+  },
+  {
+    "index": 3,
+    "text": "你会冒险吗？"
+  },
+  {
+    "index": 4,
+    "text": "大雾弥漫，"
+  },
+  {
+    "index": 5,
+    "text": "你会上高速吗？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:27:53
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "panels": [
+      {
+        "src": "暴雨倾盆的街道，一个人站在门口犹豫地望着外面，雨幕模糊了视线",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "大雪覆盖的道路，路牌显示封路标志，一个人站在车旁犹豫",
+        "showFrom": 2,
+        "enterEffect": "slideLeft"
+      },
+      {
+        "src": "浓雾笼罩的高速公路入口，能见度极低，一辆车停在匝道口",
+        "showFrom": 4,
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:27:53
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？
+
+极端天气，这个车你就非开不可吗？
+
+大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？
+
+根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。
+
+2/365，大约是0.55%。
+
+你愿意为0.55%的场景，多付一倍的智驾溢价吗？
+
+更关键的是，即使在极端天气下，智驾系统会怎么做？
+
+现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。
+
+为什么？因为系统自己知道，在这些场景下，它不可靠。
+
+所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+有人会说，安全无价。万一有一次救命呢？
+
+问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。
+
+真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+你为的，是你几乎永远遇不到的那0.55%。
+
+而代价，是你每次买车都要多付的真金白银。
+
+
+## 🎯 待处理的目标文案
+根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "根据气象数据，"
+  },
+  {
+    "index": 1,
+    "text": "影响驾驶的极端天气，"
+  },
+  {
+    "index": 2,
+    "text": "在中国大部分地区，"
+  },
+  {
+    "index": 3,
+    "text": "一年不超过5天。"
+  },
+  {
+    "index": 4,
+    "text": "真正需要上路的，"
+  },
+  {
+    "index": 5,
+    "text": "可能不到2天。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：STAT_COMPARE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "bars": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "多条柱状对比；每项须含 label、value（非负数，整数或小数）、showFrom（content 下标），从该条 startFrame 起显示本柱",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "value",
+          "showFrom"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "短标签"
+          },
+          "value": {
+            "type": "number",
+            "description": "数值（非负，整数或小数）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "小数位数；缺省按 value 自动推断"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该柱出现时机：content 数组下标（0-based），取该条 startFrame 作为入场起点"
+          }
+        }
+      }
+    },
+    "leftValue": {
+      "type": "number",
+      "description": "左侧数值（非负），旧版两柱模式"
+    },
+    "rightValue": {
+      "type": "number",
+      "description": "右侧数值（非负），旧版两柱模式"
+    },
+    "leftLabel": {
+      "type": "string",
+      "description": "左侧标签"
+    },
+    "rightLabel": {
+      "type": "string",
+      "description": "右侧标签"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；顶部锚点词列表，showFrom 为 content 下标（取该条 startFrame），与 KPI_HERO / DATA_TABLE 一致",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "锚点词文案"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "STAT_COMPARE",
+  "param": {
+    "bars": [
+      {
+        "label": "去年",
+        "value": 32,
+        "showFrom": 0
+      },
+      {
+        "label": "今年",
+        "value": 68,
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:28:01
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"bars":[{"label":"极端天气天数","value":5,"showFrom":3},{"label":"实际需上路天数","value":2,"showFrom":5}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:28:01
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？
+
+极端天气，这个车你就非开不可吗？
+
+大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？
+
+根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。
+
+2/365，大约是0.55%。
+
+你愿意为0.55%的场景，多付一倍的智驾溢价吗？
+
+更关键的是，即使在极端天气下，智驾系统会怎么做？
+
+现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。
+
+为什么？因为系统自己知道，在这些场景下，它不可靠。
+
+所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+有人会说，安全无价。万一有一次救命呢？
+
+问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。
+
+真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+你为的，是你几乎永远遇不到的那0.55%。
+
+而代价，是你每次买车都要多付的真金白银。
+
+
+## 🎯 待处理的目标文案
+2/365，大约是0.55%。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "2/365，"
+  },
+  {
+    "index": 1,
+    "text": "大约是0.55%。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：KPI_HERO
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "number",
+      "description": "单指标模式：滚动终值（整数或小数）；若提供 blocks 则可省略"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "单指标：数字左侧"
+    },
+    "suffix": {
+      "type": "string",
+      "description": "单指标：数字右侧单位"
+    },
+    "label": {
+      "type": "string",
+      "description": "单指标：数字上方标签（与 blocks[].label 同视觉层级）"
+    },
+    "useGrouping": {
+      "type": "boolean",
+      "description": "单指标：千分位（小数时作用于整数部分）"
+    },
+    "decimalPlaces": {
+      "type": "integer",
+      "description": "单指标：小数位数，缺省按 value 自动推断"
+    },
+    "blocks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "多指标：每项 value、showFrom（content 下标）；可选 prefix、suffix、label、useGrouping",
+      "items": {
+        "type": "object",
+        "required": [
+          "value",
+          "showFrom"
+        ],
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "终值，整数或小数（如 2.5 万人）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "小数位数，缺省按 value 自动推断（如 2.5→1）"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该块出现时机：content 下标，取该条 startFrame"
+          },
+          "prefix": {
+            "type": "string"
+          },
+          "suffix": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string",
+            "description": "数字上方标签（多列时字号已加大）"
+          },
+          "useGrouping": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "countDuration": {
+      "type": "integer",
+      "description": "数字从 0 滚到目标值的 spring 时长（帧），默认 28"
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "KPI_HERO",
+  "param": {
+    "blocks": [
+      {
+        "value": 87,
+        "suffix": "%",
+        "label": "满意度",
+        "showFrom": 0
+      },
+      {
+        "value": 62,
+        "suffix": "%",
+        "label": "留存",
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:28:09
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"blocks": [{"value": 2, "suffix": "/365", "showFrom": 0}, {"value": 0.55, "suffix": "%", "label": "大约是", "showFrom": 1, "decimalPlaces": 2}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:28:09
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？
+
+极端天气，这个车你就非开不可吗？
+
+大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？
+
+根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。
+
+2/365，大约是0.55%。
+
+你愿意为0.55%的场景，多付一倍的智驾溢价吗？
+
+更关键的是，即使在极端天气下，智驾系统会怎么做？
+
+现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。
+
+为什么？因为系统自己知道，在这些场景下，它不可靠。
+
+所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+有人会说，安全无价。万一有一次救命呢？
+
+问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。
+
+真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+你为的，是你几乎永远遇不到的那0.55%。
+
+而代价，是你每次买车都要多付的真金白银。
+
+
+## 🎯 待处理的目标文案
+你愿意为0.55%的场景，多付一倍的智驾溢价吗？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "你愿意为0.55%的场景，"
+  },
+  {
+    "index": 1,
+    "text": "多付一倍的智驾溢价吗？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:28:18
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "你愿意为0.55%的场景，",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "多付一倍的智驾溢价吗？",
+        "showFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "0.55%",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:28:18
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？
+
+极端天气，这个车你就非开不可吗？
+
+大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？
+
+根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。
+
+2/365，大约是0.55%。
+
+你愿意为0.55%的场景，多付一倍的智驾溢价吗？
+
+更关键的是，即使在极端天气下，智驾系统会怎么做？
+
+现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。
+
+为什么？因为系统自己知道，在这些场景下，它不可靠。
+
+所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+有人会说，安全无价。万一有一次救命呢？
+
+问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。
+
+真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+你为的，是你几乎永远遇不到的那0.55%。
+
+而代价，是你每次买车都要多付的真金白银。
+
+
+## 🎯 待处理的目标文案
+更关键的是，即使在极端天气下，智驾系统会怎么做？现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "更关键的是，"
+  },
+  {
+    "index": 1,
+    "text": "即使在极端天气下，"
+  },
+  {
+    "index": 2,
+    "text": "智驾系统会怎么做？"
+  },
+  {
+    "index": 3,
+    "text": "现在的智驾，"
+  },
+  {
+    "index": 4,
+    "text": "在检测到恶劣天气时，"
+  },
+  {
+    "index": 5,
+    "text": "会主动降低功能，"
+  },
+  {
+    "index": 6,
+    "text": "甚至直接退出。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:28:42
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "stages": [ { "imageSrc": "一个巨大的问号漂浮在模糊的雨雪背景中，象征疑问", "enterEffect": "breathe", "tone": "calm", "showFrom": 0 }, { "imageSrc": "汽车仪表盘特写，黄色警告三角闪烁，雷达信号波形减弱", "enterEffect": "slideBottom", "tone": "alert", "showFrom": 3 }, { "imageSrc": "红色警告三角放大，智能驾驶界面出现断连图标，方向盘符号逐渐消失", "enterEffect": "slideBottom", "tone": "alert", "showFrom": 5 } ] } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:28:42
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？
+
+极端天气，这个车你就非开不可吗？
+
+大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？
+
+根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。
+
+2/365，大约是0.55%。
+
+你愿意为0.55%的场景，多付一倍的智驾溢价吗？
+
+更关键的是，即使在极端天气下，智驾系统会怎么做？
+
+现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。
+
+为什么？因为系统自己知道，在这些场景下，它不可靠。
+
+所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+有人会说，安全无价。万一有一次救命呢？
+
+问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。
+
+真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+你为的，是你几乎永远遇不到的那0.55%。
+
+而代价，是你每次买车都要多付的真金白银。
+
+
+## 🎯 待处理的目标文案
+为什么？因为系统自己知道，在这些场景下，它不可靠。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "为什么？"
+  },
+  {
+    "index": 1,
+    "text": "因为系统自己知道，"
+  },
+  {
+    "index": 2,
+    "text": "在这些场景下，"
+  },
+  {
+    "index": 3,
+    "text": "它不可靠。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:28:58
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "智驾可靠",
+    "butText": "系统自知不可靠",
+    "butSrc": "暴风雨中，汽车自动驾驶系统界面亮起黄色警告，功能降级",
+    "notContentIndex": 0,
+    "butContentIndex": 3
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:28:58
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？
+
+极端天气，这个车你就非开不可吗？
+
+大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？
+
+根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。
+
+2/365，大约是0.55%。
+
+你愿意为0.55%的场景，多付一倍的智驾溢价吗？
+
+更关键的是，即使在极端天气下，智驾系统会怎么做？
+
+现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。
+
+为什么？因为系统自己知道，在这些场景下，它不可靠。
+
+所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+有人会说，安全无价。万一有一次救命呢？
+
+问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。
+
+真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+你为的，是你几乎永远遇不到的那0.55%。
+
+而代价，是你每次买车都要多付的真金白银。
+
+
+## 🎯 待处理的目标文案
+所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "所以，"
+  },
+  {
+    "index": 1,
+    "text": "真正救命的，"
+  },
+  {
+    "index": 2,
+    "text": "不是雷达。"
+  },
+  {
+    "index": 3,
+    "text": "而是司机自己的判断，"
+  },
+  {
+    "index": 4,
+    "text": "和对风险的敬畏。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:29:06
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "notText": "雷达", "butText": "司机判断与风险敬畏", "butSrc": "司机手握方向盘，眼神锐利观察前方道路，驾驶姿态警觉而沉稳", "notContentIndex": 2, "butContentIndex": 3 } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:29:06
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？
+
+极端天气，这个车你就非开不可吗？
+
+大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？
+
+根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。
+
+2/365，大约是0.55%。
+
+你愿意为0.55%的场景，多付一倍的智驾溢价吗？
+
+更关键的是，即使在极端天气下，智驾系统会怎么做？
+
+现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。
+
+为什么？因为系统自己知道，在这些场景下，它不可靠。
+
+所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+有人会说，安全无价。万一有一次救命呢？
+
+问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。
+
+真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+你为的，是你几乎永远遇不到的那0.55%。
+
+而代价，是你每次买车都要多付的真金白银。
+
+
+## 🎯 待处理的目标文案
+有人会说，安全无价。万一有一次救命呢？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "有人会说，"
+  },
+  {
+    "index": 1,
+    "text": "安全无价。"
+  },
+  {
+    "index": 2,
+    "text": "万一有一次救命呢？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：QUOTE_CITATION
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "quoteSource": {
+      "type": "string",
+      "description": "引言来源"
+    },
+    "quoteDisplayText": {
+      "type": "string",
+      "description": "版心引用正文（打字机效果）；不传则使用 content 拼接结果"
+    },
+    "showFrom": {
+      "type": "integer",
+      "description": "content 下标（0-based）。仅打字正文从该条 startFrame 起再入场；开引号与 quoteSource 仍从 item 起点出现。未传 quoteDisplayText 时正文从该条起拼接"
+    }
+  },
+  "required": [
+    "quoteSource"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "QUOTE_CITATION",
+  "param": {
+    "quoteDisplayText": "我思故我在",
+    "quoteSource": "《思考，快与慢》"
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:29:22
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "quoteSource": "安全无价论",
+    "quoteDisplayText": "安全无价。万一有一次救命呢？",
+    "showFrom": 1
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:29:22
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？
+
+极端天气，这个车你就非开不可吗？
+
+大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？
+
+根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。
+
+2/365，大约是0.55%。
+
+你愿意为0.55%的场景，多付一倍的智驾溢价吗？
+
+更关键的是，即使在极端天气下，智驾系统会怎么做？
+
+现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。
+
+为什么？因为系统自己知道，在这些场景下，它不可靠。
+
+所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+有人会说，安全无价。万一有一次救命呢？
+
+问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。
+
+真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+你为的，是你几乎永远遇不到的那0.55%。
+
+而代价，是你每次买车都要多付的真金白银。
+
+
+## 🎯 待处理的目标文案
+问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "问题是，"
+  },
+  {
+    "index": 1,
+    "text": "毫米波雷达真的能救命吗？"
+  },
+  {
+    "index": 2,
+    "text": "在极端天气下，"
+  },
+  {
+    "index": 3,
+    "text": "智驾系统本身就会大幅降低功能，"
+  },
+  {
+    "index": 4,
+    "text": "甚至直接退出。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:29:38
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "雷达救命",
+    "butText": "智驾会降级退出",
+    "butSrc": "车载屏幕弹出红色警报，自动驾驶功能关闭的图标闪烁，驾驶员的手握住方向盘",
+    "notContentIndex": 1,
+    "butContentIndex": 3
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:29:38
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？
+
+极端天气，这个车你就非开不可吗？
+
+大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？
+
+根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。
+
+2/365，大约是0.55%。
+
+你愿意为0.55%的场景，多付一倍的智驾溢价吗？
+
+更关键的是，即使在极端天气下，智驾系统会怎么做？
+
+现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。
+
+为什么？因为系统自己知道，在这些场景下，它不可靠。
+
+所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+有人会说，安全无价。万一有一次救命呢？
+
+问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。
+
+真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+你为的，是你几乎永远遇不到的那0.55%。
+
+而代价，是你每次买车都要多付的真金白银。
+
+
+## 🎯 待处理的目标文案
+真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "真正救命的，"
+  },
+  {
+    "index": 1,
+    "text": "不是雷达。"
+  },
+  {
+    "index": 2,
+    "text": "而是司机自己的判断，"
+  },
+  {
+    "index": 3,
+    "text": "和对风险的敬畏。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:29:51
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "雷达",
+    "butText": "司机的判断与敬畏",
+    "butSrc": "司机坐在驾驶座，双手紧握方向盘，目光专注地扫视前方路况，神情谨慎而敬畏，车内光线柔和，窗外天气阴沉。",
+    "notContentIndex": 1,
+    "butContentIndex": 2
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:29:51
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？
+
+极端天气，这个车你就非开不可吗？
+
+大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？
+
+根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。
+
+2/365，大约是0.55%。
+
+你愿意为0.55%的场景，多付一倍的智驾溢价吗？
+
+更关键的是，即使在极端天气下，智驾系统会怎么做？
+
+现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。
+
+为什么？因为系统自己知道，在这些场景下，它不可靠。
+
+所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+有人会说，安全无价。万一有一次救命呢？
+
+问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。
+
+真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+你为的，是你几乎永远遇不到的那0.55%。
+
+而代价，是你每次买车都要多付的真金白银。
+
+
+## 🎯 待处理的目标文案
+你为的，是你几乎永远遇不到的那0.55%。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "你为的，"
+  },
+  {
+    "index": 1,
+    "text": "是你几乎永远遇不到的那0.55%。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:30:03
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"coreSentence":[{"text":"你为的，","showFrom":0,"endFrom":0},{"text":"是你几乎永远遇不到的那0.55%。","showFrom":1,"endFrom":1}],"coreSentenceAnchors":[{"coreSentenceAnchor":"0.55%","color":"#EF4444"}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 14:30:03
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+你买车的时候，愿意为不到0.01%的极端天气，多付一倍的智驾溢价吗？
+
+极端天气，这个车你就非开不可吗？
+
+大暴雨，你会出门吗？暴雪封路，你会冒险吗？大雾弥漫，你会上高速吗？
+
+根据气象数据，影响驾驶的极端天气，在中国大部分地区，一年不超过5天。真正需要上路的，可能不到2天。
+
+2/365，大约是0.55%。
+
+你愿意为0.55%的场景，多付一倍的智驾溢价吗？
+
+更关键的是，即使在极端天气下，智驾系统会怎么做？
+
+现在的智驾，在检测到恶劣天气时，会主动降低功能，甚至直接退出。
+
+为什么？因为系统自己知道，在这些场景下，它不可靠。
+
+所以，真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+有人会说，安全无价。万一有一次救命呢？
+
+问题是，毫米波雷达真的能救命吗？在极端天气下，智驾系统本身就会大幅降低功能，甚至直接退出。
+
+真正救命的，不是雷达。而是司机自己的判断，和对风险的敬畏。
+
+你为的，是你几乎永远遇不到的那0.55%。
+
+而代价，是你每次买车都要多付的真金白银。
+
+
+## 🎯 待处理的目标文案
+而代价，是你每次买车都要多付的真金白银。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "而代价，"
+  },
+  {
+    "index": 1,
+    "text": "是你每次买车都要多付的真金白银。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 14:30:20
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"coreSentence": [{"text": "而代价，", "showFrom": 0}, {"text": "是你每次买车都要多付的真金白银。", "showFrom": 1}], "coreSentenceAnchors": []}}
+-------------------------------------------------------------------------------------------

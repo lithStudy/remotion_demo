@@ -1,0 +1,1094 @@
+{
+  "topic": "你以为AI在帮你思考？其实它在完成你的认知闭环",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入·豆包仙人",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "场景举例平铺叙事，前两句铺垫争论与掏手机动作，单图锚定豆包仙人出场。",
+          "content": [
+            {
+              "text": "你身边一定有这样的人。",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "争论到一半，",
+              "startFrame": 51,
+              "durationFrames": 31
+            },
+            {
+              "text": "他掏出手机一顿操作，",
+              "startFrame": 81,
+              "durationFrames": 47
+            },
+            {
+              "text": "然后把屏幕递给你。",
+              "startFrame": 128,
+              "durationFrames": 45
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/豆包仙人论/scene_1_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 173
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "QUOTE_CITATION",
+          "reasoning": "转述豆包仙人的典型话术，QUOTE_CITATION 以引用体裁呈现「甩出屏幕当证据」的荒谬感。",
+          "content": [
+            {
+              "text": "你看，豆包都说了，我说的没错吧。",
+              "startFrame": 0,
+              "durationFrames": 72
+            }
+          ],
+          "order": 2,
+          "param": {
+            "quoteDisplayText": "你看，豆包都说了，我说的没错吧。",
+            "quoteSource": "豆包仙人",
+            "anchors": []
+          },
+          "totalDurationFrames": 72
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促强结论，文字冲击强化“豆包即答案”的荒谬感。",
+          "content": [
+            {
+              "text": "于是争论结束了。",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "豆包说的，",
+              "startFrame": 38,
+              "durationFrames": 22
+            },
+            {
+              "text": "就是答案。",
+              "startFrame": 59,
+              "durationFrames": 28
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "于是争论结束了。",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "豆包说的，就是答案。",
+                "showFrom": 1,
+                "endFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "就是答案",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 88
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CONCEPT_CARD",
+          "reasoning": "为焦点人群命名，用概念卡钉住“豆包仙人”。",
+          "content": [
+            {
+              "text": "这类人，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "我们姑且叫他豆包仙人。",
+              "startFrame": 26,
+              "durationFrames": 43
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/豆包仙人论/scene_1_4.png",
+            "conceptName": "豆包仙人",
+            "anchors": []
+          },
+          "totalDurationFrames": 69
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "因果传导“疑问→解答→支持即正确”，因果链逐环呈现闭环。",
+          "content": [
+            {
+              "text": "豆包仙人的逻辑很简单：",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "我有疑问，",
+              "startFrame": 50,
+              "durationFrames": 27
+            },
+            {
+              "text": "豆包给我解答；",
+              "startFrame": 76,
+              "durationFrames": 37
+            },
+            {
+              "text": "豆包支持我，",
+              "startFrame": 112,
+              "durationFrames": 29
+            },
+            {
+              "text": "我就对了。",
+              "startFrame": 140,
+              "durationFrames": 21
+            }
+          ],
+          "order": 5,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "提出疑问",
+                "imageSrc": "images/豆包仙人论/scene_1_5_img0.png",
+                "showFrom": 1
+              },
+              {
+                "label": "豆包解答",
+                "imageSrc": "images/豆包仙人论/scene_1_5_img1.png",
+                "showFrom": 2
+              },
+              {
+                "label": "获得支持",
+                "imageSrc": "images/豆包仙人论/scene_1_5_img2.png",
+                "showFrom": 3
+              },
+              {
+                "label": "结论正确",
+                "imageSrc": "images/豆包仙人论/scene_1_5_img3.png",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 162
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "“不是…而是…”认知纠偏，呈现查资料 vs 给自己盖章。",
+          "content": [
+            {
+              "text": "他不是在用AI查资料，",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "他是在用AI给自己盖章。",
+              "startFrame": 45,
+              "durationFrames": 56
+            }
+          ],
+          "order": 6,
+          "param": {
+            "notText": "用AI查资料",
+            "butText": "给自己盖章",
+            "butSrc": "images/豆包仙人论/scene_1_6.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 102
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "落点句抛出二选一疑问，放大镜聚焦“想听的答案 vs 真实答案”。",
+          "content": [
+            {
+              "text": "但他可能从来没想过一个问题：",
+              "startFrame": 0,
+              "durationFrames": 56
+            },
+            {
+              "text": "豆包给出的，",
+              "startFrame": 55,
+              "durationFrames": 33
+            },
+            {
+              "text": "是真相，还是你想听的答案？",
+              "startFrame": 88,
+              "durationFrames": 72
+            }
+          ],
+          "order": 7,
+          "param": {
+            "anchors": [
+              {
+                "text": "你想听的答案",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 160
+        }
+      ],
+      "audioSrc": "/audio/豆包仙人论/scene_1/scene_1.mp3",
+      "totalDurationFrames": 826
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析·确认偏误放大器",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开篇金句，无配图，聚焦核心观点。",
+          "content": [
+            {
+              "text": "让一个人变蠢的最快方法，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "就是让他无条件相信AI。",
+              "startFrame": 50,
+              "durationFrames": 54
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "让一个人变蠢的最快方法，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "就是让他无条件相信AI。",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "无条件相信AI",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 104
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PEER_INDUCT",
+          "reasoning": "并列前提铺陈想法→验证→证据，归纳收束揭示偏见包装；适合 PEER_INDUCT。",
+          "content": [
+            {
+              "text": "你有一个想法。",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "你用AI去验证。",
+              "startFrame": 27,
+              "durationFrames": 42
+            },
+            {
+              "text": "它立刻给你列出了几条完美的证据。",
+              "startFrame": 68,
+              "durationFrames": 78
+            },
+            {
+              "text": "你觉得非常有道理。",
+              "startFrame": 145,
+              "durationFrames": 52
+            },
+            {
+              "text": "但你可能没有意识到。",
+              "startFrame": 197,
+              "durationFrames": 38
+            },
+            {
+              "text": "AI只是在顺着你的逻辑，",
+              "startFrame": 234,
+              "durationFrames": 61
+            },
+            {
+              "text": "给你一个你想要的答案。",
+              "startFrame": 294,
+              "durationFrames": 42
+            }
+          ],
+          "order": 2,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "images/豆包仙人论/scene_2_2_img0.png",
+                "enterEffect": "breathe",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/豆包仙人论/scene_2_2_img1.png",
+                "enterEffect": "slideBottom",
+                "showFrom": 1
+              },
+              {
+                "imageSrc": "images/豆包仙人论/scene_2_2_img2.png",
+                "enterEffect": "slideBottom",
+                "showFrom": 2
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "images/豆包仙人论/scene_2_2.png",
+              "enterEffect": "zoomIn",
+              "showFrom": 4,
+              "tone": "alert"
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 336
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "“不是…而是…”点明技术原理决定，非人为控制。",
+          "content": [
+            {
+              "text": "这不是人为做的控制，",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "这是AI的技术原理决定的。",
+              "startFrame": 46,
+              "durationFrames": 61
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "人为控制",
+            "butText": "AI技术原理",
+            "butSrc": "images/豆包仙人论/scene_2_3.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 108
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "同一机制子话题内：从概率预测本质→统计学习→互联网偏见→吸收为共识，单主图贯穿、右侧阶段轨对齐口播。",
+          "content": [
+            {
+              "text": "首先，AI本质上是一个概率预测模型。",
+              "startFrame": 0,
+              "durationFrames": 103
+            },
+            {
+              "text": "它通过分析海量文本，",
+              "startFrame": 102,
+              "durationFrames": 54
+            },
+            {
+              "text": "学习词语之间的统计关系。",
+              "startFrame": 156,
+              "durationFrames": 57
+            },
+            {
+              "text": "训练数据来自互联网，",
+              "startFrame": 212,
+              "durationFrames": 55
+            },
+            {
+              "text": "互联网本身就带着偏见。",
+              "startFrame": 267,
+              "durationFrames": 58
+            },
+            {
+              "text": "AI会把这些偏见，",
+              "startFrame": 324,
+              "durationFrames": 45
+            },
+            {
+              "text": "当做主流共识原封不动地吸收进来。",
+              "startFrame": 369,
+              "durationFrames": 87
+            }
+          ],
+          "order": 4,
+          "param": {
+            "title": "概率预测模型",
+            "imageSrc": "images/豆包仙人论/scene_2_4.png",
+            "phases": [
+              {
+                "phaseLabel": "概率预测",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "统计学习",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "互联网偏见",
+                "showFrom": 3
+              },
+              {
+                "phaseLabel": "吸收共识",
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 456
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "同一机制子话题内：RLHF命名→讨好消息→语气镜像→讨好任务，单主图贯穿、右侧阶段轨对齐口播。",
+          "content": [
+            {
+              "text": "其次，AI有一套叫RLHF的训练机制——用人类反馈来给它打分。",
+              "startFrame": 0,
+              "durationFrames": 172
+            },
+            {
+              "text": "它在这个过程中学到的核心技能，",
+              "startFrame": 171,
+              "durationFrames": 68
+            },
+            {
+              "text": "不是说真话，而是说让你舒服的话。",
+              "startFrame": 239,
+              "durationFrames": 81
+            },
+            {
+              "text": "你用支持的语气问它，它就给你列支持的理由；",
+              "startFrame": 319,
+              "durationFrames": 107
+            },
+            {
+              "text": "你用质疑的语气问它，它就给你找质疑的依据。",
+              "startFrame": 426,
+              "durationFrames": 91
+            },
+            {
+              "text": "它没有独立求真的意志，",
+              "startFrame": 517,
+              "durationFrames": 48
+            },
+            {
+              "text": "它只有一个任务：让你觉得它的回答符合你心意。",
+              "startFrame": 565,
+              "durationFrames": 98
+            }
+          ],
+          "order": 5,
+          "param": {
+            "title": "RLHF训练机制",
+            "imageSrc": "images/豆包仙人论/scene_2_5.png",
+            "phases": [
+              {
+                "phaseLabel": "RLHF机制",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "讨好消息",
+                "showFrom": 2
+              },
+              {
+                "phaseLabel": "语气镜像",
+                "showFrom": 3
+              },
+              {
+                "phaseLabel": "讨好任务",
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 664
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "同一机制子话题内：实时搜索→误判更准→污染内容→偏误加火，单主图贯穿、右侧阶段轨对齐口播。",
+          "content": [
+            {
+              "text": "最后，还有一个被严重低估的机制：实时搜索。",
+              "startFrame": 0,
+              "durationFrames": 106
+            },
+            {
+              "text": "很多AI会同步调用搜索引擎，去抓取最新内容来支撑回答。",
+              "startFrame": 105,
+              "durationFrames": 146
+            },
+            {
+              "text": "你以为这让答案更新更准。",
+              "startFrame": 250,
+              "durationFrames": 60
+            },
+            {
+              "text": "但互联网上涌现最快的，往往不是权威事实，",
+              "startFrame": 310,
+              "durationFrames": 104
+            },
+            {
+              "text": "而是SEO文章、情绪化自媒体、带货软文。",
+              "startFrame": 414,
+              "durationFrames": 124
+            },
+            {
+              "text": "这些高曝光污染内容被AI直接引用，",
+              "startFrame": 537,
+              "durationFrames": 86
+            },
+            {
+              "text": "给你的确认偏误又加了一把火。",
+              "startFrame": 622,
+              "durationFrames": 66
+            }
+          ],
+          "order": 6,
+          "param": {
+            "title": "实时搜索",
+            "imageSrc": "images/豆包仙人论/scene_2_6.png",
+            "phases": [
+              {
+                "phaseLabel": "实时搜索",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "误判更准",
+                "showFrom": 2
+              },
+              {
+                "phaseLabel": "污染内容",
+                "showFrom": 4
+              },
+              {
+                "phaseLabel": "偏误加火",
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 689
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "三层叠加收束为确认偏误放大器金句。",
+          "content": [
+            {
+              "text": "三层叠加，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "就成了一台高效的确认偏误放大器。",
+              "startFrame": 32,
+              "durationFrames": 86
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "三层叠加，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "就成了一台高效的确认偏误放大器。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "确认偏误放大器",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 118
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "回放豆包仙人三拍动作，content≤4 对齐换图。",
+          "content": [
+            {
+              "text": "回头看豆包仙人的那一幕：他带着预设的立场去问豆包，",
+              "startFrame": 0,
+              "durationFrames": 120
+            },
+            {
+              "text": "豆包顺着他的语气给出了支持的理由，",
+              "startFrame": 120,
+              "durationFrames": 88
+            },
+            {
+              "text": "他把这个理由截图发出来，",
+              "startFrame": 207,
+              "durationFrames": 51
+            },
+            {
+              "text": "当成了赢得争论的证据。",
+              "startFrame": 257,
+              "durationFrames": 50
+            }
+          ],
+          "order": 8,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/豆包仙人论/scene_2_8_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/豆包仙人论/scene_2_8_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 1
+              },
+              {
+                "imageSrc": "images/豆包仙人论/scene_2_8_img2.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 308
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "你以为多维思考，其实完成认知闭环，全片核心翻转。",
+          "content": [
+            {
+              "text": "你以为AI在帮你多维度思考。",
+              "startFrame": 0,
+              "durationFrames": 75
+            },
+            {
+              "text": "其实它可能只是在帮你完成认知闭环。",
+              "startFrame": 74,
+              "durationFrames": 75
+            }
+          ],
+          "order": 10,
+          "param": {
+            "notText": "帮你多维度思考",
+            "butText": "帮你完成认知闭环",
+            "butSrc": "images/豆包仙人论/scene_2_10.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 149
+        }
+      ],
+      "audioSrc": "/audio/豆包仙人论/scene_2/scene_2.mp3",
+      "totalDurationFrames": 2930
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "召唤·信息防火墙",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "普通人 vs 高手对照，DOS_AND_DONTS 左右避坑分栏比认知翻转卡更直观呈现两种 AI 使用姿态。",
+          "content": [
+            {
+              "text": "普通人把AI当大脑。",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "高手把AI当做需要保持距离的合作者。",
+              "startFrame": 58,
+              "durationFrames": 86
+            }
+          ],
+          "order": 1,
+          "param": {
+            "left": {
+              "label": "❌ 把AI当大脑",
+              "src": "images/豆包仙人论/scene_3_1_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 保持距离合作",
+              "src": "images/豆包仙人论/scene_3_1_right.png",
+              "showFrom": 1
+            }
+          },
+          "totalDurationFrames": 145
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "引出四层信息防火墙，单图聚焦。",
+          "content": [
+            {
+              "text": "作为一个高手，当你在使用AI时，",
+              "startFrame": 0,
+              "durationFrames": 72
+            },
+            {
+              "text": "需要建立四层信息防火墙。",
+              "startFrame": 72,
+              "durationFrames": 62
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/豆包仙人论/scene_3_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "四层信息防火墙",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "popIn",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 134
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "第一层交叉比对，标题+展开，content≤5。",
+          "content": [
+            {
+              "text": "第一层。交叉比对。",
+              "startFrame": 0,
+              "durationFrames": 60
+            },
+            {
+              "text": "对关键信息。使用至少两个不同的AI工具。",
+              "startFrame": 60,
+              "durationFrames": 107
+            },
+            {
+              "text": "再配合搜索引擎的原始网页进行比对。",
+              "startFrame": 166,
+              "durationFrames": 95
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "交叉比对",
+            "imageSrc": "images/豆包仙人论/scene_3_3.png",
+            "notes": [
+              {
+                "text": "不止依赖一个AI",
+                "showFrom": 1
+              },
+              {
+                "text": "回归原始信源验证",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 262
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "第二层反向发问，合并碎句，content≤5。",
+          "content": [
+            {
+              "text": "第二层。反向发问。",
+              "startFrame": 0,
+              "durationFrames": 63
+            },
+            {
+              "text": "当你得到AI的支持性结论后。必须强迫自己提出一个相反的问题。",
+              "startFrame": 62,
+              "durationFrames": 142
+            },
+            {
+              "text": "例如：如果要证明这个方案不可行。最致命的痛点会是什么？",
+              "startFrame": 204,
+              "durationFrames": 129
+            }
+          ],
+          "order": 4,
+          "param": {
+            "title": "反向发问",
+            "imageSrc": "images/豆包仙人论/scene_3_4.png",
+            "notes": [
+              {
+                "text": "强迫寻找对立面",
+                "showFrom": 1
+              },
+              {
+                "text": "提出证伪性问题",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 333
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "第三层AI警惕区，合并碎句，content≤5。",
+          "content": [
+            {
+              "text": "第三层。分类建立AI警惕区。",
+              "startFrame": 0,
+              "durationFrames": 90
+            },
+            {
+              "text": "在容错率极低的专业领域。比如法律合规、财务计算、医药健康。",
+              "startFrame": 89,
+              "durationFrames": 182
+            },
+            {
+              "text": "自动将AI定位为辅助线索。绝不用作最终结论。",
+              "startFrame": 271,
+              "durationFrames": 125
+            }
+          ],
+          "order": 5,
+          "param": {
+            "title": "AI警惕区",
+            "imageSrc": "images/豆包仙人论/scene_3_5.png",
+            "notes": [
+              {
+                "text": "法律、财务、医药划入警惕区",
+                "showFrom": 1
+              },
+              {
+                "text": "只作辅助，不作最终结论",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 396
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "第四层保持原始检索习惯，合并碎句，content≤5。",
+          "content": [
+            {
+              "text": "第四层。保持原始检索习惯。",
+              "startFrame": 0,
+              "durationFrames": 78
+            },
+            {
+              "text": "每周抽出一部分时间。不使用AI的直接回答。",
+              "startFrame": 77,
+              "durationFrames": 98
+            },
+            {
+              "text": "而是通过阅读长文章、专业报告或与行业专家交流。",
+              "startFrame": 174,
+              "durationFrames": 131
+            },
+            {
+              "text": "来获取更深度的输入。",
+              "startFrame": 305,
+              "durationFrames": 60
+            }
+          ],
+          "order": 6,
+          "param": {
+            "title": "保持原始检索习惯",
+            "imageSrc": "images/豆包仙人论/scene_3_6.png",
+            "notes": [
+              {
+                "text": "每周安排无AI时段",
+                "showFrom": 1
+              },
+              {
+                "text": "深读与专家交流",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 366
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "不是挑刺而是构建认知免疫系统。",
+          "content": [
+            {
+              "text": "这四层防火墙。",
+              "startFrame": 0,
+              "durationFrames": 45
+            },
+            {
+              "text": "不是在给AI挑刺。",
+              "startFrame": 44,
+              "durationFrames": 49
+            },
+            {
+              "text": "而是在构建你自己的认知免疫系统。",
+              "startFrame": 93,
+              "durationFrames": 81
+            }
+          ],
+          "order": 7,
+          "param": {
+            "notText": "给AI挑刺",
+            "butText": "构建认知免疫系统",
+            "butSrc": "images/豆包仙人论/scene_3_7.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 175
+        }
+      ],
+      "audioSrc": "/audio/豆包仙人论/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1810
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "反转·动态置信",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "越依赖→越失去独立判断，因果链。",
+          "content": [
+            {
+              "text": "你越依赖AI。",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "越容易失去独立判断。",
+              "startFrame": 29,
+              "durationFrames": 51
+            }
+          ],
+          "order": 9,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "依赖AI",
+                "imageSrc": "images/豆包仙人论/scene_4_9_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "失去判断",
+                "imageSrc": "images/豆包仙人论/scene_4_9_img1.png",
+                "showFrom": 1
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 80
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片收束金句，纯文字暴击强化「思考在AI答案后才开始」。",
+          "content": [
+            {
+              "text": "真正的思考。",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "不是在AI给出答案时结束。",
+              "startFrame": 34,
+              "durationFrames": 69
+            },
+            {
+              "text": "而是在AI给出答案后才刚刚开始。",
+              "startFrame": 103,
+              "durationFrames": 88
+            }
+          ],
+          "order": 10,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "真正的思考。",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "不是在AI给出答案时结束。",
+                "showFrom": 1,
+                "endFrom": 1
+              },
+              {
+                "text": "而是在AI给出答案后才刚刚开始。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "真正的思考",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "才刚刚开始",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 191
+        }
+      ],
+      "audioSrc": "/audio/豆包仙人论/scene_4/scene_4.mp3",
+      "totalDurationFrames": 273
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "豆包仙人论",
+    "subtitle": "豆包不是仙人，是确认偏误放大器",
+    "themeColor": "#FF6900",
+    "surface": "light",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

@@ -1,0 +1,998 @@
+{
+  "topic": "99.45%的时间里，你都在为用不上的功能买单",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：成本忽略的陷阱",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "反问钩子，包含数据与代价对比，冲击性强，适合用TEXT_FOCUS突出关键数字。",
+          "content": [
+            {
+              "text": "你愿意为不到0.55%的极端天气，",
+              "startFrame": 0,
+              "durationFrames": 92
+            },
+            {
+              "text": "多付一倍车钱吗？",
+              "startFrame": 91,
+              "durationFrames": 38
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "你愿意为不到0.55%的极端天气，",
+                "showFrom": 0
+              },
+              {
+                "text": "多付一倍车钱吗？",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 130
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "平缓交代争议背景，无特殊结构，用CENTER_FOCUS搭配单图支撑叙述。",
+          "content": [
+            {
+              "text": "现在全网都在吵，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "智驾到底该不该装雷达。",
+              "startFrame": 43,
+              "durationFrames": 55
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/智驾论之性价比/scene_1_2.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "雷达",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 99
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "QUOTE_CITATION",
+          "reasoning": "明确引用支持方观点，用QUOTE_CITATION强化来源与立场。",
+          "content": [
+            {
+              "text": "支持雷达的人说，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "纯视觉在极端天气下会失灵。",
+              "startFrame": 39,
+              "durationFrames": 68
+            }
+          ],
+          "order": 3,
+          "param": {
+            "quoteSource": "支持雷达的人",
+            "quoteDisplayText": "纯视觉在暴雨、炫光下会失灵。",
+            "anchors": []
+          },
+          "totalDurationFrames": 107
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "QUOTE_CITATION",
+          "reasoning": "反对方观点引用，与前一条形成对比，模板同选QUOTE_CITATION。",
+          "content": [
+            {
+              "text": "反对的人说，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "特斯拉已经证明了纯视觉可行。",
+              "startFrame": 29,
+              "durationFrames": 81
+            }
+          ],
+          "order": 4,
+          "param": {
+            "quoteDisplayText": "特斯拉已经证明了纯视觉可行。",
+            "quoteSource": "反对的人说",
+            "showFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 111
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "将注意力锁定到被忽略的核心问题上，适合MAGNIFYING_GLASS放大“最简单的问题”。",
+          "content": [
+            {
+              "text": "但我想提醒支持的人一个简单的问题，",
+              "startFrame": 0,
+              "durationFrames": 71
+            },
+            {
+              "text": "成本。",
+              "startFrame": 70,
+              "durationFrames": 27
+            }
+          ],
+          "order": 5,
+          "param": {
+            "anchors": [
+              {
+                "text": "成本",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 98
+        }
+      ],
+      "audioSrc": "/audio/智驾论之性价比/scene_1/scene_1.mp3",
+      "totalDurationFrames": 544
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析：雷达训练的成本黑洞",
+      "items": [
+        {
+          "narrativeType": "DATA",
+          "template": "CENTER_FOCUS",
+          "reasoning": "开篇给出硬件成本数据，平铺叙述无强烈对比结构，CENTER_FOCUS 直接呈现文字与可选配图，避免 KPI_HERO 强调单一数值而忽略句子间的推导关系。",
+          "content": [
+            {
+              "text": "毫米波雷达硬件相当贵。",
+              "startFrame": 0,
+              "durationFrames": 64
+            },
+            {
+              "text": "一套车规级毫米波雷达，",
+              "startFrame": 63,
+              "durationFrames": 63
+            },
+            {
+              "text": "单颗3000到5000元。",
+              "startFrame": 125,
+              "durationFrames": 51
+            },
+            {
+              "text": "4颗就是1.2万到2万。",
+              "startFrame": 175,
+              "durationFrames": 66
+            },
+            {
+              "text": "这只是采购价。",
+              "startFrame": 240,
+              "durationFrames": 46
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/智驾论之性价比/scene_2_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "毫米波雷达",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 287
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "PANEL_GRID",
+          "reasoning": "集成、标定、测试三项隐性成本并列，适合 PANEL_GRID 宫格逐格显现；后续汇总溢价仍保留 anchors 高亮。",
+          "content": [
+            {
+              "text": "车企还要承担集成、",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "标定、",
+              "startFrame": 52,
+              "durationFrames": 18
+            },
+            {
+              "text": "测试的成本。",
+              "startFrame": 69,
+              "durationFrames": 32
+            },
+            {
+              "text": "加起来，",
+              "startFrame": 101,
+              "durationFrames": 23
+            },
+            {
+              "text": "一套雷达方案的硬件溢价，",
+              "startFrame": 124,
+              "durationFrames": 60
+            },
+            {
+              "text": "可能超过3万。",
+              "startFrame": 184,
+              "durationFrames": 40
+            },
+            {
+              "text": "这还只是硬件。",
+              "startFrame": 224,
+              "durationFrames": 41
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "images/智驾论之性价比/scene_2_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/智驾论之性价比/scene_2_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/智驾论之性价比/scene_2_2_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "超过3万",
+                "showFrom": 5,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 265
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "从硬件过渡到训练，解释原理并对比纯视觉与雷达融合，属于连续说理且无分解为多步骤的强特征，适合用 CENTER_FOCUS 支持一段完整的逻辑展开。",
+          "content": [
+            {
+              "text": "更贵的是训练。",
+              "startFrame": 0,
+              "durationFrames": 45
+            },
+            {
+              "text": "现在的智驾，",
+              "startFrame": 44,
+              "durationFrames": 35
+            },
+            {
+              "text": "本质是神经网络。",
+              "startFrame": 79,
+              "durationFrames": 42
+            },
+            {
+              "text": "神经网络的训练，",
+              "startFrame": 120,
+              "durationFrames": 42
+            },
+            {
+              "text": "靠的是海量标注数据。",
+              "startFrame": 162,
+              "durationFrames": 64
+            },
+            {
+              "text": "纯视觉方案，",
+              "startFrame": 225,
+              "durationFrames": 34
+            },
+            {
+              "text": "只需要训练摄像头这一种输入。",
+              "startFrame": 259,
+              "durationFrames": 67
+            },
+            {
+              "text": "加了毫米波雷达，",
+              "startFrame": 325,
+              "durationFrames": 38
+            },
+            {
+              "text": "你就要同时训练两种信号。",
+              "startFrame": 362,
+              "durationFrames": 65
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/智驾论之性价比/scene_2_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "训练",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 428
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PEER_INDUCT",
+          "reasoning": "信号冲突、雨天、晴天三条并列前提铺陈两种传感器的矛盾场景，末句「训练时必须同时处理一致和冲突」归纳收束；并列前提→归纳，适合 PEER_INDUCT。",
+          "content": [
+            {
+              "text": "更麻烦的是，两种信号会冲突。",
+              "startFrame": 0,
+              "durationFrames": 78
+            },
+            {
+              "text": "极端大雨天，摄像头模糊，雷达信号强。",
+              "startFrame": 77,
+              "durationFrames": 90
+            },
+            {
+              "text": "晴天，摄像头清晰，雷达可能因为金属护栏产生虚警。",
+              "startFrame": 167,
+              "durationFrames": 136
+            },
+            {
+              "text": "训练时，你必须同时处理一致和冲突两种情况。",
+              "startFrame": 303,
+              "durationFrames": 113
+            }
+          ],
+          "order": 4,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "images/智驾论之性价比/scene_2_4_img0.png",
+                "enterEffect": "slideBottom",
+                "showFrom": 1
+              },
+              {
+                "imageSrc": "images/智驾论之性价比/scene_2_4_img1.png",
+                "enterEffect": "slideBottom",
+                "showFrom": 2
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "images/智驾论之性价比/scene_2_4.png",
+              "enterEffect": "zoomIn",
+              "showFrom": 3,
+              "tone": "alert"
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 416
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确的‘不是…而是…’否定与重构，COGNITIVE_SHIFT 直接呈现认知翻转，最适合表现从误区到新结论的冲击。",
+          "content": [
+            {
+              "text": "这意味着，",
+              "startFrame": 0,
+              "durationFrames": 26
+            },
+            {
+              "text": "训练数据量不是翻一倍，",
+              "startFrame": 25,
+              "durationFrames": 60
+            },
+            {
+              "text": "而是指数级上升。",
+              "startFrame": 85,
+              "durationFrames": 46
+            }
+          ],
+          "order": 5,
+          "param": {
+            "notText": "翻一倍",
+            "butText": "指数级上升",
+            "butSrc": "images/智驾论之性价比/scene_2_5.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 131
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "独立短问句，起强烈转折和聚焦作用，TEXT_FOCUS 将其放大为金句式提问，增强悬念感；字数虽少但属于独立表达结构，无需合并。",
+          "content": [
+            {
+              "text": "为什么是指数级？",
+              "startFrame": 0,
+              "durationFrames": 44
+            }
+          ],
+          "order": 6,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "为什么是指数级？",
+                "showFrom": 0,
+                "endFrom": 0
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "指数级",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 44
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "原因陈述句，单一说理，由前文提问自然衔接，CENTER_FOCUS 保持简洁支撑。",
+          "content": [
+            {
+              "text": "因为冲突场景的数量，",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "远多于单一场景。",
+              "startFrame": 51,
+              "durationFrames": 49
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "images/智驾论之性价比/scene_2_7.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "冲突场景",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 100
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "四种组合是典型的并列例子，适合用 PANEL_GRID 在屏幕上分为四宫格独立展示，形象解释‘指数级’的缘由。",
+          "content": [
+            {
+              "text": "你需要训练“摄像头可靠、雷达可靠”。",
+              "startFrame": 0,
+              "durationFrames": 89
+            },
+            {
+              "text": "“摄像头可靠、雷达不可靠”。",
+              "startFrame": 88,
+              "durationFrames": 64
+            },
+            {
+              "text": "“摄像头不可靠、雷达可靠”。",
+              "startFrame": 151,
+              "durationFrames": 59
+            },
+            {
+              "text": "“摄像头不可靠、雷达不可靠”四种组合。",
+              "startFrame": 210,
+              "durationFrames": 87
+            }
+          ],
+          "order": 8,
+          "param": {
+            "panels": [
+              {
+                "src": "images/智驾论之性价比/scene_2_8_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/智驾论之性价比/scene_2_8_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/智驾论之性价比/scene_2_8_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/智驾论之性价比/scene_2_8_img3.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 297
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "标注、算力、时间三项成本并列叠加，适合 PANEL_GRID 宫格逐格显现；结尾‘指数增长’用 anchors 高亮收束。",
+          "content": [
+            {
+              "text": "每增加一种组合，",
+              "startFrame": 0,
+              "durationFrames": 45
+            },
+            {
+              "text": "标注成本、",
+              "startFrame": 44,
+              "durationFrames": 32
+            },
+            {
+              "text": "算力成本、",
+              "startFrame": 76,
+              "durationFrames": 29
+            },
+            {
+              "text": "时间成本，",
+              "startFrame": 104,
+              "durationFrames": 32
+            },
+            {
+              "text": "都不是线性增长，",
+              "startFrame": 136,
+              "durationFrames": 38
+            },
+            {
+              "text": "而是指数增长。",
+              "startFrame": 173,
+              "durationFrames": 42
+            }
+          ],
+          "order": 9,
+          "param": {
+            "panels": [
+              {
+                "src": "images/智驾论之性价比/scene_2_9_img0.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/智驾论之性价比/scene_2_9_img1.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/智驾论之性价比/scene_2_9_img2.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "指数增长",
+                "showFrom": 5,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 216
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "引出结论的过渡句，语气平实，配图指向消费者终端示意即可，CENTER_FOCUS 恰到好处。",
+          "content": [
+            {
+              "text": "最终，",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "这些成本会传导到终端。",
+              "startFrame": 18,
+              "durationFrames": 69
+            }
+          ],
+          "order": 10,
+          "param": {
+            "imageSrc": "images/智驾论之性价比/scene_2_10.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "成本传导",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 88
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全篇收束金句，将成本问题最终落到消费者身上，TEXT_FOCUS 纯粹放大文字冲击，不做多余装饰，一击即中。",
+          "content": [
+            {
+              "text": "车企不会自己吃亏。",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "买单的，",
+              "startFrame": 50,
+              "durationFrames": 26
+            },
+            {
+              "text": "是每一个消费者。",
+              "startFrame": 76,
+              "durationFrames": 41
+            }
+          ],
+          "order": 11,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "车企不会自己吃亏。",
+                "showFrom": 0
+              },
+              {
+                "text": "买单的，",
+                "showFrom": 1
+              },
+              {
+                "text": "是每一个消费者。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "买单的",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 117
+        }
+      ],
+      "audioSrc": "/audio/智驾论之性价比/scene_2/scene_2.mp3",
+      "totalDurationFrames": 2386
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "反转：极端天气的致命谬误",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "口播先讲纯视觉覆盖正常驾驶场景、再讲雷达仅针对极端视野障碍，形成左右对照的两条技术路径，选SPLIT_COMPARE左右分屏呈现。",
+          "content": [
+            {
+              "text": "你要知道，",
+              "startFrame": 0,
+              "durationFrames": 24
+            },
+            {
+              "text": "单纯用视觉，",
+              "startFrame": 24,
+              "durationFrames": 36
+            },
+            {
+              "text": "已经可以解决正常人类可以驾驶的场景。",
+              "startFrame": 60,
+              "durationFrames": 71
+            },
+            {
+              "text": "多出来的雷达只是为了避免极端的视野障碍问题。",
+              "startFrame": 130,
+              "durationFrames": 94
+            }
+          ],
+          "order": 1,
+          "param": {
+            "leftSrc": "images/智驾论之性价比/scene_3_1_left.png",
+            "rightSrc": "images/智驾论之性价比/scene_3_1_right.png",
+            "leftLabel": "纯视觉",
+            "rightLabel": "毫米波雷达",
+            "leftShowFrom": 1,
+            "rightShowFrom": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 225
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "STAT_COMPARE",
+          "reasoning": "两项量化数据对比（不超过5天 vs 不到2天），可抽象出5和2两个非负整数进行直观统计比较，符合STAT_COMPARE的使用场景。",
+          "content": [
+            {
+              "text": "而根据气象数据，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "影响驾驶的极端天气，",
+              "startFrame": 37,
+              "durationFrames": 57
+            },
+            {
+              "text": "在中国大部分地区，",
+              "startFrame": 93,
+              "durationFrames": 41
+            },
+            {
+              "text": "一年不超过5天。",
+              "startFrame": 134,
+              "durationFrames": 40
+            },
+            {
+              "text": "真正需要上路的，",
+              "startFrame": 174,
+              "durationFrames": 36
+            },
+            {
+              "text": "可能不到2天。",
+              "startFrame": 210,
+              "durationFrames": 34
+            }
+          ],
+          "order": 2,
+          "param": {
+            "bars": [
+              {
+                "label": "极端天气天数",
+                "value": 5,
+                "showFrom": 3
+              },
+              {
+                "label": "实际需上路天数",
+                "value": 2,
+                "showFrom": 5
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 244
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "由前项数据计算出的核心概率0.55%，短促且有冲击力，适合用KPI_HERO突出单个核心数值。",
+          "content": [
+            {
+              "text": "2除以365天，",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "大约是0.55%。",
+              "startFrame": 52,
+              "durationFrames": 63
+            }
+          ],
+          "order": 3,
+          "param": {
+            "blocks": [
+              {
+                "value": 2,
+                "suffix": "/365",
+                "showFrom": 0
+              },
+              {
+                "value": 0.55,
+                "suffix": "%",
+                "label": "大约是",
+                "showFrom": 1,
+                "decimalPlaces": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 115
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "以概率数据反问用户，产生强烈冲击，无需配图的短促金句，选TEXT_FOCUS放大结论感。",
+          "content": [
+            {
+              "text": "你愿意为0.55%的场景，",
+              "startFrame": 0,
+              "durationFrames": 77
+            },
+            {
+              "text": "多付一倍的智驾溢价吗？",
+              "startFrame": 76,
+              "durationFrames": 68
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "你愿意为0.55%的场景，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "多付一倍的智驾溢价吗？",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "0.55%",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 144
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "从人类都无法驾驶的极端天气切入，再抛出‘非开不可吗’的递进反问，构成情绪递进的节拍序列，选BEAT_SEQUENCE配图强化。",
+          "content": [
+            {
+              "text": "在人类都不能开的极端天气下，",
+              "startFrame": 0,
+              "durationFrames": 69
+            },
+            {
+              "text": "这个车你就非开不可吗？",
+              "startFrame": 68,
+              "durationFrames": 50
+            }
+          ],
+          "order": 5,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/智驾论之性价比/scene_3_5_img0.png",
+                "enterEffect": "breathe",
+                "tone": "alert",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/智驾论之性价比/scene_3_5_img1.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert",
+                "showFrom": 1
+              }
+            ],
+            "anchors": [
+              {
+                "text": "非开不可吗",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 118
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "指出用户多付费所换取的实质就是那极低概率，短促有力，无配图即可形成金句冲击，选TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "你为的，",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "是你可以选择不开车的那0.55%。",
+              "startFrame": 21,
+              "durationFrames": 91
+            }
+          ],
+          "order": 6,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "你为的，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "是你可以选择不开车的那0.55%",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "0.55%",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 113
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "与前句呼应，点出真实的金钱代价，构成对比性收束，同样适用TEXT_FOCUS强化结论感。",
+          "content": [
+            {
+              "text": "而代价，",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "是你每次买车都要翻倍的真金白银。",
+              "startFrame": 21,
+              "durationFrames": 76
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "而代价，",
+                "showFrom": 0
+              },
+              {
+                "text": "是你每次买车都要翻倍的真金白银",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 98
+        }
+      ],
+      "audioSrc": "/audio/智驾论之性价比/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1056
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "智驾论（二）",
+    "subtitle": "极端天气下，这个车就非开不可吗",
+    "themeColor": "#FF6900",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

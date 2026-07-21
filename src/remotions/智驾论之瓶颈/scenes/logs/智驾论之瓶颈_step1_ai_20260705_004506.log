@@ -1,0 +1,5470 @@
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:45:07
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：下次选智驾，别数雷达了，去看一个车企最怕你提的数字。
+- **当前场景**：揭示·输入层误区
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+智驾技术之路，纯视觉 VS  加装雷达  你认为哪个更好？
+
+全网都在争，纯视觉和加雷达，哪个更好。支持雷达的人说，暴雨天摄像头会失灵。支持视觉的人说，特斯拉已经跑通了。
+
+但这些争论，犯了一个根本性错误。他们把智驾的瓶颈，定位在了“输入”这一层。
+
+智驾到底分几层？
+第一层，输入。接受感知，周围现实世界。
+第二层，计算。通过规则或者神经网络，判断当前状况。
+第三层，输出。决定加速、减速、直行还是转弯。
+视觉和雷达之争，只在第一层。根本不是重点。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:46:31
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "智驾技术之路，纯视觉 VS  加装雷达  你认为哪个更好？",
+      "narrativeType": "HOOK",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "开场提问，无强结构，平铺叙述，用中心焦点模板即可。"
+    },
+    {
+      "text": "全网都在争，纯视觉和加雷达，哪个更好。支持雷达的人说，暴雨天摄像头会失灵。支持视觉的人说，特斯拉已经跑通了。",
+      "narrativeType": "LOGIC",
+      "template": "SPLIT_COMPARE",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "明确的两方观点并列对比，适合 SPLIT_COMPARE 模板展示分歧。"
+    },
+    {
+      "text": "但这些争论，犯了一个根本性错误。他们把智驾的瓶颈，定位在了“输入”这一层。",
+      "narrativeType": "LOGIC",
+      "template": "MAGNIFYING_GLASS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "揭示根本性错误并聚焦“输入”这一核心关键词，用放大镜模板突出关键锚点。"
+    },
+    {
+      "text": "智驾到底分几层？第一层，输入。接受感知，周围现实世界。第二层，计算。通过规则或者神经网络，判断当前状况。第三层，输出。决定加速、减速、直行还是转弯。",
+      "narrativeType": "LOGIC",
+      "template": "STEP_LIST",
+      "expressionTag": "steps",
+      "confidence": "high",
+      "reasoning": "可清晰抽取三层短步骤（每条解释简洁且≤10字），用步骤列表模板展示分层逻辑。"
+    },
+    {
+      "text": "视觉和雷达之争，只在第一层。根本不是重点。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "全片级短促强结论，无需配图，用文字聚焦模板收束观点。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:46:31
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：下次选智驾，别数雷达了，去看一个车企最怕你提的数字。
+- **当前场景**：剖析·决策层瓶颈
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+现在智驾的瓶颈，不在于看不到路况。而是不知道怎么根据路况做决策。
+
+因为就现在的智驾来看，即使是在光线好的情况下能开好车，就已经是长远目标了。
+
+盘山公路上，某些智驾跑一半路就接管33次。这是看不清路的问题吗？
+
+大马路上，某些智驾专爱往橙色上撞。这是看不清路的问题吗？
+
+限宽墩间，某些智驾就是过不去，这是看不清路的问题吗？
+
+不是。光天化日，朗朗乾坤，摄像头把路拍得清清楚楚。问题是，系统不知道该怎么处理。
+
+盘山公路的33次接管，暴露的是决策层的逻辑漏洞。不是感知层的分辨率问题。
+
+往橙色物体猛撞，暴露的是神经网络对“橙色”这个特征的错误泛化。不是雷达缺失导致的漏检。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:47:47
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "现在智驾的瓶颈，不在于看不到路况。而是不知道怎么根据路况做决策。",
+      "narrativeType": "HOOK",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "典型的“不是…而是…”认知转换结构，直接点明核心矛盾，用 COGNITIVE_SHIFT 强调思维转变。"
+    },
+    {
+      "text": "因为就现在的智驾来看，即使是在光线好的情况下能开好车，就已经是长远目标了。",
+      "narrativeType": "LOGIC",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "medium",
+      "reasoning": "平缓的现状陈述，解释前句原因，无强结构，用 CENTER_FOCUS 配合单图叙述。"
+    },
+    {
+      "text": "盘山公路上，某些智驾跑一半路就接管33次。这是看不清路的问题吗？",
+      "narrativeType": "CASE",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "medium",
+      "reasoning": "两段节拍递进：先还原场景，再抛出反问，用 BEAT_SEQUENCE 让画面随节奏变化。"
+    },
+    {
+      "text": "大马路上，某些智驾专爱往橙色上撞。这是看不清路的问题吗？",
+      "narrativeType": "CASE",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "medium",
+      "reasoning": "与上一案例平行，同样场景+反问节拍，维持一致的叙事节奏。"
+    },
+    {
+      "text": "限宽墩间，某些智驾就是过不去，这是看不清路的问题吗？",
+      "narrativeType": "CASE",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "medium",
+      "reasoning": "第三个平行案例，延续反问节拍，用 BEAT_SEQUENCE 强化质疑递进。"
+    },
+    {
+      "text": "不是。光天化日，朗朗乾坤，摄像头把路拍得清清楚楚。问题是，系统不知道该怎么处理。",
+      "narrativeType": "TRANSITION",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "以“不是”否定旧认知，引出真正的决策问题，强烈的认知转换，用 COGNITIVE_SHIFT。"
+    },
+    {
+      "text": "盘山公路的33次接管，暴露的是决策层的逻辑漏洞。不是感知层的分辨率问题。",
+      "narrativeType": "CONCLUSION",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "对比“逻辑漏洞”与“分辨率问题”，明确归因，用 COGNITIVE_SHIFT 呈现认知纠正。"
+    },
+    {
+      "text": "往橙色物体猛撞，暴露的是神经网络对“橙色”这个特征的错误泛化。不是雷达缺失导致的漏检。",
+      "narrativeType": "CONCLUSION",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "对比“错误泛化”与“漏检”，强化决策层归因，用 COGNITIVE_SHIFT 完成结论收束。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:47:47
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：下次选智驾，别数雷达了，去看一个车企最怕你提的数字。
+- **当前场景**：反转·硬件营销包装
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+那为什么很多车企在不断地宣传自己家有几颗雷达？宣称自己就是比别人的安全？
+
+因为雷达是可见的，雷达一听就是军用高科技的玩意。
+
+雷达有几颗，激光多少束。消费者看得见，车企卖得出去。
+
+但决策层面，神经网络怎么判断，训练数据覆盖了什么场景，遇到边界场景怎么取舍。这些东西，消费者看不见。车企也很难包装成卖点。
+
+所以，行业才喜欢把故事讲回硬件。
+
+多一颗雷达，就像多一份安全感。多一套配置，就能多收一份智驾溢价。
+
+可真正难的，从来不是再装一个传感器。
+
+而是让系统在看见之后，知道该不该刹车。该不该避让。该不该继续走。
+
+这才是智驾公司最不想被追问的地方。
+
+因为训练大脑，比堆硬件难一百倍。
+
+未来智驾的胜负手，不在传感器。而在大脑。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:49:09
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "那为什么很多车企在不断地宣传自己家有几颗雷达？宣称自己就是比别人的安全？",
+      "narrativeType": "HOOK",
+      "template": "CHAT_BUBBLE",
+      "expressionTag": "beat",
+      "confidence": "medium",
+      "reasoning": "提问作为开头钩子，用聊天气泡模板呈现问题，吸引注意。"
+    },
+    {
+      "text": "因为雷达是可见的，雷达一听就是军用高科技的玩意。",
+      "narrativeType": "LOGIC",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "解释原因，单一陈述，适合中心聚焦画面加配图。"
+    },
+    {
+      "text": "雷达有几颗，激光多少束。消费者看得见，车企卖得出去。",
+      "narrativeType": "CASE",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "现象陈述，平铺直叙，中心聚焦展示硬件可见性。"
+    },
+    {
+      "text": "但决策层面，神经网络怎么判断，训练数据覆盖了什么场景，遇到边界场景怎么取舍。这些东西，消费者看不见。车企也很难包装成卖点。",
+      "narrativeType": "LOGIC",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "medium",
+      "reasoning": "通过三阶段递进展示决策层面的不可见性与包装困境，节拍递进模板匹配分步揭露。"
+    },
+    {
+      "text": "所以，行业才喜欢把故事讲回硬件。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "短促有力的结论，纯文本强冲击模板突出行业惯性。"
+    },
+    {
+      "text": "多一颗雷达，就像多一份安全感。多一套配置，就能多收一份智驾溢价。",
+      "narrativeType": "LOGIC",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "medium",
+      "reasoning": "两个并列比喻句构成节拍递进，说明硬件包装的商业逻辑。"
+    },
+    {
+      "text": "可真正难的，从来不是再装一个传感器。而是让系统在看见之后，知道该不该刹车。该不该避让。该不该继续走。",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "明确“不是…而是…”结构，认知转变模板揭示智驾核心挑战。"
+    },
+    {
+      "text": "这才是智驾公司最不想被追问的地方。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "短结论评论，纯文本冲击强调行业痛点。"
+    },
+    {
+      "text": "因为训练大脑，比堆硬件难一百倍。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "短因果金句，纯文本冲击突出训练难度。"
+    },
+    {
+      "text": "未来智驾的胜负手，不在传感器。而在大脑。",
+      "narrativeType": "CONCLUSION",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "最终结论的“不在…而在…”结构，认知转变模板强化大脑决胜点。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:49:09
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：下次选智驾，别数雷达了，去看一个车企最怕你提的数字。
+- **当前场景**：召唤·实测接管率
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+所以，不要再陷于输入端的口水战了，
+
+不用看摄像头数量，不用看雷达数量，不用看激光线束数量。
+
+去看实际的测试。
+
+让车跑在蜿蜒的山路上，让车跑在汹涌的车流间，让车跑在上班的高峰中。
+
+然后，你自己去看接管率。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:50:04
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "所以，不要再陷于输入端的口水战了，",
+      "narrativeType": "HOOK",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "开头一句短促强结论，呼吁停止争论，金句冲击感强，无需配图 → 选 TEXT_FOCUS。"
+    },
+    {
+      "text": "不用看摄像头数量，不用看雷达数量，不用看激光线束数量。去看实际的测试。",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "明确“不要…而要…”的强转折结构，先否定一堆参数，再引导去看实际测试，属于认知转变 → 选 COGNITIVE_SHIFT。"
+    },
+    {
+      "text": "让车跑在蜿蜒的山路上，让车跑在汹涌的车流间，让车跑在上班的高峰中。",
+      "narrativeType": "CASE",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "high",
+      "reasoning": "三个并列的场景排比，每个场景均可独立配图，适合宫格展示 → 选 PANEL_GRID。"
+    },
+    {
+      "text": "然后，你自己去看接管率。",
+      "narrativeType": "CONCLUSION",
+      "template": "MAGNIFYING_GLASS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "最终结论落在核心指标“接管率”上，属于高价值锚点短语，需要用放大镜聚焦强调 → 选 MAGNIFYING_GLASS。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:50:04
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+智驾技术之路，纯视觉 VS  加装雷达  你认为哪个更好？
+
+全网都在争，纯视觉和加雷达，哪个更好。支持雷达的人说，暴雨天摄像头会失灵。支持视觉的人说，特斯拉已经跑通了。
+
+但这些争论，犯了一个根本性错误。他们把智驾的瓶颈，定位在了“输入”这一层。
+
+智驾到底分几层？
+第一层，输入。接受感知，周围现实世界。
+第二层，计算。通过规则或者神经网络，判断当前状况。
+第三层，输出。决定加速、减速、直行还是转弯。
+视觉和雷达之争，只在第一层。根本不是重点。
+
+
+## 🎯 待处理的目标文案
+智驾技术之路，纯视觉 VS  加装雷达  你认为哪个更好？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "智驾技术之路，"
+  },
+  {
+    "index": 1,
+    "text": "纯视觉 VS  加装雷达  你认为哪个更好？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:50:11
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"imageSrc": "一辆自动驾驶汽车行驶在道路上，车顶装有摄像头和雷达传感器的示意图", "enterEffect": "fadeIn", "anchors": [{"text": "纯视觉 VS 加装雷达", "showFrom": 1, "color": "#EF4444", "anim": "spring", "audioEffect": "woosh"}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:50:11
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+智驾技术之路，纯视觉 VS  加装雷达  你认为哪个更好？
+
+全网都在争，纯视觉和加雷达，哪个更好。支持雷达的人说，暴雨天摄像头会失灵。支持视觉的人说，特斯拉已经跑通了。
+
+但这些争论，犯了一个根本性错误。他们把智驾的瓶颈，定位在了“输入”这一层。
+
+智驾到底分几层？
+第一层，输入。接受感知，周围现实世界。
+第二层，计算。通过规则或者神经网络，判断当前状况。
+第三层，输出。决定加速、减速、直行还是转弯。
+视觉和雷达之争，只在第一层。根本不是重点。
+
+
+## 🎯 待处理的目标文案
+全网都在争，纯视觉和加雷达，哪个更好。支持雷达的人说，暴雨天摄像头会失灵。支持视觉的人说，特斯拉已经跑通了。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "全网都在争，"
+  },
+  {
+    "index": 1,
+    "text": "纯视觉和加雷达，"
+  },
+  {
+    "index": 2,
+    "text": "哪个更好。"
+  },
+  {
+    "index": 3,
+    "text": "支持雷达的人说，"
+  },
+  {
+    "index": 4,
+    "text": "暴雨天摄像头会失灵。"
+  },
+  {
+    "index": 5,
+    "text": "支持视觉的人说，"
+  },
+  {
+    "index": 6,
+    "text": "特斯拉已经跑通了。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：SPLIT_COMPARE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "leftSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "左侧图片描述"
+    },
+    "rightSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "右侧图片描述"
+    },
+    "leftLabel": {
+      "type": "string",
+      "description": "左侧标签（2～6 字为宜）"
+    },
+    "rightLabel": {
+      "type": "string",
+      "description": "右侧标签（2～6 字为宜）"
+    },
+    "leftShowFrom": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "左侧图与标签出现的时刻：取 content 数组下标（0-based），入场帧为该条的 startFrame；省略或越界则从 0 帧起"
+    },
+    "rightShowFrom": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "右侧图与标签出现的时刻：取 content 数组下标（0-based），入场帧为该条的 startFrame；省略或越界则从 0 帧起"
+    }
+  },
+  "required": [
+    "leftSrc",
+    "rightSrc",
+    "leftLabel",
+    "rightLabel"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "SPLIT_COMPARE",
+  "param": {
+    "leftSrc": "传统低效工作图标",
+    "rightSrc": "高效数字工具图标",
+    "leftLabel": "旧方法",
+    "rightLabel": "新方法"
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:50:29
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "leftSrc": "一辆搭载纯视觉自动驾驶系统的汽车，车顶装有多个摄像头，通过AI算法进行实时场景识别。",
+    "rightSrc": "一辆搭载雷达传感器的自动驾驶汽车，车头雷达发射波束探测周围障碍物。",
+    "leftLabel": "纯视觉",
+    "rightLabel": "加装雷达",
+    "leftShowFrom": 1,
+    "rightShowFrom": 1
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:50:29
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+智驾技术之路，纯视觉 VS  加装雷达  你认为哪个更好？
+
+全网都在争，纯视觉和加雷达，哪个更好。支持雷达的人说，暴雨天摄像头会失灵。支持视觉的人说，特斯拉已经跑通了。
+
+但这些争论，犯了一个根本性错误。他们把智驾的瓶颈，定位在了“输入”这一层。
+
+智驾到底分几层？
+第一层，输入。接受感知，周围现实世界。
+第二层，计算。通过规则或者神经网络，判断当前状况。
+第三层，输出。决定加速、减速、直行还是转弯。
+视觉和雷达之争，只在第一层。根本不是重点。
+
+
+## 🎯 待处理的目标文案
+但这些争论，犯了一个根本性错误。他们把智驾的瓶颈，定位在了“输入”这一层。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "但这些争论，"
+  },
+  {
+    "index": 1,
+    "text": "犯了一个根本性错误。"
+  },
+  {
+    "index": 2,
+    "text": "他们把智驾的瓶颈，"
+  },
+  {
+    "index": 3,
+    "text": "定位在了“输入”这一层。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：MAGNIFYING_GLASS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "anchors": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "description": "必填且非空（建议 1～2 个高价值锚点）；每项通过 showFrom 对齐 content 分句。锚点应落在“揭示性落点句”或其核心关键词上，不要把整段说明塞满锚点",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要聚焦的关键词/短语"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "anchors"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "MAGNIFYING_GLASS",
+  "param": {
+    "anchors": [
+      {
+        "text": "忽略了基础",
+        "showFrom": 0,
+        "color": "#111111",
+        "anim": "popIn",
+        "audioEffect": "ping"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:50:41
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "anchors": [
+      {
+        "text": "根本性错误",
+        "showFrom": 1,
+        "color": "#EF4444",
+        "anim": "popIn",
+        "audioEffect": "impact_thud"
+      },
+      {
+        "text": "输入",
+        "showFrom": 3,
+        "color": "#000000",
+        "anim": "highlight",
+        "audioEffect": "ping"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:50:41
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+智驾技术之路，纯视觉 VS  加装雷达  你认为哪个更好？
+
+全网都在争，纯视觉和加雷达，哪个更好。支持雷达的人说，暴雨天摄像头会失灵。支持视觉的人说，特斯拉已经跑通了。
+
+但这些争论，犯了一个根本性错误。他们把智驾的瓶颈，定位在了“输入”这一层。
+
+智驾到底分几层？
+第一层，输入。接受感知，周围现实世界。
+第二层，计算。通过规则或者神经网络，判断当前状况。
+第三层，输出。决定加速、减速、直行还是转弯。
+视觉和雷达之争，只在第一层。根本不是重点。
+
+
+## 🎯 待处理的目标文案
+智驾到底分几层？第一层，输入。接受感知，周围现实世界。第二层，计算。通过规则或者神经网络，判断当前状况。第三层，输出。决定加速、减速、直行还是转弯。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "智驾到底分几层？"
+  },
+  {
+    "index": 1,
+    "text": "第一层，"
+  },
+  {
+    "index": 2,
+    "text": "输入。"
+  },
+  {
+    "index": 3,
+    "text": "接受感知，"
+  },
+  {
+    "index": 4,
+    "text": "周围现实世界。"
+  },
+  {
+    "index": 5,
+    "text": "第二层，"
+  },
+  {
+    "index": 6,
+    "text": "计算。"
+  },
+  {
+    "index": 7,
+    "text": "通过规则或者神经网络，"
+  },
+  {
+    "index": 8,
+    "text": "判断当前状况。"
+  },
+  {
+    "index": 9,
+    "text": "第三层，"
+  },
+  {
+    "index": 10,
+    "text": "输出。"
+  },
+  {
+    "index": 11,
+    "text": "决定加速、"
+  },
+  {
+    "index": 12,
+    "text": "减速、"
+  },
+  {
+    "index": 13,
+    "text": "直行还是转弯。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：STEP_LIST
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "可选；步骤列表上方标题，建议 4～14 字"
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "showFrom": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "对应 content 数组的下标（0-based）；该步在 content[showFrom].startFrame 帧开始入场。不传则按 staggerDelay 与序号顺延。"
+              }
+            },
+            "required": [
+              "text"
+            ]
+          }
+        ]
+      },
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "步骤（可选）。可为字符串，或 { text, showFrom? }（showFrom=content 下标）；不传则从 content 提取。每条 text 建议不超过 10 字。"
+    }
+  },
+  "required": []
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 6 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "STEP_LIST",
+  "param": {
+    "title": "流程概览",
+    "steps": [
+      {
+        "text": "第一步",
+        "showFrom": 0
+      },
+      {
+        "text": "第二步",
+        "showFrom": 1
+      },
+      {
+        "text": "第三步",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:50:54
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "title": "智驾三层架构", "steps": [ { "text": "第一层：输入", "showFrom": 1 }, { "text": "第二层：计算", "showFrom": 5 }, { "text": "第三层：输出", "showFrom": 9 } ] } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:50:54
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+智驾技术之路，纯视觉 VS  加装雷达  你认为哪个更好？
+
+全网都在争，纯视觉和加雷达，哪个更好。支持雷达的人说，暴雨天摄像头会失灵。支持视觉的人说，特斯拉已经跑通了。
+
+但这些争论，犯了一个根本性错误。他们把智驾的瓶颈，定位在了“输入”这一层。
+
+智驾到底分几层？
+第一层，输入。接受感知，周围现实世界。
+第二层，计算。通过规则或者神经网络，判断当前状况。
+第三层，输出。决定加速、减速、直行还是转弯。
+视觉和雷达之争，只在第一层。根本不是重点。
+
+
+## 🎯 待处理的目标文案
+视觉和雷达之争，只在第一层。根本不是重点。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "视觉和雷达之争，"
+  },
+  {
+    "index": 1,
+    "text": "只在第一层。"
+  },
+  {
+    "index": 2,
+    "text": "根本不是重点。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:51:13
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      { "text": "视觉和雷达之争，", "showFrom": 0, "endFrom": 0 },
+      { "text": "只在第一层。", "showFrom": 1, "endFrom": 1 },
+      { "text": "根本不是重点。", "showFrom": 2, "endFrom": 2 }
+    ],
+    "coreSentenceAnchors": []
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:51:13
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+现在智驾的瓶颈，不在于看不到路况。而是不知道怎么根据路况做决策。
+
+因为就现在的智驾来看，即使是在光线好的情况下能开好车，就已经是长远目标了。
+
+盘山公路上，某些智驾跑一半路就接管33次。这是看不清路的问题吗？
+
+大马路上，某些智驾专爱往橙色上撞。这是看不清路的问题吗？
+
+限宽墩间，某些智驾就是过不去，这是看不清路的问题吗？
+
+不是。光天化日，朗朗乾坤，摄像头把路拍得清清楚楚。问题是，系统不知道该怎么处理。
+
+盘山公路的33次接管，暴露的是决策层的逻辑漏洞。不是感知层的分辨率问题。
+
+往橙色物体猛撞，暴露的是神经网络对“橙色”这个特征的错误泛化。不是雷达缺失导致的漏检。
+
+
+## 🎯 待处理的目标文案
+现在智驾的瓶颈，不在于看不到路况。而是不知道怎么根据路况做决策。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "现在智驾的瓶颈，"
+  },
+  {
+    "index": 1,
+    "text": "不在于看不到路况。"
+  },
+  {
+    "index": 2,
+    "text": "而是不知道怎么根据路况做决策。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:51:30
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "notText": "看不到路况", "butText": "不知如何决策", "butSrc": "自动驾驶汽车在清晰道路上，AI大脑面对多路况从困惑到明确选择", "notContentIndex": 1, "butContentIndex": 2 } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:51:30
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+现在智驾的瓶颈，不在于看不到路况。而是不知道怎么根据路况做决策。
+
+因为就现在的智驾来看，即使是在光线好的情况下能开好车，就已经是长远目标了。
+
+盘山公路上，某些智驾跑一半路就接管33次。这是看不清路的问题吗？
+
+大马路上，某些智驾专爱往橙色上撞。这是看不清路的问题吗？
+
+限宽墩间，某些智驾就是过不去，这是看不清路的问题吗？
+
+不是。光天化日，朗朗乾坤，摄像头把路拍得清清楚楚。问题是，系统不知道该怎么处理。
+
+盘山公路的33次接管，暴露的是决策层的逻辑漏洞。不是感知层的分辨率问题。
+
+往橙色物体猛撞，暴露的是神经网络对“橙色”这个特征的错误泛化。不是雷达缺失导致的漏检。
+
+
+## 🎯 待处理的目标文案
+因为就现在的智驾来看，即使是在光线好的情况下能开好车，就已经是长远目标了。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "因为就现在的智驾来看，"
+  },
+  {
+    "index": 1,
+    "text": "即使是在光线好的情况下能开好车，"
+  },
+  {
+    "index": 2,
+    "text": "就已经是长远目标了。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:51:50
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "一辆自动驾驶汽车在阳光明媚的直道上，车顶激光雷达旋转，但车头灯微弱闪烁，表现出困惑姿态"
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:51:50
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+现在智驾的瓶颈，不在于看不到路况。而是不知道怎么根据路况做决策。
+
+因为就现在的智驾来看，即使是在光线好的情况下能开好车，就已经是长远目标了。
+
+盘山公路上，某些智驾跑一半路就接管33次。这是看不清路的问题吗？
+
+大马路上，某些智驾专爱往橙色上撞。这是看不清路的问题吗？
+
+限宽墩间，某些智驾就是过不去，这是看不清路的问题吗？
+
+不是。光天化日，朗朗乾坤，摄像头把路拍得清清楚楚。问题是，系统不知道该怎么处理。
+
+盘山公路的33次接管，暴露的是决策层的逻辑漏洞。不是感知层的分辨率问题。
+
+往橙色物体猛撞，暴露的是神经网络对“橙色”这个特征的错误泛化。不是雷达缺失导致的漏检。
+
+
+## 🎯 待处理的目标文案
+盘山公路上，某些智驾跑一半路就接管33次。这是看不清路的问题吗？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "盘山公路上，"
+  },
+  {
+    "index": 1,
+    "text": "某些智驾跑一半路就接管33次。"
+  },
+  {
+    "index": 2,
+    "text": "这是看不清路的问题吗？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:51:59
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "蜿蜒的盘山公路，远处有汽车行驶，阳光明媚",
+        "enterEffect": "breathe",
+        "tone": "calm"
+      },
+      {
+        "imageSrc": "一辆智能驾驶汽车在公路上频繁闪烁警示灯，多次被迫接管",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      },
+      {
+        "imageSrc": "一个巨大的问号出现在场景中，背景模糊的公路，强调质疑",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:51:59
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+现在智驾的瓶颈，不在于看不到路况。而是不知道怎么根据路况做决策。
+
+因为就现在的智驾来看，即使是在光线好的情况下能开好车，就已经是长远目标了。
+
+盘山公路上，某些智驾跑一半路就接管33次。这是看不清路的问题吗？
+
+大马路上，某些智驾专爱往橙色上撞。这是看不清路的问题吗？
+
+限宽墩间，某些智驾就是过不去，这是看不清路的问题吗？
+
+不是。光天化日，朗朗乾坤，摄像头把路拍得清清楚楚。问题是，系统不知道该怎么处理。
+
+盘山公路的33次接管，暴露的是决策层的逻辑漏洞。不是感知层的分辨率问题。
+
+往橙色物体猛撞，暴露的是神经网络对“橙色”这个特征的错误泛化。不是雷达缺失导致的漏检。
+
+
+## 🎯 待处理的目标文案
+大马路上，某些智驾专爱往橙色上撞。这是看不清路的问题吗？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "大马路上，"
+  },
+  {
+    "index": 1,
+    "text": "某些智驾专爱往橙色上撞。"
+  },
+  {
+    "index": 2,
+    "text": "这是看不清路的问题吗？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:52:10
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "一条宽阔的城市马路，天气晴朗，车辆正常行驶",
+        "enterEffect": "breathe",
+        "tone": "calm",
+        "showFrom": 0
+      },
+      {
+        "imageSrc": "一辆智能汽车即将撞上一个橙色的锥形交通路标的特写镜头，动态模糊",
+        "enterEffect": "zoomIn",
+        "tone": "alert",
+        "showFrom": 1
+      },
+      {
+        "imageSrc": "一个大大的问号悬浮在道路上空，背景虚化的橙色锥桶和汽车",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:52:10
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+现在智驾的瓶颈，不在于看不到路况。而是不知道怎么根据路况做决策。
+
+因为就现在的智驾来看，即使是在光线好的情况下能开好车，就已经是长远目标了。
+
+盘山公路上，某些智驾跑一半路就接管33次。这是看不清路的问题吗？
+
+大马路上，某些智驾专爱往橙色上撞。这是看不清路的问题吗？
+
+限宽墩间，某些智驾就是过不去，这是看不清路的问题吗？
+
+不是。光天化日，朗朗乾坤，摄像头把路拍得清清楚楚。问题是，系统不知道该怎么处理。
+
+盘山公路的33次接管，暴露的是决策层的逻辑漏洞。不是感知层的分辨率问题。
+
+往橙色物体猛撞，暴露的是神经网络对“橙色”这个特征的错误泛化。不是雷达缺失导致的漏检。
+
+
+## 🎯 待处理的目标文案
+限宽墩间，某些智驾就是过不去，这是看不清路的问题吗？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "限宽墩间，"
+  },
+  {
+    "index": 1,
+    "text": "某些智驾就是过不去，"
+  },
+  {
+    "index": 2,
+    "text": "这是看不清路的问题吗？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:52:17
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "狭窄的限宽墩阵，水泥墩表面粗糙，间距刚好容纳一辆车，光线明亮",
+        "enterEffect": "breathe",
+        "tone": "calm"
+      },
+      {
+        "imageSrc": "一辆智能汽车卡在两个限宽墩之间，前后轮悬空，车身倾斜，冒出警告灯",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      },
+      {
+        "imageSrc": "特写驾驶舱内无人操控的方向盘，挡风玻璃视野里限宽墩清晰可见，但车辆停滞不前",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:52:17
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+现在智驾的瓶颈，不在于看不到路况。而是不知道怎么根据路况做决策。
+
+因为就现在的智驾来看，即使是在光线好的情况下能开好车，就已经是长远目标了。
+
+盘山公路上，某些智驾跑一半路就接管33次。这是看不清路的问题吗？
+
+大马路上，某些智驾专爱往橙色上撞。这是看不清路的问题吗？
+
+限宽墩间，某些智驾就是过不去，这是看不清路的问题吗？
+
+不是。光天化日，朗朗乾坤，摄像头把路拍得清清楚楚。问题是，系统不知道该怎么处理。
+
+盘山公路的33次接管，暴露的是决策层的逻辑漏洞。不是感知层的分辨率问题。
+
+往橙色物体猛撞，暴露的是神经网络对“橙色”这个特征的错误泛化。不是雷达缺失导致的漏检。
+
+
+## 🎯 待处理的目标文案
+不是。光天化日，朗朗乾坤，摄像头把路拍得清清楚楚。问题是，系统不知道该怎么处理。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "不是。"
+  },
+  {
+    "index": 1,
+    "text": "光天化日，"
+  },
+  {
+    "index": 2,
+    "text": "朗朗乾坤，"
+  },
+  {
+    "index": 3,
+    "text": "摄像头把路拍得清清楚楚。"
+  },
+  {
+    "index": 4,
+    "text": "问题是，"
+  },
+  {
+    "index": 5,
+    "text": "系统不知道该怎么处理。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:52:33
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "看不清路况",
+    "butText": "不会做决策",
+    "butSrc": "AI大脑在多条道路前混乱犹豫，周围环绕问号和错误箭头",
+    "notContentIndex": 0,
+    "butContentIndex": 5
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:52:33
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+现在智驾的瓶颈，不在于看不到路况。而是不知道怎么根据路况做决策。
+
+因为就现在的智驾来看，即使是在光线好的情况下能开好车，就已经是长远目标了。
+
+盘山公路上，某些智驾跑一半路就接管33次。这是看不清路的问题吗？
+
+大马路上，某些智驾专爱往橙色上撞。这是看不清路的问题吗？
+
+限宽墩间，某些智驾就是过不去，这是看不清路的问题吗？
+
+不是。光天化日，朗朗乾坤，摄像头把路拍得清清楚楚。问题是，系统不知道该怎么处理。
+
+盘山公路的33次接管，暴露的是决策层的逻辑漏洞。不是感知层的分辨率问题。
+
+往橙色物体猛撞，暴露的是神经网络对“橙色”这个特征的错误泛化。不是雷达缺失导致的漏检。
+
+
+## 🎯 待处理的目标文案
+盘山公路的33次接管，暴露的是决策层的逻辑漏洞。不是感知层的分辨率问题。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "盘山公路的33次接管，"
+  },
+  {
+    "index": 1,
+    "text": "暴露的是决策层的逻辑漏洞。"
+  },
+  {
+    "index": 2,
+    "text": "不是感知层的分辨率问题。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:52:45
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "感知层分辨率",
+    "butText": "决策层逻辑漏洞",
+    "butSrc": "一个AI系统在道路数据流中做出错误决策，逻辑链条断裂的特写",
+    "notContentIndex": 2,
+    "butContentIndex": 1
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:52:45
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+现在智驾的瓶颈，不在于看不到路况。而是不知道怎么根据路况做决策。
+
+因为就现在的智驾来看，即使是在光线好的情况下能开好车，就已经是长远目标了。
+
+盘山公路上，某些智驾跑一半路就接管33次。这是看不清路的问题吗？
+
+大马路上，某些智驾专爱往橙色上撞。这是看不清路的问题吗？
+
+限宽墩间，某些智驾就是过不去，这是看不清路的问题吗？
+
+不是。光天化日，朗朗乾坤，摄像头把路拍得清清楚楚。问题是，系统不知道该怎么处理。
+
+盘山公路的33次接管，暴露的是决策层的逻辑漏洞。不是感知层的分辨率问题。
+
+往橙色物体猛撞，暴露的是神经网络对“橙色”这个特征的错误泛化。不是雷达缺失导致的漏检。
+
+
+## 🎯 待处理的目标文案
+往橙色物体猛撞，暴露的是神经网络对“橙色”这个特征的错误泛化。不是雷达缺失导致的漏检。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "往橙色物体猛撞，"
+  },
+  {
+    "index": 1,
+    "text": "暴露的是神经网络对“橙色”这个特征的错误泛化。"
+  },
+  {
+    "index": 2,
+    "text": "不是雷达缺失导致的漏检。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:53:05
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "雷达缺失漏检",
+    "butText": "橙色错误泛化",
+    "butSrc": "神经网络连接中，橙色特征节点与障碍物图标错误相连",
+    "notContentIndex": 2,
+    "butContentIndex": 1
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:53:05
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那为什么很多车企在不断地宣传自己家有几颗雷达？宣称自己就是比别人的安全？
+
+因为雷达是可见的，雷达一听就是军用高科技的玩意。
+
+雷达有几颗，激光多少束。消费者看得见，车企卖得出去。
+
+但决策层面，神经网络怎么判断，训练数据覆盖了什么场景，遇到边界场景怎么取舍。这些东西，消费者看不见。车企也很难包装成卖点。
+
+所以，行业才喜欢把故事讲回硬件。
+
+多一颗雷达，就像多一份安全感。多一套配置，就能多收一份智驾溢价。
+
+可真正难的，从来不是再装一个传感器。
+
+而是让系统在看见之后，知道该不该刹车。该不该避让。该不该继续走。
+
+这才是智驾公司最不想被追问的地方。
+
+因为训练大脑，比堆硬件难一百倍。
+
+未来智驾的胜负手，不在传感器。而在大脑。
+
+
+## 🎯 待处理的目标文案
+那为什么很多车企在不断地宣传自己家有几颗雷达？宣称自己就是比别人的安全？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "那为什么很多车企在不断地宣传自己家有几颗雷达？"
+  },
+  {
+    "index": 1,
+    "text": "宣称自己就是比别人的安全？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CHAT_BUBBLE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "description": "可选；兼容旧 scene-scripts，不参与渲染。头像固定为内置 SVG。"
+    },
+    "bubbleText": {
+      "type": "string",
+      "description": "可选；仅用于“气泡里显示的文本”。若传入，将覆盖气泡内默认显示的 content 当前条目文本；但不影响 content 用于时序/字幕渲染。"
+    },
+    "showFrom": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "可选；指定气泡展示的 content 下标（0-based，非帧数）。合法范围 0～(content 条数-1)，超出会被忽略并回退为按时间轴自动切换。"
+    },
+    "bubbles": {
+      "type": "array",
+      "description": "可选；多行对话。存在且非空时按多气泡纵向排列；每项可含 bubbleText、showFrom、align。",
+      "items": {
+        "type": "object",
+        "properties": {
+          "bubbleText": {
+            "type": "string"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index"
+          },
+          "align": {
+            "type": "string",
+            "enum": [
+              "left",
+              "right"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CHAT_BUBBLE",
+  "param": {
+    "bubbles": [
+      {
+        "bubbleText": "我真的快被这事逼疯了……",
+        "showFrom": 0,
+        "align": "left"
+      },
+      {
+        "bubbleText": "别急，先把事实捋清。",
+        "showFrom": 1,
+        "align": "right"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:53:13
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "bubbles": [
+      {
+        "bubbleText": "那为什么很多车企在不断地宣传自己家有几颗雷达？",
+        "showFrom": 0,
+        "align": "left"
+      },
+      {
+        "bubbleText": "宣称自己就是比别人的安全？",
+        "showFrom": 1,
+        "align": "left"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:53:13
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那为什么很多车企在不断地宣传自己家有几颗雷达？宣称自己就是比别人的安全？
+
+因为雷达是可见的，雷达一听就是军用高科技的玩意。
+
+雷达有几颗，激光多少束。消费者看得见，车企卖得出去。
+
+但决策层面，神经网络怎么判断，训练数据覆盖了什么场景，遇到边界场景怎么取舍。这些东西，消费者看不见。车企也很难包装成卖点。
+
+所以，行业才喜欢把故事讲回硬件。
+
+多一颗雷达，就像多一份安全感。多一套配置，就能多收一份智驾溢价。
+
+可真正难的，从来不是再装一个传感器。
+
+而是让系统在看见之后，知道该不该刹车。该不该避让。该不该继续走。
+
+这才是智驾公司最不想被追问的地方。
+
+因为训练大脑，比堆硬件难一百倍。
+
+未来智驾的胜负手，不在传感器。而在大脑。
+
+
+## 🎯 待处理的目标文案
+因为雷达是可见的，雷达一听就是军用高科技的玩意。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "因为雷达是可见的，"
+  },
+  {
+    "index": 1,
+    "text": "雷达一听就是军用高科技的玩意。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:53:17
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "一个高科技军用雷达装置，在深色背景中发出扫描光束",
+    "enterEffect": "fadeIn",
+    "anchors": []
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:53:17
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那为什么很多车企在不断地宣传自己家有几颗雷达？宣称自己就是比别人的安全？
+
+因为雷达是可见的，雷达一听就是军用高科技的玩意。
+
+雷达有几颗，激光多少束。消费者看得见，车企卖得出去。
+
+但决策层面，神经网络怎么判断，训练数据覆盖了什么场景，遇到边界场景怎么取舍。这些东西，消费者看不见。车企也很难包装成卖点。
+
+所以，行业才喜欢把故事讲回硬件。
+
+多一颗雷达，就像多一份安全感。多一套配置，就能多收一份智驾溢价。
+
+可真正难的，从来不是再装一个传感器。
+
+而是让系统在看见之后，知道该不该刹车。该不该避让。该不该继续走。
+
+这才是智驾公司最不想被追问的地方。
+
+因为训练大脑，比堆硬件难一百倍。
+
+未来智驾的胜负手，不在传感器。而在大脑。
+
+
+## 🎯 待处理的目标文案
+雷达有几颗，激光多少束。消费者看得见，车企卖得出去。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "雷达有几颗，"
+  },
+  {
+    "index": 1,
+    "text": "激光多少束。"
+  },
+  {
+    "index": 2,
+    "text": "消费者看得见，"
+  },
+  {
+    "index": 3,
+    "text": "车企卖得出去。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:53:24
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"imageSrc": "一辆汽车周围分布着多个雷达传感器，激光束从车顶射向远处，呈细亮光线", "enterEffect": "fadeIn"}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:53:24
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那为什么很多车企在不断地宣传自己家有几颗雷达？宣称自己就是比别人的安全？
+
+因为雷达是可见的，雷达一听就是军用高科技的玩意。
+
+雷达有几颗，激光多少束。消费者看得见，车企卖得出去。
+
+但决策层面，神经网络怎么判断，训练数据覆盖了什么场景，遇到边界场景怎么取舍。这些东西，消费者看不见。车企也很难包装成卖点。
+
+所以，行业才喜欢把故事讲回硬件。
+
+多一颗雷达，就像多一份安全感。多一套配置，就能多收一份智驾溢价。
+
+可真正难的，从来不是再装一个传感器。
+
+而是让系统在看见之后，知道该不该刹车。该不该避让。该不该继续走。
+
+这才是智驾公司最不想被追问的地方。
+
+因为训练大脑，比堆硬件难一百倍。
+
+未来智驾的胜负手，不在传感器。而在大脑。
+
+
+## 🎯 待处理的目标文案
+但决策层面，神经网络怎么判断，训练数据覆盖了什么场景，遇到边界场景怎么取舍。这些东西，消费者看不见。车企也很难包装成卖点。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "但决策层面，"
+  },
+  {
+    "index": 1,
+    "text": "神经网络怎么判断，"
+  },
+  {
+    "index": 2,
+    "text": "训练数据覆盖了什么场景，"
+  },
+  {
+    "index": 3,
+    "text": "遇到边界场景怎么取舍。"
+  },
+  {
+    "index": 4,
+    "text": "这些东西，"
+  },
+  {
+    "index": 5,
+    "text": "消费者看不见。"
+  },
+  {
+    "index": 6,
+    "text": "车企也很难包装成卖点。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:53:43
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "一个抽象的神经网络节点图，数据流在复杂的多维场景中闪烁交织，代表决策与训练数据的深层处理",
+        "enterEffect": "breathe",
+        "tone": "alert",
+        "showFrom": 0
+      },
+      {
+        "imageSrc": "一个消费者的剪影，眼部区域被迷雾或磨砂玻璃笼罩，强调看不见内部决策过程",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 5
+      },
+      {
+        "imageSrc": "一辆精致汽车的模型放在华丽的包装盒中，但盒盖无法闭合或包装纸破裂，象征难以包装成卖点",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 6
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:53:43
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那为什么很多车企在不断地宣传自己家有几颗雷达？宣称自己就是比别人的安全？
+
+因为雷达是可见的，雷达一听就是军用高科技的玩意。
+
+雷达有几颗，激光多少束。消费者看得见，车企卖得出去。
+
+但决策层面，神经网络怎么判断，训练数据覆盖了什么场景，遇到边界场景怎么取舍。这些东西，消费者看不见。车企也很难包装成卖点。
+
+所以，行业才喜欢把故事讲回硬件。
+
+多一颗雷达，就像多一份安全感。多一套配置，就能多收一份智驾溢价。
+
+可真正难的，从来不是再装一个传感器。
+
+而是让系统在看见之后，知道该不该刹车。该不该避让。该不该继续走。
+
+这才是智驾公司最不想被追问的地方。
+
+因为训练大脑，比堆硬件难一百倍。
+
+未来智驾的胜负手，不在传感器。而在大脑。
+
+
+## 🎯 待处理的目标文案
+所以，行业才喜欢把故事讲回硬件。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "所以，"
+  },
+  {
+    "index": 1,
+    "text": "行业才喜欢把故事讲回硬件。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:53:50
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "所以，",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "行业才喜欢把故事讲回硬件。",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:53:50
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那为什么很多车企在不断地宣传自己家有几颗雷达？宣称自己就是比别人的安全？
+
+因为雷达是可见的，雷达一听就是军用高科技的玩意。
+
+雷达有几颗，激光多少束。消费者看得见，车企卖得出去。
+
+但决策层面，神经网络怎么判断，训练数据覆盖了什么场景，遇到边界场景怎么取舍。这些东西，消费者看不见。车企也很难包装成卖点。
+
+所以，行业才喜欢把故事讲回硬件。
+
+多一颗雷达，就像多一份安全感。多一套配置，就能多收一份智驾溢价。
+
+可真正难的，从来不是再装一个传感器。
+
+而是让系统在看见之后，知道该不该刹车。该不该避让。该不该继续走。
+
+这才是智驾公司最不想被追问的地方。
+
+因为训练大脑，比堆硬件难一百倍。
+
+未来智驾的胜负手，不在传感器。而在大脑。
+
+
+## 🎯 待处理的目标文案
+多一颗雷达，就像多一份安全感。多一套配置，就能多收一份智驾溢价。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "多一颗雷达，"
+  },
+  {
+    "index": 1,
+    "text": "就像多一份安全感。"
+  },
+  {
+    "index": 2,
+    "text": "多一套配置，"
+  },
+  {
+    "index": 3,
+    "text": "就能多收一份智驾溢价。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:54:08
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "简笔画风格，汽车前脸，工人正在安装一颗额外的雷达传感器",
+        "enterEffect": "breathe",
+        "tone": "calm"
+      },
+      {
+        "imageSrc": "雷达传感器变形为发光的盾牌轮廓，散发出柔和光晕",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      },
+      {
+        "imageSrc": "汽车上空浮现一系列堆叠的配置图标（座椅、音响、雷达等），数量持续增加",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      },
+      {
+        "imageSrc": "一个巨型价格标签挂在汽车上，标签上箭头陡直向上，亮红高亮",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:54:08
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那为什么很多车企在不断地宣传自己家有几颗雷达？宣称自己就是比别人的安全？
+
+因为雷达是可见的，雷达一听就是军用高科技的玩意。
+
+雷达有几颗，激光多少束。消费者看得见，车企卖得出去。
+
+但决策层面，神经网络怎么判断，训练数据覆盖了什么场景，遇到边界场景怎么取舍。这些东西，消费者看不见。车企也很难包装成卖点。
+
+所以，行业才喜欢把故事讲回硬件。
+
+多一颗雷达，就像多一份安全感。多一套配置，就能多收一份智驾溢价。
+
+可真正难的，从来不是再装一个传感器。
+
+而是让系统在看见之后，知道该不该刹车。该不该避让。该不该继续走。
+
+这才是智驾公司最不想被追问的地方。
+
+因为训练大脑，比堆硬件难一百倍。
+
+未来智驾的胜负手，不在传感器。而在大脑。
+
+
+## 🎯 待处理的目标文案
+可真正难的，从来不是再装一个传感器。而是让系统在看见之后，知道该不该刹车。该不该避让。该不该继续走。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "可真正难的，"
+  },
+  {
+    "index": 1,
+    "text": "从来不是再装一个传感器。"
+  },
+  {
+    "index": 2,
+    "text": "而是让系统在看见之后，"
+  },
+  {
+    "index": 3,
+    "text": "知道该不该刹车。"
+  },
+  {
+    "index": 4,
+    "text": "该不该避让。"
+  },
+  {
+    "index": 5,
+    "text": "该不该继续走。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:54:27
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "堆硬件",
+    "butText": "训练大脑",
+    "butSrc": "一个发光的AI大脑核心，正在分析来自车辆周围传感器的数据，几条动态光束指向前方的刹车踏板、转向避让箭头和继续直行标志，展现判断瞬间",
+    "notContentIndex": 1,
+    "butContentIndex": 2
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:54:27
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那为什么很多车企在不断地宣传自己家有几颗雷达？宣称自己就是比别人的安全？
+
+因为雷达是可见的，雷达一听就是军用高科技的玩意。
+
+雷达有几颗，激光多少束。消费者看得见，车企卖得出去。
+
+但决策层面，神经网络怎么判断，训练数据覆盖了什么场景，遇到边界场景怎么取舍。这些东西，消费者看不见。车企也很难包装成卖点。
+
+所以，行业才喜欢把故事讲回硬件。
+
+多一颗雷达，就像多一份安全感。多一套配置，就能多收一份智驾溢价。
+
+可真正难的，从来不是再装一个传感器。
+
+而是让系统在看见之后，知道该不该刹车。该不该避让。该不该继续走。
+
+这才是智驾公司最不想被追问的地方。
+
+因为训练大脑，比堆硬件难一百倍。
+
+未来智驾的胜负手，不在传感器。而在大脑。
+
+
+## 🎯 待处理的目标文案
+这才是智驾公司最不想被追问的地方。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "这才是智驾公司最不想被追问的地方。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:54:33
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"coreSentence": [{"text": "这才是智驾公司最不想被追问的地方。", "showFrom": 0}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:54:33
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那为什么很多车企在不断地宣传自己家有几颗雷达？宣称自己就是比别人的安全？
+
+因为雷达是可见的，雷达一听就是军用高科技的玩意。
+
+雷达有几颗，激光多少束。消费者看得见，车企卖得出去。
+
+但决策层面，神经网络怎么判断，训练数据覆盖了什么场景，遇到边界场景怎么取舍。这些东西，消费者看不见。车企也很难包装成卖点。
+
+所以，行业才喜欢把故事讲回硬件。
+
+多一颗雷达，就像多一份安全感。多一套配置，就能多收一份智驾溢价。
+
+可真正难的，从来不是再装一个传感器。
+
+而是让系统在看见之后，知道该不该刹车。该不该避让。该不该继续走。
+
+这才是智驾公司最不想被追问的地方。
+
+因为训练大脑，比堆硬件难一百倍。
+
+未来智驾的胜负手，不在传感器。而在大脑。
+
+
+## 🎯 待处理的目标文案
+因为训练大脑，比堆硬件难一百倍。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "因为训练大脑，"
+  },
+  {
+    "index": 1,
+    "text": "比堆硬件难一百倍。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:54:41
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "因为训练大脑，",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "比堆硬件难一百倍。",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "难一百倍",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:54:41
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那为什么很多车企在不断地宣传自己家有几颗雷达？宣称自己就是比别人的安全？
+
+因为雷达是可见的，雷达一听就是军用高科技的玩意。
+
+雷达有几颗，激光多少束。消费者看得见，车企卖得出去。
+
+但决策层面，神经网络怎么判断，训练数据覆盖了什么场景，遇到边界场景怎么取舍。这些东西，消费者看不见。车企也很难包装成卖点。
+
+所以，行业才喜欢把故事讲回硬件。
+
+多一颗雷达，就像多一份安全感。多一套配置，就能多收一份智驾溢价。
+
+可真正难的，从来不是再装一个传感器。
+
+而是让系统在看见之后，知道该不该刹车。该不该避让。该不该继续走。
+
+这才是智驾公司最不想被追问的地方。
+
+因为训练大脑，比堆硬件难一百倍。
+
+未来智驾的胜负手，不在传感器。而在大脑。
+
+
+## 🎯 待处理的目标文案
+未来智驾的胜负手，不在传感器。而在大脑。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "未来智驾的胜负手，"
+  },
+  {
+    "index": 1,
+    "text": "不在传感器。"
+  },
+  {
+    "index": 2,
+    "text": "而在大脑。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:54:55
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "传感器",
+    "butText": "大脑",
+    "butSrc": "一个由光线和粒子构成的立体大脑模型，内部闪烁蓝色光芒，象征智能算法",
+    "notContentIndex": 1,
+    "butContentIndex": 2
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:54:55
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+所以，不要再陷于输入端的口水战了，
+
+不用看摄像头数量，不用看雷达数量，不用看激光线束数量。
+
+去看实际的测试。
+
+让车跑在蜿蜒的山路上，让车跑在汹涌的车流间，让车跑在上班的高峰中。
+
+然后，你自己去看接管率。
+
+
+## 🎯 待处理的目标文案
+所以，不要再陷于输入端的口水战了，
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "所以，"
+  },
+  {
+    "index": 1,
+    "text": "不要再陷于输入端的口水战了，"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:55:04
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "coreSentence": [ { "text": "所以，", "showFrom": 0, "endFrom": 0 }, { "text": "不要再陷于输入端的口水战了，", "showFrom": 1, "endFrom": 1 } ] } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:55:04
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+所以，不要再陷于输入端的口水战了，
+
+不用看摄像头数量，不用看雷达数量，不用看激光线束数量。
+
+去看实际的测试。
+
+让车跑在蜿蜒的山路上，让车跑在汹涌的车流间，让车跑在上班的高峰中。
+
+然后，你自己去看接管率。
+
+
+## 🎯 待处理的目标文案
+不用看摄像头数量，不用看雷达数量，不用看激光线束数量。去看实际的测试。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "不用看摄像头数量，"
+  },
+  {
+    "index": 1,
+    "text": "不用看雷达数量，"
+  },
+  {
+    "index": 2,
+    "text": "不用看激光线束数量。"
+  },
+  {
+    "index": 3,
+    "text": "去看实际的测试。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:55:23
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "notText": "看传感器数量", "butText": "看实际测试", "butSrc": "一辆智能汽车在蜿蜒山路上平稳行驶，展现实际路测能力", "notContentIndex": 0, "butContentIndex": 3 } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:55:23
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+所以，不要再陷于输入端的口水战了，
+
+不用看摄像头数量，不用看雷达数量，不用看激光线束数量。
+
+去看实际的测试。
+
+让车跑在蜿蜒的山路上，让车跑在汹涌的车流间，让车跑在上班的高峰中。
+
+然后，你自己去看接管率。
+
+
+## 🎯 待处理的目标文案
+让车跑在蜿蜒的山路上，让车跑在汹涌的车流间，让车跑在上班的高峰中。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "让车跑在蜿蜒的山路上，"
+  },
+  {
+    "index": 1,
+    "text": "让车跑在汹涌的车流间，"
+  },
+  {
+    "index": 2,
+    "text": "让车跑在上班的高峰中。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:55:30
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "panels": [
+      {
+        "src": "一辆车行驶在蜿蜒的山路上，周围是青山和弯道",
+        "showFrom": 0
+      },
+      {
+        "src": "一辆车在密集涌动的城市车流中穿行，周围车辆很多",
+        "showFrom": 1
+      },
+      {
+        "src": "一辆车在早高峰的拥堵街道上缓缓前进，周围全是车，高楼林立",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-07-05 00:55:30
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+所以，不要再陷于输入端的口水战了，
+
+不用看摄像头数量，不用看雷达数量，不用看激光线束数量。
+
+去看实际的测试。
+
+让车跑在蜿蜒的山路上，让车跑在汹涌的车流间，让车跑在上班的高峰中。
+
+然后，你自己去看接管率。
+
+
+## 🎯 待处理的目标文案
+然后，你自己去看接管率。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "然后，"
+  },
+  {
+    "index": 1,
+    "text": "你自己去看接管率。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：MAGNIFYING_GLASS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "anchors": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "description": "必填且非空（建议 1～2 个高价值锚点）；每项通过 showFrom 对齐 content 分句。锚点应落在“揭示性落点句”或其核心关键词上，不要把整段说明塞满锚点",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要聚焦的关键词/短语"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "anchors"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "MAGNIFYING_GLASS",
+  "param": {
+    "anchors": [
+      {
+        "text": "忽略了基础",
+        "showFrom": 0,
+        "color": "#111111",
+        "anim": "popIn",
+        "audioEffect": "ping"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-07-05 00:55:36
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "anchors": [ { "text": "接管率", "showFrom": 1, "color": "#EF4444", "anim": "popIn", "audioEffect": "ping" } ] } }
+-------------------------------------------------------------------------------------------

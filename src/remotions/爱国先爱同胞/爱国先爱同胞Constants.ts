@@ -18,7 +18,7 @@ export const sceneConfigs = [
     { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "剖析：道德许可与错位" },
     { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "剖析：经济误判" },
     { name: "scene5", duration: calculateScene5Duration() + SCENE_END_PADDING, component: Scene5, label: "召唤：普通人托起的国家" },
-    { name: "scene6", duration: calculateScene6Duration() + SCENE_END_PADDING, component: Scene6, label: "结语：空谈者必变节" },
+    { name: "scene6", duration: calculateScene6Duration() + SCENE_END_PADDING, component: Scene6, label: "结语：看见具体的人" },
 ];
 
 export const MAIN_DURATION_爱国先爱同胞 =

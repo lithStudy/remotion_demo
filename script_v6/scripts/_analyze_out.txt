@@ -1,0 +1,122 @@
+============================================================
+scene_1 寮曞叆路璞嗗寘浠欎汉  items=7
+  #01 CENTER_FOCUS       HOOK         chars= 60 content_n=8
+       浣犺韩杈逛竴瀹氭湁杩欐牱鐨勪汉銆備簤璁哄埌涓€鍗婏紝浠栨帍鍑烘墜鏈猴紝闂簡涓€涓嬭眴鍖咃紝鐒跺悗鎶婂睆骞曡浆杩囨潵缁欎綘鐪嬧€斺€滀綘鐪嬶紝璞嗗寘閮借浜嗭紝鎴戣鐨勬病閿欏惂銆傗€?
+  #02 TEXT_FOCUS         CONCLUSION   chars= 18 content_n=3
+       浜庢槸浜夎缁撴潫浜嗐€傝眴鍖呰鐨勶紝灏辨槸绛旀銆?
+  #03 CONCEPT_CARD       TRANSITION   chars= 17 content_n=2
+       杩欑被浜猴紝鎴戜滑濮戜笖鍙粬鈥滆眴鍖呬粰浜衡€濄€?
+  #04 CAUSE_CHAIN        LOGIC        chars= 34 content_n=5
+       璞嗗寘浠欎汉鐨勯€昏緫寰堢畝鍗曪細鎴戞湁鐤戦棶锛岃眴鍖呯粰鎴戣В绛旓紱璞嗗寘鏀寔鎴戯紝鎴戝氨瀵逛簡銆?
+  #05 COGNITIVE_SHIFT    LOGIC        chars= 23 content_n=2
+       浠栦笉鏄湪鐢ˋI鏌ヨ祫鏂欙紝浠栨槸鍦ㄧ敤AI缁欒嚜宸辩洊绔犮€?
+  #06 MAGNIFYING_GLASS   LOGIC        chars= 39 content_n=4
+       浣嗕粬鍙兘浠庢潵娌℃兂杩囦竴涓棶棰橈細璞嗗寘缁欏嚭鐨勶紝鏄畠璁や负浣犳兂鍚殑绛旀锛岃繕鏄湡瀹炵殑绛旀锛?
+  #07 TEXT_FOCUS         CONCLUSION   chars= 13 content_n=2
+       杩欎袱鑰咃紝寰€寰€涓嶆槸鍚屼竴鍥炰簨銆?
+============================================================
+scene_2 鍓栨瀽路纭鍋忚鏀惧ぇ鍣? items=19
+  #01 TEXT_FOCUS         HOOK         chars= 24 content_n=2
+       璁╀竴涓汉鍙樿牏鐨勬渶蹇柟娉曪紝灏辨槸璁╀粬鏃犳潯浠剁浉淇I銆?
+  #02 BEAT_SEQUENCE      CASE         chars= 40 content_n=4
+       浣犳湁涓€涓兂娉曘€備綘鐢ˋI鍘婚獙璇併€傚畠绔嬪埢缁欎綘鍒楀嚭浜嗗嚑鏉″畬缇庣殑璇佹嵁銆備綘瑙夊緱闈炲父鏈夐亾鐞嗐€?
+  #03 BEAT_SEQUENCE      LOGIC        chars= 38 content_n=3
+       浣嗕綘鍙兘娌℃湁鎰忚瘑鍒般€侫I鍙槸鍦ㄩ『鐫€浣犵殑閫昏緫銆傛妸浣犵殑鍋忚鍖呰寰楁洿鍔犲渾婊″拰婕備寒銆?
+  #04 COGNITIVE_SHIFT    LOGIC        chars= 23 content_n=2
+       杩欎笉鏄汉涓哄仛鐨勬帶鍒讹紝杩欐槸AI鐨勬妧鏈師鐞嗗喅瀹氱殑銆?
+  #05 CONCEPT_CARD       LOGIC        chars= 18 content_n=2
+       棣栧厛锛孉I鏈川涓婃槸涓€涓鐜囬娴嬫ā鍨嬨€?
+       SHORT_FRAGS: ['棣栧厛锛?]
+  #06 CENTER_FOCUS       LOGIC        chars= 22 content_n=2
+       瀹冮€氳繃鍒嗘瀽娴烽噺鏂囨湰锛屽涔犺瘝璇箣闂寸殑缁熻鍏崇郴銆?
+  #07 CAUSE_CHAIN        LOGIC        chars= 47 content_n=4
+       璁粌鏁版嵁鏉ヨ嚜浜掕仈缃戯紝鑰屼簰鑱旂綉鏈韩灏卞甫鐫€鍋忚鈥擜I浼氭妸杩欎簺鍋忚锛屽綋鍋氫富娴佸叡璇嗗師灏佷笉鍔ㄥ湴鍚告敹杩涙潵銆?
+  #08 CONCEPT_CARD       LOGIC        chars= 30 content_n=3
+       鍏舵锛孉I鏈変竴濂楀彨RLHF鐨勮缁冩満鍒垛€旂敤浜虹被鍙嶉鏉ョ粰瀹冩墦鍒嗐€?
+       SHORT_FRAGS: ['鍏舵锛?]
+  #09 COGNITIVE_SHIFT    LOGIC        chars= 31 content_n=3
+       瀹冨湪杩欎釜杩囩▼涓鍒扮殑鏍稿績鎶€鑳斤紝涓嶆槸璇寸湡璇濓紝鑰屾槸璇磋浣犺垝鏈嶇殑璇濄€?
+  #10 SPLIT_COMPARE      LOGIC        chars= 42 content_n=4
+       浣犵敤鏀寔鐨勮姘旈棶瀹冿紝瀹冨氨缁欎綘鍒楁敮鎸佺殑鐞嗙敱锛涗綘鐢ㄨ川鐤戠殑璇皵闂畠锛屽畠灏辩粰浣犳壘璐ㄧ枒鐨勪緷鎹€?
+  #11 COGNITIVE_SHIFT    LOGIC        chars= 33 content_n=3
+       瀹冩病鏈夌嫭绔嬫眰鐪熺殑鎰忓織锛屽畠鍙湁涓€涓换鍔★細璁╀綘瑙夊緱瀹冪殑鍥炵瓟绗﹀悎浣犲績鎰忋€?
+  #12 CONCEPT_CARD       LOGIC        chars= 21 content_n=3
+       鏈€鍚庯紝杩樻湁涓€涓涓ラ噸浣庝及鐨勬満鍒讹細瀹炴椂鎼滅储銆?
+       SHORT_FRAGS: ['鏈€鍚庯紝']
+  #13 CENTER_FOCUS       LOGIC        chars= 29 content_n=2
+       寰堝AI浼氬悓姝ヨ皟鐢ㄦ悳绱㈠紩鎿庯紝鍘绘姄鍙栤€滄渶鏂板唴瀹光€濇潵鏀拺鍥炵瓟銆?
+  #14 COGNITIVE_SHIFT    LOGIC        chars= 52 content_n=6
+       浣犱互涓鸿繖璁╃瓟妗堟洿鏂版洿鍑嗐€備絾浜掕仈缃戜笂娑岀幇鏈€蹇殑锛屽線寰€涓嶆槸鏉冨▉浜嬪疄锛岃€屾槸SEO鏂囩珷銆佹儏缁寲鑷獟浣撱€佸甫璐ц蒋鏂囥€?
+  #15 CAUSE_CHAIN        LOGIC        chars= 33 content_n=2
+       杩欎簺鈥滈珮鏇濆厜姹℃煋鍐呭鈥濊AI鐩存帴寮曠敤锛岀粰浣犵殑纭鍋忚鍙堝姞浜嗕竴鎶婄伀銆?
+  #16 TEXT_FOCUS         CONCLUSION   chars= 21 content_n=2
+       涓夊眰鍙犲姞锛屽氨鎴愪簡涓€鍙伴珮鏁堢殑纭鍋忚鏀惧ぇ鍣ㄣ€?
+  #17 BEAT_SEQUENCE      CASE         chars= 65 content_n=5
+       鍥炲ご鐪嬭眴鍖呬粰浜虹殑閭ｄ竴骞曪細浠栧甫鐫€棰勮鐨勭珛鍦哄幓闂眴鍖咃紝璞嗗寘椤虹潃浠栫殑璇皵缁欏嚭浜嗘敮鎸佺殑鐞嗙敱锛屼粬鎶婅繖涓悊鐢辨埅鍥惧彂鍑烘潵锛屽綋鎴愪簡璧㈠緱浜夎鐨勮瘉鎹€?
+  #18 COGNITIVE_SHIFT    CONCLUSION   chars= 43 content_n=4
+       杩欐暣涓繃绋嬶紝AI涓€娆￠兘娌℃湁甯粬鈥滄€濊€冣€濄€傚畠鍙槸甯粬鎶婂師鏈夌殑鍋忚锛屾墦浜嗕竴涓洿婕備寒鐨勫寘瑁呫€?
+  #19 COGNITIVE_SHIFT    CONCLUSION   chars= 31 content_n=2
+       浣犱互涓篈I鍦ㄥ府浣犲缁村害鎬濊€冦€傚叾瀹炲畠鍙兘鍙槸鍦ㄥ府浣犲畬鎴愯鐭ラ棴鐜€?
+============================================================
+scene_3 鍙敜路淇℃伅闃茬伀澧? items=7
+  #01 COGNITIVE_SHIFT    HOOK         chars= 28 content_n=2
+       鏅€氫汉鎶夾I褰撳ぇ鑴戙€傞珮鎵嬫妸AI褰撳仛闇€瑕佷繚鎸佽窛绂荤殑鍚堜綔鑰呫€?
+  #02 CENTER_FOCUS       TRANSITION   chars= 28 content_n=3
+       浣滀负涓€涓珮鎵嬶紝褰撲綘鍦ㄤ娇鐢ˋI鏃讹紝闇€瑕佸缓绔嬪洓灞備俊鎭槻鐏銆?
+  #03 METHOD_STACK       LOGIC        chars= 46 content_n=5
+       绗竴灞傘€備氦鍙夋瘮瀵广€傚鍏抽敭淇℃伅銆備娇鐢ㄨ嚦灏戜袱涓笉鍚岀殑AI宸ュ叿銆傚啀閰嶅悎鎼滅储寮曟搸鐨勫師濮嬬綉椤佃繘琛屾瘮瀵广€?
+  #04 METHOD_STACK       LOGIC        chars= 68 content_n=8
+       绗簩灞傘€傚弽鍚戝彂闂€傚綋浣犲緱鍒癆I鐨勬敮鎸佹€х粨璁哄悗銆傚繀椤诲己杩嚜宸辨彁鍑轰竴涓浉鍙嶇殑闂銆備緥濡傦細"濡傛灉瑕佽瘉鏄庤繖涓柟妗堜笉鍙銆傛渶鑷村懡鐨勭棝鐐逛細鏄粈涔堬紵"
+       SHORT_FRAGS: ['渚嬪锛?, '"']
+  #05 METHOD_STACK       LOGIC        chars= 67 content_n=8
+       绗笁灞傘€傚垎绫诲缓绔?AI璀︽儠鍖?銆傚湪瀹归敊鐜囨瀬浣庣殑涓撲笟棰嗗煙銆傛瘮濡傛硶寰嬪悎瑙勩€佽储鍔¤绠椼€佸尰鑽仴搴枫€傝嚜鍔ㄥ皢AI瀹氫綅涓鸿緟鍔╃嚎绱€傜粷涓嶇敤浣滄渶缁堢粨璁恒€?
+  #06 METHOD_STACK       LOGIC        chars= 67 content_n=7
+       绗洓灞傘€備繚鎸佸師濮嬫绱範鎯€傛瘡鍛ㄦ娊鍑轰竴閮ㄥ垎鏃堕棿銆備笉浣跨敤AI鐨勭洿鎺ュ洖绛斻€傝€屾槸閫氳繃闃呰闀挎枃绔犮€佷笓涓氭姤鍛婃垨涓庤涓氫笓瀹朵氦娴併€傛潵鑾峰彇鏇存繁搴︾殑杈撳叆銆?
+  #07 COGNITIVE_SHIFT    CONCLUSION   chars= 32 content_n=3
+       杩欏洓灞傞槻鐏銆備笉鏄湪缁橝I鎸戝埡銆傝€屾槸鍦ㄦ瀯寤轰綘鑷繁鐨勮鐭ュ厤鐤郴缁熴€?
+============================================================
+scene_4 鍙嶈浆路鍔ㄦ€佺疆淇? items=11
+  #01 CENTER_FOCUS       TRANSITION   chars= 22 content_n=3
+       褰撶劧銆傛垜浠篃涓嶉渶瑕佽蛋鍚戝彟涓€涓瀬绔€旀€€鐤戜竴鍒囥€?
+       SHORT_FRAGS: ['褰撶劧銆?]
+  #02 BEAT_SEQUENCE      LOGIC        chars= 47 content_n=3
+       濡傛灉浣犲AI鐨勪换浣曞洖绛旈兘鍏呮弧闃插銆傝姳涓変釜灏忔椂鍘婚獙璇佷竴涓笉閲嶈鐨勬棩甯稿父璇嗐€傞偅灏卞け鍘讳簡鏁堢巼鐨勬剰涔夈€?
+  #03 TEXT_FOCUS         TRANSITION   chars= 11 content_n=1
+       鎴戜滑闇€瑕佺殑鏄姩鎬佺疆淇°€?
+  #04 CONCEPT_CARD       LOGIC        chars= 30 content_n=2
+       鍔ㄦ€佺疆淇＄殑鎰忔€濇槸銆傜粰涓嶅悓鍦烘櫙涓嬬殑AI鍥炵瓟璁惧畾涓嶅悓鐨勪俊浠绘潈閲嶃€?
+  #05 PANEL_GRID         CASE         chars= 78 content_n=7
+       鏃ュ父闂茶亰鎴栧垱鎰忓ご鑴戦鏆淬€備綘鍙互缁欏畠80%鐨勬潈閲嶏紱鍐欎竴灏佹櫘閫氶偖浠躲€傜粰70%锛涗絾鍒颁簡鎾板啓鍏抽敭鎶ュ憡銆佺紪鍐欐牳蹇冧唬鐮佹垨鑰呰繘琛岄噸瑕佸喅绛栨椂銆傚畠鐨勪俊浠诲害搴旇...
+  #06 CENTER_FOCUS       CONCLUSION   chars= 25 content_n=2
+       鍓╀笅鐨勯儴鍒嗐€傚繀椤荤敱浣犺嚜宸辩殑澶ц剳鍜岀涓€鎵嬩簨瀹炴潵濉ˉ銆?
+  #07 CHECKLIST_REVEAL   LOGIC        chars= 34 content_n=4
+       浣犳案杩滈棶鑷繁涓変釜闂銆傜涓€銆傝繖涓俊鎭鏋滃嚭閿欍€傛垜闇€瑕佹壙鎷呭澶х殑浠ｄ环銆?
+       SHORT_FRAGS: ['绗竴銆?]
+  #08 CHECKLIST_REVEAL   LOGIC        chars= 35 content_n=4
+       绗簩銆傛垜鏈夊澶у繀瑕佸幓楠岃瘉瀹冦€傜涓夈€傛垜鐜版湁鐨勮祫婧愭槸鍚﹁冻澶熸敮鎸佹垜杩涜楠岃瘉銆?
+       SHORT_FRAGS: ['绗簩銆?, '绗笁銆?]
+  #09 COGNITIVE_SHIFT    CONCLUSION   chars= 35 content_n=3
+       鎯虫竻妤氳繖涓夌偣銆備綘鎵嶈兘鐪熸椹鹃┉AI銆傝€屼笉鏄AI鎵€缂栫粐鐨勪俊鎭场娉℃墍鍖呰９銆?
+  #10 CAUSE_CHAIN        LOGIC        chars= 17 content_n=2
+       浣犺秺渚濊禆AI銆傝秺瀹规槗澶卞幓鐙珛鍒ゆ柇銆?
+  #11 COGNITIVE_SHIFT    CONCLUSION   chars= 35 content_n=3
+       鐪熸鐨勬€濊€冦€備笉鏄湪AI缁欏嚭绛旀鏃剁粨鏉熴€傝€屾槸鍦ˋI缁欏嚭绛旀鍚庢墠鍒氬垰寮€濮嬨€?
+============================================================
+coverage match: False
+diff at 42 '鎶婂睆骞曡浆杩囨潵缁欎綘鐪嬧€斺€?浣犵湅锛岃眴鍖呴兘璇翠簡' vs '鎶婂睆骞曡浆杩囨潵缁欎綘鐪嬧€斺€滀綘鐪嬶紝璞嗗寘閮借浜嗭紝'
+orig len 1565 got len 1552
+missing tail: 'AI缁欏嚭绛旀鍚庢墠鍒氬垰寮€濮嬨€?
+
+=== MERGE CHECK (adj weak + <=45 chars) ===
+scene_2 #4+#5: 23+18=41 | COGNITIVE_SHIFT+CONCEPT_CARD | LOGIC/LOGIC
+  A: 杩欎笉鏄汉涓哄仛鐨勬帶鍒讹紝杩欐槸AI鐨勬妧鏈師鐞嗗喅瀹氱殑銆?
+  B: 棣栧厛锛孉I鏈川涓婃槸涓€涓鐜囬娴嬫ā鍨嬨€?
+scene_2 #5+#6: 18+22=40 | CONCEPT_CARD+CENTER_FOCUS | LOGIC/LOGIC
+  A: 棣栧厛锛孉I鏈川涓婃槸涓€涓鐜囬娴嬫ā鍨嬨€?
+  B: 瀹冮€氳繃鍒嗘瀽娴烽噺鏂囨湰锛屽涔犺瘝璇箣闂寸殑缁熻鍏崇郴銆?
+scene_4 #2+#3: 47+11=58 | BEAT_SEQUENCE+TEXT_FOCUS | LOGIC/TRANSITION
+  A: 濡傛灉浣犲AI鐨勪换浣曞洖绛旈兘鍏呮弧闃插銆傝姳涓変釜灏忔椂鍘婚獙璇佷竴涓笉閲嶈鐨勬棩甯稿父璇嗐€傞偅灏卞け鍘?
+  B: 鎴戜滑闇€瑕佺殑鏄姩鎬佺疆淇°€?
+scene_4 #3+#4: 11+30=41 | TEXT_FOCUS+CONCEPT_CARD | TRANSITION/LOGIC
+  A: 鎴戜滑闇€瑕佺殑鏄姩鎬佺疆淇°€?
+  B: 鍔ㄦ€佺疆淇＄殑鎰忔€濇槸銆傜粰涓嶅悓鍦烘櫙涓嬬殑AI鍥炵瓟璁惧畾涓嶅悓鐨勪俊浠绘潈閲嶃€?

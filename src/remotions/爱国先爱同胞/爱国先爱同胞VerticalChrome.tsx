@@ -8,6 +8,7 @@ const FONT_STACK =
     '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
 
 const STATIC_HEADLINE = "爱国爱同胞";
+const STATIC_HEADLINE_SUBTITLE = "爱抽象的词，也要看见具体的人";
 const STATIC_HEADLINE_SUB = "社会热点深读";
 const STATIC_HEADLINE_SUB_EN = "SOCIAL DEEP DIVE";
 const THEME_ACCENT = "#059669";
@@ -111,6 +112,23 @@ export const 爱国先爱同胞TopStaticHeadline: React.FC<TopStaticHeadlineProp
             >
                 {STATIC_HEADLINE}
             </div>
+            {STATIC_HEADLINE_SUBTITLE ? (
+                <div
+                    style={{
+                        marginTop: 24,
+                        fontSize: 30,
+                        fontWeight: 600,
+                        fontFamily: FONT_STACK,
+                        color: "rgba(248, 250, 252, 0.82)",
+                        letterSpacing: "0.06em",
+                        textAlign: "center",
+                        lineHeight: 1.38,
+                        maxWidth: "100%",
+                    }}
+                >
+                    {STATIC_HEADLINE_SUBTITLE}
+                </div>
+            ) : null}
             <div
                 style={{
                     marginTop: 10,

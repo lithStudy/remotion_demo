@@ -3,11 +3,11 @@ import type { StaticCoverProps } from "../../components";
 /** 与 scene-scripts.json 中 cover 一致，供横/竖屏封面 still 与文档对照 */
 export const 廉价的便利_STATIC_COVER_PROPS: StaticCoverProps = {
 	title: "廉价的便利",
-	subtitle: "你享受的便利，悄悄让你自己变成了代价",
-	themeColor: "#2563EB",
-	badge: "认识自我 · 理性思考",
-	seriesLabel: "认知心理学",
-	seriesLabelEn: "COGNITIVE PSYCHOLOGY",
-	methodologySteps: ["觉察", "归因", "调整"],
-	methodologyStepsEn: "OBSERVE · ATTRIBUTE · ADJUST",
+	subtitle: "廉价的便利，是一记回旋镖",
+	themeColor: "#059669",
+	badge: "深度解读 · 理性思考",
+	seriesLabel: "社会热点深读",
+	seriesLabelEn: "SOCIAL DEEP DIVE",
+	methodologySteps: ["争议", "数据", "结论"],
+	methodologyStepsEn: "DEBATE · DATA · VERDICT",
 };

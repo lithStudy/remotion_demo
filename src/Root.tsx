@@ -34,12 +34,8 @@ import { 小米掀翻蚂蚁市场, 小米掀翻蚂蚁市场竖屏, 小米掀翻�
 import { 小米掀翻蚂蚁市场封面横屏, 小米掀翻蚂蚁市场封面竖屏 } from "./remotions/小米掀翻蚂蚁市场/小米掀翻蚂蚁市场CoverStills";
 import { 食品安全, 食品安全竖屏, 食品安全Schema, TOTAL_DURATION_食品安全 } from "./remotions/食品安全/食品安全";
 import { 食品安全封面横屏, 食品安全封面竖屏 } from "./remotions/食品安全/食品安全CoverStills";
-import { 爱国先爱同胞, 爱国先爱同胞竖屏, 爱国先爱同胞Schema, TOTAL_DURATION_爱国先爱同胞 } from "./remotions/爱国先爱同胞/爱国先爱同胞";
-import { 爱国先爱同胞封面横屏, 爱国先爱同胞封面竖屏 } from "./remotions/爱国先爱同胞/爱国先爱同胞CoverStills";
 import { 华为专利论, 华为专利论竖屏, 华为专利论Schema, TOTAL_DURATION_华为专利论 } from "./remotions/华为专利论/华为专利论";
 import { 华为专利论封面横屏, 华为专利论封面竖屏 } from "./remotions/华为专利论/华为专利论CoverStills";
-import { 劳动法落实, 劳动法落实竖屏, 劳动法落实Schema, TOTAL_DURATION_劳动法落实 } from "./remotions/劳动法落实/劳动法落实";
-import { 劳动法落实封面横屏, 劳动法落实封面竖屏 } from "./remotions/劳动法落实/劳动法落实CoverStills";
 import { MyVideo, MyVideo竖屏, MyVideoSchema, TOTAL_DURATION_MY_VIDEO } from "./remotions/my_video/MyVideo";
 import { MyVideo封面横屏, MyVideo封面竖屏 } from "./remotions/my_video/MyVideoCoverStills";
 import { 纳税人, 纳税人竖屏, 纳税人Schema, TOTAL_DURATION_纳税人 } from "./remotions/纳税人/纳税人";
@@ -60,8 +56,6 @@ import { 小米买办论, 小米买办论竖屏, 小米买办论Schema, TOTAL_DU
 import { 小米买办论封面横屏, 小米买办论封面竖屏 } from "./remotions/小米买办论/小米买办论CoverStills";
 import { 小米营销论, 小米营销论竖屏, 小米营销论Schema, TOTAL_DURATION_小米营销论 } from "./remotions/小米营销论/小米营销论";
 import { 小米营销论封面横屏, 小米营销论封面竖屏 } from "./remotions/小米营销论/小米营销论CoverStills";
-import { 汽车质量论, 汽车质量论竖屏, 汽车质量论Schema, TOTAL_DURATION_汽车质量论 } from "./remotions/汽车质量论/汽车质量论";
-import { 汽车质量论封面横屏, 汽车质量论封面竖屏 } from "./remotions/汽车质量论/汽车质量论CoverStills";
 import { 智驾兜底论, 智驾兜底论竖屏, 智驾兜底论Schema, TOTAL_DURATION_智驾兜底论 } from "./remotions/智驾兜底论/智驾兜底论";
 import { 智驾兜底论封面横屏, 智驾兜底论封面竖屏 } from "./remotions/智驾兜底论/智驾兜底论CoverStills";
 import { 权利与责任, 权利与责任竖屏, 权利与责任Schema, TOTAL_DURATION_权利与责任 } from "./remotions/权利与责任/权利与责任";
@@ -74,6 +68,20 @@ import { 华为高价论, 华为高价论竖屏, 华为高价论Schema, TOTAL_DU
 import { 华为高价论封面横屏, 华为高价论封面竖屏 } from "./remotions/华为高价论/华为高价论CoverStills";
 import { 廉价的便利, 廉价的便利竖屏, 廉价的便利Schema, TOTAL_DURATION_廉价的便利 } from "./remotions/廉价的便利/廉价的便利";
 import { 廉价的便利封面横屏, 廉价的便利封面竖屏 } from "./remotions/廉价的便利/廉价的便利CoverStills";
+import { 智驾论之瓶颈, 智驾论之瓶颈竖屏, 智驾论之瓶颈Schema, TOTAL_DURATION_智驾论之瓶颈 } from "./remotions/智驾论之瓶颈/智驾论之瓶颈";
+import { 智驾论之瓶颈封面横屏, 智驾论之瓶颈封面竖屏 } from "./remotions/智驾论之瓶颈/智驾论之瓶颈CoverStills";
+import { 智驾论之性价比, 智驾论之性价比竖屏, 智驾论之性价比Schema, TOTAL_DURATION_智驾论之性价比 } from "./remotions/智驾论之性价比/智驾论之性价比";
+import { 智驾论之性价比封面横屏, 智驾论之性价比封面竖屏 } from "./remotions/智驾论之性价比/智驾论之性价比CoverStills";
+import { 爱国先爱同胞, 爱国先爱同胞竖屏, 爱国先爱同胞Schema, TOTAL_DURATION_爱国先爱同胞 } from "./remotions/爱国先爱同胞/爱国先爱同胞";
+import { 爱国先爱同胞封面横屏, 爱国先爱同胞封面竖屏 } from "./remotions/爱国先爱同胞/爱国先爱同胞CoverStills";
+import { 豆包仙人论, 豆包仙人论竖屏, 豆包仙人论Schema, TOTAL_DURATION_豆包仙人论 } from "./remotions/豆包仙人论/豆包仙人论";
+import { 豆包仙人论封面横屏, 豆包仙人论封面竖屏 } from "./remotions/豆包仙人论/豆包仙人论CoverStills";
+import { 华为抹黑论, 华为抹黑论竖屏, 华为抹黑论Schema, TOTAL_DURATION_华为抹黑论 } from "./remotions/华为抹黑论/华为抹黑论";
+import { 华为抹黑论封面横屏, 华为抹黑论封面竖屏 } from "./remotions/华为抹黑论/华为抹黑论CoverStills";
+import { 汽车质量论, 汽车质量论竖屏, 汽车质量论Schema, TOTAL_DURATION_汽车质量论 } from "./remotions/汽车质量论/汽车质量论";
+import { 汽车质量论封面横屏, 汽车质量论封面竖屏 } from "./remotions/汽车质量论/汽车质量论CoverStills";
+import { 劳动法落实, 劳动法落实竖屏, 劳动法落实Schema, TOTAL_DURATION_劳动法落实 } from "./remotions/劳动法落实/劳动法落实";
+import { 劳动法落实封面横屏, 劳动法落实封面竖屏 } from "./remotions/劳动法落实/劳动法落实CoverStills";
 // Each <Composition> is an entry in the sidebar!
 
 export const RemotionRoot: React.FC = () => {
@@ -92,53 +100,6 @@ export const RemotionRoot: React.FC = () => {
       />
 
 
-
-
-
-      {/* 爱国先爱同胞 - 横屏 1920×1080（自动生成） */}
-      <Composition
-        id="爱国先爱同胞"
-        component={爱国先爱同胞}
-        durationInFrames={TOTAL_DURATION_爱国先爱同胞}
-        fps={30}
-        width={1920}
-        height={1080}
-        schema={爱国先爱同胞Schema}
-        defaultProps={{}}
-      />
-
-      {/* 爱国先爱同胞竖屏 - 竖屏 1080×1920（自动生成） */}
-      <Composition
-        id="爱国先爱同胞竖屏"
-        component={爱国先爱同胞竖屏}
-        durationInFrames={TOTAL_DURATION_爱国先爱同胞}
-        fps={30}
-        width={1080}
-        height={1920}
-        schema={爱国先爱同胞Schema}
-        defaultProps={{}}
-      />
-      {/* 爱国先爱同胞封面横屏 - 横屏封面 still 1920×1080 */}
-      <Composition
-        id="爱国先爱同胞封面横屏"
-        component={爱国先爱同胞封面横屏}
-        durationInFrames={1}
-        fps={30}
-        width={1920}
-        height={1080}
-        defaultProps={{}}
-      />
-
-      {/* 爱国先爱同胞封面竖屏 - 3:4 封面 still 1080×1440 */}
-      <Composition
-        id="爱国先爱同胞封面竖屏"
-        component={爱国先爱同胞封面竖屏}
-        durationInFrames={1}
-        fps={30}
-        width={1080}
-        height={1440}
-        defaultProps={{}}
-      />
 
 
 
@@ -189,33 +150,37 @@ export const RemotionRoot: React.FC = () => {
       />
 
 
-      {/* 华为高价论 - 横屏 1920×1080（自动生成） */}
+
+
+
+
+      {/* 智驾论之瓶颈 - 横屏 1920×1080（自动生成） */}
       <Composition
-        id="华为高价论"
-        component={华为高价论}
-        durationInFrames={TOTAL_DURATION_华为高价论}
+        id="智驾论之瓶颈"
+        component={智驾论之瓶颈}
+        durationInFrames={TOTAL_DURATION_智驾论之瓶颈}
         fps={30}
         width={1920}
         height={1080}
-        schema={华为高价论Schema}
+        schema={智驾论之瓶颈Schema}
         defaultProps={{}}
       />
 
-      {/* 华为高价论竖屏 - 竖屏 1080×1920（自动生成） */}
+      {/* 智驾论之瓶颈竖屏 - 竖屏 1080×1920（自动生成） */}
       <Composition
-        id="华为高价论竖屏"
-        component={华为高价论竖屏}
-        durationInFrames={TOTAL_DURATION_华为高价论}
+        id="智驾论之瓶颈竖屏"
+        component={智驾论之瓶颈竖屏}
+        durationInFrames={TOTAL_DURATION_智驾论之瓶颈}
         fps={30}
         width={1080}
         height={1920}
-        schema={华为高价论Schema}
+        schema={智驾论之瓶颈Schema}
         defaultProps={{}}
       />
-      {/* 华为高价论封面横屏 - 横屏封面 still 1920×1080 */}
+      {/* 智驾论之瓶颈封面横屏 - 横屏封面 still 1920×1080 */}
       <Composition
-        id="华为高价论封面横屏"
-        component={华为高价论封面横屏}
+        id="智驾论之瓶颈封面横屏"
+        component={智驾论之瓶颈封面横屏}
         durationInFrames={1}
         fps={30}
         width={1920}
@@ -223,43 +188,45 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{}}
       />
 
-      {/* 华为高价论封面竖屏 - 3:4 封面 still 1080×1440 */}
+      {/* 智驾论之瓶颈封面竖屏 - 3:4 封面 still 1080×1440 */}
       <Composition
-        id="华为高价论封面竖屏"
-        component={华为高价论封面竖屏}
+        id="智驾论之瓶颈封面竖屏"
+        component={智驾论之瓶颈封面竖屏}
         durationInFrames={1}
         fps={30}
         width={1080}
         height={1440}
         defaultProps={{}}
       />
-      {/* 廉价的便利 - 横屏 1920×1080（自动生成） */}
+
+
+      {/* 智驾论之性价比 - 横屏 1920×1080（自动生成） */}
       <Composition
-        id="廉价的便利"
-        component={廉价的便利}
-        durationInFrames={TOTAL_DURATION_廉价的便利}
+        id="智驾论之性价比"
+        component={智驾论之性价比}
+        durationInFrames={TOTAL_DURATION_智驾论之性价比}
         fps={30}
         width={1920}
         height={1080}
-        schema={廉价的便利Schema}
+        schema={智驾论之性价比Schema}
         defaultProps={{}}
       />
 
-      {/* 廉价的便利竖屏 - 竖屏 1080×1920（自动生成） */}
+      {/* 智驾论之性价比竖屏 - 竖屏 1080×1920（自动生成） */}
       <Composition
-        id="廉价的便利竖屏"
-        component={廉价的便利竖屏}
-        durationInFrames={TOTAL_DURATION_廉价的便利}
+        id="智驾论之性价比竖屏"
+        component={智驾论之性价比竖屏}
+        durationInFrames={TOTAL_DURATION_智驾论之性价比}
         fps={30}
         width={1080}
         height={1920}
-        schema={廉价的便利Schema}
+        schema={智驾论之性价比Schema}
         defaultProps={{}}
       />
-      {/* 廉价的便利封面横屏 - 横屏封面 still 1920×1080 */}
+      {/* 智驾论之性价比封面横屏 - 横屏封面 still 1920×1080 */}
       <Composition
-        id="廉价的便利封面横屏"
-        component={廉价的便利封面横屏}
+        id="智驾论之性价比封面横屏"
+        component={智驾论之性价比封面横屏}
         durationInFrames={1}
         fps={30}
         width={1920}
@@ -267,10 +234,241 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{}}
       />
 
-      {/* 廉价的便利封面竖屏 - 3:4 封面 still 1080×1440 */}
+      {/* 智驾论之性价比封面竖屏 - 3:4 封面 still 1080×1440 */}
       <Composition
-        id="廉价的便利封面竖屏"
-        component={廉价的便利封面竖屏}
+        id="智驾论之性价比封面竖屏"
+        component={智驾论之性价比封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
+        defaultProps={{}}
+      />
+
+
+      {/* 爱国先爱同胞 - 横屏 1920×1080（自动生成） */}
+      <Composition
+        id="爱国先爱同胞"
+        component={爱国先爱同胞}
+        durationInFrames={TOTAL_DURATION_爱国先爱同胞}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={爱国先爱同胞Schema}
+        defaultProps={{}}
+      />
+
+      {/* 爱国先爱同胞竖屏 - 竖屏 1080×1920（自动生成） */}
+      <Composition
+        id="爱国先爱同胞竖屏"
+        component={爱国先爱同胞竖屏}
+        durationInFrames={TOTAL_DURATION_爱国先爱同胞}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={爱国先爱同胞Schema}
+        defaultProps={{}}
+      />
+      {/* 爱国先爱同胞封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="爱国先爱同胞封面横屏"
+        component={爱国先爱同胞封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 爱国先爱同胞封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="爱国先爱同胞封面竖屏"
+        component={爱国先爱同胞封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
+        defaultProps={{}}
+      />
+
+
+
+
+
+
+
+      {/* 豆包仙人论 - 横屏 1920×1080（自动生成） */}
+      <Composition
+        id="豆包仙人论"
+        component={豆包仙人论}
+        durationInFrames={TOTAL_DURATION_豆包仙人论}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={豆包仙人论Schema}
+        defaultProps={{}}
+      />
+
+      {/* 豆包仙人论竖屏 - 竖屏 1080×1920（自动生成） */}
+      <Composition
+        id="豆包仙人论竖屏"
+        component={豆包仙人论竖屏}
+        durationInFrames={TOTAL_DURATION_豆包仙人论}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={豆包仙人论Schema}
+        defaultProps={{}}
+      />
+      {/* 豆包仙人论封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="豆包仙人论封面横屏"
+        component={豆包仙人论封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 豆包仙人论封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="豆包仙人论封面竖屏"
+        component={豆包仙人论封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
+        defaultProps={{}}
+      />
+
+
+      {/* 华为抹黑论 - 横屏 1920×1080（自动生成） */}
+      <Composition
+        id="华为抹黑论"
+        component={华为抹黑论}
+        durationInFrames={TOTAL_DURATION_华为抹黑论}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={华为抹黑论Schema}
+        defaultProps={{}}
+      />
+
+      {/* 华为抹黑论竖屏 - 竖屏 1080×1920（自动生成） */}
+      <Composition
+        id="华为抹黑论竖屏"
+        component={华为抹黑论竖屏}
+        durationInFrames={TOTAL_DURATION_华为抹黑论}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={华为抹黑论Schema}
+        defaultProps={{}}
+      />
+      {/* 华为抹黑论封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="华为抹黑论封面横屏"
+        component={华为抹黑论封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 华为抹黑论封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="华为抹黑论封面竖屏"
+        component={华为抹黑论封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
+        defaultProps={{}}
+      />
+      {/* 汽车质量论 - 横屏 1920×1080（自动生成） */}
+      <Composition
+        id="汽车质量论"
+        component={汽车质量论}
+        durationInFrames={TOTAL_DURATION_汽车质量论}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={汽车质量论Schema}
+        defaultProps={{}}
+      />
+
+      {/* 汽车质量论竖屏 - 竖屏 1080×1920（自动生成） */}
+      <Composition
+        id="汽车质量论竖屏"
+        component={汽车质量论竖屏}
+        durationInFrames={TOTAL_DURATION_汽车质量论}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={汽车质量论Schema}
+        defaultProps={{}}
+      />
+      {/* 汽车质量论封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="汽车质量论封面横屏"
+        component={汽车质量论封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 汽车质量论封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="汽车质量论封面竖屏"
+        component={汽车质量论封面竖屏}
+        durationInFrames={1}
+        fps={30}
+        width={1080}
+        height={1440}
+        defaultProps={{}}
+      />
+      {/* 劳动法落实 - 横屏 1920×1080（自动生成） */}
+      <Composition
+        id="劳动法落实"
+        component={劳动法落实}
+        durationInFrames={TOTAL_DURATION_劳动法落实}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={劳动法落实Schema}
+        defaultProps={{}}
+      />
+
+      {/* 劳动法落实竖屏 - 竖屏 1080×1920（自动生成） */}
+      <Composition
+        id="劳动法落实竖屏"
+        component={劳动法落实竖屏}
+        durationInFrames={TOTAL_DURATION_劳动法落实}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={劳动法落实Schema}
+        defaultProps={{}}
+      />
+      {/* 劳动法落实封面横屏 - 横屏封面 still 1920×1080 */}
+      <Composition
+        id="劳动法落实封面横屏"
+        component={劳动法落实封面横屏}
+        durationInFrames={1}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* 劳动法落实封面竖屏 - 3:4 封面 still 1080×1440 */}
+      <Composition
+        id="劳动法落实封面竖屏"
+        component={劳动法落实封面竖屏}
         durationInFrames={1}
         fps={30}
         width={1080}

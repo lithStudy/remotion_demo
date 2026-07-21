@@ -8,6 +8,7 @@ const FONT_STACK =
     '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
 
 const STATIC_HEADLINE = "电车质量论";
+const STATIC_HEADLINE_SUBTITLE = "公开考场不敢上，遥遥领先一张嘴";
 const STATIC_HEADLINE_SUB = "科技热点深读";
 const STATIC_HEADLINE_SUB_EN = "TECH DEEP DIVE";
 const THEME_ACCENT = "#FF6900";
@@ -111,6 +112,23 @@ export const 汽车质量论TopStaticHeadline: React.FC<TopStaticHeadlineProps> 
             >
                 {STATIC_HEADLINE}
             </div>
+            {STATIC_HEADLINE_SUBTITLE ? (
+                <div
+                    style={{
+                        marginTop: 24,
+                        fontSize: 30,
+                        fontWeight: 600,
+                        fontFamily: FONT_STACK,
+                        color: "rgba(248, 250, 252, 0.82)",
+                        letterSpacing: "0.06em",
+                        textAlign: "center",
+                        lineHeight: 1.38,
+                        maxWidth: "100%",
+                    }}
+                >
+                    {STATIC_HEADLINE_SUBTITLE}
+                </div>
+            ) : null}
             <div
                 style={{
                     marginTop: 10,

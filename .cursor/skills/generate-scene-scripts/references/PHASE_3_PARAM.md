@@ -38,8 +38,8 @@
 当 param_schema 中某字段标记为 `format: image_prompt` 时：
 - 写入**英文视觉场景描述**，纯粹描述画面内容
 - **绝不包含**任何文字、标语、注音或 UI 元素
-- 描述风格参考 `script_v6/config.json` 中的 `image_style`（当前为极简黑白矢量插图风格）
-- 后续由 Step2 据此生成图片并回写为文件路径
+- 描述风格参考 `narrator_pipeline/config.json` 中的 `image_style`（当前为极简黑白矢量插图风格）
+- 后续由 Step3 据此生成图片并回写为文件路径
 
 示例：
 ```json

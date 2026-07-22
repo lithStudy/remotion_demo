@@ -15,7 +15,7 @@
 |------|------|------|
 | `topic` | string | 阶段 1 生成的封面钩子 |
 | `scenes` | array | 场景数组 |
-| `fps` | number | 帧率，从 `script_v6/config.json` 读取（当前 30） |
+| `fps` | number | 帧率，从 `narrator_pipeline/config.json` 读取（当前 30） |
 | `cover` | object | 封面信息，后处理注入 |
 
 ## Scene 结构
@@ -65,7 +65,7 @@
 | `param` | object | 模板参数，按 param_schema 填充 |
 
 **禁止在 item 上出现**：`text`（中间产物，后处理删除）
-**禁止在 param 中出现**：`content`、`totalDurationFrames`（这两者只属于 item 顶层，由后续 Step3 写入）
+**禁止在 param 中出现**：`content`、`totalDurationFrames`（这两者只属于 item 顶层，由后续 Step2 写入）
 
 ## 常用 param 示例片段
 
@@ -100,7 +100,7 @@
 
 ## Cover 结构
 
-cover 对象根据 `script_v6/config.json` 中的配置注入。
+cover 对象根据 `narrator_pipeline/config.json` 中的配置注入。
 
 ```json
 {
@@ -118,7 +118,7 @@ cover 对象根据 `script_v6/config.json` 中的配置注入。
 }
 ```
 
-字段来源映射（从 `script_v6/config.json` 读取）：
+字段来源映射（从 `narrator_pipeline/config.json` 读取）：
 
 | cover 字段 | config.json 字段 | 说明 |
 |-----------|-----------------|------|

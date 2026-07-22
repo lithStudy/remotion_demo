@@ -565,7 +565,7 @@ export interface PeerInductConclusionItem {
 // 模板驱动架构：公共类型
 // ─────────────────────────────────────────────────────────────
 
-/** JSON Schema 风格子集：与 script_v5/param_schema_tools.py 约定一致 */
+/** JSON Schema 风格子集：与 narrator_pipeline/param_schema_tools.py 约定一致 */
 export type ParamSchemaType =
 	| "string"
 	| "number"

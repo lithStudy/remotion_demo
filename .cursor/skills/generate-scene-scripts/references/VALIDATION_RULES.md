@@ -28,7 +28,7 @@
 
 ### 5. param 禁止字段
 
-`param` 内**不得出现** `content` 或 `totalDurationFrames`。这两个字段只属于 item 顶层（由后续 Step3 写入）。
+`param` 内**不得出现** `content` 或 `totalDurationFrames`。这两个字段只属于 item 顶层（由后续 Step2 写入）。
 
 ### 6. param 必填字段
 

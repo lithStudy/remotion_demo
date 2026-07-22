@@ -15,7 +15,7 @@ metadata:
 ## 前置准备
 
 1. **确认视频名称**：向用户确认 `name`（英文，用作目录名），如 `认知偏见_达克效应`
-2. **读取配置**：从 `script_v6/config.json` 获取以下关键参数：
+2. **读取配置**：从 `narrator_pipeline/config.json` 获取以下关键参数：
    - `fps`（帧率，当前 30）
    - `image_style`（图片风格描述，写入 image_prompt 类字段时参考）
    - `cover_*` 系列字段（封面信息，后处理注入）
@@ -58,12 +58,12 @@ metadata:
 完成三阶段分析后，对整份 JSON 执行以下后处理：
 
 1. **清理临时字段**：删除 scene 级 `text`、item 级 `text`
-2. **content 归一化**：每条 content 仅保留 `{ "text": "..." }`，不写 startFrame/durationFrames（留给 Step3 音频处理）
+2. **content 归一化**：每条 content 仅保留 `{ "text": "..." }`，不写 startFrame/durationFrames（留给 Step2 音频处理）
 3. **锚点清洗**：
    - 非 TEXT_FOCUS 模板：校验 `param.anchors`，`showFrom` 必须是 content 数组的合法 0-based 下标，`text` 非空
    - TEXT_FOCUS 模板：不使用 `anchors`，使用 `coreSentenceAnchors`，每项 `coreSentenceAnchor` 必须是 `coreSentence` 拼接后的子串
 4. **注入 fps**：顶层写入 `"fps": 30`（或 config 中的值）
-5. **注入 cover**：按 `script_v6/config.json` 中的 `cover_*` 字段注入顶层 `cover` 对象（详见 [OUTPUT_FORMAT.md](references/OUTPUT_FORMAT.md)）
+5. **注入 cover**：按 `narrator_pipeline/config.json` 中的 `cover_*` 字段注入顶层 `cover` 对象（详见 [OUTPUT_FORMAT.md](references/OUTPUT_FORMAT.md)）
 6. **param 禁止字段**：`param` 内不得出现 `content` 或 `totalDurationFrames`（这两者只属于 item 顶层）
 
 ## 输出格式
@@ -76,7 +76,7 @@ metadata:
 
 也可运行校验脚本（从项目根目录执行）：
 ```bash
-python script_v6/scripts/validate_scene_scripts.py src/remotions/{name}/scenes/scene-scripts.json
+python -m narrator_pipeline.cli.validate_scene_scripts src/remotions/{name}/scenes/scene-scripts.json
 ```
 
 ## 硬性约束（全流程必须遵守）
@@ -89,7 +89,7 @@ python script_v6/scripts/validate_scene_scripts.py src/remotions/{name}/scenes/s
 
 ## 与 Python 管线的关系
 
-本 skill 替代 `script_v6/step1_analyze_script.py` 的 Gemini AI 分析环节。后续步骤仍可使用现有脚本：
-- Step2（生图）：`python script_v6/step2_generate_images.py --input {json_path} --output {images_dir}`
-- Step3（TTS）：`python script_v6/step3_generate_audio.py --input {json_path} --output {audio_dir}`
-- Step4（代码生成）：`python script_v6/step4_generate_remotion.py --input {json_path} --name {name}`
+本 skill 替代 `narrator_pipeline` 分析域（Step1）的 Gemini AI 分析环节。后续步骤：
+- Step2（TTS）：`python -m narrator_pipeline.audio.step2 --name {name}`
+- Step3（生图）：`python -m narrator_pipeline.images.step3 --name {name}`
+- Step4（代码生成）：`python -m narrator_pipeline.codegen.step4 --name {name}`

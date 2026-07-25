@@ -68,6 +68,21 @@ python -m narrator_pipeline.cli.validate_scene_scripts src/remotions/{name}/scen
 
 Step1 的分析与校验只读场景草稿：对照文本为草稿中各 `scene.text` 按顺序拼接。
 
+## Scene Studio（Step0/1 Web）
+
+云端工作台：异步跑 Step0/1，可视化编辑 `scene-scripts`，ZIP 导入/导出（目录对齐仓库约定）。
+
+```bash
+# .env 中设置 SCENE_STUDIO_PASSWORD；可选 SCENE_STUDIO_WORKSPACE
+pip install -r narrator_pipeline/requirements.txt
+python -m narrator_pipeline.web
+
+# 另开终端
+cd scene_studio && npm install && npm run dev
+```
+
+浏览器打开 Vite 地址（默认代理 `/api` → `:8787`）。
+
 ## 配置
 
 见 `config.json`（模型、画布、TTS、`project_root` 等）与 `.env`。

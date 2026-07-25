@@ -66,6 +66,59 @@ def run_scene_split(
     return result
 
 
+def run_step0_for_video(
+    video_name: str,
+    config: dict,
+    *,
+    llm_provider: str | None = None,
+    llm_model: str | None = None,
+    print_continue_hint: bool = True,
+) -> dict:
+    """
+    读取口播稿 → cleanup → 场景拆分 → 写入 scene-split-draft.json。
+    返回 scene_split 字典。口播稿或内容为空时抛 ValueError。
+    """
+    script_dir = PACKAGE_ROOT
+    paths = resolve_video_paths(video_name, config)
+    input_path = paths.narration_txt
+    output_dir = paths.scenes_dir
+    draft_path = paths.scene_split_draft
+
+    if not input_path.exists():
+        raise ValueError(f"文案文件不存在: {input_path}")
+
+    cleanup_before_step0(video_name, output_dir, config, script_dir)
+
+    ai_logger = AiLogger(output_dir, video_name, step="step0")
+
+    with open(input_path, "r", encoding="utf-8") as f:
+        text = f.read().strip()
+
+    if not text:
+        raise ValueError("文案内容为空")
+
+    print(f"📄 读取文案: {len(text)} 字符 ({input_path})")
+
+    scene_split = run_scene_split(
+        text,
+        config,
+        ai_logger,
+        llm_provider=llm_provider,
+        llm_model=llm_model,
+    )
+    save_scene_split_draft(scene_split, draft_path)
+
+    print("\n✅ 场景拆分完成!")
+    print(f"   📦 视频名: {video_name}")
+    print(f"   📊 主题: {scene_split.get('topic', '未知')}")
+    print(f"   🎬 场景数: {len(scene_split.get('scenes', []))}")
+    print(f"   💾 草稿: {draft_path}")
+    print(f"   🧾 AI日志: {ai_logger.path}")
+    if print_continue_hint:
+        _print_continue_hint(draft_path, video_name)
+    return scene_split
+
+
 def main() -> bool:
     parser = argparse.ArgumentParser(description="Step 0: 口播文案场景拆分")
     parser.add_argument(
@@ -85,49 +138,19 @@ def main() -> bool:
     )
     args = parser.parse_args()
 
-    script_dir = PACKAGE_ROOT
-    load_env(script_dir)
-    config = load_config(script_dir)
+    load_env(PACKAGE_ROOT)
+    config = load_config(PACKAGE_ROOT)
 
-    video_name = args.name
-    paths = resolve_video_paths(video_name, config)
-    input_path = paths.narration_txt
-    output_dir = paths.scenes_dir
-    draft_path = paths.scene_split_draft
-
-    if not input_path.exists():
-        print(f"❌ 文案文件不存在: {input_path}")
+    try:
+        run_step0_for_video(
+            args.name,
+            config,
+            llm_provider=args.llm_provider,
+            llm_model=args.llm_model,
+        )
+    except ValueError as e:
+        print(f"❌ {e}")
         return False
-
-    cleanup_before_step0(video_name, output_dir, config, script_dir)
-
-    ai_logger = AiLogger(output_dir, video_name, step="step0")
-
-    with open(input_path, "r", encoding="utf-8") as f:
-        text = f.read().strip()
-
-    if not text:
-        print("❌ 文案内容为空")
-        return False
-
-    print(f"📄 读取文案: {len(text)} 字符 ({input_path})")
-
-    scene_split = run_scene_split(
-        text,
-        config,
-        ai_logger,
-        llm_provider=args.llm_provider,
-        llm_model=args.llm_model,
-    )
-    save_scene_split_draft(scene_split, draft_path)
-
-    print("\n✅ 场景拆分完成!")
-    print(f"   📦 视频名: {video_name}")
-    print(f"   📊 主题: {scene_split.get('topic', '未知')}")
-    print(f"   🎬 场景数: {len(scene_split.get('scenes', []))}")
-    print(f"   💾 草稿: {draft_path}")
-    print(f"   🧾 AI日志: {ai_logger.path}")
-    _print_continue_hint(draft_path, video_name)
     return True
 
 

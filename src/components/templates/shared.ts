@@ -602,6 +602,8 @@ export interface TemplateMeta {
 	content_min_items?: number;
 	content_max_items?: number;
 	content_anchor_required?: boolean;
+	/** param 中与 item.content 条数锁定同步的数组字段名（分镜工作台表单用） */
+	param_array_sync_content?: string;
 }
 
 /** content 数组中每条内容项（Step3 升级后的对象格式） */

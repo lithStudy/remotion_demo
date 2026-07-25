@@ -51,3 +51,19 @@ _Avoid_: remotion 生成器（过泛）
 **契约域（contracts）**：
 分镜脚本与草稿的校验、规范化，以及模板注册表等契约侧适配；不改变对外字段语义本身。
 _Avoid_: utils（过泛）, validation 脚本（片面）
+
+**分镜工作台（Scene Studio）**：
+面向分镜脚本的人机审阅与编辑界面；以表单与选择为主，不以手写 JSON 为默认编辑方式。脚本编辑：侧栏/列表仅导航场景；场景内扁平口播表完成 item 归类与模板选择（改模板即清空该 item 的 param）；再钻取进入单个 item 的 param 编辑。
+_Avoid_: 编辑器（过泛）, JSON 编辑器
+
+**口播片段（content）**：
+item 内与口播对齐的文本时间片（`content[]` 元素）；在场景扁平文案表中一行一条，默认可读点按后编辑；可在相邻 item 间整段移动；item 边界以分组头标识。
+_Avoid_: 条目（易与 item 混淆）, content 行（实现口吻）
+
+**局部参数重生（Local Param Regen）**：
+在保留该 item 的模板与口播片段的前提下，仅重新生成其 `param`；由用户在 param 编辑页手动触发，不自动改写 template。
+_Avoid_: 重新跑 Step1, 局部重新生成（未指明重生范围时）
+
+**叙事类型（narrativeType）**：
+item 的叙事角色分类，取值限于 `HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION`；供分析域模板选型使用，分镜工作台不提供编辑入口。
+_Avoid_: 叙事标签（过泛）, type（易与模板类型混淆）

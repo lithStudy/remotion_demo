@@ -29,6 +29,7 @@ class VideoPaths:
 def resolve_video_paths(name: str, config: dict) -> VideoPaths:
     project_root = Path(config.get("project_root", REPO_ROOT))
     scenes_dir = project_root / "src" / "remotions" / name / "scenes"
+    narrations_dir = project_root / "narrations"
     return VideoPaths(
         name=name,
         project_root=project_root,
@@ -37,5 +38,5 @@ def resolve_video_paths(name: str, config: dict) -> VideoPaths:
         scene_scripts=scenes_dir / "scene-scripts.json",
         images_dir=project_root / "public" / "images" / name,
         audio_dir=project_root / "public" / "audio" / name,
-        narration_txt=NARRATIONS_DIR / f"{name}.txt",
+        narration_txt=narrations_dir / f"{name}.txt",
     )

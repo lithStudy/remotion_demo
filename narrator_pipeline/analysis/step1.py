@@ -475,6 +475,82 @@ def _source_text_from_draft(scene_split: dict) -> str:
     return "".join(str(s.get("text", "")) for s in scenes if isinstance(s, dict))
 
 
+def run_step1_for_video(
+    video_name: str,
+    config: dict,
+    *,
+    llm_provider: str | None = None,
+    llm_model: str | None = None,
+    skip_validate: bool | None = None,
+) -> dict:
+    """
+    加载草稿 → cleanup → LLM 分析 → 后处理 → 写入 scene-scripts.json。
+    返回 scene-scripts 字典。草稿缺失或对照文本为空时抛 ValueError。
+    """
+    script_dir = PACKAGE_ROOT
+    paths = resolve_video_paths(video_name, config)
+    draft_path = paths.scene_split_draft
+    output_dir = paths.scenes_dir
+
+    if not draft_path.exists():
+        raise ValueError(f"场景拆分草稿不存在: {draft_path}")
+
+    cleanup_before_step1(video_name, output_dir, config, script_dir)
+
+    ai_logger = AiLogger(output_dir, video_name, step="step1")
+
+    scene_split = load_scene_split_draft(draft_path)
+    print(f"📂 已加载场景拆分草稿: {draft_path}")
+    print(f"   🎬 场景数: {len(scene_split.get('scenes', []))}")
+
+    text = _source_text_from_draft(scene_split)
+    if not text.strip():
+        raise ValueError("草稿中各 scene.text 拼接后为空")
+
+    print(f"📄 校验对照文本（来自草稿 scene.text）: {len(text)} 字符")
+
+    skip = _step1_skip_validate(config, cli_override=skip_validate is True)
+
+    result = analyze_with_llm(
+        text,
+        scene_split,
+        config,
+        ai_logger,
+        llm_provider=llm_provider,
+        llm_model=llm_model,
+        skip_validate=skip,
+    )
+    _merge_dash_only_captions(result)
+    finalize_step1_content_and_anchors(result)
+    _inject_cover_for_step4(result, video_name, config)
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_path = output_dir / "scene-scripts.json"
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+
+    scenes = result.get("scenes", [])
+    total_items = sum(len(s.get("items", [])) for s in scenes)
+    template_counts: dict[str, int] = {}
+    for s in scenes:
+        for it in s.get("items", []):
+            t = it.get("template", "?")
+            template_counts[t] = template_counts.get(t, 0) + 1
+
+    print("\n✅ 文案分析完成!")
+    print(f"   📦 视频名: {video_name}")
+    print(f"   📊 主题: {result.get('topic', '未知')}")
+    print(f"   🎬 场景数: {len(scenes)}")
+    print(f"   📝 文案条目: {total_items}")
+    print(f"   🎨 模板分布: {template_counts}")
+    print(f"   💾 保存到: {output_path}")
+    print(f"   📋 场景草稿: {draft_path}")
+    print(f"   🧾 AI日志: {ai_logger.path}")
+
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(description="Step 1: 口播文案分析（模板驱动 v3）")
     parser.add_argument(
@@ -499,74 +575,20 @@ def main():
     )
     args = parser.parse_args()
 
-    script_dir = PACKAGE_ROOT
-    load_env(script_dir)
-    config = load_config(script_dir)
+    load_env(PACKAGE_ROOT)
+    config = load_config(PACKAGE_ROOT)
 
-    video_name = args.name
-    paths = resolve_video_paths(video_name, config)
-    draft_path = paths.scene_split_draft
-    output_dir = paths.scenes_dir
-
-    if not draft_path.exists():
-        print(f"❌ 场景拆分草稿不存在: {draft_path}")
+    try:
+        run_step1_for_video(
+            args.name,
+            config,
+            llm_provider=args.llm_provider,
+            llm_model=args.llm_model,
+            skip_validate=True if args.skip_validate else None,
+        )
+    except ValueError as e:
+        print(f"❌ {e}")
         return False
-
-    cleanup_before_step1(video_name, output_dir, config, script_dir)
-
-    ai_logger = AiLogger(output_dir, video_name, step="step1")
-
-    scene_split = load_scene_split_draft(draft_path)
-    print(f"📂 已加载场景拆分草稿: {draft_path}")
-    print(f"   🎬 场景数: {len(scene_split.get('scenes', []))}")
-
-    text = _source_text_from_draft(scene_split)
-    if not text.strip():
-        print("❌ 草稿中各 scene.text 拼接后为空")
-        return False
-
-    print(f"📄 校验对照文本（来自草稿 scene.text）: {len(text)} 字符")
-
-    skip_validate = _step1_skip_validate(config, cli_override=args.skip_validate)
-
-    result = analyze_with_llm(
-        text,
-        scene_split,
-        config,
-        ai_logger,
-        llm_provider=args.llm_provider,
-        llm_model=args.llm_model,
-        skip_validate=skip_validate,
-    )
-    _merge_dash_only_captions(result)
-    finalize_step1_content_and_anchors(result)
-    _inject_cover_for_step4(result, video_name, config)
-
-    output_dir.mkdir(parents=True, exist_ok=True)
-    output_path = output_dir / "scene-scripts.json"
-
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(result, f, ensure_ascii=False, indent=2)
-
-    # 统计信息
-    scenes = result.get("scenes", [])
-    total_items = sum(len(s.get("items", [])) for s in scenes)
-    template_counts: dict[str, int] = {}
-    for s in scenes:
-        for it in s.get("items", []):
-            t = it.get("template", "?")
-            template_counts[t] = template_counts.get(t, 0) + 1
-
-    print("\n✅ 文案分析完成!")
-    print(f"   📦 视频名: {video_name}")
-    print(f"   📊 主题: {result.get('topic', '未知')}")
-    print(f"   🎬 场景数: {len(scenes)}")
-    print(f"   📝 文案条目: {total_items}")
-    print(f"   🎨 模板分布: {template_counts}")
-    print(f"   💾 保存到: {output_path}")
-    print(f"   📋 场景草稿: {draft_path}")
-    print(f"   🧾 AI日志: {ai_logger.path}")
-
     return True
 
 

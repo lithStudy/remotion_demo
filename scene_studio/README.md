@@ -1,8 +1,8 @@
 
 ### 怎么用（云端）
 1. `.env` 设置 `SCENE_STUDIO_PASSWORD`，可选 `SCENE_STUDIO_WORKSPACE`
-2. `python -m narrator_pipeline.web`（默认 `:8787`）
-3. `cd scene_studio && npm run dev`（代理 `/api`）
+2. `python -m narrator_pipeline.web`（默认 `:21119`）
+3. `cd scene_studio && npm run dev`（`:21118`，代理 `/api` → `:21119`）
 4. 浏览器登录 → 新建/导入 → 生成 → 编辑 → 导出 ZIP → 本机解压到仓库根
 
 ### 关键改动

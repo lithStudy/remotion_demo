@@ -81,7 +81,7 @@ python -m narrator_pipeline.web
 cd scene_studio && npm install && npm run dev
 ```
 
-浏览器打开 Vite 地址（默认代理 `/api` → `:8787`）。
+浏览器打开 Vite 地址（默认 `:21118`，代理 `/api` → `:21119`）。
 
 ## 配置
 

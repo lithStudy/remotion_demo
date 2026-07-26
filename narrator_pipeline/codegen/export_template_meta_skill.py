@@ -220,7 +220,7 @@ def main() -> bool:
 	)
 	references_dir.mkdir(parents=True, exist_ok=True)
 
-	import template_registry as template_registry_mod
+	from narrator_pipeline.contracts import template_registry as template_registry_mod
 
 	importlib.reload(template_registry_mod)
 	registry = template_registry_mod.get_all_templates()

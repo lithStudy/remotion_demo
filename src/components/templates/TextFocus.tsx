@@ -20,7 +20,7 @@ export const templateMeta = {
 	"description":
 		"适用：全片最强金句、结论暴击；0 图纯大字。\n差异：需要配图锚定用 CENTER_FOCUS；2~6 句极短连击质问用 PUNCH_CAPTION；模拟读者吐槽口吻用 CHAT_BUBBLE。\n慎用：content 建议不超过 3 条以保持冲击；若口播/字幕必须保留长 content，可填 coreSentence（string 或 { text, showFrom, endFrom? } 每行一条，showFrom/endFrom 均为 content 下标）作为大屏主文案。",
 	"content_max_items": 3,
-	"psychology": "信噪比极致化",
+	"chinese_name": "纯文字金句",
 	"image_count": 0,
 	"param_schema": {
 		"type": "object",

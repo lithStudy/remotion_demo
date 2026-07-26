@@ -8,8 +8,6 @@ import { normalizeContent, TemplateContentRenderer } from "./TemplateContentRend
 
 /** 多气泡模式下每一行的参数 */
 export interface ChatBubbleRowParam {
-	/** @deprecated 不参与渲染；左右头像固定为模板内置 SVG */
-	imageSrc?: string;
 	bubbleText?: string;
 	/** 绑定 content 下标（0-based）；缺省为该行在 bubbles 数组中的下标 */
 	showFrom?: number;
@@ -21,40 +19,38 @@ export const templateMeta = {
 	"name": "CHAT_BUBBLE",
 	"componentExport": "BWChatBubble",
 	"description":
-		"适用：显式对话/弹幕/评论体/群聊体/角色化吐槽（如“我：…你：…”、“网友：…”、“评论：…”、“有人说：…”）的口吻表达，适合做共鸣痛点、用户反馈、反对意见、现场对话等。\n不适用：仅“你是不是也…”这类单句发问但整体仍是平铺叙述时（此时优先 CENTER_FOCUS）。\n差异：纯金句大字无对话感用 TEXT_FOCUS；需配图但非气泡口径用 CENTER_FOCUS。\n视觉：左右说话者头像为模板内置矢量 SVG（align=left 与 align=right 各一套），不加载外部图片。可选 bubbleText 覆盖气泡内文案；可选 showFrom 绑定 content 下标（0-based）。多对话：传 bubbles（数组），每项可含 bubbleText、showFrom、align；气泡在对应 content 条目的 startFrame 入场并保留。imageSrc 为可选遗留字段，仅占位/兼容旧脚本，不参与渲染。",
-	"psychology": "社会投射",
+		"适用：显式对话/弹幕/评论体/群聊体/角色化吐槽（如“我：…你：…”、“网友：…”、“评论：…”、“有人说：…”）的口吻表达，适合做共鸣痛点、用户反馈、反对意见、现场对话等。\n不适用：仅“你是不是也…”这类单句发问但整体仍是平铺叙述时（此时优先 CENTER_FOCUS）。\n差异：纯金句大字无对话感用 TEXT_FOCUS；需配图但非气泡口径用 CENTER_FOCUS。\n视觉：左右说话者头像为模板内置矢量 SVG（align=left 与 align=right 各一套），不加载外部图片。气泡一律用 bubbles（数组）：单气泡传 1 项，多气泡传多项；每项可含 bubbleText、showFrom、align；气泡在对应 content 条目的 startFrame 入场并保留。",
+	"chinese_name": "对话气泡",
 	"image_count": "0",
 	"param_schema": {
 		"type": "object",
 		"properties": {
-			"imageSrc": {
-				"type": "string",
-				"description": "可选；兼容旧 scene-scripts，不参与渲染。头像固定为内置 SVG。",
-			},
-			"bubbleText": {
-				"type": "string",
-				"description":
-					"可选；仅用于“气泡里显示的文本”。若传入，将覆盖气泡内默认显示的 content 当前条目文本；但不影响 content 用于时序/字幕渲染。",
-			},
-			"showFrom": {
-				"type": "integer",
-				"format": "content_index",
-				"description": "可选；指定气泡展示的 content 下标（0-based，非帧数）。合法范围 0～(content 条数-1)，超出会被忽略并回退为按时间轴自动切换。",
-			},
 			"bubbles": {
 				"type": "array",
-				"description": "可选；多行对话。存在且非空时按多气泡纵向排列；每项可含 bubbleText、showFrom、align。",
+				"description": "对话气泡列表；单气泡传 1 项，多气泡传多项。每项可含 bubbleText、showFrom、align。",
 				"items": {
 					"type": "object",
 					"properties": {
-						"bubbleText": { "type": "string" },
-						"showFrom": { "type": "integer", "format": "content_index" },
-						"align": { "type": "string", "enum": ["left", "right"] },
+						"bubbleText": {
+							"type": "string",
+							"description":
+								"可选；气泡内显示文本。若传入则覆盖对应 content 条目文本；不影响 content 用于时序/字幕。",
+						},
+						"showFrom": {
+							"type": "integer",
+							"format": "content_index",
+							"description": "可选；绑定 content 下标（0-based）。缺省为该行在 bubbles 中的下标。",
+						},
+						"align": {
+							"type": "string",
+							"enum": ["left", "right"],
+							"description": "可选；left 头像在左，right 头像在右。",
+						},
 					},
 				},
 			},
 		},
-		"required": [],
+		"required": ["bubbles"],
 	},
 	"example": {
 		"template": "CHAT_BUBBLE",
@@ -68,20 +64,8 @@ export const templateMeta = {
 } as const;
 
 export interface BWChatBubbleProps extends TemplateBaseProps {
-	/** @deprecated 不参与渲染；兼容旧 scene-scripts */
-	imageSrc?: string;
-	/**
-	 * 可选：仅用于气泡里展示的文本。
-	 * 不会改变 `content` 本身（`content` 仍用于时序/字幕渲染）。
-	 */
-	bubbleText?: string;
-	/**
-	 * 可选：指定气泡展示的 content 下标（0-based）。
-	 * 超出范围将忽略并回退为按时间轴自动切换。
-	 */
-	showFrom?: number;
-	/** 多行对话；存在且非空时启用多气泡布局 */
-	bubbles?: ChatBubbleRowParam[];
+	/** 对话气泡；单气泡传 1 项，多气泡传多项 */
+	bubbles: ChatBubbleRowParam[];
 }
 
 function clampIndex(index: number, length: number): number {
@@ -302,28 +286,17 @@ function ChatBubbleRowVisual(props: {
 }
 
 export const BWChatBubble: React.FC<BWChatBubbleProps> = ({
-	bubbleText,
-	showFrom,
 	bubbles,
 	content,
 	audioSrc,
-	children,
 	style,
 }) => {
 	const frame = useCurrentFrame();
 	const { fps, height } = useVideoConfig();
 	const items = normalizeContent(content);
 
-	const activeIndex = items.findIndex((it) => frame >= it.startFrame && frame < it.startFrame + it.durationFrames);
-	const safeActiveIndex = activeIndex >= 0 ? activeIndex : 0;
-	const inRangeShowFrom =
-		typeof showFrom === "number" && Number.isFinite(showFrom) && showFrom >= 0 && showFrom < items.length;
-	const bubbleIndex = inRangeShowFrom ? showFrom! : safeActiveIndex;
-	const activeItem = items[bubbleIndex];
-
-	const multiRows = useMemo(() => {
-		if (!bubbles || bubbles.length === 0) return null;
-		return bubbles.map((b, i) => {
+	const rows = useMemo(() => {
+		return (bubbles ?? []).map((b, i) => {
 			const show = typeof b.showFrom === "number" && Number.isFinite(b.showFrom) ? Math.floor(b.showFrom) : i;
 			return {
 				key: i,
@@ -335,12 +308,11 @@ export const BWChatBubble: React.FC<BWChatBubbleProps> = ({
 	}, [bubbles, items.length]);
 
 	const rowEnterFrames = useMemo(() => {
-		if (!multiRows) return [];
 		const it = normalizeContent(content);
-		return multiRows.map((row) => (it.length > 0 ? rowEnterFrame(it, row.showFrom) : 0));
-	}, [multiRows, content]);
+		return rows.map((row) => (it.length > 0 ? rowEnterFrame(it, row.showFrom) : 0));
+	}, [rows, content]);
 
-	const rowCount = multiRows?.length ?? 1;
+	const rowCount = Math.max(rows.length, 1);
 	const fontSize = rowCount <= 1 ? 72 : rowCount === 2 ? 64 : 56;
 	const avatarPx = rowCount <= 1 ? 168 : 140;
 	const rowGap = rowCount <= 1 ? 32 : 22;
@@ -354,7 +326,7 @@ export const BWChatBubble: React.FC<BWChatBubbleProps> = ({
 	const layoutMaxPx = Math.round(height * (rowCount > 2 ? 0.78 : 0.68));
 	const rowBlockEstPx = estimateBubbleRowBlockPx(avatarPx, fontSize, rowGap);
 	const multiPadTop =
-		multiRows && multiRows.length > 0
+		rows.length > 0
 			? computeMultiBubblePadTop({
 					frame,
 					fps,
@@ -365,77 +337,6 @@ export const BWChatBubble: React.FC<BWChatBubbleProps> = ({
 				})
 			: 0;
 
-	const renderSingleBubbleContent = () => {
-		if (bubbleText) {
-			const triggerFrame = inRangeShowFrom ? items[showFrom!].startFrame : (activeItem?.startFrame ?? 0);
-			if (frame < triggerFrame) return children;
-			return bubbleText;
-		}
-		const textFromContent = activeItem?.text;
-		if (!textFromContent) return children;
-		return textFromContent;
-	};
-
-	if (multiRows && multiRows.length > 0) {
-		return (
-			<AbsoluteFill
-				style={{
-					display: "flex",
-					flexDirection: "column",
-					alignItems: "center",
-					justifyContent: "flex-start",
-					gap: bubbleStackToSubtitleGap,
-					paddingTop: "6%",
-					paddingBottom: rowCount > 2 ? 24 : 0,
-					boxSizing: "border-box",
-					...style,
-				}}
-			>
-				<div
-					style={{
-						display: "flex",
-						flexDirection: "column",
-						alignItems: "stretch",
-						width: "100%",
-						height: layoutMaxPx,
-						maxHeight: layoutMaxPx,
-						boxSizing: "border-box",
-						overflow: "hidden",
-						paddingTop: multiPadTop,
-						gap: betweenBubbleRowsGap,
-					}}
-				>
-					{multiRows.map((row) => {
-						const enterFrame = items.length > 0 ? rowEnterFrame(items, row.showFrom) : 0;
-						if (frame < enterFrame) return null;
-						const cue = items[row.showFrom];
-
-						const renderInner = () => {
-							if (row.bubbleText) return row.bubbleText;
-							return cue?.text ?? null;
-						};
-
-						return (
-							<ChatBubbleRowVisual
-								key={row.key}
-								frame={frame}
-								fps={fps}
-								enterFrame={enterFrame}
-								align={row.align}
-								fontSize={fontSize}
-								avatarPx={avatarPx}
-								gap={rowGap}
-								horizontalPad={horizontalPad}
-								renderBubbleInner={renderInner}
-							/>
-						);
-					})}
-				</div>
-				<TemplateContentRenderer content={content} audioSrc={audioSrc} />
-			</AbsoluteFill>
-		);
-	}
-
 	return (
 		<AbsoluteFill
 			style={{
@@ -443,29 +344,52 @@ export const BWChatBubble: React.FC<BWChatBubbleProps> = ({
 				flexDirection: "column",
 				alignItems: "center",
 				justifyContent: "flex-start",
-				paddingTop: "4%",
+				gap: bubbleStackToSubtitleGap,
+				paddingTop: "6%",
+				paddingBottom: rowCount > 2 ? 24 : 0,
+				boxSizing: "border-box",
 				...style,
 			}}
 		>
 			<div
 				style={{
 					display: "flex",
-					alignItems: "flex-end",
+					flexDirection: "column",
+					alignItems: "stretch",
 					width: "100%",
-					maxHeight: "68%",
+					height: layoutMaxPx,
+					maxHeight: layoutMaxPx,
+					boxSizing: "border-box",
+					overflow: "hidden",
+					paddingTop: multiPadTop,
+					gap: betweenBubbleRowsGap,
 				}}
 			>
-				<ChatBubbleRowVisual
-					frame={frame}
-					fps={fps}
-					enterFrame={0}
-					align="left"
-					fontSize={fontSize}
-					avatarPx={avatarPx}
-					gap={rowGap}
-					horizontalPad={horizontalPad}
-					renderBubbleInner={renderSingleBubbleContent}
-				/>
+				{rows.map((row) => {
+					const enterFrame = items.length > 0 ? rowEnterFrame(items, row.showFrom) : 0;
+					if (frame < enterFrame) return null;
+					const cue = items[row.showFrom];
+
+					const renderInner = () => {
+						if (row.bubbleText) return row.bubbleText;
+						return cue?.text ?? null;
+					};
+
+					return (
+						<ChatBubbleRowVisual
+							key={row.key}
+							frame={frame}
+							fps={fps}
+							enterFrame={enterFrame}
+							align={row.align}
+							fontSize={fontSize}
+							avatarPx={avatarPx}
+							gap={rowGap}
+							horizontalPad={horizontalPad}
+							renderBubbleInner={renderInner}
+						/>
+					);
+				})}
 			</div>
 			<TemplateContentRenderer content={content} audioSrc={audioSrc} />
 		</AbsoluteFill>

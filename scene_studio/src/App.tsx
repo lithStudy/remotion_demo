@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   api,
   getToken,
+  isDraftGenerating,
+  isJobActive,
   setToken,
   type JobStatus,
   type ProjectInfo,
@@ -16,6 +18,29 @@ import { ProjectHomeScreen } from "./screens/ProjectHomeScreen";
 import { ProjectListScreen } from "./screens/ProjectListScreen";
 import { ScriptsShell } from "./screens/scripts/ScriptsShell";
 import type { Screen } from "./types";
+
+function applyJobStart(
+  setJob: (j: JobStatus) => void,
+  setCurrent: (n: string) => void,
+  setScreen: (s: Screen) => void,
+  name: string,
+  kind: string,
+  res: { jobId: string; status: string; phase: string },
+) {
+  setJob({
+    jobId: res.jobId,
+    name,
+    kind,
+    status: res.status,
+    phase: res.phase,
+    logs: [],
+    error: null,
+    createdAt: new Date().toISOString(),
+    finishedAt: null,
+  });
+  setCurrent(name);
+  setScreen("job");
+}
 
 export default function App() {
   const [authed, setAuthed] = useState(Boolean(getToken()));
@@ -62,12 +87,18 @@ export default function App() {
     if (!authed) return;
     (async () => {
       try {
-        const [p, t] = await Promise.all([
+        const [p, t, active] = await Promise.all([
           api.listProjects(),
           api.listTemplates(),
+          api.activeJob(),
         ]);
         setProjects(p.projects);
         setTemplates(t.templates);
+        if (active.job) {
+          setJob(active.job);
+          setCurrent(active.job.name);
+          setScreen("job");
+        }
       } catch (e) {
         setError(String(e));
         if (String(e).includes("401") || String(e).includes("token")) {
@@ -78,11 +109,12 @@ export default function App() {
     })();
   }, [authed]);
 
+  const activeJobId = isJobActive(job) ? job!.jobId : null;
   useEffect(() => {
-    if (!job || job.status === "succeeded" || job.status === "failed") return;
+    if (!activeJobId) return;
     const id = window.setInterval(async () => {
       try {
-        const st = await api.jobStatus(job.jobId);
+        const st = await api.jobStatus(activeJobId);
         setJob(st);
         if (st.status === "succeeded") {
           await refreshProjects();
@@ -104,7 +136,7 @@ export default function App() {
       }
     }, 1500);
     return () => window.clearInterval(id);
-  }, [job, refreshProjects]);
+  }, [activeJobId, refreshProjects]);
 
   async function onLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -143,20 +175,51 @@ export default function App() {
 
   async function startGen(name: string) {
     setError(null);
-    const res = await api.startGenerate(name, pauseAfterStep0);
-    setJob({
-      jobId: res.jobId,
-      name,
-      kind: "generate",
-      status: res.status,
-      phase: res.phase,
-      logs: [],
-      error: null,
-      createdAt: new Date().toISOString(),
-      finishedAt: null,
+    const active = await api.activeJob();
+    let force = false;
+    if (isJobActive(active.job)) {
+      if (
+        !window.confirm("已有生成任务进行中，确认取消并重新生成分镜？")
+      ) {
+        return;
+      }
+      force = true;
+    }
+    const res = await api.startGenerate(name, pauseAfterStep0, { force });
+    applyJobStart(setJob, setCurrent, setScreen, name, "generate", res);
+  }
+
+  async function startStep1(name: string) {
+    setError(null);
+    const active = await api.activeJob();
+    if (isDraftGenerating(active.job)) {
+      throw new Error("正在生成草稿（Step0），不允许生成脚本");
+    }
+    let force = false;
+    if (isJobActive(active.job)) {
+      if (
+        !window.confirm("已有生成任务进行中，确认取消并重新生成脚本？")
+      ) {
+        return;
+      }
+      force = true;
+    }
+    const res = await api.continueStep1(name, { force });
+    applyJobStart(setJob, setCurrent, setScreen, name, "step1", res);
+  }
+
+  async function regenerateCurrentJob() {
+    if (!job) return;
+    setError(null);
+    if (job.kind === "step1") {
+      const res = await api.continueStep1(job.name, { force: true });
+      applyJobStart(setJob, setCurrent, setScreen, job.name, "step1", res);
+      return;
+    }
+    const res = await api.startGenerate(job.name, pauseAfterStep0, {
+      force: true,
     });
-    setCurrent(name);
-    setScreen("job");
+    applyJobStart(setJob, setCurrent, setScreen, job.name, "generate", res);
   }
 
   function goProjectHome() {
@@ -202,6 +265,7 @@ export default function App() {
           project={currentProject}
           pauseAfterStep0={pauseAfterStep0}
           setPauseAfterStep0={setPauseAfterStep0}
+          activeJob={isJobActive(job) && job?.name === currentProject.name ? job : null}
           onBack={() => {
             setScreen("list");
             setCurrent(null);
@@ -209,6 +273,9 @@ export default function App() {
           onGenerate={() => startGen(currentProject.name)}
           onOpenDraft={() => openDraft(currentProject.name)}
           onOpenScripts={() => openScripts(currentProject.name)}
+          onOpenJob={() => {
+            if (job) setScreen("job");
+          }}
           onDeleted={async () => {
             setCurrent(null);
             setScreen("list");
@@ -244,6 +311,9 @@ export default function App() {
           job={job}
           onBack={goProjectHome}
           onReviewDraft={() => openDraft(job.name)}
+          onRegenerate={() =>
+            regenerateCurrentJob().catch((e) => setError(String(e)))
+          }
           error={error}
         />
       ) : null}
@@ -256,20 +326,9 @@ export default function App() {
           onBack={goProjectHome}
           onError={setError}
           error={error}
+          scriptGenBlocked={isDraftGenerating(job)}
           onContinue={async () => {
-            const res = await api.continueStep1(current);
-            setJob({
-              jobId: res.jobId,
-              name: current,
-              kind: "step1",
-              status: "running",
-              phase: "step1",
-              logs: [],
-              error: null,
-              createdAt: new Date().toISOString(),
-              finishedAt: null,
-            });
-            setScreen("job");
+            await startStep1(current);
           }}
         />
       ) : null}
@@ -288,6 +347,7 @@ export default function App() {
           onError={setError}
           error={error}
           onBack={goProjectHome}
+          scriptGenBlocked={isDraftGenerating(job)}
           onOpenSync={async () => {
             const prev = await api.syncPreview(
               current,
@@ -302,19 +362,7 @@ export default function App() {
             setSyncOpen(true);
           }}
           onRegenAllScripts={async () => {
-            const res = await api.continueStep1(current);
-            setJob({
-              jobId: res.jobId,
-              name: current,
-              kind: "step1",
-              status: "running",
-              phase: "step1",
-              logs: [],
-              error: null,
-              createdAt: new Date().toISOString(),
-              finishedAt: null,
-            });
-            setScreen("job");
+            await startStep1(current);
           }}
         />
       ) : null}

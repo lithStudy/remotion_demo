@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api, type TemplateInfo } from "../../api";
 import { AppShell } from "../../components/AppShell";
+import { TemplatePicker } from "../../components/TemplatePicker";
 import { useIsNarrow } from "../../hooks/useIsNarrow";
 import { ParamForm } from "../../ParamForm";
 import {
-  itemHasContent,
   moveContentAcrossItems,
   reorderItemOrders,
   sceneHasScriptContent,
@@ -12,6 +12,8 @@ import {
   syncItemsParamArrays,
 } from "../../scriptHelpers";
 import type { DrillLevel, Item, Scene } from "../../types";
+
+const AUTOSAVE_MS = 400;
 
 type Props = {
   name: string;
@@ -27,6 +29,7 @@ type Props = {
   onBack: () => void;
   onOpenSync: () => Promise<void>;
   onRegenAllScripts: () => Promise<void>;
+  scriptGenBlocked?: boolean;
   error: string | null;
 };
 
@@ -38,6 +41,92 @@ export function ScriptsShell(props: Props) {
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [moreOpen, setMoreOpen] = useState(false);
+
+  const scriptsRef = useRef(props.scripts);
+  scriptsRef.current = props.scripts;
+  const propsRef = useRef(props);
+  propsRef.current = props;
+  const lastSavedJsonRef = useRef<string | null>(null);
+  const saveSeqRef = useRef(0);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const persistScriptsRef = useRef<(payload: Record<string, unknown>) => Promise<void>>(
+    async () => {},
+  );
+
+  function scheduleAutosave() {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      timerRef.current = null;
+      void persistScriptsRef.current(scriptsRef.current);
+    }, AUTOSAVE_MS);
+  }
+
+  async function persistScripts(payload: Record<string, unknown>) {
+    const sentJson = JSON.stringify(payload);
+    if (sentJson === lastSavedJsonRef.current) return;
+    const seq = ++saveSeqRef.current;
+    const p = propsRef.current;
+    p.onError(null);
+    try {
+      const res = await api.saveScripts(p.name, payload);
+      if (seq !== saveSeqRef.current) return;
+      p.setWarnings(res.warnings || []);
+      const currentJson = JSON.stringify(scriptsRef.current);
+      if (currentJson === sentJson) {
+        const savedJson = JSON.stringify(res.scripts);
+        lastSavedJsonRef.current = savedJson;
+        if (savedJson !== sentJson) {
+          p.setScripts(res.scripts);
+        }
+      } else {
+        lastSavedJsonRef.current = JSON.stringify(res.scripts);
+        scheduleAutosave();
+      }
+    } catch (e) {
+      if (seq !== saveSeqRef.current) return;
+      p.onError(String(e));
+    }
+  }
+  persistScriptsRef.current = persistScripts;
+
+  async function flushSave() {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    await persistScripts(scriptsRef.current);
+  }
+
+  useEffect(() => {
+    lastSavedJsonRef.current = JSON.stringify(scriptsRef.current);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  }, [props.name]);
+
+  useEffect(() => {
+    if (lastSavedJsonRef.current === null) {
+      lastSavedJsonRef.current = JSON.stringify(props.scripts);
+      return;
+    }
+    const json = JSON.stringify(props.scripts);
+    if (json === lastSavedJsonRef.current) return;
+    scheduleAutosave();
+  }, [props.scripts]);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      const json = JSON.stringify(scriptsRef.current);
+      if (
+        lastSavedJsonRef.current !== null &&
+        json !== lastSavedJsonRef.current
+      ) {
+        void api.saveScripts(propsRef.current.name, scriptsRef.current);
+      }
+    };
+  }, []);
 
   function clearContentFocus() {
     setEditingKey(null);
@@ -123,28 +212,28 @@ export function ScriptsShell(props: Props) {
     ]);
   }
 
-  async function onRegenParam() {
-    if (paramItemIdx == null) return;
-    const scriptsSnapshot = props.scripts;
+  async function onRegenParam(itemIdx: number) {
+    const requestScripts = scriptsRef.current;
     setRegenBusy(true);
     props.onError(null);
     try {
       const res = await api.regenParam(
         props.name,
-        scriptsSnapshot,
+        requestScripts,
         sceneIdx,
-        paramItemIdx,
+        itemIdx,
       );
-      const nextScenes = [...((scriptsSnapshot.scenes as Scene[]) || [])];
+      const latest = scriptsRef.current;
+      const nextScenes = [...((latest.scenes as Scene[]) || [])];
       const sc = nextScenes[sceneIdx];
-      if (!sc?.items?.[paramItemIdx]) return;
+      if (!sc?.items?.[itemIdx]) return;
       const nextItems = [...sc.items];
-      nextItems[paramItemIdx] = {
-        ...nextItems[paramItemIdx],
+      nextItems[itemIdx] = {
+        ...nextItems[itemIdx],
         param: res.param,
       };
       nextScenes[sceneIdx] = { ...sc, items: nextItems };
-      props.setScripts({ ...scriptsSnapshot, scenes: nextScenes });
+      props.setScripts({ ...latest, scenes: nextScenes });
     } catch (e) {
       props.onError(String(e));
     } finally {
@@ -156,13 +245,6 @@ export function ScriptsShell(props: Props) {
   const showListChrome = !narrow || drill === "scenes";
   const showSceneNav = showListChrome && (!narrow || drill === "scenes");
   const showScript = (!narrow || drill === "script") && !showParamPage;
-
-  async function saveScripts() {
-    props.onError(null);
-    const res = await api.saveScripts(props.name, props.scripts);
-    props.setScripts(res.scripts);
-    props.setWarnings(res.warnings || []);
-  }
 
   const shellBack = () => {
     if (narrow && drill === "param") {
@@ -217,7 +299,7 @@ export function ScriptsShell(props: Props) {
               type="button"
               className="primary"
               onClick={() =>
-                saveScripts().catch((e) => props.onError(String(e)))
+                flushSave().catch((e) => props.onError(String(e)))
               }
             >
               保存
@@ -227,7 +309,7 @@ export function ScriptsShell(props: Props) {
           <button
             type="button"
             className="primary"
-            onClick={() => saveScripts().catch((e) => props.onError(String(e)))}
+            onClick={() => flushSave().catch((e) => props.onError(String(e)))}
           >
             保存
           </button>
@@ -238,8 +320,17 @@ export function ScriptsShell(props: Props) {
         <div className="more-sheet">
           <button
             type="button"
-            disabled={regenAllBusy}
+            disabled={regenAllBusy || props.scriptGenBlocked}
+            title={
+              props.scriptGenBlocked
+                ? "正在生成草稿，不允许生成脚本"
+                : undefined
+            }
             onClick={async () => {
+              if (props.scriptGenBlocked) {
+                props.onError("正在生成草稿，不允许生成脚本");
+                return;
+              }
               if (
                 !window.confirm(
                   "将根据当前场景拆分草稿全量重新生成分镜脚本，覆盖现有脚本（含未保存编辑）。是否继续？",
@@ -251,6 +342,7 @@ export function ScriptsShell(props: Props) {
               setRegenAllBusy(true);
               props.onError(null);
               try {
+                await flushSave();
                 await props.onRegenAllScripts();
               } catch (e) {
                 props.onError(String(e));
@@ -363,62 +455,52 @@ export function ScriptsShell(props: Props) {
                 <div className="item-group" key={ii}>
                   <div className="item-group-head">
                     <span className="item-order">#{it.order ?? ii + 1}</span>
-                    <select
-                      className="template-select"
+                    <TemplatePicker
+                      templates={props.templates}
                       value={it.template || ""}
-                      onChange={(e) =>
+                      onChange={(template) =>
                         updateItemAt(ii, {
-                          template: e.target.value,
+                          template,
                           param: {},
                         })
                       }
-                    >
-                      {props.templates.map((t) => (
-                        <option key={t.name} value={t.name}>
-                          {t.label || t.name}
-                        </option>
-                      ))}
-                    </select>
-                    <button
-                      type="button"
-                      className="primary"
-                      onClick={() => openParam(ii)}
-                    >
-                      {!narrow && paramItemIdx === ii ? "收起参数" : "编辑参数"}
-                    </button>
-                    <button
-                      type="button"
-                      className="danger"
-                      disabled={itemHasContent(it)}
-                      title={
-                        itemHasContent(it)
-                          ? "item 中有口播内容时不允许删除"
-                          : undefined
-                      }
-                      onClick={() => {
-                        if (itemHasContent(it)) return;
-                        patchSceneItems(
-                          reorderItemOrders(items.filter((_, i) => i !== ii)),
-                        );
-                        clearContentFocus();
-                      }}
-                    >
-                      删 item
-                    </button>
+                    />
+                    <div className="item-group-actions">
+                      {narrow ? (
+                        <button
+                          type="button"
+                          className="add-content-btn"
+                          onClick={() =>
+                            updateItemAt(ii, {
+                              content: [...(it.content || []), { text: "" }],
+                            })
+                          }
+                        >
+                          + 口播句
+                        </button>
+                      ) : null}
+                      <button
+                        type="button"
+                        className="primary"
+                        onClick={() => openParam(ii)}
+                      >
+                        {!narrow && paramItemIdx === ii ? "收起参数" : "编辑参数"}
+                      </button>
+                      <button
+                        type="button"
+                        disabled={regenBusy}
+                        onClick={() => onRegenParam(ii)}
+                      >
+                        {regenBusy ? "重生中…" : "局部参数重生"}
+                      </button>
+                      
+                    </div>
                   </div>
 
                   {!narrow && paramItemIdx === ii ? (
                     <div className="inline-param">
-                      <div className="param-toolbar">
-                        <button
-                          type="button"
-                          disabled={regenBusy}
-                          onClick={() => onRegenParam()}
-                        >
-                          {regenBusy ? "重生中…" : "局部参数重生"}
-                        </button>
-                      </div>
                       <ParamForm
+                        templateName={it.template || null}
                         schema={
                           (props.tmap.get(it.template || "")?.paramSchema as
                             | Record<string, unknown>
@@ -655,17 +737,19 @@ export function ScriptsShell(props: Props) {
                     );
                   })}
 
-                  <button
-                    type="button"
-                    className="add-content-btn"
-                    onClick={() =>
-                      updateItemAt(ii, {
-                        content: [...(it.content || []), { text: "" }],
-                      })
-                    }
-                  >
-                    + 口播句
-                  </button>
+                  {!narrow ? (
+                    <button
+                      type="button"
+                      className="add-content-btn"
+                      onClick={() =>
+                        updateItemAt(ii, {
+                          content: [...(it.content || []), { text: "" }],
+                        })
+                      }
+                    >
+                      + 口播句
+                    </button>
+                  ) : null}
                 </div>
               ))}
 
@@ -699,12 +783,13 @@ export function ScriptsShell(props: Props) {
               <button
                 type="button"
                 disabled={regenBusy}
-                onClick={() => onRegenParam()}
+                onClick={() => onRegenParam(paramItemIdx)}
               >
                 {regenBusy ? "重生中…" : "局部参数重生"}
               </button>
             </div>
             <ParamForm
+              templateName={paramItem.template || null}
               schema={(tmpl?.paramSchema as Record<string, unknown>) || {}}
               value={paramItem.param || {}}
               syncArrayKey={tmpl?.paramArraySyncContent || null}

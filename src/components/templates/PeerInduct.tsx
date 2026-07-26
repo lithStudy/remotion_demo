@@ -32,7 +32,7 @@ export const templateMeta = {
 	"componentExport": "BWPeerInduct",
 	"description":
 		"适用：先并列铺陈 2～3 个同级要点（各配一图、随口播依次出现），最后用单独一行口播+一图做归纳收束；视觉上前提横排在上，归纳在下方居中，连线表示「共同指向结论」。\n差异：纯节拍情绪递进、无「并列→归纳」结构用 BEAT_SEQUENCE；并列块无总归纳行用 PANEL_GRID。\n口播条为 item 外层 content[]；premises[i].showFrom 对齐前提第 i 条（可省略则等于 i）；conclusion.showFrom 默认最后一条 content。\n参数：premises（2～3 项，每项 imageSrc、可选 enterEffect、可选 showFrom）；conclusion（必填 imageSrc、可选 enterEffect、showFrom、tone）。",
-	"psychology": "并列前提 → 归纳收束",
+	"chinese_name": "多前提归纳收束",
 	"image_count": "3-4",
 	"param_schema": {
 		"type": "object",

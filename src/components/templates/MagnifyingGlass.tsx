@@ -17,7 +17,7 @@ export const templateMeta = {
 	"componentExport": "BWMagnifyingGlass",
 	"description":
 		"适用：需要把观众注意力“锁定到一个关键词/短语/关键细节/核心发现”上（可用于揭秘、关键洞察、核心卖点、重要结论的聚焦强调），且口播中存在明确的落点句（如“关键在于…”“核心是…”“结论是…”）。\n差异：本模板要求 param.anchors 非空，且通过 showFrom 关联 content；没有清晰落点/锚点就不要用；不要用它打包多个机制+多个例子+多个结论。\n参数：anchors.text 对准要聚焦的关键词（建议 1～2 个高价值锚点）。",
-	"psychology": "好奇心缺口",
+	"chinese_name": "放大镜揭秘",
 	"image_count": 0,
 	"param_schema": {
 		"type": "object",

@@ -11,7 +11,7 @@ metadata:
   "name": "TIMELINE",
   "componentExport": "BWTimeline",
   "description": "适用：历史演进、时间顺序、前后对比带明确时间轴。\n差异：无时间线的并列要点用 PANEL_GRID；操作步骤用 STEP_LIST。\n参数：images 3～5 项，按数组顺序从左到右沿轴线均分；每项可选 label，轴上方节点标注在配图上方、轴下方节点标注在配图下方。",
-  "psychology": "叙事连贯性",
+  "chinese_name": "时间轴演进",
   "image_count": "3-5",
   "param_schema": {
     "type": "object",

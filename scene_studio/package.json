@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "export:param-override-requirements": "python scripts/run_pipeline_mod.py narrator_pipeline.codegen.export_param_override_requirements",
+    "check:param-overrides": "python scripts/run_pipeline_mod.py narrator_pipeline.codegen.check_param_overrides",
+    "generate:param-overrides": "npm run export:param-override-requirements && python scripts/run_pipeline_mod.py narrator_pipeline.codegen.generate_param_overrides",
+    "build": "npm run check:param-overrides && tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"
   },

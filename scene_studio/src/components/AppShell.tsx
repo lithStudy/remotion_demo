@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { ThemeToggle } from "./ThemeToggle";
 
 type Props = {
   title?: string;
@@ -33,7 +34,10 @@ export function AppShell({
             {subtitle ? <p className="topbar-sub">{subtitle}</p> : null}
           </div>
         </div>
-        {actions ? <div className="topbar-actions">{actions}</div> : null}
+        <div className="topbar-actions">
+          <ThemeToggle />
+          {actions}
+        </div>
       </header>
       {error ? <div className="banner-error">{error}</div> : null}
       <main className="app-main">{children}</main>

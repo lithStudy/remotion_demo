@@ -11,7 +11,7 @@ metadata:
   "name": "CAUSE_CHAIN",
   "componentExport": "BWCauseChain",
   "description": "适用：同一镜头内讲清「因→果→再果」传导、机制链条；每段口播对应链上一环。\n差异：有时间刻度/年代演进用 TIMELINE；单标题+多句解释用 METHOD_STACK；左右对照用 SPLIT_COMPARE；情绪递进换图用 BEAT_SEQUENCE。\n参数：nodes 2～4 项，每项 label（短标签）、imageSrc、showFrom（content 下标 0-based，非帧数）；可选 layout 为 horizontal（默认，左→右链）或 vertical（竖向堆叠，适配竖屏）；anchors 可选，顶部依次展示关键词并绑定音效。",
-  "psychology": "因果可视化",
+  "chinese_name": "因果链条",
   "image_count": "2-4",
   "content_min_items": 2,
   "content_max_items": 6,

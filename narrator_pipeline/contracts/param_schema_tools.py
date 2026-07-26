@@ -90,6 +90,37 @@ def task_key(scene_id: str, order: Any, path: list[str | int]) -> str:
 	return "_".join(parts)
 
 
+def _resolve_ref(
+	schema: dict,
+	root_schema: dict | None,
+	*,
+	warn: Callable[[str], None] | None = None,
+) -> dict:
+	"""解析 JSON Schema $ref（仅 #/$defs/name），与前端 resolveRef 对齐。"""
+	if not isinstance(schema, dict):
+		return schema
+	ref = schema.get("$ref")
+	if not ref or not isinstance(ref, str):
+		return schema
+	if not isinstance(root_schema, dict):
+		if warn:
+			warn(f"$ref={ref!r} 无法解析：缺少 root schema")
+		return schema
+	if not ref.startswith("#/$defs/"):
+		if warn:
+			warn(f"$ref={ref!r} 不支持（仅 #/$defs/...）")
+		return schema
+	name = ref[len("#/$defs/") :]
+	defs = root_schema.get("$defs")
+	def_node = defs.get(name) if isinstance(defs, dict) else None
+	if not isinstance(def_node, dict):
+		if warn:
+			warn(f"$ref={ref!r} 无法解析：未找到 $defs.{name}")
+		return schema
+	rest = {k: v for k, v in schema.items() if k != "$ref"}
+	return {**def_node, **rest}
+
+
 def _normalize_schema_node(schema: dict) -> dict:
 	"""将 templateMeta 中的非标准 JSON Schema 节点规范为校验器可识别的形态。"""
 	if not isinstance(schema, dict):
@@ -118,9 +149,15 @@ def _normalize_schema_node(schema: dict) -> dict:
 	return out
 
 
-def _nonempty_matches_oneof_branch(val: Any, br: dict) -> bool:
+def _nonempty_matches_oneof_branch(
+	val: Any,
+	br: dict,
+	root_schema: dict | None = None,
+) -> bool:
 	"""值在该 oneOf 分支下是否视为非空（用于必填校验）。"""
-	br = _normalize_schema_node(br) if isinstance(br, dict) else br
+	if isinstance(br, dict):
+		br = _resolve_ref(br, root_schema)
+		br = _normalize_schema_node(br)
 	st = br.get("type")
 	if st == "string":
 		return isinstance(val, str) and bool(val.strip())
@@ -128,6 +165,8 @@ def _nonempty_matches_oneof_branch(val: Any, br: dict) -> bool:
 		if not isinstance(val, list) or len(val) == 0:
 			return False
 		items = br.get("items") or {}
+		if isinstance(items, dict):
+			items = _resolve_ref(items, root_schema)
 		if items.get("type") == "string":
 			return any(isinstance(x, str) and str(x).strip() for x in val)
 		return True
@@ -138,21 +177,31 @@ def _nonempty_matches_oneof_branch(val: Any, br: dict) -> bool:
 		req = br.get("required") or []
 		for rk in req:
 			sub = props.get(rk, {}) if isinstance(props.get(rk), dict) else {}
-			if rk not in val or _is_empty_value(val.get(rk), sub):
+			if rk not in val or _is_empty_value(val.get(rk), sub, root_schema):
 				return False
 		return True
 	return False
 
 
-def _is_empty_value(val: Any, schema: dict) -> bool:
+def _is_empty_value(
+	val: Any,
+	schema: dict,
+	root_schema: dict | None = None,
+) -> bool:
 	"""判断值是否算作“空”，依据schema类型定义。主要用于必填项校验"""
 	if val is None:
 		return True
+	if isinstance(schema, dict):
+		schema = _resolve_ref(schema, root_schema)
 	if "oneOf" in schema:
 		branches = schema.get("oneOf")
 		if not isinstance(branches, list):
 			return True
-		return not any(_nonempty_matches_oneof_branch(val, br) for br in branches if isinstance(br, dict))
+		return not any(
+			_nonempty_matches_oneof_branch(val, br, root_schema)
+			for br in branches
+			if isinstance(br, dict)
+		)
 	st = schema.get("type")
 	if st == "string":
 		return isinstance(val, str) and not val.strip()
@@ -193,10 +242,12 @@ def _validate_and_normalize_value(
 	"""递归校验和归一化单个字段/对象的值（类型、枚举、边界等），不合法时警告。"""
 	if val is None:
 		return
-	schema = _normalize_schema_node(schema)
 	param_root: dict = ctx["param_root"]
 	warn: Callable[[str], None] = ctx["warn"]
+	root_schema: dict | None = ctx.get("root_schema")
 	path_s = ".".join(str(p) for p in path) or "(root)"
+	schema = _resolve_ref(schema, root_schema, warn=warn)
+	schema = _normalize_schema_node(schema)
 
 	if "oneOf" in schema:
 		branches = schema.get("oneOf")
@@ -206,6 +257,7 @@ def _validate_and_normalize_value(
 		for br in branches:
 			if not isinstance(br, dict):
 				continue
+			br = _resolve_ref(br, root_schema, warn=warn)
 			br = _normalize_schema_node(br)
 			st = br.get("type")
 			if st == "string" and isinstance(val, str):
@@ -275,7 +327,8 @@ def _validate_and_normalize_value(
 		props = schema.get("properties") or {}
 		req = schema.get("required") or []
 		for rk in req:
-			if rk not in val or _is_empty_value(val.get(rk), props.get(rk, {})):
+			sub = props.get(rk, {}) if isinstance(props.get(rk), dict) else {}
+			if rk not in val or _is_empty_value(val.get(rk), sub, root_schema):
 				warn(f"`{path_s}.{rk}` 必填缺失或为空")
 		# 校验每个key子项
 		for key, sub in props.items():
@@ -341,11 +394,13 @@ def validate_param_with_schema(
 		"param_root": param,
 		"warn": warn,
 		"content_len": content_len,
+		"root_schema": schema,
 	}
 	props = schema.get("properties") or {}
 	req = schema.get("required") or []
 	for rk in req:
-		if rk not in param or _is_empty_value(param.get(rk), props.get(rk, {})):
+		sub = props.get(rk, {}) if isinstance(props.get(rk), dict) else {}
+		if rk not in param or _is_empty_value(param.get(rk), sub, schema):
 			warn(f"必填字段 `{rk}` 缺失或为空")
 	for key, sub in props.items():
 		if key not in param:
@@ -365,16 +420,22 @@ def _normalize_image_enter_effects_in_param(
 	"""
 	def walk_obj(pobj: dict, sobj: dict, pfx: str) -> None:
 		"""递归遍历以schema为准的对象树，处理嵌套enterEffect"""
+		sobj = _resolve_ref(sobj, schema, warn=warn)
 		props = sobj.get("properties") or {}
 		for k, sub in props.items():
 			if k not in pobj:
 				continue
 			v = pobj[k]
+			if not isinstance(sub, dict):
+				continue
+			sub = _resolve_ref(sub, schema, warn=warn)
 			st = sub.get("type")
 			if st == "object" and isinstance(v, dict):
 				walk_obj(v, sub, f"{pfx}.{k}" if pfx else k)
 			elif st == "array" and isinstance(v, list):
 				items = sub.get("items") or {}
+				if isinstance(items, dict):
+					items = _resolve_ref(items, schema, warn=warn)
 				for i, el in enumerate(v):
 					if items.get("type") == "object" and isinstance(el, dict):
 						walk_obj(el, items, f"{pfx}.{k}[{i}]" if pfx else f"{k}[{i}]")
@@ -385,8 +446,13 @@ def _normalize_image_enter_effects_in_param(
 		if top not in param:
 			continue
 		v = param[top]
+		if not isinstance(sub, dict):
+			continue
+		sub = _resolve_ref(sub, schema, warn=warn)
 		if sub.get("type") == "array" and isinstance(v, list):
 			items = sub.get("items") or {}
+			if isinstance(items, dict):
+				items = _resolve_ref(items, schema, warn=warn)
 			for i, el in enumerate(v):
 				if items.get("type") == "object" and isinstance(el, dict):
 					walk_obj(el, items, f"{top}[{i}]")

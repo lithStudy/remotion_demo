@@ -1,5 +1,6 @@
-import React from "react";
+import React, { createContext, useContext } from "react";
 import { AbsoluteFill, Series, staticFile } from "remotion";
+import { z } from "zod";
 import {
 	BWImageBreath,
 	BWCenterFocus,
@@ -28,167 +29,72 @@ import {
 	BWTreeDiagram,
 	BWSubtitle,
 } from "../components";
-import type { ContentItem } from "../components/templates/shared";
-
-/** 无口播时间轴时的展示停留（与各模板入场动画量级一致） */
-const SHOWCASE_FALLBACK_FRAMES = 75;
+import {
+	SC_BEAT_CONTENT,
+	SC_PUNCH_CONTENT,
+	SC_PEER_INDUCT_CONTENT,
+	SC_METHOD_CONTENT,
+	SC_CASE_CONTENT,
+	SC_COGNITIVE_CONTENT,
+	SC_CHAT_BUBBLE_CONTENT,
+	SC_KPI_HERO_CONTENT,
+	SC_MAGNIFY_CONTENT,
+	SC_PROGRESS_CONTENT,
+	SC_STAT_CONTENT,
+	SC_CAUSE_CONTENT,
+	SC_CHECKLIST_CONTENT,
+	SC_PANEL_CONTENT,
+	SC_DATA_TABLE_CONTENT,
+	SC_TREE_DIAGRAM_CONTENT,
+	SC_STEP_LIST_START,
+	SC_STEP_LIST_STAGGER,
+	showcaseDuration,
+} from "./showcaseStillJobs";
 
 const img = (path: string) => staticFile(path);
 
-/** 口播 coverage：最后一条结束帧 = max(startFrame + durationFrames) */
-const durationFromContent = (items: ContentItem[]): number =>
-	items.length === 0
-		? SHOWCASE_FALLBACK_FRAMES
-		: Math.max(...items.map((c) => c.startFrame + c.durationFrames));
-
-/** StaggeredList 末项入场延迟 + 入场 spring(20) + 尾段阅读 */
-const durationAfterLastStagger = (
-	lastEntryDelay: number,
-	settleFrames = 20,
-	tailFrames = 40,
-): number => lastEntryDelay + settleFrames + tailFrames;
-
-/** TIMELINE：轴线 spring 与末节点出现后的可视尾段 */
-const durationForTimelineShowcase = (
-	maxImageStart: number,
-	lineSpringFrames = 50,
-	nodeSettleFrames = 22,
-	tailFrames = 28,
-): number => Math.max(lineSpringFrames, maxImageStart + nodeSettleFrames) + tailFrames;
-
-const SC_BEAT_CONTENT: ContentItem[] = [
-	{ text: "看到规律就等于财富密码？", startFrame: 0, durationFrames: 28 },
-	{ text: "那是幻觉。", startFrame: 28, durationFrames: 22 },
-	{ text: "持续误解就是慢性自杀。", startFrame: 50, durationFrames: 25 },
-];
-
-const SC_PUNCH_CONTENT: ContentItem[] = [
-	{ text: "什么？", startFrame: 0, durationFrames: 22 },
-	{ text: "你说我瞎说？", startFrame: 22, durationFrames: 24 },
-	{ text: "你是不相信中国的科技力量吗？", startFrame: 46, durationFrames: 28 },
-	{ text: "你是不爱国吗？", startFrame: 74, durationFrames: 24 },
-];
-
-const SC_PEER_INDUCT_CONTENT: ContentItem[] = [
-	{ text: "样本太小会误判。", startFrame: 0, durationFrames: 24 },
-	{ text: "指标口径不一致也会误判。", startFrame: 24, durationFrames: 26 },
-	{ text: "幸存者偏差还会再误判一次。", startFrame: 50, durationFrames: 26 },
-	{ text: "结论：先核对数据再下判断。", startFrame: 76, durationFrames: 32 },
-];
-
-const SC_METHOD_CONTENT: ContentItem[] = [
-	{ text: "第一，警惕情绪画面。", startFrame: 0, durationFrames: 22 },
-	{ text: "先识别这是在煽动情绪。", startFrame: 22, durationFrames: 20 },
-	{ text: "别让极端画面直接接管判断。", startFrame: 42, durationFrames: 20 },
-	{ text: "再问它到底普遍，还是离奇。", startFrame: 62, durationFrames: 13 },
-];
-
-const SC_CASE_CONTENT: ContentItem[] = [
-	{ text: "某个百岁老人每天抽烟喝酒，", startFrame: 0, durationFrames: 18 },
-	{ text: "大家就觉得养生没用。", startFrame: 18, durationFrames: 16 },
-	{ text: "其实那只是因为他基因逆天，", startFrame: 34, durationFrames: 16 },
-	{ text: "而那些学他抽烟喝酒的人，", startFrame: 50, durationFrames: 14 },
-	{ text: "大多没活到能接受采访的年纪。", startFrame: 64, durationFrames: 11 },
-];
-
-const SC_COGNITIVE_CONTENT: ContentItem[] = [
-	{ text: "你以为结果只取决于努力程度。", startFrame: 0, durationFrames: 32 },
-	{ text: "真正拉开差距的是认知和选择。", startFrame: 32, durationFrames: 43 },
-];
-
-/** CHAT_BUBBLE：两条 content 对齐两行气泡的入场与字幕 */
-const SC_CHAT_BUBBLE_CONTENT: ContentItem[] = [
-	{ text: "这数据越看越焦虑，我是不是该跟着慌？", startFrame: 0, durationFrames: 36 },
-	{ text: "先把口径和样本量核对清楚，再决定要不要被情绪带着走。", startFrame: 36, durationFrames: 44 },
-];
-
-const SC_KPI_HERO_CONTENT: ContentItem[] = [
-	{ text: "满意度稳居高位", startFrame: 0, durationFrames: 45 },
-	{ text: "留存同样扎实", startFrame: 45, durationFrames: 45 },
-	{ text: "转化还在放大", startFrame: 90, durationFrames: 45 },
-];
-
-const SC_MAGNIFY_CONTENT: ContentItem[] = [
-	{ text: "本质是供需失衡在起作用", startFrame: 0, durationFrames: 40 },
-];
-
-const SC_PROGRESS_CONTENT: ContentItem[] = [
-	{ text: "整体进度已经走到近八成。", startFrame: 0, durationFrames: 42 },
-	{ text: "核心模块的测试覆盖也过半。", startFrame: 42, durationFrames: 42 },
-	{ text: "文档与交付节奏和里程碑对齐。", startFrame: 84, durationFrames: 42 },
-];
-
-const SC_STAT_CONTENT: ContentItem[] = [
-	{ text: "去年基数还偏低。", startFrame: 0, durationFrames: 60 },
-	{ text: "今年明显抬升。", startFrame: 60, durationFrames: 60 },
-	{ text: "明年冲刺更高目标。", startFrame: 120, durationFrames: 60 },
-];
-
-const SC_CAUSE_CONTENT: ContentItem[] = [
-	{ text: "外界先给你一个刺激", startFrame: 0, durationFrames: 24 },
-	{ text: "大脑再用偏见去加工", startFrame: 24, durationFrames: 26 },
-	{ text: "最后得到偏离事实的判断", startFrame: 50, durationFrames: 25 },
-];
-
-const SC_CHECKLIST_CONTENT: ContentItem[] = [
-	{ text: "先把事实写清楚", startFrame: 0, durationFrames: 24 },
-	{ text: "再把推断分开写", startFrame: 24, durationFrames: 25 },
-	{ text: "最后保证可追溯", startFrame: 49, durationFrames: 26 },
-];
-
-const SC_PANEL_CONTENT: ContentItem[] = [
-	{ text: "第一块拼图是输入", startFrame: 0, durationFrames: 24 },
-	{ text: "第二块是处理机制", startFrame: 24, durationFrames: 26 },
-	{ text: "第三块是输出行为", startFrame: 50, durationFrames: 25 },
-];
-
-const SC_DATA_TABLE_CONTENT: ContentItem[] = [
-	{ text: "先看标准版定位", startFrame: 0, durationFrames: 26 },
-	{ text: "再看 Pro 的升级点", startFrame: 26, durationFrames: 26 },
-	{ text: "最后 Ultra 拉满体验", startFrame: 52, durationFrames: 28 },
-];
-
-const SC_TREE_DIAGRAM_CONTENT: ContentItem[] = [
-	{ text: "抵制华为的背景是什么？", startFrame: 0, durationFrames: 22 },
-	{ text: "分为制裁和去华为化两大类", startFrame: 22, durationFrames: 22 },
-	{ text: "制裁又分为惩罚性制裁和制约性制裁", startFrame: 44, durationFrames: 26 },
-	{ text: "去华为化分为技术原因和法理原因", startFrame: 70, durationFrames: 26 },
-];
-
-/** STEP_LIST 演示：与下方 BWStepList 的 startFrame / staggerDelay / steps 数量一致 */
-const SC_STEP_LIST_START = 0;
-const SC_STEP_LIST_STAGGER = 12;
-const SC_STEP_LIST_STEP_COUNT = 3;
-const SC_STEP_LIST_LAST_DELAY =
-	SC_STEP_LIST_START + (SC_STEP_LIST_STEP_COUNT - 1) * SC_STEP_LIST_STAGGER;
-
-/** TIMELINE 演示：images 中最大的 startFrame */
-const SC_TIMELINE_MAX_IMAGE_START = 30;
-
 type ShowcaseSegment = {
+	/** 模板注册名（如 BEAT_SEQUENCE）；非模板演示段可用非 SCREAMING_SNAKE 的 key（如 image-breath） */
 	key: string;
 	durationInFrames: number;
 	content: React.ReactNode;
 };
 
+export const TemplateShowcaseSchema = z.object({
+	showLabels: z.boolean(),
+});
+
+export type TemplateShowcaseProps = z.infer<typeof TemplateShowcaseSchema>;
+
+const ShowcaseLabelsContext = createContext(true);
+
+/** Studio 预览用顶栏说明；导出预览图时 showLabels=false 不渲染 */
+const ShowcaseLabel: React.FC<{ text: string }> = ({ text }) => {
+	const showLabels = useContext(ShowcaseLabelsContext);
+	if (!showLabels) {
+		return null;
+	}
+	return <BWSubtitle position="top" text={text} startFrame={0} />;
+};
+
 /**
  * 全展示：覆盖当前 templates 目录已导出的模板能力。
- * 新增模板时请在此处追加一项；durationInFrames 由口播 coverage 或专用规则得出，总时长为各段之和。
+ * 新增模板：showcaseStillJobs 追加 timing（key=模板名），并在此处追加同名段内容。
  */
 const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 	{
 		key: "image-breath",
-		durationInFrames: SHOWCASE_FALLBACK_FRAMES,
+		durationInFrames: showcaseDuration("image-breath"),
 		content: (
 			<>
 				<BWImageBreath src={img("images/template/scene1_1.png")} />
-				<BWSubtitle position="top" text="BWImageBreath · 单图入场基元（breathe）" startFrame={0} />
+				<ShowcaseLabel text="BWImageBreath · 单图入场基元（breathe）" />
 			</>
 		),
 	},
 	{
-		key: "beat-sequence",
-		durationInFrames: durationFromContent(SC_BEAT_CONTENT),
+		key: "BEAT_SEQUENCE",
+		durationInFrames: showcaseDuration("BEAT_SEQUENCE"),
 		content: (
 			<>
 				<BWBeatSequence
@@ -200,13 +106,13 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					content={SC_BEAT_CONTENT}
 					anchors={[{ text: "财富密码", showFrom: 0, color: "#FF8C00", anim: "popIn" }]}
 				/>
-				<BWSubtitle position="top" text="BEAT_SEQUENCE · 节拍递进（一问一驳一锤）" startFrame={0} />
+				<ShowcaseLabel text="BEAT_SEQUENCE · 节拍递进（一问一驳一锤）" />
 			</>
 		),
 	},
 	{
-		key: "punch-caption",
-		durationInFrames: durationFromContent(SC_PUNCH_CONTENT),
+		key: "PUNCH_CAPTION",
+		durationInFrames: showcaseDuration("PUNCH_CAPTION"),
 		content: (
 			<>
 				<BWPunchCaption
@@ -222,13 +128,13 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 						{ text: "不爱国", showFrom: 3, color: "#EF4444" },
 					]}
 				/>
-				<BWSubtitle position="top" text="PUNCH_CAPTION · 暴击字幕（连击质问）" startFrame={0} />
+				<ShowcaseLabel text="PUNCH_CAPTION · 暴击字幕（连击质问）" />
 			</>
 		),
 	},
 	{
-		key: "peer-induct",
-		durationInFrames: durationFromContent(SC_PEER_INDUCT_CONTENT),
+		key: "PEER_INDUCT",
+		durationInFrames: showcaseDuration("PEER_INDUCT"),
 		content: (
 			<>
 				<BWPeerInduct
@@ -245,13 +151,13 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					content={SC_PEER_INDUCT_CONTENT}
 					anchors={[{ text: "幸存者偏差", showFrom: 2, color: "#FF8C00", anim: "popIn" }]}
 				/>
-				<BWSubtitle position="top" text="PEER_INDUCT · 并列前提 → 归纳收束" startFrame={0} />
+				<ShowcaseLabel text="PEER_INDUCT · 并列前提 → 归纳收束" />
 			</>
 		),
 	},
 	{
-		key: "method-stack",
-		durationInFrames: durationFromContent(SC_METHOD_CONTENT),
+		key: "METHOD_STACK",
+		durationInFrames: showcaseDuration("METHOD_STACK"),
 		content: (
 			<>
 				<BWMethodStack
@@ -263,13 +169,13 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					]}
 					content={SC_METHOD_CONTENT}
 				/>
-				<BWSubtitle position="top" text="METHOD_STACK · 单标题解释展开" startFrame={0} />
+				<ShowcaseLabel text="METHOD_STACK · 单标题解释展开" />
 			</>
 		),
 	},
 	{
-		key: "case-breakdown",
-		durationInFrames: durationFromContent(SC_CASE_CONTENT),
+		key: "CASE_BREAKDOWN",
+		durationInFrames: showcaseDuration("CASE_BREAKDOWN"),
 		content: (
 			<>
 				<BWCaseBreakdown
@@ -284,23 +190,23 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					content={SC_CASE_CONTENT}
 					anchors={[]}
 				/>
-				<BWSubtitle position="top" text="CASE_BREAKDOWN · 案例/子话题详解" startFrame={0} />
+				<ShowcaseLabel text="CASE_BREAKDOWN · 案例/子话题详解" />
 			</>
 		),
 	},
 	{
-		key: "center-focus",
-		durationInFrames: SHOWCASE_FALLBACK_FRAMES,
+		key: "CENTER_FOCUS",
+		durationInFrames: showcaseDuration("CENTER_FOCUS"),
 		content: (
 			<>
 				<BWCenterFocus imageSrc={img("images/template/scene1_1.png")} />
-				<BWSubtitle position="top" text="CENTER_FOCUS · 视觉中心稳定" startFrame={0} />
+				<ShowcaseLabel text="CENTER_FOCUS · 视觉中心稳定" />
 			</>
 		),
 	},
 	{
-		key: "chat-bubble",
-		durationInFrames: durationFromContent(SC_CHAT_BUBBLE_CONTENT),
+		key: "CHAT_BUBBLE",
+		durationInFrames: showcaseDuration("CHAT_BUBBLE"),
 		content: (
 			<>
 				<BWChatBubble
@@ -318,13 +224,13 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 						},
 					]}
 				/>
-				<BWSubtitle position="top" text="CHAT_BUBBLE · 多气泡 / 左右对聊" startFrame={0} />
+				<ShowcaseLabel text="CHAT_BUBBLE · 多气泡 / 左右对聊" />
 			</>
 		),
 	},
 	{
-		key: "cognitive-shift",
-		durationInFrames: durationFromContent(SC_COGNITIVE_CONTENT),
+		key: "COGNITIVE_SHIFT",
+		durationInFrames: showcaseDuration("COGNITIVE_SHIFT"),
 		content: (
 			<>
 				<BWCognitiveShift
@@ -337,36 +243,36 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 						{ text: "认知和选择", showFrom: 1, color: "#111111", anim: "highlight" },
 					]}
 				/>
-				<BWSubtitle position="top" text="COGNITIVE_SHIFT · 不是...而是..." startFrame={0} />
+				<ShowcaseLabel text="COGNITIVE_SHIFT · 不是...而是..." />
 			</>
 		),
 	},
 	{
-		key: "concept-card",
-		durationInFrames: SHOWCASE_FALLBACK_FRAMES,
+		key: "CONCEPT_CARD",
+		durationInFrames: showcaseDuration("CONCEPT_CARD"),
 		content: (
 			<>
 				<BWConceptCard imageSrc={img("images/template/scene1_1.png")} conceptName="可得性启发fasdfasdfs" />
-				<BWSubtitle position="top" text="CONCEPT_CARD · 术语锚定" startFrame={0} />
+				<ShowcaseLabel text="CONCEPT_CARD · 术语锚定" />
 			</>
 		),
 	},
 	{
-		key: "dos-and-donts",
-		durationInFrames: SHOWCASE_FALLBACK_FRAMES,
+		key: "DOS_AND_DONTS",
+		durationInFrames: showcaseDuration("DOS_AND_DONTS"),
 		content: (
 			<>
 				<BWDosAndDonts
 					left={{ label: "错误示范", src: img("images/template/scene5_1.png"), showFrom: 0 }}
 					right={{ label: "正确做法", src: img("images/template/scene5_2.png"), showFrom: 10 }}
 				/>
-				<BWSubtitle position="top" text="DOS_AND_DONTS · 避坑对比" startFrame={0} />
+				<ShowcaseLabel text="DOS_AND_DONTS · 避坑对比" />
 			</>
 		),
 	},
 	{
-		key: "kpi-hero",
-		durationInFrames: durationFromContent(SC_KPI_HERO_CONTENT),
+		key: "KPI_HERO",
+		durationInFrames: showcaseDuration("KPI_HERO"),
 		content: (
 			<>
 				<BWKpiHero
@@ -377,26 +283,26 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					]}
 					content={SC_KPI_HERO_CONTENT}
 				/>
-				<BWSubtitle position="top" text="KPI_HERO · 多指标并列" startFrame={0} />
+				<ShowcaseLabel text="KPI_HERO · 多指标并列" />
 			</>
 		),
 	},
 	{
-		key: "magnifying-glass",
-		durationInFrames: durationFromContent(SC_MAGNIFY_CONTENT),
+		key: "MAGNIFYING_GLASS",
+		durationInFrames: showcaseDuration("MAGNIFYING_GLASS"),
 		content: (
 			<>
 				<BWMagnifyingGlass
 					content={SC_MAGNIFY_CONTENT}
 					anchors={[{ text: "供需失衡", showFrom: 0, color: "#111111", anim: "popIn" }]}
 				/>
-				<BWSubtitle position="top" text="MAGNIFYING_GLASS · 揭秘底层" startFrame={0} />
+				<ShowcaseLabel text="MAGNIFYING_GLASS · 揭秘底层" />
 			</>
 		),
 	},
 	{
-		key: "progress-ring",
-		durationInFrames: durationFromContent(SC_PROGRESS_CONTENT),
+		key: "PROGRESS_RING",
+		durationInFrames: showcaseDuration("PROGRESS_RING"),
 		content: (
 			<>
 				<BWProgressRing
@@ -424,26 +330,26 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					]}
 					content={SC_PROGRESS_CONTENT}
 				/>
-				<BWSubtitle position="top" text="PROGRESS_RING · 多组环形" startFrame={0} />
+				<ShowcaseLabel text="PROGRESS_RING · 多组环形" />
 			</>
 		),
 	},
 	{
-		key: "quote-citation",
-		durationInFrames: SHOWCASE_FALLBACK_FRAMES,
+		key: "QUOTE_CITATION",
+		durationInFrames: showcaseDuration("QUOTE_CITATION"),
 		content: (
 			<>
 				<BWQuoteCitation
 					imageSrc={img("images/template/scene2_1.png")}
 					quoteSource="某研究 / 某名人"
 				/>
-				<BWSubtitle position="top" text="QUOTE_CITATION · 引用背书" startFrame={0} />
+				<ShowcaseLabel text="QUOTE_CITATION · 引用背书" />
 			</>
 		),
 	},
 	{
-		key: "split-compare",
-		durationInFrames: SHOWCASE_FALLBACK_FRAMES,
+		key: "SPLIT_COMPARE",
+		durationInFrames: showcaseDuration("SPLIT_COMPARE"),
 		content: (
 			<>
 				<BWSplitCompare
@@ -452,13 +358,13 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					leftLabel="左"
 					rightLabel="右"
 				/>
-				<BWSubtitle position="top" text="SPLIT_COMPARE · A vs B 对比" startFrame={0} />
+				<ShowcaseLabel text="SPLIT_COMPARE · A vs B 对比" />
 			</>
 		),
 	},
 	{
-		key: "stat-compare",
-		durationInFrames: durationFromContent(SC_STAT_CONTENT),
+		key: "STAT_COMPARE",
+		durationInFrames: showcaseDuration("STAT_COMPARE"),
 		content: (
 			<>
 				<BWStatCompare
@@ -469,13 +375,13 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					]}
 					content={SC_STAT_CONTENT}
 				/>
-				<BWSubtitle position="top" text="STAT_COMPARE · 多柱 KPI（bars + showFrom）" startFrame={0} />
+				<ShowcaseLabel text="STAT_COMPARE · 多柱 KPI（bars + showFrom）" />
 			</>
 		),
 	},
 	{
-		key: "step-list",
-		durationInFrames: durationAfterLastStagger(SC_STEP_LIST_LAST_DELAY),
+		key: "STEP_LIST",
+		durationInFrames: showcaseDuration("STEP_LIST"),
 		content: (
 			<>
 				<BWStepList
@@ -483,13 +389,13 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					startFrame={SC_STEP_LIST_START}
 					staggerDelay={SC_STEP_LIST_STAGGER}
 				/>
-				<BWSubtitle position="top" text="STEP_LIST · 步骤/流程" startFrame={0} />
+				<ShowcaseLabel text="STEP_LIST · 步骤/流程" />
 			</>
 		),
 	},
 	{
-		key: "text-focus",
-		durationInFrames: SHOWCASE_FALLBACK_FRAMES,
+		key: "TEXT_FOCUS",
+		durationInFrames: showcaseDuration("TEXT_FOCUS"),
 		content: (
 			<>
 				<BWTextFocus>
@@ -511,13 +417,13 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 						这是核心金句，无需配图
 					</div>
 				</BWTextFocus>
-				<BWSubtitle position="top" text="TEXT_FOCUS · 信噪比极致化" startFrame={0} />
+				<ShowcaseLabel text="TEXT_FOCUS · 信噪比极致化" />
 			</>
 		),
 	},
 	{
-		key: "cause-chain",
-		durationInFrames: durationFromContent(SC_CAUSE_CONTENT),
+		key: "CAUSE_CHAIN",
+		durationInFrames: showcaseDuration("CAUSE_CHAIN"),
 		content: (
 			<>
 				<BWCauseChain
@@ -528,13 +434,13 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					]}
 					content={SC_CAUSE_CONTENT}
 				/>
-				<BWSubtitle position="top" text="CAUSE_CHAIN · 因果链" startFrame={0} />
+				<ShowcaseLabel text="CAUSE_CHAIN · 因果链" />
 			</>
 		),
 	},
 	{
-		key: "checklist-reveal",
-		durationInFrames: durationFromContent(SC_CHECKLIST_CONTENT),
+		key: "CHECKLIST_REVEAL",
+		durationInFrames: showcaseDuration("CHECKLIST_REVEAL"),
 		content: (
 			<>
 				<BWChecklistReveal
@@ -546,13 +452,13 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					]}
 					content={SC_CHECKLIST_CONTENT}
 				/>
-				<BWSubtitle position="top" text="CHECKLIST_REVEAL · 清单打勾" startFrame={0} />
+				<ShowcaseLabel text="CHECKLIST_REVEAL · 清单打勾" />
 			</>
 		),
 	},
 	{
-		key: "panel-grid",
-		durationInFrames: durationFromContent(SC_PANEL_CONTENT),
+		key: "PANEL_GRID",
+		durationInFrames: showcaseDuration("PANEL_GRID"),
 		content: (
 			<>
 				<BWPanelGrid
@@ -563,13 +469,13 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					]}
 					content={SC_PANEL_CONTENT}
 				/>
-				<BWSubtitle position="top" text="PANEL_GRID · 宫格并列" startFrame={0} />
+				<ShowcaseLabel text="PANEL_GRID · 宫格并列" />
 			</>
 		),
 	},
 	{
-		key: "data-table",
-		durationInFrames: durationFromContent(SC_DATA_TABLE_CONTENT),
+		key: "DATA_TABLE",
+		durationInFrames: showcaseDuration("DATA_TABLE"),
 		content: (
 			<>
 				<BWDataTable
@@ -582,13 +488,13 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					]}
 					content={SC_DATA_TABLE_CONTENT}
 				/>
-				<BWSubtitle position="top" text="DATA_TABLE · 表格对照" startFrame={0} />
+				<ShowcaseLabel text="DATA_TABLE · 表格对照" />
 			</>
 		),
 	},
 	{
-		key: "tree-diagram",
-		durationInFrames: durationFromContent(SC_TREE_DIAGRAM_CONTENT),
+		key: "TREE_DIAGRAM",
+		durationInFrames: showcaseDuration("TREE_DIAGRAM"),
 		content: (
 			<>
 				<BWTreeDiagram
@@ -621,13 +527,13 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					}}
 					content={SC_TREE_DIAGRAM_CONTENT}
 				/>
-				<BWSubtitle position="top" text="TREE_DIAGRAM · 树状层次" startFrame={0} />
+				<ShowcaseLabel text="TREE_DIAGRAM · 树状层次" />
 			</>
 		),
 	},
 	{
-		key: "timeline",
-		durationInFrames: durationForTimelineShowcase(SC_TIMELINE_MAX_IMAGE_START),
+		key: "TIMELINE",
+		durationInFrames: showcaseDuration("TIMELINE"),
 		content: (
 			<>
 				<BWTimeline
@@ -637,29 +543,32 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 						{ src: img("images/template/scene4_3.png"), startFrame: 30, label: "阶段三" },
 					]}
 				/>
-				<BWSubtitle position="top" text="TIMELINE · 时间序列" startFrame={0} />
+				<ShowcaseLabel text="TIMELINE · 时间序列" />
 			</>
 		),
 	},
 ];
 
-export const TEMPLATE_SHOWCASE_SEGMENTS = SHOWCASE_SEGMENTS.length;
+export {
+	TOTAL_DURATION_TEMPLATE_SHOWCASE,
+	TEMPLATE_SHOWCASE_SEGMENTS,
+	getTemplateShowcaseStillJobs,
+} from "./showcaseStillJobs";
 
-export const TOTAL_DURATION_TEMPLATE_SHOWCASE = SHOWCASE_SEGMENTS.reduce(
-	(sum, seg) => sum + seg.durationInFrames,
-	0,
-);
-
-export const TemplateShowcase: React.FC = () => {
+export const TemplateShowcase: React.FC<TemplateShowcaseProps> = ({
+	showLabels,
+}) => {
 	return (
-		<AbsoluteFill style={{ backgroundColor: "#fff" }}>
-			<Series>
-				{SHOWCASE_SEGMENTS.map((seg) => (
-					<Series.Sequence key={seg.key} durationInFrames={seg.durationInFrames}>
-						{seg.content}
-					</Series.Sequence>
-				))}
-			</Series>
-		</AbsoluteFill>
+		<ShowcaseLabelsContext.Provider value={showLabels}>
+			<AbsoluteFill style={{ backgroundColor: "#fff" }}>
+				<Series>
+					{SHOWCASE_SEGMENTS.map((seg) => (
+						<Series.Sequence key={seg.key} durationInFrames={seg.durationInFrames}>
+							{seg.content}
+						</Series.Sequence>
+					))}
+				</Series>
+			</AbsoluteFill>
+		</ShowcaseLabelsContext.Provider>
 	);
 };

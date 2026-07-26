@@ -11,7 +11,7 @@ metadata:
   "name": "CHECKLIST_REVEAL",
   "componentExport": "BWChecklistReveal",
   "description": "适用：收束段、行动清单、要点复诵；口播逐条对应清单行，行随 content 时间显现并打勾。\n差异：可执行「第一步/第二步」短步骤用 STEP_LIST；并列多组大图用 PANEL_GRID；纯叙述单图用 CENTER_FOCUS。\n参数：rows 2～6 项，每项 text（短标签）、showFrom（content 下标）；可选 title。",
-  "psychology": "闭环与可执行感",
+  "chinese_name": "清单逐条打勾",
   "image_count": "0",
   "content_min_items": 2,
   "content_max_items": 8,

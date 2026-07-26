@@ -11,7 +11,7 @@ metadata:
   "name": "PROGRESS_RING",
   "componentExport": "BWProgressRing",
   "description": "适用：完成度、达成率、占比、进度结论；环形动效强化「走到哪一步」。\n单组：percent（0–100）+ label，可选 subLabel。\n多组：blocks（1～4 项），每项 percent、label、showFrom（content 下标），可选 subLabel、ringColor；列数变化时弹簧过渡与 KPI_HERO 一致。\n差异：单数字大字报用 KPI_HERO；两项柱状对比用 STAT_COMPARE。",
-  "psychology": "目标梯度",
+  "chinese_name": "环形进度",
   "image_count": 0,
   "param_schema": {
     "type": "object",

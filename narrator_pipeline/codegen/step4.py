@@ -77,16 +77,12 @@ def _param_to_jsx_props(
     将 param 对象转换为 JSX props 字符串（不含 item 层级的 content / totalDurationFrames）。
     - 图片字段用 staticFile() 包装
     - images 数组中的 src 也用 staticFile() 包装
-    - CHAT_BUBBLE：头像为 BWChatBubble 内置 SVG，不传 imageSrc；bubbles 逐项序列化且不包装 imageSrc
     """
     props = []
     for key, value in param.items():
         if key in ("content", "totalDurationFrames"):
             continue
-        if template == "CHAT_BUBBLE" and key == "imageSrc":
-            # 模板已弃用该字段渲染，避免生成 staticFile 与多余 props
-            continue
-        elif key == "audioSrc":
+        if key == "audioSrc":
             # audioSrc 已移到 scene 级别，不在 item props 中传递
             continue
         elif key == "images" and isinstance(value, list):
@@ -246,15 +242,13 @@ def _param_to_jsx_props(
                 panel_jsx_parts.append("{ " + ", ".join(parts) + " }")
             props.append(f'panels={{[{", ".join(panel_jsx_parts)}]}}')
         elif key == "bubbles" and isinstance(value, list):
-            # CHAT_BUBBLE：多气泡；组件内为内置 SVG，忽略每项中的 imageSrc
+            # CHAT_BUBBLE：多气泡；头像为组件内置 SVG
             bubble_jsx_parts = []
             for b in value:
                 if not isinstance(b, dict):
                     continue
                 parts = []
                 for bk, bv in b.items():
-                    if bk == "imageSrc":
-                        continue
                     if bk == "bubbleText" and isinstance(bv, str):
                         parts.append(f'bubbleText: "{_escape_jsx(bv)}"')
                     elif bk == "showFrom" and isinstance(bv, (int, float)):
@@ -528,12 +522,6 @@ def _apply_preview_overrides(scenes: list, preview_image: str | None, mute_audio
                     for pn in panels:
                         if isinstance(pn, dict) and "src" in pn:
                             pn["src"] = preview_image
-
-                bubbles = param.get("bubbles")
-                if isinstance(bubbles, list):
-                    for b in bubbles:
-                        if isinstance(b, dict) and "imageSrc" in b and isinstance(b.get("imageSrc"), str):
-                            b["imageSrc"] = preview_image
 
 
 def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -> str:

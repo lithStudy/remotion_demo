@@ -18,7 +18,7 @@ from narrator_pipeline.contracts.scene_split_draft import (
     validate_scene_split_draft,
 )
 from narrator_pipeline.contracts.template_registry import TEMPLATE_REGISTRY
-from narrator_pipeline.paths import resolve_video_paths
+from narrator_pipeline.paths import VideoPaths, resolve_video_paths
 from narrator_pipeline.web.settings import pipeline_config_with_workspace, workspace_root
 
 _NAME_RE = re.compile(r"^[\w\u4e00-\u9fff][\w\u4e00-\u9fff\- ]{0,63}$")
@@ -53,6 +53,18 @@ def ensure_workspace() -> Path:
     return root
 
 
+def _project_mtime(paths: VideoPaths) -> float:
+    """工程最近修改时间：取口播 / 草稿 / 脚本 / 场景目录中已存在路径的最大 mtime。"""
+    candidates = (
+        paths.narration_txt,
+        paths.scene_split_draft,
+        paths.scene_scripts,
+        paths.scenes_dir,
+        paths.scenes_dir.parent,
+    )
+    return max(p.stat().st_mtime for p in candidates if p.exists())
+
+
 def list_projects() -> list[ProjectInfo]:
     ensure_workspace()
     config = _config()
@@ -67,8 +79,8 @@ def list_projects() -> list[ProjectInfo]:
             if d.is_dir():
                 names.add(d.name)
 
-    result: list[ProjectInfo] = []
-    for name in sorted(names):
+    result: list[tuple[float, ProjectInfo]] = []
+    for name in names:
         paths = resolve_video_paths(name, config)
         topic = None
         if paths.scene_scripts.is_file():
@@ -84,15 +96,19 @@ def list_projects() -> list[ProjectInfo]:
                 t = data.get("topic")
                 topic = t if isinstance(t, str) else None
         result.append(
-            ProjectInfo(
-                name=name,
-                hasNarration=paths.narration_txt.is_file(),
-                hasDraft=paths.scene_split_draft.is_file(),
-                hasScripts=paths.scene_scripts.is_file(),
-                topic=topic,
+            (
+                _project_mtime(paths),
+                ProjectInfo(
+                    name=name,
+                    hasNarration=paths.narration_txt.is_file(),
+                    hasDraft=paths.scene_split_draft.is_file(),
+                    hasScripts=paths.scene_scripts.is_file(),
+                    topic=topic,
+                ),
             )
         )
-    return result
+    result.sort(key=lambda item: item[0], reverse=True)
+    return [info for _, info in result]
 
 
 def create_project(name: str, narration_text: str) -> ProjectInfo:
@@ -306,7 +322,7 @@ def template_catalog() -> list[dict]:
         items.append(
             {
                 "name": name,
-                "label": meta.get("psychology") or name,
+                "label": meta.get("chinese_name") or name,
                 "description": meta.get("description"),
                 "paramSchema": meta.get("param_schema") or {"type": "object", "properties": {}},
                 "contentMinItems": meta.get("content_min_items"),

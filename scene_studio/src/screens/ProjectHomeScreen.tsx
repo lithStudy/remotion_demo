@@ -1,4 +1,4 @@
-import type { ProjectInfo } from "../api";
+import type { JobStatus, ProjectInfo } from "../api";
 import { api } from "../api";
 import { AppShell } from "../components/AppShell";
 
@@ -6,10 +6,12 @@ type Props = {
   project: ProjectInfo;
   pauseAfterStep0: boolean;
   setPauseAfterStep0: (v: boolean) => void;
+  activeJob?: JobStatus | null;
   onBack: () => void;
   onGenerate: () => Promise<void>;
   onOpenDraft: () => Promise<void>;
   onOpenScripts: () => Promise<void>;
+  onOpenJob?: () => void;
   onDeleted: () => Promise<void>;
   onError: (e: string | null) => void;
   error: string | null;
@@ -43,6 +45,30 @@ export function ProjectHomeScreen(props: Props) {
 
         <section className="panel">
           <h3 className="panel-title">生成</h3>
+          {props.activeJob ? (
+            <p className="muted" style={{ marginBottom: 8 }}>
+              进行中：{props.activeJob.phase}
+              {props.onOpenJob ? (
+                <>
+                  {" · "}
+                  <button
+                    type="button"
+                    onClick={props.onOpenJob}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      padding: 0,
+                      color: "inherit",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                    }}
+                  >
+                    查看任务
+                  </button>
+                </>
+              ) : null}
+            </p>
+          ) : null}
           <label className="check">
             <input
               type="checkbox"
@@ -57,7 +83,7 @@ export function ProjectHomeScreen(props: Props) {
             disabled={!p.hasNarration}
             onClick={() => props.onGenerate().catch((e) => props.onError(String(e)))}
           >
-            生成分镜
+            {props.activeJob ? "重新生成分镜" : "生成分镜"}
           </button>
         </section>
 

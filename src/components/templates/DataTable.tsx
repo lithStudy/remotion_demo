@@ -21,7 +21,7 @@ export const templateMeta = {
 	"componentExport": "BWDataTable",
 	"description":
 		"适用：规格对照、多维度参数、版本差异、价目/档位并列等需要「行列结构」一目了然的段落。\n差异：纯两项整数对比用 STAT_COMPARE；无表格结构的要点清单用 CHECKLIST_REVEAL 或 STEP_LIST。\n参数：columns 为表头（2～5 列短文案）；rows 每项 cells 长度应与列数一致（不足补空、超出截断），showFrom 为 content 下标，从该条 startFrame 起该行入场。",
-	"psychology": "结构化对比与可信度",
+	"chinese_name": "表格对照",
 	"image_count": "0",
 	"content_min_items": 2,
 	"content_max_items": 12,

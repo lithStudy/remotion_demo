@@ -38,7 +38,7 @@ export const templateMeta = {
 	"componentExport": "BWPunchCaption",
 	"description":
 		"适用：2~6 条短促反问/反驳/情绪连击；居中纯黑大字逐句弹入，保留底部小字幕。\n差异：单句金句暴击用 TEXT_FOCUS；多图节拍递进用 BEAT_SEQUENCE；本模板 0 图、一句一帧一冲击。\n参数：punches 必填，每项 text（大屏文案）+ showFrom（content 下标）必填；可选 enterEffect（snap|popIn|slideUp|shake）、tone（calm|alert）。省略 tone 时首条 calm、其余 alert。",
-	"psychology": "连击质问",
+	"chinese_name": "暴击大字连击",
 	"image_count": 0,
 	"param_schema": {
 		"type": "object",

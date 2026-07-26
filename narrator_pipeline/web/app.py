@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict
+from urllib.parse import quote
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -37,6 +38,7 @@ from narrator_pipeline.web.workspace import ensure_workspace
 
 def create_app() -> FastAPI:
     ensure_workspace()
+    job_service.recover_from_disk()
     app = FastAPI(title="Scene Studio", version="0.1.0")
     app.add_middleware(
         CORSMiddleware,
@@ -82,11 +84,12 @@ def create_app() -> FastAPI:
             data = workspace.export_zip_bytes(param.name)
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e)) from e
+        filename = f"{param.name}.zip"
         return Response(
             content=data,
             media_type="application/zip",
             headers={
-                "Content-Disposition": f'attachment; filename="{param.name}.zip"'
+                "Content-Disposition": f"attachment; filename*=UTF-8''{quote(filename)}"
             },
         )
 
@@ -108,6 +111,7 @@ def create_app() -> FastAPI:
                 pause_after_step0=param.pauseAfterStep0,
                 llm_provider=param.llmProvider,
                 llm_model=param.llmModel,
+                force=param.force,
             )
         except RuntimeError as e:
             raise HTTPException(status_code=409, detail=str(e)) from e
@@ -123,6 +127,7 @@ def create_app() -> FastAPI:
                 param.name,
                 llm_provider=param.llmProvider,
                 llm_model=param.llmModel,
+                force=param.force,
             )
         except RuntimeError as e:
             raise HTTPException(status_code=409, detail=str(e)) from e
@@ -130,11 +135,7 @@ def create_app() -> FastAPI:
             raise HTTPException(status_code=400, detail=str(e)) from e
         return {"jobId": job.jobId, "status": job.status, "phase": job.phase}
 
-    @app.post("/api/jobs/status")
-    def jobs_status(_auth: AuthDep, param: JobIdParam):
-        job = job_service.get_job(param.jobId)
-        if job is None:
-            raise HTTPException(status_code=404, detail="job 不存在")
+    def _job_payload(job: job_service.Job) -> dict:
         return {
             "jobId": job.jobId,
             "name": job.name,
@@ -145,7 +146,20 @@ def create_app() -> FastAPI:
             "error": job.error,
             "createdAt": job.createdAt,
             "finishedAt": job.finishedAt,
+            "timeoutSec": job_service.JOB_TIMEOUT_SEC,
         }
+
+    @app.post("/api/jobs/status")
+    def jobs_status(_auth: AuthDep, param: JobIdParam):
+        job = job_service.get_job(param.jobId)
+        if job is None:
+            raise HTTPException(status_code=404, detail="job 不存在")
+        return _job_payload(job)
+
+    @app.post("/api/jobs/active")
+    def jobs_active(_auth: AuthDep, _param: EmptyParam):
+        job = job_service.get_active_job()
+        return {"job": None if job is None else _job_payload(job)}
 
     @app.post("/api/draft/get")
     def draft_get(_auth: AuthDep, param: GetDraftParam):

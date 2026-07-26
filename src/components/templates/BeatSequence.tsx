@@ -29,7 +29,7 @@ export const templateMeta = {
 	"componentExport": "BWBeatSequence",
 	"description":
 		"适用：一问一驳一锤等同一镜头内情绪递进；多图按口播时间线换图，首段 calm、后续默认可 alert。\n差异：单段平缓叙述用 CENTER_FOCUS；单句结论暴击、无需配图时用 TEXT_FOCUS；极短句连击质问、0 图用 PUNCH_CAPTION；本模板负责多段串联且需配图。\n口播条为镜头 item 外层与 param 同级的 content[]（含 text、startFrame 等）；showFrom 必须按该数组的 0-based 下标对齐，而非 stages 下标。stages 可少于口播条数，此时用 showFrom 指定从第几条口播起显示该图。\n段落间若有空隙，画面保持上一张直至下一条口播切入。\n参数：stages[i].enterEffect / tone / showFrom；省略 showFrom 时默认与 stages 下标 i 同列口播对齐。tone 省略时首条 calm、其余 alert。",
-	"psychology": "节拍递进",
+	"chinese_name": "多图节拍换场",
 	"image_count": "2-4",
 	"param_schema": {
 		"type": "object",

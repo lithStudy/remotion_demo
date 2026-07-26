@@ -1,7 +1,11 @@
 import "./index.css";
 import React from "react";
 import { Composition } from "remotion";
-import { TemplateShowcase, TOTAL_DURATION_TEMPLATE_SHOWCASE } from "./templateShowcase/TemplateShowcase";
+import {
+  TemplateShowcase,
+  TemplateShowcaseSchema,
+  TOTAL_DURATION_TEMPLATE_SHOWCASE,
+} from "./templateShowcase/TemplateShowcase";
 import { 小米核心技术, 小米核心技术竖屏, 小米核心技术Schema, TOTAL_DURATION_小米核心技术 } from "./remotions/小米核心技术/小米核心技术";
 import { 小米核心技术封面横屏, 小米核心技术封面竖屏 } from "./remotions/小米核心技术/小米核心技术CoverStills";
 import { 小米平权, 小米平权竖屏, 小米平权Schema, TOTAL_DURATION_小米平权 } from "./remotions/小米平权/小米平权";
@@ -96,7 +100,8 @@ export const RemotionRoot: React.FC = () => {
         fps={30}
         width={1920}
         height={1080}
-        defaultProps={{}}
+        schema={TemplateShowcaseSchema}
+        defaultProps={{ showLabels: true }}
       />
 
 

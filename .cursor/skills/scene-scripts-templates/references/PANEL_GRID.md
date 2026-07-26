@@ -11,7 +11,7 @@ metadata:
   "name": "PANEL_GRID",
   "componentExport": "BWPanelGrid",
   "description": "适用：同一镜头内并列 2～6 个主题块（如多个工具/模块清单），每块一图，随对应口播条显现。\n差异：时间演进用 TIMELINE；逐拍换图更适合 BEAT_SEQUENCE。\n参数：panels 2～6 项，每项 src（image_prompt）、showFrom（content 下标）、可选 enterEffect、position（宫格布局弱提示，可省略）。",
-  "psychology": "结构并列",
+  "chinese_name": "宫格多图并列",
   "image_count": "2-6",
   "content_min_items": 2,
   "content_max_items": 8,

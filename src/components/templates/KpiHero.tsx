@@ -158,7 +158,7 @@ export const templateMeta = {
 	"componentExport": "BWKpiHero",
 	"description":
 		"适用：单指标或多指标（最多 4 列）大字报：占比、排名、研发费用等；主视觉在画布垂直水平居中。\n单指标：传 value（整数或小数）+ prefix/suffix/useGrouping，可选 label、decimalPlaces（缺省按 value 推断小数位）。\n多指标：传 blocks（1～4 项），每项 value、showFrom，可选 decimalPlaces；列数变化时已有块 left/width 弹簧过渡。\n差异：柱状对比用 STAT_COMPARE；环形进度用 PROGRESS_RING。\n参数：countDuration 为每块数字滚动 spring 时长（帧）。",
-	"psychology": "锚定效应",
+	"chinese_name": "多指标大字报",
 	"image_count": "0",
 	"param_schema": {
 		"type": "object",

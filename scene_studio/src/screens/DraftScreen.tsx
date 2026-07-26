@@ -9,6 +9,7 @@ type Props = {
   onBack: () => void;
   onError: (e: string | null) => void;
   onContinue: () => Promise<void>;
+  scriptGenBlocked?: boolean;
   error: string | null;
 };
 
@@ -131,10 +132,21 @@ export function DraftScreen(props: Props) {
           <button
             type="button"
             className="primary btn-block"
+            disabled={props.scriptGenBlocked}
+            title={
+              props.scriptGenBlocked
+                ? "正在生成草稿，不允许生成脚本"
+                : undefined
+            }
             onClick={() => props.onContinue().catch((e) => props.onError(String(e)))}
           >
             继续生成脚本（Step1）
           </button>
+          {props.scriptGenBlocked ? (
+            <p className="muted" style={{ marginTop: 8 }}>
+              正在生成草稿，不允许生成脚本
+            </p>
+          ) : null}
         </div>
       </div>
     </AppShell>

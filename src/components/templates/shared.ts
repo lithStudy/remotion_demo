@@ -593,7 +593,8 @@ export interface TemplateMeta {
 	name: string;
 	/** 适用场景、与相似模板差异、慎用、参数提示等均写入此单一字段 */
 	description: string;
-	psychology: string;
+	/** 选型 UI 用的中文显示名（功能/形态向） */
+	chinese_name: string;
 	image_count: number | string;
 	componentExport?: string;
 	/** 根节点须为 type: "object"；必填字段列在 required 中 */

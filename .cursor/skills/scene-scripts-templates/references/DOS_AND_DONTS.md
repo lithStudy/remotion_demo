@@ -11,7 +11,7 @@ metadata:
   "name": "DOS_AND_DONTS",
   "componentExport": "BWDosAndDonts",
   "description": "适用：明确「别这样做 vs 应该这样做」的避坑/规范/注意事项（可用于教程、产品使用、运营话术、设计规范、职场建议等）；左右对错叙事。\n差异：两种中立方案并列、无对错标签用 SPLIT_COMPARE；若是纯数据的双指标对比用 STAT_COMPARE。\n参数：`left` / `right` 各含 `label`、`src`、可选 `showFrom`。`showFrom` 语义：当本 item 的 `content` 带时间信息（startFrame 或 durationFrames）且 `showFrom` 为 **0～(content 条数−1)** 时，表示 **content 下标**，该侧从对应条的 `startFrame` 起做滑入；否则表示 **相对本 item 起点的帧号**。省略时：左侧对齐第 0 条；右侧若至少两条口播则对齐第 1 条，否则在左侧起点后再延迟 10 帧。",
-  "psychology": "损失厌恶",
+  "chinese_name": "对错对照",
   "image_count": 2,
   "param_schema": {
     "type": "object",

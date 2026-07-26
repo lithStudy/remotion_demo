@@ -19,7 +19,7 @@ export const templateMeta = {
 	"componentExport": "BWTreeDiagram",
 	"description":
 		"适用：层次关系、分类体系、分叉决策树、组织结构等需要展示树状结构的场景。\n差异：线性链条用 CAUSE_CHAIN；并列清单用 PANEL_GRID；时间轴用 TIMELINE；因果传导用 CAUSE_CHAIN。\n参数：root 为根节点，含 label 和可选 children（1～4 个子节点），子节点可递归包含 children（建议 ≤ 3 层）。showFrom 为 content 数组下标（0-based），控制各节点随口播逐层展开。",
-	"psychology": "层次可视化",
+	"chinese_name": "树状层次图",
 	"image_count": 0,
 	"content_min_items": 2,
 	"content_max_items": 8,

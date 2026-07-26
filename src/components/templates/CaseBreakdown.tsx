@@ -32,7 +32,7 @@ export const templateMeta = {
 	"componentExport": "BWCaseBreakdown",
 	"description":
 		"适用：同一镜头内讲透一个小案例/子话题，口播 4～8 句呈「个案现象→推论/误判→纠偏→收束」叙事弧；单张主图贯穿，右侧 2～4 个 phaseLabel 通过 showFrom 对齐到任意 content 下标（不必连续）。\n布局：固定左侧主图、右侧自上而下的竖向阶段列表（不随横竖屏切换版式）。\n差异：单标题+方法要点堆叠仍用 METHOD_STACK；多图随节拍换、强情绪递进用 BEAT_SEQUENCE；每环一图的机制传导用 CAUSE_CHAIN。\n参数：title 为案例短标题；imageSrc 为单主图；phases 为 2～4 项，每项 phaseLabel（宜短）与 showFrom（content 下标 0-based，非帧号）。",
-	"psychology": "案例叙事",
+	"chinese_name": "案例分阶段拆解",
 	"image_count": 1,
 	"param_schema": {
 		"type": "object",

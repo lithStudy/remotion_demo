@@ -1,0 +1,1385 @@
+{
+  "version": 1,
+  "templates": {
+    "BEAT_SEQUENCE": {
+      "requiredOverrideKeys": [
+        "stages"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "stages": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 4,
+            "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+            "items": {
+              "type": "object",
+              "required": [
+                "imageSrc"
+              ],
+              "properties": {
+                "imageSrc": {
+                  "type": "string",
+                  "format": "image_prompt",
+                  "description": "该节拍配图提示词"
+                },
+                "enterEffect": {
+                  "type": "string",
+                  "enum": [
+                    "breathe",
+                    "slideLeft",
+                    "slideBottom",
+                    "zoomIn",
+                    "fadeIn"
+                  ],
+                  "default": "breathe",
+                  "description": "入场效果"
+                },
+                "tone": {
+                  "type": "string",
+                  "enum": [
+                    "calm",
+                    "alert"
+                  ],
+                  "description": "首条可 calm，其余默认可 alert"
+                },
+                "showFrom": {
+                  "type": "content_index",
+                  "minimum": 0,
+                  "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "stages"
+        ]
+      }
+    },
+    "CASE_BREAKDOWN": {
+      "requiredOverrideKeys": [
+        "phases"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "案例短标题，建议 4～12 字"
+          },
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "单张主图描述，贯穿本案例讲解"
+          },
+          "phases": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 4,
+            "description": "叙事阶段；每项含 phaseLabel 与 showFrom；showFrom 为 content 下标（0-based，非帧数），须在 0～(content 条数-1) 内",
+            "items": {
+              "type": "object",
+              "required": [
+                "phaseLabel",
+                "showFrom"
+              ],
+              "properties": {
+                "phaseLabel": {
+                  "type": "string",
+                  "description": "阶段名，如表面个案、误判、真相、收束"
+                },
+                "showFrom": {
+                  "type": "integer",
+                  "format": "content_index",
+                  "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "title",
+          "imageSrc",
+          "phases"
+        ]
+      }
+    },
+    "CAUSE_CHAIN": {
+      "requiredOverrideKeys": [
+        "nodes",
+        "anchors"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "layout": {
+            "type": "string",
+            "enum": [
+              "horizontal",
+              "vertical"
+            ],
+            "default": "horizontal",
+            "description": "链的排布方向；横屏/常规叙事默认 horizontal，竖屏可设 vertical"
+          },
+          "nodes": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 4,
+            "description": "因果节点；showFrom 为 content 数组下标（0-based），入场时刻取该条 startFrame",
+            "items": {
+              "type": "object",
+              "required": [
+                "label",
+                "imageSrc",
+                "showFrom"
+              ],
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "description": "节点短标签，建议 2～8 字"
+                },
+                "imageSrc": {
+                  "type": "string",
+                  "format": "image_prompt",
+                  "description": "该环节隐喻配图"
+                },
+                "showFrom": {
+                  "type": "integer",
+                  "format": "content_index",
+                  "description": "content 下标（0-based），非帧数"
+                },
+                "enterEffect": {
+                  "type": "string",
+                  "enum": [
+                    "breathe",
+                    "slideLeft",
+                    "slideBottom",
+                    "zoomIn",
+                    "fadeIn"
+                  ],
+                  "default": "fadeIn"
+                }
+              }
+            }
+          },
+          "anchors": {
+            "type": "array",
+            "description": "可选；顶部依次展示锚点词并保留为列表，showFrom 为 content 下标（0-based，非帧数）；保持克制，只提取整段里真正的高潮、反转或核心名词",
+            "items": {
+              "type": "object",
+              "required": [
+                "text",
+                "showFrom"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "要展示的锚点词"
+                },
+                "showFrom": {
+                  "type": "integer",
+                  "format": "content_index",
+                  "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "anim": {
+                  "type": "string",
+                  "enum": [
+                    "spring",
+                    "slideUp",
+                    "popIn",
+                    "highlight"
+                  ]
+                },
+                "audioEffect": {
+                  "type": "string",
+                  "enum": [
+                    "impact_thud",
+                    "ping",
+                    "woosh"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "nodes"
+        ]
+      }
+    },
+    "CENTER_FOCUS": {
+      "requiredOverrideKeys": [
+        "anchors"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "主图描述"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "fadeIn",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn"
+            ],
+            "default": "fadeIn",
+            "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+          },
+          "anchors": {
+            "type": "array",
+            "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+            "items": {
+              "type": "object",
+              "required": [
+                "text",
+                "showFrom"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "要展示的锚点词"
+                },
+                "showFrom": {
+                  "type": "integer",
+                  "format": "content_index",
+                  "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "anim": {
+                  "type": "string",
+                  "enum": [
+                    "spring",
+                    "slideUp",
+                    "popIn",
+                    "highlight"
+                  ]
+                },
+                "audioEffect": {
+                  "type": "string",
+                  "enum": [
+                    "impact_thud",
+                    "ping",
+                    "woosh"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "imageSrc"
+        ]
+      }
+    },
+    "CHAT_BUBBLE": {
+      "requiredOverrideKeys": [
+        "bubbles"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "bubbles": {
+            "type": "array",
+            "description": "对话气泡列表；单气泡传 1 项，多气泡传多项。每项可含 bubbleText、showFrom、align。",
+            "items": {
+              "type": "object",
+              "properties": {
+                "bubbleText": {
+                  "type": "string",
+                  "description": "可选；气泡内显示文本。若传入则覆盖对应 content 条目文本；不影响 content 用于时序/字幕。"
+                },
+                "showFrom": {
+                  "type": "integer",
+                  "format": "content_index",
+                  "description": "可选；绑定 content 下标（0-based）。缺省为该行在 bubbles 中的下标。"
+                },
+                "align": {
+                  "type": "string",
+                  "enum": [
+                    "left",
+                    "right"
+                  ],
+                  "description": "可选；left 头像在左，right 头像在右。"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "bubbles"
+        ]
+      }
+    },
+    "CHECKLIST_REVEAL": {
+      "requiredOverrideKeys": [
+        "rows"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "可选；清单上方标题，建议 4～14 字"
+          },
+          "rows": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 6,
+            "description": "清单行；showFrom 为 content 下标（0-based），在该条 startFrame 打勾显现",
+            "items": {
+              "type": "object",
+              "required": [
+                "text",
+                "showFrom"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "该行短文案，建议不超过 16 字"
+                },
+                "showFrom": {
+                  "type": "integer",
+                  "format": "content_index",
+                  "description": "content 下标（0-based），非帧数"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "rows"
+        ]
+      }
+    },
+    "COGNITIVE_SHIFT": {
+      "requiredOverrideKeys": [],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "notText": {
+            "type": "string",
+            "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+          },
+          "butText": {
+            "type": "string",
+            "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+          },
+          "butSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "真实认知的配图"
+          },
+          "notContentIndex": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "触发「不是」动画的字幕段索引（默认 0）"
+          },
+          "butContentIndex": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "触发「而是」动画的字幕段索引（默认 1）"
+          }
+        },
+        "required": [
+          "notText",
+          "butText"
+        ]
+      }
+    },
+    "CONCEPT_CARD": {
+      "requiredOverrideKeys": [],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "概念图标描述"
+          },
+          "conceptName": {
+            "type": "string",
+            "description": "概念名称"
+          }
+        },
+        "required": [
+          "imageSrc",
+          "conceptName"
+        ]
+      }
+    },
+    "DATA_TABLE": {
+      "requiredOverrideKeys": [
+        "rows"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "可选；表上方标题，建议 4～18 字"
+          },
+          "columns": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 5,
+            "description": "表头文案，从左到右",
+            "items": {
+              "type": "string",
+              "description": "列标题，建议 2～8 字"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 8,
+            "description": "数据行；cells 为单元格文案（顺序与 columns 一致）；showFrom 为 content 下标（0-based）",
+            "items": {
+              "type": "object",
+              "required": [
+                "cells",
+                "showFrom"
+              ],
+              "properties": {
+                "cells": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 5,
+                  "items": {
+                    "type": "string",
+                    "description": "单元格短文案"
+                  }
+                },
+                "showFrom": {
+                  "type": "integer",
+                  "format": "content_index",
+                  "description": "该行出现时机：content 数组下标，取该条 startFrame"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "columns",
+          "rows"
+        ]
+      }
+    },
+    "DOS_AND_DONTS": {
+      "requiredOverrideKeys": [
+        "left",
+        "right"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "left": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+              },
+              "src": {
+                "type": "string",
+                "format": "image_prompt",
+                "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+              },
+              "showFrom": {
+                "type": "integer",
+                "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+              }
+            },
+            "required": [
+              "label",
+              "src"
+            ]
+          },
+          "right": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+              },
+              "src": {
+                "type": "string",
+                "format": "image_prompt",
+                "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+              },
+              "showFrom": {
+                "type": "integer",
+                "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+              }
+            },
+            "required": [
+              "label",
+              "src"
+            ]
+          }
+        },
+        "required": [
+          "left",
+          "right"
+        ]
+      }
+    },
+    "KPI_HERO": {
+      "requiredOverrideKeys": [
+        "blocks"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "单指标模式：滚动终值（整数或小数）；若提供 blocks 则可省略"
+          },
+          "prefix": {
+            "type": "string",
+            "description": "单指标：数字左侧"
+          },
+          "suffix": {
+            "type": "string",
+            "description": "单指标：数字右侧单位"
+          },
+          "label": {
+            "type": "string",
+            "description": "单指标：数字上方标签（与 blocks[].label 同视觉层级）"
+          },
+          "useGrouping": {
+            "type": "boolean",
+            "description": "单指标：千分位（小数时作用于整数部分）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "单指标：小数位数，缺省按 value 自动推断"
+          },
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 4,
+            "description": "多指标：每项 value、showFrom（content 下标）；可选 prefix、suffix、label、useGrouping",
+            "items": {
+              "type": "object",
+              "required": [
+                "value",
+                "showFrom"
+              ],
+              "properties": {
+                "value": {
+                  "type": "number",
+                  "description": "终值，整数或小数（如 2.5 万人）"
+                },
+                "decimalPlaces": {
+                  "type": "integer",
+                  "description": "小数位数，缺省按 value 自动推断（如 2.5→1）"
+                },
+                "showFrom": {
+                  "type": "integer",
+                  "format": "content_index",
+                  "description": "该块出现时机：content 下标，取该条 startFrame"
+                },
+                "prefix": {
+                  "type": "string"
+                },
+                "suffix": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "description": "数字上方标签（多列时字号已加大）"
+                },
+                "useGrouping": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "countDuration": {
+            "type": "integer",
+            "description": "数字从 0 滚到目标值的 spring 时长（帧），默认 28"
+          }
+        },
+        "required": []
+      }
+    },
+    "MAGNIFYING_GLASS": {
+      "requiredOverrideKeys": [
+        "anchors"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "anchors": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "description": "必填且非空（建议 1～2 个高价值锚点）；每项通过 showFrom 对齐 content 分句。锚点应落在“揭示性落点句”或其核心关键词上，不要把整段说明塞满锚点",
+            "items": {
+              "type": "object",
+              "required": [
+                "text",
+                "showFrom"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "要聚焦的关键词/短语"
+                },
+                "showFrom": {
+                  "type": "integer",
+                  "format": "content_index",
+                  "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "anim": {
+                  "type": "string",
+                  "enum": [
+                    "spring",
+                    "slideUp",
+                    "popIn",
+                    "highlight"
+                  ]
+                },
+                "audioEffect": {
+                  "type": "string",
+                  "enum": [
+                    "impact_thud",
+                    "ping",
+                    "woosh"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "anchors"
+        ]
+      }
+    },
+    "METHOD_STACK": {
+      "requiredOverrideKeys": [
+        "notes"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "该 item 的方法名/提醒标题/观点标题，建议 4~12 个字"
+          },
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "单张主图描述，用于承接这个方法或观点"
+          },
+          "notes": {
+            "type": "array",
+            "description": "可选；解释短语数组。每项含 text 与 showFrom；showFrom 为 content 下标（0-based，非帧数），须在 0～(content 条数-1) 内",
+            "items": {
+              "type": "object",
+              "required": [
+                "text",
+                "showFrom"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "解释短语"
+                },
+                "showFrom": {
+                  "type": "integer",
+                  "format": "content_index",
+                  "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "title",
+          "imageSrc"
+        ]
+      }
+    },
+    "PANEL_GRID": {
+      "requiredOverrideKeys": [
+        "panels"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "panels": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 6,
+            "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+            "items": {
+              "type": "object",
+              "required": [
+                "src",
+                "showFrom"
+              ],
+              "properties": {
+                "src": {
+                  "type": "string",
+                  "format": "image_prompt",
+                  "description": "该宫格配图提示词"
+                },
+                "showFrom": {
+                  "type": "integer",
+                  "format": "content_index",
+                  "description": "content 下标（0-based），非帧数"
+                },
+                "position": {
+                  "type": "string",
+                  "enum": [
+                    "center",
+                    "left",
+                    "right",
+                    "top",
+                    "bottom"
+                  ],
+                  "description": "可选；弱提示，布局以宫格为准"
+                },
+                "enterEffect": {
+                  "type": "string",
+                  "enum": [
+                    "breathe",
+                    "slideLeft",
+                    "slideBottom",
+                    "zoomIn",
+                    "fadeIn"
+                  ],
+                  "default": "fadeIn"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "panels"
+        ]
+      }
+    },
+    "PEER_INDUCT": {
+      "requiredOverrideKeys": [
+        "premises",
+        "conclusion"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "premises": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 3,
+            "description": "前提配图：横排并列；每项 imageSrc、可选 enterEffect、可选 showFrom（content 0-based）",
+            "items": {
+              "type": "object",
+              "required": [
+                "imageSrc"
+              ],
+              "properties": {
+                "imageSrc": {
+                  "type": "string",
+                  "format": "image_prompt",
+                  "description": "前提配图"
+                },
+                "enterEffect": {
+                  "type": "string",
+                  "enum": [
+                    "breathe",
+                    "slideLeft",
+                    "slideBottom",
+                    "zoomIn",
+                    "fadeIn"
+                  ],
+                  "default": "breathe"
+                },
+                "showFrom": {
+                  "type": "content_index",
+                  "minimum": 0,
+                  "description": "从该条口播起显示本图；省略则与 premises 下标 i 对齐"
+                }
+              }
+            }
+          },
+          "conclusion": {
+            "type": "object",
+            "required": [
+              "imageSrc"
+            ],
+            "description": "归纳行：单独一图，默认对齐末条 content",
+            "properties": {
+              "imageSrc": {
+                "type": "string",
+                "format": "image_prompt",
+                "description": "归纳配图"
+              },
+              "enterEffect": {
+                "type": "string",
+                "enum": [
+                  "breathe",
+                  "slideLeft",
+                  "slideBottom",
+                  "zoomIn",
+                  "fadeIn"
+                ],
+                "default": "zoomIn"
+              },
+              "showFrom": {
+                "type": "content_index",
+                "minimum": 0,
+                "description": "从该条口播起显示归纳图与连线；省略为末条下标"
+              },
+              "tone": {
+                "type": "string",
+                "enum": [
+                  "calm",
+                  "alert"
+                ],
+                "description": "归纳出现后画面整体情绪；默认 alert"
+              }
+            }
+          }
+        },
+        "required": [
+          "premises",
+          "conclusion"
+        ]
+      }
+    },
+    "PROGRESS_RING": {
+      "requiredOverrideKeys": [
+        "blocks"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "percent": {
+            "type": "integer",
+            "description": "单组模式：进度百分比 0–100；若提供 blocks 则可省略"
+          },
+          "label": {
+            "type": "string",
+            "description": "单组：主标题；多组请用 blocks[].label"
+          },
+          "subLabel": {
+            "type": "string",
+            "description": "单组：副标题或口径说明"
+          },
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 4,
+            "description": "多组：每项 percent、label、showFrom（content 下标）；可选 subLabel、ringColor",
+            "items": {
+              "type": "object",
+              "required": [
+                "percent",
+                "label",
+                "showFrom"
+              ],
+              "properties": {
+                "percent": {
+                  "type": "integer",
+                  "description": "0–100"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "subLabel": {
+                  "type": "string"
+                },
+                "ringColor": {
+                  "type": "string",
+                  "description": "环与进度弧颜色，默认 #2B6CB0"
+                },
+                "showFrom": {
+                  "type": "integer",
+                  "format": "content_index",
+                  "description": "该列出现时机：content 下标，取该条 startFrame"
+                }
+              }
+            }
+          }
+        },
+        "required": []
+      }
+    },
+    "PUNCH_CAPTION": {
+      "requiredOverrideKeys": [
+        "punches"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "punches": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 6,
+            "description": "暴击大字序列；每项 text 为居中主文案，showFrom 为 content 下标（0-based）；enterEffect、tone 可选",
+            "items": {
+              "type": "object",
+              "required": [
+                "text",
+                "showFrom"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "居中暴击大字；可与 content 口播措辞不同，宜更短"
+                },
+                "showFrom": {
+                  "type": "content_index",
+                  "minimum": 0,
+                  "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本句"
+                },
+                "enterEffect": {
+                  "type": "string",
+                  "enum": [
+                    "snap",
+                    "popIn",
+                    "slideUp",
+                    "shake"
+                  ],
+                  "default": "snap",
+                  "description": "入场效果"
+                },
+                "tone": {
+                  "type": "string",
+                  "enum": [
+                    "calm",
+                    "alert"
+                  ],
+                  "description": "首条可 calm，其余默认可 alert"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "punches"
+        ]
+      }
+    },
+    "QUOTE_CITATION": {
+      "requiredOverrideKeys": [],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "quoteSource": {
+            "type": "string",
+            "description": "引言来源"
+          },
+          "quoteDisplayText": {
+            "type": "string",
+            "description": "版心引用正文（打字机效果）；不传则使用 content 拼接结果"
+          },
+          "showFrom": {
+            "type": "integer",
+            "description": "content 下标（0-based）。仅打字正文从该条 startFrame 起再入场；开引号与 quoteSource 仍从 item 起点出现。未传 quoteDisplayText 时正文从该条起拼接"
+          }
+        },
+        "required": [
+          "quoteSource"
+        ]
+      }
+    },
+    "SPLIT_COMPARE": {
+      "requiredOverrideKeys": [],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "leftSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "左侧图片描述"
+          },
+          "rightSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "右侧图片描述"
+          },
+          "leftLabel": {
+            "type": "string",
+            "description": "左侧标签（2～6 字为宜）"
+          },
+          "rightLabel": {
+            "type": "string",
+            "description": "右侧标签（2～6 字为宜）"
+          },
+          "leftShowFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "左侧图与标签出现的时刻：取 content 数组下标（0-based），入场帧为该条的 startFrame；省略或越界则从 0 帧起"
+          },
+          "rightShowFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "右侧图与标签出现的时刻：取 content 数组下标（0-based），入场帧为该条的 startFrame；省略或越界则从 0 帧起"
+          }
+        },
+        "required": [
+          "leftSrc",
+          "rightSrc",
+          "leftLabel",
+          "rightLabel"
+        ]
+      }
+    },
+    "STAT_COMPARE": {
+      "requiredOverrideKeys": [
+        "bars",
+        "anchors"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "bars": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 6,
+            "description": "多条柱状对比；每项须含 label、value（非负数，整数或小数）、showFrom（content 下标），从该条 startFrame 起显示本柱",
+            "items": {
+              "type": "object",
+              "required": [
+                "label",
+                "value",
+                "showFrom"
+              ],
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "description": "短标签"
+                },
+                "value": {
+                  "type": "number",
+                  "description": "数值（非负，整数或小数）"
+                },
+                "decimalPlaces": {
+                  "type": "integer",
+                  "description": "小数位数；缺省按 value 自动推断"
+                },
+                "showFrom": {
+                  "type": "integer",
+                  "format": "content_index",
+                  "description": "该柱出现时机：content 数组下标（0-based），取该条 startFrame 作为入场起点"
+                }
+              }
+            }
+          },
+          "leftValue": {
+            "type": "number",
+            "description": "左侧数值（非负），旧版两柱模式"
+          },
+          "rightValue": {
+            "type": "number",
+            "description": "右侧数值（非负），旧版两柱模式"
+          },
+          "leftLabel": {
+            "type": "string",
+            "description": "左侧标签"
+          },
+          "rightLabel": {
+            "type": "string",
+            "description": "右侧标签"
+          },
+          "anchors": {
+            "type": "array",
+            "description": "可选；顶部锚点词列表，showFrom 为 content 下标（取该条 startFrame），与 KPI_HERO / DATA_TABLE 一致",
+            "items": {
+              "type": "object",
+              "required": [
+                "text",
+                "showFrom"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "锚点词文案"
+                },
+                "showFrom": {
+                  "type": "integer",
+                  "format": "content_index",
+                  "description": "content 下标（0-based），非帧数"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "anim": {
+                  "type": "string",
+                  "enum": [
+                    "spring",
+                    "slideUp",
+                    "popIn",
+                    "highlight"
+                  ]
+                },
+                "audioEffect": {
+                  "type": "string",
+                  "enum": [
+                    "impact_thud",
+                    "ping",
+                    "woosh"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "required": []
+      }
+    },
+    "STEP_LIST": {
+      "requiredOverrideKeys": [
+        "steps"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "可选；步骤列表上方标题，建议 4～14 字"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "showFrom": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "description": "对应 content 数组的下标（0-based）；该步在 content[showFrom].startFrame 帧开始入场。不传则按 staggerDelay 与序号顺延。"
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ]
+                }
+              ]
+            },
+            "minItems": 2,
+            "maxItems": 6,
+            "description": "步骤（可选）。可为字符串，或 { text, showFrom? }（showFrom=content 下标）；不传则从 content 提取。每条 text 建议不超过 10 字。"
+          }
+        },
+        "required": []
+      }
+    },
+    "TEXT_FOCUS": {
+      "requiredOverrideKeys": [
+        "coreSentence",
+        "coreSentenceAnchors"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "coreSentence": {
+            "type": "array",
+            "minItems": 1,
+            "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "text",
+                    "showFrom"
+                  ],
+                  "properties": {
+                    "text": {
+                      "type": "string",
+                      "description": "该行大屏文案"
+                    },
+                    "showFrom": {
+                      "type": "integer",
+                      "format": "content_index",
+                      "description": "content 下标（0-based），非帧数"
+                    },
+                    "endFrom": {
+                      "type": "integer",
+                      "format": "content_index",
+                      "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "coreSentenceAnchors": {
+            "type": "array",
+            "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+            "items": {
+              "type": "object",
+              "required": [
+                "coreSentenceAnchor"
+              ],
+              "properties": {
+                "coreSentenceAnchor": {
+                  "type": "string",
+                  "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+                },
+                "color": {
+                  "type": "string",
+                  "description": "高亮颜色，省略时默认强调色"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "coreSentence"
+        ]
+      }
+    },
+    "TIMELINE": {
+      "requiredOverrideKeys": [
+        "images"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "images": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 5,
+            "description": "时间轴节点配图（3～5 项）；顺序即时间先后，横向从左到右均分",
+            "items": {
+              "type": "object",
+              "required": [
+                "src"
+              ],
+              "properties": {
+                "src": {
+                  "type": "string",
+                  "format": "image_prompt",
+                  "description": "该节点配图提示词"
+                },
+                "enterEffect": {
+                  "type": "string",
+                  "enum": [
+                    "breathe",
+                    "slideLeft",
+                    "slideBottom",
+                    "zoomIn",
+                    "fadeIn"
+                  ],
+                  "default": "breathe"
+                },
+                "textIndex": {
+                  "type": "integer",
+                  "format": "content_index"
+                },
+                "startFrame": {
+                  "type": "integer"
+                },
+                "label": {
+                  "type": "string",
+                  "description": "节点短标注（建议 2～12 字）；轴上方节点显示在配图上方，轴下方节点显示在配图下方"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "images"
+        ]
+      }
+    },
+    "TREE_DIAGRAM": {
+      "requiredOverrideKeys": [
+        "root"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "root": {
+            "type": "object",
+            "required": [
+              "label"
+            ],
+            "description": "根节点",
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "节点文本，建议 2～12 字"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 数组下标（0-based），控制该节点出现时机"
+              },
+              "children": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 4,
+                "description": "子节点列表",
+                "items": {
+                  "$ref": "#/$defs/treeNode"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "root"
+        ],
+        "$defs": {
+          "treeNode": {
+            "type": "object",
+            "required": [
+              "label"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "节点文本"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 数组下标（0-based）"
+              },
+              "children": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 4,
+                "items": {
+                  "$ref": "#/$defs/treeNode"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

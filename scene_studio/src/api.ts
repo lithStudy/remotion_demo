@@ -50,7 +50,7 @@ export type ProjectInfo = {
 
 export type TemplateInfo = {
   name: string;
-  /** 中文显示名（来自 templateMeta.psychology） */
+  /** 中文显示名（来自 templateMeta.chinese_name） */
   label?: string;
   description?: string;
   paramSchema: Record<string, unknown>;
@@ -71,7 +71,30 @@ export type JobStatus = {
   error: string | null;
   createdAt: string;
   finishedAt: string | null;
+  timeoutSec?: number;
 };
+
+export const JOB_TERMINAL_STATUSES = new Set([
+  "succeeded",
+  "failed",
+  "cancelled",
+  "timed_out",
+  "interrupted",
+]);
+
+export function isJobActive(job: JobStatus | null | undefined): boolean {
+  return Boolean(job && !JOB_TERMINAL_STATUSES.has(job.status));
+}
+
+/** 正在生成草稿（Step0），此时禁止开脚本生成 */
+export function isDraftGenerating(job: JobStatus | null | undefined): boolean {
+  return Boolean(
+    isJobActive(job) &&
+      job &&
+      job.kind === "generate" &&
+      (job.phase === "starting" || job.phase === "step0"),
+  );
+}
 
 export const api = {
   login: (password: string) =>
@@ -131,19 +154,46 @@ export const api = {
   startGenerate: (
     name: string,
     pauseAfterStep0: boolean,
-    llmProvider?: string | null,
-    llmModel?: string | null,
+    opts?: {
+      force?: boolean;
+      llmProvider?: string | null;
+      llmModel?: string | null;
+    },
   ) =>
     postJson<{ jobId: string; status: string; phase: string }>(
       "/api/generate/start",
-      { name, pauseAfterStep0, llmProvider, llmModel },
+      {
+        name,
+        pauseAfterStep0,
+        force: opts?.force ?? false,
+        llmProvider: opts?.llmProvider,
+        llmModel: opts?.llmModel,
+      },
     ),
 
-  continueStep1: (name: string) =>
-    postJson<{ jobId: string }>("/api/generate/continue-step1", { name }),
+  continueStep1: (
+    name: string,
+    opts?: {
+      force?: boolean;
+      llmProvider?: string | null;
+      llmModel?: string | null;
+    },
+  ) =>
+    postJson<{ jobId: string; status: string; phase: string }>(
+      "/api/generate/continue-step1",
+      {
+        name,
+        force: opts?.force ?? false,
+        llmProvider: opts?.llmProvider,
+        llmModel: opts?.llmModel,
+      },
+    ),
 
   jobStatus: (jobId: string) =>
     postJson<JobStatus>("/api/jobs/status", { jobId }),
+
+  activeJob: () =>
+    postJson<{ job: JobStatus | null }>("/api/jobs/active", {}),
 
   getDraft: (name: string) =>
     postJson<{ draft: Record<string, unknown> }>("/api/draft/get", { name }),

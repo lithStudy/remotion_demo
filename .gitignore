@@ -8,6 +8,11 @@ out
 
 # IDE and tool directories
 
+# Python bytecode / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
 # Scene Studio cloud workspace (local default)
 scene_studio_workspace/
 

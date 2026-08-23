@@ -30,6 +30,21 @@ export { BWConceptCard } from "./ConceptCard";
 export type { BWConceptCardProps } from "./ConceptCard";
 export { BWQuoteCitation } from "./QuoteCitation";
 export type { BWQuoteCitationProps } from "./QuoteCitation";
+export {
+	BWSourceCitation,
+	computeSourceCitationDuration,
+	formatSourceCitationLine,
+	getSourceCitationOriginalTitle,
+	SOURCE_CITATION_BASE_FRAMES,
+	SOURCE_CITATION_PER_ITEM_FRAMES,
+	SOURCE_CITATION_READ_BUFFER_FRAMES,
+	SOURCE_CITATION_SCROLL_THRESHOLD,
+	SOURCE_CITATION_MAX_REFERENCES,
+} from "./SourceCitation";
+export type {
+	BWSourceCitationProps,
+	SourceCitationReferenceItem,
+} from "./SourceCitation";
 export { BWTimeline } from "./Timeline";
 export type { BWTimelineProps, TimelineImageItem } from "./Timeline";
 export { BWDosAndDonts } from "./DosAndDonts";
@@ -71,3 +86,5 @@ export { BWDataTable } from "./DataTable";
 export type { BWDataTableProps, DataTableRowItem } from "./DataTable";
 export { BWTreeDiagram } from "./TreeDiagram";
 export type { BWTreeDiagramProps, TreeNodeData } from "./TreeDiagram";
+export { BWQaReveal } from "./QaReveal";
+export type { BWQaRevealProps, QaRevealHighlightItem } from "./QaReveal";

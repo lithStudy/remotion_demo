@@ -15,7 +15,7 @@
 |------|------|------|
 | `topic` | string | 阶段 1 生成的封面钩子 |
 | `scenes` | array | 场景数组 |
-| `fps` | number | 帧率，从 `narrator_pipeline/config.json` 读取（当前 30） |
+| `fps` | number | 帧率，从 `narrator_pipeline/config.yaml` 读取（当前 30） |
 | `cover` | object | 封面信息，后处理注入 |
 
 ## Scene 结构
@@ -23,7 +23,7 @@
 ```json
 {
   "sceneId": "scene_1",
-  "sceneName": "引入·主题词",
+  "sceneName": "无知者为何更自信",
   "items": [ ... ]
 }
 ```
@@ -31,7 +31,7 @@
 | 字段 | 类型 | 说明 |
 |------|------|------|
 | `sceneId` | string | `scene_1`, `scene_2` ... 递增 |
-| `sceneName` | string | 功能前缀 + 主题词（6～14 字） |
+| `sceneName` | string | 内容化章节名（6～10 字，见 PHASE_1 sceneName 规则） |
 | `items` | array | 该场景的分镜条目 |
 
 **注意**：最终输出中 scene 上**不保留** `text` 字段（阶段 1 的中间产物，后处理时删除）。
@@ -100,7 +100,7 @@
 
 ## Cover 结构
 
-cover 对象根据 `narrator_pipeline/config.json` 中的配置注入。
+cover 对象根据 `narrator_pipeline/config.yaml` 中的配置注入。
 
 ```json
 {
@@ -118,9 +118,9 @@ cover 对象根据 `narrator_pipeline/config.json` 中的配置注入。
 }
 ```
 
-字段来源映射（从 `narrator_pipeline/config.json` 读取）：
+字段来源映射（从 `narrator_pipeline/config.yaml` 读取）：
 
-| cover 字段 | config.json 字段 | 说明 |
+| cover 字段 | config.yaml 字段 | 说明 |
 |-----------|-----------------|------|
 | `durationFrames` | `cover_duration_frames` | 封面持续帧数 |
 | `title` | 用户提供的视频名称 `name` | 若为空则用 topic 截断 |
@@ -155,7 +155,7 @@ cover 对象根据 `narrator_pipeline/config.json` 中的配置注入。
   "scenes": [
     {
       "sceneId": "scene_1",
-      "sceneName": "引入·达克效应",
+      "sceneName": "无知者为何更自信",
       "items": [
         {
           "order": 1,

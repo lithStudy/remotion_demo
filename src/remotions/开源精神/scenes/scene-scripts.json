@@ -7,32 +7,113 @@
       "items": [
         {
           "narrativeType": "HOOK",
-          "template": "CENTER_FOCUS",
-          "reasoning": "平铺叙述一个普遍误解，作为引子，无列表/对比/节奏变化，用CENTER_FOCUS单图展示即可；后续转折需独立成镜以强化冲击，故拆分。",
+          "template": "PUNCH_CAPTION",
+          "reasoning": "开篇钩子反问，独立成镜用PUNCH_CAPTION居中大字制造冲击；后续解释另镜承接。",
           "content": [
             {
               "text": "我为什么特别讨厌鸿蒙？",
               "startFrame": 0,
-              "durationFrames": 47
-            },
-            {
-              "text": "因为鸿蒙破坏了开源精神。",
-              "startFrame": 46,
-              "durationFrames": 74
-            },
-            {
-              "text": "作为一个程序员，这是我最不能容忍的事情。",
-              "startFrame": 120,
-              "durationFrames": 86
+              "durationFrames": 54
             }
           ],
           "order": 1,
+          "param": {
+            "punches": [
+              {
+                "text": "我为什么特别讨厌鸿蒙？",
+                "showFrom": 0,
+                "enterEffect": "snap",
+                "tone": "alert"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "讨厌鸿蒙",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 54
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "点明讨厌鸿蒙的核心指控（套壳却宣称自研），短促强结论无需配图，独立成TEXT_FOCUS做大字暴击。",
+          "content": [
+            {
+              "text": "因为鸿蒙至少在5.0之前，",
+              "startFrame": 0,
+              "durationFrames": 62
+            },
+            {
+              "text": "一边套壳安卓，",
+              "startFrame": 61,
+              "durationFrames": 42
+            },
+            {
+              "text": "一边宣称完全自研。",
+              "startFrame": 102,
+              "durationFrames": 48
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "因为鸿蒙至少在5.0之前，",
+                "startFrame": 0,
+                "durationFrames": 54
+              },
+              {
+                "text": "一边套壳安卓，",
+                "startFrame": 53,
+                "durationFrames": 54
+              },
+              {
+                "text": "一边宣称完全自研。",
+                "startFrame": 53,
+                "durationFrames": 54
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "套壳安卓",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "完全自研",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 151
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "承接指控后的情绪落点，平铺叙述反感态度，用CENTER_FOCUS单图展示即可。",
+          "content": [
+            {
+              "text": "这种严重破坏开源精神的操作，",
+              "startFrame": 0,
+              "durationFrames": 66
+            },
+            {
+              "text": "让我相当的反感。",
+              "startFrame": 65,
+              "durationFrames": 43
+            }
+          ],
+          "order": 3,
           "param": {
             "imageSrc": "images/开源精神/scene_1_1.png",
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 206
+          "totalDurationFrames": 108
         },
         {
           "narrativeType": "HOOK",
@@ -42,20 +123,20 @@
             {
               "text": "很多人以为，",
               "startFrame": 0,
-              "durationFrames": 33
+              "durationFrames": 28
             },
             {
               "text": "“开源”",
-              "startFrame": 32,
-              "durationFrames": 22
+              "startFrame": 27,
+              "durationFrames": 16
             },
             {
               "text": "只是程序员圈子里的技术游戏。",
-              "startFrame": 54,
-              "durationFrames": 64
+              "startFrame": 42,
+              "durationFrames": 76
             }
           ],
-          "order": 2,
+          "order": 4,
           "param": {
             "imageSrc": "images/开源精神/scene_1_2.png",
             "enterEffect": "fadeIn",
@@ -71,29 +152,29 @@
             {
               "text": "但其实，",
               "startFrame": 0,
-              "durationFrames": 24
+              "durationFrames": 20
             },
             {
               "text": "开源是现代文明社会里，",
-              "startFrame": 24,
-              "durationFrames": 53
+              "startFrame": 19,
+              "durationFrames": 55
             },
             {
               "text": "最伟大的一次“资产普惠”。",
-              "startFrame": 76,
-              "durationFrames": 67
+              "startFrame": 74,
+              "durationFrames": 55
             }
           ],
-          "order": 3,
+          "order": 5,
           "param": {
             "imageSrc": "images/开源精神/scene_1_3.png",
             "conceptName": "开源"
           },
-          "totalDurationFrames": 143
+          "totalDurationFrames": 129
         }
       ],
       "audioSrc": "/audio/开源精神/scene_1/scene_1.mp3",
-      "totalDurationFrames": 468
+      "totalDurationFrames": 560
     },
     {
       "sceneId": "scene_2",
@@ -107,17 +188,17 @@
             {
               "text": "根据 2024 年的数据，",
               "startFrame": 0,
-              "durationFrames": 45
+              "durationFrames": 48
             },
             {
               "text": "全球 96% 的商业代码库，",
-              "startFrame": 44,
-              "durationFrames": 66
+              "startFrame": 48,
+              "durationFrames": 68
             },
             {
               "text": "都包含开源组件。",
-              "startFrame": 110,
-              "durationFrames": 45
+              "startFrame": 115,
+              "durationFrames": 42
             }
           ],
           "order": 1,
@@ -131,7 +212,7 @@
               }
             ]
           },
-          "totalDurationFrames": 155
+          "totalDurationFrames": 158
         },
         {
           "narrativeType": "LOGIC",
@@ -141,21 +222,21 @@
             {
               "text": "这意味着，",
               "startFrame": 0,
-              "durationFrames": 21
+              "durationFrames": 24
             },
             {
               "text": "你手机里几乎每一款 APP，",
-              "startFrame": 20,
+              "startFrame": 24,
               "durationFrames": 64
             },
             {
               "text": "其核心代码的 70% 到 90%，",
-              "startFrame": 84,
-              "durationFrames": 83
+              "startFrame": 87,
+              "durationFrames": 88
             },
             {
               "text": "都是开源社区免费提供的。",
-              "startFrame": 166,
+              "startFrame": 174,
               "durationFrames": 59
             }
           ],
@@ -165,7 +246,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 226
+          "totalDurationFrames": 233
         },
         {
           "narrativeType": "LOGIC",
@@ -180,17 +261,17 @@
             {
               "text": "我们要想从头研发这套底层设施，",
               "startFrame": 76,
-              "durationFrames": 90
+              "durationFrames": 74
             },
             {
               "text": "至少需要投入 415 亿美金。",
-              "startFrame": 165,
-              "durationFrames": 89
+              "startFrame": 149,
+              "durationFrames": 74
             },
             {
               "text": "这还仅仅是研发成本，不含时间成本。",
-              "startFrame": 254,
-              "durationFrames": 89
+              "startFrame": 222,
+              "durationFrames": 86
             }
           ],
           "order": 3,
@@ -214,7 +295,7 @@
               }
             ]
           },
-          "totalDurationFrames": 343
+          "totalDurationFrames": 308
         },
         {
           "narrativeType": "CONCLUSION",
@@ -229,7 +310,7 @@
             {
               "text": "直接送给了全人类。",
               "startFrame": 65,
-              "durationFrames": 44
+              "durationFrames": 46
             }
           ],
           "order": 4,
@@ -245,11 +326,11 @@
               }
             ]
           },
-          "totalDurationFrames": 110
+          "totalDurationFrames": 112
         }
       ],
       "audioSrc": "/audio/开源精神/scene_2/scene_2.mp3",
-      "totalDurationFrames": 834
+      "totalDurationFrames": 812
     },
     {
       "sceneId": "scene_3",
@@ -263,12 +344,12 @@
             {
               "text": "开源最重要的一点，",
               "startFrame": 0,
-              "durationFrames": 42
+              "durationFrames": 41
             },
             {
               "text": "是它实现了“科技平权”。",
-              "startFrame": 41,
-              "durationFrames": 59
+              "startFrame": 40,
+              "durationFrames": 62
             }
           ],
           "order": 1,
@@ -284,7 +365,7 @@
               }
             ]
           },
-          "totalDurationFrames": 101
+          "totalDurationFrames": 102
         },
         {
           "narrativeType": "DATA",
@@ -294,12 +375,12 @@
             {
               "text": "如果没有开源，",
               "startFrame": 0,
-              "durationFrames": 36
+              "durationFrames": 32
             },
             {
               "text": "全球智能手机的价格至少要翻三倍。",
-              "startFrame": 36,
-              "durationFrames": 92
+              "startFrame": 31,
+              "durationFrames": 79
             }
           ],
           "order": 2,
@@ -317,7 +398,7 @@
               }
             ]
           },
-          "totalDurationFrames": 128
+          "totalDurationFrames": 110
         },
         {
           "narrativeType": "CASE",
@@ -327,12 +408,12 @@
             {
               "text": "因为有开源的安卓在，",
               "startFrame": 0,
-              "durationFrames": 51
+              "durationFrames": 47
             },
             {
               "text": "苹果才是你够够脚尖能买的起的产品，",
-              "startFrame": 50,
-              "durationFrames": 104
+              "startFrame": 46,
+              "durationFrames": 91
             }
           ],
           "order": 3,
@@ -341,7 +422,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 154
+          "totalDurationFrames": 138
         },
         {
           "narrativeType": "CONCLUSION",
@@ -351,17 +432,17 @@
             {
               "text": "如果没有安卓对抗，",
               "startFrame": 0,
-              "durationFrames": 40
+              "durationFrames": 45
             },
             {
               "text": "苹果这种闭源垄断产品，",
-              "startFrame": 39,
-              "durationFrames": 60
+              "startFrame": 44,
+              "durationFrames": 69
             },
             {
               "text": "可能会变成像八零年代的大哥大一样贵重",
-              "startFrame": 99,
-              "durationFrames": 87
+              "startFrame": 113,
+              "durationFrames": 102
             }
           ],
           "order": 4,
@@ -376,11 +457,11 @@
               }
             ]
           },
-          "totalDurationFrames": 186
+          "totalDurationFrames": 215
         }
       ],
       "audioSrc": "/audio/开源精神/scene_3/scene_3.mp3",
-      "totalDurationFrames": 570
+      "totalDurationFrames": 566
     },
     {
       "sceneId": "scene_4",
@@ -394,12 +475,12 @@
             {
               "text": "在知识面前，",
               "startFrame": 0,
-              "durationFrames": 32
+              "durationFrames": 31
             },
             {
               "text": "开源也在打破围墙。",
-              "startFrame": 31,
-              "durationFrames": 54
+              "startFrame": 30,
+              "durationFrames": 55
             }
           ],
           "order": 1,
@@ -425,7 +506,7 @@
             {
               "text": "维基百科拥有超过6500万个页面，",
               "startFrame": 0,
-              "durationFrames": 89
+              "durationFrames": 87
             }
           ],
           "order": 2,
@@ -437,7 +518,7 @@
             "useGrouping": true,
             "decimalPlaces": 0
           },
-          "totalDurationFrames": 89
+          "totalDurationFrames": 87
         },
         {
           "narrativeType": "DATA",
@@ -447,7 +528,7 @@
             {
               "text": "全球网民每年在这里耗费29亿小时去学习。",
               "startFrame": 0,
-              "durationFrames": 116
+              "durationFrames": 99
             }
           ],
           "order": 3,
@@ -457,7 +538,7 @@
             "label": "每年学习时长",
             "useGrouping": false
           },
-          "totalDurationFrames": 116
+          "totalDurationFrames": 99
         },
         {
           "narrativeType": "DATA",
@@ -467,12 +548,12 @@
             {
               "text": "麻省理工的开源课程，",
               "startFrame": 0,
-              "durationFrames": 57
+              "durationFrames": 58
             },
             {
               "text": "累计播放量突破4.2亿次。",
-              "startFrame": 56,
-              "durationFrames": 75
+              "startFrame": 57,
+              "durationFrames": 81
             }
           ],
           "order": 4,
@@ -488,7 +569,7 @@
             ],
             "countDuration": 28
           },
-          "totalDurationFrames": 131
+          "totalDurationFrames": 139
         },
         {
           "narrativeType": "LOGIC",
@@ -498,12 +579,12 @@
             {
               "text": "这不仅仅是代码的公开，",
               "startFrame": 0,
-              "durationFrames": 61
+              "durationFrames": 47
             },
             {
               "text": "更是“生存机会”的公开。",
-              "startFrame": 60,
-              "durationFrames": 54
+              "startFrame": 46,
+              "durationFrames": 51
             }
           ],
           "order": 5,
@@ -514,7 +595,7 @@
             "notContentIndex": 0,
             "butContentIndex": 1
           },
-          "totalDurationFrames": 114
+          "totalDurationFrames": 98
         },
         {
           "narrativeType": "CASE",
@@ -524,12 +605,12 @@
             {
               "text": "它让一个偏远山区的孩子，",
               "startFrame": 0,
-              "durationFrames": 48
+              "durationFrames": 52
             },
             {
               "text": "可以和硅谷工程师看到一模一样的底层逻辑。",
-              "startFrame": 48,
-              "durationFrames": 81
+              "startFrame": 51,
+              "durationFrames": 93
             }
           ],
           "order": 6,
@@ -546,7 +627,7 @@
               }
             ]
           },
-          "totalDurationFrames": 129
+          "totalDurationFrames": 144
         },
         {
           "narrativeType": "CONCLUSION",
@@ -556,12 +637,12 @@
             {
               "text": "这就是科技带给人类，",
               "startFrame": 0,
-              "durationFrames": 40
+              "durationFrames": 41
             },
             {
               "text": "最顶级的温柔",
-              "startFrame": 39,
-              "durationFrames": 41
+              "startFrame": 40,
+              "durationFrames": 36
             }
           ],
           "order": 7,
@@ -576,11 +657,11 @@
               }
             ]
           },
-          "totalDurationFrames": 80
+          "totalDurationFrames": 77
         }
       ],
       "audioSrc": "/audio/开源精神/scene_4/scene_4.mp3",
-      "totalDurationFrames": 745
+      "totalDurationFrames": 728
     },
     {
       "sceneId": "scene_5",
@@ -594,17 +675,17 @@
             {
               "text": "开源的意义，",
               "startFrame": 0,
-              "durationFrames": 29
+              "durationFrames": 30
             },
             {
               "text": "甚至跨越了代码，",
-              "startFrame": 28,
-              "durationFrames": 38
+              "startFrame": 29,
+              "durationFrames": 35
             },
             {
               "text": "在直接拯救生命。",
-              "startFrame": 65,
-              "durationFrames": 46
+              "startFrame": 64,
+              "durationFrames": 37
             }
           ],
           "order": 1,
@@ -621,7 +702,7 @@
               }
             ]
           },
-          "totalDurationFrames": 112
+          "totalDurationFrames": 102
         },
         {
           "narrativeType": "CASE",
@@ -631,17 +712,17 @@
             {
               "text": "在医疗领域，",
               "startFrame": 0,
-              "durationFrames": 28
+              "durationFrames": 33
             },
             {
               "text": "Open Insulin打破了胰岛素市场三大药企的垄断，",
-              "startFrame": 27,
-              "durationFrames": 113
+              "startFrame": 32,
+              "durationFrames": 114
             },
             {
               "text": "实现了平价的胰岛素的生物合成方案。",
-              "startFrame": 139,
-              "durationFrames": 96
+              "startFrame": 146,
+              "durationFrames": 90
             }
           ],
           "order": 2,
@@ -672,12 +753,12 @@
             {
               "text": "也正是超千万份病毒基因组序列的开源，",
               "startFrame": 50,
-              "durationFrames": 99
+              "durationFrames": 102
             },
             {
               "text": "促成了新冠疫苗史诗级的快速研发。",
-              "startFrame": 148,
-              "durationFrames": 81
+              "startFrame": 151,
+              "durationFrames": 85
             }
           ],
           "order": 3,
@@ -701,7 +782,7 @@
               }
             ]
           },
-          "totalDurationFrames": 230
+          "totalDurationFrames": 237
         },
         {
           "narrativeType": "CONCLUSION",
@@ -711,17 +792,17 @@
             {
               "text": "当商业逻辑为了利润选择“收割”你的时候，",
               "startFrame": 0,
-              "durationFrames": 84
+              "durationFrames": 98
             },
             {
               "text": "开源精神通过共享，",
-              "startFrame": 84,
-              "durationFrames": 48
+              "startFrame": 97,
+              "durationFrames": 57
             },
             {
               "text": "给了你活下去的“武器”。",
-              "startFrame": 132,
-              "durationFrames": 50
+              "startFrame": 153,
+              "durationFrames": 47
             }
           ],
           "order": 5,
@@ -733,11 +814,11 @@
             "leftShowFrom": 0,
             "rightShowFrom": 1
           },
-          "totalDurationFrames": 182
+          "totalDurationFrames": 201
         }
       ],
       "audioSrc": "/audio/开源精神/scene_5/scene_5.mp3",
-      "totalDurationFrames": 760
+      "totalDurationFrames": 776
     },
     {
       "sceneId": "scene_6",
@@ -751,12 +832,12 @@
             {
               "text": "甚至于我个人来说，",
               "startFrame": 0,
-              "durationFrames": 44
+              "durationFrames": 41
             },
             {
               "text": "我自己组装的NAS系统。",
-              "startFrame": 43,
-              "durationFrames": 60
+              "startFrame": 40,
+              "durationFrames": 57
             }
           ],
           "order": 1,
@@ -773,7 +854,7 @@
               }
             ]
           },
-          "totalDurationFrames": 104
+          "totalDurationFrames": 98
         },
         {
           "narrativeType": "CASE",
@@ -783,32 +864,32 @@
             {
               "text": "远程桌面RustDesk，",
               "startFrame": 0,
-              "durationFrames": 57
+              "durationFrames": 55
             },
             {
               "text": "网盘工具filebrowser，",
-              "startFrame": 56,
+              "startFrame": 54,
               "durationFrames": 57
             },
             {
               "text": "智能家居Home Assistant，",
-              "startFrame": 113,
-              "durationFrames": 54
+              "startFrame": 111,
+              "durationFrames": 53
             },
             {
               "text": "影音播放Jellyfin，",
-              "startFrame": 166,
-              "durationFrames": 51
-            },
-            {
-              "text": "数据同步syncthing。",
-              "startFrame": 217,
+              "startFrame": 163,
               "durationFrames": 47
             },
             {
+              "text": "数据同步syncthing。",
+              "startFrame": 210,
+              "durationFrames": 50
+            },
+            {
               "text": "还有很多很多。",
-              "startFrame": 264,
-              "durationFrames": 45
+              "startFrame": 260,
+              "durationFrames": 42
             }
           ],
           "order": 2,
@@ -852,7 +933,7 @@
               }
             ]
           },
-          "totalDurationFrames": 309
+          "totalDurationFrames": 302
         },
         {
           "narrativeType": "CONCLUSION",
@@ -862,24 +943,24 @@
             {
               "text": "如果没有这些工具的开源，",
               "startFrame": 0,
-              "durationFrames": 52
+              "durationFrames": 54
             },
             {
               "text": "想要实现自己的NAS，",
-              "startFrame": 51,
-              "durationFrames": 44
+              "startFrame": 53,
+              "durationFrames": 42
             },
             {
-              "text": "成本至少每年1000元起步。",
+              "text": "成本至少每年5000元起步。",
               "startFrame": 94,
-              "durationFrames": 72
+              "durationFrames": 68
             }
           ],
           "order": 3,
           "param": {
             "blocks": [
               {
-                "value": 1000,
+                "value": 5000,
                 "suffix": "元",
                 "label": "年成本",
                 "showFrom": 2
@@ -887,11 +968,11 @@
             ],
             "countDuration": 28
           },
-          "totalDurationFrames": 167
+          "totalDurationFrames": 163
         }
       ],
       "audioSrc": "/audio/开源精神/scene_6/scene_6.mp3",
-      "totalDurationFrames": 581
+      "totalDurationFrames": 564
     },
     {
       "sceneId": "scene_7",
@@ -905,17 +986,17 @@
             {
               "text": "但是，最讽刺的一幕正在发生",
               "startFrame": 0,
-              "durationFrames": 77
+              "durationFrames": 71
             },
             {
               "text": "某些巨头，",
-              "startFrame": 76,
-              "durationFrames": 30
+              "startFrame": 70,
+              "durationFrames": 32
             },
             {
               "text": "正在上演“农夫与蛇”的故事。",
-              "startFrame": 105,
-              "durationFrames": 64
+              "startFrame": 102,
+              "durationFrames": 53
             }
           ],
           "order": 1,
@@ -932,7 +1013,7 @@
               }
             ]
           },
-          "totalDurationFrames": 170
+          "totalDurationFrames": 155
         },
         {
           "narrativeType": "DATA",
@@ -942,12 +1023,12 @@
             {
               "text": "他们利用全球 11 亿次 的年度开源贡献，",
               "startFrame": 0,
-              "durationFrames": 88
+              "durationFrames": 103
             },
             {
               "text": "像海绵一样吸取养分。",
-              "startFrame": 87,
-              "durationFrames": 56
+              "startFrame": 102,
+              "durationFrames": 49
             }
           ],
           "order": 2,
@@ -957,7 +1038,7 @@
             "suffix": "亿次",
             "label": "年度开源贡献"
           },
-          "totalDurationFrames": 143
+          "totalDurationFrames": 152
         },
         {
           "narrativeType": "LOGIC",
@@ -967,17 +1048,17 @@
             {
               "text": "等自己长肥了，",
               "startFrame": 0,
-              "durationFrames": 36
+              "durationFrames": 34
             },
             {
               "text": "却反手给代码加上锁，",
-              "startFrame": 36,
-              "durationFrames": 51
+              "startFrame": 33,
+              "durationFrames": 58
             },
             {
               "text": "宣称这是“自主研发”。",
-              "startFrame": 86,
-              "durationFrames": 54
+              "startFrame": 91,
+              "durationFrames": 57
             }
           ],
           "order": 3,
@@ -1000,7 +1081,7 @@
               }
             ]
           },
-          "totalDurationFrames": 140
+          "totalDurationFrames": 149
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1010,12 +1091,12 @@
             {
               "text": "这不叫竞争，",
               "startFrame": 0,
-              "durationFrames": 31
+              "durationFrames": 33
             },
             {
               "text": "这叫掠夺。",
-              "startFrame": 30,
-              "durationFrames": 32
+              "startFrame": 32,
+              "durationFrames": 35
             }
           ],
           "order": 4,
@@ -1026,7 +1107,7 @@
             "notContentIndex": 0,
             "butContentIndex": 1
           },
-          "totalDurationFrames": 62
+          "totalDurationFrames": 68
         },
         {
           "narrativeType": "LOGIC",
@@ -1041,17 +1122,17 @@
             {
               "text": "这些大厂甚至连科技的门都摸不着。",
               "startFrame": 46,
-              "durationFrames": 86
+              "durationFrames": 73
             },
             {
               "text": "现在他们却想在公用水井口修收费站，",
-              "startFrame": 132,
-              "durationFrames": 93
+              "startFrame": 119,
+              "durationFrames": 82
             },
             {
               "text": "还要宣布这口井是他们家祖传的。",
-              "startFrame": 224,
-              "durationFrames": 81
+              "startFrame": 201,
+              "durationFrames": 80
             }
           ],
           "order": 5,
@@ -1079,7 +1160,7 @@
               }
             ]
           },
-          "totalDurationFrames": 306
+          "totalDurationFrames": 281
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1089,18 +1170,19 @@
             {
               "text": "这种行为，",
               "startFrame": 0,
-              "durationFrames": 28
+              "durationFrames": 27
             },
             {
               "text": "正在摧毁人类协作的底层信任。",
-              "startFrame": 27,
-              "durationFrames": 76
+              "startFrame": 26,
+              "durationFrames": 72
             }
           ],
           "order": 6,
           "param": {
             "coreSentence": [
-              "这种行为，正在摧毁人类协作的底层信任。"
+              "这种行为，",
+              "正在摧毁人类协作的底层信任。"
             ],
             "coreSentenceAnchors": [
               {
@@ -1109,7 +1191,7 @@
               }
             ]
           },
-          "totalDurationFrames": 103
+          "totalDurationFrames": 99
         },
         {
           "narrativeType": "LOGIC",
@@ -1119,21 +1201,21 @@
             {
               "text": "一旦开源精神消失，",
               "startFrame": 0,
-              "durationFrames": 50
+              "durationFrames": 44
             },
             {
               "text": "我们将退回“科技中世纪”。",
-              "startFrame": 49,
-              "durationFrames": 63
+              "startFrame": 43,
+              "durationFrames": 53
             },
             {
               "text": "每个人都要重新去发明轮子，",
-              "startFrame": 111,
-              "durationFrames": 59
+              "startFrame": 96,
+              "durationFrames": 56
             },
             {
               "text": "每个人都要支付昂贵的“技术智商税”。",
-              "startFrame": 170,
+              "startFrame": 152,
               "durationFrames": 71
             }
           ],
@@ -1157,11 +1239,11 @@
               }
             ]
           },
-          "totalDurationFrames": 241
+          "totalDurationFrames": 223
         }
       ],
       "audioSrc": "/audio/开源精神/scene_7/scene_7.mp3",
-      "totalDurationFrames": 1165
+      "totalDurationFrames": 1126
     },
     {
       "sceneId": "scene_8",
@@ -1175,12 +1257,12 @@
             {
               "text": "所以，",
               "startFrame": 0,
-              "durationFrames": 15
+              "durationFrames": 18
             },
             {
               "text": "我们为什么要大声疾呼？",
-              "startFrame": 14,
-              "durationFrames": 55
+              "startFrame": 17,
+              "durationFrames": 50
             }
           ],
           "order": 1,
@@ -1188,7 +1270,7 @@
             "imageSrc": "images/开源精神/scene_8_1.png",
             "enterEffect": "zoomIn"
           },
-          "totalDurationFrames": 69
+          "totalDurationFrames": 67
         },
         {
           "narrativeType": "LOGIC",
@@ -1203,22 +1285,22 @@
             {
               "text": "是数字时代的“自由宪章”。",
               "startFrame": 35,
-              "durationFrames": 61
+              "durationFrames": 52
             },
             {
               "text": "它不仅关乎代码，",
-              "startFrame": 96,
-              "durationFrames": 39
+              "startFrame": 87,
+              "durationFrames": 34
             },
             {
               "text": "更关乎我们的口袋，",
-              "startFrame": 134,
-              "durationFrames": 40
+              "startFrame": 121,
+              "durationFrames": 38
             },
             {
               "text": "和我们的尊严。",
-              "startFrame": 173,
-              "durationFrames": 34
+              "startFrame": 158,
+              "durationFrames": 29
             }
           ],
           "order": 2,
@@ -1239,7 +1321,7 @@
               }
             ]
           },
-          "totalDurationFrames": 208
+          "totalDurationFrames": 188
         },
         {
           "narrativeType": "LOGIC",
@@ -1275,12 +1357,12 @@
             {
               "text": "我们要抵制那些拿开源当“原材料”，",
               "startFrame": 0,
-              "durationFrames": 72
+              "durationFrames": 77
             },
             {
               "text": "却反手收割情怀的骗局。",
-              "startFrame": 72,
-              "durationFrames": 68
+              "startFrame": 76,
+              "durationFrames": 59
             }
           ],
           "order": 4,
@@ -1297,7 +1379,7 @@
               }
             ]
           },
-          "totalDurationFrames": 140
+          "totalDurationFrames": 136
         },
         {
           "narrativeType": "LOGIC",
@@ -1307,12 +1389,12 @@
             {
               "text": "我们要支持那些敢于透明、",
               "startFrame": 0,
-              "durationFrames": 57
+              "durationFrames": 54
             },
             {
               "text": "敢于回馈的真极客。",
-              "startFrame": 56,
-              "durationFrames": 49
+              "startFrame": 53,
+              "durationFrames": 51
             }
           ],
           "order": 5,
@@ -1329,7 +1411,7 @@
               }
             ]
           },
-          "totalDurationFrames": 105
+          "totalDurationFrames": 104
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1339,17 +1421,17 @@
             {
               "text": "请记住：",
               "startFrame": 0,
-              "durationFrames": 23
+              "durationFrames": 25
             },
             {
               "text": "代码是有国界的，",
-              "startFrame": 22,
-              "durationFrames": 40
+              "startFrame": 24,
+              "durationFrames": 47
             },
             {
               "text": "但开源精神是属于全人类的。",
-              "startFrame": 62,
-              "durationFrames": 68
+              "startFrame": 70,
+              "durationFrames": 67
             }
           ],
           "order": 6,
@@ -1361,7 +1443,7 @@
             "leftShowFrom": 1,
             "rightShowFrom": 2
           },
-          "totalDurationFrames": 130
+          "totalDurationFrames": 138
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1371,12 +1453,12 @@
             {
               "text": "它不是某种慈善，",
               "startFrame": 0,
-              "durationFrames": 43
+              "durationFrames": 42
             },
             {
               "text": "而是我们抵御垄断的最后一颗子弹。",
-              "startFrame": 42,
-              "durationFrames": 69
+              "startFrame": 41,
+              "durationFrames": 71
             }
           ],
           "order": 7,
@@ -1396,14 +1478,76 @@
         }
       ],
       "audioSrc": "/audio/开源精神/scene_8/scene_8.mp3",
-      "totalDurationFrames": 841
+      "totalDurationFrames": 822
+    },
+    {
+      "sceneId": "scene_references",
+      "sceneName": "片尾·参考资料",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "CONCLUSION",
+          "template": "SOURCE_CITATION",
+          "reasoning": "片尾仅展示「鸿蒙5.0之前套壳安卓」指控的公开技术证据来源，无口播。",
+          "content": [],
+          "param": {
+            "sectionTitle": "参考资料",
+            "references": [
+              {
+                "title": "HarmonyOS: “Fake it till you make it” meets OS development",
+                "titleZh": "鸿蒙系统实测：本质是 Android 分支，而非全新操作系统",
+                "publisher": "Ron Amadeo · Ars Technica",
+                "publisherZh": "Ron Amadeo · Ars Technica（科技媒体）",
+                "year": "2021"
+              },
+              {
+                "title": "Huawei officially replaces Android with HarmonyOS, which is also Android",
+                "titleZh": "华为正式用鸿蒙替换 Android，但鸿蒙仍是 Android",
+                "publisher": "Ron Amadeo · Ars Technica",
+                "publisherZh": "Ron Amadeo · Ars Technica（科技媒体）",
+                "year": "2021"
+              },
+              {
+                "title": "Huawei's Harmony OS 2.0 beta appears to be based on Android",
+                "titleZh": "鸿蒙 OS 2.0 测试版基于 Android 框架",
+                "publisher": "XDA Developers",
+                "publisherZh": "XDA Developers（开发者社区）",
+                "year": "2021"
+              },
+              {
+                "title": "Harmony OS 2.0 includes Android Q's easter egg app",
+                "titleZh": "鸿蒙 2.0 系统中发现 Android Q 彩蛋应用",
+                "publisher": "Android Authority",
+                "publisherZh": "Android Authority（科技媒体）",
+                "year": "2021"
+              },
+              {
+                "title": "HarmonyOS",
+                "titleZh": "鸿蒙系统：2019–2024 整合 AOSP，5.0 前兼容 Android 应用",
+                "publisher": "Wikipedia",
+                "publisherZh": "维基百科",
+                "year": "2024"
+              },
+              {
+                "title": "HarmonyOS version history",
+                "titleZh": "鸿蒙版本史：HarmonyOS 4.0 为 Android 12/AOSP 双框架架构",
+                "publisher": "HandWiki",
+                "publisherZh": "HandWiki（技术百科）",
+                "year": "2024"
+              }
+            ]
+          },
+          "totalDurationFrames": 180
+        }
+      ],
+      "totalDurationFrames": 180
     }
   ],
   "fps": 30,
   "cover": {
     "durationFrames": 5,
     "title": "开源精神",
-    "subtitle": "当商业选择收割，是开源精神给了平民对抗垄断的“最后一颗子弹”",
+    "subtitle": "开源精神给了平民对抗垄断的“最后一颗子弹”",
     "themeColor": "#FF6900",
     "badge": "深度解读 · 数据与事实",
     "seriesLabel": "科技热点深读",

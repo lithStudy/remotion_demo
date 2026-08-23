@@ -18,7 +18,7 @@
             {
               "text": "有人说资本家太黑心。",
               "startFrame": 46,
-              "durationFrames": 47
+              "durationFrames": 59
             }
           ],
           "order": 1,
@@ -27,7 +27,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 94
+          "totalDurationFrames": 106
         },
         {
           "narrativeType": "CONCLUSION",
@@ -37,22 +37,22 @@
             {
               "text": "但我要说，",
               "startFrame": 0,
-              "durationFrames": 44
+              "durationFrames": 24
             },
             {
               "text": "追根溯源，",
-              "startFrame": 43,
-              "durationFrames": 31
+              "startFrame": 24,
+              "durationFrames": 33
             },
             {
               "text": "一切食品问题，",
-              "startFrame": 74,
-              "durationFrames": 36
+              "startFrame": 56,
+              "durationFrames": 40
             },
             {
               "text": "都是监管问题。",
-              "startFrame": 110,
-              "durationFrames": 39
+              "startFrame": 96,
+              "durationFrames": 30
             }
           ],
           "order": 2,
@@ -79,7 +79,7 @@
               }
             ]
           },
-          "totalDurationFrames": 149
+          "totalDurationFrames": 126
         },
         {
           "narrativeType": "LOGIC",
@@ -89,26 +89,26 @@
             {
               "text": "我一直认为，",
               "startFrame": 0,
-              "durationFrames": 34
+              "durationFrames": 27
             },
             {
               "text": "只要是分析有人参与的问题，",
-              "startFrame": 33,
-              "durationFrames": 60
+              "startFrame": 26,
+              "durationFrames": 52
             },
             {
               "text": "就必须要考虑一个点：",
-              "startFrame": 93,
-              "durationFrames": 43
+              "startFrame": 77,
+              "durationFrames": 38
             },
             {
               "text": "人性是自私的，",
-              "startFrame": 136,
-              "durationFrames": 39
+              "startFrame": 114,
+              "durationFrames": 41
             },
             {
               "text": "人性是趋利的。",
-              "startFrame": 174,
+              "startFrame": 154,
               "durationFrames": 35
             }
           ],
@@ -118,7 +118,7 @@
             "conceptName": "人性趋利",
             "anchors": []
           },
-          "totalDurationFrames": 210
+          "totalDurationFrames": 190
         },
         {
           "narrativeType": "LOGIC",
@@ -128,22 +128,22 @@
             {
               "text": "没有什么有利于自己的事情，",
               "startFrame": 0,
-              "durationFrames": 51
+              "durationFrames": 50
             },
             {
               "text": "人类是做不出来的。",
-              "startFrame": 50,
-              "durationFrames": 35
+              "startFrame": 49,
+              "durationFrames": 38
             },
             {
               "text": "无论哪行哪业，",
-              "startFrame": 84,
-              "durationFrames": 35
+              "startFrame": 87,
+              "durationFrames": 42
             },
             {
               "text": "你都不能指望靠人的道德，来自我约束。",
-              "startFrame": 119,
-              "durationFrames": 94
+              "startFrame": 128,
+              "durationFrames": 82
             }
           ],
           "order": 4,
@@ -165,7 +165,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 214
+          "totalDurationFrames": 210
         },
         {
           "narrativeType": "CONCLUSION",
@@ -175,17 +175,17 @@
             {
               "text": "所以我们把监督的权利让渡给市监局，",
               "startFrame": 0,
-              "durationFrames": 88
+              "durationFrames": 83
             },
             {
               "text": "把税收的一部分提供给市监局，",
-              "startFrame": 87,
-              "durationFrames": 75
+              "startFrame": 82,
+              "durationFrames": 1
             },
             {
               "text": "就是为了让第三方来监督人性。",
-              "startFrame": 162,
-              "durationFrames": 75
+              "startFrame": 0,
+              "durationFrames": 574
             }
           ],
           "order": 5,
@@ -218,11 +218,11 @@
               }
             ]
           },
-          "totalDurationFrames": 238
+          "totalDurationFrames": 229
         }
       ],
       "audioSrc": "/audio/食品安全/scene_1/scene_1.mp3",
-      "totalDurationFrames": 906
+      "totalDurationFrames": 862
     },
     {
       "sceneId": "scene_2",
@@ -236,22 +236,22 @@
             {
               "text": "但是现在，",
               "startFrame": 0,
-              "durationFrames": 28
+              "durationFrames": 27
             },
             {
               "text": "三鹿奶粉要靠新西兰政府举报。",
-              "startFrame": 27,
-              "durationFrames": 76
+              "startFrame": 26,
+              "durationFrames": 68
             },
             {
               "text": "煤油车装食用油要靠调查记者举报。",
-              "startFrame": 102,
-              "durationFrames": 91
+              "startFrame": 93,
+              "durationFrames": 82
             },
             {
               "text": "泡药杨梅要靠自媒体举报。",
-              "startFrame": 193,
-              "durationFrames": 72
+              "startFrame": 175,
+              "durationFrames": 55
             }
           ],
           "order": 1,
@@ -275,7 +275,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 266
+          "totalDurationFrames": 231
         },
         {
           "narrativeType": "LOGIC",
@@ -285,17 +285,17 @@
             {
               "text": "这些明显是非个例的广泛性问题，",
               "startFrame": 0,
-              "durationFrames": 82
+              "durationFrames": 79
             },
             {
               "text": "不仅要靠其他人来暴露，",
-              "startFrame": 81,
-              "durationFrames": 47
+              "startFrame": 78,
+              "durationFrames": 50
             },
             {
               "text": "就算暴露了每次也都只是抓一两个典型草草收场。",
-              "startFrame": 128,
-              "durationFrames": 115
+              "startFrame": 127,
+              "durationFrames": 108
             }
           ],
           "order": 2,
@@ -304,7 +304,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 244
+          "totalDurationFrames": 235
         },
         {
           "narrativeType": "LOGIC",
@@ -314,12 +314,12 @@
             {
               "text": "既没有给予匹配消费者损失的补偿。",
               "startFrame": 0,
-              "durationFrames": 75
+              "durationFrames": 83
             },
             {
               "text": "也没有对商家或者整个行业震摄性的惩罚。",
-              "startFrame": 74,
-              "durationFrames": 94
+              "startFrame": 82,
+              "durationFrames": 92
             }
           ],
           "order": 4,
@@ -338,7 +338,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 168
+          "totalDurationFrames": 175
         },
         {
           "narrativeType": "LOGIC",
@@ -348,12 +348,12 @@
             {
               "text": "更重要的是，",
               "startFrame": 0,
-              "durationFrames": 29
+              "durationFrames": 28
             },
             {
               "text": "完全没有对监管缺位的追责。",
-              "startFrame": 28,
-              "durationFrames": 71
+              "startFrame": 27,
+              "durationFrames": 72
             }
           ],
           "order": 5,
@@ -378,12 +378,12 @@
             {
               "text": "如果一个机构不需要为结果负责，",
               "startFrame": 0,
-              "durationFrames": 66
+              "durationFrames": 67
             },
             {
               "text": "那么这个机构还有存在的意义吗？",
-              "startFrame": 65,
-              "durationFrames": 63
+              "startFrame": 66,
+              "durationFrames": 62
             }
           ],
           "order": 6,
@@ -414,7 +414,7 @@
         }
       ],
       "audioSrc": "/audio/食品安全/scene_2/scene_2.mp3",
-      "totalDurationFrames": 906
+      "totalDurationFrames": 869
     },
     {
       "sceneId": "scene_3",
@@ -428,12 +428,12 @@
             {
               "text": "有人说市监局人太少了，",
               "startFrame": 0,
-              "durationFrames": 57
+              "durationFrames": 54
             },
             {
               "text": "管不了那么大的市场。",
-              "startFrame": 56,
-              "durationFrames": 44
+              "startFrame": 53,
+              "durationFrames": 42
             }
           ],
           "order": 1,
@@ -442,7 +442,7 @@
             "quoteSource": "常见说法",
             "anchors": []
           },
-          "totalDurationFrames": 101
+          "totalDurationFrames": 95
         },
         {
           "narrativeType": "LOGIC",
@@ -452,17 +452,17 @@
             {
               "text": "那么我想问你，",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 31
             },
             {
               "text": "交警人少不少？全国的司机多不多？",
-              "startFrame": 34,
-              "durationFrames": 86
+              "startFrame": 30,
+              "durationFrames": 85
             },
             {
               "text": "为什么交警就能管住酒驾？",
-              "startFrame": 119,
-              "durationFrames": 57
+              "startFrame": 115,
+              "durationFrames": 55
             }
           ],
           "order": 2,
@@ -471,7 +471,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 177
+          "totalDurationFrames": 171
         },
         {
           "narrativeType": "TRANSITION",
@@ -481,17 +481,17 @@
             {
               "text": "管住食品安全，",
               "startFrame": 0,
-              "durationFrames": 38
+              "durationFrames": 41
             },
             {
               "text": "其实并不需要多高的人力成本，",
-              "startFrame": 37,
-              "durationFrames": 59
+              "startFrame": 40,
+              "durationFrames": 63
             },
             {
               "text": "我有两策：",
-              "startFrame": 96,
-              "durationFrames": 33
+              "startFrame": 102,
+              "durationFrames": 29
             }
           ],
           "order": 3,
@@ -500,7 +500,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 129
+          "totalDurationFrames": 131
         },
         {
           "narrativeType": "METHOD",
@@ -510,37 +510,37 @@
             {
               "text": "1.重罚。",
               "startFrame": 0,
-              "durationFrames": 40
+              "durationFrames": 39
             },
             {
               "text": "只需要你对一级市场进行抽检，",
-              "startFrame": 39,
-              "durationFrames": 68
+              "startFrame": 38,
+              "durationFrames": 59
             },
             {
               "text": "抽到有问题的就重罚。",
-              "startFrame": 106,
-              "durationFrames": 47
+              "startFrame": 96,
+              "durationFrames": 41
             },
             {
               "text": "怎么叫重罚？",
-              "startFrame": 153,
-              "durationFrames": 28
+              "startFrame": 137,
+              "durationFrames": 43
             },
             {
               "text": "万倍赔偿，",
-              "startFrame": 181,
-              "durationFrames": 35
+              "startFrame": 180,
+              "durationFrames": 30
             },
             {
               "text": "吊销销售许可，",
-              "startFrame": 216,
-              "durationFrames": 45
+              "startFrame": 209,
+              "durationFrames": 41
             },
             {
               "text": "永不允许进入销售市场。",
-              "startFrame": 261,
-              "durationFrames": 67
+              "startFrame": 250,
+              "durationFrames": 57
             }
           ],
           "order": 4,
@@ -559,7 +559,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 329
+          "totalDurationFrames": 307
         },
         {
           "narrativeType": "CONCLUSION",
@@ -569,7 +569,7 @@
             {
               "text": "抓一两个典型看还有没有敢这么干？",
               "startFrame": 0,
-              "durationFrames": 72
+              "durationFrames": 77
             }
           ],
           "order": 6,
@@ -588,7 +588,7 @@
               }
             ]
           },
-          "totalDurationFrames": 72
+          "totalDurationFrames": 77
         },
         {
           "narrativeType": "METHOD",
@@ -598,27 +598,27 @@
             {
               "text": "2.重奖。",
               "startFrame": 0,
-              "durationFrames": 45
+              "durationFrames": 44
             },
             {
               "text": "让百姓监督，",
-              "startFrame": 44,
-              "durationFrames": 37
+              "startFrame": 43,
+              "durationFrames": 35
             },
             {
               "text": "在保证隐私安全的前提下，",
-              "startFrame": 80,
-              "durationFrames": 56
+              "startFrame": 78,
+              "durationFrames": 54
             },
             {
               "text": "让百姓举报，",
-              "startFrame": 136,
-              "durationFrames": 31
+              "startFrame": 132,
+              "durationFrames": 30
             },
             {
               "text": "发现一例奖励一例。",
-              "startFrame": 166,
-              "durationFrames": 62
+              "startFrame": 161,
+              "durationFrames": 52
             }
           ],
           "order": 7,
@@ -637,7 +637,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 229
+          "totalDurationFrames": 213
         },
         {
           "narrativeType": "LOGIC",
@@ -684,12 +684,12 @@
             {
               "text": "所以，为什么不做？",
               "startFrame": 0,
-              "durationFrames": 55
+              "durationFrames": 48
             },
             {
               "text": "谁能告诉我，这很难吗？",
-              "startFrame": 54,
-              "durationFrames": 57
+              "startFrame": 48,
+              "durationFrames": 53
             }
           ],
           "order": 9,
@@ -717,11 +717,11 @@
               }
             ]
           },
-          "totalDurationFrames": 112
+          "totalDurationFrames": 101
         }
       ],
       "audioSrc": "/audio/食品安全/scene_3/scene_3.mp3",
-      "totalDurationFrames": 1258
+      "totalDurationFrames": 1205
     }
   ],
   "fps": 30,

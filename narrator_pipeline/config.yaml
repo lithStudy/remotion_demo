@@ -1,0 +1,148 @@
+# =============================================================================
+# narrator_pipeline 管线配置
+# =============================================================================
+# 本文件支持 YAML 的 # 行注释，用于说明各字段含义与取值范围。
+#
+# 密钥、密码等敏感信息请放在同目录 .env（参见 .env.example），勿写入本文件。
+#
+# 管线步骤概览：
+#   Step 0  口播稿场景拆分草稿（scene-split-draft）
+#   Step 1  分镜脚本 scene-scripts.json（LLM 分析 + 模板选型）
+#   Step 2  Azure TTS 语音合成
+#   Step 3  AI 配图（GPT / Gemini）
+#   Step 4  生成 Remotion 场景代码（Scene*.tsx、constants 等）
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# LLM 文本生成（Step 0 / Step 1）
+# -----------------------------------------------------------------------------
+# 主用 LLM 提供方。可选：gemini | deepseek | mimo
+# 对应 .env：GEMINI_API_KEY | DEEPSEEK_API_KEY | MIMO_API_KEY
+llm_provider: deepseek
+
+# 备用提供方（当前代码未自动切换，仅作人工记录/后续扩展）
+llm_provider_bak: gemini
+
+# DeepSeek 模型名（llm_provider=deepseek 时生效）
+deepseek_model: deepseek-v4-pro
+# DeepSeek OpenAI 兼容 API 基地址
+deepseek_base_url: https://api.deepseek.com
+
+# 小米 MiMo 模型名（llm_provider=mimo 时生效）
+mimo_model: mimo-v2-pro
+# MiMo OpenAI 兼容 API 基地址
+mimo_base_url: https://api.xiaomimimo.com/v1
+
+# Gemini 主模型（llm_provider=gemini 时默认使用）
+gemini_model: gemini-2.0-flash
+# Gemini 备用模型名（当前代码未自动切换，仅作记录）
+gemini_model_back: gemini-2.5-flash
+
+# Step 1 分镜项无模板时的默认模板 ID（如 CENTER_FOCUS、TEXT_FOCUS）
+default_template: CENTER_FOCUS
+
+# 历史字段，当前管线未读取（可忽略或作包名备注）
+package_name: my_video
+
+# -----------------------------------------------------------------------------
+# 图片生成（Step 3）
+# -----------------------------------------------------------------------------
+# 主用配图提供方。可选：gpt | gemini
+# gpt 需 .env 中 OPENAI_API_KEY；gemini 需 GEMINI_API_KEY
+image_provider: gpt
+
+# 备用配图提供方（当前代码未自动切换，仅作记录）
+image_provider_bak: gemini
+
+# Gemini 配图模型（image_provider=gemini）
+imagen_model: gemini-3.1-flash-image-preview
+# Gemini 备用配图模型（未自动切换）
+imagen_model_back: gemini-3-pro-image-preview
+
+# GPT 配图模型（image_provider=gpt），如 gpt-image-2
+gpt_image_model: gpt-image-2
+# GPT 配图质量：low | medium | high
+gpt_image_quality: medium
+
+# 单张图宽高比（写入配图请求；Step 3 网格批处理内部仍用 1:1 拼格）
+image_aspect_ratio: "3:4"
+# 出图分辨率档位，如 1K、2K（依模型/API 支持）
+image_size: 1K
+
+# 全局配图风格提示词，会拼入 Step 3 的 image_prompt；Step 1 LLM 也会参考此风格
+image_style: >-
+  Bold comic-style illustration with thick black outlines on pure white background,
+  heavy stroke weight, cartoon line art, flat vector icon, high contrast,
+  no thin hairline, no pencil sketch, no shading, no glow,
+  no dark or black background, isolated subject
+
+# -----------------------------------------------------------------------------
+# Azure TTS 语音合成（Step 2）
+# -----------------------------------------------------------------------------
+# 需在 .env 配置 SPEECH_KEY
+# Azure 语音服务区域
+azure_service_region: eastasia
+# 发音人名称（Azure Neural Voice）
+azure_voice_name: zh-CN-Xiaoxiao2:DragonHDFlashLatestNeural
+# 语速，Azure SSML 格式，如 +10%、-5%、+0%
+speech_rate: "+10%"
+
+# 以下为 Step 2 可选高级项（未配置时使用代码内默认值）：
+# azure_tts_frame_timeout_ms: 60000      # 单帧合成超时（毫秒）
+# azure_tts_rtf_timeout_threshold: 10      # 实时率 RTF 告警阈值
+
+# -----------------------------------------------------------------------------
+# 管线行为开关
+# -----------------------------------------------------------------------------
+# Step 1 是否跳过 scene-scripts.json 结构校验（调试时可 true）
+step1_skip_validate: true
+
+# Step 1 按文案长度估算 content 时间轴时的参数（未配置则用默认）：
+# preview_min_duration_frames: 30        # 单条 content 最短帧数
+# preview_frames_per_char: 2.2           # 每字估算帧数（与 fps 配合）
+
+# -----------------------------------------------------------------------------
+# 视频画布与 Remotion 工程（Step 1 / Step 2 / Step 4）
+# -----------------------------------------------------------------------------
+# 成片帧率，写入 scene-scripts 与生成代码
+fps: 30
+# 成片宽度、高度（竖屏示例 960×1280）
+width: 960
+height: 1280
+
+# Remotion 工程根目录；产物路径均相对此目录：
+#   narrations/{name}.txt
+#   src/remotions/{name}/scenes/scene-scripts.json
+#   public/images/{name}/、public/audio/{name}/
+project_root: d:/code/study/remotion_test
+
+# 场景切换转场时长（帧），写入 constants 的 TRANSITION_DURATION
+transition_duration_frames: 15
+# 每个场景末尾留白（帧），写入 SCENE_END_PADDING
+scene_end_padding_frames: 20
+# 正片最后一镜最后一项额外定格（帧），用于片尾呼吸感
+final_item_hold_frames: 25
+
+# Step 4 竖版顶部标题文案（未配置则不注入 verticalTopTitle）
+# vertical_top_title: 本期主题
+
+# -----------------------------------------------------------------------------
+# 片头封面 cover（Step 1 注入 scene-scripts，Step 4 生成 LandscapeCoverPoster）
+# -----------------------------------------------------------------------------
+# 封面持续帧数；设为 0 或不配置则不生成片头 cover
+cover_duration_frames: 5
+# 封面主题色（十六进制），用于标题、装饰线等
+cover_theme_color: "#2563EB"
+# 系列中文名（左上角系列标签）
+cover_series_label: 认知心理学
+# 系列英文名
+cover_series_label_en: COGNITIVE PSYCHOLOGY
+# 方法论步骤（中文，列表），展示在封面流程区
+cover_methodology_steps:
+  - 觉察
+  - 归因
+  - 调整
+# 方法论步骤（英文单行展示）
+cover_methodology_steps_en: OBSERVE · ATTRIBUTE · ADJUST
+# 封面角标/副标语
+cover_badge: 认识自我 · 理性思考

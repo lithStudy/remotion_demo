@@ -29,22 +29,22 @@
             {
               "text": "网上总有一群人，",
               "startFrame": 0,
-              "durationFrames": 40
+              "durationFrames": 34
             },
             {
               "text": "手里砸着特斯拉，",
-              "startFrame": 39,
-              "durationFrames": 39
+              "startFrame": 33,
+              "durationFrames": 38
             },
             {
               "text": "嘴上喊着抵制外资，",
-              "startFrame": 77,
-              "durationFrames": 44
+              "startFrame": 70,
+              "durationFrames": 54
             },
             {
               "text": "心里居然觉得自己在爱国。",
-              "startFrame": 121,
-              "durationFrames": 79
+              "startFrame": 124,
+              "durationFrames": 52
             }
           ],
           "order": 1,
@@ -61,7 +61,7 @@
               }
             ]
           },
-          "totalDurationFrames": 200
+          "totalDurationFrames": 176
         },
         {
           "narrativeType": "HOOK",
@@ -71,17 +71,17 @@
             {
               "text": "我今天告诉你——",
               "startFrame": 0,
-              "durationFrames": 21
+              "durationFrames": 34
             },
             {
               "text": "这锤子砸下去，",
-              "startFrame": 20,
-              "durationFrames": 27
+              "startFrame": 33,
+              "durationFrames": 40
             },
             {
               "text": "每一锤都砸在中国人自己身上。",
-              "startFrame": 46,
-              "durationFrames": 69
+              "startFrame": 73,
+              "durationFrames": 63
             }
           ],
           "order": 2,
@@ -103,7 +103,7 @@
               }
             ]
           },
-          "totalDurationFrames": 116
+          "totalDurationFrames": 136
         },
         {
           "narrativeType": "TRANSITION",
@@ -113,12 +113,12 @@
             {
               "text": "不跟你谈情绪，",
               "startFrame": 0,
-              "durationFrames": 37
+              "durationFrames": 34
             },
             {
               "text": "只跟你谈数据。",
-              "startFrame": 36,
-              "durationFrames": 38
+              "startFrame": 33,
+              "durationFrames": 36
             }
           ],
           "order": 3,
@@ -134,11 +134,11 @@
               "showFrom": 1
             }
           },
-          "totalDurationFrames": 74
+          "totalDurationFrames": 70
         }
       ],
       "audioSrc": "/audio/抵制特斯拉的伪爱国/scene_1/scene_1.mp3",
-      "totalDurationFrames": 391
+      "totalDurationFrames": 383
     },
     {
       "sceneId": "scene_2",
@@ -152,7 +152,7 @@
             {
               "text": "先看供应链。",
               "startFrame": 0,
-              "durationFrames": 42
+              "durationFrames": 41
             }
           ],
           "order": 1,
@@ -160,7 +160,7 @@
             "imageSrc": "images/抵制特斯拉的伪爱国/scene_2_1.png",
             "conceptName": "供应链"
           },
-          "totalDurationFrames": 42
+          "totalDurationFrames": 41
         },
         {
           "narrativeType": "DATA",
@@ -170,12 +170,12 @@
             {
               "text": "特斯拉上海工厂，",
               "startFrame": 0,
-              "durationFrames": 46
+              "durationFrames": 45
             },
             {
               "text": "零部件本土化率超过95%。",
-              "startFrame": 45,
-              "durationFrames": 103
+              "startFrame": 44,
+              "durationFrames": 78
             }
           ],
           "order": 2,
@@ -189,7 +189,7 @@
               }
             ]
           },
-          "totalDurationFrames": 149
+          "totalDurationFrames": 123
         },
         {
           "narrativeType": "CASE",
@@ -204,22 +204,22 @@
             {
               "text": "成千上万个零件——",
               "startFrame": 30,
-              "durationFrames": 51
+              "durationFrames": 44
             },
             {
               "text": "小到螺丝钉，",
-              "startFrame": 80,
-              "durationFrames": 33
+              "startFrame": 74,
+              "durationFrames": 38
             },
             {
               "text": "大到发动机，",
-              "startFrame": 113,
+              "startFrame": 111,
               "durationFrames": 38
             },
             {
               "text": "几乎全是中国企业造的。",
-              "startFrame": 150,
-              "durationFrames": 59
+              "startFrame": 148,
+              "durationFrames": 57
             }
           ],
           "order": 3,
@@ -245,7 +245,7 @@
               }
             ]
           },
-          "totalDurationFrames": 210
+          "totalDurationFrames": 205
         },
         {
           "narrativeType": "DATA",
@@ -255,12 +255,12 @@
             {
               "text": "跟特斯拉直接签约的中国供应商，",
               "startFrame": 0,
-              "durationFrames": 76
+              "durationFrames": 74
             },
             {
               "text": "超过400家。",
-              "startFrame": 75,
-              "durationFrames": 34
+              "startFrame": 73,
+              "durationFrames": 39
             }
           ],
           "order": 4,
@@ -275,7 +275,7 @@
               }
             ]
           },
-          "totalDurationFrames": 110
+          "totalDurationFrames": 112
         },
         {
           "narrativeType": "LOGIC",
@@ -285,26 +285,26 @@
             {
               "text": "从上海，",
               "startFrame": 0,
-              "durationFrames": 26
+              "durationFrames": 27
             },
             {
               "text": "到苏州、",
-              "startFrame": 25,
-              "durationFrames": 30
+              "startFrame": 26,
+              "durationFrames": 29
             },
             {
               "text": "宁波、南通，",
               "startFrame": 54,
-              "durationFrames": 42
+              "durationFrames": 40
             },
             {
               "text": "长三角围绕特斯拉，",
-              "startFrame": 96,
-              "durationFrames": 56
+              "startFrame": 93,
+              "durationFrames": 55
             },
             {
               "text": "长出了一条完整的汽车产业链。",
-              "startFrame": 151,
+              "startFrame": 148,
               "durationFrames": 74
             }
           ],
@@ -334,7 +334,7 @@
               "showFrom": 3
             }
           },
-          "totalDurationFrames": 225
+          "totalDurationFrames": 222
         },
         {
           "narrativeType": "LOGIC",
@@ -344,27 +344,27 @@
             {
               "text": "而且不只是代工。",
               "startFrame": 0,
-              "durationFrames": 44
+              "durationFrames": 42
             },
             {
               "text": "超过60家中国企业，",
-              "startFrame": 43,
-              "durationFrames": 51
+              "startFrame": 41,
+              "durationFrames": 47
             },
             {
               "text": "已经借着特斯拉的认证体系，",
-              "startFrame": 93,
-              "durationFrames": 60
+              "startFrame": 88,
+              "durationFrames": 62
             },
             {
               "text": "进入了它的全球供应链，",
-              "startFrame": 153,
-              "durationFrames": 50
+              "startFrame": 149,
+              "durationFrames": 54
             },
             {
               "text": "把零部件卖到了北美和欧洲的超级工厂。",
               "startFrame": 202,
-              "durationFrames": 93
+              "durationFrames": 95
             }
           ],
           "order": 7,
@@ -388,7 +388,7 @@
               }
             ]
           },
-          "totalDurationFrames": 295
+          "totalDurationFrames": 297
         },
         {
           "narrativeType": "DATA",
@@ -398,12 +398,12 @@
             {
               "text": "2025年第一季度，",
               "startFrame": 0,
-              "durationFrames": 48
+              "durationFrames": 44
             },
             {
               "text": "中国零部件随车出口额同比猛增了62%。",
-              "startFrame": 48,
-              "durationFrames": 114
+              "startFrame": 43,
+              "durationFrames": 110
             }
           ],
           "order": 8,
@@ -417,7 +417,7 @@
               }
             ]
           },
-          "totalDurationFrames": 162
+          "totalDurationFrames": 154
         },
         {
           "narrativeType": "HOOK",
@@ -427,11 +427,11 @@
             {
               "text": "你砸的那一锤子，",
               "startFrame": 0,
-              "durationFrames": 42
+              "durationFrames": 38
             },
             {
               "text": "砸的不是美国人的零件。",
-              "startFrame": 41,
+              "startFrame": 37,
               "durationFrames": 51
             }
           ],
@@ -441,7 +441,7 @@
             "enterEffect": "zoomIn",
             "anchors": []
           },
-          "totalDurationFrames": 92
+          "totalDurationFrames": 88
         },
         {
           "narrativeType": "CONCLUSION",
@@ -451,17 +451,17 @@
             {
               "text": "砸的是中国工程师画了三年的图纸，",
               "startFrame": 0,
-              "durationFrames": 80
-            },
-            {
-              "text": "砸的是中国工人磨了半年的良品率，",
-              "startFrame": 79,
               "durationFrames": 77
             },
             {
+              "text": "砸的是中国工人磨了半年的良品率，",
+              "startFrame": 76,
+              "durationFrames": 74
+            },
+            {
               "text": "砸的是中国企业拿到的那张通往全球市场的通行证。",
-              "startFrame": 155,
-              "durationFrames": 109
+              "startFrame": 149,
+              "durationFrames": 114
             }
           ],
           "order": 11,
@@ -484,11 +484,11 @@
               }
             ]
           },
-          "totalDurationFrames": 265
+          "totalDurationFrames": 263
         }
       ],
       "audioSrc": "/audio/抵制特斯拉的伪爱国/scene_2/scene_2.mp3",
-      "totalDurationFrames": 1548
+      "totalDurationFrames": 1503
     },
     {
       "sceneId": "scene_3",
@@ -502,7 +502,7 @@
             {
               "text": "再算就业账。",
               "startFrame": 0,
-              "durationFrames": 42
+              "durationFrames": 35
             }
           ],
           "order": 1,
@@ -510,7 +510,7 @@
             "imageSrc": "images/抵制特斯拉的伪爱国/scene_3_1.png",
             "conceptName": "就业账"
           },
-          "totalDurationFrames": 42
+          "totalDurationFrames": 35
         },
         {
           "narrativeType": "DATA",
@@ -520,17 +520,17 @@
             {
               "text": "上海超级工厂，",
               "startFrame": 0,
-              "durationFrames": 38
+              "durationFrames": 42
             },
             {
               "text": "中国员工占比，",
-              "startFrame": 37,
-              "durationFrames": 35
+              "startFrame": 41,
+              "durationFrames": 32
             },
             {
               "text": "99.99%。",
-              "startFrame": 72,
-              "durationFrames": 51
+              "startFrame": 73,
+              "durationFrames": 42
             }
           ],
           "order": 2,
@@ -544,7 +544,7 @@
               }
             ]
           },
-          "totalDurationFrames": 123
+          "totalDurationFrames": 115
         },
         {
           "narrativeType": "DATA",
@@ -554,12 +554,12 @@
             {
               "text": "为工厂供货的400多家一级供应商背后，",
               "startFrame": 0,
-              "durationFrames": 99
+              "durationFrames": 94
             },
             {
               "text": "还有上万家二级、三级配套供应商。",
-              "startFrame": 98,
-              "durationFrames": 94
+              "startFrame": 93,
+              "durationFrames": 86
             }
           ],
           "order": 4,
@@ -580,7 +580,7 @@
               }
             ]
           },
-          "totalDurationFrames": 192
+          "totalDurationFrames": 180
         },
         {
           "narrativeType": "DATA",
@@ -590,12 +590,12 @@
             {
               "text": "特斯拉在华的业务版图，",
               "startFrame": 0,
-              "durationFrames": 47
+              "durationFrames": 53
             },
             {
               "text": "维系着五十万以上中国人的饭碗。",
-              "startFrame": 46,
-              "durationFrames": 67
+              "startFrame": 52,
+              "durationFrames": 71
             }
           ],
           "order": 5,
@@ -610,7 +610,7 @@
             ],
             "countDuration": 35
           },
-          "totalDurationFrames": 114
+          "totalDurationFrames": 123
         },
         {
           "narrativeType": "CONCLUSION",
@@ -620,17 +620,17 @@
             {
               "text": "你说你要爱国？",
               "startFrame": 0,
-              "durationFrames": 42
+              "durationFrames": 33
             },
             {
               "text": "你先看看你要砸的，",
-              "startFrame": 41,
-              "durationFrames": 41
+              "startFrame": 32,
+              "durationFrames": 39
             },
             {
               "text": "是谁的饭碗。",
-              "startFrame": 81,
-              "durationFrames": 34
+              "startFrame": 70,
+              "durationFrames": 31
             }
           ],
           "order": 7,
@@ -664,11 +664,11 @@
               }
             ]
           },
-          "totalDurationFrames": 116
+          "totalDurationFrames": 102
         }
       ],
       "audioSrc": "/audio/抵制特斯拉的伪爱国/scene_3/scene_3.mp3",
-      "totalDurationFrames": 587
+      "totalDurationFrames": 556
     },
     {
       "sceneId": "scene_4",
@@ -682,7 +682,7 @@
             {
               "text": "再算经济账。",
               "startFrame": 0,
-              "durationFrames": 44
+              "durationFrames": 42
             }
           ],
           "order": 1,
@@ -690,7 +690,7 @@
             "imageSrc": "images/抵制特斯拉的伪爱国/scene_4_1.png",
             "conceptName": "经济账"
           },
-          "totalDurationFrames": 44
+          "totalDurationFrames": 42
         },
         {
           "narrativeType": "DATA",
@@ -700,27 +700,27 @@
             {
               "text": "特斯拉每年向中国缴纳数十亿元税款。",
               "startFrame": 0,
-              "durationFrames": 98
+              "durationFrames": 104
             },
             {
               "text": "这还只是特斯拉的企业所得税。",
-              "startFrame": 97,
-              "durationFrames": 76
+              "startFrame": 103,
+              "durationFrames": 68
             },
             {
               "text": "下游的供应链企业，",
-              "startFrame": 172,
-              "durationFrames": 44
+              "startFrame": 170,
+              "durationFrames": 46
             },
             {
               "text": "每年要缴纳的增值税，",
               "startFrame": 216,
-              "durationFrames": 53
+              "durationFrames": 51
             },
             {
               "text": "更是百亿级别。",
-              "startFrame": 268,
-              "durationFrames": 39
+              "startFrame": 266,
+              "durationFrames": 37
             }
           ],
           "order": 2,
@@ -741,7 +741,7 @@
             ],
             "countDuration": 40
           },
-          "totalDurationFrames": 307
+          "totalDurationFrames": 303
         },
         {
           "narrativeType": "CONCLUSION",
@@ -751,17 +751,17 @@
             {
               "text": "你说你要爱国？",
               "startFrame": 0,
-              "durationFrames": 40
+              "durationFrames": 38
             },
             {
               "text": "你先看看你要砸的，",
-              "startFrame": 39,
-              "durationFrames": 44
+              "startFrame": 37,
+              "durationFrames": 45
             },
             {
               "text": "是谁的收入。",
-              "startFrame": 82,
-              "durationFrames": 30
+              "startFrame": 81,
+              "durationFrames": 33
             }
           ],
           "order": 7,
@@ -795,11 +795,11 @@
               }
             ]
           },
-          "totalDurationFrames": 113
+          "totalDurationFrames": 115
         }
       ],
       "audioSrc": "/audio/抵制特斯拉的伪爱国/scene_4/scene_4.mp3",
-      "totalDurationFrames": 465
+      "totalDurationFrames": 461
     },
     {
       "sceneId": "scene_5",
@@ -813,12 +813,12 @@
             {
               "text": "而这些，",
               "startFrame": 0,
-              "durationFrames": 22
+              "durationFrames": 20
             },
             {
               "text": "还只是冰山一角而已。",
-              "startFrame": 21,
-              "durationFrames": 46
+              "startFrame": 19,
+              "durationFrames": 48
             }
           ],
           "order": 1,
@@ -845,12 +845,12 @@
             {
               "text": "你看不见的地方，",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 38
             },
             {
               "text": "才是真正改变格局的力量。",
-              "startFrame": 34,
-              "durationFrames": 62
+              "startFrame": 37,
+              "durationFrames": 56
             }
           ],
           "order": 2,
@@ -873,7 +873,7 @@
               }
             ]
           },
-          "totalDurationFrames": 96
+          "totalDurationFrames": 93
         },
         {
           "narrativeType": "LOGIC",
@@ -883,7 +883,7 @@
             {
               "text": "特斯拉进中国，最重要的是产生了鲶鱼效应。",
               "startFrame": 0,
-              "durationFrames": 109
+              "durationFrames": 108
             }
           ],
           "order": 3,
@@ -891,11 +891,11 @@
             "imageSrc": "images/抵制特斯拉的伪爱国/scene_5_3.png",
             "conceptName": "鲶鱼效应"
           },
-          "totalDurationFrames": 109
+          "totalDurationFrames": 108
         }
       ],
       "audioSrc": "/audio/抵制特斯拉的伪爱国/scene_5/scene_5.mp3",
-      "totalDurationFrames": 274
+      "totalDurationFrames": 270
     },
     {
       "sceneId": "scene_6",
@@ -909,12 +909,12 @@
             {
               "text": "特斯拉进来之前，",
               "startFrame": 0,
-              "durationFrames": 46
+              "durationFrames": 42
             },
             {
               "text": "中国新能源市场什么样？",
-              "startFrame": 45,
-              "durationFrames": 57
+              "startFrame": 41,
+              "durationFrames": 53
             }
           ],
           "order": 1,
@@ -931,7 +931,7 @@
               }
             ]
           },
-          "totalDurationFrames": 103
+          "totalDurationFrames": 94
         },
         {
           "narrativeType": "LOGIC",
@@ -941,17 +941,17 @@
             {
               "text": "很多企业躺着拿政策钱，",
               "startFrame": 0,
-              "durationFrames": 62
+              "durationFrames": 58
             },
             {
               "text": "尽是开发一些骗补贴的低端电车。",
-              "startFrame": 61,
-              "durationFrames": 82
+              "startFrame": 57,
+              "durationFrames": 86
             },
             {
               "text": "根本不想搞研发。",
-              "startFrame": 142,
-              "durationFrames": 50
+              "startFrame": 143,
+              "durationFrames": 48
             }
           ],
           "order": 3,
@@ -974,7 +974,7 @@
               }
             ]
           },
-          "totalDurationFrames": 193
+          "totalDurationFrames": 192
         },
         {
           "narrativeType": "LOGIC",
@@ -984,22 +984,22 @@
             {
               "text": "特斯拉一来，",
               "startFrame": 0,
-              "durationFrames": 29
+              "durationFrames": 38
             },
             {
               "text": "用极致的成本控制，",
-              "startFrame": 28,
-              "durationFrames": 47
+              "startFrame": 37,
+              "durationFrames": 54
             },
             {
               "text": "把这群混日子的，",
-              "startFrame": 75,
-              "durationFrames": 36
+              "startFrame": 90,
+              "durationFrames": 40
             },
             {
               "text": "直接逼到了生死线上。",
-              "startFrame": 111,
-              "durationFrames": 56
+              "startFrame": 129,
+              "durationFrames": 48
             }
           ],
           "order": 4,
@@ -1029,7 +1029,7 @@
               }
             ]
           },
-          "totalDurationFrames": 167
+          "totalDurationFrames": 178
         },
         {
           "narrativeType": "LOGIC",
@@ -1039,22 +1039,22 @@
             {
               "text": "但它做的不止这一件事。",
               "startFrame": 0,
-              "durationFrames": 52
+              "durationFrames": 56
             },
             {
               "text": "它让所有人看见——",
-              "startFrame": 51,
-              "durationFrames": 39
+              "startFrame": 55,
+              "durationFrames": 41
             },
             {
               "text": "纯电车，原来可以这样造。",
-              "startFrame": 89,
-              "durationFrames": 60
+              "startFrame": 96,
+              "durationFrames": 61
             },
             {
               "text": "这条赛道，原来有这么大的商业价值。",
-              "startFrame": 149,
-              "durationFrames": 86
+              "startFrame": 156,
+              "durationFrames": 89
             }
           ],
           "order": 5,
@@ -1077,7 +1077,7 @@
               }
             ]
           },
-          "totalDurationFrames": 235
+          "totalDurationFrames": 245
         },
         {
           "narrativeType": "LOGIC",
@@ -1092,42 +1092,42 @@
             {
               "text": "蔚来、",
               "startFrame": 22,
-              "durationFrames": 21
+              "durationFrames": 19
             },
             {
               "text": "小鹏、",
-              "startFrame": 43,
-              "durationFrames": 23
-            },
-            {
-              "text": "理想、",
-              "startFrame": 66,
+              "startFrame": 41,
               "durationFrames": 21
             },
             {
+              "text": "理想、",
+              "startFrame": 62,
+              "durationFrames": 18
+            },
+            {
               "text": "极氪、",
-              "startFrame": 87,
-              "durationFrames": 20
+              "startFrame": 79,
+              "durationFrames": 18
             },
             {
               "text": "小米。",
-              "startFrame": 106,
-              "durationFrames": 26
+              "startFrame": 97,
+              "durationFrames": 20
             },
             {
               "text": "今天能站上世界舞台，",
-              "startFrame": 131,
-              "durationFrames": 54
+              "startFrame": 116,
+              "durationFrames": 47
             },
             {
               "text": "是因为它们沿着特斯拉铺好的路，",
-              "startFrame": 185,
-              "durationFrames": 68
+              "startFrame": 163,
+              "durationFrames": 58
             },
             {
               "text": "完成了快速进化。",
-              "startFrame": 253,
-              "durationFrames": 45
+              "startFrame": 221,
+              "durationFrames": 39
             }
           ],
           "order": 6,
@@ -1165,7 +1165,7 @@
               }
             ]
           },
-          "totalDurationFrames": 298
+          "totalDurationFrames": 260
         },
         {
           "narrativeType": "LOGIC",
@@ -1175,17 +1175,17 @@
             {
               "text": "先行者的血，",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 30
             },
             {
               "text": "换来的是后来者的加速度。",
-              "startFrame": 34,
-              "durationFrames": 58
+              "startFrame": 29,
+              "durationFrames": 54
             },
             {
               "text": "这就是最强者的示范。",
-              "startFrame": 92,
-              "durationFrames": 53
+              "startFrame": 82,
+              "durationFrames": 57
             }
           ],
           "order": 8,
@@ -1206,11 +1206,11 @@
               }
             ]
           },
-          "totalDurationFrames": 145
+          "totalDurationFrames": 139
         }
       ],
       "audioSrc": "/audio/抵制特斯拉的伪爱国/scene_6/scene_6.mp3",
-      "totalDurationFrames": 1141
+      "totalDurationFrames": 1108
     },
     {
       "sceneId": "scene_7",
@@ -1224,17 +1224,17 @@
             {
               "text": "不只是整车厂，",
               "startFrame": 0,
-              "durationFrames": 39
+              "durationFrames": 34
             },
             {
               "text": "整个零部件产业的技术水平，",
-              "startFrame": 38,
-              "durationFrames": 66
+              "startFrame": 33,
+              "durationFrames": 56
             },
             {
               "text": "也被它拉高了。",
-              "startFrame": 103,
-              "durationFrames": 43
+              "startFrame": 89,
+              "durationFrames": 28
             }
           ],
           "order": 1,
@@ -1251,7 +1251,7 @@
               }
             ]
           },
-          "totalDurationFrames": 147
+          "totalDurationFrames": 117
         },
         {
           "narrativeType": "LOGIC",
@@ -1266,37 +1266,37 @@
             {
               "text": "电池、",
               "startFrame": 63,
-              "durationFrames": 27
+              "durationFrames": 26
             },
             {
               "text": "电机、",
-              "startFrame": 89,
-              "durationFrames": 21
+              "startFrame": 88,
+              "durationFrames": 19
             },
             {
               "text": "电控。",
-              "startFrame": 110,
-              "durationFrames": 25
+              "startFrame": 106,
+              "durationFrames": 20
             },
             {
               "text": "规模效应起来了，",
-              "startFrame": 134,
-              "durationFrames": 42
+              "startFrame": 126,
+              "durationFrames": 39
             },
             {
               "text": "采购成本大幅下降。",
-              "startFrame": 175,
-              "durationFrames": 64
+              "startFrame": 164,
+              "durationFrames": 54
             },
             {
               "text": "所有中国自主品牌，",
-              "startFrame": 238,
-              "durationFrames": 46
+              "startFrame": 218,
+              "durationFrames": 51
             },
             {
               "text": "都能以更低的价格拿到高质量零部件。",
-              "startFrame": 284,
-              "durationFrames": 88
+              "startFrame": 268,
+              "durationFrames": 87
             }
           ],
           "order": 2,
@@ -1333,7 +1333,7 @@
               }
             ]
           },
-          "totalDurationFrames": 373
+          "totalDurationFrames": 356
         },
         {
           "narrativeType": "LOGIC",
@@ -1343,27 +1343,27 @@
             {
               "text": "小鹏、",
               "startFrame": 0,
-              "durationFrames": 22
+              "durationFrames": 19
             },
             {
               "text": "小米、",
-              "startFrame": 21,
-              "durationFrames": 21
+              "startFrame": 18,
+              "durationFrames": 19
             },
             {
               "text": "华为，",
-              "startFrame": 42,
-              "durationFrames": 24
+              "startFrame": 37,
+              "durationFrames": 22
             },
             {
               "text": "这些新势力能快速入局，",
-              "startFrame": 66,
-              "durationFrames": 55
+              "startFrame": 58,
+              "durationFrames": 52
             },
             {
               "text": "靠的就是这条已经铺好的路。",
-              "startFrame": 121,
-              "durationFrames": 63
+              "startFrame": 110,
+              "durationFrames": 54
             }
           ],
           "order": 4,
@@ -1386,7 +1386,7 @@
               }
             ]
           },
-          "totalDurationFrames": 184
+          "totalDurationFrames": 164
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1401,7 +1401,7 @@
             {
               "text": "是整个行业的技术普惠。",
               "startFrame": 50,
-              "durationFrames": 60
+              "durationFrames": 54
             }
           ],
           "order": 5,
@@ -1412,11 +1412,11 @@
             "notContentIndex": 0,
             "butContentIndex": 1
           },
-          "totalDurationFrames": 110
+          "totalDurationFrames": 105
         }
       ],
       "audioSrc": "/audio/抵制特斯拉的伪爱国/scene_7/scene_7.mp3",
-      "totalDurationFrames": 813
+      "totalDurationFrames": 743
     },
     {
       "sceneId": "scene_8",
@@ -1430,12 +1430,12 @@
             {
               "text": "还有宁德时代。",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 51
             },
             {
               "text": "中国人引以为傲的电池巨头。",
-              "startFrame": 34,
-              "durationFrames": 70
+              "startFrame": 50,
+              "durationFrames": 63
             }
           ],
           "order": 1,
@@ -1443,7 +1443,7 @@
             "imageSrc": "images/抵制特斯拉的伪爱国/scene_8_1.png",
             "conceptName": "宁德时代"
           },
-          "totalDurationFrames": 105
+          "totalDurationFrames": 113
         },
         {
           "narrativeType": "HOOK",
@@ -1453,12 +1453,12 @@
             {
               "text": "但你知道吗？",
               "startFrame": 0,
-              "durationFrames": 28
+              "durationFrames": 23
             },
             {
               "text": "宁德时代的崛起，特斯拉是最大的推手之一。",
-              "startFrame": 27,
-              "durationFrames": 111
+              "startFrame": 22,
+              "durationFrames": 103
             }
           ],
           "order": 2,
@@ -1466,7 +1466,7 @@
             "quoteSource": "行业分析",
             "showFrom": 1
           },
-          "totalDurationFrames": 138
+          "totalDurationFrames": 125
         },
         {
           "narrativeType": "LOGIC",
@@ -1476,21 +1476,21 @@
             {
               "text": "特斯拉的入局，",
               "startFrame": 0,
-              "durationFrames": 36
+              "durationFrames": 33
             },
             {
               "text": "直接拉动了中国储能电池产能。",
-              "startFrame": 36,
-              "durationFrames": 75
+              "startFrame": 32,
+              "durationFrames": 67
             },
             {
               "text": "今天中国占全球68%的储能电池产能。",
-              "startFrame": 110,
-              "durationFrames": 98
+              "startFrame": 99,
+              "durationFrames": 123
             },
             {
               "text": "拿到这个国际话语权，特斯拉功不可没。",
-              "startFrame": 207,
+              "startFrame": 222,
               "durationFrames": 86
             }
           ],
@@ -1515,11 +1515,11 @@
               }
             ]
           },
-          "totalDurationFrames": 294
+          "totalDurationFrames": 309
         }
       ],
       "audioSrc": "/audio/抵制特斯拉的伪爱国/scene_8/scene_8.mp3",
-      "totalDurationFrames": 538
+      "totalDurationFrames": 548
     },
     {
       "sceneId": "scene_9",
@@ -1533,12 +1533,12 @@
             {
               "text": "那些砸特斯拉的人，",
               "startFrame": 0,
-              "durationFrames": 36
+              "durationFrames": 53
             },
             {
               "text": "初衷也许是好的。",
-              "startFrame": 36,
-              "durationFrames": 40
+              "startFrame": 52,
+              "durationFrames": 42
             }
           ],
           "order": 1,
@@ -1555,7 +1555,7 @@
               }
             ]
           },
-          "totalDurationFrames": 76
+          "totalDurationFrames": 94
         },
         {
           "narrativeType": "LOGIC",
@@ -1565,12 +1565,12 @@
             {
               "text": "但封闭和保护，",
               "startFrame": 0,
-              "durationFrames": 38
+              "durationFrames": 41
             },
             {
               "text": "从来不是锻造工业强国的途径。",
-              "startFrame": 37,
-              "durationFrames": 70
+              "startFrame": 40,
+              "durationFrames": 60
             }
           ],
           "order": 2,
@@ -1592,7 +1592,7 @@
               }
             ]
           },
-          "totalDurationFrames": 107
+          "totalDurationFrames": 100
         },
         {
           "narrativeType": "LOGIC",
@@ -1602,7 +1602,7 @@
             {
               "text": "你以为你在保护中国车企？",
               "startFrame": 0,
-              "durationFrames": 66
+              "durationFrames": 58
             }
           ],
           "order": 3,
@@ -1620,7 +1620,7 @@
               }
             ]
           },
-          "totalDurationFrames": 66
+          "totalDurationFrames": 58
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1635,12 +1635,12 @@
             {
               "text": "你剥夺的，是本土企业在最高水平竞技场上淬火的机会。",
               "startFrame": 106,
-              "durationFrames": 116
+              "durationFrames": 131
             },
             {
               "text": "低水平内卷，骗补贴，缺乏创新——这才是你砸出来的未来。",
-              "startFrame": 222,
-              "durationFrames": 136
+              "startFrame": 236,
+              "durationFrames": 145
             }
           ],
           "order": 6,
@@ -1663,11 +1663,11 @@
               }
             ]
           },
-          "totalDurationFrames": 359
+          "totalDurationFrames": 382
         }
       ],
       "audioSrc": "/audio/抵制特斯拉的伪爱国/scene_9/scene_9.mp3",
-      "totalDurationFrames": 608
+      "totalDurationFrames": 635
     },
     {
       "sceneId": "scene_10",
@@ -1681,11 +1681,11 @@
             {
               "text": "所有砸特斯拉的人，",
               "startFrame": 0,
-              "durationFrames": 39
+              "durationFrames": 40
             },
             {
               "text": "没有一个是真正爱国的。",
-              "startFrame": 38,
+              "startFrame": 39,
               "durationFrames": 48
             }
           ],
@@ -1708,7 +1708,7 @@
               }
             ]
           },
-          "totalDurationFrames": 87
+          "totalDurationFrames": 88
         },
         {
           "narrativeType": "LOGIC",
@@ -1718,22 +1718,22 @@
             {
               "text": "你要真爱国，就该明白——",
               "startFrame": 0,
-              "durationFrames": 57
+              "durationFrames": 59
             },
             {
               "text": "抵制特斯拉，",
-              "startFrame": 56,
-              "durationFrames": 34
+              "startFrame": 58,
+              "durationFrames": 35
             },
             {
               "text": "就是抵制同胞造的车，",
-              "startFrame": 90,
-              "durationFrames": 52
+              "startFrame": 93,
+              "durationFrames": 51
             },
             {
               "text": "就是砸掉中国人的饭碗。",
-              "startFrame": 141,
-              "durationFrames": 54
+              "startFrame": 143,
+              "durationFrames": 42
             }
           ],
           "order": 2,
@@ -1763,7 +1763,7 @@
               }
             ]
           },
-          "totalDurationFrames": 196
+          "totalDurationFrames": 186
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1778,17 +1778,17 @@
             {
               "text": "不是靠砸别人的东西来证明自己强。",
               "startFrame": 33,
-              "durationFrames": 76
+              "durationFrames": 72
             },
             {
               "text": "而是让全世界最优秀的企业，",
-              "startFrame": 109,
-              "durationFrames": 61
+              "startFrame": 104,
+              "durationFrames": 62
             },
             {
               "text": "都争着来你的土地上建厂。",
-              "startFrame": 169,
-              "durationFrames": 63
+              "startFrame": 166,
+              "durationFrames": 57
             }
           ],
           "order": 3,
@@ -1799,7 +1799,7 @@
             "notContentIndex": 1,
             "butContentIndex": 3
           },
-          "totalDurationFrames": 232
+          "totalDurationFrames": 223
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1809,12 +1809,12 @@
             {
               "text": "尊重规律，是最大的清醒。",
               "startFrame": 0,
-              "durationFrames": 63
+              "durationFrames": 68
             },
             {
               "text": "拥抱竞争，是最大的自信。",
-              "startFrame": 62,
-              "durationFrames": 72
+              "startFrame": 67,
+              "durationFrames": 61
             }
           ],
           "order": 4,
@@ -1840,11 +1840,11 @@
               }
             ]
           },
-          "totalDurationFrames": 135
+          "totalDurationFrames": 129
         }
       ],
       "audioSrc": "/audio/抵制特斯拉的伪爱国/scene_10/scene_10.mp3",
-      "totalDurationFrames": 649
+      "totalDurationFrames": 626
     }
   ],
   "fps": 30

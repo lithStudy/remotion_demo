@@ -1,0 +1,531 @@
+{
+  "topic": "你以为你在挑产品，其实你正在被“提纯”",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：最烂产品卖给谁",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "该片段包含提问与意外答案的因果传导（问→答），适合CAUSE_CHAIN展示机制链条。",
+          "content": [
+            {
+              "text": "怎么把最烂的产品卖出去？",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "卖给最蠢的人。",
+              "startFrame": 58,
+              "durationFrames": 33
+            }
+          ],
+          "order": 1,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "怎么卖",
+                "imageSrc": "images/客户提纯论/scene_1_1_img0.png",
+                "showFrom": 0,
+                "enterEffect": "breathe"
+              },
+              {
+                "label": "卖给谁",
+                "imageSrc": "images/客户提纯论/scene_1_1_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 91
+        }
+      ],
+      "audioSrc": "/audio/客户提纯论/scene_1/scene_1.mp3",
+      "totalDurationFrames": 93
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析：最蠢的人特征",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "行为铺垫→结论递进结构，前半句描述吹牛却不给证据的行为，后半句断言相信者最蠢，适合用BEAT_SEQUENCE分两拍呈现。",
+          "content": [
+            {
+              "text": "哪些人最蠢？",
+              "startFrame": 0,
+              "durationFrames": 33
+            }
+          ],
+          "order": 1,
+          "param": {
+            "anchors": [
+              {
+                "text": "最蠢",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 33
+        },
+        {
+          "order": 2,
+          "template": "CAUSE_CHAIN",
+          "narrativeType": "LOGIC",
+          "reasoning": "吹牛逼→不给量化证据→相信者最蠢，行为铺垫与结论形成因果传导，适合CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "你就使劲的吹牛逼，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "但是不给可以量化的证据，",
+              "startFrame": 39,
+              "durationFrames": 58
+            },
+            {
+              "text": "那些相信的就是最蠢的人。",
+              "startFrame": 97,
+              "durationFrames": 51
+            }
+          ],
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "吹牛逼",
+                "imageSrc": "images/客户提纯论/scene_2_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "breathe"
+              },
+              {
+                "label": "无证据",
+                "imageSrc": "images/客户提纯论/scene_2_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "label": "最蠢",
+                "imageSrc": "images/客户提纯论/scene_2_2_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ]
+          },
+          "totalDurationFrames": 148
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "普通产品→附加情怀价值→被感动者最蠢，行为铺垫与结论形成因果传导，适合CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "你就为普通的产品，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "附加毫无来由的情怀价值，",
+              "startFrame": 37,
+              "durationFrames": 63
+            },
+            {
+              "text": "那些感动的就是最蠢的人。",
+              "startFrame": 99,
+              "durationFrames": 55
+            }
+          ],
+          "order": 3,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "普通产品",
+                "imageSrc": "images/客户提纯论/scene_2_3_img0.png",
+                "showFrom": 0,
+                "enterEffect": "breathe"
+              },
+              {
+                "label": "情怀价值",
+                "imageSrc": "images/客户提纯论/scene_2_3_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "label": "最蠢",
+                "imageSrc": "images/客户提纯论/scene_2_3_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ]
+          },
+          "totalDurationFrames": 154
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "扭曲讨论→立场站队→跟风扣帽子者最蠢，行为铺垫与结论形成因果传导，适合CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "你就把正常的商业竞争和技术讨论，",
+              "startFrame": 0,
+              "durationFrames": 68
+            },
+            {
+              "text": "扭曲成敌我矛盾和立场站队，",
+              "startFrame": 67,
+              "durationFrames": 70
+            },
+            {
+              "text": "那些跟着扣帽子的就是最蠢的人。",
+              "startFrame": 137,
+              "durationFrames": 73
+            }
+          ],
+          "order": 4,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "商业竞争",
+                "imageSrc": "images/客户提纯论/scene_2_4_img0.png",
+                "showFrom": 0,
+                "enterEffect": "breathe"
+              },
+              {
+                "label": "立场站队",
+                "imageSrc": "images/客户提纯论/scene_2_4_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "label": "最蠢",
+                "imageSrc": "images/客户提纯论/scene_2_4_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 210
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "技术瓶颈→洗成大棋局→盲目迷信者最蠢，行为铺垫与结论形成因果传导，适合CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "你就把企业面临的客观技术瓶颈，",
+              "startFrame": 0,
+              "durationFrames": 66
+            },
+            {
+              "text": "洗地成“大棋局”和“且听龙吟”，",
+              "startFrame": 65,
+              "durationFrames": 70
+            },
+            {
+              "text": "那些盲目迷信的人就是最蠢的人。",
+              "startFrame": 135,
+              "durationFrames": 73
+            }
+          ],
+          "order": 5,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "技术瓶颈",
+                "imageSrc": "images/客户提纯论/scene_2_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "breathe"
+              },
+              {
+                "label": "洗成大棋",
+                "imageSrc": "images/客户提纯论/scene_2_5_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "label": "最蠢",
+                "imageSrc": "images/客户提纯论/scene_2_5_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 208
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "宏大叙事→与有荣焉→替老板代入者最蠢，行为铺垫与结论形成因果传导，适合CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "你就拿宏大叙事当优越感，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "那些 与有荣焉、",
+              "startFrame": 58,
+              "durationFrames": 36
+            },
+            {
+              "text": "替老板代入人生的就是最蠢的人。",
+              "startFrame": 94,
+              "durationFrames": 64
+            }
+          ],
+          "order": 6,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "宏大叙事",
+                "imageSrc": "images/客户提纯论/scene_2_6_img0.png",
+                "showFrom": 0,
+                "enterEffect": "breathe"
+              },
+              {
+                "label": "与有荣焉",
+                "imageSrc": "images/客户提纯论/scene_2_6_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "label": "最蠢",
+                "imageSrc": "images/客户提纯论/scene_2_6_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 159
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "洗脑排斥→未体验就排斥新事物→最蠢，行为铺垫与结论形成因果传导，适合CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "你就洗脑式的告诉他们外面的产品都是垃圾，",
+              "startFrame": 0,
+              "durationFrames": 88
+            },
+            {
+              "text": "那些尚未体验就对新事物充满排斥的，",
+              "startFrame": 87,
+              "durationFrames": 80
+            },
+            {
+              "text": "就是最蠢的人。",
+              "startFrame": 166,
+              "durationFrames": 36
+            }
+          ],
+          "order": 7,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "洗脑排斥",
+                "imageSrc": "images/客户提纯论/scene_2_7_img0.png",
+                "showFrom": 0,
+                "enterEffect": "breathe"
+              },
+              {
+                "label": "排斥新事物",
+                "imageSrc": "images/客户提纯论/scene_2_7_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "label": "最蠢",
+                "imageSrc": "images/客户提纯论/scene_2_7_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ]
+          },
+          "totalDurationFrames": 203
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "放大缺憾→忽略基数→跟着夸大其词者最蠢，行为铺垫与结论形成因果传导，适合CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "你就拿对手产品的一两次缺憾拼命宣传，",
+              "startFrame": 0,
+              "durationFrames": 88
+            },
+            {
+              "text": "刻意忽略庞大的基数，",
+              "startFrame": 87,
+              "durationFrames": 53
+            },
+            {
+              "text": "那些跟着夸大其词的人就是最蠢的人。",
+              "startFrame": 139,
+              "durationFrames": 81
+            }
+          ],
+          "order": 8,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "放大缺憾",
+                "imageSrc": "images/客户提纯论/scene_2_8_img0.png",
+                "showFrom": 0,
+                "enterEffect": "breathe"
+              },
+              {
+                "label": "忽略基数",
+                "imageSrc": "images/客户提纯论/scene_2_8_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "label": "最蠢",
+                "imageSrc": "images/客户提纯论/scene_2_8_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 221
+        }
+      ],
+      "audioSrc": "/audio/客户提纯论/scene_2/scene_2.mp3",
+      "totalDurationFrames": 1335
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "反转：提纯机制",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "铺垫引出“提纯”概念，为平缓叙述，无特殊结构，选CENTER_FOCUS以单图承接。",
+          "content": [
+            {
+              "text": "当一个企业这么做的时候，",
+              "startFrame": 0,
+              "durationFrames": 50
+            },
+            {
+              "text": "你就该知道，",
+              "startFrame": 49,
+              "durationFrames": 17
+            },
+            {
+              "text": "这是在提纯。",
+              "startFrame": 65,
+              "durationFrames": 29
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/客户提纯论/scene_3_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "提纯",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 94
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促强结论，定义提纯本质，金句冲击无需配图，选TEXT_FOCUS增强记忆点。拆分因铺垫与结论间情绪段位跳变。",
+          "content": [
+            {
+              "text": "提纯出最蠢的人，",
+              "startFrame": 0,
+              "durationFrames": 41
+            },
+            {
+              "text": "花最多的钱，",
+              "startFrame": 40,
+              "durationFrames": 30
+            },
+            {
+              "text": "买最烂的产品。",
+              "startFrame": 69,
+              "durationFrames": 35
+            }
+          ],
+          "order": 2,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "提纯出最蠢的人。 ",
+                "showFrom": 0
+              },
+              {
+                "text": "花最多的钱。 ",
+                "showFrom": 1
+              },
+              {
+                "text": "买最烂的产品。 ",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "最蠢",
+                "color": "red"
+              },
+              {
+                "coreSentenceAnchor": "最多",
+                "color": "red"
+              },
+              {
+                "coreSentenceAnchor": "最烂",
+                "color": "red"
+              }
+            ]          
+          },
+          "totalDurationFrames": 105
+        }
+      ],
+      "audioSrc": "/audio/客户提纯论/scene_3/scene_3.mp3",
+      "totalDurationFrames": 201
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "客户提纯论",
+    "subtitle": "你以为你在挑产品，其实你正在被“提纯”",
+    "themeColor": "#F59E0B",
+    "badge": "日常观察 · 有趣视角",
+    "seriesLabel": "日常调侃",
+    "seriesLabelEn": "DAILY TAKE",
+    "methodologySteps": [
+      "现象",
+      "吐槽",
+      "真相"
+    ],
+    "methodologyStepsEn": "SCENE · SNARK · TRUTH"
+  }
+}

@@ -1,5 +1,7 @@
 export { VerticalBottomBrandBar } from "./VerticalBottomBrandBar";
 export type { VerticalBottomBrandBarProps } from "./VerticalBottomBrandBar";
+export { NarratorLandscapeShell } from "./NarratorLandscapeShell";
+export type { NarratorLandscapeShellProps } from "./NarratorLandscapeShell";
 export {
 	VerticalSegmentedProgressBar,
 } from "./VerticalSegmentedProgressBar";

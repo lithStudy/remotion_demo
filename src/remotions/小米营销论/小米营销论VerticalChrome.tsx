@@ -8,6 +8,7 @@ const FONT_STACK =
     '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
 
 const STATIC_HEADLINE = "小米营销论";
+const STATIC_HEADLINE_SUBTITLE = "都说小米营销很土，其实它最尊重你的智商。";
 const STATIC_HEADLINE_SUB = "认知心理学";
 const STATIC_HEADLINE_SUB_EN = "COGNITIVE PSYCHOLOGY";
 const THEME_ACCENT = "#2563EB";
@@ -111,6 +112,23 @@ export const 小米营销论TopStaticHeadline: React.FC<TopStaticHeadlineProps> 
             >
                 {STATIC_HEADLINE}
             </div>
+            {STATIC_HEADLINE_SUBTITLE ? (
+                <div
+                    style={{
+                        marginTop: 24,
+                        fontSize: 30,
+                        fontWeight: 600,
+                        fontFamily: FONT_STACK,
+                        color: "rgba(248, 250, 252, 0.82)",
+                        letterSpacing: "0.06em",
+                        textAlign: "center",
+                        lineHeight: 1.38,
+                        maxWidth: "100%",
+                    }}
+                >
+                    {STATIC_HEADLINE_SUBTITLE}
+                </div>
+            ) : null}
             <div
                 style={{
                     marginTop: 10,

@@ -6,3 +6,4 @@ export { Scene5 } from "./Scene5";
 export { Scene6 } from "./Scene6";
 export { Scene7 } from "./Scene7";
 export { Scene8 } from "./Scene8";
+export { Scene9 } from "./Scene9";

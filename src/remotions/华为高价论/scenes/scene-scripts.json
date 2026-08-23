@@ -13,12 +13,12 @@
             {
               "text": "华为的产品为什么都偏贵？",
               "startFrame": 0,
-              "durationFrames": 59
+              "durationFrames": 54
             },
             {
               "text": "是他的质量更好吗？",
-              "startFrame": 58,
-              "durationFrames": 40
+              "startFrame": 53,
+              "durationFrames": 38
             }
           ],
           "order": 1,
@@ -44,7 +44,7 @@
               }
             ]
           },
-          "totalDurationFrames": 99
+          "totalDurationFrames": 92
         },
         {
           "narrativeType": "TRANSITION",
@@ -54,12 +54,12 @@
             {
               "text": "这篇视频让我来客观的告诉你，",
               "startFrame": 0,
-              "durationFrames": 56
+              "durationFrames": 54
             },
             {
               "text": "华为的东西贵在哪里。",
-              "startFrame": 55,
-              "durationFrames": 53
+              "startFrame": 53,
+              "durationFrames": 58
             }
           ],
           "order": 2,
@@ -68,11 +68,11 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 109
+          "totalDurationFrames": 111
         }
       ],
       "audioSrc": "/audio/华为高价论/scene_1/scene_1.mp3",
-      "totalDurationFrames": 209
+      "totalDurationFrames": 204
     },
     {
       "sceneId": "scene_2",
@@ -86,17 +86,17 @@
             {
               "text": "美国全面制裁华为以后，",
               "startFrame": 0,
-              "durationFrames": 57
+              "durationFrames": 62
             },
             {
               "text": "华为必须把产业链切到国内。",
-              "startFrame": 56,
-              "durationFrames": 65
+              "startFrame": 61,
+              "durationFrames": 71
             },
             {
               "text": "但是产业链中有些产品有两类问题。",
-              "startFrame": 121,
-              "durationFrames": 87
+              "startFrame": 131,
+              "durationFrames": 82
             }
           ],
           "order": 1,
@@ -113,7 +113,7 @@
               }
             ]
           },
-          "totalDurationFrames": 208
+          "totalDurationFrames": 214
         },
         {
           "narrativeType": "LOGIC",
@@ -123,16 +123,16 @@
             {
               "text": "第一类，",
               "startFrame": 0,
-              "durationFrames": 18
+              "durationFrames": 21
             },
             {
               "text": "国内能做，",
-              "startFrame": 17,
-              "durationFrames": 28
+              "startFrame": 20,
+              "durationFrames": 29
             },
             {
               "text": "但质量差。",
-              "startFrame": 44,
+              "startFrame": 49,
               "durationFrames": 26
             }
           ],
@@ -142,7 +142,7 @@
             "conceptName": "技术跟不上",
             "anchors": []
           },
-          "totalDurationFrames": 70
+          "totalDurationFrames": 75
         },
         {
           "narrativeType": "CASE",
@@ -152,17 +152,17 @@
             {
               "text": "摄像头、",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 26
             },
             {
               "text": "传感器、",
-              "startFrame": 29,
-              "durationFrames": 30
+              "startFrame": 25,
+              "durationFrames": 27
             },
             {
               "text": "射频器件等",
-              "startFrame": 58,
-              "durationFrames": 35
+              "startFrame": 51,
+              "durationFrames": 34
             }
           ],
           "order": 3,
@@ -186,7 +186,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 94
+          "totalDurationFrames": 86
         },
         {
           "narrativeType": "LOGIC",
@@ -196,12 +196,12 @@
             {
               "text": "你要达到别人差不多的效果，",
               "startFrame": 0,
-              "durationFrames": 58
+              "durationFrames": 55
             },
             {
               "text": "就要付出更高的成本。",
-              "startFrame": 57,
-              "durationFrames": 49
+              "startFrame": 54,
+              "durationFrames": 45
             }
           ],
           "order": 4,
@@ -223,7 +223,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 106
+          "totalDurationFrames": 100
         },
         {
           "narrativeType": "LOGIC",
@@ -233,11 +233,11 @@
             {
               "text": "你要控制成本，",
               "startFrame": 0,
-              "durationFrames": 31
+              "durationFrames": 33
             },
             {
               "text": "体验就会打折。",
-              "startFrame": 30,
+              "startFrame": 32,
               "durationFrames": 42
             }
           ],
@@ -260,7 +260,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 72
+          "totalDurationFrames": 75
         },
         {
           "narrativeType": "LOGIC",
@@ -270,26 +270,26 @@
             {
               "text": "别人的钱，",
               "startFrame": 0,
-              "durationFrames": 26
+              "durationFrames": 25
             },
             {
               "text": "能花在性能、影像、续航、做工上。",
-              "startFrame": 25,
-              "durationFrames": 95
+              "startFrame": 24,
+              "durationFrames": 84
             },
             {
               "text": "华为的钱，",
-              "startFrame": 120,
+              "startFrame": 107,
               "durationFrames": 29
             },
             {
               "text": "有相当一部分，",
-              "startFrame": 148,
-              "durationFrames": 35
+              "startFrame": 135,
+              "durationFrames": 33
             },
             {
               "text": "要花在“替代”这件事本身上。",
-              "startFrame": 183,
+              "startFrame": 168,
               "durationFrames": 60
             }
           ],
@@ -303,7 +303,7 @@
             "rightShowFrom": 2,
             "anchors": []
           },
-          "totalDurationFrames": 243
+          "totalDurationFrames": 228
         },
         {
           "narrativeType": "LOGIC",
@@ -313,17 +313,17 @@
             {
               "text": "第二类，",
               "startFrame": 0,
-              "durationFrames": 17
+              "durationFrames": 19
             },
             {
               "text": "国内根本没有成熟方案。",
-              "startFrame": 16,
-              "durationFrames": 50
+              "startFrame": 18,
+              "durationFrames": 53
             },
             {
               "text": "光刻机就是典型。",
-              "startFrame": 65,
-              "durationFrames": 40
+              "startFrame": 70,
+              "durationFrames": 45
             }
           ],
           "order": 7,
@@ -332,7 +332,7 @@
             "conceptName": "没有成熟方案",
             "anchors": []
           },
-          "totalDurationFrames": 105
+          "totalDurationFrames": 116
         },
         {
           "narrativeType": "CASE",
@@ -342,17 +342,17 @@
             {
               "text": "华为芯片名义国产，",
               "startFrame": 0,
-              "durationFrames": 47
+              "durationFrames": 56
             },
             {
               "text": "中芯国际在做。",
-              "startFrame": 46,
-              "durationFrames": 41
+              "startFrame": 55,
+              "durationFrames": 40
             },
             {
               "text": "但中芯国际用的光刻机依然是外国的，",
-              "startFrame": 87,
-              "durationFrames": 80
+              "startFrame": 94,
+              "durationFrames": 87
             }
           ],
           "order": 8,
@@ -380,7 +380,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 167
+          "totalDurationFrames": 182
         },
         {
           "narrativeType": "CASE",
@@ -390,22 +390,22 @@
             {
               "text": "而且因为制裁买不到先进的光刻机。",
               "startFrame": 0,
-              "durationFrames": 77
+              "durationFrames": 75
             },
             {
               "text": "只能用多重曝光，",
-              "startFrame": 76,
+              "startFrame": 74,
               "durationFrames": 39
             },
             {
               "text": "在受限设备上，",
-              "startFrame": 114,
+              "startFrame": 113,
               "durationFrames": 36
             },
             {
               "text": "硬造 7nm。",
-              "startFrame": 150,
-              "durationFrames": 40
+              "startFrame": 149,
+              "durationFrames": 46
             }
           ],
           "order": 9,
@@ -422,7 +422,7 @@
               }
             ]
           },
-          "totalDurationFrames": 190
+          "totalDurationFrames": 195
         },
         {
           "narrativeType": "LOGIC",
@@ -432,12 +432,12 @@
             {
               "text": "工艺越复杂，",
               "startFrame": 0,
-              "durationFrames": 36
+              "durationFrames": 31
             },
             {
               "text": "良品率越低。",
-              "startFrame": 36,
-              "durationFrames": 33
+              "startFrame": 30,
+              "durationFrames": 29
             }
           ],
           "order": 10,
@@ -463,7 +463,7 @@
               }
             ]
           },
-          "totalDurationFrames": 69
+          "totalDurationFrames": 60
         },
         {
           "narrativeType": "DATA",
@@ -478,7 +478,7 @@
             {
               "text": "中芯国际可能要花十块。",
               "startFrame": 67,
-              "durationFrames": 56
+              "durationFrames": 53
             }
           ],
           "order": 11,
@@ -497,7 +497,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 123
+          "totalDurationFrames": 121
         },
         {
           "narrativeType": "CONCLUSION",
@@ -507,12 +507,12 @@
             {
               "text": "即使做到了 7nm，",
               "startFrame": 0,
-              "durationFrames": 45
+              "durationFrames": 42
             },
             {
               "text": "也只是勉强达到别人的前几代产品。",
-              "startFrame": 44,
-              "durationFrames": 79
+              "startFrame": 41,
+              "durationFrames": 72
             }
           ],
           "order": 12,
@@ -530,7 +530,7 @@
             ],
             "coreSentenceAnchors": []
           },
-          "totalDurationFrames": 123
+          "totalDurationFrames": 113
         },
         {
           "narrativeType": "CASE",
@@ -550,27 +550,27 @@
             {
               "text": "通过中间商、",
               "startFrame": 62,
-              "durationFrames": 31
+              "durationFrames": 33
             },
             {
               "text": "白手套公司，",
-              "startFrame": 92,
+              "startFrame": 94,
               "durationFrames": 31
             },
             {
               "text": "采购国外零部件。",
-              "startFrame": 123,
+              "startFrame": 125,
               "durationFrames": 41
             },
             {
               "text": "再把来源隐藏起来，",
-              "startFrame": 163,
-              "durationFrames": 51
+              "startFrame": 166,
+              "durationFrames": 43
             },
             {
               "text": "包装成“国产突破”。",
-              "startFrame": 214,
-              "durationFrames": 59
+              "startFrame": 208,
+              "durationFrames": 58
             }
           ],
           "order": 13,
@@ -596,7 +596,7 @@
               }
             ]
           },
-          "totalDurationFrames": 273
+          "totalDurationFrames": 267
         },
         {
           "narrativeType": "LOGIC",
@@ -606,12 +606,12 @@
             {
               "text": "这条路不但有法律风险，",
               "startFrame": 0,
-              "durationFrames": 55
+              "durationFrames": 52
             },
             {
               "text": "还有供应风险。",
-              "startFrame": 54,
-              "durationFrames": 34
+              "startFrame": 51,
+              "durationFrames": 36
             }
           ],
           "order": 14,
@@ -624,7 +624,7 @@
             "rightShowFrom": 1,
             "anchors": []
           },
-          "totalDurationFrames": 88
+          "totalDurationFrames": 87
         },
         {
           "narrativeType": "CONCLUSION",
@@ -634,22 +634,22 @@
             {
               "text": "为了规避追查，",
               "startFrame": 0,
-              "durationFrames": 31
+              "durationFrames": 36
             },
             {
               "text": "要层层转包。",
-              "startFrame": 30,
-              "durationFrames": 32
+              "startFrame": 36,
+              "durationFrames": 39
             },
             {
               "text": "价格比正常采购，",
-              "startFrame": 62,
-              "durationFrames": 37
+              "startFrame": 74,
+              "durationFrames": 39
             },
             {
               "text": "贵很多。",
-              "startFrame": 98,
-              "durationFrames": 25
+              "startFrame": 112,
+              "durationFrames": 26
             }
           ],
           "order": 15,
@@ -677,11 +677,11 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 123
+          "totalDurationFrames": 139
         }
       ],
       "audioSrc": "/audio/华为高价论/scene_2/scene_2.mp3",
-      "totalDurationFrames": 2054
+      "totalDurationFrames": 2052
     },
     {
       "sceneId": "scene_3",
@@ -695,12 +695,12 @@
             {
               "text": "所以就能解释，",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 33
             },
             {
               "text": "为什么华为的产品就是贵？",
-              "startFrame": 34,
-              "durationFrames": 55
+              "startFrame": 32,
+              "durationFrames": 59
             }
           ],
           "order": 1,
@@ -709,7 +709,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 90
+          "totalDurationFrames": 92
         },
         {
           "narrativeType": "LOGIC",
@@ -719,12 +719,12 @@
             {
               "text": "不是质量就一定比别家好了，",
               "startFrame": 0,
-              "durationFrames": 62
+              "durationFrames": 66
             },
             {
               "text": "而是他的成本结构变了。",
-              "startFrame": 61,
-              "durationFrames": 47
+              "startFrame": 65,
+              "durationFrames": 50
             }
           ],
           "order": 2,
@@ -736,7 +736,7 @@
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 108
+          "totalDurationFrames": 115
         },
         {
           "narrativeType": "LOGIC",
@@ -751,7 +751,7 @@
             {
               "text": "主要花在产品竞争力上。",
               "startFrame": 24,
-              "durationFrames": 56
+              "durationFrames": 55
             }
           ],
           "order": 3,
@@ -760,7 +760,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 80
+          "totalDurationFrames": 79
         },
         {
           "narrativeType": "LOGIC",
@@ -770,22 +770,22 @@
             {
               "text": "华为的钱，",
               "startFrame": 0,
-              "durationFrames": 37
+              "durationFrames": 34
             },
             {
               "text": "有一部分花在制裁成本上。",
-              "startFrame": 36,
-              "durationFrames": 67
+              "startFrame": 33,
+              "durationFrames": 65
             },
             {
               "text": "花在国产替代的摩擦成本上。",
-              "startFrame": 102,
-              "durationFrames": 79
+              "startFrame": 98,
+              "durationFrames": 77
             },
             {
               "text": "花在绕过限制的交易成本上。",
-              "startFrame": 180,
-              "durationFrames": 68
+              "startFrame": 174,
+              "durationFrames": 73
             }
           ],
           "order": 4,
@@ -809,7 +809,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 249
+          "totalDurationFrames": 247
         },
         {
           "narrativeType": "TRANSITION",
@@ -819,7 +819,7 @@
             {
               "text": "那这些差距怎么弥补？",
               "startFrame": 0,
-              "durationFrames": 51
+              "durationFrames": 46
             }
           ],
           "order": 5,
@@ -828,7 +828,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 51
+          "totalDurationFrames": 46
         },
         {
           "narrativeType": "LOGIC",
@@ -838,12 +838,12 @@
             {
               "text": "物理附加值不够，",
               "startFrame": 0,
-              "durationFrames": 39
+              "durationFrames": 43
             },
             {
               "text": "就只能加“魔法附加值”：情怀。",
-              "startFrame": 38,
-              "durationFrames": 73
+              "startFrame": 42,
+              "durationFrames": 68
             }
           ],
           "order": 6,
@@ -852,7 +852,7 @@
             "conceptName": "魔法附加值",
             "anchors": []
           },
-          "totalDurationFrames": 112
+          "totalDurationFrames": 111
         },
         {
           "narrativeType": "CASE",
@@ -862,12 +862,12 @@
             {
               "text": "把买不到国外技术的窘迫，",
               "startFrame": 0,
-              "durationFrames": 58
+              "durationFrames": 59
             },
             {
               "text": "包装成强硬的反抗。",
-              "startFrame": 57,
-              "durationFrames": 56
+              "startFrame": 58,
+              "durationFrames": 55
             }
           ],
           "order": 7,
@@ -894,12 +894,12 @@
             {
               "text": "把供应链被迫降级的成本，",
               "startFrame": 0,
-              "durationFrames": 63
+              "durationFrames": 65
             },
             {
               "text": "包装成民族产业的脊梁。",
-              "startFrame": 62,
-              "durationFrames": 71
+              "startFrame": 64,
+              "durationFrames": 61
             }
           ],
           "order": 8,
@@ -916,7 +916,7 @@
             },
             "anchors": []
           },
-          "totalDurationFrames": 133
+          "totalDurationFrames": 125
         },
         {
           "narrativeType": "CASE",
@@ -926,12 +926,12 @@
             {
               "text": "把消费者多花的钱，",
               "startFrame": 0,
-              "durationFrames": 46
+              "durationFrames": 50
             },
             {
               "text": "包装成对国产崛起的支持。",
-              "startFrame": 45,
-              "durationFrames": 76
+              "startFrame": 49,
+              "durationFrames": 65
             }
           ],
           "order": 9,
@@ -948,7 +948,7 @@
             },
             "anchors": []
           },
-          "totalDurationFrames": 122
+          "totalDurationFrames": 114
         },
         {
           "narrativeType": "CASE",
@@ -958,12 +958,12 @@
             {
               "text": "把一个企业的生存压力，",
               "startFrame": 0,
-              "durationFrames": 52
+              "durationFrames": 51
             },
             {
               "text": "转化成普通人的道德义务。",
-              "startFrame": 51,
-              "durationFrames": 59
+              "startFrame": 50,
+              "durationFrames": 54
             }
           ],
           "order": 10,
@@ -980,7 +980,7 @@
             },
             "anchors": []
           },
-          "totalDurationFrames": 110
+          "totalDurationFrames": 105
         },
         {
           "narrativeType": "TRANSITION",
@@ -995,17 +995,17 @@
             {
               "text": "作为一个消费者。",
               "startFrame": 18,
-              "durationFrames": 35
+              "durationFrames": 36
             },
             {
               "text": "当你买一件华为产品，",
-              "startFrame": 53,
+              "startFrame": 54,
               "durationFrames": 51
             },
             {
               "text": "你要心里有数。",
-              "startFrame": 103,
-              "durationFrames": 33
+              "startFrame": 104,
+              "durationFrames": 39
             }
           ],
           "order": 11,
@@ -1022,7 +1022,7 @@
               }
             ]
           },
-          "totalDurationFrames": 136
+          "totalDurationFrames": 144
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1032,22 +1032,22 @@
             {
               "text": "你付的钱里，",
               "startFrame": 0,
-              "durationFrames": 32
+              "durationFrames": 28
             },
             {
               "text": "到底有多少是产品本身的价值。",
-              "startFrame": 31,
-              "durationFrames": 71
+              "startFrame": 27,
+              "durationFrames": 68
             },
             {
               "text": "有多少是制裁带来的额外成本。",
-              "startFrame": 102,
-              "durationFrames": 80
+              "startFrame": 94,
+              "durationFrames": 67
             },
             {
               "text": "又有多少是营销包装出来的情怀溢价。",
-              "startFrame": 181,
-              "durationFrames": 97
+              "startFrame": 161,
+              "durationFrames": 94
             }
           ],
           "order": 12,
@@ -1068,11 +1068,11 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 279
+          "totalDurationFrames": 256
         }
       ],
       "audioSrc": "/audio/华为高价论/scene_3/scene_3.mp3",
-      "totalDurationFrames": 1580
+      "totalDurationFrames": 1544
     },
     {
       "sceneId": "scene_4",
@@ -1086,22 +1086,22 @@
             {
               "text": "有人会说，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 26
             },
             {
               "text": "不管是为了真生存，",
-              "startFrame": 29,
+              "startFrame": 25,
               "durationFrames": 40
             },
             {
               "text": "还是为了假脊梁，",
-              "startFrame": 68,
-              "durationFrames": 34
+              "startFrame": 64,
+              "durationFrames": 32
             },
             {
               "text": "华为不都在为国产贡献力量吗？",
-              "startFrame": 102,
-              "durationFrames": 63
+              "startFrame": 96,
+              "durationFrames": 67
             }
           ],
           "order": 1,
@@ -1110,7 +1110,7 @@
             "quoteDisplayText": "不管是为了真生存，还是为了假脊梁，华为不都在为国产贡献力量吗？",
             "showFrom": 1
           },
-          "totalDurationFrames": 166
+          "totalDurationFrames": 163
         },
         {
           "narrativeType": "LOGIC",
@@ -1120,12 +1120,12 @@
             {
               "text": "这话没错。",
               "startFrame": 0,
-              "durationFrames": 33
+              "durationFrames": 31
             },
             {
               "text": "但在为国产贡献力量的不只是华为。",
-              "startFrame": 32,
-              "durationFrames": 81
+              "startFrame": 30,
+              "durationFrames": 85
             }
           ],
           "order": 2,
@@ -1154,7 +1154,7 @@
               }
             ]
           },
-          "totalDurationFrames": 114
+          "totalDurationFrames": 116
         },
         {
           "narrativeType": "LOGIC",
@@ -1164,17 +1164,17 @@
             {
               "text": "国产供应链更可控，",
               "startFrame": 0,
-              "durationFrames": 59
+              "durationFrames": 54
             },
             {
               "text": "国产技术如果真正发展起来，",
-              "startFrame": 58,
-              "durationFrames": 67
+              "startFrame": 53,
+              "durationFrames": 64
             },
             {
               "text": "长期性价比也会更高。",
-              "startFrame": 125,
-              "durationFrames": 53
+              "startFrame": 116,
+              "durationFrames": 55
             }
           ],
           "order": 3,
@@ -1183,7 +1183,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 179
+          "totalDurationFrames": 172
         },
         {
           "narrativeType": "CASE",
@@ -1193,37 +1193,37 @@
             {
               "text": "所以小米、",
               "startFrame": 0,
-              "durationFrames": 33
+              "durationFrames": 30
             },
             {
               "text": "OPPO、",
-              "startFrame": 32,
-              "durationFrames": 21
-            },
-            {
-              "text": "vivo、",
-              "startFrame": 53,
+              "startFrame": 29,
               "durationFrames": 17
             },
             {
-              "text": "联想、",
-              "startFrame": 69,
-              "durationFrames": 22
+              "text": "vivo、",
+              "startFrame": 45,
+              "durationFrames": 18
             },
             {
-              "text": "大疆，",
-              "startFrame": 91,
+              "text": "联想、",
+              "startFrame": 63,
               "durationFrames": 20
             },
             {
+              "text": "大疆，",
+              "startFrame": 82,
+              "durationFrames": 21
+            },
+            {
               "text": "以及大量你叫不上名字的公司，",
-              "startFrame": 111,
-              "durationFrames": 63
+              "startFrame": 103,
+              "durationFrames": 66
             },
             {
               "text": "其实都在推动国产替代。",
-              "startFrame": 173,
-              "durationFrames": 55
+              "startFrame": 169,
+              "durationFrames": 54
             }
           ],
           "order": 4,
@@ -1262,7 +1262,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 228
+          "totalDurationFrames": 223
         },
         {
           "narrativeType": "LOGIC",
@@ -1272,17 +1272,17 @@
             {
               "text": "区别只在于，",
               "startFrame": 0,
-              "durationFrames": 34
+              "durationFrames": 33
             },
             {
               "text": "有些公司把它当成长期产业能力来建设。",
-              "startFrame": 33,
-              "durationFrames": 90
+              "startFrame": 32,
+              "durationFrames": 86
             },
             {
               "text": "有些公司把它当成营销叙事来出售。",
-              "startFrame": 122,
-              "durationFrames": 79
+              "startFrame": 117,
+              "durationFrames": 75
             }
           ],
           "order": 5,
@@ -1295,7 +1295,7 @@
             "rightShowFrom": 2,
             "anchors": []
           },
-          "totalDurationFrames": 202
+          "totalDurationFrames": 192
         },
         {
           "narrativeType": "LOGIC",
@@ -1305,17 +1305,17 @@
             {
               "text": "推动国产，",
               "startFrame": 0,
-              "durationFrames": 29
+              "durationFrames": 30
             },
             {
               "text": "最合理的路径，",
-              "startFrame": 28,
-              "durationFrames": 34
+              "startFrame": 29,
+              "durationFrames": 32
             },
             {
               "text": "应该是一个循序渐进的过程。",
-              "startFrame": 62,
-              "durationFrames": 54
+              "startFrame": 61,
+              "durationFrames": 57
             }
           ],
           "order": 6,
@@ -1324,7 +1324,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 117
+          "totalDurationFrames": 118
         },
         {
           "narrativeType": "LOGIC",
@@ -1334,37 +1334,37 @@
             {
               "text": "一边利用全球产业链，",
               "startFrame": 0,
-              "durationFrames": 56
+              "durationFrames": 52
             },
             {
               "text": "生产真正有全球竞争力的产品。",
-              "startFrame": 55,
+              "startFrame": 51,
               "durationFrames": 75
             },
             {
               "text": "一边卖给全世界的人，",
-              "startFrame": 130,
-              "durationFrames": 46
+              "startFrame": 125,
+              "durationFrames": 44
             },
             {
               "text": "赚全世界的钱。",
-              "startFrame": 176,
-              "durationFrames": 40
+              "startFrame": 169,
+              "durationFrames": 42
             },
             {
               "text": "再用这些利润反哺国内研发、",
-              "startFrame": 215,
+              "startFrame": 210,
               "durationFrames": 64
             },
             {
               "text": "工艺、材料、设备和人才。",
-              "startFrame": 278,
-              "durationFrames": 75
+              "startFrame": 273,
+              "durationFrames": 70
             },
             {
               "text": "这才是健康的产业升级。",
-              "startFrame": 353,
-              "durationFrames": 53
+              "startFrame": 343,
+              "durationFrames": 59
             }
           ],
           "order": 7,
@@ -1386,7 +1386,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 406
+          "totalDurationFrames": 402
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1396,22 +1396,22 @@
             {
               "text": "而不是把企业的困境包装成国家的困境。",
               "startFrame": 0,
-              "durationFrames": 102
+              "durationFrames": 85
             },
             {
               "text": "把产品的短板包装成精神的长板。",
-              "startFrame": 101,
-              "durationFrames": 89
+              "startFrame": 84,
+              "durationFrames": 87
             },
             {
               "text": "再通过道德感，",
-              "startFrame": 189,
-              "durationFrames": 50
+              "startFrame": 170,
+              "durationFrames": 1
             },
             {
               "text": "要求国人为你的生存买单。",
-              "startFrame": 240,
-              "durationFrames": 65
+              "startFrame": 0,
+              "durationFrames": 912
             }
           ],
           "order": 9,
@@ -1435,11 +1435,11 @@
               "tone": "alert"
             }
           },
-          "totalDurationFrames": 294
+          "totalDurationFrames": 271
         }
       ],
       "audioSrc": "/audio/华为高价论/scene_4/scene_4.mp3",
-      "totalDurationFrames": 1704
+      "totalDurationFrames": 1657
     },
     {
       "sceneId": "scene_5",
@@ -1453,22 +1453,22 @@
             {
               "text": "此外，",
               "startFrame": 0,
-              "durationFrames": 17
+              "durationFrames": 22
             },
             {
               "text": "作为一个消费者。",
-              "startFrame": 16,
-              "durationFrames": 35
+              "startFrame": 21,
+              "durationFrames": 39
             },
             {
               "text": "当你要为情怀买单时，",
-              "startFrame": 51,
-              "durationFrames": 51
+              "startFrame": 60,
+              "durationFrames": 54
             },
             {
               "text": "你还应该要问自己三个问题。",
-              "startFrame": 101,
-              "durationFrames": 53
+              "startFrame": 113,
+              "durationFrames": 52
             }
           ],
           "order": 1,
@@ -1485,7 +1485,7 @@
               }
             ]
           },
-          "totalDurationFrames": 154
+          "totalDurationFrames": 166
         },
         {
           "narrativeType": "LOGIC",
@@ -1495,52 +1495,52 @@
             {
               "text": "第一，",
               "startFrame": 0,
-              "durationFrames": 16
+              "durationFrames": 19
             },
             {
               "text": "你为了情怀多花的钱，",
-              "startFrame": 15,
-              "durationFrames": 52
-            },
-            {
-              "text": "是真的一分不少花在了国产的研发上，",
-              "startFrame": 66,
-              "durationFrames": 84
-            },
-            {
-              "text": "还是变成了少数人的利润、",
-              "startFrame": 150,
+              "startFrame": 18,
               "durationFrames": 53
             },
             {
+              "text": "是真的一分不少花在了国产的研发上，",
+              "startFrame": 70,
+              "durationFrames": 87
+            },
+            {
+              "text": "还是变成了少数人的利润、",
+              "startFrame": 157,
+              "durationFrames": 56
+            },
+            {
               "text": "奖金和加拿大的别墅？",
-              "startFrame": 202,
-              "durationFrames": 48
+              "startFrame": 212,
+              "durationFrames": 54
             },
             {
               "text": "第二，",
-              "startFrame": 250,
+              "startFrame": 266,
               "durationFrames": 16
             },
             {
               "text": "你为了情怀多花的钱，",
-              "startFrame": 266,
-              "durationFrames": 56
+              "startFrame": 281,
+              "durationFrames": 48
             },
             {
               "text": "是推动了底层技术突破，",
-              "startFrame": 321,
-              "durationFrames": 59
+              "startFrame": 329,
+              "durationFrames": 52
             },
             {
               "text": "还是只是支付了绕过封锁的中间商成本？",
               "startFrame": 380,
-              "durationFrames": 86
+              "durationFrames": 88
             },
             {
               "text": "第三，",
-              "startFrame": 465,
-              "durationFrames": 20
+              "startFrame": 468,
+              "durationFrames": 18
             },
             {
               "text": "如果一个产品不靠性能、",
@@ -1549,28 +1549,28 @@
             },
             {
               "text": "不靠价格、",
-              "startFrame": 535,
-              "durationFrames": 26
+              "startFrame": 536,
+              "durationFrames": 27
             },
             {
               "text": "不靠体验，",
-              "startFrame": 560,
-              "durationFrames": 26
+              "startFrame": 562,
+              "durationFrames": 27
             },
             {
               "text": "而主要靠情绪动员才能卖出去，",
-              "startFrame": 585,
-              "durationFrames": 74
+              "startFrame": 588,
+              "durationFrames": 63
             },
             {
               "text": "那它到底是在推动国产进步，",
-              "startFrame": 659,
-              "durationFrames": 65
+              "startFrame": 650,
+              "durationFrames": 57
             },
             {
               "text": "还是在奖励落后？",
-              "startFrame": 723,
-              "durationFrames": 43
+              "startFrame": 707,
+              "durationFrames": 36
             }
           ],
           "order": 2,
@@ -1592,11 +1592,11 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 767
+          "totalDurationFrames": 743
         }
       ],
       "audioSrc": "/audio/华为高价论/scene_5/scene_5.mp3",
-      "totalDurationFrames": 924
+      "totalDurationFrames": 911
     },
     {
       "sceneId": "scene_6",
@@ -1610,17 +1610,17 @@
             {
               "text": "支持国产当然没问题。",
               "startFrame": 0,
-              "durationFrames": 47
+              "durationFrames": 56
             },
             {
               "text": "但支持国产，",
-              "startFrame": 46,
-              "durationFrames": 29
+              "startFrame": 55,
+              "durationFrames": 31
             },
             {
               "text": "不等于放弃判断。",
-              "startFrame": 75,
-              "durationFrames": 32
+              "startFrame": 86,
+              "durationFrames": 36
             }
           ],
           "order": 1,
@@ -1632,7 +1632,7 @@
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 107
+          "totalDurationFrames": 122
         },
         {
           "narrativeType": "LOGIC",
@@ -1642,17 +1642,17 @@
             {
               "text": "真正的国产崛起，",
               "startFrame": 0,
-              "durationFrames": 39
+              "durationFrames": 38
             },
             {
               "text": "是良性竞争，",
-              "startFrame": 38,
-              "durationFrames": 34
+              "startFrame": 37,
+              "durationFrames": 33
             },
             {
               "text": "用产品说话。",
-              "startFrame": 72,
-              "durationFrames": 41
+              "startFrame": 69,
+              "durationFrames": 36
             }
           ],
           "order": 3,
@@ -1683,7 +1683,7 @@
               }
             ]
           },
-          "totalDurationFrames": 113
+          "totalDurationFrames": 106
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1698,12 +1698,12 @@
             {
               "text": "反哺国内的产业升级，",
               "startFrame": 45,
-              "durationFrames": 51
+              "durationFrames": 48
             },
             {
               "text": "才是可持续发展的正道。",
-              "startFrame": 96,
-              "durationFrames": 52
+              "startFrame": 93,
+              "durationFrames": 57
             }
           ],
           "order": 4,
@@ -1738,11 +1738,11 @@
               }
             ]
           },
-          "totalDurationFrames": 148
+          "totalDurationFrames": 151
         }
       ],
       "audioSrc": "/audio/华为高价论/scene_6/scene_6.mp3",
-      "totalDurationFrames": 369
+      "totalDurationFrames": 381
     }
   ],
   "fps": 30,

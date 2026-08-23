@@ -9,10 +9,12 @@ Step 3: AI 图片生成（模板驱动版）
 """
 
 import argparse
+import base64
 import json
 import os
 import time
 from pathlib import Path
+from typing import Any, Literal
 
 from narrator_pipeline.paths import PACKAGE_ROOT, resolve_video_paths
 try:
@@ -36,25 +38,103 @@ def remove_white_background(img: "Image.Image", threshold: int = 240) -> "Image.
     return img
 
 
+ImageProvider = Literal["gemini", "gpt"]
+
+
+def normalize_image_provider(value: Any) -> ImageProvider:
+    v = str(value or "gemini").strip().lower()
+    if v in ("gpt", "openai", "oai"):
+        return "gpt"
+    return "gemini"
+
+
+def resolve_grid_pixel_size(aspect_ratio: str, image_size: str) -> str:
+    """将网格宽高比 + 尺寸档位映射为 GPT Images API 的 WIDTHxHEIGHT（宽高须能被 16 整除）。"""
+    size_key = str(image_size or "1K").strip().upper()
+    base = 2048 if size_key == "2K" else 1024
+
+    ratio = str(aspect_ratio or "1:1").strip()
+    if ratio == "1:1":
+        return f"{base}x{base}"
+
+    parts = ratio.replace("/", ":").split(":")
+    if len(parts) != 2:
+        return f"{base}x{base}"
+    try:
+        w_ratio, h_ratio = int(parts[0]), int(parts[1])
+    except ValueError:
+        return f"{base}x{base}"
+    if w_ratio <= 0 or h_ratio <= 0:
+        return f"{base}x{base}"
+
+    if w_ratio >= h_ratio:
+        width = base
+        height = round(base * h_ratio / w_ratio)
+    else:
+        height = base
+        width = round(base * w_ratio / h_ratio)
+
+    width = max(16, (width // 16) * 16)
+    height = max(16, (height // 16) * 16)
+    return f"{width}x{height}"
+
+
 def is_imagen_model(model: str) -> bool:
     """判断是否是 Imagen 模型"""
     return "imagen" in model.lower()
 
 
-def generate_image(
-    client,
+def generate_grid_image(
+    provider: ImageProvider,
+    client: Any,
     model: str,
     prompt: str,
     output_path: Path,
     aspect_ratio: str = "1:1",
     image_size: str = "1K",
+    gpt_quality: str = "medium",
 ) -> bool:
-    """根据模型类型自动选择 API 生成图片"""
+    """按 image_provider 选择 API 生成 3×3 网格整图。"""
+    if provider == "gpt":
+        pixel_size = resolve_grid_pixel_size(aspect_ratio, image_size)
+        return _generate_with_gpt(
+            client, model, prompt, output_path, pixel_size, gpt_quality
+        )
     if is_imagen_model(model):
         return _generate_with_imagen(client, model, prompt, output_path, aspect_ratio)
     return _generate_with_gemini(
         client, model, prompt, output_path, aspect_ratio, image_size
     )
+
+
+def _generate_with_gpt(
+    client: Any,
+    model: str,
+    prompt: str,
+    output_path: Path,
+    pixel_size: str,
+    quality: str,
+) -> bool:
+    try:
+        response = client.images.generate(
+            model=model,
+            prompt=prompt,
+            size=pixel_size,
+            quality=quality,
+        )
+        if not response.data:
+            print("  ⚠️ GPT 未返回图片")
+            return False
+        image_b64 = response.data[0].b64_json
+        if not image_b64:
+            print("  ⚠️ GPT 响应缺少 b64_json")
+            return False
+        with open(output_path, "wb") as f:
+            f.write(base64.b64decode(image_b64))
+        return True
+    except Exception as e:
+        print(f"  ❌ GPT Image API 失败: {e}")
+        return False
 
 
 def _generate_with_imagen(
@@ -218,18 +298,33 @@ def main():
     load_env(script_dir)
     config = load_config(script_dir)
 
-    api_key = os.environ.get("GEMINI_API_KEY", "")
-    if not api_key:
-        print("❌ 未设置 GEMINI_API_KEY")
-        return False
+    image_provider = normalize_image_provider(config.get("image_provider", "gemini"))
+    gpt_quality = str(config.get("gpt_image_quality", "medium")).strip() or "medium"
 
     if Image is None:
         print("❌ 请安装 Pillow: pip install Pillow")
         return False
 
-    from google import genai
+    if image_provider == "gpt":
+        api_key = os.environ.get("OPENAI_API_KEY", "")
+        if not api_key:
+            print("❌ 未设置 OPENAI_API_KEY（image_provider=gpt）")
+            return False
+        from openai import OpenAI
 
-    client = genai.Client(api_key=api_key)
+        client = OpenAI(api_key=api_key)
+        image_model = str(config.get("gpt_image_model", "gpt-image-2")).strip() or "gpt-image-2"
+    else:
+        api_key = os.environ.get("GEMINI_API_KEY", "")
+        if not api_key:
+            print("❌ 未设置 GEMINI_API_KEY")
+            return False
+        from google import genai
+
+        client = genai.Client(api_key=api_key)
+        image_model = str(
+            config.get("imagen_model", "gemini-3.1-flash-image-preview")
+        ).strip() or "gemini-3.1-flash-image-preview"
 
     paths = resolve_video_paths(args.name, config)
     input_path = paths.scene_scripts
@@ -264,8 +359,17 @@ def main():
         for i in range(0, len(tasks), batch_size)
     ]
 
+    grid_pixel_size = (
+        resolve_grid_pixel_size(grid_aspect_ratio, image_size)
+        if image_provider == "gpt"
+        else None
+    )
+
     print(f"🎨 开始生成场景配图（3×3 网格批量，共 {len(tasks)} 张 → {len(chunks)} 次 API）")
-    print(f"   📐 网格宽高比: {grid_aspect_ratio}")
+    print(f"   🖼️  provider: {image_provider} | model: {image_model}")
+    print(f"   📐 网格宽高比: {grid_aspect_ratio} | 尺寸档位: {image_size}")
+    if grid_pixel_size:
+        print(f"   📏 GPT 像素: {grid_pixel_size} | quality: {gpt_quality}")
     print(f"   📂 输出: {output_dir}")
 
     success_count = 0
@@ -284,6 +388,11 @@ def main():
             "A 3x3 grid image with exactly 9 equal cells.",
             "CRITICAL: absolutely NO borders, NO dividing lines, NO grid lines, NO separators, NO outlines between cells.",
             "CRITICAL - NO TEXT: The image must contain ZERO text. No letters, no numbers, no words, no captions.",
+            "CRITICAL - WHITE BACKGROUND ONLY: Every cell MUST have a pure white background. "
+            "NO black, dark gray, colored, gradient, or textured backgrounds. "
+            "Subjects are bold thick black line art on pure white only. "
+            "Use heavy comic-style outlines with thick strokes. "
+            "NO thin hairline, NO pencil sketch, NO delicate minimalist lines.",
             "",
         ]
         for i in range(9):
@@ -302,13 +411,15 @@ def main():
         print(f"\n📦 批次 {batch_idx + 1}/{len(chunks)}: {len(batch)} 张 → 1 次 API")
         print(f"    首条: {preview}")
 
-        if not generate_image(
+        if not generate_grid_image(
+            image_provider,
             client,
-            config.get("imagen_model", "gemini-3.1-flash-image-preview"),
+            image_model,
             grid_prompt,
             grid_path,
             grid_aspect_ratio,
             image_size,
+            gpt_quality,
         ):
             fail_count += len(batch)
             if grid_path.exists():

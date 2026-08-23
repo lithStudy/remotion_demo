@@ -11,34 +11,158 @@ from __future__ import annotations
 from narrator_pipeline.common import extract_content_text
 
 
-def sanitize_anchors(param: dict, content_len: int, item_order) -> list[dict]:
-    """校验并清洗 param.anchors，丢弃非法条目，返回有效列表。"""
-    anchors = param.get("anchors", [])
-    if not isinstance(anchors, list):
-        print(f"   ⚠️ item order={item_order} 的 anchors 非数组，已清空")
-        return []
+def _source_citation_has_bilingual(refs: list) -> bool:
+	for r in refs:
+		if not isinstance(r, dict):
+			continue
+		title = str(r.get("title", "")).strip()
+		title_zh = str(r.get("titleZh", "")).strip()
+		if title and title_zh and title != title_zh:
+			return True
+	return False
 
-    valid = []
-    for idx, anchor_item in enumerate(anchors):
-        if not isinstance(anchor_item, dict):
-            print(f"   ⚠️ item order={item_order} anchors[{idx}] 非对象，已丢弃")
-            continue
-        anchor_text = str(anchor_item.get("text", "")).strip()
-        show_from = anchor_item.get("showFrom")
-        if not anchor_text:
-            print(f"   ⚠️ item order={item_order} anchors[{idx}] 缺少 text，已丢弃")
-            continue
-        if not isinstance(show_from, int) or show_from < 0 or show_from >= content_len:
-            print(f"   ⚠️ item order={item_order} anchors[{idx}].showFrom 非法，已丢弃")
-            continue
-        valid.append({
-            "text": anchor_text,
-            "showFrom": show_from,
-            "color": anchor_item.get("color"),
-            "anim": anchor_item.get("anim"),
-            "audioEffect": anchor_item.get("audioEffect"),
-        })
-    return valid
+
+def _source_citation_items_per_page(has_bilingual: bool) -> int:
+	return 4 if has_bilingual else 5
+
+
+def _source_citation_page_duration(page_item_count: int, is_last_page: bool = True) -> int:
+	count = max(1, min(12, int(page_item_count)))
+	read_buffer = 27 if is_last_page else 15
+	return 24 + count * 12 + read_buffer
+
+
+def compute_source_citation_duration(reference_count: int) -> int:
+	"""SOURCE_CITATION 单页：24 + n×12 + 27 帧（与 SourceCitation.tsx 一致）。"""
+	count = max(1, min(12, int(reference_count)))
+	return 24 + count * 12 + 27
+
+
+def compute_source_citation_duration_from_references(refs: list) -> int:
+	"""按参考文献内容计算时长：双语多行每页 4 条，超出分页叠化。"""
+	valid = [
+		r for r in refs
+		if isinstance(r, dict) and str(r.get("title", "")).strip()
+	]
+	if not valid:
+		return _source_citation_page_duration(1)
+	valid = valid[:12]
+	has_bilingual = _source_citation_has_bilingual(valid)
+	per_page = _source_citation_items_per_page(has_bilingual)
+	pages: list[list] = []
+	for i in range(0, len(valid), per_page):
+		pages.append(valid[i : i + per_page])
+	if len(pages) == 1:
+		return _source_citation_page_duration(len(pages[0]))
+	total = 0
+	for i, page in enumerate(pages):
+		total += _source_citation_page_duration(len(page), i == len(pages) - 1)
+		if i < len(pages) - 1:
+			total -= 12
+	return total
+
+
+def _source_citation_reference_count(item: dict) -> int:
+	param = item.get("param")
+	if not isinstance(param, dict):
+		return 1
+	refs = param.get("references")
+	if not isinstance(refs, list) or not refs:
+		return 1
+	valid = [
+		r for r in refs
+		if isinstance(r, dict) and str(r.get("title", "")).strip()
+	]
+	return max(1, len(valid))
+
+
+def apply_source_citation_item_duration(item: dict) -> int:
+	"""为 SOURCE_CITATION item 写入 totalDurationFrames，返回帧数。"""
+	param = item.get("param")
+	refs = param.get("references") if isinstance(param, dict) else None
+	if isinstance(refs, list) and refs:
+		frames = compute_source_citation_duration_from_references(refs)
+	else:
+		frames = compute_source_citation_duration(_source_citation_reference_count(item))
+	item["totalDurationFrames"] = frames
+	if not isinstance(item.get("content"), list):
+		item["content"] = []
+	return frames
+
+
+def _is_reference_scene(scene: dict) -> bool:
+	if not isinstance(scene, dict):
+		return False
+	if scene.get("sceneId") == "scene_references":
+		return True
+	if "参考资料" in str(scene.get("sceneName") or ""):
+		return True
+	items = scene.get("items")
+	if isinstance(items, list) and items:
+		return all(
+			isinstance(it, dict) and it.get("template") == "SOURCE_CITATION"
+			for it in items
+		)
+	return False
+
+
+def inject_source_citation_durations(
+	scene_scripts: dict,
+	scene_end_padding: int = 0,
+) -> None:
+	"""为所有 SOURCE_CITATION item 注入自动时长（无口播 content 亦可）。"""
+	for scene in scene_scripts.get("scenes", []):
+		is_ref = _is_reference_scene(scene)
+		pad = scene_end_padding if is_ref else 0
+		scene_frames = 0
+		for item in scene.get("items", []):
+			if item.get("template") == "SOURCE_CITATION":
+				param = item.get("param")
+				refs = param.get("references") if isinstance(param, dict) else None
+				if isinstance(refs, list) and refs:
+					frames = compute_source_citation_duration_from_references(refs)
+				else:
+					frames = compute_source_citation_duration(
+						_source_citation_reference_count(item),
+					)
+				if pad > 0:
+					frames += pad
+				item["totalDurationFrames"] = frames
+				scene_frames += frames
+			else:
+				scene_frames += int(item.get("totalDurationFrames") or 0)
+		if scene_frames > 0 and not scene.get("audioSrc"):
+			scene["totalDurationFrames"] = scene_frames
+
+
+def sanitize_anchors(param: dict, content_len: int, item_order) -> list[dict]:
+	"""校验并清洗 param.anchors，丢弃非法条目，返回有效列表。"""
+	anchors = param.get("anchors", [])
+	if not isinstance(anchors, list):
+		print(f"   ⚠️ item order={item_order} 的 anchors 非数组，已清空")
+		return []
+
+	valid = []
+	for idx, anchor_item in enumerate(anchors):
+		if not isinstance(anchor_item, dict):
+			print(f"   ⚠️ item order={item_order} anchors[{idx}] 非对象，已丢弃")
+			continue
+		anchor_text = str(anchor_item.get("text", "")).strip()
+		show_from = anchor_item.get("showFrom")
+		if not anchor_text:
+			print(f"   ⚠️ item order={item_order} anchors[{idx}] 缺少 text，已丢弃")
+			continue
+		if not isinstance(show_from, int) or show_from < 0 or show_from >= content_len:
+			print(f"   ⚠️ item order={item_order} anchors[{idx}].showFrom 非法，已丢弃")
+			continue
+		valid.append({
+			"text": anchor_text,
+			"showFrom": show_from,
+			"color": anchor_item.get("color"),
+			"anim": anchor_item.get("anim"),
+			"audioEffect": anchor_item.get("audioEffect"),
+		})
+	return valid
 
 
 def core_sentence_text_for_anchor_match(param: dict) -> str:
@@ -139,6 +263,8 @@ def inject_text_length_content_timings(scene_scripts: dict, fps: int, config: di
 
             content = item.get("content", [])
             if not isinstance(content, list) or not content:
+                if item.get("template") == "SOURCE_CITATION":
+                    apply_source_citation_item_duration(item)
                 continue
 
             upgraded_content = []

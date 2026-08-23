@@ -14,3 +14,5 @@ export {
 	VERTICAL_COVER_POSTER_H,
 	VERTICAL_COVER_POSTER_W,
 } from "./CoverPosterVertical";
+export { NarratorTopicCompositions } from "./NarratorTopicCompositions";
+export type { NarratorTopicCompositionsProps } from "./NarratorTopicCompositions";

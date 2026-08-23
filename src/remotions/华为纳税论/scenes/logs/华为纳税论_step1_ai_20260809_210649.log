@@ -1,0 +1,5524 @@
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:06:50
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：你交的税，凭什么算成华为的奉献？
+- **当前场景**：引入·千亿纳税疑云
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+有人说，华为不愧是国之栋梁，一年纳税千亿元。
+
+先别急着感动。我们看看这个所谓的“千亿”是从哪来。
+
+最初来源，全国工商联发布，
+二零二一年民企五百强报告，具体说，是903亿。
+
+首先说一下这个所谓的“全国工商联”，
+并不是什么国家机构，而是一个别名为“中国民间商会”的民间组织。
+一个民间组织给出的报告，权威性能有多高呢？
+你只需要知道他给出的所谓中国民营500强，甚至有很多世界500强都没有上榜，比如中国平安、联想集团、海尔集团等。
+所以这个报告您就乐一乐就完了，别太当真。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:08:28
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "有人说，华为不愧是国之栋梁，一年纳税千亿元。",
+      "narrativeType": "HOOK",
+      "template": "QUOTE_CITATION",
+      "expressionTag": "quote",
+      "confidence": "high",
+      "estimatedSeconds": 4.0,
+      "reasoning": "引用他人说法作为开头钩子，营造质疑的起点。"
+    },
+    {
+      "text": "先别急着感动。我们看看这个所谓的“千亿”是从哪来。",
+      "narrativeType": "TRANSITION",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "estimatedSeconds": 4.4,
+      "reasoning": "先否定感性反应，引导观众转向理性审视，属于认知转变结构。"
+    },
+    {
+      "text": "最初来源，全国工商联发布，二零二一年民企五百强报告，具体说，是903亿。",
+      "narrativeType": "DATA",
+      "template": "KPI_HERO",
+      "expressionTag": "data",
+      "confidence": "high",
+      "estimatedSeconds": 5.1,
+      "reasoning": "揭示具体数据，突出903亿这一关键数字，适合KPI_HERO模板。"
+    },
+    {
+      "text": "首先说一下这个所谓的“全国工商联”，并不是什么国家机构，而是一个别名为“中国民间商会”的民间组织。",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "estimatedSeconds": 6.7,
+      "reasoning": "对全国工商联的性质进行“不是…而是…”的认知纠正，适合COGNITIVE_SHIFT。"
+    },
+    {
+      "text": "一个民间组织给出的报告，权威性能有多高呢？你只需要知道他给出的所谓中国民营500强，甚至有很多世界500强都没有上榜，比如中国平安、联想集团、海尔集团等。",
+      "narrativeType": "CASE",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "medium",
+      "estimatedSeconds": 9.3,
+      "reasoning": "先以反问质疑，再以实例佐证，属于问→驳的节拍递进；合并后长度适中，避免过于零星。"
+    },
+    {
+      "text": "所以这个报告您就乐一乐就完了，别太当真。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "estimatedSeconds": 3.6,
+      "reasoning": "最终收束观点，以短句直接打击，无需配图，适合TEXT_FOCUS。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:08:28
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：你交的税，凭什么算成华为的奉献？
+- **当前场景**：剖析·增值税真相
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+那有人说了，民间组织也不会乱说话吧，总得有点依据吧？
+要说依据，那唯一可信的应该就是年报了。
+很遗憾，华为自家发布的年报。2020年企业所得税是76亿元。只有腾讯的1/3。
+那么这827亿元的差额哪里来的呢？
+唯一可能的来源，是增值税。
+
+增值税，是典型的间接税。
+
+谁向税务机关申报？企业。
+
+谁把钱交进国库？也是企业。
+
+可谁最终承担税负？消费者。
+
+算一部手机就明白了。
+
+假设一部华为手机，
+售价七千元。
+
+按照百分之十三的税率，
+这七千元里面，
+大约有八百零五元，
+是消费者为手机额外付出的增值税，这是你自己缴纳的税款，不是华为缴纳的。
+
+这就像商场收银台。
+顾客交钱给收银台，收银台交钱给商场，
+你就不能说这些钱都是收银员贡献的。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:10:47
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "那有人说了，民间组织也不会乱说话吧，总得有点依据吧？要说依据，那唯一可信的应该就是年报了。",
+      "narrativeType": "LOGIC",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "问句→回答的递进节拍，两段节奏推进，适合用BEAT_SEQUENCE呈现质疑与引出年报的情绪转换。"
+    },
+    {
+      "text": "很遗憾，华为自家发布的年报。2020年企业所得税是76亿元。只有腾讯的1/3。",
+      "narrativeType": "DATA",
+      "template": "STAT_COMPARE",
+      "expressionTag": "data",
+      "confidence": "high",
+      "reasoning": "明确的两项数据对比（华为76亿 vs 腾讯≈228亿），适用STAT_COMPARE突出差距，强化'很遗憾'的反差感。"
+    },
+    {
+      "text": "那么这827亿元的差额哪里来的呢？唯一可能的来源，是增值税。",
+      "narrativeType": "LOGIC",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "问→答的短节拍递进，悬念与揭示一气呵成，BEAT_SEQUENCE可在同一镜头中分段呈现问答张力。"
+    },
+    {
+      "text": "增值税，是典型的间接税。谁向税务机关申报？企业。谁把钱交进国库？也是企业。可谁最终承担税负？消费者。",
+      "narrativeType": "LOGIC",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "定义+三组问答构成4段递进解释间接税，BEAT_SEQUENCE通过画面分段逐步揭示申报者、缴纳者与最终承担者之间的错位。"
+    },
+    {
+      "text": "算一部手机就明白了。假设一部华为手机，售价七千元。",
+      "narrativeType": "CASE",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "过渡引入案例设定，平缓叙述，无复杂结构，CENTER_FOCUS以单视觉焦点配合口播，自然进入计算环节。"
+    },
+    {
+      "text": "按照百分之十三的税率，这七千元里面，大约有八百零五元，是消费者为手机额外付出的增值税，",
+      "narrativeType": "CASE",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "计算步骤递进（税率→基数→得出金额），三段节拍强化推导过程，BEAT_SEQUENCE让计算可视化层层揭示。"
+    },
+    {
+      "text": "这是你自己缴纳的税款，不是华为缴纳的。",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "明确'不是…而是…'认知转换结构，COGNITIVE_SHIFT专为这种强对照设计，突出税负归属的颠覆性认知。"
+    },
+    {
+      "text": "这就像商场收银台。顾客交钱给收银台，收银台交钱给商场，你就不能说这些钱都是收银员贡献的。",
+      "narrativeType": "CONCLUSION",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "比喻三段递进（设喻→类比过程→结论），用BEAT_SEQUENCE将抽象间接税具象化，并收束到'不能说都是收银员贡献的'这一核心类比推理。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:10:47
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：你交的税，凭什么算成华为的奉献？
+- **当前场景**：反转·谁在邀功
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+903亿的纳税总额，也许不是假的。
+
+但有些人故意混淆统计口径，
+把消费者贡献的税收算作华为的，
+就是不要脸了。
+
+
+
+还有人会说，
+钱毕竟是华为交的。
+这难道不算贡献吗？
+
+当然算。
+
+依法申报，
+准确核算，
+按时缴纳，
+都是企业的责任。
+
+华为创造交易，
+创造利润，
+创造就业，
+当然也创造税源。
+
+但创造税源，
+并不等于承担税负。
+
+如果企业把增值税，
+都算成自己的奉献，
+那消费者算什么？
+
+一个没有名字的付款码吗？
+
+更荒唐的是，
+这种口径常被拿来拉踩。
+
+讲华为的时候就用纳税总额算出千亿。
+将别家的时候就只提企业所得税，纳税几十亿。
+
+结论就成了：华为更爱国。别家没有贡献。
+
+这不是比较。
+这是拿不同尺子，
+量出想要的结论。
+
+
+别把经手的钱，
+都算成企业的牺牲。
+
+更别把消费者的账单，
+铸成企业邀功的勋章。
+
+## 可用模板（共 24 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QUOTE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:12:26
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "903亿的纳税总额，也许不是假的。",
+      "narrativeType": "DATA",
+      "template": "KPI_HERO",
+      "expressionTag": "data",
+      "confidence": "high",
+      "reasoning": "强调单个核心数值903亿，适合KPI_HERO模板突出数据冲击力。"
+    },
+    {
+      "text": "但有些人故意混淆统计口径，把消费者贡献的税收算作华为的，就是不要脸了。",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "揭示错误认知（混淆口径）→ 真相（不要脸），典型认知扭转，选COGNITIVE_SHIFT。"
+    },
+    {
+      "text": "还有人会说，钱毕竟是华为交的。这难道不算贡献吗？",
+      "narrativeType": "TRANSITION",
+      "template": "CHAT_BUBBLE",
+      "expressionTag": "quote",
+      "confidence": "medium",
+      "reasoning": "模拟他人反驳言论，适合CHAT_BUBBLE以聊天气泡呈现对立观点。"
+    },
+    {
+      "text": "当然算。依法申报，准确核算，按时缴纳，都是企业的责任。",
+      "narrativeType": "LOGIC",
+      "template": "METHOD_STACK",
+      "expressionTag": "method",
+      "confidence": "medium",
+      "reasoning": "核心观点“当然算”+三条解释性责任（依法申报、准确核算、按时缴纳），符合METHOD_STACK结构。"
+    },
+    {
+      "text": "华为创造交易，创造利润，创造就业，当然也创造税源。",
+      "narrativeType": "LOGIC",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "high",
+      "reasoning": "四个并列的“创造”点，适合PANEL_GRID以宫格形式各有配图展示。"
+    },
+    {
+      "text": "但创造税源，并不等于承担税负。如果企业把增值税，都算成自己的奉献，那消费者算什么？一个没有名字的付款码吗？",
+      "narrativeType": "LOGIC",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "先给出论断（创造税源≠承担税负），再用反问揭露荒谬，整体是认知纠正过程，合并后不超过45字，用COGNITIVE_SHIFT。"
+    },
+    {
+      "text": "更荒唐的是，这种口径常被拿来拉踩。",
+      "narrativeType": "TRANSITION",
+      "template": "PUNCH_CAPTION",
+      "expressionTag": "focus",
+      "confidence": "medium",
+      "reasoning": "强化情绪转折，突出“荒唐”，适合PUNCH_CAPTION作为冲击性过渡镜头。"
+    },
+    {
+      "text": "讲华为的时候就用纳税总额算出千亿。将别家的时候就只提企业所得税，纳税几十亿。",
+      "narrativeType": "DATA",
+      "template": "STAT_COMPARE",
+      "expressionTag": "data",
+      "confidence": "high",
+      "reasoning": "两种口径下数额对比（千亿 vs 几十亿），可抽象出两个非负整数，适合STAT_COMPARE。"
+    },
+    {
+      "text": "结论就成了：华为更爱国。别家没有贡献。",
+      "narrativeType": "CONCLUSION",
+      "template": "PUNCH_CAPTION",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "荒谬结论的直击，用PUNCH_CAPTION强化讽刺与冲击。"
+    },
+    {
+      "text": "这不是比较。这是拿不同尺子，量出想要的结论。",
+      "narrativeType": "CONCLUSION",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "典型“不是…而是…”认知转变，揭示本质，选COGNITIVE_SHIFT。"
+    },
+    {
+      "text": "别把经手的钱，都算成企业的牺牲。更别把消费者的账单，铸成企业邀功的勋章。",
+      "narrativeType": "CONCLUSION",
+      "template": "DOS_AND_DONTS",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "两个明确的“别…”禁止事项，适合DOS_AND_DONTS以警示牌面呈现。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:12:26
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+有人说，华为不愧是国之栋梁，一年纳税千亿元。
+
+先别急着感动。我们看看这个所谓的“千亿”是从哪来。
+
+最初来源，全国工商联发布，
+二零二一年民企五百强报告，具体说，是903亿。
+
+首先说一下这个所谓的“全国工商联”，
+并不是什么国家机构，而是一个别名为“中国民间商会”的民间组织。
+一个民间组织给出的报告，权威性能有多高呢？
+你只需要知道他给出的所谓中国民营500强，甚至有很多世界500强都没有上榜，比如中国平安、联想集团、海尔集团等。
+所以这个报告您就乐一乐就完了，别太当真。
+
+
+## 🎯 待处理的目标文案
+有人说，华为不愧是国之栋梁，一年纳税千亿元。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "有人说，"
+  },
+  {
+    "index": 1,
+    "text": "华为不愧是国之栋梁，"
+  },
+  {
+    "index": 2,
+    "text": "一年纳税千亿元。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：QUOTE_CITATION
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "quoteSource": {
+      "type": "string",
+      "description": "引言来源"
+    },
+    "quoteDisplayText": {
+      "type": "string",
+      "description": "版心引用正文（打字机效果）；不传则使用 content 拼接结果"
+    },
+    "showFrom": {
+      "type": "integer",
+      "description": "content 下标（0-based）。仅打字正文从该条 startFrame 起再入场；开引号与 quoteSource 仍从 item 起点出现。未传 quoteDisplayText 时正文从该条起拼接"
+    }
+  },
+  "required": [
+    "quoteSource"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "QUOTE_CITATION",
+  "param": {
+    "quoteDisplayText": "我思故我在",
+    "quoteSource": "《思考，快与慢》"
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:12:48
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "quoteSource": "网传" } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:12:48
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+有人说，华为不愧是国之栋梁，一年纳税千亿元。
+
+先别急着感动。我们看看这个所谓的“千亿”是从哪来。
+
+最初来源，全国工商联发布，
+二零二一年民企五百强报告，具体说，是903亿。
+
+首先说一下这个所谓的“全国工商联”，
+并不是什么国家机构，而是一个别名为“中国民间商会”的民间组织。
+一个民间组织给出的报告，权威性能有多高呢？
+你只需要知道他给出的所谓中国民营500强，甚至有很多世界500强都没有上榜，比如中国平安、联想集团、海尔集团等。
+所以这个报告您就乐一乐就完了，别太当真。
+
+
+## 🎯 待处理的目标文案
+先别急着感动。我们看看这个所谓的“千亿”是从哪来。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "先别急着感动。"
+  },
+  {
+    "index": 1,
+    "text": "我们看看这个所谓的“千亿”是从哪来。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:12:55
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "被千亿感动",
+    "butText": "千亿的来源",
+    "butSrc": "一个人手持放大镜，仔细审视一份财务报告上的数字",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:12:55
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+有人说，华为不愧是国之栋梁，一年纳税千亿元。
+
+先别急着感动。我们看看这个所谓的“千亿”是从哪来。
+
+最初来源，全国工商联发布，
+二零二一年民企五百强报告，具体说，是903亿。
+
+首先说一下这个所谓的“全国工商联”，
+并不是什么国家机构，而是一个别名为“中国民间商会”的民间组织。
+一个民间组织给出的报告，权威性能有多高呢？
+你只需要知道他给出的所谓中国民营500强，甚至有很多世界500强都没有上榜，比如中国平安、联想集团、海尔集团等。
+所以这个报告您就乐一乐就完了，别太当真。
+
+
+## 🎯 待处理的目标文案
+最初来源，全国工商联发布，二零二一年民企五百强报告，具体说，是903亿。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "最初来源，"
+  },
+  {
+    "index": 1,
+    "text": "全国工商联发布，"
+  },
+  {
+    "index": 2,
+    "text": "二零二一年民企五百强报告，"
+  },
+  {
+    "index": 3,
+    "text": "具体说，"
+  },
+  {
+    "index": 4,
+    "text": "是903亿。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：KPI_HERO
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "number",
+      "description": "单指标模式：滚动终值（整数或小数）；若提供 blocks 则可省略"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "单指标：数字左侧"
+    },
+    "suffix": {
+      "type": "string",
+      "description": "单指标：数字右侧单位"
+    },
+    "label": {
+      "type": "string",
+      "description": "单指标：数字上方标签（与 blocks[].label 同视觉层级）"
+    },
+    "useGrouping": {
+      "type": "boolean",
+      "description": "单指标：千分位（小数时作用于整数部分）"
+    },
+    "decimalPlaces": {
+      "type": "integer",
+      "description": "单指标：小数位数，缺省按 value 自动推断"
+    },
+    "blocks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "多指标：每项 value、showFrom（content 下标）；可选 prefix、suffix、label、useGrouping",
+      "items": {
+        "type": "object",
+        "required": [
+          "value",
+          "showFrom"
+        ],
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "终值，整数或小数（如 2.5 万人）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "小数位数，缺省按 value 自动推断（如 2.5→1）"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该块出现时机：content 下标，取该条 startFrame"
+          },
+          "prefix": {
+            "type": "string"
+          },
+          "suffix": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string",
+            "description": "数字上方标签（多列时字号已加大）"
+          },
+          "useGrouping": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "countDuration": {
+      "type": "integer",
+      "description": "数字从 0 滚到目标值的 spring 时长（帧），默认 28"
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "KPI_HERO",
+  "param": {
+    "blocks": [
+      {
+        "value": 87,
+        "suffix": "%",
+        "label": "满意度",
+        "showFrom": 0
+      },
+      {
+        "value": 62,
+        "suffix": "%",
+        "label": "留存",
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:13:12
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"blocks": [{"value": 903, "suffix": "亿", "label": "纳税额", "showFrom": 4}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:13:12
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+有人说，华为不愧是国之栋梁，一年纳税千亿元。
+
+先别急着感动。我们看看这个所谓的“千亿”是从哪来。
+
+最初来源，全国工商联发布，
+二零二一年民企五百强报告，具体说，是903亿。
+
+首先说一下这个所谓的“全国工商联”，
+并不是什么国家机构，而是一个别名为“中国民间商会”的民间组织。
+一个民间组织给出的报告，权威性能有多高呢？
+你只需要知道他给出的所谓中国民营500强，甚至有很多世界500强都没有上榜，比如中国平安、联想集团、海尔集团等。
+所以这个报告您就乐一乐就完了，别太当真。
+
+
+## 🎯 待处理的目标文案
+首先说一下这个所谓的“全国工商联”，并不是什么国家机构，而是一个别名为“中国民间商会”的民间组织。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "首先说一下这个所谓的“全国工商联”，"
+  },
+  {
+    "index": 1,
+    "text": "并不是什么国家机构，"
+  },
+  {
+    "index": 2,
+    "text": "而是一个别名为“中国民间商会”的民间组织。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:13:22
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "国家机构",
+    "butText": "中国民间商会",
+    "butSrc": "一间挂着“中国民间商会”牌匾的简洁办公室，木质桌面上摆着文件，窗外有阳光透入",
+    "notContentIndex": 1,
+    "butContentIndex": 2
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:13:22
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+有人说，华为不愧是国之栋梁，一年纳税千亿元。
+
+先别急着感动。我们看看这个所谓的“千亿”是从哪来。
+
+最初来源，全国工商联发布，
+二零二一年民企五百强报告，具体说，是903亿。
+
+首先说一下这个所谓的“全国工商联”，
+并不是什么国家机构，而是一个别名为“中国民间商会”的民间组织。
+一个民间组织给出的报告，权威性能有多高呢？
+你只需要知道他给出的所谓中国民营500强，甚至有很多世界500强都没有上榜，比如中国平安、联想集团、海尔集团等。
+所以这个报告您就乐一乐就完了，别太当真。
+
+
+## 🎯 待处理的目标文案
+一个民间组织给出的报告，权威性能有多高呢？你只需要知道他给出的所谓中国民营500强，甚至有很多世界500强都没有上榜，比如中国平安、联想集团、海尔集团等。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "一个民间组织给出的报告，"
+  },
+  {
+    "index": 1,
+    "text": "权威性能有多高呢？"
+  },
+  {
+    "index": 2,
+    "text": "你只需要知道他给出的所谓中国民营500强，"
+  },
+  {
+    "index": 3,
+    "text": "甚至有很多世界500强都没有上榜，"
+  },
+  {
+    "index": 4,
+    "text": "比如中国平安、"
+  },
+  {
+    "index": 5,
+    "text": "联想集团、"
+  },
+  {
+    "index": 6,
+    "text": "海尔集团等。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:13:43
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "桌上放着一份印有工商联标志的普通报告文件",
+        "enterEffect": "breathe",
+        "tone": "calm",
+        "showFrom": 0
+      },
+      {
+        "imageSrc": "一个放大镜聚焦在报告上，透出问号光影",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 1
+      },
+      {
+        "imageSrc": "几份世界五百强企业名牌被从榜单上划除，留下空白名单",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 3
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:13:43
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+有人说，华为不愧是国之栋梁，一年纳税千亿元。
+
+先别急着感动。我们看看这个所谓的“千亿”是从哪来。
+
+最初来源，全国工商联发布，
+二零二一年民企五百强报告，具体说，是903亿。
+
+首先说一下这个所谓的“全国工商联”，
+并不是什么国家机构，而是一个别名为“中国民间商会”的民间组织。
+一个民间组织给出的报告，权威性能有多高呢？
+你只需要知道他给出的所谓中国民营500强，甚至有很多世界500强都没有上榜，比如中国平安、联想集团、海尔集团等。
+所以这个报告您就乐一乐就完了，别太当真。
+
+
+## 🎯 待处理的目标文案
+所以这个报告您就乐一乐就完了，别太当真。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "所以这个报告您就乐一乐就完了，"
+  },
+  {
+    "index": 1,
+    "text": "别太当真。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:13:57
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "所以这个报告您就乐一乐就完了，",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "别太当真。",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "别太当真",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:13:57
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那有人说了，民间组织也不会乱说话吧，总得有点依据吧？
+要说依据，那唯一可信的应该就是年报了。
+很遗憾，华为自家发布的年报。2020年企业所得税是76亿元。只有腾讯的1/3。
+那么这827亿元的差额哪里来的呢？
+唯一可能的来源，是增值税。
+
+增值税，是典型的间接税。
+
+谁向税务机关申报？企业。
+
+谁把钱交进国库？也是企业。
+
+可谁最终承担税负？消费者。
+
+算一部手机就明白了。
+
+假设一部华为手机，
+售价七千元。
+
+按照百分之十三的税率，
+这七千元里面，
+大约有八百零五元，
+是消费者为手机额外付出的增值税，这是你自己缴纳的税款，不是华为缴纳的。
+
+这就像商场收银台。
+顾客交钱给收银台，收银台交钱给商场，
+你就不能说这些钱都是收银员贡献的。
+
+
+## 🎯 待处理的目标文案
+那有人说了，民间组织也不会乱说话吧，总得有点依据吧？要说依据，那唯一可信的应该就是年报了。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "那有人说了，"
+  },
+  {
+    "index": 1,
+    "text": "民间组织也不会乱说话吧，"
+  },
+  {
+    "index": 2,
+    "text": "总得有点依据吧？"
+  },
+  {
+    "index": 3,
+    "text": "要说依据，"
+  },
+  {
+    "index": 4,
+    "text": "那唯一可信的应该就是年报了。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:14:11
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "一个侧身站立的人，手托下巴，身边漂浮着几个透明问号，背景模糊的会议室",
+        "enterEffect": "breathe",
+        "tone": "calm",
+        "showFrom": 0
+      },
+      {
+        "imageSrc": "一个红色警示感叹号从画面中心弹出，周围环绕微弱的震动线条，背景暗化",
+        "enterEffect": "slideLeft",
+        "tone": "alert",
+        "showFrom": 2
+      },
+      {
+        "imageSrc": "一份摊开的华丽年报封面特写，光线聚焦在标题位置，背景虚化有金色粒子",
+        "enterEffect": "zoomIn",
+        "tone": "alert",
+        "showFrom": 4
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:14:11
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那有人说了，民间组织也不会乱说话吧，总得有点依据吧？
+要说依据，那唯一可信的应该就是年报了。
+很遗憾，华为自家发布的年报。2020年企业所得税是76亿元。只有腾讯的1/3。
+那么这827亿元的差额哪里来的呢？
+唯一可能的来源，是增值税。
+
+增值税，是典型的间接税。
+
+谁向税务机关申报？企业。
+
+谁把钱交进国库？也是企业。
+
+可谁最终承担税负？消费者。
+
+算一部手机就明白了。
+
+假设一部华为手机，
+售价七千元。
+
+按照百分之十三的税率，
+这七千元里面，
+大约有八百零五元，
+是消费者为手机额外付出的增值税，这是你自己缴纳的税款，不是华为缴纳的。
+
+这就像商场收银台。
+顾客交钱给收银台，收银台交钱给商场，
+你就不能说这些钱都是收银员贡献的。
+
+
+## 🎯 待处理的目标文案
+很遗憾，华为自家发布的年报。2020年企业所得税是76亿元。只有腾讯的1/3。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "很遗憾，"
+  },
+  {
+    "index": 1,
+    "text": "华为自家发布的年报。"
+  },
+  {
+    "index": 2,
+    "text": "2020年企业所得税是76亿元。"
+  },
+  {
+    "index": 3,
+    "text": "只有腾讯的1/3。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：STAT_COMPARE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "bars": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "多条柱状对比；每项须含 label、value（非负数，整数或小数）、showFrom（content 下标），从该条 startFrame 起显示本柱",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "value",
+          "showFrom"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "短标签"
+          },
+          "value": {
+            "type": "number",
+            "description": "数值（非负，整数或小数）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "小数位数；缺省按 value 自动推断"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该柱出现时机：content 数组下标（0-based），取该条 startFrame 作为入场起点"
+          }
+        }
+      }
+    },
+    "leftValue": {
+      "type": "number",
+      "description": "左侧数值（非负），旧版两柱模式"
+    },
+    "rightValue": {
+      "type": "number",
+      "description": "右侧数值（非负），旧版两柱模式"
+    },
+    "leftLabel": {
+      "type": "string",
+      "description": "左侧标签"
+    },
+    "rightLabel": {
+      "type": "string",
+      "description": "右侧标签"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；顶部锚点词列表，showFrom 为 content 下标（取该条 startFrame），与 KPI_HERO / DATA_TABLE 一致",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "锚点词文案"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "STAT_COMPARE",
+  "param": {
+    "bars": [
+      {
+        "label": "去年",
+        "value": 32,
+        "showFrom": 0
+      },
+      {
+        "label": "今年",
+        "value": 68,
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:14:21
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "bars": [ { "label": "华为", "value": 76, "showFrom": 2 }, { "label": "腾讯", "value": 228, "showFrom": 3 } ] } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:14:21
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那有人说了，民间组织也不会乱说话吧，总得有点依据吧？
+要说依据，那唯一可信的应该就是年报了。
+很遗憾，华为自家发布的年报。2020年企业所得税是76亿元。只有腾讯的1/3。
+那么这827亿元的差额哪里来的呢？
+唯一可能的来源，是增值税。
+
+增值税，是典型的间接税。
+
+谁向税务机关申报？企业。
+
+谁把钱交进国库？也是企业。
+
+可谁最终承担税负？消费者。
+
+算一部手机就明白了。
+
+假设一部华为手机，
+售价七千元。
+
+按照百分之十三的税率，
+这七千元里面，
+大约有八百零五元，
+是消费者为手机额外付出的增值税，这是你自己缴纳的税款，不是华为缴纳的。
+
+这就像商场收银台。
+顾客交钱给收银台，收银台交钱给商场，
+你就不能说这些钱都是收银员贡献的。
+
+
+## 🎯 待处理的目标文案
+那么这827亿元的差额哪里来的呢？唯一可能的来源，是增值税。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "那么这827亿元的差额哪里来的呢？"
+  },
+  {
+    "index": 1,
+    "text": "唯一可能的来源，"
+  },
+  {
+    "index": 2,
+    "text": "是增值税。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:14:55
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "一个放大镜悬停在打开的空白账本上，账本中央有一道裂痕，散发着微光，裂痕内是空的。",
+        "enterEffect": "breathe",
+        "tone": "calm"
+      },
+      {
+        "imageSrc": "一道红色的警示箭头从裂痕中弹出，指向虚空，背景隐约有建筑轮廓。",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      },
+      {
+        "imageSrc": "一个价格标签被撕开，露出底层印着红色印记的纸张，标签上有一道高亮的撕裂边缘。",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:14:55
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那有人说了，民间组织也不会乱说话吧，总得有点依据吧？
+要说依据，那唯一可信的应该就是年报了。
+很遗憾，华为自家发布的年报。2020年企业所得税是76亿元。只有腾讯的1/3。
+那么这827亿元的差额哪里来的呢？
+唯一可能的来源，是增值税。
+
+增值税，是典型的间接税。
+
+谁向税务机关申报？企业。
+
+谁把钱交进国库？也是企业。
+
+可谁最终承担税负？消费者。
+
+算一部手机就明白了。
+
+假设一部华为手机，
+售价七千元。
+
+按照百分之十三的税率，
+这七千元里面，
+大约有八百零五元，
+是消费者为手机额外付出的增值税，这是你自己缴纳的税款，不是华为缴纳的。
+
+这就像商场收银台。
+顾客交钱给收银台，收银台交钱给商场，
+你就不能说这些钱都是收银员贡献的。
+
+
+## 🎯 待处理的目标文案
+增值税，是典型的间接税。谁向税务机关申报？企业。谁把钱交进国库？也是企业。可谁最终承担税负？消费者。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "增值税，"
+  },
+  {
+    "index": 1,
+    "text": "是典型的间接税。"
+  },
+  {
+    "index": 2,
+    "text": "谁向税务机关申报？"
+  },
+  {
+    "index": 3,
+    "text": "企业。"
+  },
+  {
+    "index": 4,
+    "text": "谁把钱交进国库？"
+  },
+  {
+    "index": 5,
+    "text": "也是企业。"
+  },
+  {
+    "index": 6,
+    "text": "可谁最终承担税负？"
+  },
+  {
+    "index": 7,
+    "text": "消费者。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:15:46
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "简笔画：三个图标从左到右——消费者钱包、企业员工、国库金库；箭头从钱包指向员工，再从员工指向金库，表示资金流转。",
+        "enterEffect": "breathe",
+        "tone": "calm",
+        "showFrom": 0
+      },
+      {
+        "imageSrc": "简笔画：企业员工在税务申报窗口前递交文件，窗口上有一个表格图标。",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 2
+      },
+      {
+        "imageSrc": "简笔画：企业员工将一袋钱币放入巨大的国库金库入口。",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 4
+      },
+      {
+        "imageSrc": "简笔画：消费者在收银台前付款，表情疑惑，他的钱包打开，有部分现金被无形的力量导向一个国库图标，暗示税款实际由他承担。",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 6
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:15:46
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那有人说了，民间组织也不会乱说话吧，总得有点依据吧？
+要说依据，那唯一可信的应该就是年报了。
+很遗憾，华为自家发布的年报。2020年企业所得税是76亿元。只有腾讯的1/3。
+那么这827亿元的差额哪里来的呢？
+唯一可能的来源，是增值税。
+
+增值税，是典型的间接税。
+
+谁向税务机关申报？企业。
+
+谁把钱交进国库？也是企业。
+
+可谁最终承担税负？消费者。
+
+算一部手机就明白了。
+
+假设一部华为手机，
+售价七千元。
+
+按照百分之十三的税率，
+这七千元里面，
+大约有八百零五元，
+是消费者为手机额外付出的增值税，这是你自己缴纳的税款，不是华为缴纳的。
+
+这就像商场收银台。
+顾客交钱给收银台，收银台交钱给商场，
+你就不能说这些钱都是收银员贡献的。
+
+
+## 🎯 待处理的目标文案
+算一部手机就明白了。假设一部华为手机，售价七千元。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "算一部手机就明白了。"
+  },
+  {
+    "index": 1,
+    "text": "假设一部华为手机，"
+  },
+  {
+    "index": 2,
+    "text": "售价七千元。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:16:03
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "imageSrc": "一部华为智能手机的特写，置于简洁的白色背景上，屏幕亮起", "enterEffect": "fadeIn" } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:16:03
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那有人说了，民间组织也不会乱说话吧，总得有点依据吧？
+要说依据，那唯一可信的应该就是年报了。
+很遗憾，华为自家发布的年报。2020年企业所得税是76亿元。只有腾讯的1/3。
+那么这827亿元的差额哪里来的呢？
+唯一可能的来源，是增值税。
+
+增值税，是典型的间接税。
+
+谁向税务机关申报？企业。
+
+谁把钱交进国库？也是企业。
+
+可谁最终承担税负？消费者。
+
+算一部手机就明白了。
+
+假设一部华为手机，
+售价七千元。
+
+按照百分之十三的税率，
+这七千元里面，
+大约有八百零五元，
+是消费者为手机额外付出的增值税，这是你自己缴纳的税款，不是华为缴纳的。
+
+这就像商场收银台。
+顾客交钱给收银台，收银台交钱给商场，
+你就不能说这些钱都是收银员贡献的。
+
+
+## 🎯 待处理的目标文案
+按照百分之十三的税率，这七千元里面，大约有八百零五元，是消费者为手机额外付出的增值税，
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "按照百分之十三的税率，"
+  },
+  {
+    "index": 1,
+    "text": "这七千元里面，"
+  },
+  {
+    "index": 2,
+    "text": "大约有八百零五元，"
+  },
+  {
+    "index": 3,
+    "text": "是消费者为手机额外付出的增值税，"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:16:16
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"stages": [{"imageSrc": "一张写有13%税率标志的纸", "enterEffect": "breathe", "tone": "calm"}, {"imageSrc": "一部标价7000元的华为智能手机", "enterEffect": "slideLeft", "tone": "alert"}, {"imageSrc": "一个计算器屏幕显示805元数字", "enterEffect": "slideBottom", "tone": "alert"}, {"imageSrc": "一个消费者愁眉苦脸地把现金交给收银员", "enterEffect": "zoomIn", "tone": "alert"}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:16:16
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那有人说了，民间组织也不会乱说话吧，总得有点依据吧？
+要说依据，那唯一可信的应该就是年报了。
+很遗憾，华为自家发布的年报。2020年企业所得税是76亿元。只有腾讯的1/3。
+那么这827亿元的差额哪里来的呢？
+唯一可能的来源，是增值税。
+
+增值税，是典型的间接税。
+
+谁向税务机关申报？企业。
+
+谁把钱交进国库？也是企业。
+
+可谁最终承担税负？消费者。
+
+算一部手机就明白了。
+
+假设一部华为手机，
+售价七千元。
+
+按照百分之十三的税率，
+这七千元里面，
+大约有八百零五元，
+是消费者为手机额外付出的增值税，这是你自己缴纳的税款，不是华为缴纳的。
+
+这就像商场收银台。
+顾客交钱给收银台，收银台交钱给商场，
+你就不能说这些钱都是收银员贡献的。
+
+
+## 🎯 待处理的目标文案
+这是你自己缴纳的税款，不是华为缴纳的。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "这是你自己缴纳的税款，"
+  },
+  {
+    "index": 1,
+    "text": "不是华为缴纳的。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:16:39
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "华为缴纳的",
+    "butText": "你自己缴纳的",
+    "butSrc": "一位消费者在收银台前将带有税字图案的纸币递给收银员，特写纸币上的税字标识，背景虚化，强调税款由消费者承担。",
+    "notContentIndex": 1,
+    "butContentIndex": 0
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:16:39
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+那有人说了，民间组织也不会乱说话吧，总得有点依据吧？
+要说依据，那唯一可信的应该就是年报了。
+很遗憾，华为自家发布的年报。2020年企业所得税是76亿元。只有腾讯的1/3。
+那么这827亿元的差额哪里来的呢？
+唯一可能的来源，是增值税。
+
+增值税，是典型的间接税。
+
+谁向税务机关申报？企业。
+
+谁把钱交进国库？也是企业。
+
+可谁最终承担税负？消费者。
+
+算一部手机就明白了。
+
+假设一部华为手机，
+售价七千元。
+
+按照百分之十三的税率，
+这七千元里面，
+大约有八百零五元，
+是消费者为手机额外付出的增值税，这是你自己缴纳的税款，不是华为缴纳的。
+
+这就像商场收银台。
+顾客交钱给收银台，收银台交钱给商场，
+你就不能说这些钱都是收银员贡献的。
+
+
+## 🎯 待处理的目标文案
+这就像商场收银台。顾客交钱给收银台，收银台交钱给商场，你就不能说这些钱都是收银员贡献的。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "这就像商场收银台。"
+  },
+  {
+    "index": 1,
+    "text": "顾客交钱给收银台，"
+  },
+  {
+    "index": 2,
+    "text": "收银台交钱给商场，"
+  },
+  {
+    "index": 3,
+    "text": "你就不能说这些钱都是收银员贡献的。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:17:05
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "商场收银台简笔画，收银员站在柜台后，收银机、购物袋等陈设",
+        "enterEffect": "breathe",
+        "tone": "calm"
+      },
+      {
+        "imageSrc": "顾客的手将几张钞票递给收银员，收银员伸手接过，钞票特写",
+        "enterEffect": "slideBottom",
+        "tone": "calm"
+      },
+      {
+        "imageSrc": "收银员将一大叠钞票放入一个巨大的透明玻璃钱箱，钱箱里堆积着大量现金，一只管理者的手打开箱盖接收钞票",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      },
+      {
+        "imageSrc": "收银员摇头摊手，表情无辜，身后出现巨大的红色圆形禁止标志",
+        "enterEffect": "zoomIn",
+        "tone": "alert"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:17:05
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+903亿的纳税总额，也许不是假的。
+
+但有些人故意混淆统计口径，
+把消费者贡献的税收算作华为的，
+就是不要脸了。
+
+
+
+还有人会说，
+钱毕竟是华为交的。
+这难道不算贡献吗？
+
+当然算。
+
+依法申报，
+准确核算，
+按时缴纳，
+都是企业的责任。
+
+华为创造交易，
+创造利润，
+创造就业，
+当然也创造税源。
+
+但创造税源，
+并不等于承担税负。
+
+如果企业把增值税，
+都算成自己的奉献，
+那消费者算什么？
+
+一个没有名字的付款码吗？
+
+更荒唐的是，
+这种口径常被拿来拉踩。
+
+讲华为的时候就用纳税总额算出千亿。
+将别家的时候就只提企业所得税，纳税几十亿。
+
+结论就成了：华为更爱国。别家没有贡献。
+
+这不是比较。
+这是拿不同尺子，
+量出想要的结论。
+
+
+别把经手的钱，
+都算成企业的牺牲。
+
+更别把消费者的账单，
+铸成企业邀功的勋章。
+
+
+## 🎯 待处理的目标文案
+903亿的纳税总额，也许不是假的。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "903亿的纳税总额，"
+  },
+  {
+    "index": 1,
+    "text": "也许不是假的。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：KPI_HERO
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "number",
+      "description": "单指标模式：滚动终值（整数或小数）；若提供 blocks 则可省略"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "单指标：数字左侧"
+    },
+    "suffix": {
+      "type": "string",
+      "description": "单指标：数字右侧单位"
+    },
+    "label": {
+      "type": "string",
+      "description": "单指标：数字上方标签（与 blocks[].label 同视觉层级）"
+    },
+    "useGrouping": {
+      "type": "boolean",
+      "description": "单指标：千分位（小数时作用于整数部分）"
+    },
+    "decimalPlaces": {
+      "type": "integer",
+      "description": "单指标：小数位数，缺省按 value 自动推断"
+    },
+    "blocks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "多指标：每项 value、showFrom（content 下标）；可选 prefix、suffix、label、useGrouping",
+      "items": {
+        "type": "object",
+        "required": [
+          "value",
+          "showFrom"
+        ],
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "终值，整数或小数（如 2.5 万人）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "小数位数，缺省按 value 自动推断（如 2.5→1）"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该块出现时机：content 下标，取该条 startFrame"
+          },
+          "prefix": {
+            "type": "string"
+          },
+          "suffix": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string",
+            "description": "数字上方标签（多列时字号已加大）"
+          },
+          "useGrouping": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "countDuration": {
+      "type": "integer",
+      "description": "数字从 0 滚到目标值的 spring 时长（帧），默认 28"
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "KPI_HERO",
+  "param": {
+    "blocks": [
+      {
+        "value": 87,
+        "suffix": "%",
+        "label": "满意度",
+        "showFrom": 0
+      },
+      {
+        "value": 62,
+        "suffix": "%",
+        "label": "留存",
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:17:17
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "value": 903,
+    "suffix": "亿",
+    "label": "纳税总额",
+    "useGrouping": false,
+    "decimalPlaces": 0
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:17:17
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+903亿的纳税总额，也许不是假的。
+
+但有些人故意混淆统计口径，
+把消费者贡献的税收算作华为的，
+就是不要脸了。
+
+
+
+还有人会说，
+钱毕竟是华为交的。
+这难道不算贡献吗？
+
+当然算。
+
+依法申报，
+准确核算，
+按时缴纳，
+都是企业的责任。
+
+华为创造交易，
+创造利润，
+创造就业，
+当然也创造税源。
+
+但创造税源，
+并不等于承担税负。
+
+如果企业把增值税，
+都算成自己的奉献，
+那消费者算什么？
+
+一个没有名字的付款码吗？
+
+更荒唐的是，
+这种口径常被拿来拉踩。
+
+讲华为的时候就用纳税总额算出千亿。
+将别家的时候就只提企业所得税，纳税几十亿。
+
+结论就成了：华为更爱国。别家没有贡献。
+
+这不是比较。
+这是拿不同尺子，
+量出想要的结论。
+
+
+别把经手的钱，
+都算成企业的牺牲。
+
+更别把消费者的账单，
+铸成企业邀功的勋章。
+
+
+## 🎯 待处理的目标文案
+但有些人故意混淆统计口径，把消费者贡献的税收算作华为的，就是不要脸了。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "但有些人故意混淆统计口径，"
+  },
+  {
+    "index": 1,
+    "text": "把消费者贡献的税收算作华为的，"
+  },
+  {
+    "index": 2,
+    "text": "就是不要脸了。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:17:43
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "消费者纳税算华为的",
+    "butText": "分清实际纳税人",
+    "butSrc": "消费者在超市收银台伸出手机付款，一张透明的税额发票飘起，发票上指印鲜明，背景中企业标志被弱化虚焦，光线指向付款人",
+    "notContentIndex": 1,
+    "butContentIndex": 1
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:17:43
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+903亿的纳税总额，也许不是假的。
+
+但有些人故意混淆统计口径，
+把消费者贡献的税收算作华为的，
+就是不要脸了。
+
+
+
+还有人会说，
+钱毕竟是华为交的。
+这难道不算贡献吗？
+
+当然算。
+
+依法申报，
+准确核算，
+按时缴纳，
+都是企业的责任。
+
+华为创造交易，
+创造利润，
+创造就业，
+当然也创造税源。
+
+但创造税源，
+并不等于承担税负。
+
+如果企业把增值税，
+都算成自己的奉献，
+那消费者算什么？
+
+一个没有名字的付款码吗？
+
+更荒唐的是，
+这种口径常被拿来拉踩。
+
+讲华为的时候就用纳税总额算出千亿。
+将别家的时候就只提企业所得税，纳税几十亿。
+
+结论就成了：华为更爱国。别家没有贡献。
+
+这不是比较。
+这是拿不同尺子，
+量出想要的结论。
+
+
+别把经手的钱，
+都算成企业的牺牲。
+
+更别把消费者的账单，
+铸成企业邀功的勋章。
+
+
+## 🎯 待处理的目标文案
+还有人会说，钱毕竟是华为交的。这难道不算贡献吗？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "还有人会说，"
+  },
+  {
+    "index": 1,
+    "text": "钱毕竟是华为交的。"
+  },
+  {
+    "index": 2,
+    "text": "这难道不算贡献吗？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CHAT_BUBBLE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "bubbles": {
+      "type": "array",
+      "description": "对话气泡列表；单气泡传 1 项，多气泡传多项。每项可含 bubbleText、showFrom、align。",
+      "items": {
+        "type": "object",
+        "properties": {
+          "bubbleText": {
+            "type": "string",
+            "description": "可选；气泡内显示文本。若传入则覆盖对应 content 条目文本；不影响 content 用于时序/字幕。"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "可选；绑定 content 下标（0-based）。缺省为该行在 bubbles 中的下标。"
+          },
+          "align": {
+            "type": "string",
+            "enum": [
+              "left",
+              "right"
+            ],
+            "description": "可选；left 头像在左，right 头像在右。"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "bubbles"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CHAT_BUBBLE",
+  "param": {
+    "bubbles": [
+      {
+        "bubbleText": "我真的快被这事逼疯了……",
+        "showFrom": 0,
+        "align": "left"
+      },
+      {
+        "bubbleText": "别急，先把事实捋清。",
+        "showFrom": 1,
+        "align": "right"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:17:51
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"bubbles":[{"bubbleText":"还有人会说，钱毕竟是华为交的。这难道不算贡献吗？","showFrom":0,"align":"left"}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:17:51
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+903亿的纳税总额，也许不是假的。
+
+但有些人故意混淆统计口径，
+把消费者贡献的税收算作华为的，
+就是不要脸了。
+
+
+
+还有人会说，
+钱毕竟是华为交的。
+这难道不算贡献吗？
+
+当然算。
+
+依法申报，
+准确核算，
+按时缴纳，
+都是企业的责任。
+
+华为创造交易，
+创造利润，
+创造就业，
+当然也创造税源。
+
+但创造税源，
+并不等于承担税负。
+
+如果企业把增值税，
+都算成自己的奉献，
+那消费者算什么？
+
+一个没有名字的付款码吗？
+
+更荒唐的是，
+这种口径常被拿来拉踩。
+
+讲华为的时候就用纳税总额算出千亿。
+将别家的时候就只提企业所得税，纳税几十亿。
+
+结论就成了：华为更爱国。别家没有贡献。
+
+这不是比较。
+这是拿不同尺子，
+量出想要的结论。
+
+
+别把经手的钱，
+都算成企业的牺牲。
+
+更别把消费者的账单，
+铸成企业邀功的勋章。
+
+
+## 🎯 待处理的目标文案
+当然算。依法申报，准确核算，按时缴纳，都是企业的责任。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "当然算。"
+  },
+  {
+    "index": 1,
+    "text": "依法申报，"
+  },
+  {
+    "index": 2,
+    "text": "准确核算，"
+  },
+  {
+    "index": 3,
+    "text": "按时缴纳，"
+  },
+  {
+    "index": 4,
+    "text": "都是企业的责任。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：METHOD_STACK
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "该 item 的方法名/提醒标题/观点标题，建议 4~12 个字"
+    },
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "单张主图描述，用于承接这个方法或观点"
+    },
+    "notes": {
+      "type": "array",
+      "description": "可选；解释短语数组。每项含 text 与 showFrom；showFrom 为 content 下标（0-based，非帧数），须在 0～(content 条数-1) 内",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "解释短语"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "title",
+    "imageSrc"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 5 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "METHOD_STACK",
+  "param": {
+    "title": "警惕情绪画面",
+    "imageSrc": "被耸动新闻画面包围、神情紧张的人物简笔画",
+    "notes": [
+      {
+        "text": "先识别这是情绪刺激",
+        "showFrom": 1
+      },
+      {
+        "text": "再追问它是否只是离奇个案",
+        "showFrom": 3
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:18:05
+attempt: 1/3
+
+[OUTPUT]
+{ "param": { "title": "纳税是企业的本分", "imageSrc": "一位企业财务人员坐在整洁的办公桌前，专注核对税务申报表，桌上摆放着计算器、印章和一份日历，日历上标红了缴税截止日期" } }
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:18:05
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+903亿的纳税总额，也许不是假的。
+
+但有些人故意混淆统计口径，
+把消费者贡献的税收算作华为的，
+就是不要脸了。
+
+
+
+还有人会说，
+钱毕竟是华为交的。
+这难道不算贡献吗？
+
+当然算。
+
+依法申报，
+准确核算，
+按时缴纳，
+都是企业的责任。
+
+华为创造交易，
+创造利润，
+创造就业，
+当然也创造税源。
+
+但创造税源，
+并不等于承担税负。
+
+如果企业把增值税，
+都算成自己的奉献，
+那消费者算什么？
+
+一个没有名字的付款码吗？
+
+更荒唐的是，
+这种口径常被拿来拉踩。
+
+讲华为的时候就用纳税总额算出千亿。
+将别家的时候就只提企业所得税，纳税几十亿。
+
+结论就成了：华为更爱国。别家没有贡献。
+
+这不是比较。
+这是拿不同尺子，
+量出想要的结论。
+
+
+别把经手的钱，
+都算成企业的牺牲。
+
+更别把消费者的账单，
+铸成企业邀功的勋章。
+
+
+## 🎯 待处理的目标文案
+华为创造交易，创造利润，创造就业，当然也创造税源。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "华为创造交易，"
+  },
+  {
+    "index": 1,
+    "text": "创造利润，"
+  },
+  {
+    "index": 2,
+    "text": "创造就业，"
+  },
+  {
+    "index": 3,
+    "text": "当然也创造税源。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:18:14
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "panels": [
+      {
+        "src": "两只手相握的简笔画，代表交易与合作",
+        "showFrom": 0,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "src": "一枚金币堆叠向上增长的简笔画，代表利润创造",
+        "showFrom": 1,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "src": "一群人站在工厂或办公楼前的简笔画，代表就业机会",
+        "showFrom": 2,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "src": "一棵树根深叶茂结出金币的简笔画，代表税源创造",
+        "showFrom": 3,
+        "enterEffect": "fadeIn"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:18:14
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+903亿的纳税总额，也许不是假的。
+
+但有些人故意混淆统计口径，
+把消费者贡献的税收算作华为的，
+就是不要脸了。
+
+
+
+还有人会说，
+钱毕竟是华为交的。
+这难道不算贡献吗？
+
+当然算。
+
+依法申报，
+准确核算，
+按时缴纳，
+都是企业的责任。
+
+华为创造交易，
+创造利润，
+创造就业，
+当然也创造税源。
+
+但创造税源，
+并不等于承担税负。
+
+如果企业把增值税，
+都算成自己的奉献，
+那消费者算什么？
+
+一个没有名字的付款码吗？
+
+更荒唐的是，
+这种口径常被拿来拉踩。
+
+讲华为的时候就用纳税总额算出千亿。
+将别家的时候就只提企业所得税，纳税几十亿。
+
+结论就成了：华为更爱国。别家没有贡献。
+
+这不是比较。
+这是拿不同尺子，
+量出想要的结论。
+
+
+别把经手的钱，
+都算成企业的牺牲。
+
+更别把消费者的账单，
+铸成企业邀功的勋章。
+
+
+## 🎯 待处理的目标文案
+但创造税源，并不等于承担税负。如果企业把增值税，都算成自己的奉献，那消费者算什么？一个没有名字的付款码吗？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "但创造税源，"
+  },
+  {
+    "index": 1,
+    "text": "并不等于承担税负。"
+  },
+  {
+    "index": 2,
+    "text": "如果企业把增值税，"
+  },
+  {
+    "index": 3,
+    "text": "都算成自己的奉献，"
+  },
+  {
+    "index": 4,
+    "text": "那消费者算什么？"
+  },
+  {
+    "index": 5,
+    "text": "一个没有名字的付款码吗？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:18:30
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "创造税源等于承担税负",
+    "butText": "创造税源不等于承担税负",
+    "butSrc": "一条河流在源头堆积着金币，但在分叉处，一条支流尽头放着盾牌和天平，另一条支流尽头则是空的收银台，视觉上分离了创造与负担",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:18:30
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+903亿的纳税总额，也许不是假的。
+
+但有些人故意混淆统计口径，
+把消费者贡献的税收算作华为的，
+就是不要脸了。
+
+
+
+还有人会说，
+钱毕竟是华为交的。
+这难道不算贡献吗？
+
+当然算。
+
+依法申报，
+准确核算，
+按时缴纳，
+都是企业的责任。
+
+华为创造交易，
+创造利润，
+创造就业，
+当然也创造税源。
+
+但创造税源，
+并不等于承担税负。
+
+如果企业把增值税，
+都算成自己的奉献，
+那消费者算什么？
+
+一个没有名字的付款码吗？
+
+更荒唐的是，
+这种口径常被拿来拉踩。
+
+讲华为的时候就用纳税总额算出千亿。
+将别家的时候就只提企业所得税，纳税几十亿。
+
+结论就成了：华为更爱国。别家没有贡献。
+
+这不是比较。
+这是拿不同尺子，
+量出想要的结论。
+
+
+别把经手的钱，
+都算成企业的牺牲。
+
+更别把消费者的账单，
+铸成企业邀功的勋章。
+
+
+## 🎯 待处理的目标文案
+更荒唐的是，这种口径常被拿来拉踩。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "更荒唐的是，"
+  },
+  {
+    "index": 1,
+    "text": "这种口径常被拿来拉踩。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PUNCH_CAPTION
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "punches": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "暴击大字序列；每项 text 为居中主文案，showFrom 为 content 下标（0-based）；enterEffect、tone 可选",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "居中暴击大字；可与 content 口播措辞不同，宜更短"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本句"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "snap",
+              "popIn",
+              "slideUp",
+              "shake"
+            ],
+            "default": "snap",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "punches"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 6 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PUNCH_CAPTION",
+  "param": {
+    "punches": [
+      {
+        "text": "什么？",
+        "showFrom": 0,
+        "enterEffect": "popIn",
+        "tone": "calm"
+      },
+      {
+        "text": "你说我瞎说？",
+        "showFrom": 1,
+        "enterEffect": "snap",
+        "tone": "alert"
+      },
+      {
+        "text": "不信科技力量？",
+        "showFrom": 2,
+        "enterEffect": "shake",
+        "tone": "alert"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:18:44
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "punches": [
+      {
+        "text": "更荒唐的是",
+        "showFrom": 0,
+        "enterEffect": "snap",
+        "tone": "calm"
+      },
+      {
+        "text": "口径拉踩",
+        "showFrom": 1,
+        "enterEffect": "shake",
+        "tone": "alert"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:18:44
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+903亿的纳税总额，也许不是假的。
+
+但有些人故意混淆统计口径，
+把消费者贡献的税收算作华为的，
+就是不要脸了。
+
+
+
+还有人会说，
+钱毕竟是华为交的。
+这难道不算贡献吗？
+
+当然算。
+
+依法申报，
+准确核算，
+按时缴纳，
+都是企业的责任。
+
+华为创造交易，
+创造利润，
+创造就业，
+当然也创造税源。
+
+但创造税源，
+并不等于承担税负。
+
+如果企业把增值税，
+都算成自己的奉献，
+那消费者算什么？
+
+一个没有名字的付款码吗？
+
+更荒唐的是，
+这种口径常被拿来拉踩。
+
+讲华为的时候就用纳税总额算出千亿。
+将别家的时候就只提企业所得税，纳税几十亿。
+
+结论就成了：华为更爱国。别家没有贡献。
+
+这不是比较。
+这是拿不同尺子，
+量出想要的结论。
+
+
+别把经手的钱，
+都算成企业的牺牲。
+
+更别把消费者的账单，
+铸成企业邀功的勋章。
+
+
+## 🎯 待处理的目标文案
+讲华为的时候就用纳税总额算出千亿。将别家的时候就只提企业所得税，纳税几十亿。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "讲华为的时候就用纳税总额算出千亿。"
+  },
+  {
+    "index": 1,
+    "text": "将别家的时候就只提企业所得税，"
+  },
+  {
+    "index": 2,
+    "text": "纳税几十亿。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：STAT_COMPARE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "bars": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "多条柱状对比；每项须含 label、value（非负数，整数或小数）、showFrom（content 下标），从该条 startFrame 起显示本柱",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "value",
+          "showFrom"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "短标签"
+          },
+          "value": {
+            "type": "number",
+            "description": "数值（非负，整数或小数）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "小数位数；缺省按 value 自动推断"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该柱出现时机：content 数组下标（0-based），取该条 startFrame 作为入场起点"
+          }
+        }
+      }
+    },
+    "leftValue": {
+      "type": "number",
+      "description": "左侧数值（非负），旧版两柱模式"
+    },
+    "rightValue": {
+      "type": "number",
+      "description": "右侧数值（非负），旧版两柱模式"
+    },
+    "leftLabel": {
+      "type": "string",
+      "description": "左侧标签"
+    },
+    "rightLabel": {
+      "type": "string",
+      "description": "右侧标签"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；顶部锚点词列表，showFrom 为 content 下标（取该条 startFrame），与 KPI_HERO / DATA_TABLE 一致",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "锚点词文案"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "STAT_COMPARE",
+  "param": {
+    "bars": [
+      {
+        "label": "去年",
+        "value": 32,
+        "showFrom": 0
+      },
+      {
+        "label": "今年",
+        "value": 68,
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:18:53
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "bars": [
+      {
+        "label": "华为",
+        "value": 1000,
+        "showFrom": 0
+      },
+      {
+        "label": "别家",
+        "value": 40,
+        "showFrom": 1
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:18:53
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+903亿的纳税总额，也许不是假的。
+
+但有些人故意混淆统计口径，
+把消费者贡献的税收算作华为的，
+就是不要脸了。
+
+
+
+还有人会说，
+钱毕竟是华为交的。
+这难道不算贡献吗？
+
+当然算。
+
+依法申报，
+准确核算，
+按时缴纳，
+都是企业的责任。
+
+华为创造交易，
+创造利润，
+创造就业，
+当然也创造税源。
+
+但创造税源，
+并不等于承担税负。
+
+如果企业把增值税，
+都算成自己的奉献，
+那消费者算什么？
+
+一个没有名字的付款码吗？
+
+更荒唐的是，
+这种口径常被拿来拉踩。
+
+讲华为的时候就用纳税总额算出千亿。
+将别家的时候就只提企业所得税，纳税几十亿。
+
+结论就成了：华为更爱国。别家没有贡献。
+
+这不是比较。
+这是拿不同尺子，
+量出想要的结论。
+
+
+别把经手的钱，
+都算成企业的牺牲。
+
+更别把消费者的账单，
+铸成企业邀功的勋章。
+
+
+## 🎯 待处理的目标文案
+结论就成了：华为更爱国。别家没有贡献。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "结论就成了："
+  },
+  {
+    "index": 1,
+    "text": "华为更爱国。"
+  },
+  {
+    "index": 2,
+    "text": "别家没有贡献。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PUNCH_CAPTION
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "punches": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "暴击大字序列；每项 text 为居中主文案，showFrom 为 content 下标（0-based）；enterEffect、tone 可选",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "居中暴击大字；可与 content 口播措辞不同，宜更短"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本句"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "snap",
+              "popIn",
+              "slideUp",
+              "shake"
+            ],
+            "default": "snap",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "punches"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 6 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PUNCH_CAPTION",
+  "param": {
+    "punches": [
+      {
+        "text": "什么？",
+        "showFrom": 0,
+        "enterEffect": "popIn",
+        "tone": "calm"
+      },
+      {
+        "text": "你说我瞎说？",
+        "showFrom": 1,
+        "enterEffect": "snap",
+        "tone": "alert"
+      },
+      {
+        "text": "不信科技力量？",
+        "showFrom": 2,
+        "enterEffect": "shake",
+        "tone": "alert"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:19:10
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"punches":[{"text":"结论","showFrom":0,"enterEffect":"popIn","tone":"calm"},{"text":"华为更爱国","showFrom":1,"enterEffect":"shake","tone":"alert"},{"text":"别家没贡献","showFrom":2,"enterEffect":"shake","tone":"alert"}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:19:10
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+903亿的纳税总额，也许不是假的。
+
+但有些人故意混淆统计口径，
+把消费者贡献的税收算作华为的，
+就是不要脸了。
+
+
+
+还有人会说，
+钱毕竟是华为交的。
+这难道不算贡献吗？
+
+当然算。
+
+依法申报，
+准确核算，
+按时缴纳，
+都是企业的责任。
+
+华为创造交易，
+创造利润，
+创造就业，
+当然也创造税源。
+
+但创造税源，
+并不等于承担税负。
+
+如果企业把增值税，
+都算成自己的奉献，
+那消费者算什么？
+
+一个没有名字的付款码吗？
+
+更荒唐的是，
+这种口径常被拿来拉踩。
+
+讲华为的时候就用纳税总额算出千亿。
+将别家的时候就只提企业所得税，纳税几十亿。
+
+结论就成了：华为更爱国。别家没有贡献。
+
+这不是比较。
+这是拿不同尺子，
+量出想要的结论。
+
+
+别把经手的钱，
+都算成企业的牺牲。
+
+更别把消费者的账单，
+铸成企业邀功的勋章。
+
+
+## 🎯 待处理的目标文案
+这不是比较。这是拿不同尺子，量出想要的结论。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "这不是比较。"
+  },
+  {
+    "index": 1,
+    "text": "这是拿不同尺子，"
+  },
+  {
+    "index": 2,
+    "text": "量出想要的结论。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:19:27
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "比较",
+    "butText": "拿不同尺子量结论",
+    "butSrc": "一只手握着两把刻度截然不同的尺子，长度比例夸张，对准同一物体",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-08-09 21:19:27
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+903亿的纳税总额，也许不是假的。
+
+但有些人故意混淆统计口径，
+把消费者贡献的税收算作华为的，
+就是不要脸了。
+
+
+
+还有人会说，
+钱毕竟是华为交的。
+这难道不算贡献吗？
+
+当然算。
+
+依法申报，
+准确核算，
+按时缴纳，
+都是企业的责任。
+
+华为创造交易，
+创造利润，
+创造就业，
+当然也创造税源。
+
+但创造税源，
+并不等于承担税负。
+
+如果企业把增值税，
+都算成自己的奉献，
+那消费者算什么？
+
+一个没有名字的付款码吗？
+
+更荒唐的是，
+这种口径常被拿来拉踩。
+
+讲华为的时候就用纳税总额算出千亿。
+将别家的时候就只提企业所得税，纳税几十亿。
+
+结论就成了：华为更爱国。别家没有贡献。
+
+这不是比较。
+这是拿不同尺子，
+量出想要的结论。
+
+
+别把经手的钱，
+都算成企业的牺牲。
+
+更别把消费者的账单，
+铸成企业邀功的勋章。
+
+
+## 🎯 待处理的目标文案
+别把经手的钱，都算成企业的牺牲。更别把消费者的账单，铸成企业邀功的勋章。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "别把经手的钱，"
+  },
+  {
+    "index": 1,
+    "text": "都算成企业的牺牲。"
+  },
+  {
+    "index": 2,
+    "text": "更别把消费者的账单，"
+  },
+  {
+    "index": 3,
+    "text": "铸成企业邀功的勋章。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：DOS_AND_DONTS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "left": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    },
+    "right": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "该侧标题（左：如 ❌ 别这样；右：如 ✅ 正确做法），极简短语"
+        },
+        "src": {
+          "type": "string",
+          "format": "image_prompt",
+          "description": "该侧配图（左：错误/误区示意；右：正确做法示意）"
+        },
+        "showFrom": {
+          "type": "integer",
+          "description": "有 content 时间轴且值落在 [0, content.length) 时为 content 下标（取该条 startFrame）；否则为相对 item 起点的帧号。省略：左 0；右为第 1 条或左起点+10 帧"
+        }
+      },
+      "required": [
+        "label",
+        "src"
+      ]
+    }
+  },
+  "required": [
+    "left",
+    "right"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "DOS_AND_DONTS",
+  "param": {
+    "left": {
+      "label": "❌ 别这样",
+      "src": "盲目跟风的人简笔画图标",
+      "showFrom": 0
+    },
+    "right": {
+      "label": "✅ 正确做法",
+      "src": "理性分析图表的人简笔画图标",
+      "showFrom": 1
+    }
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-08-09 21:19:50
+attempt: 1/3
+
+[OUTPUT]
+{"param": {"left": {"label": "❌ 偷换概念", "src": "一个西装革履的人物将一堆金币从消费者手中接过，却展示为自己胸口的光荣勋章。", "showFrom": 0}, "right": {"label": "✅ 认清税负", "src": "一个消费者将金币放入透明管道，管道经过一家企业图标，金币直接流向政府大楼，企业角色在旁做传递手势。", "showFrom": 2}}}
+-------------------------------------------------------------------------------------------

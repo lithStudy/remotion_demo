@@ -109,7 +109,7 @@ def _inject_cover_for_step4(
     - title：优先使用命令行/配置的成片名 video_name；若为空则用 topic 截断作兜底。
     - subtitle：使用 Step1 产出的 topic。
     - durationFrames / themeColor / badge / seriesLabel / seriesLabelEn /
-      methodologySteps / methodologyStepsEn：来自 config.json（可选）。
+      methodologySteps / methodologyStepsEn：来自 config.yaml（可选）。
     若 cover_duration_frames<=0 或未配置为生成，则不写入 cover。
     """
     existing = result.get("cover")
@@ -562,11 +562,11 @@ def main():
     parser.add_argument(
         "--llm-provider",
         choices=["gemini", "deepseek", "mimo"],
-        help="LLM 提供方（默认读取 config.json 的 llm_provider；未配置则 gemini）",
+        help="LLM 提供方（默认读取 config.yaml 的 llm_provider；未配置则 gemini）",
     )
     parser.add_argument(
         "--llm-model",
-        help="覆盖模型名（gemini/deepseek 通用覆盖；不填则按 provider 读取 config.json 对应字段）",
+        help="覆盖模型名（gemini/deepseek 通用覆盖；不填则按 provider 读取 config.yaml 对应字段）",
     )
     parser.add_argument(
         "--skip-validate",

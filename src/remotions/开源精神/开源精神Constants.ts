@@ -7,6 +7,7 @@ import { Scene5, calculateScene5Duration } from "./scenes/Scene5";
 import { Scene6, calculateScene6Duration } from "./scenes/Scene6";
 import { Scene7, calculateScene7Duration } from "./scenes/Scene7";
 import { Scene8, calculateScene8Duration } from "./scenes/Scene8";
+import { Scene9, calculateScene9Duration } from "./scenes/Scene9";
 
 export const 开源精神Schema = z.object({});
 
@@ -23,6 +24,7 @@ export const sceneConfigs = [
     { name: "scene6", duration: calculateScene6Duration() + SCENE_END_PADDING, component: Scene6, label: "个人叙事·我的NAS依赖开源" },
     { name: "scene7", duration: calculateScene7Duration() + SCENE_END_PADDING, component: Scene7, label: "反转·农夫与蛇的掠夺" },
     { name: "scene8", duration: calculateScene8Duration() + SCENE_END_PADDING, component: Scene8, label: "召唤：捍卫开源的尊严" },
+    { name: "scene9", duration: calculateScene9Duration() + SCENE_END_PADDING, component: Scene9, label: "片尾·参考资料" },
 ];
 
 export const MAIN_DURATION_开源精神 =

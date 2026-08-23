@@ -364,6 +364,13 @@ export default function App() {
           onRegenAllScripts={async () => {
             await startStep1(current);
           }}
+          onRegenChangedScripts={async (payload) => {
+            const res = await api.syncConfirm(current, payload, false);
+            setScripts(res.scripts as Record<string, unknown>);
+            setDraft(res.draft as Record<string, unknown>);
+            setWarnings((res.warnings as string[]) || []);
+            await startStep1(current);
+          }}
         />
       ) : null}
 

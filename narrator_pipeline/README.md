@@ -85,4 +85,4 @@ cd scene_studio && npm install && npm run dev
 
 ## 配置
 
-见 `config.json`（模型、画布、TTS、`project_root` 等）与 `.env`。
+见 `config.yaml`（模型、画布、TTS、`project_root` 等，支持 `#` 注释）与 `.env`。

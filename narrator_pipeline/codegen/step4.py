@@ -10,7 +10,8 @@ Step 4: Remotion 动画代码生成（模板驱动版）
   生成 *Constants.ts、*MainBody.tsx、*Landscape.tsx、*Vertical.tsx、*VerticalChrome.tsx，
   入口 *.tsx 为双 Composition re-export。
   若 scene-scripts.json 含有效 cover（title/subtitle），另生成 *CoverProps.ts、*CoverStills.tsx，
-  并在 Root 注册「PascalCase封面横屏」「PascalCase封面竖屏」（横 1920×1080；竖 3:4 即 1080×1440，duration=1）。
+  并在 Root 用 NarratorTopicCompositions 注册主片与「PascalCase封面横屏」「PascalCase封面竖屏」
+  （横 1920×1080；竖 3:4 即 1080×1440，duration=1）。
 
 用法（仓库根目录）:
   python -m narrator_pipeline.codegen.step4 --name video_name
@@ -25,7 +26,12 @@ from pathlib import Path
 
 from narrator_pipeline.paths import PACKAGE_ROOT, resolve_video_paths
 from narrator_pipeline.contracts.template_registry import TEMPLATE_REGISTRY, get_template_to_component_map
-from narrator_pipeline.contracts.scene_timing import inject_text_length_content_timings, needs_text_length_timings_from_scripts
+from narrator_pipeline.contracts.scene_timing import (
+    inject_text_length_content_timings,
+    needs_text_length_timings_from_scripts,
+    apply_source_citation_item_duration,
+    inject_source_citation_durations,
+)
 from narrator_pipeline.common import load_config
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -524,28 +530,79 @@ def _apply_preview_overrides(scenes: list, preview_image: str | None, mute_audio
                             pn["src"] = preview_image
 
 
-def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -> str:
-    """生成单个场景文件"""
+def _is_reference_scene(scene: dict) -> bool:
+    """片尾参考资料场景：scene_references、名称含「参考资料」、或全为 SOURCE_CITATION。"""
+    if not isinstance(scene, dict):
+        return False
+    if scene.get("sceneId") == "scene_references":
+        return True
+    if "参考资料" in str(scene.get("sceneName") or ""):
+        return True
+    items = scene.get("items")
+    if isinstance(items, list) and items:
+        return all(
+            isinstance(it, dict) and it.get("template") == "SOURCE_CITATION"
+            for it in items
+        )
+    return False
+
+
+def _index_of_last_content_scene(scenes: list) -> int | None:
+    """除参考资料外的最后一个正片场景下标；若无正片则返回 None。"""
+    last = None
+    for i, scene in enumerate(scenes):
+        if not _is_reference_scene(scene):
+            last = i
+    return last
+
+
+def generate_scene_tsx(
+    scene_index: int,
+    scene: dict,
+    name: str,
+    config: dict,
+    last_item_hold_frames: int = 0,
+) -> str:
+    """生成单个场景文件。
+
+    last_item_hold_frames：仅用于正片收尾场景，加到最后一个 item 的时长上（画面定格）。
+    """
     scene_id = scene["sceneId"]
     scene_name = scene.get("sceneName", f"Scene {scene_index + 1}")
     items = scene.get("items", [])
     n = scene_index + 1
 
+    is_ref_scene = _is_reference_scene(scene)
+    scene_end_padding = int(config.get("scene_end_padding_frames", 20))
+
     # 收集使用的组件
     used_components = set()
     item_renders = []
 
-    for item in items:
+    for item_idx, item in enumerate(items):
         template = item.get("template", "CENTER_FOCUS")
         param = item.get("param", {})
         order = item.get("order", 1)
         component = TEMPLATE_TO_COMPONENT.get(template, _COMPONENT_FALLBACK)
         used_components.add(component)
 
-        total_frames = item.get("totalDurationFrames", 90)
+        total_frames = item.get("totalDurationFrames")
+        if template == "SOURCE_CITATION":
+            if not isinstance(total_frames, int) or total_frames <= 0:
+                total_frames = apply_source_citation_item_duration(item)
+                if is_ref_scene:
+                    total_frames += scene_end_padding
+        if not isinstance(total_frames, int) or total_frames <= 0:
+            total_frames = 90
+
+        hold_frames = 0
+        if last_item_hold_frames > 0 and item_idx == len(items) - 1:
+            hold_frames = last_item_hold_frames
+
+        base_frames = total_frames
         content = item.get("content", [])
         content_prop = f"content={{{json.dumps(content, ensure_ascii=False)}}}"
-        duration_prop = f"totalDurationFrames={{{total_frames}}}"
+        duration_prop = f"totalDurationFrames={{{base_frames}}}"
         props_str = (
             f"{content_prop} {duration_prop} "
             f"{_param_to_jsx_props(param, name, scene_id, order, template=template)}"
@@ -554,15 +611,25 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
         item_renders.append({
             "component": component,
             "props_str": props_str,
-            "duration": total_frames,
+            "duration": base_frames,
+            "hold_frames": hold_frames,
             "order": order,
         })
 
-    # 计算场景总时长
-    total_duration_expr = " + ".join([str(ir["duration"]) for ir in item_renders]) if item_renders else "90"
+    # 计算场景总时长（含末镜定格 hold）
+    if item_renders:
+        total_duration_expr = " + ".join(
+            [str(ir["duration"] + ir.get("hold_frames", 0)) for ir in item_renders]
+        )
+    else:
+        total_duration_expr = "90"
 
     # 构建导入列表
     components_import = ", ".join(sorted(used_components))
+    needs_freeze = any(ir.get("hold_frames", 0) > 0 for ir in item_renders)
+    remotion_imports = "AbsoluteFill, Sequence, Audio, staticFile"
+    if needs_freeze:
+        remotion_imports += ", Freeze"
 
     # 构建 item 渲染代码
     renders = []
@@ -574,6 +641,17 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
             f'            </Sequence>'
         )
         frame_offset += ir["duration"]
+        hold = ir.get("hold_frames", 0)
+        if hold > 0:
+            freeze_frame = ir["duration"] - 1
+            renders.append(
+                f'            <Sequence from={{{frame_offset}}} durationInFrames={{{hold}}}>\n'
+                f'                <Freeze frame={{{freeze_frame}}}>\n'
+                f'                    <{ir["component"]} {ir["props_str"]} />\n'
+                f'                </Freeze>\n'
+                f'            </Sequence>'
+            )
+            frame_offset += hold
 
     renders_str = "\n".join(renders)
 
@@ -584,7 +662,7 @@ def generate_scene_tsx(scene_index: int, scene: dict, name: str, config: dict) -
         audio_line = f'            <Audio src={{staticFile("{scene_audio_src}")}} />'
 
     return f'''import React from "react";
-import {{ AbsoluteFill, Sequence, Audio, staticFile }} from "remotion";
+import {{ {remotion_imports} }} from "remotion";
 import {{ {components_import} }} from "../../../components";
 
 // {scene_name}
@@ -611,7 +689,8 @@ def _build_scene_configs_lines(scenes: list) -> str:
 
     return ",\n    ".join([
         (
-            f'{{ name: "scene{i+1}", duration: calculateScene{i+1}Duration() + SCENE_END_PADDING, '
+            f'{{ name: "scene{i+1}", duration: calculateScene{i+1}Duration()'
+            f'{"" if _is_reference_scene(scenes[i]) else " + SCENE_END_PADDING"}, '
             f'component: Scene{i+1}, label: "{_clean_label(scene.get("sceneName", f"Scene {i+1}"))}" }}'
         )
         for i, scene in enumerate(scenes)
@@ -805,93 +884,23 @@ export const {pascal}MainBody: React.FC = () => (
 
 
 def generate_landscape_tsx(pascal: str, mute_audio: bool) -> str:
-    if not mute_audio:
-        audio_block = """            <Audio
-                src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
-                loop
-                volume={0.10}
-                name="Background music"
-            />
-"""
-        remotion_import = "AbsoluteFill, Audio, interpolate, staticFile, useCurrentFrame"
-    else:
-        audio_block = ""
-        remotion_import = "AbsoluteFill, interpolate, staticFile, useCurrentFrame"
-
+    mute_prop = "\n            muteAudio" if mute_audio else ""
     return f'''import React from "react";
-import {{ {remotion_import} }} from "remotion";
 
-import {{ RemotionLayoutMetricsProvider }} from "../../components";
+import {{ NarratorLandscapeShell }} from "../../components";
 import {{ {pascal}MainBody }} from "./{pascal}MainBody";
 import {{ DESIGN_H, DESIGN_W, LANDSCAPE_CONTAIN_SCALE }} from "./{pascal}Constants";
 
 /** 横屏主片 1920×1080：版心 contain，避免裁切字幕/锚点 */
 export const {pascal}Landscape: React.FC = () => {{
-    const frame = useCurrentFrame();
-    const bgShiftX = interpolate(frame % 240, [0, 120, 240], [-4, 4, -4], {{
-        extrapolateLeft: "clamp",
-        extrapolateRight: "clamp",
-    }});
-    const bgShiftY = interpolate(frame % 180, [0, 90, 180], [-3, 3, -3], {{
-        extrapolateLeft: "clamp",
-        extrapolateRight: "clamp",
-    }});
-    const bgBreathOpacity = interpolate(frame % 150, [0, 75, 150], [0.22, 0.34, 0.22], {{
-        extrapolateLeft: "clamp",
-        extrapolateRight: "clamp",
-    }});
-
     return (
-        <AbsoluteFill style={{{{ background: "#0f172a" }}}}>
-{audio_block}            <div
-                style={{{{
-
-
-                    height: "100%",
-                    width: "100%",
-                    background: "linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #e2e8f0 100%)",
-                }}}}
-            />
-            <div
-                style={{{{
-
-
-                    position: "absolute",
-                    inset: "-6%",
-                    pointerEvents: "none",
-                    opacity: bgBreathOpacity,
-                    transform: `translate(${{bgShiftX}}px, ${{bgShiftY}}px)`,
-                    background:
-                        "radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08), transparent 40%), radial-gradient(circle at 80% 60%, rgba(56, 189, 248, 0.12), transparent 45%), radial-gradient(circle at 40% 80%, rgba(148, 163, 184, 0.15), transparent 50%)",
-                }}}}
-            />
-            <RemotionLayoutMetricsProvider value={{{{ width: DESIGN_W, height: DESIGN_H }}}}>
-                <AbsoluteFill
-                    style={{{{
-
-
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        overflow: "hidden",
-                    }}}}
-                >
-                    <div
-                        style={{{{
-
-
-                            width: DESIGN_W,
-                            height: DESIGN_H,
-                            flexShrink: 0,
-                            transform: `scale(${{LANDSCAPE_CONTAIN_SCALE}})`,
-                            transformOrigin: "center center",
-                        }}}}
-                    >
-                        <{pascal}MainBody />
-                    </div>
-                </AbsoluteFill>
-            </RemotionLayoutMetricsProvider>
-        </AbsoluteFill>
+        <NarratorLandscapeShell
+            designW={{DESIGN_W}}
+            designH={{DESIGN_H}}
+            containScale={{LANDSCAPE_CONTAIN_SCALE}}{mute_prop}
+        >
+            <{pascal}MainBody />
+        </NarratorLandscapeShell>
     );
 }};
 '''
@@ -1330,17 +1339,28 @@ export {{ {pascal}Vertical as {pascal}竖屏 }} from "./{pascal}Vertical";
 def update_root_tsx(
     root_path: Path, name: str, pascal: str, config: dict, cover_still: dict | None
 ):
-    """在 Root.tsx 注册横屏 + 竖屏 Composition；cover_still 有值时追加横/竖封面 still 与 import。"""
+    """在 Root.tsx 用 NarratorTopicCompositions 注册横/竖主片；cover_still 有值时带封面 still。"""
     fps = config.get("fps", 30)
     duration_token = f"TOTAL_DURATION_{name.upper()}"
     vert_id = f"{pascal}竖屏"
     cover_land_id = f"{pascal}封面横屏"
     cover_vert_id = f"{pascal}封面竖屏"
+    helper_import = 'import { NarratorTopicCompositions } from "./components";'
 
     with open(root_path, "r", encoding="utf-8") as f:
         content = f.read()
 
-    for comp_id in (cover_land_id, cover_vert_id):
+    # 新格式：删掉该选题的 NarratorTopicCompositions
+    helper_pattern = (
+        r"\n\s*(?:\{/\*[^\n]*\*/\}\s*\n)?\s*<NarratorTopicCompositions\b"
+        r"(?:(?!<NarratorTopicCompositions)[\s\S])*?\bid=\""
+        + re.escape(pascal)
+        + r"\"[\s\S]*?/>"
+    )
+    content = re.sub(helper_pattern, "\n", content, count=1)
+
+    # 旧格式兼容：逐个删掉 4 个 Composition（不可跨 Composition 贪婪匹配）
+    for comp_id in (cover_land_id, cover_vert_id, pascal, vert_id):
         pattern = (
             r"\n\s*(?:\{/\*[^\n]*\*/\}\s*\n)?\s*<Composition\b"
             r"(?:(?!<Composition)[\s\S])*?\bid=\""
@@ -1358,17 +1378,6 @@ def update_root_tsx(
         re.MULTILINE,
     )
     content = cover_imp_line_re.sub("", content)
-
-    # 只删除「单个」Composition：从 <Composition 到目标 id 之间不能跨过另一个 <Composition，
-    # 否则会从文件里第一个 <Composition（如 TemplateShowcase）一直吞到目标 id，误删中间所有条目。
-    for comp_id in (pascal, vert_id):
-        pattern = (
-            r"\n\s*(?:\{/\*[^\n]*\*/\}\s*\n)?\s*<Composition\b"
-            r"(?:(?!<Composition)[\s\S])*?\bid=\""
-            + re.escape(comp_id)
-            + r"\"[\s\S]*?/>"
-        )
-        content = re.sub(pattern, "\n", content, count=1)
 
     imp_line_re = re.compile(
         r"^\s*import\s*\{[^}]+\}\s*from\s*[\"']\./remotions/"
@@ -1391,55 +1400,46 @@ def update_root_tsx(
             f'from "./remotions/{name}/{pascal}CoverStills";'
         )
 
-    cover_comp_block = ""
+    cover_props = ""
     if cover_still:
-        cover_comp_block = f"""
-      {{/* {cover_land_id} - 横屏封面 still 1920×1080 */}}
-      <Composition
-        id="{cover_land_id}"
-        component={{{cover_land_id}}}
-        durationInFrames={{1}}
-        fps={{{fps}}}
-        width={{1920}}
-        height={{1080}}
-        defaultProps={{{{}}}}
-      />
-
-      {{/* {cover_vert_id} - 3:4 封面 still 1080×1440 */}}
-      <Composition
-        id="{cover_vert_id}"
-        component={{{cover_vert_id}}}
-        durationInFrames={{1}}
-        fps={{{fps}}}
-        width={{1080}}
-        height={{1440}}
-        defaultProps={{{{}}}}
-      />"""
+        cover_props = f"""
+        coverLandscape={{{cover_land_id}}}
+        coverVertical={{{cover_vert_id}}}"""
 
     composition_block = f"""
-      {{/* {pascal} - 横屏 1920×1080（自动生成） */}}
-      <Composition
+      <NarratorTopicCompositions
         id="{pascal}"
-        component={{{pascal}}}
+        landscape={{{pascal}}}
+        vertical={{{vert_id}}}
         durationInFrames={{{duration_token}}}
         fps={{{fps}}}
-        width={{1920}}
-        height={{1080}}
-        schema={{{pascal}Schema}}
-        defaultProps={{{{}}}}
-      />
+        schema={{{pascal}Schema}}{cover_props}
+      />"""
 
-      {{/* {vert_id} - 竖屏 1080×1920（自动生成） */}}
-      <Composition
-        id="{vert_id}"
-        component={{{vert_id}}}
-        durationInFrames={{{duration_token}}}
-        fps={{{fps}}}
-        width={{1080}}
-        height={{1920}}
-        schema={{{pascal}Schema}}
-        defaultProps={{{{}}}}
-      />{cover_comp_block}"""
+    if helper_import not in content:
+        # 紧挨 remotion 的 Composition import 之后插入 helper
+        remotion_imp = re.search(
+            r"^import\s*\{[^}]*\bComposition\b[^}]*\}\s*from\s*[\"']remotion[\"'];\s*\n",
+            content,
+            re.MULTILINE,
+        )
+        if remotion_imp:
+            content = (
+                content[: remotion_imp.end()]
+                + helper_import
+                + "\n"
+                + content[remotion_imp.end() :]
+            )
+        else:
+            first_import = content.find("import ")
+            if first_import >= 0:
+                end_of_line = content.index("\n", first_import)
+                content = (
+                    content[: end_of_line + 1]
+                    + helper_import
+                    + "\n"
+                    + content[end_of_line + 1 :]
+                )
 
     lines = content.split("\n")
     insert_at = None
@@ -1465,7 +1465,7 @@ def update_root_tsx(
     with open(root_path, "w", encoding="utf-8") as f:
         f.write(content)
 
-    root_msg = "  ✅ Root.tsx 已更新（横屏 + 竖屏双 Composition"
+    root_msg = "  ✅ Root.tsx 已更新（NarratorTopicCompositions：横屏 + 竖屏"
     if cover_still:
         root_msg += " + 横/竖封面 still"
     root_msg += "）"
@@ -1530,6 +1530,11 @@ def main():
             "已按文案长度在内存中注入预览帧（不写回 scene-scripts.json）"
         )
 
+    inject_source_citation_durations(
+        scripts_data,
+        scene_end_padding=int(config.get("scene_end_padding_frames", 20)),
+    )
+
     cover = normalize_cover(scripts_data)
     if cover:
         print(
@@ -1564,9 +1569,18 @@ def main():
         print(f"📄 复制 scene-scripts.json → {scripts_dest}")
 
     # 生成场景文件
+    final_hold = max(0, int(config.get("final_item_hold_frames", 25)))
+    last_content_idx = _index_of_last_content_scene(scenes)
+    if last_content_idx is not None and final_hold > 0:
+        print(
+            f"📌 正片末镜定格: Scene{last_content_idx + 1} 最后一项 +{final_hold} 帧 "
+            f"（config.final_item_hold_frames）"
+        )
+
     print(f"\n🎬 生成场景代码 ({len(scenes)} 个场景)...")
     for i, scene in enumerate(scenes):
-        scene_code = generate_scene_tsx(i, scene, name, config)
+        hold = final_hold if i == last_content_idx else 0
+        scene_code = generate_scene_tsx(i, scene, name, config, last_item_hold_frames=hold)
         scene_path = scenes_dir / f"Scene{i+1}.tsx"
         with open(scene_path, "w", encoding="utf-8") as f:
             f.write(scene_code)
@@ -1634,7 +1648,10 @@ def main():
 
     print("\n✅ Remotion 代码生成完成（横屏 + 竖屏双入口）!")
     print(f"   📂 {remotion_dir}")
-    print(f"   Root：Composition「{pascal}」1920×1080、「{pascal}竖屏」1080×1920")
+    print(
+        f"   Root：NarratorTopicCompositions id「{pascal}」"
+        f" → 「{pascal}」1920×1080、「{pascal}竖屏」1080×1920"
+    )
     if cover_still:
         print(
             f"   封面 still：「{pascal}封面横屏」「{pascal}封面竖屏」"

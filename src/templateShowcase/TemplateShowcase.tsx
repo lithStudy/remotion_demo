@@ -9,10 +9,12 @@ import {
 	BWTextFocus,
 	BWConceptCard,
 	BWQuoteCitation,
+	BWSourceCitation,
 	BWTimeline,
 	BWDosAndDonts,
 	BWMagnifyingGlass,
 	BWChatBubble,
+	BWQaReveal,
 	BWKpiHero,
 	BWStatCompare,
 	BWProgressRing,
@@ -37,6 +39,7 @@ import {
 	SC_CASE_CONTENT,
 	SC_COGNITIVE_CONTENT,
 	SC_CHAT_BUBBLE_CONTENT,
+	SC_QA_REVEAL_CONTENT,
 	SC_KPI_HERO_CONTENT,
 	SC_MAGNIFY_CONTENT,
 	SC_PROGRESS_CONTENT,
@@ -229,6 +232,23 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 		),
 	},
 	{
+		key: "QA_REVEAL",
+		durationInFrames: showcaseDuration("QA_REVEAL"),
+		content: (
+			<>
+				<BWQaReveal
+					content={SC_QA_REVEAL_CONTENT}
+					highlights={[
+						{ text: "不是", showFrom: 1 },
+						{ text: "源码可获取", showFrom: 2 },
+						{ text: "仍可能收费", showFrom: 3 },
+					]}
+				/>
+				<ShowcaseLabel text="QA_REVEAL · 问答揭示" />
+			</>
+		),
+	},
+	{
 		key: "COGNITIVE_SHIFT",
 		durationInFrames: showcaseDuration("COGNITIVE_SHIFT"),
 		content: (
@@ -344,6 +364,46 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					quoteSource="某研究 / 某名人"
 				/>
 				<ShowcaseLabel text="QUOTE_CITATION · 引用背书" />
+			</>
+		),
+	},
+	{
+		key: "SOURCE_CITATION",
+		durationInFrames: showcaseDuration("SOURCE_CITATION"),
+		content: (
+			<>
+				<BWSourceCitation
+					sectionTitle="参考资料"
+					references={[
+						{
+							title: "2021中国民营企业500强调研分析报告",
+							publisher: "全国工商联",
+							year: "2021",
+						},
+						{
+							title: "HarmonyOS: “Fake it till you make it” meets OS development",
+							titleZh: "鸿蒙系统实测：本质是 Android 分支",
+							publisher: "Ron Amadeo · Ars Technica",
+							publisherZh: "Ron Amadeo · Ars Technica（科技媒体）",
+							year: "2021",
+						},
+						{
+							title: "华为投资控股有限公司2020年年度报告",
+							publisher: "华为技术有限公司",
+							year: "2020",
+						},
+						{
+							title: "2025中国新车质量研究",
+							publisher: "J.D. Power",
+							year: "2025",
+						},
+						{
+							title: "中华人民共和国增值税暂行条例",
+							publisher: "国务院",
+						},
+					]}
+				/>
+				<ShowcaseLabel text="SOURCE_CITATION · 参考资料" />
 			</>
 		),
 	},

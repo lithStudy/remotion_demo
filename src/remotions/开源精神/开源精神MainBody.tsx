@@ -16,7 +16,7 @@ export const 开源精神MainBody: React.FC = () => (
         <Sequence durationInFrames={COVER_DURATION_FRAMES}>
             <LandscapeCoverPoster
                 title="开源精神"
-                    subtitle="当商业选择收割，是开源精神给了平民对抗垄断的“最后一颗子弹”"
+                    subtitle="开源精神给了平民对抗垄断的“最后一颗子弹”"
                     themeColor="#FF6900"
                     badge="深度解读 · 数据与事实"
                     seriesLabel="科技热点深读"

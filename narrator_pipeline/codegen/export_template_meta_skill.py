@@ -98,7 +98,7 @@ def _build_main_skill_body(registry: dict[str, dict], config: dict, subskills_pa
 	]
 	if image_style:
 		lines.extend([
-			f"- 工程 `config.json` 中的 `image_style`（供 image_prompt 类字段参考）：",
+			f"- 工程 `config.yaml` 中的 `image_style`（供 image_prompt 类字段参考）：",
 			"",
 			f"  {image_style}",
 			"",

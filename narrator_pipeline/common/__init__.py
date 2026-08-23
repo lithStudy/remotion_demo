@@ -5,10 +5,11 @@ narrator_pipeline 公共工具
 Gemini 相关工具见同包 `gemini_utils`。
 """
 
-import json
 import os
 from datetime import datetime
 from pathlib import Path
+
+import yaml
 
 
 def load_env(script_dir: Path) -> None:
@@ -24,10 +25,13 @@ def load_env(script_dir: Path) -> None:
 
 
 def load_config(script_dir: Path) -> dict:
-    """从 script_dir/config.json 加载并返回配置字典。"""
-    config_path = script_dir / "config.json"
+    """从 script_dir/config.yaml 加载并返回配置字典。"""
+    config_path = script_dir / "config.yaml"
     with open(config_path, "r", encoding="utf-8") as f:
-        return json.load(f)
+        data = yaml.safe_load(f)
+    if not isinstance(data, dict):
+        raise ValueError(f"配置文件格式无效: {config_path}")
+    return data
 
 
 # 遇到下列字符时结束当前片段（字符保留在片段末尾）

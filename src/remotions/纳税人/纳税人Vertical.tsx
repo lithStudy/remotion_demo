@@ -37,7 +37,7 @@ export const 纳税人Vertical: React.FC = () => {
             <Audio
                 src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
                 loop
-                volume={0.17}
+                volume={0.10}
                 name="Background music"
             />
             <纳税人TopStaticHeadline canvasW={VERTICAL_CANVAS_W} topBandH={VERTICAL_PLAY_TOP} />

@@ -13,17 +13,17 @@
             {
               "text": "明明你每天都在交钱,",
               "startFrame": 0,
-              "durationFrames": 51
+              "durationFrames": 53
             },
             {
               "text": "为什么却还是觉得，",
-              "startFrame": 50,
+              "startFrame": 52,
               "durationFrames": 39
             },
             {
               "text": "自己在白嫖国家的福利？",
-              "startFrame": 88,
-              "durationFrames": 49
+              "startFrame": 90,
+              "durationFrames": 47
             }
           ],
           "order": 1,
@@ -70,57 +70,57 @@
             {
               "text": "很多人觉得，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 40
             },
             {
               "text": "自己从来没有主动交过税，",
-              "startFrame": 29,
-              "durationFrames": 50
+              "startFrame": 39,
+              "durationFrames": 53
             },
             {
               "text": "没有给国家做过贡献，",
-              "startFrame": 78,
+              "startFrame": 91,
               "durationFrames": 51
             },
             {
               "text": "自己享受的一切福利都是占了便宜。",
-              "startFrame": 128,
-              "durationFrames": 79
+              "startFrame": 141,
+              "durationFrames": 75
             },
             {
               "text": "于是，",
-              "startFrame": 207,
+              "startFrame": 216,
               "durationFrames": 17
             },
             {
               "text": "在公共事务面前，",
-              "startFrame": 223,
-              "durationFrames": 39
+              "startFrame": 232,
+              "durationFrames": 42
             },
             {
               "text": "他们自觉站到了边缘。",
-              "startFrame": 261,
+              "startFrame": 273,
               "durationFrames": 48
             },
             {
               "text": "不敢提诉求，",
-              "startFrame": 309,
-              "durationFrames": 35
-            },
-            {
-              "text": "也不敢谈权利。",
-              "startFrame": 344,
+              "startFrame": 321,
               "durationFrames": 32
             },
             {
+              "text": "也不敢谈权利。",
+              "startFrame": 353,
+              "durationFrames": 33
+            },
+            {
               "text": "但这，",
-              "startFrame": 376,
-              "durationFrames": 26
+              "startFrame": 386,
+              "durationFrames": 22
             },
             {
               "text": "其实是一个天大的认知错觉。",
-              "startFrame": 401,
-              "durationFrames": 69
+              "startFrame": 408,
+              "durationFrames": 66
             }
           ],
           "order": 2,
@@ -162,7 +162,7 @@
               }
             ]
           },
-          "totalDurationFrames": 471
+          "totalDurationFrames": 474
         },
         {
           "narrativeType": "TRANSITION",
@@ -172,37 +172,37 @@
             {
               "text": "我必须告诉你，",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 39
             },
             {
               "text": "不管你是学生、",
-              "startFrame": 34,
-              "durationFrames": 30
+              "startFrame": 38,
+              "durationFrames": 36
             },
             {
               "text": "退休老人、",
-              "startFrame": 64,
-              "durationFrames": 29
+              "startFrame": 74,
+              "durationFrames": 24
             },
             {
               "text": "自由职业者，",
-              "startFrame": 92,
-              "durationFrames": 26
+              "startFrame": 98,
+              "durationFrames": 29
             },
             {
               "text": "甚至是无业游民，",
-              "startFrame": 117,
-              "durationFrames": 40
+              "startFrame": 126,
+              "durationFrames": 44
             },
             {
               "text": "每天，",
-              "startFrame": 157,
-              "durationFrames": 23
+              "startFrame": 170,
+              "durationFrames": 21
             },
             {
               "text": "你都在交税。",
-              "startFrame": 180,
-              "durationFrames": 39
+              "startFrame": 190,
+              "durationFrames": 33
             }
           ],
           "order": 4,
@@ -239,11 +239,11 @@
               }
             ]
           },
-          "totalDurationFrames": 219
+          "totalDurationFrames": 224
         }
       ],
       "audioSrc": "/audio/纳税人/scene_1/scene_1.mp3",
-      "totalDurationFrames": 828
+      "totalDurationFrames": 837
     },
     {
       "sceneId": "scene_2",
@@ -257,17 +257,17 @@
             {
               "text": "你以为没主动交个税，",
               "startFrame": 0,
-              "durationFrames": 42
+              "durationFrames": 47
             },
             {
               "text": "就是没纳税？",
-              "startFrame": 41,
-              "durationFrames": 35
+              "startFrame": 46,
+              "durationFrames": 33
             },
             {
               "text": "大错特错。",
-              "startFrame": 76,
-              "durationFrames": 44
+              "startFrame": 79,
+              "durationFrames": 42
             }
           ],
           "order": 2,
@@ -296,7 +296,7 @@
               }
             ]
           },
-          "totalDurationFrames": 120
+          "totalDurationFrames": 122
         },
         {
           "narrativeType": "LOGIC",
@@ -306,12 +306,12 @@
             {
               "text": "在我们的税收体系里，",
               "startFrame": 0,
-              "durationFrames": 44
+              "durationFrames": 45
             },
             {
               "text": "个税只占很小的一部分。",
-              "startFrame": 43,
-              "durationFrames": 51
+              "startFrame": 44,
+              "durationFrames": 54
             }
           ],
           "order": 3,
@@ -320,7 +320,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 94
+          "totalDurationFrames": 98
         },
         {
           "narrativeType": "LOGIC",
@@ -330,27 +330,27 @@
             {
               "text": "真正的绝对主力，",
               "startFrame": 0,
-              "durationFrames": 40
+              "durationFrames": 44
             },
             {
               "text": "叫做间接税，",
-              "startFrame": 39,
-              "durationFrames": 43
+              "startFrame": 43,
+              "durationFrames": 42
             },
             {
               "text": "这是一种隐形的税法，",
-              "startFrame": 81,
-              "durationFrames": 47
+              "startFrame": 85,
+              "durationFrames": 44
             },
             {
               "text": "它像水一样，",
               "startFrame": 128,
-              "durationFrames": 32
+              "durationFrames": 34
             },
             {
               "text": "渗透进你生活的每一个缝隙。",
-              "startFrame": 160,
-              "durationFrames": 61
+              "startFrame": 162,
+              "durationFrames": 62
             }
           ],
           "order": 4,
@@ -359,11 +359,11 @@
             "conceptName": "间接税",
             "anchors": []
           },
-          "totalDurationFrames": 222
+          "totalDurationFrames": 225
         }
       ],
       "audioSrc": "/audio/纳税人/scene_2/scene_2.mp3",
-      "totalDurationFrames": 438
+      "totalDurationFrames": 445
     },
     {
       "sceneId": "scene_3",
@@ -377,12 +377,12 @@
             {
               "text": "给你算一笔硬核的账。",
               "startFrame": 0,
-              "durationFrames": 51
+              "durationFrames": 52
             },
             {
               "text": "假设你买了一件一百多块钱的衣服。",
-              "startFrame": 50,
-              "durationFrames": 69
+              "startFrame": 51,
+              "durationFrames": 71
             }
           ],
           "order": 1,
@@ -391,7 +391,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 120
+          "totalDurationFrames": 122
         },
         {
           "narrativeType": "CASE",
@@ -401,22 +401,22 @@
             {
               "text": "第一步，",
               "startFrame": 0,
-              "durationFrames": 20
+              "durationFrames": 22
             },
             {
               "text": "原材料采购成本40元，",
-              "startFrame": 19,
-              "durationFrames": 70
+              "startFrame": 21,
+              "durationFrames": 72
             },
             {
               "text": "进口棉花关税4.4元，",
-              "startFrame": 89,
-              "durationFrames": 65
+              "startFrame": 93,
+              "durationFrames": 74
             },
             {
               "text": "增值税5.2元",
-              "startFrame": 153,
-              "durationFrames": 48
+              "startFrame": 166,
+              "durationFrames": 51
             }
           ],
           "order": 2,
@@ -435,7 +435,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 202
+          "totalDurationFrames": 218
         },
         {
           "narrativeType": "CASE",
@@ -445,22 +445,22 @@
             {
               "text": "第二步，",
               "startFrame": 0,
-              "durationFrames": 26
+              "durationFrames": 25
             },
             {
               "text": "原材料运输成本10元，",
-              "startFrame": 25,
+              "startFrame": 24,
               "durationFrames": 63
             },
             {
               "text": "公路运输增值税0.9元，",
-              "startFrame": 87,
-              "durationFrames": 69
+              "startFrame": 86,
+              "durationFrames": 77
             },
             {
               "text": "燃油消费税0.8元",
-              "startFrame": 156,
-              "durationFrames": 68
+              "startFrame": 162,
+              "durationFrames": 64
             }
           ],
           "order": 3,
@@ -479,7 +479,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 224
+          "totalDurationFrames": 226
         },
         {
           "narrativeType": "CASE",
@@ -489,22 +489,22 @@
             {
               "text": "第三步，",
               "startFrame": 0,
-              "durationFrames": 27
+              "durationFrames": 23
             },
             {
               "text": "生产制作成本30元，",
-              "startFrame": 26,
-              "durationFrames": 60
+              "startFrame": 22,
+              "durationFrames": 62
             },
             {
               "text": "加工各环节增值税3.9元，",
-              "startFrame": 86,
-              "durationFrames": 87
+              "startFrame": 84,
+              "durationFrames": 75
             },
             {
               "text": "企业所得税按利润比例算1.5元",
-              "startFrame": 172,
-              "durationFrames": 98
+              "startFrame": 158,
+              "durationFrames": 92
             }
           ],
           "order": 4,
@@ -523,7 +523,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 270
+          "totalDurationFrames": 250
         },
         {
           "narrativeType": "CASE",
@@ -538,12 +538,12 @@
             {
               "text": "成品运输成本5元，",
               "startFrame": 24,
-              "durationFrames": 55
+              "durationFrames": 62
             },
             {
               "text": "增值税0.45元，燃油消费税0.4元。",
-              "startFrame": 78,
-              "durationFrames": 112
+              "startFrame": 85,
+              "durationFrames": 108
             }
           ],
           "order": 5,
@@ -562,7 +562,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 191
+          "totalDurationFrames": 194
         },
         {
           "narrativeType": "CASE",
@@ -572,17 +572,17 @@
             {
               "text": "第五步，",
               "startFrame": 0,
-              "durationFrames": 21
+              "durationFrames": 20
             },
             {
               "text": "零售销售 利润25元，",
-              "startFrame": 20,
-              "durationFrames": 70
+              "startFrame": 19,
+              "durationFrames": 74
             },
             {
               "text": "缴纳3.25元的增值税与1.25元的企业所得税",
-              "startFrame": 90,
-              "durationFrames": 128
+              "startFrame": 92,
+              "durationFrames": 123
             }
           ],
           "order": 6,
@@ -601,7 +601,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 219
+          "totalDurationFrames": 215
         },
         {
           "narrativeType": "CONCLUSION",
@@ -611,16 +611,16 @@
             {
               "text": "最终税负构成：",
               "startFrame": 0,
-              "durationFrames": 49
+              "durationFrames": 48
             },
             {
               "text": "直接税20.20元，",
-              "startFrame": 48,
-              "durationFrames": 55
+              "startFrame": 47,
+              "durationFrames": 54
             },
             {
               "text": "间接税4.25元",
-              "startFrame": 102,
+              "startFrame": 101,
               "durationFrames": 48
             }
           ],
@@ -652,7 +652,7 @@
               }
             ]
           },
-          "totalDurationFrames": 151
+          "totalDurationFrames": 150
         },
         {
           "narrativeType": "CONCLUSION",
@@ -662,7 +662,7 @@
             {
               "text": "最高纳税总占比 24%",
               "startFrame": 0,
-              "durationFrames": 73
+              "durationFrames": 79
             }
           ],
           "order": 8,
@@ -676,11 +676,11 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 73
+          "totalDurationFrames": 79
         }
       ],
       "audioSrc": "/audio/纳税人/scene_3/scene_3.mp3",
-      "totalDurationFrames": 1448
+      "totalDurationFrames": 1453
     },
     {
       "sceneId": "scene_4",
@@ -694,17 +694,17 @@
             {
               "text": "你以为你只买了一件衣服？",
               "startFrame": 0,
-              "durationFrames": 59
+              "durationFrames": 53
             },
             {
               "text": "不，",
-              "startFrame": 58,
+              "startFrame": 52,
               "durationFrames": 17
             },
             {
               "text": "你买单的是这整个漫长的税收链条。",
-              "startFrame": 75,
-              "durationFrames": 83
+              "startFrame": 68,
+              "durationFrames": 79
             }
           ],
           "order": 1,
@@ -716,7 +716,7 @@
             "butContentIndex": 2,
             "anchors": []
           },
-          "totalDurationFrames": 158
+          "totalDurationFrames": 148
         },
         {
           "narrativeType": "LOGIC",
@@ -726,31 +726,31 @@
             {
               "text": "这笔钱，",
               "startFrame": 0,
-              "durationFrames": 24
+              "durationFrames": 21
             },
             {
               "text": "作为成本的一部分，",
-              "startFrame": 24,
-              "durationFrames": 42
+              "startFrame": 20,
+              "durationFrames": 39
             },
             {
               "text": "一分不差，",
-              "startFrame": 65,
-              "durationFrames": 18
+              "startFrame": 58,
+              "durationFrames": 17
             },
             {
               "text": "全算在你的最终消费里。",
-              "startFrame": 82,
-              "durationFrames": 61
+              "startFrame": 75,
+              "durationFrames": 58
             },
             {
               "text": "你没有去税务局排队。",
-              "startFrame": 143,
-              "durationFrames": 51
+              "startFrame": 133,
+              "durationFrames": 48
             },
             {
               "text": "但你每天都在实打实地掏钱。",
-              "startFrame": 193,
+              "startFrame": 181,
               "durationFrames": 63
             }
           ],
@@ -773,7 +773,7 @@
               }
             ]
           },
-          "totalDurationFrames": 256
+          "totalDurationFrames": 244
         },
         {
           "narrativeType": "LOGIC",
@@ -793,7 +793,7 @@
             {
               "text": "这是整个社会的普遍规律。",
               "startFrame": 52,
-              "durationFrames": 56
+              "durationFrames": 51
             }
           ],
           "order": 3,
@@ -805,7 +805,7 @@
             "butContentIndex": 2,
             "anchors": []
           },
-          "totalDurationFrames": 108
+          "totalDurationFrames": 103
         },
         {
           "narrativeType": "CASE",
@@ -815,27 +815,27 @@
             {
               "text": "你买米，",
               "startFrame": 0,
-              "durationFrames": 18
+              "durationFrames": 23
             },
             {
               "text": "买盐，",
-              "startFrame": 17,
-              "durationFrames": 12
+              "startFrame": 22,
+              "durationFrames": 11
             },
             {
               "text": "买油，",
-              "startFrame": 29,
-              "durationFrames": 21
+              "startFrame": 33,
+              "durationFrames": 32
             },
             {
               "text": "你的每一笔消费，",
-              "startFrame": 50,
-              "durationFrames": 39
+              "startFrame": 65,
+              "durationFrames": 45
             },
             {
               "text": "都分出一部分变成了国家运转的资金。",
-              "startFrame": 88,
-              "durationFrames": 86
+              "startFrame": 110,
+              "durationFrames": 82
             }
           ],
           "order": 4,
@@ -852,7 +852,7 @@
               }
             ]
           },
-          "totalDurationFrames": 175
+          "totalDurationFrames": 192
         },
         {
           "narrativeType": "CONCLUSION",
@@ -862,17 +862,17 @@
             {
               "text": "但讽刺的是。",
               "startFrame": 0,
-              "durationFrames": 42
+              "durationFrames": 33
             },
             {
               "text": "你养活了庞大的基建，",
-              "startFrame": 41,
-              "durationFrames": 52
+              "startFrame": 32,
+              "durationFrames": 46
             },
             {
               "text": "你却以为这里面没有你的贡献。",
-              "startFrame": 92,
-              "durationFrames": 56
+              "startFrame": 78,
+              "durationFrames": 55
             }
           ],
           "order": 5,
@@ -889,7 +889,7 @@
               }
             ]
           },
-          "totalDurationFrames": 149
+          "totalDurationFrames": 134
         },
         {
           "narrativeType": "LOGIC",
@@ -899,17 +899,17 @@
             {
               "text": "很多人看不透这套机制。",
               "startFrame": 0,
-              "durationFrames": 66
+              "durationFrames": 56
             },
             {
               "text": "在强权面前唯唯诺诺，",
-              "startFrame": 65,
+              "startFrame": 55,
               "durationFrames": 55
             },
             {
               "text": "在公共事务上默不作声。",
-              "startFrame": 120,
-              "durationFrames": 55
+              "startFrame": 110,
+              "durationFrames": 52
             }
           ],
           "order": 6,
@@ -922,7 +922,7 @@
             "rightShowFrom": 2,
             "anchors": []
           },
-          "totalDurationFrames": 175
+          "totalDurationFrames": 162
         },
         {
           "narrativeType": "CONCLUSION",
@@ -932,17 +932,17 @@
             {
               "text": "你的钱被拿去建了高速公路。",
               "startFrame": 0,
-              "durationFrames": 57
+              "durationFrames": 53
             },
             {
               "text": "你却连在上面走，",
-              "startFrame": 56,
-              "durationFrames": 39
+              "startFrame": 52,
+              "durationFrames": 35
             },
             {
               "text": "都觉得是被施舍的。",
-              "startFrame": 94,
-              "durationFrames": 44
+              "startFrame": 87,
+              "durationFrames": 42
             }
           ],
           "order": 7,
@@ -959,11 +959,11 @@
               }
             ]
           },
-          "totalDurationFrames": 139
+          "totalDurationFrames": 129
         }
       ],
       "audioSrc": "/audio/纳税人/scene_4/scene_4.mp3",
-      "totalDurationFrames": 1158
+      "totalDurationFrames": 1110
     },
     {
       "sceneId": "scene_5",
@@ -977,22 +977,22 @@
             {
               "text": "现在，",
               "startFrame": 0,
-              "durationFrames": 18
+              "durationFrames": 24
             },
             {
               "text": "把腰杆给我挺直了！",
-              "startFrame": 17,
+              "startFrame": 24,
               "durationFrames": 45
             },
             {
               "text": "从今天起，",
-              "startFrame": 62,
+              "startFrame": 68,
               "durationFrames": 27
             },
             {
               "text": "彻底重构你的身份认知。",
-              "startFrame": 88,
-              "durationFrames": 47
+              "startFrame": 94,
+              "durationFrames": 48
             }
           ],
           "order": 1,
@@ -1024,7 +1024,7 @@
               }
             ]
           },
-          "totalDurationFrames": 135
+          "totalDurationFrames": 143
         },
         {
           "narrativeType": "LOGIC",
@@ -1034,37 +1034,37 @@
             {
               "text": "第一，",
               "startFrame": 0,
-              "durationFrames": 16
+              "durationFrames": 22
             },
             {
               "text": "理直气壮地去享受社会福利。",
-              "startFrame": 15,
-              "durationFrames": 65
+              "startFrame": 21,
+              "durationFrames": 64
             },
             {
               "text": "你看到的每一座高架桥，",
-              "startFrame": 79,
-              "durationFrames": 47
+              "startFrame": 85,
+              "durationFrames": 58
             },
             {
               "text": "你走过的每一段柏油路。",
-              "startFrame": 126,
-              "durationFrames": 49
+              "startFrame": 142,
+              "durationFrames": 52
             },
             {
               "text": "都有你掏出的真金白银。",
-              "startFrame": 175,
-              "durationFrames": 57
+              "startFrame": 194,
+              "durationFrames": 60
             },
             {
               "text": "你不是在受人恩惠，",
-              "startFrame": 231,
-              "durationFrames": 41
+              "startFrame": 254,
+              "durationFrames": 47
             },
             {
               "text": "你是在享受自己的投资回报。",
-              "startFrame": 272,
-              "durationFrames": 58
+              "startFrame": 301,
+              "durationFrames": 55
             }
           ],
           "order": 2,
@@ -1087,7 +1087,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 331
+          "totalDurationFrames": 356
         },
         {
           "narrativeType": "LOGIC",
@@ -1097,47 +1097,47 @@
             {
               "text": "第二，",
               "startFrame": 0,
-              "durationFrames": 16
+              "durationFrames": 17
             },
             {
               "text": "唤醒你的主人翁意识。",
-              "startFrame": 15,
-              "durationFrames": 55
+              "startFrame": 16,
+              "durationFrames": 58
             },
             {
               "text": "当你遇到不合理的现象，",
-              "startFrame": 69,
-              "durationFrames": 48
+              "startFrame": 74,
+              "durationFrames": 54
             },
             {
               "text": "当你的合法权益受到侵害，",
-              "startFrame": 117,
-              "durationFrames": 51
+              "startFrame": 127,
+              "durationFrames": 57
             },
             {
               "text": "大胆地说出来，",
-              "startFrame": 168,
-              "durationFrames": 31
+              "startFrame": 184,
+              "durationFrames": 32
             },
             {
               "text": "勇敢地去争取。",
-              "startFrame": 198,
-              "durationFrames": 35
+              "startFrame": 216,
+              "durationFrames": 38
             },
             {
               "text": "你有绝对的资格。",
-              "startFrame": 232,
-              "durationFrames": 35
+              "startFrame": 253,
+              "durationFrames": 42
             },
             {
               "text": "你不仅有资格享受福利，",
-              "startFrame": 267,
-              "durationFrames": 53
+              "startFrame": 294,
+              "durationFrames": 52
             },
             {
               "text": "你更有资格参与决定每一个政策。",
-              "startFrame": 320,
-              "durationFrames": 67
+              "startFrame": 346,
+              "durationFrames": 69
             }
           ],
           "order": 3,
@@ -1160,7 +1160,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 387
+          "totalDurationFrames": 415
         },
         {
           "narrativeType": "TRANSITION",
@@ -1170,17 +1170,17 @@
             {
               "text": "记住。",
               "startFrame": 0,
-              "durationFrames": 24
+              "durationFrames": 21
             },
             {
               "text": "每一次微小的消费。",
-              "startFrame": 24,
+              "startFrame": 20,
               "durationFrames": 47
             },
             {
               "text": "都在进行光荣的纳税。",
-              "startFrame": 70,
-              "durationFrames": 52
+              "startFrame": 67,
+              "durationFrames": 51
             }
           ],
           "order": 4,
@@ -1206,7 +1206,7 @@
               }
             ]
           },
-          "totalDurationFrames": 123
+          "totalDurationFrames": 118
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1216,22 +1216,22 @@
             {
               "text": "你根本不是什么国家的负担。",
               "startFrame": 0,
-              "durationFrames": 59
+              "durationFrames": 57
             },
             {
               "text": "你，",
-              "startFrame": 58,
-              "durationFrames": 7
+              "startFrame": 56,
+              "durationFrames": 14
             },
             {
               "text": "就是建设这个国家的，",
-              "startFrame": 65,
-              "durationFrames": 36
+              "startFrame": 69,
+              "durationFrames": 44
             },
             {
               "text": "隐形金主！",
-              "startFrame": 101,
-              "durationFrames": 40
+              "startFrame": 113,
+              "durationFrames": 34
             }
           ],
           "order": 5,
@@ -1264,11 +1264,11 @@
               }
             ]
           },
-          "totalDurationFrames": 142
+          "totalDurationFrames": 147
         }
       ],
       "audioSrc": "/audio/纳税人/scene_5/scene_5.mp3",
-      "totalDurationFrames": 1118
+      "totalDurationFrames": 1180
     }
   ],
   "fps": 30,

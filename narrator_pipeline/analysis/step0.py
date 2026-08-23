@@ -130,11 +130,11 @@ def main() -> bool:
     parser.add_argument(
         "--llm-provider",
         choices=["gemini", "deepseek", "mimo"],
-        help="LLM 提供方（默认读取 config.json 的 llm_provider；未配置则 gemini）",
+        help="LLM 提供方（默认读取 config.yaml 的 llm_provider；未配置则 gemini）",
     )
     parser.add_argument(
         "--llm-model",
-        help="覆盖模型名（gemini/deepseek 通用覆盖；不填则按 provider 读取 config.json 对应字段）",
+        help="覆盖模型名（gemini/deepseek 通用覆盖；不填则按 provider 读取 config.yaml 对应字段）",
     )
     args = parser.parse_args()
 

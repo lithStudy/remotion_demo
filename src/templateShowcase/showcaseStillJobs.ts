@@ -73,6 +73,13 @@ export const SC_CHAT_BUBBLE_CONTENT: ContentItem[] = [
 	{ text: "先把口径和样本量核对清楚，再决定要不要被情绪带着走。", startFrame: 36, durationFrames: 44 },
 ];
 
+export const SC_QA_REVEAL_CONTENT: ContentItem[] = [
+	{ text: "开源就等于免费吗？", startFrame: 0, durationFrames: 36 },
+	{ text: "不是。", startFrame: 36, durationFrames: 20 },
+	{ text: "开源指的是源码可获取、可修改。", startFrame: 56, durationFrames: 40 },
+	{ text: "商业支持和服务仍可能收费。", startFrame: 96, durationFrames: 36 },
+];
+
 export const SC_KPI_HERO_CONTENT: ContentItem[] = [
 	{ text: "满意度稳居高位", startFrame: 0, durationFrames: 45 },
 	{ text: "留存同样扎实", startFrame: 45, durationFrames: 45 },
@@ -150,6 +157,7 @@ export const SHOWCASE_SEGMENT_TIMINGS: ShowcaseSegmentTiming[] = [
 	{ key: "CASE_BREAKDOWN", durationInFrames: durationFromContent(SC_CASE_CONTENT) },
 	{ key: "CENTER_FOCUS", durationInFrames: SHOWCASE_FALLBACK_FRAMES },
 	{ key: "CHAT_BUBBLE", durationInFrames: durationFromContent(SC_CHAT_BUBBLE_CONTENT) },
+	{ key: "QA_REVEAL", durationInFrames: durationFromContent(SC_QA_REVEAL_CONTENT) },
 	{ key: "COGNITIVE_SHIFT", durationInFrames: durationFromContent(SC_COGNITIVE_CONTENT) },
 	{ key: "CONCEPT_CARD", durationInFrames: SHOWCASE_FALLBACK_FRAMES },
 	{ key: "DOS_AND_DONTS", durationInFrames: SHOWCASE_FALLBACK_FRAMES },
@@ -157,6 +165,7 @@ export const SHOWCASE_SEGMENT_TIMINGS: ShowcaseSegmentTiming[] = [
 	{ key: "MAGNIFYING_GLASS", durationInFrames: durationFromContent(SC_MAGNIFY_CONTENT) },
 	{ key: "PROGRESS_RING", durationInFrames: durationFromContent(SC_PROGRESS_CONTENT) },
 	{ key: "QUOTE_CITATION", durationInFrames: SHOWCASE_FALLBACK_FRAMES },
+	{ key: "SOURCE_CITATION", durationInFrames: 24 + 4 * 12 + 27 },
 	{ key: "SPLIT_COMPARE", durationInFrames: SHOWCASE_FALLBACK_FRAMES },
 	{ key: "STAT_COMPARE", durationInFrames: durationFromContent(SC_STAT_CONTENT) },
 	{ key: "STEP_LIST", durationInFrames: durationAfterLastStagger(SC_STEP_LIST_LAST_DELAY) },

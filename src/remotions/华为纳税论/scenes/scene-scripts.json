@@ -1,0 +1,1199 @@
+{
+  "topic": "你交的税，凭什么算成华为的奉献？",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入·千亿纳税疑云",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用他人说法作为开头钩子，营造质疑的起点。",
+          "content": [
+            {
+              "text": "有人说，",
+              "startFrame": 0,
+              "durationFrames": 20
+            },
+            {
+              "text": "华为不愧是国之栋梁，",
+              "startFrame": 19,
+              "durationFrames": 52
+            },
+            {
+              "text": "一年纳税千亿元。",
+              "startFrame": 70,
+              "durationFrames": 39
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteSource": "网传",
+            "quoteDisplayText": "华为不愧是国之栋梁，一年纳税千亿元。",
+            "anchors": []
+          },
+          "totalDurationFrames": 109
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "先否定感性反应，引导观众转向理性审视，属于认知转变结构。",
+          "content": [
+            {
+              "text": "先别急着激动。",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "我们看看这个所谓的“千亿”是从哪来。",
+              "startFrame": 33,
+              "durationFrames": 77
+            }
+          ],
+          "order": 2,
+          "param": {
+            "anchors": [
+              {
+                "text": "千亿",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 111
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "CONCEPT_CARD",
+          "reasoning": "揭示具体数据，突出903亿这一关键数字，适合KPI_HERO模板。",
+          "content": [
+            {
+              "text": "最初来源，",
+              "startFrame": 0,
+              "durationFrames": 24
+            },
+            {
+              "text": "全国工商联发布，",
+              "startFrame": 24,
+              "durationFrames": 39
+            },
+            {
+              "text": "二零二一年民企五百强报告，",
+              "startFrame": 62,
+              "durationFrames": 76
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/华为纳税论/scene_1_3.png",
+            "conceptName": "民企五百强报告"
+          },
+          "totalDurationFrames": 138
+        },
+        {
+          "order": 4,
+          "template": "KPI_HERO",
+          "narrativeType": "LOGIC",
+          "content": [
+            {
+              "text": "具体说，",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "是903亿。",
+              "startFrame": 18,
+              "durationFrames": 42
+            }
+          ],
+          "param": {
+            "blocks": [
+              {
+                "value": 903,
+                "suffix": "亿",
+                "label": "2021年纳税",
+                "showFrom": 1,
+                "useGrouping": false,
+                "decimalPlaces": 0
+              }
+            ]
+          },
+          "totalDurationFrames": 60
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "对全国工商联的性质进行“不是…而是…”的认知纠正，适合COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "首先说一下这个所谓的“全国工商联”，",
+              "startFrame": 0,
+              "durationFrames": 95
+            },
+            {
+              "text": "并不是什么国家机构，",
+              "startFrame": 94,
+              "durationFrames": 47
+            },
+            {
+              "text": "而是一个别名为“中国民间商会”的民间组织。",
+              "startFrame": 141,
+              "durationFrames": 107
+            }
+          ],
+          "order": 5,
+          "param": {
+            "notText": "国家机构",
+            "butText": "中国民间商会",
+            "butSrc": "images/华为纳税论/scene_1_5.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 249
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "同一「民间报告权威性」子话题：报告现身→质疑权威→榜单失真→名企缺席举证，单主图贯穿、右侧阶段轨对齐口播，适合 CASE_BREAKDOWN。",
+          "content": [
+            {
+              "text": "一个民间组织给出的报告，",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "权威性能有多高呢？",
+              "startFrame": 54,
+              "durationFrames": 52
+            },
+            {
+              "text": "你只需要知道他给出的所谓中国民营500强，",
+              "startFrame": 105,
+              "durationFrames": 106
+            },
+            {
+              "text": "甚至有很多世界500强都没有上榜，",
+              "startFrame": 211,
+              "durationFrames": 78
+            },
+            {
+              "text": "比如中国平安、",
+              "startFrame": 289,
+              "durationFrames": 41
+            },
+            {
+              "text": "联想集团、",
+              "startFrame": 329,
+              "durationFrames": 31
+            },
+            {
+              "text": "海尔集团等。",
+              "startFrame": 360,
+              "durationFrames": 30
+            }
+          ],
+          "order": 6,
+          "param": {
+            "title": "毫无权威性",
+            "imageSrc": "images/华为纳税论/scene_1_6.png",
+            "phases": [
+              {
+                "phaseLabel": "报告现身",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "质疑权威",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "榜单失真",
+                "showFrom": 3
+              },
+              {
+                "phaseLabel": "名企缺席",
+                "showFrom": 4
+              }
+            ]
+          },
+          "totalDurationFrames": 390
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "最终收束观点，以短句直接打击，无需配图，适合TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "所以这个报告您就乐一乐就完了，",
+              "startFrame": 0,
+              "durationFrames": 63
+            },
+            {
+              "text": "别太当真。",
+              "startFrame": 62,
+              "durationFrames": 28
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "所以这个报告您就乐一乐就完了，",
+                "showFrom": 0,
+                "endFrom": 1
+              },
+              {
+                "text": "别太当真。",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "别太当真",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 91
+        }
+      ],
+      "audioSrc": "/audio/华为纳税论/scene_1/scene_1.mp3",
+      "totalDurationFrames": 1146
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析·增值税真相",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "QUOTE_CITATION",
+          "reasoning": "以「有人问」引出对民间报告依据的质疑，适合 QUOTE_CITATION 呈现证言式设问。",
+          "content": [
+            {
+              "text": "那有人问了，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "民间组织也不会乱说话吧，",
+              "startFrame": 27,
+              "durationFrames": 59
+            },
+            {
+              "text": "总得有点依据吧？",
+              "startFrame": 86,
+              "durationFrames": 36
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteSource": "有人问",
+            "quoteDisplayText": "民间组织也不会乱说话吧，总得有点依据吧？",
+            "showFrom": 1
+          },
+          "totalDurationFrames": 122
+        },
+        {
+          "order": 2,
+          "template": "TEXT_FOCUS",
+          "narrativeType": "LOGIC",
+          "content": [
+            {
+              "text": "要说依据，",
+              "startFrame": 0,
+              "durationFrames": 26
+            },
+            {
+              "text": "那唯一可信的应该就是年报了。",
+              "startFrame": 25,
+              "durationFrames": 60
+            }
+          ],
+          "param": {
+            "coreSentence": [
+              {
+                "text": "要说依据，",
+                "showFrom": 0,
+                "endFrom": 1
+              },
+              {
+                "text": "那唯一可信的应该就是年报了。",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "年报",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 86
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "STAT_COMPARE",
+          "reasoning": "明确的两项数据对比（华为76亿 vs 腾讯≈228亿），适用STAT_COMPARE突出差距，强化'很遗憾'的反差感。",
+          "content": [
+            {
+              "text": "很遗憾，",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "华为自家发布的年报。",
+              "startFrame": 18,
+              "durationFrames": 50
+            },
+            {
+              "text": "2020年企业所得税是76亿元。",
+              "startFrame": 68,
+              "durationFrames": 100
+            },
+            {
+              "text": "只有腾讯的1/3。",
+              "startFrame": 167,
+              "durationFrames": 50
+            }
+          ],
+          "order": 3,
+          "param": {
+            "bars": [
+              {
+                "label": "华为",
+                "value": 76,
+                "showFrom": 2,
+                "decimalPlaces": 0
+              },
+              {
+                "label": "腾讯",
+                "value": 228,
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 217
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "问→答的短节拍递进，悬念与揭示一气呵成，BEAT_SEQUENCE可在同一镜头中分段呈现问答张力。",
+          "content": [
+            {
+              "text": "那么这千亿中的827亿元的差额哪里来的呢？",
+              "startFrame": 0,
+              "durationFrames": 108
+            },
+            {
+              "text": "唯一可能的来源，",
+              "startFrame": 107,
+              "durationFrames": 40
+            },
+            {
+              "text": "是增值税。",
+              "startFrame": 146,
+              "durationFrames": 38
+            }
+          ],
+          "order": 4,
+          "param": {
+            "anchors": [
+              {
+                "text": "增值税",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 184
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "定义+三组问答构成4段递进解释间接税，BEAT_SEQUENCE通过画面分段逐步揭示申报者、缴纳者与最终承担者之间的错位。",
+          "content": [
+            {
+              "text": "增值税，",
+              "startFrame": 0,
+              "durationFrames": 23
+            },
+            {
+              "text": "是典型的间接税。",
+              "startFrame": 22,
+              "durationFrames": 42
+            },
+            {
+              "text": "谁向税务机关申报？",
+              "startFrame": 64,
+              "durationFrames": 48
+            },
+            {
+              "text": "企业。",
+              "startFrame": 112,
+              "durationFrames": 22
+            },
+            {
+              "text": "谁把钱交进国库？",
+              "startFrame": 134,
+              "durationFrames": 43
+            },
+            {
+              "text": "也是企业。",
+              "startFrame": 176,
+              "durationFrames": 26
+            },
+            {
+              "text": "可谁最终承担税负？",
+              "startFrame": 202,
+              "durationFrames": 54
+            },
+            {
+              "text": "是消费者。",
+              "startFrame": 256,
+              "durationFrames": 32
+            }
+          ],
+          "order": 5,
+          "param": {
+            "title": "谁最终承担税负",
+            "imageSrc": "images/华为纳税论/scene_2_5.png",
+            "notes": [
+              {
+                "text": "税负可以转嫁",
+                "showFrom": 1
+              },
+              {
+                "text": "企业只是代收代缴",
+                "showFrom": 5
+              },
+              {
+                "text": "消费者最终承担",
+                "showFrom": 7
+              }
+            ]
+          },
+          "totalDurationFrames": 288
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "STAT_COMPARE",
+          "reasoning": "计算步骤递进（税率→基数→得出金额），三段节拍强化推导过程，BEAT_SEQUENCE让计算可视化层层揭示。",
+          "content": [
+            {
+              "text": "算一部手机就明白了。",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "假设一部华为手机，",
+              "startFrame": 37,
+              "durationFrames": 46
+            },
+            {
+              "text": "售价七千元。",
+              "startFrame": 83,
+              "durationFrames": 42
+            },
+            {
+              "text": "按照百分之十三的税率，",
+              "startFrame": 125,
+              "durationFrames": 53
+            },
+            {
+              "text": "这七千元里面，",
+              "startFrame": 177,
+              "durationFrames": 35
+            },
+            {
+              "text": "大约有八百零五元，",
+              "startFrame": 212,
+              "durationFrames": 51
+            },
+            {
+              "text": "是消费者为手机额外付出的增值税，",
+              "startFrame": 262,
+              "durationFrames": 82
+            }
+          ],
+          "order": 6,
+          "param": {
+            "bars": [
+              {
+                "label": "手机售价",
+                "value": 7000,
+                "showFrom": 2
+              },
+              {
+                "label": "增值税",
+                "value": 805,
+                "showFrom": 5
+              }
+            ]
+          },
+          "totalDurationFrames": 345
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确'不是…而是…'认知转换结构，COGNITIVE_SHIFT专为这种强对照设计，突出税负归属的颠覆性认知。",
+          "content": [
+            {
+              "text": "这是你自己缴纳的税款，",
+              "startFrame": 0,
+              "durationFrames": 50
+            },
+            {
+              "text": "不是华为缴纳的。",
+              "startFrame": 49,
+              "durationFrames": 39
+            }
+          ],
+          "order": 7,
+          "param": {
+            "notText": "华为缴纳的",
+            "butText": "你自己缴纳的",
+            "butSrc": "images/华为纳税论/scene_2_7.png",
+            "notContentIndex": 1,
+            "butContentIndex": 0,
+            "anchors": []
+          },
+          "totalDurationFrames": 88
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "PEER_INDUCT",
+          "reasoning": "「顾客交钱→收银台交商场」两条并列资金流向前提，末句归纳为不能把钱都算成收银员贡献；符合并列前提→归纳收束的 PEER_INDUCT。",
+          "content": [
+            {
+              "text": "这就像商场收银台。",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "顾客交钱给收银台，",
+              "startFrame": 45,
+              "durationFrames": 51
+            },
+            {
+              "text": "收银台交钱给商场，",
+              "startFrame": 96,
+              "durationFrames": 51
+            },
+            {
+              "text": "你就不能说这些钱都是收银员贡献的。",
+              "startFrame": 146,
+              "durationFrames": 82
+            }
+          ],
+          "order": 8,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "images/华为纳税论/scene_2_8_img0.png",
+                "enterEffect": "slideBottom",
+                "showFrom": 1
+              },
+              {
+                "imageSrc": "images/华为纳税论/scene_2_8_img1.png",
+                "enterEffect": "slideBottom",
+                "showFrom": 2
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "images/华为纳税论/scene_2_8.png",
+              "enterEffect": "zoomIn",
+              "showFrom": 3,
+              "tone": "alert"
+            }
+          },
+          "totalDurationFrames": 228
+        }
+      ],
+      "audioSrc": "/audio/华为纳税论/scene_2/scene_2.mp3",
+      "totalDurationFrames": 1558
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "反转·谁在邀功",
+      "items": [
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "强调单个核心数值903亿，适合KPI_HERO模板突出数据冲击力。",
+          "content": [
+            {
+              "text": "903亿的纳税总额，",
+              "startFrame": 0,
+              "durationFrames": 54
+            },
+            {
+              "text": "也许不是假的。",
+              "startFrame": 53,
+              "durationFrames": 39
+            }
+          ],
+          "order": 1,
+          "param": {
+            "value": 903,
+            "suffix": "亿",
+            "label": "纳税总额",
+            "useGrouping": false,
+            "decimalPlaces": 0,
+            "anchors": []
+          },
+          "totalDurationFrames": 92
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "口播并列「消费税算华为」与「个税算华为」两种混淆口径，左右分屏对照，选SPLIT_COMPARE。",
+          "content": [
+            {
+              "text": "但有些人故意混淆统计口径，",
+              "startFrame": 0,
+              "durationFrames": 73
+            },
+            {
+              "text": "把消费者贡献的税收算作华为的，",
+              "startFrame": 72,
+              "durationFrames": 71
+            },
+            {
+              "text": "把员工的个税也算作华为的，",
+              "startFrame": 142,
+              "durationFrames": 60
+            },
+            {
+              "text": "这就是不要脸了。",
+              "startFrame": 202,
+              "durationFrames": 31
+            }
+          ],
+          "order": 2,
+          "param": {
+            "leftSrc": "images/华为纳税论/scene_3_2_left.png",
+            "rightSrc": "images/华为纳税论/scene_3_2_right.png",
+            "leftLabel": "消费纳税",
+            "rightLabel": "员工个税",
+            "leftShowFrom": 1,
+            "rightShowFrom": 2,
+            "anchors": [
+              {
+                "text": "不要脸",
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud",
+                "showFrom": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 234
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CHAT_BUBBLE",
+          "reasoning": "模拟他人反驳言论，适合CHAT_BUBBLE以聊天气泡呈现对立观点。",
+          "content": [
+            {
+              "text": "还有人会说，",
+              "startFrame": 0,
+              "durationFrames": 26
+            },
+            {
+              "text": "钱毕竟是华为交的。",
+              "startFrame": 25,
+              "durationFrames": 47
+            },
+            {
+              "text": "这难道不算贡献吗？",
+              "startFrame": 72,
+              "durationFrames": 48
+            }
+          ],
+          "order": 3,
+          "param": {
+            "bubbles": [
+              {
+                "bubbleText": "钱毕竟是华为交的。这难道不算贡献吗？",
+                "showFrom": 0,
+                "align": "left"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 120
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "核心观点“当然算”+三条解释性责任（依法申报、准确核算、按时缴纳），符合METHOD_STACK结构。",
+          "content": [
+            {
+              "text": "当然算。",
+              "startFrame": 0,
+              "durationFrames": 26
+            },
+            {
+              "text": "依法申报，",
+              "startFrame": 25,
+              "durationFrames": 29
+            },
+            {
+              "text": "准确核算，",
+              "startFrame": 53,
+              "durationFrames": 26
+            },
+            {
+              "text": "按时缴纳，",
+              "startFrame": 78,
+              "durationFrames": 28
+            },
+            {
+              "text": "都是企业的责任。",
+              "startFrame": 105,
+              "durationFrames": 38
+            }
+          ],
+          "order": 4,
+          "param": {
+            "title": "纳税是企业的本分",
+            "imageSrc": "images/华为纳税论/scene_3_4.png",
+            "notes": [
+              {
+                "text": "依法申报",
+                "showFrom": 1
+              },
+              {
+                "text": "准确核算",
+                "showFrom": 2
+              },
+              {
+                "text": "按时缴纳",
+                "showFrom": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 144
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "四个并列的“创造”点，适合PANEL_GRID以宫格形式各有配图展示。",
+          "content": [
+            {
+              "text": "华为创造交易，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "创造利润，",
+              "startFrame": 50,
+              "durationFrames": 28
+            },
+            {
+              "text": "创造就业，",
+              "startFrame": 77,
+              "durationFrames": 28
+            },
+            {
+              "text": "当然也创造税源。",
+              "startFrame": 104,
+              "durationFrames": 39
+            }
+          ],
+          "order": 5,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为纳税论/scene_3_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为纳税论/scene_3_5_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为纳税论/scene_3_5_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为纳税论/scene_3_5_img3.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 144
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "先给出论断（创造税源≠承担税负），再用反问揭露荒谬，整体是认知纠正过程，合并后不超过45字，用COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "但创造税源，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "并不等于承担税负。",
+              "startFrame": 39,
+              "durationFrames": 52
+            },
+            {
+              "text": "如果企业把增值税，",
+              "startFrame": 90,
+              "durationFrames": 43
+            },
+            {
+              "text": "都算成自己的奉献，",
+              "startFrame": 133,
+              "durationFrames": 45
+            },
+            {
+              "text": "那消费者算什么？",
+              "startFrame": 177,
+              "durationFrames": 40
+            },
+            {
+              "text": "一个没有名字的付款码吗？",
+              "startFrame": 217,
+              "durationFrames": 51
+            }
+          ],
+          "order": 6,
+          "param": {
+            "notText": "承担税负",
+            "butText": "创造税源",
+            "butSrc": "images/华为纳税论/scene_3_6.png",
+            "notContentIndex": 1,
+            "butContentIndex": 0,
+            "anchors": []
+          },
+          "totalDurationFrames": 268
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "PUNCH_CAPTION",
+          "reasoning": "强化情绪转折，突出“荒唐”，适合PUNCH_CAPTION作为冲击性过渡镜头。",
+          "content": [
+            {
+              "text": "更荒唐的是，",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "这种口径常被拿来拉踩。",
+              "startFrame": 33,
+              "durationFrames": 60
+            }
+          ],
+          "order": 7,
+          "param": {
+            "punches": [
+              {
+                "text": "更荒唐的是",
+                "showFrom": 0,
+                "enterEffect": "snap",
+                "tone": "calm"
+              },
+              {
+                "text": "口径拉踩",
+                "showFrom": 1,
+                "enterEffect": "shake",
+                "tone": "alert"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "口径拉踩",
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping",
+                "showFrom": 1
+              }
+            ]
+          },
+          "totalDurationFrames": 94
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "STAT_COMPARE",
+          "reasoning": "两种口径下数额对比（千亿 vs 几十亿），可抽象出两个非负整数，适合STAT_COMPARE。",
+          "content": [
+            {
+              "text": "讲华为的时候就用纳税总额算出千亿。",
+              "startFrame": 0,
+              "durationFrames": 103
+            },
+            {
+              "text": "讲别家的时候就只提企业所得税，",
+              "startFrame": 102,
+              "durationFrames": 82
+            },
+            {
+              "text": "纳税几十亿。",
+              "startFrame": 184,
+              "durationFrames": 44
+            }
+          ],
+          "order": 8,
+          "param": {
+            "bars": [
+              {
+                "label": "华为",
+                "value": 1000,
+                "showFrom": 0
+              },
+              {
+                "label": "别家",
+                "value": 40,
+                "showFrom": 1
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 228
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "荒谬结论的直击收束，用TEXT_FOCUS纯大字强化讽刺与冲击。",
+          "content": [
+            {
+              "text": "结论就成了：",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "华为更爱国。",
+              "startFrame": 30,
+              "durationFrames": 47
+            },
+            {
+              "text": "别家没有贡献。",
+              "startFrame": 77,
+              "durationFrames": 43
+            }
+          ],
+          "order": 9,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "华为更爱国。",
+                "showFrom": 1,
+                "endFrom": 2
+              },
+              {
+                "text": "别家没有贡献。",
+                "showFrom": 2,
+                "endFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "更爱国",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "没有贡献",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 120
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "结论暴击金句，用TEXT_FOCUS纯大字强化批判力度。",
+          "content": [
+            {
+              "text": "把消费者的账单，",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "铸成企业邀功的勋章。",
+              "startFrame": 37,
+              "durationFrames": 53
+            },
+            {
+              "text": "就是不要脸。",
+              "startFrame": 89,
+              "durationFrames": 30
+            }
+          ],
+          "order": 11,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "把消费者的账单，",
+                "showFrom": 0,
+                "endFrom": 2
+              },
+              {
+                "text": "铸成企业邀功的勋章。",
+                "showFrom": 1,
+                "endFrom": 2
+              },
+              {
+                "text": "就是不要脸。",
+                "showFrom": 2,
+                "endFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "不要脸",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 120
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "结论暴击金句，用TEXT_FOCUS纯大字强化批判力度。",
+          "content": [
+            {
+              "text": "用不同的尺子，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "量出想要的结论。",
+              "startFrame": 34,
+              "durationFrames": 39
+            },
+            {
+              "text": "就是不要脸。",
+              "startFrame": 73,
+              "durationFrames": 27
+            }
+          ],
+          "order": 11,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "用不同的尺子，",
+                "showFrom": 0,
+                "endFrom": 2
+              },
+              {
+                "text": "量出想要的结论。",
+                "showFrom": 1,
+                "endFrom": 2
+              },
+              {
+                "text": "就是不要脸。",
+                "showFrom": 2,
+                "endFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "不要脸",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 100
+        }
+      ],
+      "audioSrc": "/audio/华为纳税论/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1662
+    },
+    {
+      "sceneId": "scene_references",
+      "sceneName": "片尾·参考资料",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "CONCLUSION",
+          "template": "SOURCE_CITATION",
+          "reasoning": "片尾展示支撑全文数据与口径论点的公开来源，无口播。",
+          "content": [],
+          "param": {
+            "sectionTitle": "参考资料",
+            "references": [
+              {
+                "title": "2021中国民营企业500强调研分析报告",
+                "titleZh": "2021民企500强报告：华为纳税903亿元",
+                "publisher": "All-China Federation of Industry and Commerce",
+                "publisherZh": "中华全国工商业联合会",
+                "year": "2021"
+              },
+              {
+                "title": "华为投资控股有限公司2020年年度报告",
+                "titleZh": "华为2020年报：企业所得税76亿元",
+                "publisher": "Huawei Investment & Holding Co., Ltd.",
+                "publisherZh": "华为投资控股有限公司",
+                "year": "2020"
+              },
+              {
+                "title": "腾讯控股有限公司2020年年度报告",
+                "titleZh": "腾讯2020年报：企业所得税约228亿元",
+                "publisher": "Tencent Holdings Limited",
+                "publisherZh": "腾讯控股有限公司",
+                "year": "2020"
+              },
+              {
+                "title": "中华人民共和国增值税暂行条例",
+                "titleZh": "增值税暂行条例：间接税与13%基本税率",
+                "publisher": "State Council of the PRC",
+                "publisherZh": "国务院",
+                "year": "2017"
+              },
+              {
+                "title": "中华人民共和国企业所得税法",
+                "titleZh": "企业所得税法：企业利润的直接税",
+                "publisher": "National People's Congress",
+                "publisherZh": "全国人民代表大会",
+                "year": "2018"
+              },
+              {
+                "title": "中华全国工商业联合会章程",
+                "titleZh": "全国工商联章程：民间商会组织性质",
+                "publisher": "All-China Federation of Industry and Commerce",
+                "publisherZh": "中华全国工商业联合会",
+                "year": "2022"
+              }
+            ]
+          },
+          "totalDurationFrames": 170
+        }
+      ],
+      "totalDurationFrames": 170
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "华为纳税论",
+    "subtitle": "你交的税，凭什么算成华为的奉献？",
+    "themeColor": "#FF6900",
+    "surface": "light",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

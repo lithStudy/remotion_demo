@@ -11,10 +11,10 @@
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from collections.abc import Callable
 
+from narrator_pipeline.common import load_config
 from narrator_pipeline.paths import PACKAGE_ROOT, resolve_video_paths
 
 
@@ -81,13 +81,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    config_path = PACKAGE_ROOT / "config.json"
+    config_path = PACKAGE_ROOT / "config.yaml"
     if not config_path.exists():
-        print("❌ 配置文件不存在: config.json")
+        print("❌ 配置文件不存在: config.yaml")
         return 1
 
-    with open(config_path, "r", encoding="utf-8") as f:
-        config = json.load(f)
+    config = load_config(PACKAGE_ROOT)
 
     name = args.name
     paths = resolve_video_paths(name, config)

@@ -13,7 +13,7 @@
             {
               "text": "给我一个买电车的理由！",
               "startFrame": 0,
-              "durationFrames": 45
+              "durationFrames": 48
             }
           ],
           "order": 1,
@@ -28,7 +28,7 @@
               }
             ]
           },
-          "totalDurationFrames": 45
+          "totalDurationFrames": 48
         },
         {
           "narrativeType": "LOGIC",
@@ -38,22 +38,22 @@
             {
               "text": "想必你一定在一个电车事故的短视频中看到过这样的评论。",
               "startFrame": 0,
-              "durationFrames": 127
+              "durationFrames": 118
             },
             {
               "text": "这种事故现场的短视频，",
-              "startFrame": 126,
-              "durationFrames": 54
+              "startFrame": 117,
+              "durationFrames": 52
             },
             {
               "text": "往往只有最惨烈的那几秒：",
-              "startFrame": 179,
-              "durationFrames": 61
+              "startFrame": 168,
+              "durationFrames": 56
             },
             {
               "text": "火光冲天、车体变形。",
-              "startFrame": 240,
-              "durationFrames": 72
+              "startFrame": 224,
+              "durationFrames": 70
             }
           ],
           "order": 2,
@@ -70,7 +70,7 @@
               }
             ]
           },
-          "totalDurationFrames": 312
+          "totalDurationFrames": 294
         },
         {
           "narrativeType": "LOGIC",
@@ -80,17 +80,17 @@
             {
               "text": "但它没有拍下的是：",
               "startFrame": 0,
-              "durationFrames": 43
+              "durationFrames": 39
             },
             {
               "text": "司机是否连续驾驶了十几个小时？",
-              "startFrame": 42,
-              "durationFrames": 81
+              "startFrame": 38,
+              "durationFrames": 75
             },
             {
               "text": "路口是否突然窜出了一辆逆行的电动车？",
-              "startFrame": 123,
-              "durationFrames": 85
+              "startFrame": 112,
+              "durationFrames": 94
             }
           ],
           "order": 3,
@@ -112,7 +112,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 208
+          "totalDurationFrames": 207
         },
         {
           "narrativeType": "LOGIC",
@@ -122,22 +122,22 @@
             {
               "text": "在传统的图文时代，",
               "startFrame": 0,
-              "durationFrames": 44
+              "durationFrames": 46
             },
             {
               "text": "新闻报道会试图还原事件的“语境”—",
-              "startFrame": 43,
-              "durationFrames": 86
+              "startFrame": 45,
+              "durationFrames": 95
             },
             {
               "text": "时间、地点、人物、",
-              "startFrame": 128,
+              "startFrame": 140,
               "durationFrames": 57
             },
             {
               "text": "起因、经过、结果。",
-              "startFrame": 185,
-              "durationFrames": 58
+              "startFrame": 197,
+              "durationFrames": 60
             }
           ],
           "order": 4,
@@ -146,7 +146,7 @@
             "conceptName": "语境",
             "anchors": []
           },
-          "totalDurationFrames": 244
+          "totalDurationFrames": 257
         },
         {
           "narrativeType": "LOGIC",
@@ -156,22 +156,22 @@
             {
               "text": "但在短视频时代，",
               "startFrame": 0,
-              "durationFrames": 40
+              "durationFrames": 44
             },
             {
               "text": "语境被粗暴地剥离了。",
-              "startFrame": 39,
-              "durationFrames": 54
+              "startFrame": 43,
+              "durationFrames": 63
             },
             {
               "text": "我们看到的，",
-              "startFrame": 92,
-              "durationFrames": 30
+              "startFrame": 105,
+              "durationFrames": 33
             },
             {
               "text": "永远是被剪裁过的“高潮”。",
-              "startFrame": 122,
-              "durationFrames": 63
+              "startFrame": 138,
+              "durationFrames": 57
             }
           ],
           "order": 5,
@@ -188,11 +188,11 @@
               }
             ]
           },
-          "totalDurationFrames": 185
+          "totalDurationFrames": 196
         }
       ],
       "audioSrc": "/audio/碎片认知/scene_1/scene_1.mp3",
-      "totalDurationFrames": 995
+      "totalDurationFrames": 1003
     },
     {
       "sceneId": "scene_2",
@@ -206,27 +206,27 @@
             {
               "text": "古人说“眼见为实”，",
               "startFrame": 0,
-              "durationFrames": 47
-            },
-            {
-              "text": "是因为在过去，",
-              "startFrame": 46,
-              "durationFrames": 32
-            },
-            {
-              "text": "当你“眼见”一个事件时，",
-              "startFrame": 78,
-              "durationFrames": 44
-            },
-            {
-              "text": "你通常身处现场，",
-              "startFrame": 122,
               "durationFrames": 43
             },
             {
+              "text": "是因为在过去，",
+              "startFrame": 42,
+              "durationFrames": 35
+            },
+            {
+              "text": "当你“眼见”一个事件时，",
+              "startFrame": 77,
+              "durationFrames": 50
+            },
+            {
+              "text": "你通常身处现场，",
+              "startFrame": 126,
+              "durationFrames": 46
+            },
+            {
               "text": "拥有全息的视角和完整的时空感知。",
-              "startFrame": 164,
-              "durationFrames": 89
+              "startFrame": 172,
+              "durationFrames": 86
             }
           ],
           "order": 1,
@@ -250,7 +250,7 @@
               }
             ]
           },
-          "totalDurationFrames": 254
+          "totalDurationFrames": 258
         },
         {
           "narrativeType": "LOGIC",
@@ -260,12 +260,12 @@
             {
               "text": "但在今天，",
               "startFrame": 0,
-              "durationFrames": 32
+              "durationFrames": 27
             },
             {
               "text": "这句古语成了一个巨大的认知陷阱。",
-              "startFrame": 31,
-              "durationFrames": 77
+              "startFrame": 26,
+              "durationFrames": 70
             }
           ],
           "order": 2,
@@ -277,7 +277,7 @@
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 109
+          "totalDurationFrames": 96
         },
         {
           "narrativeType": "LOGIC",
@@ -287,22 +287,22 @@
             {
               "text": "网民通过一块6英寸的屏幕，",
               "startFrame": 0,
-              "durationFrames": 59
+              "durationFrames": 64
             },
             {
               "text": "看了一个经过剪辑、",
-              "startFrame": 58,
+              "startFrame": 63,
               "durationFrames": 42
             },
             {
               "text": "配着惊悚BGM的5秒切片，",
-              "startFrame": 100,
-              "durationFrames": 77
+              "startFrame": 104,
+              "durationFrames": 60
             },
             {
               "text": "就傲慢地认为自己掌握了全局。",
-              "startFrame": 176,
-              "durationFrames": 84
+              "startFrame": 164,
+              "durationFrames": 67
             }
           ],
           "order": 3,
@@ -319,7 +319,7 @@
               }
             ]
           },
-          "totalDurationFrames": 261
+          "totalDurationFrames": 232
         },
         {
           "narrativeType": "CONCLUSION",
@@ -329,12 +329,12 @@
             {
               "text": "这种媒介赋予我们的“虚假全知全能感”，",
               "startFrame": 0,
-              "durationFrames": 78
+              "durationFrames": 80
             },
             {
               "text": "是极其危险的。",
-              "startFrame": 77,
-              "durationFrames": 42
+              "startFrame": 79,
+              "durationFrames": 39
             }
           ],
           "order": 4,
@@ -351,7 +351,7 @@
               }
             ]
           },
-          "totalDurationFrames": 119
+          "totalDurationFrames": 118
         },
         {
           "narrativeType": "LOGIC",
@@ -361,12 +361,12 @@
             {
               "text": "视频和照片具有极强的欺骗性，",
               "startFrame": 0,
-              "durationFrames": 74
+              "durationFrames": 71
             },
             {
               "text": "因为它们看起来太像“客观记录”了。",
-              "startFrame": 73,
-              "durationFrames": 70
+              "startFrame": 70,
+              "durationFrames": 65
             }
           ],
           "order": 5,
@@ -390,7 +390,7 @@
               }
             ]
           },
-          "totalDurationFrames": 143
+          "totalDurationFrames": 136
         },
         {
           "narrativeType": "LOGIC",
@@ -400,22 +400,22 @@
             {
               "text": "文字带有明显的作者主观色彩，",
               "startFrame": 0,
-              "durationFrames": 77
+              "durationFrames": 63
             },
             {
               "text": "读者天然会有防备心；",
-              "startFrame": 76,
-              "durationFrames": 58
+              "startFrame": 62,
+              "durationFrames": 50
             },
             {
               "text": "但影像直接冲击视觉，",
-              "startFrame": 134,
-              "durationFrames": 55
+              "startFrame": 111,
+              "durationFrames": 48
             },
             {
               "text": "让人误以为这就是未经加工的现实。",
-              "startFrame": 188,
-              "durationFrames": 81
+              "startFrame": 159,
+              "durationFrames": 77
             }
           ],
           "order": 6,
@@ -428,7 +428,7 @@
             "rightShowFrom": 2,
             "anchors": []
           },
-          "totalDurationFrames": 270
+          "totalDurationFrames": 236
         },
         {
           "narrativeType": "LOGIC",
@@ -438,32 +438,32 @@
             {
               "text": "当人们看着起火的画面时，",
               "startFrame": 0,
-              "durationFrames": 54
+              "durationFrames": 55
             },
             {
               "text": "他们忘记了：",
-              "startFrame": 53,
+              "startFrame": 54,
               "durationFrames": 31
             },
             {
               "text": "镜头指向哪里、",
-              "startFrame": 84,
-              "durationFrames": 38
+              "startFrame": 85,
+              "durationFrames": 39
             },
             {
               "text": "何时开机、",
-              "startFrame": 121,
-              "durationFrames": 29
+              "startFrame": 123,
+              "durationFrames": 32
             },
             {
               "text": "何时关机，",
-              "startFrame": 149,
-              "durationFrames": 33
+              "startFrame": 154,
+              "durationFrames": 30
             },
             {
               "text": "本身就是一种主观的筛选。",
-              "startFrame": 182,
-              "durationFrames": 57
+              "startFrame": 184,
+              "durationFrames": 62
             }
           ],
           "order": 7,
@@ -480,11 +480,11 @@
               }
             ]
           },
-          "totalDurationFrames": 239
+          "totalDurationFrames": 246
         }
       ],
       "audioSrc": "/audio/碎片认知/scene_2/scene_2.mp3",
-      "totalDurationFrames": 1395
+      "totalDurationFrames": 1325
     },
     {
       "sceneId": "scene_3",
@@ -498,17 +498,17 @@
             {
               "text": "更糟糕的是，",
               "startFrame": 0,
-              "durationFrames": 28
+              "durationFrames": 33
             },
             {
               "text": "平台算法并不关心那辆车到底为什么起火，",
-              "startFrame": 27,
-              "durationFrames": 89
+              "startFrame": 32,
+              "durationFrames": 103
             },
             {
               "text": "算法只关心“完播率”、“评论数”和“转发量”。",
-              "startFrame": 115,
-              "durationFrames": 91
+              "startFrame": 135,
+              "durationFrames": 105
             }
           ],
           "order": 1,
@@ -532,7 +532,7 @@
               }
             ]
           },
-          "totalDurationFrames": 207
+          "totalDurationFrames": 240
         },
         {
           "narrativeType": "LOGIC",
@@ -542,32 +542,32 @@
             {
               "text": "一个客观冷静、",
               "startFrame": 0,
-              "durationFrames": 40
+              "durationFrames": 42
             },
             {
               "text": "分析多种可能性的视频，",
-              "startFrame": 39,
-              "durationFrames": 52
+              "startFrame": 41,
+              "durationFrames": 53
             },
             {
               "text": "往往无人问津；",
-              "startFrame": 90,
-              "durationFrames": 38
+              "startFrame": 93,
+              "durationFrames": 36
             },
             {
               "text": "而一个带有极强煽动性、",
-              "startFrame": 127,
-              "durationFrames": 66
+              "startFrame": 129,
+              "durationFrames": 56
             },
             {
               "text": "能引发两派网友在评论区互骂的“定论式”视频，",
-              "startFrame": 193,
-              "durationFrames": 114
+              "startFrame": 185,
+              "durationFrames": 111
             },
             {
               "text": "会被算法迅速推流到千万人的手机里。",
-              "startFrame": 306,
-              "durationFrames": 88
+              "startFrame": 295,
+              "durationFrames": 81
             }
           ],
           "order": 2,
@@ -580,7 +580,7 @@
             "rightShowFrom": 3,
             "anchors": []
           },
-          "totalDurationFrames": 394
+          "totalDurationFrames": 377
         },
         {
           "narrativeType": "LOGIC",
@@ -590,17 +590,17 @@
             {
               "text": "在这种媒介生态下，",
               "startFrame": 0,
-              "durationFrames": 43
+              "durationFrames": 46
             },
             {
               "text": "“事实”变得不再重要，",
-              "startFrame": 42,
-              "durationFrames": 45
+              "startFrame": 45,
+              "durationFrames": 53
             },
             {
               "text": "“情绪价值”成了唯一的硬通货。",
-              "startFrame": 87,
-              "durationFrames": 70
+              "startFrame": 98,
+              "durationFrames": 74
             }
           ],
           "order": 3,
@@ -612,7 +612,7 @@
             "butContentIndex": 2,
             "anchors": []
           },
-          "totalDurationFrames": 157
+          "totalDurationFrames": 172
         },
         {
           "narrativeType": "CONCLUSION",
@@ -622,17 +622,17 @@
             {
               "text": "那些在评论区里急于下定论的人，",
               "startFrame": 0,
-              "durationFrames": 65
+              "durationFrames": 71
             },
             {
               "text": "其实是被算法驯化的数据节点，",
-              "startFrame": 64,
-              "durationFrames": 67
+              "startFrame": 70,
+              "durationFrames": 70
             },
             {
               "text": "用自己的偏见为平台贡献着日活和流量。",
-              "startFrame": 130,
-              "durationFrames": 97
+              "startFrame": 140,
+              "durationFrames": 99
             }
           ],
           "order": 4,
@@ -656,11 +656,11 @@
               }
             ]
           },
-          "totalDurationFrames": 228
+          "totalDurationFrames": 240
         }
       ],
       "audioSrc": "/audio/碎片认知/scene_3/scene_3.mp3",
-      "totalDurationFrames": 986
+      "totalDurationFrames": 1029
     },
     {
       "sceneId": "scene_4",
@@ -674,17 +674,17 @@
             {
               "text": "碎片化的媒介，",
               "startFrame": 0,
-              "durationFrames": 50
+              "durationFrames": 39
             },
             {
               "text": "把过程与语境压成几秒高光，",
-              "startFrame": 49,
-              "durationFrames": 79
+              "startFrame": 38,
+              "durationFrames": 80
             },
             {
               "text": "必然塑造出碎片化的认知。",
-              "startFrame": 127,
-              "durationFrames": 70
+              "startFrame": 117,
+              "durationFrames": 58
             }
           ],
           "order": 1,
@@ -712,7 +712,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 198
+          "totalDurationFrames": 176
         },
         {
           "narrativeType": "LOGIC",
@@ -722,12 +722,12 @@
             {
               "text": "要打破这种幻觉，",
               "startFrame": 0,
-              "durationFrames": 55
+              "durationFrames": 35
             },
             {
               "text": "我们必须重建对“语境”的尊重。",
-              "startFrame": 54,
-              "durationFrames": 75
+              "startFrame": 34,
+              "durationFrames": 67
             }
           ],
           "order": 2,
@@ -736,7 +736,7 @@
             "conceptName": "语境",
             "anchors": []
           },
-          "totalDurationFrames": 129
+          "totalDurationFrames": 101
         },
         {
           "narrativeType": "LOGIC",
@@ -746,22 +746,22 @@
             {
               "text": "当你下一次看到一个极具冲击力的短视频时，",
               "startFrame": 0,
-              "durationFrames": 91
+              "durationFrames": 96
             },
             {
               "text": "请先问自己：",
-              "startFrame": 90,
-              "durationFrames": 35
+              "startFrame": 96,
+              "durationFrames": 34
             },
             {
               "text": "这个画面的上一秒是什么？",
-              "startFrame": 125,
-              "durationFrames": 64
+              "startFrame": 129,
+              "durationFrames": 54
             },
             {
               "text": "镜头之外有什么？",
-              "startFrame": 188,
-              "durationFrames": 36
+              "startFrame": 183,
+              "durationFrames": 44
             }
           ],
           "order": 3,
@@ -783,7 +783,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 225
+          "totalDurationFrames": 227
         },
         {
           "narrativeType": "CONCLUSION",
@@ -793,17 +793,17 @@
             {
               "text": "真正的“眼见为实”，",
               "startFrame": 0,
-              "durationFrames": 46
+              "durationFrames": 51
             },
             {
               "text": "从来不是相信自己看见的一切，",
-              "startFrame": 45,
-              "durationFrames": 67
+              "startFrame": 50,
+              "durationFrames": 63
             },
             {
               "text": "而是承认自己还有许多没看见的东西。",
               "startFrame": 112,
-              "durationFrames": 89
+              "durationFrames": 83
             }
           ],
           "order": 5,
@@ -823,7 +823,7 @@
               }
             ]
           },
-          "totalDurationFrames": 201
+          "totalDurationFrames": 195
         },
         {
           "narrativeType": "CONCLUSION",
@@ -833,17 +833,17 @@
             {
               "text": "在语境被归还之前，那份悬置判断的沉默，",
               "startFrame": 0,
-              "durationFrames": 105
+              "durationFrames": 99
             },
             {
               "text": "既是对真相的尊重，",
-              "startFrame": 104,
+              "startFrame": 98,
               "durationFrames": 1
             },
             {
               "text": "也是对我们自身心智的最后保护。",
               "startFrame": 0,
-              "durationFrames": 272
+              "durationFrames": 234
             }
           ],
           "order": 5,
@@ -863,11 +863,11 @@
               }
             ]
           },
-          "totalDurationFrames": 237
+          "totalDurationFrames": 207
         }
       ],
       "audioSrc": "/audio/碎片认知/scene_4/scene_4.mp3",
-      "totalDurationFrames": 991
+      "totalDurationFrames": 907
     }
   ],
   "fps": 30,

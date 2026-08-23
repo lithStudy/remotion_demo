@@ -15,7 +15,7 @@ metadata:
 ## 前置准备
 
 1. **确认视频名称**：向用户确认 `name`（英文，用作目录名），如 `认知偏见_达克效应`
-2. **读取配置**：从 `narrator_pipeline/config.json` 获取以下关键参数：
+2. **读取配置**：从 `narrator_pipeline/config.yaml` 获取以下关键参数：
    - `fps`（帧率，当前 30）
    - `image_style`（图片风格描述，写入 image_prompt 类字段时参考）
    - `cover_*` 系列字段（封面信息，后处理注入）
@@ -63,7 +63,7 @@ metadata:
    - 非 TEXT_FOCUS 模板：校验 `param.anchors`，`showFrom` 必须是 content 数组的合法 0-based 下标，`text` 非空
    - TEXT_FOCUS 模板：不使用 `anchors`，使用 `coreSentenceAnchors`，每项 `coreSentenceAnchor` 必须是 `coreSentence` 拼接后的子串
 4. **注入 fps**：顶层写入 `"fps": 30`（或 config 中的值）
-5. **注入 cover**：按 `narrator_pipeline/config.json` 中的 `cover_*` 字段注入顶层 `cover` 对象（详见 [OUTPUT_FORMAT.md](references/OUTPUT_FORMAT.md)）
+5. **注入 cover**：按 `narrator_pipeline/config.yaml` 中的 `cover_*` 字段注入顶层 `cover` 对象（详见 [OUTPUT_FORMAT.md](references/OUTPUT_FORMAT.md)）
 6. **param 禁止字段**：`param` 内不得出现 `content` 或 `totalDurationFrames`（这两者只属于 item 顶层）
 
 ## 输出格式

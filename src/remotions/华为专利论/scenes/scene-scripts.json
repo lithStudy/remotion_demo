@@ -13,12 +13,12 @@
             {
               "text": "华为拥有全球专利数量超过15万件。",
               "startFrame": 0,
-              "durationFrames": 95
+              "durationFrames": 112
             },
             {
               "text": "全球第一。",
-              "startFrame": 94,
-              "durationFrames": 34
+              "startFrame": 111,
+              "durationFrames": 29
             }
           ],
           "order": 1,
@@ -35,7 +35,7 @@
             "countDuration": 28,
             "anchors": []
           },
-          "totalDurationFrames": 129
+          "totalDurationFrames": 140
         },
         {
           "narrativeType": "DATA",
@@ -45,12 +45,12 @@
             {
               "text": "每年光收许可费，",
               "startFrame": 0,
-              "durationFrames": 44
+              "durationFrames": 45
             },
             {
               "text": "就六亿多美元。",
-              "startFrame": 43,
-              "durationFrames": 48
+              "startFrame": 44,
+              "durationFrames": 42
             }
           ],
           "order": 3,
@@ -66,7 +66,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 92
+          "totalDurationFrames": 87
         },
         {
           "narrativeType": "HOOK",
@@ -76,22 +76,22 @@
             {
               "text": "你听到这些数字，",
               "startFrame": 0,
-              "durationFrames": 36
+              "durationFrames": 41
             },
             {
               "text": "第一反应是什么？",
-              "startFrame": 36,
-              "durationFrames": 35
+              "startFrame": 40,
+              "durationFrames": 33
             },
             {
               "text": "厉害？",
-              "startFrame": 70,
-              "durationFrames": 17
+              "startFrame": 72,
+              "durationFrames": 28
             },
             {
               "text": "民族骄傲？",
-              "startFrame": 87,
-              "durationFrames": 28
+              "startFrame": 99,
+              "durationFrames": 32
             }
           ],
           "order": 4,
@@ -115,7 +115,7 @@
               }
             ]
           },
-          "totalDurationFrames": 115
+          "totalDurationFrames": 132
         },
         {
           "narrativeType": "TRANSITION",
@@ -125,7 +125,7 @@
             {
               "text": "我今天要告诉你另一件事。",
               "startFrame": 0,
-              "durationFrames": 58
+              "durationFrames": 63
             }
           ],
           "order": 5,
@@ -134,7 +134,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 58
+          "totalDurationFrames": 63
         },
         {
           "narrativeType": "LOGIC",
@@ -144,22 +144,22 @@
             {
               "text": "这里面，",
               "startFrame": 0,
-              "durationFrames": 22
+              "durationFrames": 18
             },
             {
               "text": "有相当大一块，",
-              "startFrame": 21,
-              "durationFrames": 38
+              "startFrame": 17,
+              "durationFrames": 40
             },
             {
               "text": "不是技术，",
-              "startFrame": 58,
-              "durationFrames": 22
+              "startFrame": 56,
+              "durationFrames": 26
             },
             {
               "text": "是法律地雷。",
-              "startFrame": 80,
-              "durationFrames": 40
+              "startFrame": 81,
+              "durationFrames": 28
             }
           ],
           "order": 6,
@@ -171,7 +171,7 @@
             "butContentIndex": 3,
             "anchors": []
           },
-          "totalDurationFrames": 121
+          "totalDurationFrames": 110
         },
         {
           "narrativeType": "LOGIC",
@@ -181,22 +181,22 @@
             {
               "text": "名字就叫—",
               "startFrame": 0,
-              "durationFrames": 27
+              "durationFrames": 33
             },
             {
               "text": "专利丛林。",
-              "startFrame": 26,
-              "durationFrames": 44
+              "startFrame": 32,
+              "durationFrames": 38
             },
             {
               "text": "什么叫专利丛林？",
               "startFrame": 69,
-              "durationFrames": 44
+              "durationFrames": 45
             },
             {
               "text": "打个比方。",
-              "startFrame": 113,
-              "durationFrames": 21
+              "startFrame": 114,
+              "durationFrames": 27
             }
           ],
           "order": 7,
@@ -205,7 +205,7 @@
             "conceptName": "专利丛林",
             "anchors": []
           },
-          "totalDurationFrames": 134
+          "totalDurationFrames": 141
         },
         {
           "narrativeType": "CASE",
@@ -215,37 +215,37 @@
             {
               "text": "你住的小区，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 33
             },
             {
               "text": "本来一条路就能回家。",
-              "startFrame": 29,
-              "durationFrames": 47
-            },
-            {
-              "text": "突然有人宣布：",
-              "startFrame": 76,
-              "durationFrames": 35
-            },
-            {
-              "text": "你左脚踩的这块砖，",
-              "startFrame": 111,
+              "startFrame": 32,
               "durationFrames": 46
             },
             {
+              "text": "突然有人宣布：",
+              "startFrame": 78,
+              "durationFrames": 41
+            },
+            {
+              "text": "你左脚踩的这块砖，",
+              "startFrame": 118,
+              "durationFrames": 50
+            },
+            {
               "text": "归我。",
-              "startFrame": 157,
-              "durationFrames": 30
+              "startFrame": 168,
+              "durationFrames": 24
             },
             {
               "text": "你右脚踩的那块砖，",
-              "startFrame": 186,
-              "durationFrames": 47
+              "startFrame": 192,
+              "durationFrames": 42
             },
             {
               "text": "也归我。",
               "startFrame": 233,
-              "durationFrames": 34
+              "durationFrames": 30
             }
           ],
           "order": 9,
@@ -272,7 +272,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 268
+          "totalDurationFrames": 263
         },
         {
           "narrativeType": "CASE",
@@ -282,22 +282,22 @@
             {
               "text": "跨门槛三步，",
               "startFrame": 0,
-              "durationFrames": 36
+              "durationFrames": 32
             },
             {
               "text": "每一步都要交钱。",
-              "startFrame": 36,
-              "durationFrames": 44
+              "startFrame": 31,
+              "durationFrames": 36
             },
             {
               "text": "你不交？",
-              "startFrame": 79,
-              "durationFrames": 28
+              "startFrame": 67,
+              "durationFrames": 27
             },
             {
               "text": "告你侵权。",
-              "startFrame": 106,
-              "durationFrames": 36
+              "startFrame": 93,
+              "durationFrames": 39
             }
           ],
           "order": 10,
@@ -321,7 +321,7 @@
               }
             ]
           },
-          "totalDurationFrames": 143
+          "totalDurationFrames": 132
         },
         {
           "narrativeType": "CONCLUSION",
@@ -331,17 +331,17 @@
             {
               "text": "更恶心的是，",
               "startFrame": 0,
-              "durationFrames": 34
+              "durationFrames": 31
             },
             {
               "text": "他们根本不想修路。",
-              "startFrame": 33,
-              "durationFrames": 43
+              "startFrame": 30,
+              "durationFrames": 39
             },
             {
               "text": "他们只想让你走不了。",
-              "startFrame": 76,
-              "durationFrames": 42
+              "startFrame": 68,
+              "durationFrames": 48
             }
           ],
           "order": 11,
@@ -353,11 +353,11 @@
             "butContentIndex": 2,
             "anchors": []
           },
-          "totalDurationFrames": 118
+          "totalDurationFrames": 117
         }
       ],
       "audioSrc": "/audio/华为专利论/scene_1/scene_1.mp3",
-      "totalDurationFrames": 1177
+      "totalDurationFrames": 1183
     },
     {
       "sceneId": "scene_2",
@@ -371,12 +371,12 @@
             {
               "text": "先说最不要脸的一类：",
               "startFrame": 0,
-              "durationFrames": 51
+              "durationFrames": 45
             },
             {
               "text": "把常识当发明。",
-              "startFrame": 50,
-              "durationFrames": 53
+              "startFrame": 44,
+              "durationFrames": 42
             }
           ],
           "order": 1,
@@ -385,7 +385,7 @@
             "conceptName": "常识当发明",
             "anchors": []
           },
-          "totalDurationFrames": 103
+          "totalDurationFrames": 87
         },
         {
           "narrativeType": "CASE",
@@ -395,27 +395,27 @@
             {
               "text": "你打开手机，",
               "startFrame": 0,
-              "durationFrames": 31
-            },
-            {
-              "text": "图标会动吧？",
-              "startFrame": 30,
               "durationFrames": 30
             },
             {
+              "text": "图标会动吧？",
+              "startFrame": 29,
+              "durationFrames": 27
+            },
+            {
               "text": "会放大、会淡入淡出吧？",
-              "startFrame": 60,
-              "durationFrames": 52
+              "startFrame": 56,
+              "durationFrames": 69
             },
             {
               "text": "这在程序员眼里，",
-              "startFrame": 111,
-              "durationFrames": 38
+              "startFrame": 124,
+              "durationFrames": 35
             },
             {
               "text": "有专业名字。",
-              "startFrame": 148,
-              "durationFrames": 41
+              "startFrame": 159,
+              "durationFrames": 33
             }
           ],
           "order": 2,
@@ -424,7 +424,7 @@
             "enterEffect": "zoomIn",
             "anchors": []
           },
-          "totalDurationFrames": 189
+          "totalDurationFrames": 192
         },
         {
           "narrativeType": "LOGIC",
@@ -434,27 +434,27 @@
             {
               "text": "分层渲染。",
               "startFrame": 0,
-              "durationFrames": 39
-            },
-            {
-              "text": "透明度渐变。",
-              "startFrame": 38,
-              "durationFrames": 44
-            },
-            {
-              "text": "翻成白话就是：",
-              "startFrame": 81,
-              "durationFrames": 41
-            },
-            {
-              "text": "把图片分几层动，",
-              "startFrame": 122,
               "durationFrames": 51
             },
             {
-              "text": "让它慢慢变亮、变暗。",
-              "startFrame": 172,
+              "text": "透明度渐变。",
+              "startFrame": 50,
+              "durationFrames": 42
+            },
+            {
+              "text": "翻成白话就是：",
+              "startFrame": 91,
+              "durationFrames": 38
+            },
+            {
+              "text": "把图片分几层动，",
+              "startFrame": 128,
               "durationFrames": 62
+            },
+            {
+              "text": "让它慢慢变亮、变暗。",
+              "startFrame": 189,
+              "durationFrames": 56
             }
           ],
           "order": 3,
@@ -467,7 +467,7 @@
             "rightShowFrom": 1,
             "anchors": []
           },
-          "totalDurationFrames": 234
+          "totalDurationFrames": 246
         },
         {
           "narrativeType": "CONCLUSION",
@@ -477,7 +477,7 @@
             {
               "text": "这是十年前的入门课。",
               "startFrame": 0,
-              "durationFrames": 52
+              "durationFrames": 53
             }
           ],
           "order": 5,
@@ -487,7 +487,7 @@
             ],
             "coreSentenceAnchors": []
           },
-          "totalDurationFrames": 52
+          "totalDurationFrames": 53
         },
         {
           "narrativeType": "TRANSITION",
@@ -497,7 +497,7 @@
             {
               "text": "可华为偏要把这些拆开申请专利。",
               "startFrame": 0,
-              "durationFrames": 68
+              "durationFrames": 79
             }
           ],
           "order": 6,
@@ -514,7 +514,7 @@
               }
             ]
           },
-          "totalDurationFrames": 68
+          "totalDurationFrames": 79
         },
         {
           "narrativeType": "CASE",
@@ -524,32 +524,32 @@
             {
               "text": "图标前景放大一层，",
               "startFrame": 0,
-              "durationFrames": 51
+              "durationFrames": 47
             },
             {
               "text": "算一件。",
-              "startFrame": 50,
+              "startFrame": 46,
               "durationFrames": 24
             },
             {
               "text": "背景再放大一层，",
-              "startFrame": 74,
-              "durationFrames": 38
+              "startFrame": 70,
+              "durationFrames": 45
             },
             {
               "text": "又是一件。",
-              "startFrame": 111,
-              "durationFrames": 27
+              "startFrame": 115,
+              "durationFrames": 28
             },
             {
               "text": "淡入淡出，",
-              "startFrame": 137,
-              "durationFrames": 29
+              "startFrame": 143,
+              "durationFrames": 34
             },
             {
               "text": "再一件。",
-              "startFrame": 165,
-              "durationFrames": 24
+              "startFrame": 177,
+              "durationFrames": 34
             }
           ],
           "order": 7,
@@ -573,7 +573,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 190
+          "totalDurationFrames": 212
         },
         {
           "narrativeType": "CASE",
@@ -583,31 +583,31 @@
             {
               "text": "弹簧动画，",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 32
             },
             {
               "text": "再一件。",
-              "startFrame": 34,
-              "durationFrames": 27
-            },
-            {
-              "text": "手机上的开机动画，",
-              "startFrame": 61,
-              "durationFrames": 47
-            },
-            {
-              "text": "一件。",
-              "startFrame": 108,
+              "startFrame": 31,
               "durationFrames": 23
             },
             {
+              "text": "手机上的开机动画，",
+              "startFrame": 54,
+              "durationFrames": 45
+            },
+            {
+              "text": "一件。",
+              "startFrame": 99,
+              "durationFrames": 20
+            },
+            {
               "text": "车载多屏拼接放同一段动画，",
-              "startFrame": 130,
-              "durationFrames": 69
+              "startFrame": 119,
+              "durationFrames": 65
             },
             {
               "text": "又一件。",
-              "startFrame": 199,
+              "startFrame": 183,
               "durationFrames": 22
             }
           ],
@@ -632,7 +632,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 222
+          "totalDurationFrames": 206
         },
         {
           "narrativeType": "CONCLUSION",
@@ -647,7 +647,7 @@
             {
               "text": "硬拆成几十上百个专利。",
               "startFrame": 37,
-              "durationFrames": 70
+              "durationFrames": 56
             }
           ],
           "order": 9,
@@ -662,7 +662,7 @@
               }
             ]
           },
-          "totalDurationFrames": 107
+          "totalDurationFrames": 94
         },
         {
           "narrativeType": "CASE",
@@ -672,22 +672,22 @@
             {
               "text": "这就像有人，把本来的进屋动作，拆成了不同的技术。",
               "startFrame": 0,
-              "durationFrames": 115
+              "durationFrames": 111
             },
             {
               "text": "“推门”是一件；",
-              "startFrame": 114,
-              "durationFrames": 32
+              "startFrame": 110,
+              "durationFrames": 33
             },
             {
               "text": "“抬脚”是一件；",
-              "startFrame": 146,
-              "durationFrames": 44
+              "startFrame": 143,
+              "durationFrames": 32
             },
             {
               "text": "“放脚”又是一件。",
-              "startFrame": 189,
-              "durationFrames": 40
+              "startFrame": 174,
+              "durationFrames": 49
             }
           ],
           "order": 10,
@@ -706,7 +706,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 230
+          "totalDurationFrames": 223
         },
         {
           "narrativeType": "CONCLUSION",
@@ -716,12 +716,12 @@
             {
               "text": "你回家进门，",
               "startFrame": 0,
-              "durationFrames": 30
+              "durationFrames": 32
             },
             {
               "text": "理论上要交三次钱。",
-              "startFrame": 29,
-              "durationFrames": 48
+              "startFrame": 31,
+              "durationFrames": 46
             }
           ],
           "order": 11,
@@ -744,7 +744,7 @@
               }
             ]
           },
-          "totalDurationFrames": 78
+          "totalDurationFrames": 77
         },
         {
           "narrativeType": "CONCLUSION",
@@ -754,12 +754,12 @@
             {
               "text": "这是在创新吗？",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 32
             },
             {
               "text": "这是在注水。",
-              "startFrame": 34,
-              "durationFrames": 32
+              "startFrame": 31,
+              "durationFrames": 33
             }
           ],
           "order": 12,
@@ -771,11 +771,11 @@
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 66
+          "totalDurationFrames": 65
         }
       ],
       "audioSrc": "/audio/华为专利论/scene_2/scene_2.mp3",
-      "totalDurationFrames": 1537
+      "totalDurationFrames": 1530
     },
     {
       "sceneId": "scene_3",
@@ -789,17 +789,17 @@
             {
               "text": "第二类，",
               "startFrame": 0,
-              "durationFrames": 21
+              "durationFrames": 22
             },
             {
               "text": "最冷血的：",
-              "startFrame": 20,
-              "durationFrames": 33
+              "startFrame": 21,
+              "durationFrames": 31
             },
             {
               "text": "时光倒流式狙击。",
-              "startFrame": 53,
-              "durationFrames": 65
+              "startFrame": 52,
+              "durationFrames": 55
             }
           ],
           "order": 1,
@@ -808,7 +808,7 @@
             "conceptName": "时光倒流式狙击",
             "anchors": []
           },
-          "totalDurationFrames": 118
+          "totalDurationFrames": 107
         },
         {
           "narrativeType": "LOGIC",
@@ -818,42 +818,42 @@
             {
               "text": "专利申请中有一种叫做分案申请，",
               "startFrame": 0,
-              "durationFrames": 90
+              "durationFrames": 81
             },
             {
               "text": "本来是好事。",
-              "startFrame": 89,
-              "durationFrames": 30
+              "startFrame": 80,
+              "durationFrames": 27
             },
             {
               "text": "意思是：",
-              "startFrame": 118,
-              "durationFrames": 22
+              "startFrame": 106,
+              "durationFrames": 20
             },
             {
               "text": "一份专利申请里，",
-              "startFrame": 140,
+              "startFrame": 126,
               "durationFrames": 42
             },
             {
               "text": "如果塞了两个不相关发明，",
-              "startFrame": 182,
-              "durationFrames": 55
+              "startFrame": 168,
+              "durationFrames": 57
             },
             {
               "text": "拆开来审，",
-              "startFrame": 236,
-              "durationFrames": 28
+              "startFrame": 224,
+              "durationFrames": 27
             },
             {
               "text": "各算各的。",
-              "startFrame": 264,
-              "durationFrames": 27
+              "startFrame": 250,
+              "durationFrames": 25
             },
             {
               "text": "合理。",
-              "startFrame": 290,
-              "durationFrames": 27
+              "startFrame": 275,
+              "durationFrames": 24
             }
           ],
           "order": 2,
@@ -862,7 +862,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 317
+          "totalDurationFrames": 300
         },
         {
           "narrativeType": "TRANSITION",
@@ -872,7 +872,7 @@
             {
               "text": "可华为把它玩成了时光机。",
               "startFrame": 0,
-              "durationFrames": 64
+              "durationFrames": 63
             }
           ],
           "order": 3,
@@ -891,7 +891,7 @@
               }
             ]
           },
-          "totalDurationFrames": 64
+          "totalDurationFrames": 63
         },
         {
           "narrativeType": "CASE",
@@ -901,42 +901,42 @@
             {
               "text": "说个实案。",
               "startFrame": 0,
-              "durationFrames": 27
-            },
-            {
-              "text": "2024 年，",
-              "startFrame": 26,
               "durationFrames": 34
             },
             {
+              "text": "2024 年，",
+              "startFrame": 33,
+              "durationFrames": 31
+            },
+            {
               "text": "华为起诉联发科。",
-              "startFrame": 60,
-              "durationFrames": 45
+              "startFrame": 64,
+              "durationFrames": 39
             },
             {
               "text": "核心专利之一，",
-              "startFrame": 104,
-              "durationFrames": 41
+              "startFrame": 103,
+              "durationFrames": 36
             },
             {
               "text": "2011 年才提交。",
-              "startFrame": 145,
-              "durationFrames": 47
+              "startFrame": 139,
+              "durationFrames": 41
             },
             {
               "text": "但它不是新东西。",
-              "startFrame": 191,
-              "durationFrames": 35
+              "startFrame": 179,
+              "durationFrames": 37
             },
             {
               "text": "它是从 2007 年那份老申请里，",
-              "startFrame": 226,
-              "durationFrames": 93
+              "startFrame": 215,
+              "durationFrames": 68
             },
             {
               "text": "拆出来的“分身”。",
-              "startFrame": 318,
-              "durationFrames": 44
+              "startFrame": 283,
+              "durationFrames": 35
             }
           ],
           "order": 4,
@@ -963,7 +963,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 363
+          "totalDurationFrames": 319
         },
         {
           "narrativeType": "LOGIC",
@@ -973,47 +973,47 @@
             {
               "text": "什么意思？",
               "startFrame": 0,
-              "durationFrames": 44
+              "durationFrames": 30
             },
             {
               "text": "先在 2007 年占一个坑。",
-              "startFrame": 43,
-              "durationFrames": 70
+              "startFrame": 29,
+              "durationFrames": 60
             },
             {
               "text": "这份老申请，",
-              "startFrame": 113,
+              "startFrame": 89,
               "durationFrames": 40
             },
             {
               "text": "叫母案。",
-              "startFrame": 152,
-              "durationFrames": 31
+              "startFrame": 128,
+              "durationFrames": 25
             },
             {
               "text": "后面拆出来的新申请，",
-              "startFrame": 183,
-              "durationFrames": 54
+              "startFrame": 153,
+              "durationFrames": 51
             },
             {
               "text": "叫分案。",
-              "startFrame": 236,
-              "durationFrames": 34
+              "startFrame": 203,
+              "durationFrames": 30
             },
             {
               "text": "分案的厉害之处在于：",
-              "startFrame": 270,
-              "durationFrames": 54
+              "startFrame": 233,
+              "durationFrames": 50
             },
             {
               "text": "它看起来是后来提交的，",
-              "startFrame": 324,
-              "durationFrames": 52
+              "startFrame": 282,
+              "durationFrames": 54
             },
             {
               "text": "却能往前借用母案的时间。",
-              "startFrame": 375,
-              "durationFrames": 63
+              "startFrame": 335,
+              "durationFrames": 65
             }
           ],
           "order": 5,
@@ -1022,7 +1022,7 @@
             "conceptName": "分案时间回溯",
             "anchors": []
           },
-          "totalDurationFrames": 438
+          "totalDurationFrames": 401
         },
         {
           "narrativeType": "LOGIC",
@@ -1032,42 +1032,42 @@
             {
               "text": "于是玩法就变了。",
               "startFrame": 0,
-              "durationFrames": 44
+              "durationFrames": 39
             },
             {
               "text": "先把坑占住。",
-              "startFrame": 43,
-              "durationFrames": 36
+              "startFrame": 38,
+              "durationFrames": 39
             },
             {
               "text": "等联发科、",
-              "startFrame": 78,
-              "durationFrames": 30
+              "startFrame": 76,
+              "durationFrames": 31
             },
             {
               "text": "三星把芯片做出来。",
-              "startFrame": 108,
-              "durationFrames": 48
+              "startFrame": 106,
+              "durationFrames": 44
             },
             {
               "text": "等行业标准定下来。",
-              "startFrame": 156,
-              "durationFrames": 47
+              "startFrame": 150,
+              "durationFrames": 48
             },
             {
               "text": "等产品上市。",
-              "startFrame": 203,
+              "startFrame": 198,
               "durationFrames": 40
             },
             {
               "text": "再调整专利保护范围。",
-              "startFrame": 242,
-              "durationFrames": 65
+              "startFrame": 237,
+              "durationFrames": 59
             },
             {
               "text": "也就是修改权利要求。",
-              "startFrame": 306,
-              "durationFrames": 59
+              "startFrame": 296,
+              "durationFrames": 48
             }
           ],
           "order": 6,
@@ -1089,7 +1089,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 366
+          "totalDurationFrames": 345
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1099,17 +1099,17 @@
             {
               "text": "最后发生什么？",
               "startFrame": 0,
-              "durationFrames": 36
+              "durationFrames": 35
             },
             {
               "text": "你已经公开的产品，",
-              "startFrame": 36,
-              "durationFrames": 45
+              "startFrame": 34,
+              "durationFrames": 42
             },
             {
               "text": "突然被它精准套住。",
-              "startFrame": 80,
-              "durationFrames": 55
+              "startFrame": 76,
+              "durationFrames": 48
             }
           ],
           "order": 7,
@@ -1126,7 +1126,7 @@
               }
             ]
           },
-          "totalDurationFrames": 136
+          "totalDurationFrames": 124
         },
         {
           "narrativeType": "CASE",
@@ -1136,52 +1136,52 @@
             {
               "text": "这就像你 2007 年签了一份模糊租房合同。",
               "startFrame": 0,
-              "durationFrames": 102
+              "durationFrames": 96
             },
             {
               "text": "房东说没事，",
-              "startFrame": 101,
-              "durationFrames": 30
+              "startFrame": 96,
+              "durationFrames": 28
             },
             {
               "text": "先放着。",
-              "startFrame": 130,
+              "startFrame": 123,
               "durationFrames": 21
             },
             {
               "text": "你花十年把房子装修好、",
-              "startFrame": 151,
-              "durationFrames": 48
+              "startFrame": 143,
+              "durationFrames": 53
             },
             {
               "text": "生意做起来了。",
-              "startFrame": 199,
+              "startFrame": 195,
               "durationFrames": 38
             },
             {
               "text": "2024 年他拿出补充条款：",
-              "startFrame": 236,
-              "durationFrames": 72
+              "startFrame": 232,
+              "durationFrames": 70
             },
             {
               "text": "你阳台面积算我的，",
-              "startFrame": 308,
-              "durationFrames": 47
+              "startFrame": 302,
+              "durationFrames": 44
             },
             {
               "text": "月租翻倍。",
-              "startFrame": 355,
-              "durationFrames": 30
+              "startFrame": 346,
+              "durationFrames": 33
             },
             {
               "text": "你不签？",
-              "startFrame": 384,
-              "durationFrames": 18
+              "startFrame": 378,
+              "durationFrames": 26
             },
             {
               "text": "法院见。",
-              "startFrame": 402,
-              "durationFrames": 28
+              "startFrame": 403,
+              "durationFrames": 29
             }
           ],
           "order": 8,
@@ -1215,7 +1215,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 430
+          "totalDurationFrames": 433
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1225,12 +1225,12 @@
             {
               "text": "这不是保护研发成果。",
               "startFrame": 0,
-              "durationFrames": 50
+              "durationFrames": 51
             },
             {
               "text": "这是事后碰瓷。",
-              "startFrame": 49,
-              "durationFrames": 39
+              "startFrame": 50,
+              "durationFrames": 40
             }
           ],
           "order": 10,
@@ -1242,11 +1242,11 @@
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 89
+          "totalDurationFrames": 90
         }
       ],
       "audioSrc": "/audio/华为专利论/scene_3/scene_3.mp3",
-      "totalDurationFrames": 2318
+      "totalDurationFrames": 2179
     },
     {
       "sceneId": "scene_4",
@@ -1260,12 +1260,12 @@
             {
               "text": "第三类：",
               "startFrame": 0,
-              "durationFrames": 22
+              "durationFrames": 23
             },
             {
               "text": "垃圾专利当炮灰。",
-              "startFrame": 21,
-              "durationFrames": 55
+              "startFrame": 22,
+              "durationFrames": 48
             }
           ],
           "order": 1,
@@ -1274,7 +1274,7 @@
             "conceptName": "凑数专利",
             "anchors": []
           },
-          "totalDurationFrames": 77
+          "totalDurationFrames": 71
         },
         {
           "narrativeType": "LOGIC",
@@ -1284,12 +1284,12 @@
             {
               "text": "华为不是只会申请高大上的通信专利。",
               "startFrame": 0,
-              "durationFrames": 98
+              "durationFrames": 90
             },
             {
               "text": "还有工业化流水线一样的“凑数专利”。",
-              "startFrame": 97,
-              "durationFrames": 99
+              "startFrame": 89,
+              "durationFrames": 88
             }
           ],
           "order": 2,
@@ -1301,7 +1301,7 @@
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 196
+          "totalDurationFrames": 177
         },
         {
           "narrativeType": "CASE",
@@ -1311,22 +1311,22 @@
             {
               "text": "2016 年打三星，",
               "startFrame": 0,
-              "durationFrames": 54
+              "durationFrames": 51
             },
             {
               "text": "有些专利名字特别唬人，",
-              "startFrame": 53,
+              "startFrame": 50,
               "durationFrames": 59
             },
             {
               "text": "什么扩展物理下行链路控制信道。",
-              "startFrame": 112,
-              "durationFrames": 94
+              "startFrame": 109,
+              "durationFrames": 93
             },
             {
               "text": "听起来像火箭发射。",
-              "startFrame": 206,
-              "durationFrames": 53
+              "startFrame": 202,
+              "durationFrames": 55
             }
           ],
           "order": 3,
@@ -1350,7 +1350,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 259
+          "totalDurationFrames": 257
         },
         {
           "narrativeType": "CASE",
@@ -1360,31 +1360,31 @@
             {
               "text": "翻成白话，",
               "startFrame": 0,
-              "durationFrames": 33
+              "durationFrames": 31
             },
             {
               "text": "就是手机和基站之间，",
-              "startFrame": 32,
-              "durationFrames": 55
+              "startFrame": 30,
+              "durationFrames": 47
             },
             {
               "text": "怎么安排通信资源的一段规则。",
-              "startFrame": 87,
-              "durationFrames": 65
+              "startFrame": 77,
+              "durationFrames": 66
             },
             {
               "text": "专家一拆，",
-              "startFrame": 152,
-              "durationFrames": 28
+              "startFrame": 142,
+              "durationFrames": 27
             },
             {
               "text": "技术含量极低。",
-              "startFrame": 179,
-              "durationFrames": 36
+              "startFrame": 168,
+              "durationFrames": 35
             },
             {
               "text": "就是术语堆出来的纸老虎。",
-              "startFrame": 215,
+              "startFrame": 203,
               "durationFrames": 57
             }
           ],
@@ -1406,7 +1406,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 273
+          "totalDurationFrames": 261
         },
         {
           "narrativeType": "LOGIC",
@@ -1416,27 +1416,27 @@
             {
               "text": "还有中国的实用新型。",
               "startFrame": 0,
-              "durationFrames": 53
+              "durationFrames": 54
             },
             {
               "text": "你可以把它理解成：",
-              "startFrame": 52,
-              "durationFrames": 44
+              "startFrame": 53,
+              "durationFrames": 39
             },
             {
               "text": "低配版专利。",
-              "startFrame": 96,
-              "durationFrames": 38
+              "startFrame": 91,
+              "durationFrames": 34
             },
             {
               "text": "主要看材料形式过不过关。",
-              "startFrame": 133,
-              "durationFrames": 56
+              "startFrame": 125,
+              "durationFrames": 59
             },
             {
               "text": "不太深挖技术到底有多新。",
-              "startFrame": 188,
-              "durationFrames": 70
+              "startFrame": 184,
+              "durationFrames": 64
             }
           ],
           "order": 5,
@@ -1460,7 +1460,7 @@
               }
             ]
           },
-          "totalDurationFrames": 259
+          "totalDurationFrames": 249
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1470,22 +1470,22 @@
             {
               "text": "所以下证快，",
               "startFrame": 0,
-              "durationFrames": 34
+              "durationFrames": 31
             },
             {
               "text": "成本低。",
-              "startFrame": 33,
-              "durationFrames": 28
+              "startFrame": 30,
+              "durationFrames": 24
             },
             {
               "text": "华为体系里，",
-              "startFrame": 61,
-              "durationFrames": 30
+              "startFrame": 54,
+              "durationFrames": 33
             },
             {
               "text": "这类东西不少。",
-              "startFrame": 90,
-              "durationFrames": 35
+              "startFrame": 87,
+              "durationFrames": 28
             }
           ],
           "order": 6,
@@ -1521,7 +1521,7 @@
               }
             ]
           },
-          "totalDurationFrames": 126
+          "totalDurationFrames": 116
         },
         {
           "narrativeType": "CASE",
@@ -1531,37 +1531,37 @@
             {
               "text": "最出圈的是什么？",
               "startFrame": 0,
-              "durationFrames": 38
+              "durationFrames": 36
             },
             {
               "text": "赛力斯车载便器。",
-              "startFrame": 37,
-              "durationFrames": 48
-            },
-            {
-              "text": "座椅下面藏马桶，",
-              "startFrame": 84,
+              "startFrame": 36,
               "durationFrames": 50
             },
             {
+              "text": "座椅下面藏马桶，",
+              "startFrame": 85,
+              "durationFrames": 41
+            },
+            {
               "text": "滑轨拉出来，",
-              "startFrame": 133,
-              "durationFrames": 32
+              "startFrame": 125,
+              "durationFrames": 27
             },
             {
               "text": "用完推回去。",
-              "startFrame": 165,
-              "durationFrames": 38
+              "startFrame": 151,
+              "durationFrames": 31
             },
             {
               "text": "网友都笑了：",
-              "startFrame": 202,
-              "durationFrames": 42
+              "startFrame": 181,
+              "durationFrames": 33
             },
             {
               "text": "这也能叫专利？",
-              "startFrame": 244,
-              "durationFrames": 48
+              "startFrame": 214,
+              "durationFrames": 42
             }
           ],
           "order": 7,
@@ -1588,7 +1588,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 293
+          "totalDurationFrames": 256
         },
         {
           "narrativeType": "LOGIC",
@@ -1598,32 +1598,32 @@
             {
               "text": "你问它对汽车工业有什么推动？",
               "startFrame": 0,
-              "durationFrames": 64
+              "durationFrames": 67
             },
             {
               "text": "没有。",
-              "startFrame": 63,
-              "durationFrames": 24
+              "startFrame": 66,
+              "durationFrames": 18
             },
             {
               "text": "它唯一的作用，",
-              "startFrame": 87,
-              "durationFrames": 33
+              "startFrame": 84,
+              "durationFrames": 29
             },
             {
               "text": "是帮专利总数再 +1。",
-              "startFrame": 119,
-              "durationFrames": 55
+              "startFrame": 112,
+              "durationFrames": 52
             },
             {
               "text": "是谈判桌上多一张牌。",
-              "startFrame": 174,
-              "durationFrames": 62
+              "startFrame": 163,
+              "durationFrames": 49
             },
             {
               "text": "是宣传稿里多一个“创新”数字。",
-              "startFrame": 235,
-              "durationFrames": 79
+              "startFrame": 212,
+              "durationFrames": 77
             }
           ],
           "order": 8,
@@ -1646,7 +1646,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 315
+          "totalDurationFrames": 289
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1656,17 +1656,17 @@
             {
               "text": "一家天天讲 6G、AI、芯片的公司，",
               "startFrame": 0,
-              "durationFrames": 90
+              "durationFrames": 82
             },
             {
               "text": "武器库里混着这种货色。",
-              "startFrame": 89,
+              "startFrame": 81,
               "durationFrames": 55
             },
             {
               "text": "你还信“件件都是硬核科技”吗？",
-              "startFrame": 144,
-              "durationFrames": 66
+              "startFrame": 136,
+              "durationFrames": 65
             }
           ],
           "order": 9,
@@ -1675,11 +1675,11 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 210
+          "totalDurationFrames": 202
         }
       ],
       "audioSrc": "/audio/华为专利论/scene_4/scene_4.mp3",
-      "totalDurationFrames": 2005
+      "totalDurationFrames": 1876
     },
     {
       "sceneId": "scene_5",
@@ -1693,32 +1693,32 @@
             {
               "text": "经济学早就证明：",
               "startFrame": 0,
-              "durationFrames": 38
+              "durationFrames": 42
             },
             {
               "text": "电信、软件这种复杂行业，",
-              "startFrame": 37,
-              "durationFrames": 67
+              "startFrame": 41,
+              "durationFrames": 75
             },
             {
               "text": "专利越密，",
-              "startFrame": 103,
-              "durationFrames": 29
+              "startFrame": 115,
+              "durationFrames": 28
             },
             {
               "text": "小公司越不敢进场。",
-              "startFrame": 132,
-              "durationFrames": 53
+              "startFrame": 142,
+              "durationFrames": 43
             },
             {
               "text": "不是他们不想创新，",
-              "startFrame": 184,
-              "durationFrames": 46
+              "startFrame": 185,
+              "durationFrames": 42
             },
             {
               "text": "是他们请不起律师团。",
-              "startFrame": 230,
-              "durationFrames": 52
+              "startFrame": 227,
+              "durationFrames": 53
             }
           ],
           "order": 2,
@@ -1730,7 +1730,7 @@
             "butContentIndex": 6,
             "anchors": []
           },
-          "totalDurationFrames": 282
+          "totalDurationFrames": 280
         },
         {
           "narrativeType": "CASE",
@@ -1740,12 +1740,12 @@
             {
               "text": "华为在局部技术节点上，",
               "startFrame": 0,
-              "durationFrames": 63
+              "durationFrames": 54
             },
             {
               "text": "织几百上千张重叠的网。",
-              "startFrame": 62,
-              "durationFrames": 65
+              "startFrame": 53,
+              "durationFrames": 61
             }
           ],
           "order": 3,
@@ -1754,7 +1754,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 127
+          "totalDurationFrames": 114
         },
         {
           "narrativeType": "CASE",
@@ -1764,17 +1764,17 @@
             {
               "text": "你想做兼容设备？",
               "startFrame": 0,
-              "durationFrames": 44
+              "durationFrames": 46
             },
             {
               "text": "想改一点交互？",
-              "startFrame": 43,
-              "durationFrames": 38
+              "startFrame": 45,
+              "durationFrames": 40
             },
             {
               "text": "一脚踩雷。",
-              "startFrame": 80,
-              "durationFrames": 29
+              "startFrame": 85,
+              "durationFrames": 35
             }
           ],
           "order": 4,
@@ -1791,11 +1791,11 @@
               }
             ]
           },
-          "totalDurationFrames": 110
+          "totalDurationFrames": 120
         }
       ],
       "audioSrc": "/audio/华为专利论/scene_5/scene_5.mp3",
-      "totalDurationFrames": 520
+      "totalDurationFrames": 515
     },
     {
       "sceneId": "scene_6",
@@ -1809,12 +1809,12 @@
             {
               "text": "最后说最让人心寒的反转。",
               "startFrame": 0,
-              "durationFrames": 68
+              "durationFrames": 59
             },
             {
               "text": "2013 年，华为还是受害者。",
-              "startFrame": 67,
-              "durationFrames": 70
+              "startFrame": 58,
+              "durationFrames": 62
             }
           ],
           "order": 1,
@@ -1831,7 +1831,7 @@
               }
             ]
           },
-          "totalDurationFrames": 138
+          "totalDurationFrames": 121
         },
         {
           "narrativeType": "CASE",
@@ -1841,32 +1841,32 @@
             {
               "text": "美国公司 IDC，",
               "startFrame": 0,
-              "durationFrames": 41
+              "durationFrames": 43
             },
             {
               "text": "拿标准专利漫天要价，",
-              "startFrame": 40,
-              "durationFrames": 59
+              "startFrame": 42,
+              "durationFrames": 57
             },
             {
               "text": "还强行搭售。",
               "startFrame": 99,
-              "durationFrames": 41
+              "durationFrames": 37
             },
             {
               "text": "华为告它反垄断，",
-              "startFrame": 139,
-              "durationFrames": 41
+              "startFrame": 135,
+              "durationFrames": 39
             },
             {
               "text": "告赢了。",
-              "startFrame": 179,
+              "startFrame": 173,
               "durationFrames": 26
             },
             {
               "text": "那时它是屠龙少年。",
-              "startFrame": 205,
-              "durationFrames": 63
+              "startFrame": 198,
+              "durationFrames": 57
             }
           ],
           "order": 2,
@@ -1893,7 +1893,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 268
+          "totalDurationFrames": 256
         },
         {
           "narrativeType": "LOGIC",
@@ -1903,22 +1903,22 @@
             {
               "text": "今天呢？",
               "startFrame": 0,
-              "durationFrames": 22
+              "durationFrames": 19
             },
             {
               "text": "它手里攥着十六万件专利。",
-              "startFrame": 21,
-              "durationFrames": 61
+              "startFrame": 18,
+              "durationFrames": 60
             },
             {
               "text": "也开始用专利池，",
-              "startFrame": 81,
-              "durationFrames": 39
+              "startFrame": 78,
+              "durationFrames": 41
             },
             {
               "text": "向产业链收过路费。",
-              "startFrame": 120,
-              "durationFrames": 50
+              "startFrame": 118,
+              "durationFrames": 46
             }
           ],
           "order": 3,
@@ -1949,7 +1949,7 @@
               }
             ]
           },
-          "totalDurationFrames": 170
+          "totalDurationFrames": 165
         },
         {
           "narrativeType": "CASE",
@@ -1959,27 +1959,27 @@
             {
               "text": "芯片厂要谈。",
               "startFrame": 0,
-              "durationFrames": 36
+              "durationFrames": 43
             },
             {
               "text": "路由器厂要谈。",
-              "startFrame": 36,
-              "durationFrames": 35
+              "startFrame": 42,
+              "durationFrames": 43
             },
             {
               "text": "整机厂也要谈。",
-              "startFrame": 70,
-              "durationFrames": 36
+              "startFrame": 85,
+              "durationFrames": 43
             },
             {
               "text": "它曾经恨过的那套玩法，",
-              "startFrame": 105,
-              "durationFrames": 51
+              "startFrame": 127,
+              "durationFrames": 54
             },
             {
               "text": "现在用得比谁都熟。",
-              "startFrame": 156,
-              "durationFrames": 45
+              "startFrame": 181,
+              "durationFrames": 46
             }
           ],
           "order": 4,
@@ -2003,11 +2003,11 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 202
+          "totalDurationFrames": 227
         }
       ],
       "audioSrc": "/audio/华为专利论/scene_6/scene_6.mp3",
-      "totalDurationFrames": 777
+      "totalDurationFrames": 770
     },
     {
       "sceneId": "scene_7",
@@ -2021,17 +2021,17 @@
             {
               "text": "专利制度的本意，",
               "startFrame": 0,
-              "durationFrames": 36
+              "durationFrames": 38
             },
             {
               "text": "是保护真正的发明，",
-              "startFrame": 36,
-              "durationFrames": 44
+              "startFrame": 37,
+              "durationFrames": 48
             },
             {
               "text": "让后来者能站在巨人肩上。",
-              "startFrame": 79,
-              "durationFrames": 69
+              "startFrame": 85,
+              "durationFrames": 63
             }
           ],
           "order": 1,
@@ -2040,7 +2040,7 @@
             "conceptName": "专利制度",
             "anchors": []
           },
-          "totalDurationFrames": 149
+          "totalDurationFrames": 148
         },
         {
           "narrativeType": "CASE",
@@ -2050,27 +2050,27 @@
             {
               "text": "可当巨头把 KPI当信仰，",
               "startFrame": 0,
-              "durationFrames": 59
+              "durationFrames": 68
             },
             {
               "text": "把分案当时光机，",
-              "startFrame": 58,
-              "durationFrames": 44
+              "startFrame": 67,
+              "durationFrames": 45
             },
             {
               "text": "把马桶当政绩，",
-              "startFrame": 102,
-              "durationFrames": 44
+              "startFrame": 112,
+              "durationFrames": 41
             },
             {
               "text": "把标准池当注水战场。",
-              "startFrame": 146,
-              "durationFrames": 62
+              "startFrame": 152,
+              "durationFrames": 53
             },
             {
               "text": "受伤的是谁？",
-              "startFrame": 207,
-              "durationFrames": 35
+              "startFrame": 204,
+              "durationFrames": 33
             }
           ],
           "order": 2,
@@ -2099,7 +2099,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 243
+          "totalDurationFrames": 238
         },
         {
           "narrativeType": "CASE",
@@ -2109,17 +2109,17 @@
             {
               "text": "是每个消费者为此多付的专利许可，",
               "startFrame": 0,
-              "durationFrames": 79
+              "durationFrames": 83
             },
             {
               "text": "是那些被吓退的小团队。",
-              "startFrame": 78,
-              "durationFrames": 55
+              "startFrame": 82,
+              "durationFrames": 51
             },
             {
               "text": "是整个社会多出来的合规成本。",
               "startFrame": 133,
-              "durationFrames": 62
+              "durationFrames": 68
             }
           ],
           "order": 3,
@@ -2143,7 +2143,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 195
+          "totalDurationFrames": 202
         },
         {
           "narrativeType": "LOGIC",
@@ -2153,12 +2153,12 @@
             {
               "text": "我们可以尊重华为在通信工程上的真贡献。",
               "startFrame": 0,
-              "durationFrames": 98
+              "durationFrames": 97
             },
             {
               "text": "但必须拒绝把“专利数量”当成“技术良心”。",
-              "startFrame": 97,
-              "durationFrames": 107
+              "startFrame": 96,
+              "durationFrames": 103
             }
           ],
           "order": 4,
@@ -2175,7 +2175,7 @@
             },
             "anchors": []
           },
-          "totalDurationFrames": 204
+          "totalDurationFrames": 199
         },
         {
           "narrativeType": "CONCLUSION",
@@ -2185,32 +2185,32 @@
             {
               "text": "剥掉泡沫之后，",
               "startFrame": 0,
-              "durationFrames": 39
+              "durationFrames": 35
             },
             {
               "text": "该问的不是谁专利多。",
-              "startFrame": 38,
-              "durationFrames": 60
+              "startFrame": 34,
+              "durationFrames": 55
             },
             {
               "text": "而是—",
-              "startFrame": 98,
-              "durationFrames": 21
+              "startFrame": 89,
+              "durationFrames": 20
             },
             {
               "text": "这些专利，",
-              "startFrame": 118,
-              "durationFrames": 33
+              "startFrame": 109,
+              "durationFrames": 22
             },
             {
               "text": "到底是在护创新，",
-              "startFrame": 151,
-              "durationFrames": 41
+              "startFrame": 130,
+              "durationFrames": 31
             },
             {
               "text": "还是在护垄断？",
-              "startFrame": 192,
-              "durationFrames": 37
+              "startFrame": 161,
+              "durationFrames": 32
             }
           ],
           "order": 5,
@@ -2243,11 +2243,11 @@
               }
             ]
           },
-          "totalDurationFrames": 229
+          "totalDurationFrames": 194
         }
       ],
       "audioSrc": "/audio/华为专利论/scene_7/scene_7.mp3",
-      "totalDurationFrames": 1020
+      "totalDurationFrames": 980
     }
   ],
   "fps": 30,

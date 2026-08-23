@@ -5,9 +5,11 @@ import { TemplatePicker } from "../../components/TemplatePicker";
 import { useIsNarrow } from "../../hooks/useIsNarrow";
 import { ParamForm } from "../../ParamForm";
 import {
+  itemParamHasChanges,
   moveContentAcrossItems,
   reorderItemOrders,
   sceneHasScriptContent,
+  scriptsHasChanges,
   splitItemAt,
   syncItemsParamArrays,
 } from "../../scriptHelpers";
@@ -29,6 +31,7 @@ type Props = {
   onBack: () => void;
   onOpenSync: () => Promise<void>;
   onRegenAllScripts: () => Promise<void>;
+  onRegenChangedScripts: (scripts: Record<string, unknown>) => Promise<void>;
   scriptGenBlocked?: boolean;
   error: string | null;
 };
@@ -38,6 +41,8 @@ export function ScriptsShell(props: Props) {
   const [drill, setDrill] = useState<DrillLevel>("scenes");
   const [regenBusy, setRegenBusy] = useState(false);
   const [regenAllBusy, setRegenAllBusy] = useState(false);
+  const [regenChangedBusy, setRegenChangedBusy] = useState(false);
+  const [, setSaveTick] = useState(0);
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [moreOpen, setMoreOpen] = useState(false);
@@ -75,11 +80,13 @@ export function ScriptsShell(props: Props) {
       if (currentJson === sentJson) {
         const savedJson = JSON.stringify(res.scripts);
         lastSavedJsonRef.current = savedJson;
+        setSaveTick((t) => t + 1);
         if (savedJson !== sentJson) {
           p.setScripts(res.scripts);
         }
       } else {
         lastSavedJsonRef.current = JSON.stringify(res.scripts);
+        setSaveTick((t) => t + 1);
         scheduleAutosave();
       }
     } catch (e) {
@@ -99,6 +106,7 @@ export function ScriptsShell(props: Props) {
 
   useEffect(() => {
     lastSavedJsonRef.current = JSON.stringify(scriptsRef.current);
+    setSaveTick((t) => t + 1);
     if (timerRef.current) {
       clearTimeout(timerRef.current);
       timerRef.current = null;
@@ -108,6 +116,7 @@ export function ScriptsShell(props: Props) {
   useEffect(() => {
     if (lastSavedJsonRef.current === null) {
       lastSavedJsonRef.current = JSON.stringify(props.scripts);
+      setSaveTick((t) => t + 1);
       return;
     }
     const json = JSON.stringify(props.scripts);
@@ -134,6 +143,7 @@ export function ScriptsShell(props: Props) {
   }
 
   const scenes = (props.scripts.scenes as Scene[]) || [];
+  const scriptsDirty = scriptsHasChanges(props.scripts, lastSavedJsonRef.current);
   const sceneIdx = props.selected.sceneIdx;
   const scene = scenes[sceneIdx];
   const items = scene?.items || [];
@@ -213,6 +223,9 @@ export function ScriptsShell(props: Props) {
   }
 
   async function onRegenParam(itemIdx: number) {
+    if (!itemParamHasChanges(scenes, sceneIdx, itemIdx, lastSavedJsonRef.current)) {
+      return;
+    }
     const requestScripts = scriptsRef.current;
     setRegenBusy(true);
     props.onError(null);
@@ -318,6 +331,43 @@ export function ScriptsShell(props: Props) {
     >
       {moreOpen && showListChrome ? (
         <div className="more-sheet">
+          <button
+            type="button"
+            disabled={!scriptsDirty || regenChangedBusy || props.scriptGenBlocked}
+            title={
+              props.scriptGenBlocked
+                ? "正在生成草稿，不允许生成脚本"
+                : !scriptsDirty
+                  ? "脚本无变更"
+                  : undefined
+            }
+            onClick={async () => {
+              if (props.scriptGenBlocked) {
+                props.onError("正在生成草稿，不允许生成脚本");
+                return;
+              }
+              if (!scriptsDirty) return;
+              if (
+                !window.confirm(
+                  "将根据当前脚本变更同步草稿并重新生成分镜脚本，覆盖现有脚本（含未保存编辑）。是否继续？",
+                )
+              ) {
+                return;
+              }
+              setMoreOpen(false);
+              setRegenChangedBusy(true);
+              props.onError(null);
+              try {
+                await flushSave();
+                await props.onRegenChangedScripts(scriptsRef.current);
+              } catch (e) {
+                props.onError(String(e));
+                setRegenChangedBusy(false);
+              }
+            }}
+          >
+            {regenChangedBusy ? "生成中…" : "全量生成变更脚本"}
+          </button>
           <button
             type="button"
             disabled={regenAllBusy || props.scriptGenBlocked}
@@ -488,7 +538,25 @@ export function ScriptsShell(props: Props) {
                       </button>
                       <button
                         type="button"
-                        disabled={regenBusy}
+                        disabled={
+                          regenBusy ||
+                          !itemParamHasChanges(
+                            scenes,
+                            sceneIdx,
+                            ii,
+                            lastSavedJsonRef.current,
+                          )
+                        }
+                        title={
+                          !itemParamHasChanges(
+                            scenes,
+                            sceneIdx,
+                            ii,
+                            lastSavedJsonRef.current,
+                          )
+                            ? "参数无变更"
+                            : undefined
+                        }
                         onClick={() => onRegenParam(ii)}
                       >
                         {regenBusy ? "重生中…" : "局部参数重生"}
@@ -782,7 +850,25 @@ export function ScriptsShell(props: Props) {
             <div className="param-toolbar">
               <button
                 type="button"
-                disabled={regenBusy}
+                disabled={
+                  regenBusy ||
+                  !itemParamHasChanges(
+                    scenes,
+                    sceneIdx,
+                    paramItemIdx,
+                    lastSavedJsonRef.current,
+                  )
+                }
+                title={
+                  !itemParamHasChanges(
+                    scenes,
+                    sceneIdx,
+                    paramItemIdx,
+                    lastSavedJsonRef.current,
+                  )
+                    ? "参数无变更"
+                    : undefined
+                }
                 onClick={() => onRegenParam(paramItemIdx)}
               >
                 {regenBusy ? "重生中…" : "局部参数重生"}

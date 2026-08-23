@@ -68,7 +68,7 @@
           "param": {
             "notText": "看热搜",
             "butText": "看数据",
-            "butSrc": "images/小米事故论/scene_1_2.png",
+            "butSrc": "柱状图与数据表格对照热搜榜单的理性分析简笔画",
             "notContentIndex": 2,
             "butContentIndex": 3,
             "anchors": []
@@ -110,17 +110,17 @@
           "param": {
             "panels": [
               {
-                "src": "images/小米事故论/scene_1_3_img0.png",
+                "src": "电动车碰撞后起火冒烟的事故现场简笔画",
                 "showFrom": 2,
                 "enterEffect": "breathe"
               },
               {
-                "src": "images/小米事故论/scene_1_3_img1.png",
+                "src": "两车相撞事故残骸横亘路面的简笔画",
                 "showFrom": 3,
                 "enterEffect": "slideLeft"
               },
               {
-                "src": "images/小米事故论/scene_1_3_img2.png",
+                "src": "汽车冲上路中间绿化带横停的简笔画",
                 "showFrom": 4,
                 "enterEffect": "slideBottom"
               }
@@ -194,7 +194,7 @@
           "param": {
             "notText": "感觉真实",
             "butText": "概率真实",
-            "butSrc": "images/小米事故论/scene_1_5.png",
+            "butSrc": "概率曲线与统计数据对照直觉感觉的理性刻度简笔画",
             "notContentIndex": 1,
             "butContentIndex": 3,
             "anchors": []
@@ -469,7 +469,7 @@
           "param": {
             "notText": "静置自燃",
             "butText": "外部诱因",
-            "butSrc": "images/小米事故论/scene_2_7.png",
+            "butSrc": "严重碰撞后起火与外部火源引燃的诱因示意简笔画",
             "notContentIndex": 2,
             "butContentIndex": 3,
             "anchors": []
@@ -581,8 +581,8 @@
           ],
           "order": 10,
           "param": {
-            "leftSrc": "images/小米事故论/scene_2_10_left.png",
-            "rightSrc": "images/小米事故论/scene_2_10_right.png",
+            "leftSrc": "交通部门档案柜空空如也、查无事故率公开数据",
+            "rightSrc": "保险公司档案缺失、无出险率可查",
             "leftLabel": "交通部",
             "rightLabel": "保险公司",
             "leftShowFrom": 1,
@@ -653,7 +653,7 @@
           "param": {
             "notText": "否认优点",
             "butText": "有几个特点",
-            "butSrc": "images/小米事故论/scene_3_1.png",
+            "butSrc": "小米SU7轮廓旁标注若干产品特点的简笔画",
             "notContentIndex": 0,
             "butContentIndex": 1,
             "anchors": []
@@ -700,16 +700,16 @@
           "param": {
             "panels": [
               {
-                "src": "images/小米事故论/scene_3_2_img0.png",
+                "src": "年轻车主驾驶高性能电动汽车的简笔画",
                 "showFrom": 0,
                 "enterEffect": "zoomIn"
               },
               {
-                "src": "images/小米事故论/scene_3_2_img1.png",
+                "src": "仪表盘指针飙向极限的高性能跑车简笔画",
                 "showFrom": 2
               },
               {
-                "src": "images/小米事故论/scene_3_2_img2.png",
+                "src": "新手司机手握方向盘神情紧张的简笔画",
                 "showFrom": 4
               }
             ],
@@ -735,7 +735,7 @@
           ],
           "order": 3,
           "param": {
-            "imageSrc": "images/小米事故论/scene_3_3.png",
+            "imageSrc": "年轻车手、强性能、新手三类因素叠压汇聚成事故风险",
             "enterEffect": "fadeIn",
             "anchors": []
           },
@@ -766,7 +766,7 @@
           "param": {
             "notText": "车本身的问题",
             "butText": "只是工具",
-            "butSrc": "images/小米事故论/scene_3_4.png",
+            "butSrc": "汽车作为中性工具、驾驶方式不由车决定的简笔画",
             "notContentIndex": 0,
             "butContentIndex": 1,
             "anchors": []
@@ -849,7 +849,7 @@
           ],
           "order": 1,
           "param": {
-            "imageSrc": "images/小米事故论/scene_4_1.png",
+            "imageSrc": "围观群众摇头觉得小米问题频出的质疑氛围简笔画",
             "enterEffect": "fadeIn",
             "anchors": []
           },
@@ -894,7 +894,7 @@
           "order": 2,
           "param": {
             "title": "保有量太大",
-            "imageSrc": "images/小米事故论/scene_4_2.png",
+            "imageSrc": "六十万辆汽车密密麻麻排布象征巨大保有量基数",
             "notes": [
               {
                 "text": "交付超60万辆，基数巨大",
@@ -952,7 +952,7 @@
           "order": 3,
           "param": {
             "title": "算法追着恐惧跑",
-            "imageSrc": "images/小米事故论/scene_4_3.png",
+            "imageSrc": "算法机械臂把人拽向事故短视频的信息流简笔画",
             "notes": [
               {
                 "text": "停留就是喂养算法",
@@ -1006,7 +1006,7 @@
           "order": 4,
           "param": {
             "title": "重复制造真实感",
-            "imageSrc": "images/小米事故论/scene_4_4.png",
+            "imageSrc": "同一事故从不同机位剪出三条重复视频的简笔画",
             "notes": [
               {
                 "text": "同一事故被切分成不同视角",
@@ -1075,7 +1075,7 @@
           "order": 5,
           "param": {
             "title": "借题发挥的陷阱",
-            "imageSrc": "images/小米事故论/scene_4_5.png",
+            "imageSrc": "攻击者把事故、旧视频、人为操作混进同一标签的简笔画",
             "notes": [
               {
                 "text": "恶意炒作攻击者",
@@ -1134,18 +1134,18 @@
           "param": {
             "stages": [
               {
-                "imageSrc": "images/小米事故论/scene_4_6_img0.png",
+                "imageSrc": "大脑轮廓中被反复刻印同一信息的简笔画",
                 "enterEffect": "breathe",
                 "tone": "calm"
               },
               {
-                "imageSrc": "images/小米事故论/scene_4_6_img1.png",
+                "imageSrc": "同一事件出现十次被标记为常见的示意",
                 "enterEffect": "slideBottom",
                 "tone": "alert",
                 "showFrom": 2
               },
               {
-                "imageSrc": "images/小米事故论/scene_4_6_img2.png",
+                "imageSrc": "屏幕连刷三天同一新闻被感知为严重的简笔画",
                 "enterEffect": "slideBottom",
                 "tone": "alert",
                 "showFrom": 4
@@ -1190,7 +1190,7 @@
           "param": {
             "notText": "现实的重复",
             "butText": "流量、情绪与算法的重复",
-            "butSrc": "images/小米事故论/scene_4_7.png",
+            "butSrc": "流量、情绪与算法循环推送对照现实偶发事件的对比",
             "notContentIndex": 1,
             "butContentIndex": 2,
             "anchors": []
@@ -1282,17 +1282,17 @@
           "param": {
             "panels": [
               {
-                "src": "images/小米事故论/scene_5_2_img0.png",
+                "src": "举放大镜审视车企标志的公众监督简笔画",
                 "showFrom": 0,
                 "enterEffect": "fadeIn"
               },
               {
-                "src": "images/小米事故论/scene_5_2_img1.png",
+                "src": "安全盾牌被追问检验的简笔画",
                 "showFrom": 1,
                 "enterEffect": "fadeIn"
               },
               {
-                "src": "images/小米事故论/scene_5_2_img2.png",
+                "src": "事故现场调查人员厘清责任归属的简笔画",
                 "showFrom": 3,
                 "enterEffect": "fadeIn"
               }
@@ -1326,17 +1326,17 @@
           "param": {
             "panels": [
               {
-                "src": "images/小米事故论/scene_5_3_img0.png",
+                "src": "辅助驾驶方向盘与路况感应的简笔画",
                 "showFrom": 0,
                 "enterEffect": "fadeIn"
               },
               {
-                "src": "images/小米事故论/scene_5_3_img1.png",
+                "src": "车门结构剖面与碰撞耐受的简笔画",
                 "showFrom": 1,
                 "enterEffect": "fadeIn"
               },
               {
-                "src": "images/小米事故论/scene_5_3_img2.png",
+                "src": "碰撞后有限逃生时间窗口的倒计时示意",
                 "showFrom": 2,
                 "enterEffect": "fadeIn"
               }
@@ -1378,7 +1378,7 @@
           ],
           "order": 4,
           "param": {
-            "imageSrc": "images/小米事故论/scene_5_4.png",
+            "imageSrc": "手持尺子与分母刻度衡量质疑与愤怒的简笔画",
             "enterEffect": "fadeIn",
             "anchors": [
               {

@@ -123,7 +123,7 @@
           ],
           "order": 3,
           "param": {
-            "imageSrc": "images/为雷军正名/scene_1_3.png",
+            "imageSrc": "一个人站在话筒前为雷军说句公道话的简笔画，背景隐约可见手机刷机界面",
             "enterEffect": "fadeIn",
             "anchors": []
           },
@@ -166,17 +166,17 @@
             "nodes": [
               {
                 "label": "残酷赛道",
-                "imageSrc": "images/为雷军正名/scene_1_4_img0.png",
+                "imageSrc": "布满荆棘与竞争箭头的商业赛道简笔画，象征残酷的商业世界",
                 "showFrom": 0
               },
               {
                 "label": "营销大师",
-                "imageSrc": "images/为雷军正名/scene_1_4_img1.png",
+                "imageSrc": "聚光灯下手持麦克风的营销大师形象简笔画",
                 "showFrom": 1
               },
               {
                 "label": "小米存活",
-                "imageSrc": "images/为雷军正名/scene_1_4_img2.png",
+                "imageSrc": "小树苗在巨头夹缝中顽强生长的简笔画，象征小米存活",
                 "showFrom": 2
               }
             ],
@@ -205,7 +205,7 @@
           ],
           "order": 1,
           "param": {
-            "imageSrc": "images/为雷军正名/scene_2_1.png",
+            "imageSrc": "空货架前排着长队的简笔画图标，象征饥饿营销",
             "conceptName": "饥饿营销"
           },
           "totalDurationFrames": 88
@@ -233,7 +233,7 @@
           ],
           "order": 2,
           "param": {
-            "imageSrc": "images/为雷军正名/scene_2_2.png",
+            "imageSrc": "一群人盯着闹钟抢购手机、旁边堆着未拆封箱子的简笔画",
             "enterEffect": "fadeIn",
             "anchors": []
           },
@@ -273,7 +273,7 @@
           "order": 3,
           "param": {
             "title": "小米初创链弱势",
-            "imageSrc": "images/为雷军正名/scene_2_3.png",
+            "imageSrc": "名不见经传的小公司站在巨大供应链工厂门前显得渺小的简笔画",
             "phases": [
               {
                 "phaseLabel": "历史主体",
@@ -323,22 +323,22 @@
             "nodes": [
               {
                 "label": "缺钱",
-                "imageSrc": "images/为雷军正名/scene_2_4_img0.png",
+                "imageSrc": "空空如也的钱包简笔画图标，象征缺钱",
                 "showFrom": 0
               },
               {
                 "label": "缺产能",
-                "imageSrc": "images/为雷军正名/scene_2_4_img1.png",
+                "imageSrc": "空荡荡的生产线传送带简笔画，没有产品产出",
                 "showFrom": 1
               },
               {
                 "label": "爬坡慢",
-                "imageSrc": "images/为雷军正名/scene_2_4_img2.png",
+                "imageSrc": "陡峭斜坡上人艰难攀登的简笔画，象征供应链爬坡慢",
                 "showFrom": 2
               },
               {
                 "label": "落现实",
-                "imageSrc": "images/为雷军正名/scene_2_4_img3.png",
+                "imageSrc": "写着「现实」的拳头击中创业公司的简笔画",
                 "showFrom": 3
               }
             ]
@@ -370,7 +370,7 @@
           "param": {
             "notText": "精于算计的饥饿营销",
             "butText": "创业公司狼狈求生",
-            "butSrc": "images/为雷军正名/scene_2_5.png",
+            "butSrc": "小公司在巨头阴影下狼狈挣扎求生的简笔画",
             "notContentIndex": 0,
             "butContentIndex": 1,
             "anchors": []
@@ -398,7 +398,7 @@
           ],
           "order": 1,
           "param": {
-            "imageSrc": "images/为雷军正名/scene_3_1.png",
+            "imageSrc": "一个人伸手向豪车碰瓷的简笔画图标，象征碰瓷营销",
             "conceptName": "碰瓷营销"
           },
           "totalDurationFrames": 86
@@ -433,7 +433,7 @@
           "param": {
             "notText": "经常吊打友商",
             "butText": "极少说“吊打”",
-            "butSrc": "images/为雷军正名/scene_3_2.png",
+            "butSrc": "演讲台上的人举手说话、嘴边标注否定符号的简笔画，表示极少说吊打",
             "notContentIndex": 1,
             "butContentIndex": 3,
             "anchors": []
@@ -480,12 +480,12 @@
           "param": {
             "panels": [
               {
-                "src": "images/为雷军正名/scene_3_3_img0.png",
+                "src": "演讲台上对着苹果标志表示谦虚学习的简笔画",
                 "showFrom": 0,
                 "enterEffect": "zoomIn"
               },
               {
-                "src": "images/为雷军正名/scene_3_3_img1.png",
+                "src": "演讲台上对着保时捷标志表示全面对标的简笔画",
                 "showFrom": 1,
                 "enterEffect": "fadeIn"
               }
@@ -539,7 +539,7 @@
           ],
           "order": 5,
           "param": {
-            "imageSrc": "images/为雷军正名/scene_3_5.png",
+            "imageSrc": "发布会大屏幕上密密麻麻的参数对比表格简笔画",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -593,22 +593,22 @@
           "param": {
             "panels": [
               {
-                "src": "images/为雷军正名/scene_3_6_img0.png",
+                "src": "处理器芯片与跑分数字上升的简笔画",
                 "showFrom": 0,
                 "enterEffect": "zoomIn"
               },
               {
-                "src": "images/为雷军正名/scene_3_6_img1.png",
+                "src": "电池图标与续航里程数字的简笔画",
                 "showFrom": 1,
                 "enterEffect": "fadeIn"
               },
               {
-                "src": "images/为雷军正名/scene_3_6_img2.png",
+                "src": "汽车加速仪表盘与零百加速计时的简笔画",
                 "showFrom": 2,
                 "enterEffect": "slideLeft"
               },
               {
-                "src": "images/为雷军正名/scene_3_6_img3.png",
+                "src": "风洞测试中风阻系数数据的简笔画",
                 "showFrom": 3,
                 "enterEffect": "fadeIn"
               }
@@ -630,7 +630,7 @@
           ],
           "order": 7,
           "param": {
-            "imageSrc": "images/为雷军正名/scene_3_7.png",
+            "imageSrc": "托腮思考的简笔画，头顶一个大问号",
             "enterEffect": "fadeIn",
             "anchors": []
           },
@@ -668,22 +668,22 @@
             "nodes": [
               {
                 "label": "术语门槛",
-                "imageSrc": "images/为雷军正名/scene_3_8_img0.png",
+                "imageSrc": "深奥技术名词堆成高墙挡住普通人的简笔画",
                 "showFrom": 0
               },
               {
                 "label": "表格语言",
-                "imageSrc": "images/为雷军正名/scene_3_8_img1.png",
+                "imageSrc": "一目了然的对比表格简笔画",
                 "showFrom": 1
               },
               {
                 "label": "数字可比",
-                "imageSrc": "images/为雷军正名/scene_3_8_img2.png",
+                "imageSrc": "两个数字大小对比箭头的简笔画",
                 "showFrom": 2
               },
               {
                 "label": "价格更低",
-                "imageSrc": "images/为雷军正名/scene_3_8_img3.png",
+                "imageSrc": "价格标签上下降箭头的简笔画",
                 "showFrom": 3
               }
             ],
@@ -716,7 +716,7 @@
           "param": {
             "notText": "碰瓷",
             "butText": "硬核展现产品质量",
-            "butSrc": "images/为雷军正名/scene_3_9.png",
+            "butSrc": "产品参数透明展示给消费者看的简笔画",
             "notContentIndex": 0,
             "butContentIndex": 1,
             "anchors": []
@@ -749,7 +749,7 @@
           ],
           "order": 1,
           "param": {
-            "imageSrc": "images/为雷军正名/scene_4_1.png",
+            "imageSrc": "扳手与代码交织的工程师文化符号简笔画",
             "conceptName": "工程师文化"
           },
           "totalDurationFrames": 116
@@ -779,18 +779,18 @@
           "param": {
             "premises": [
               {
-                "imageSrc": "images/为雷军正名/scene_4_2_img0.png",
+                "imageSrc": "奢侈品广告画面与「调性」字样的简笔画",
                 "showFrom": 0,
                 "enterEffect": "fadeIn"
               },
               {
-                "imageSrc": "images/为雷军正名/scene_4_2_img1.png",
+                "imageSrc": "精致生活方式摆拍的简笔画",
                 "showFrom": 1,
                 "enterEffect": "fadeIn"
               }
             ],
             "conclusion": {
-              "imageSrc": "images/为雷军正名/scene_4_2.png",
+              "imageSrc": "消费者对朦胧「感觉」标签掏钱、中间隔着信息高墙的简笔画",
               "showFrom": 2,
               "enterEffect": "zoomIn",
               "tone": "alert"
@@ -859,13 +859,13 @@
             "nodes": [
               {
                 "label": "质疑性能",
-                "imageSrc": "images/为雷军正名/scene_4_4_img0.png",
+                "imageSrc": "指着产品打出问号的质疑性能简笔画",
                 "showFrom": 0,
                 "enterEffect": "fadeIn"
               },
               {
                 "label": "纽北赛道",
-                "imageSrc": "images/为雷军正名/scene_4_4_img1.png",
+                "imageSrc": "汽车在纽北赛道上飞驰的简笔画",
                 "showFrom": 2,
                 "enterEffect": "zoomIn"
               }
@@ -906,13 +906,13 @@
             "nodes": [
               {
                 "label": "你说电池好",
-                "imageSrc": "images/为雷军正名/scene_4_5_img0.png",
+                "imageSrc": "电池图标配上怀疑问号的简笔画",
                 "showFrom": 0,
                 "enterEffect": "fadeIn"
               },
               {
                 "label": "高速直播",
-                "imageSrc": "images/为雷军正名/scene_4_5_img1.png",
+                "imageSrc": "直播镜头前开车从满电跑到趴窝的简笔画",
                 "showFrom": 2,
                 "enterEffect": "zoomIn"
               }
@@ -963,13 +963,13 @@
             "nodes": [
               {
                 "label": "质疑安全",
-                "imageSrc": "images/为雷军正名/scene_4_6_img0.png",
+                "imageSrc": "汽车安全被质疑的问号简笔画",
                 "showFrom": 0,
                 "enterEffect": "fadeIn"
               },
               {
                 "label": "结构拆解",
-                "imageSrc": "images/为雷军正名/scene_4_6_img1.png",
+                "imageSrc": "汽车大卸八块展示防撞梁和线束的拆解简笔画",
                 "showFrom": 2,
                 "enterEffect": "zoomIn"
               }
@@ -1040,7 +1040,7 @@
           "param": {
             "notText": "没有滤镜有点土",
             "butText": "尊重消费者知情权",
-            "butSrc": "images/为雷军正名/scene_4_8.png",
+            "butSrc": "翻开底牌给消费者看的透明简笔画，象征尊重知情权",
             "notContentIndex": 1,
             "butContentIndex": 2,
             "anchors": []
@@ -1078,7 +1078,7 @@
           ],
           "order": 1,
           "param": {
-            "imageSrc": "images/为雷军正名/scene_5_1.png",
+            "imageSrc": "深夜台灯下内向程序员埋头写代码的简笔画",
             "enterEffect": "fadeIn",
             "anchors": []
           },
@@ -1165,7 +1165,7 @@
           "param": {
             "notText": "做戏博眼球",
             "butText": "燃尽自我的孤勇者",
-            "butSrc": "images/为雷军正名/scene_5_3.png",
+            "butSrc": "燃烧个人IP冲向前方的孤勇者简笔画",
             "notContentIndex": 0,
             "butContentIndex": 3,
             "anchors": []
@@ -1197,12 +1197,12 @@
           "param": {
             "left": {
               "label": "❌ 无脑吹嘘",
-              "src": "images/为雷军正名/scene_5_4_left.png",
+              "src": "喇叭喷出夸张吹嘘泡泡的简笔画",
               "showFrom": 1
             },
             "right": {
               "label": "✅ 事实与数据",
-              "src": "images/为雷军正名/scene_5_4_right.png",
+              "src": "事实清单与数据图表支撑的简笔画",
               "showFrom": 2
             }
           },
@@ -1236,7 +1236,7 @@
           ],
           "order": 5,
           "param": {
-            "imageSrc": "images/为雷军正名/scene_5_5.png",
+            "imageSrc": "普通人手持平价智能设备享受科技的科技平权简笔画",
             "enterEffect": "zoomIn",
             "anchors": [
               {
@@ -1291,7 +1291,7 @@
           ],
           "order": 1,
           "param": {
-            "imageSrc": "images/为雷军正名/scene_6_1.png",
+            "imageSrc": "高性价比策略激起剧烈波纹、对面坐着愤怒利益代表的简笔画",
             "enterEffect": "fadeIn",
             "anchors": [
               {

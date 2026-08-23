@@ -979,6 +979,43 @@
         ]
       }
     },
+    "QA_REVEAL": {
+      "requiredOverrideKeys": [
+        "highlights"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "highlights": {
+            "type": "array",
+            "description": "可选；在对应 content 行正文内联标色。showFrom 为 content 下标（0-based），text 须为该条 content.text 的子串；color 省略时默认 #E53E3E。",
+            "items": {
+              "type": "object",
+              "required": [
+                "text",
+                "showFrom"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "要高亮的子串，须出现在 content[showFrom].text 内"
+                },
+                "showFrom": {
+                  "type": "integer",
+                  "format": "content_index",
+                  "description": "content 下标（0-based），非帧数"
+                },
+                "color": {
+                  "type": "string",
+                  "description": "高亮颜色，省略时默认红色 #E53E3E"
+                }
+              }
+            }
+          }
+        },
+        "required": []
+      }
+    },
     "QUOTE_CITATION": {
       "requiredOverrideKeys": [],
       "paramSchema": {

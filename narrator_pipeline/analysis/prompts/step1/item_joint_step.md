@@ -94,6 +94,10 @@ __TEMPLATE_GUIDE__
 ### G2. 收束清单（expressionTag≈conclusion|list）
 - 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
 
+### G3. 课后答疑 / 疑点解答（expressionTag≈neutral|focus）
+- 针对本课/本主题的一个疑点，讲师正式解答：`content[0]` 为问句，`content[1..]` 为答句 → `QA_REVEAL`
+- 须有完整问句 + 递进解答；**非**「有人说/网友」对话体（→ `CHAT_BUBBLE`）；**非**多图情绪递进（→ `BEAT_SEQUENCE`）；**非**收束打勾清单（→ `CHECKLIST_REVEAL`）
+
 ### H. 默认（expressionTag=neutral）
 - 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
 

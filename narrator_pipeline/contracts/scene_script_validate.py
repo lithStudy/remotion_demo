@@ -130,9 +130,19 @@ def validate_and_normalize_scene_scripts(
 				)
 			)
 			if not has_nonempty:
-				warnings.append(
-					f"[{scene_id}] item order={order} 模板 {tname} content 缺失或无效（严格模式：不兜底回填）"
-				)
+				if tname == "SOURCE_CITATION":
+					refs = param.get("references")
+					if not isinstance(refs, list) or not any(
+						isinstance(r, dict) and str(r.get("title", "")).strip()
+						for r in refs
+					):
+						warnings.append(
+							f"[{scene_id}] item order={order} 模板 SOURCE_CITATION references 缺失或无效"
+						)
+				else:
+					warnings.append(
+						f"[{scene_id}] item order={order} 模板 {tname} content 缺失或无效（严格模式：不兜底回填）"
+					)
 
 			def _schema_warn(msg: str) -> None:
 				warnings.append(f"[{scene_id}] item order={order} 模板 {tname} {msg}")

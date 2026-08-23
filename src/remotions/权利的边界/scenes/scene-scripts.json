@@ -13,27 +13,27 @@
             {
               "text": "如果必须在人类历史的浩瀚星河中，",
               "startFrame": 0,
-              "durationFrames": 68
+              "durationFrames": 72
             },
             {
               "text": "选出一句最让我震撼、",
-              "startFrame": 67,
-              "durationFrames": 50
+              "startFrame": 72,
+              "durationFrames": 47
             },
             {
               "text": "也最动心的话。",
-              "startFrame": 116,
-              "durationFrames": 39
+              "startFrame": 118,
+              "durationFrames": 29
             },
             {
               "text": "在学生时代，",
-              "startFrame": 154,
-              "durationFrames": 33
+              "startFrame": 147,
+              "durationFrames": 30
             },
             {
               "text": "我一定会毫不犹豫地诵出张载的横渠四句：",
-              "startFrame": 187,
-              "durationFrames": 90
+              "startFrame": 176,
+              "durationFrames": 92
             }
           ],
           "order": 1,
@@ -42,7 +42,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 278
+          "totalDurationFrames": 269
         },
         {
           "narrativeType": "CASE",
@@ -52,22 +52,22 @@
             {
               "text": "为天地立心，",
               "startFrame": 0,
-              "durationFrames": 34
+              "durationFrames": 36
             },
             {
               "text": "为生民立命，",
-              "startFrame": 33,
-              "durationFrames": 32
+              "startFrame": 36,
+              "durationFrames": 33
             },
             {
               "text": "为往圣继绝学，",
-              "startFrame": 65,
+              "startFrame": 68,
               "durationFrames": 42
             },
             {
               "text": "为万世开太平。",
-              "startFrame": 106,
-              "durationFrames": 43
+              "startFrame": 110,
+              "durationFrames": 41
             }
           ],
           "order": 3,
@@ -75,7 +75,7 @@
             "quoteSource": "张载",
             "anchors": []
           },
-          "totalDurationFrames": 150
+          "totalDurationFrames": 151
         },
         {
           "narrativeType": "LOGIC",
@@ -85,17 +85,17 @@
             {
               "text": "那时的我，",
               "startFrame": 0,
-              "durationFrames": 19
+              "durationFrames": 20
             },
             {
               "text": "满眼都是宏大叙事，",
-              "startFrame": 18,
-              "durationFrames": 42
+              "startFrame": 19,
+              "durationFrames": 38
             },
             {
               "text": "满心都是天下苍生。",
-              "startFrame": 60,
-              "durationFrames": 43
+              "startFrame": 56,
+              "durationFrames": 41
             }
           ],
           "order": 4,
@@ -104,7 +104,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 103
+          "totalDurationFrames": 98
         },
         {
           "narrativeType": "TRANSITION",
@@ -114,26 +114,26 @@
             {
               "text": "直到走进社会，经历了一些事情，",
               "startFrame": 0,
-              "durationFrames": 69
+              "durationFrames": 71
             },
             {
               "text": "然后突然有一天，",
-              "startFrame": 68,
-              "durationFrames": 34
+              "startFrame": 70,
+              "durationFrames": 33
             },
             {
               "text": "我看到了另外一句话：",
-              "startFrame": 102,
+              "startFrame": 103,
               "durationFrames": 39
             }
           ],
           "order": 5,
           "param": {
-            "imageSrc": " ",
+            "imageSrc": "images/权利的边界/scene_1_5.png",
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 141
+          "totalDurationFrames": 142
         },
         {
           "narrativeType": "CASE",
@@ -143,22 +143,22 @@
             {
               "text": "“我有一间破房子，",
               "startFrame": 0,
-              "durationFrames": 50
+              "durationFrames": 51
             },
             {
               "text": "风能进，",
-              "startFrame": 49,
-              "durationFrames": 20
+              "startFrame": 50,
+              "durationFrames": 27
             },
             {
               "text": "雨能进，",
-              "startFrame": 68,
-              "durationFrames": 24
+              "startFrame": 76,
+              "durationFrames": 29
             },
             {
               "text": "国王不能进。”",
-              "startFrame": 92,
-              "durationFrames": 26
+              "startFrame": 104,
+              "durationFrames": 33
             }
           ],
           "order": 6,
@@ -167,7 +167,7 @@
             "quoteSource": "知乎",
             "anchors": []
           },
-          "totalDurationFrames": 118
+          "totalDurationFrames": 138
         },
         {
           "narrativeType": "LOGIC",
@@ -177,16 +177,16 @@
             {
               "text": "记忆里，",
               "startFrame": 0,
-              "durationFrames": 24
+              "durationFrames": 33
             },
             {
               "text": "那天的我凝视着屏幕，",
-              "startFrame": 24,
-              "durationFrames": 53
+              "startFrame": 32,
+              "durationFrames": 50
             },
             {
               "text": "久久无法移开视线。",
-              "startFrame": 76,
+              "startFrame": 81,
               "durationFrames": 42
             }
           ],
@@ -196,7 +196,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 118
+          "totalDurationFrames": 123
         },
         {
           "narrativeType": "CONCLUSION",
@@ -206,16 +206,16 @@
             {
               "text": "那不是一种被大风大浪席卷的冲击。",
               "startFrame": 0,
-              "durationFrames": 78
+              "durationFrames": 82
             },
             {
               "text": "而是一种锥心刺骨、",
-              "startFrame": 77,
+              "startFrame": 81,
               "durationFrames": 44
             },
             {
               "text": "前所未有的震撼。",
-              "startFrame": 121,
+              "startFrame": 125,
               "durationFrames": 41
             }
           ],
@@ -228,7 +228,7 @@
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 162
+          "totalDurationFrames": 167
         },
         {
           "narrativeType": "HOOK",
@@ -243,7 +243,7 @@
             {
               "text": "我从字里行间深刻感受到了“个体”的尊严。",
               "startFrame": 67,
-              "durationFrames": 98
+              "durationFrames": 94
             }
           ],
           "order": 1,
@@ -270,11 +270,11 @@
               }
             ]
           },
-          "totalDurationFrames": 166
+          "totalDurationFrames": 161
         }
       ],
       "audioSrc": "/audio/权利的边界/scene_1/scene_1.mp3",
-      "totalDurationFrames": 1234
+      "totalDurationFrames": 1248
     },
     {
       "sceneId": "scene_2",
@@ -288,27 +288,27 @@
             {
               "text": "一间破房子，",
               "startFrame": 0,
-              "durationFrames": 42
-            },
-            {
-              "text": "它挡不住风。",
-              "startFrame": 41,
-              "durationFrames": 31
-            },
-            {
-              "text": "挡不住雨。",
-              "startFrame": 72,
               "durationFrames": 33
             },
             {
+              "text": "它挡不住风。",
+              "startFrame": 32,
+              "durationFrames": 39
+            },
+            {
+              "text": "挡不住雨。",
+              "startFrame": 70,
+              "durationFrames": 32
+            },
+            {
               "text": "挡不住寒冷和贫穷。",
-              "startFrame": 104,
+              "startFrame": 102,
               "durationFrames": 43
             },
             {
               "text": "但它偏偏能挡住这个世界上最强的人。国王。",
-              "startFrame": 147,
-              "durationFrames": 117
+              "startFrame": 144,
+              "durationFrames": 115
             }
           ],
           "order": 2,
@@ -337,7 +337,7 @@
               "tone": "alert"
             }
           },
-          "totalDurationFrames": 265
+          "totalDurationFrames": 260
         },
         {
           "narrativeType": "LOGIC",
@@ -347,17 +347,17 @@
             {
               "text": "但这里真正强的，",
               "startFrame": 0,
-              "durationFrames": 47
+              "durationFrames": 45
             },
             {
               "text": "从来不是那堵墙。",
-              "startFrame": 46,
-              "durationFrames": 39
+              "startFrame": 44,
+              "durationFrames": 41
             },
             {
               "text": "而是墙背后的规则。",
               "startFrame": 85,
-              "durationFrames": 45
+              "durationFrames": 48
             }
           ],
           "order": 4,
@@ -369,7 +369,7 @@
             "butContentIndex": 2,
             "anchors": []
           },
-          "totalDurationFrames": 131
+          "totalDurationFrames": 134
         },
         {
           "narrativeType": "LOGIC",
@@ -379,32 +379,32 @@
             {
               "text": "风能进，",
               "startFrame": 0,
-              "durationFrames": 27
+              "durationFrames": 24
             },
             {
               "text": "是自然的力量。",
-              "startFrame": 26,
-              "durationFrames": 39
+              "startFrame": 24,
+              "durationFrames": 33
             },
             {
               "text": "雨能进，",
-              "startFrame": 64,
-              "durationFrames": 22
+              "startFrame": 56,
+              "durationFrames": 25
             },
             {
               "text": "是贫穷的现实。",
-              "startFrame": 86,
-              "durationFrames": 39
+              "startFrame": 80,
+              "durationFrames": 38
             },
             {
               "text": "国王不能进，",
-              "startFrame": 124,
-              "durationFrames": 27
+              "startFrame": 118,
+              "durationFrames": 26
             },
             {
               "text": "是权利的边界。",
-              "startFrame": 150,
-              "durationFrames": 40
+              "startFrame": 143,
+              "durationFrames": 43
             }
           ],
           "order": 5,
@@ -428,7 +428,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 190
+          "totalDurationFrames": 187
         },
         {
           "narrativeType": "CONCLUSION",
@@ -443,12 +443,12 @@
             {
               "text": "它把一个社会最底层的文明标准，",
               "startFrame": 52,
-              "durationFrames": 65
+              "durationFrames": 63
             },
             {
               "text": "压缩进了一间破房子里。",
-              "startFrame": 116,
-              "durationFrames": 52
+              "startFrame": 114,
+              "durationFrames": 54
             }
           ],
           "order": 6,
@@ -465,11 +465,11 @@
               }
             ]
           },
-          "totalDurationFrames": 168
+          "totalDurationFrames": 169
         }
       ],
       "audioSrc": "/audio/权利的边界/scene_2/scene_2.mp3",
-      "totalDurationFrames": 754
+      "totalDurationFrames": 749
     },
     {
       "sceneId": "scene_3",
@@ -483,12 +483,12 @@
             {
               "text": "很多人理解权利，",
               "startFrame": 0,
-              "durationFrames": 40
+              "durationFrames": 42
             },
             {
               "text": "第一反应是我要拥有什么。",
-              "startFrame": 39,
-              "durationFrames": 46
+              "startFrame": 41,
+              "durationFrames": 47
             }
           ],
           "order": 1,
@@ -497,7 +497,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 86
+          "totalDurationFrames": 89
         },
         {
           "narrativeType": "CASE",
@@ -507,32 +507,32 @@
             {
               "text": "我要有钱。",
               "startFrame": 0,
-              "durationFrames": 23
-            },
-            {
-              "text": "我要有地位。",
-              "startFrame": 22,
               "durationFrames": 24
             },
             {
+              "text": "我要有地位。",
+              "startFrame": 23,
+              "durationFrames": 26
+            },
+            {
               "text": "我要有资源。",
-              "startFrame": 46,
-              "durationFrames": 28
+              "startFrame": 48,
+              "durationFrames": 27
             },
             {
               "text": "我要有话语权。",
-              "startFrame": 73,
+              "startFrame": 74,
               "durationFrames": 35
             },
             {
               "text": "这些当然重要。",
-              "startFrame": 108,
-              "durationFrames": 31
+              "startFrame": 109,
+              "durationFrames": 35
             },
             {
               "text": "可它们都不是最底层的东西。",
-              "startFrame": 138,
-              "durationFrames": 57
+              "startFrame": 143,
+              "durationFrames": 67
             }
           ],
           "order": 2,
@@ -561,7 +561,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 196
+          "totalDurationFrames": 210
         },
         {
           "narrativeType": "LOGIC",
@@ -571,12 +571,12 @@
             {
               "text": "最底层的东西，",
               "startFrame": 0,
-              "durationFrames": 31
+              "durationFrames": 32
             },
             {
               "text": "对别人说不的权利。",
-              "startFrame": 30,
-              "durationFrames": 41
+              "startFrame": 31,
+              "durationFrames": 43
             }
           ],
           "order": 4,
@@ -585,7 +585,7 @@
             "conceptName": "说不的权利",
             "anchors": []
           },
-          "totalDurationFrames": 72
+          "totalDurationFrames": 75
         },
         {
           "narrativeType": "LOGIC",
@@ -595,17 +595,17 @@
             {
               "text": "尤其是强者。",
               "startFrame": 0,
-              "durationFrames": 33
+              "durationFrames": 35
             },
             {
               "text": "尤其是权力。",
-              "startFrame": 32,
-              "durationFrames": 34
+              "startFrame": 34,
+              "durationFrames": 36
             },
             {
               "text": "尤其是那个一句话就能改变你命运的人。",
-              "startFrame": 66,
-              "durationFrames": 72
+              "startFrame": 70,
+              "durationFrames": 70
             }
           ],
           "order": 5,
@@ -629,7 +629,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 139
+          "totalDurationFrames": 141
         },
         {
           "narrativeType": "LOGIC",
@@ -639,42 +639,42 @@
             {
               "text": "真正的权利，",
               "startFrame": 0,
-              "durationFrames": 31
+              "durationFrames": 30
             },
             {
               "text": "不是你站在高处时，",
-              "startFrame": 30,
-              "durationFrames": 46
+              "startFrame": 29,
+              "durationFrames": 47
             },
             {
               "text": "别人对你客气。",
               "startFrame": 76,
-              "durationFrames": 34
+              "durationFrames": 32
             },
             {
               "text": "那可能只是交换。",
-              "startFrame": 110,
-              "durationFrames": 35
+              "startFrame": 107,
+              "durationFrames": 42
             },
             {
               "text": "也可能只是忌惮。",
-              "startFrame": 144,
-              "durationFrames": 43
+              "startFrame": 148,
+              "durationFrames": 46
             },
             {
               "text": "真正的权利，",
-              "startFrame": 187,
-              "durationFrames": 34
+              "startFrame": 194,
+              "durationFrames": 33
             },
             {
               "text": "是你站在低处时，",
-              "startFrame": 221,
-              "durationFrames": 40
+              "startFrame": 227,
+              "durationFrames": 44
             },
             {
               "text": "别人依然不能随便越界。",
-              "startFrame": 260,
-              "durationFrames": 52
+              "startFrame": 271,
+              "durationFrames": 49
             }
           ],
           "order": 6,
@@ -691,7 +691,7 @@
             },
             "anchors": []
           },
-          "totalDurationFrames": 313
+          "totalDurationFrames": 321
         },
         {
           "narrativeType": "CASE",
@@ -701,47 +701,47 @@
             {
               "text": "你住在破屋里。",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 42
             },
             {
               "text": "你没钱。",
-              "startFrame": 34,
-              "durationFrames": 26
+              "startFrame": 41,
+              "durationFrames": 29
             },
             {
               "text": "没势。",
-              "startFrame": 60,
-              "durationFrames": 21
+              "startFrame": 69,
+              "durationFrames": 18
             },
             {
               "text": "没背景。",
-              "startFrame": 80,
-              "durationFrames": 31
+              "startFrame": 87,
+              "durationFrames": 29
             },
             {
               "text": "你看起来什么都没有。",
-              "startFrame": 111,
-              "durationFrames": 43
+              "startFrame": 115,
+              "durationFrames": 42
             },
             {
               "text": "但有一件事，是你永远不能失去的。",
-              "startFrame": 153,
-              "durationFrames": 75
+              "startFrame": 157,
+              "durationFrames": 76
             },
             {
               "text": "那就是未经允许，",
-              "startFrame": 227,
-              "durationFrames": 42
+              "startFrame": 232,
+              "durationFrames": 38
             },
             {
               "text": "任何人不能闯入你的边界。",
               "startFrame": 269,
-              "durationFrames": 54
+              "durationFrames": 51
             },
             {
               "text": "这才是法治最硬的部分。",
-              "startFrame": 322,
-              "durationFrames": 51
+              "startFrame": 319,
+              "durationFrames": 62
             }
           ],
           "order": 8,
@@ -767,11 +767,11 @@
               }
             ]
           },
-          "totalDurationFrames": 374
+          "totalDurationFrames": 382
         }
       ],
       "audioSrc": "/audio/权利的边界/scene_3/scene_3.mp3",
-      "totalDurationFrames": 1178
+      "totalDurationFrames": 1217
     },
     {
       "sceneId": "scene_4",
@@ -785,22 +785,22 @@
             {
               "text": "法治不是把每个人都变成强者。",
               "startFrame": 0,
-              "durationFrames": 79
+              "durationFrames": 69
             },
             {
               "text": "那不现实。",
-              "startFrame": 78,
-              "durationFrames": 44
+              "startFrame": 68,
+              "durationFrames": 38
             },
             {
               "text": "法治真正做的，",
-              "startFrame": 122,
-              "durationFrames": 44
+              "startFrame": 105,
+              "durationFrames": 42
             },
             {
               "text": "是让强者也必须停一下。",
-              "startFrame": 165,
-              "durationFrames": 56
+              "startFrame": 147,
+              "durationFrames": 54
             }
           ],
           "order": 1,
@@ -817,7 +817,7 @@
             },
             "anchors": []
           },
-          "totalDurationFrames": 222
+          "totalDurationFrames": 202
         },
         {
           "narrativeType": "LOGIC",
@@ -827,22 +827,22 @@
             {
               "text": "他要解释。",
               "startFrame": 0,
-              "durationFrames": 33
+              "durationFrames": 24
             },
             {
               "text": "要申请。",
-              "startFrame": 32,
+              "startFrame": 24,
               "durationFrames": 29
             },
             {
               "text": "要经过程序。",
-              "startFrame": 61,
-              "durationFrames": 33
+              "startFrame": 52,
+              "durationFrames": 30
             },
             {
               "text": "要承担责任。",
-              "startFrame": 93,
-              "durationFrames": 33
+              "startFrame": 81,
+              "durationFrames": 36
             }
           ],
           "order": 2,
@@ -867,7 +867,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 127
+          "totalDurationFrames": 118
         },
         {
           "narrativeType": "TRANSITION",
@@ -877,27 +877,27 @@
             {
               "text": "很多人会觉得，",
               "startFrame": 0,
-              "durationFrames": 40
+              "durationFrames": 31
             },
             {
               "text": "这太麻烦了。",
-              "startFrame": 39,
-              "durationFrames": 32
+              "startFrame": 30,
+              "durationFrames": 31
             },
             {
               "text": "抓紧办事不好吗？",
-              "startFrame": 70,
-              "durationFrames": 35
+              "startFrame": 61,
+              "durationFrames": 40
             },
             {
               "text": "遇到问题直接冲进去，不是更快吗？",
-              "startFrame": 105,
-              "durationFrames": 65
+              "startFrame": 100,
+              "durationFrames": 64
             },
             {
               "text": "这就是最大的陷阱。",
-              "startFrame": 170,
-              "durationFrames": 50
+              "startFrame": 163,
+              "durationFrames": 43
             }
           ],
           "order": 3,
@@ -914,7 +914,7 @@
               }
             ]
           },
-          "totalDurationFrames": 220
+          "totalDurationFrames": 207
         },
         {
           "narrativeType": "LOGIC",
@@ -924,7 +924,7 @@
             {
               "text": "权力最喜欢借口。",
               "startFrame": 0,
-              "durationFrames": 45
+              "durationFrames": 48
             }
           ],
           "order": 4,
@@ -934,7 +934,7 @@
             ],
             "coreSentenceAnchors": []
           },
-          "totalDurationFrames": 45
+          "totalDurationFrames": 48
         },
         {
           "narrativeType": "LOGIC",
@@ -944,32 +944,32 @@
             {
               "text": "效率，",
               "startFrame": 0,
-              "durationFrames": 18
+              "durationFrames": 19
             },
             {
               "text": "是它最常用的借口。",
-              "startFrame": 17,
-              "durationFrames": 40
+              "startFrame": 18,
+              "durationFrames": 38
             },
             {
               "text": "安全，",
               "startFrame": 56,
-              "durationFrames": 16
+              "durationFrames": 12
             },
             {
               "text": "是它最漂亮的借口。",
-              "startFrame": 72,
-              "durationFrames": 43
+              "startFrame": 68,
+              "durationFrames": 38
             },
             {
               "text": "大局，",
-              "startFrame": 114,
-              "durationFrames": 19
+              "startFrame": 105,
+              "durationFrames": 18
             },
             {
               "text": "是它最难反驳的借口。",
-              "startFrame": 133,
-              "durationFrames": 42
+              "startFrame": 123,
+              "durationFrames": 40
             }
           ],
           "order": 5,
@@ -991,7 +991,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 175
+          "totalDurationFrames": 163
         },
         {
           "narrativeType": "LOGIC",
@@ -1006,17 +1006,17 @@
             {
               "text": "可以随便推开一扇普通人的门。",
               "startFrame": 33,
-              "durationFrames": 59
+              "durationFrames": 61
             },
             {
               "text": "那扇门就不再是门。",
-              "startFrame": 92,
-              "durationFrames": 42
+              "startFrame": 94,
+              "durationFrames": 47
             },
             {
               "text": "它只是摆设。",
-              "startFrame": 133,
-              "durationFrames": 34
+              "startFrame": 141,
+              "durationFrames": 36
             }
           ],
           "order": 6,
@@ -1035,7 +1035,7 @@
               }
             ]
           },
-          "totalDurationFrames": 168
+          "totalDurationFrames": 178
         },
         {
           "narrativeType": "LOGIC",
@@ -1050,17 +1050,17 @@
             {
               "text": "只是一个人的隐私。",
               "startFrame": 30,
-              "durationFrames": 59
+              "durationFrames": 38
             },
             {
               "text": "不。",
-              "startFrame": 89,
-              "durationFrames": 5
+              "startFrame": 68,
+              "durationFrames": 17
             },
             {
               "text": "损失的是所有人的边界感。",
-              "startFrame": 93,
-              "durationFrames": 63
+              "startFrame": 84,
+              "durationFrames": 58
             }
           ],
           "order": 7,
@@ -1072,7 +1072,7 @@
             "butContentIndex": 3,
             "anchors": []
           },
-          "totalDurationFrames": 156
+          "totalDurationFrames": 143
         },
         {
           "narrativeType": "CASE",
@@ -1082,22 +1082,22 @@
             {
               "text": "今天它可以为了效率进他的门。",
               "startFrame": 0,
-              "durationFrames": 59
+              "durationFrames": 67
             },
             {
               "text": "明天它也可以为了安全进你的门。",
-              "startFrame": 58,
-              "durationFrames": 59
+              "startFrame": 66,
+              "durationFrames": 54
             },
             {
               "text": "后天它就可以为了大局，",
-              "startFrame": 117,
-              "durationFrames": 53
+              "startFrame": 120,
+              "durationFrames": 39
             },
             {
               "text": "进入每一个人的门。",
-              "startFrame": 169,
-              "durationFrames": 35
+              "startFrame": 158,
+              "durationFrames": 34
             }
           ],
           "order": 8,
@@ -1121,7 +1121,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 205
+          "totalDurationFrames": 193
         },
         {
           "narrativeType": "LOGIC",
@@ -1131,11 +1131,11 @@
             {
               "text": "门一旦失去意义，",
               "startFrame": 0,
-              "durationFrames": 33
+              "durationFrames": 35
             },
             {
               "text": "家也会失去意义。",
-              "startFrame": 32,
+              "startFrame": 34,
               "durationFrames": 42
             }
           ],
@@ -1145,7 +1145,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 75
+          "totalDurationFrames": 77
         },
         {
           "narrativeType": "LOGIC",
@@ -1160,7 +1160,7 @@
             {
               "text": "家是一个人最后能说“不”的地方。",
               "startFrame": 38,
-              "durationFrames": 63
+              "durationFrames": 60
             }
           ],
           "order": 10,
@@ -1172,7 +1172,7 @@
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 101
+          "totalDurationFrames": 99
         },
         {
           "narrativeType": "LOGIC",
@@ -1182,17 +1182,17 @@
             {
               "text": "如果连这里都不能拒绝，",
               "startFrame": 0,
-              "durationFrames": 50
+              "durationFrames": 47
             },
             {
               "text": "那人就不是生活在家里。",
-              "startFrame": 49,
-              "durationFrames": 43
+              "startFrame": 46,
+              "durationFrames": 45
             },
             {
               "text": "他只是暂时被允许待在那里。",
               "startFrame": 91,
-              "durationFrames": 56
+              "durationFrames": 57
             }
           ],
           "order": 11,
@@ -1221,7 +1221,7 @@
         }
       ],
       "audioSrc": "/audio/权利的边界/scene_4/scene_4.mp3",
-      "totalDurationFrames": 1639
+      "totalDurationFrames": 1574
     },
     {
       "sceneId": "scene_5",
@@ -1235,17 +1235,17 @@
             {
               "text": "这就是“国王不能进”的真正含义。",
               "startFrame": 0,
-              "durationFrames": 64
+              "durationFrames": 68
             },
             {
               "text": "它不是一句浪漫的话。",
-              "startFrame": 63,
+              "startFrame": 67,
               "durationFrames": 39
             },
             {
               "text": "它是一句冷峻的制度判断。",
-              "startFrame": 101,
-              "durationFrames": 56
+              "startFrame": 106,
+              "durationFrames": 58
             }
           ],
           "order": 1,
@@ -1254,7 +1254,7 @@
             "conceptName": "国王不能进",
             "anchors": []
           },
-          "totalDurationFrames": 157
+          "totalDurationFrames": 165
         },
         {
           "narrativeType": "LOGIC",
@@ -1264,31 +1264,31 @@
             {
               "text": "一个社会，",
               "startFrame": 0,
-              "durationFrames": 24
+              "durationFrames": 26
             },
             {
               "text": "能不能保护普通人，",
-              "startFrame": 23,
-              "durationFrames": 40
+              "startFrame": 25,
+              "durationFrames": 43
             },
             {
               "text": "不要看它怎样对待成功者。",
-              "startFrame": 63,
-              "durationFrames": 45
+              "startFrame": 67,
+              "durationFrames": 54
             },
             {
               "text": "成功者本来就有人保护。",
-              "startFrame": 108,
-              "durationFrames": 56
+              "startFrame": 121,
+              "durationFrames": 52
             },
             {
               "text": "不要看它怎样对待富人。",
-              "startFrame": 163,
-              "durationFrames": 42
+              "startFrame": 172,
+              "durationFrames": 52
             },
             {
               "text": "富人有资源保护自己。",
-              "startFrame": 205,
+              "startFrame": 224,
               "durationFrames": 55
             }
           ],
@@ -1302,7 +1302,7 @@
             "rightShowFrom": 4,
             "anchors": []
           },
-          "totalDurationFrames": 260
+          "totalDurationFrames": 279
         },
         {
           "narrativeType": "LOGIC",
@@ -1312,7 +1312,7 @@
             {
               "text": "要看它怎样对待一个住在破房子里的人。",
               "startFrame": 0,
-              "durationFrames": 79
+              "durationFrames": 73
             }
           ],
           "order": 4,
@@ -1322,7 +1322,7 @@
             ],
             "coreSentenceAnchors": []
           },
-          "totalDurationFrames": 79
+          "totalDurationFrames": 73
         },
         {
           "narrativeType": "CASE",
@@ -1332,17 +1332,17 @@
             {
               "text": "当一个人没有身份光环。",
               "startFrame": 0,
-              "durationFrames": 47
+              "durationFrames": 48
             },
             {
               "text": "没有舆论声量。",
-              "startFrame": 46,
-              "durationFrames": 39
+              "startFrame": 48,
+              "durationFrames": 38
             },
             {
               "text": "没有讨价还价的筹码。",
               "startFrame": 85,
-              "durationFrames": 44
+              "durationFrames": 50
             }
           ],
           "order": 5,
@@ -1366,7 +1366,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 130
+          "totalDurationFrames": 135
         },
         {
           "narrativeType": "LOGIC",
@@ -1376,27 +1376,27 @@
             {
               "text": "他还能不能关上门？",
               "startFrame": 0,
-              "durationFrames": 50
+              "durationFrames": 32
             },
             {
               "text": "他关上门以后，",
-              "startFrame": 49,
-              "durationFrames": 36
+              "startFrame": 31,
+              "durationFrames": 43
             },
             {
               "text": "强者会不会停下？",
-              "startFrame": 85,
-              "durationFrames": 45
+              "startFrame": 74,
+              "durationFrames": 38
             },
             {
               "text": "权力会不会承认，",
-              "startFrame": 129,
-              "durationFrames": 39
+              "startFrame": 111,
+              "durationFrames": 33
             },
             {
               "text": "这里不是我的地方？",
-              "startFrame": 167,
-              "durationFrames": 38
+              "startFrame": 144,
+              "durationFrames": 36
             }
           ],
           "order": 6,
@@ -1423,7 +1423,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 205
+          "totalDurationFrames": 181
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1433,7 +1433,7 @@
             {
               "text": "这才是文明的压力测试。",
               "startFrame": 0,
-              "durationFrames": 54
+              "durationFrames": 52
             }
           ],
           "order": 7,
@@ -1451,11 +1451,11 @@
               }
             ]
           },
-          "totalDurationFrames": 54
+          "totalDurationFrames": 52
         }
       ],
       "audioSrc": "/audio/权利的边界/scene_5/scene_5.mp3",
-      "totalDurationFrames": 885
+      "totalDurationFrames": 884
     },
     {
       "sceneId": "scene_6",
@@ -1474,11 +1474,11 @@
             {
               "text": "也不能只把它当作一句浪漫的话。",
               "startFrame": 33,
-              "durationFrames": 61
+              "durationFrames": 58
             },
             {
               "text": "它有两个现实提醒。",
-              "startFrame": 93,
+              "startFrame": 91,
               "durationFrames": 42
             }
           ],
@@ -1488,7 +1488,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 136
+          "totalDurationFrames": 133
         },
         {
           "narrativeType": "LOGIC",
@@ -1498,47 +1498,47 @@
             {
               "text": "第一，",
               "startFrame": 0,
-              "durationFrames": 18
+              "durationFrames": 15
             },
             {
               "text": "看权力时，",
-              "startFrame": 17,
-              "durationFrames": 30
-            },
-            {
-              "text": "不要只看它承诺什么。",
-              "startFrame": 46,
-              "durationFrames": 45
-            },
-            {
-              "text": "要看它不能做什么。",
-              "startFrame": 91,
-              "durationFrames": 47
-            },
-            {
-              "text": "一个权力说了很多好听的话，",
-              "startFrame": 138,
-              "durationFrames": 58
-            },
-            {
-              "text": "不代表它被约束了。",
-              "startFrame": 196,
-              "durationFrames": 42
-            },
-            {
-              "text": "真正的约束，",
-              "startFrame": 237,
+              "startFrame": 14,
               "durationFrames": 32
             },
             {
+              "text": "不要只看它承诺什么。",
+              "startFrame": 45,
+              "durationFrames": 44
+            },
+            {
+              "text": "要看它不能做什么。",
+              "startFrame": 89,
+              "durationFrames": 42
+            },
+            {
+              "text": "一个权力说了很多好听的话，",
+              "startFrame": 130,
+              "durationFrames": 54
+            },
+            {
+              "text": "不代表它被约束了。",
+              "startFrame": 183,
+              "durationFrames": 41
+            },
+            {
+              "text": "真正的约束，",
+              "startFrame": 224,
+              "durationFrames": 29
+            },
+            {
               "text": "是它想进打破边界时，",
-              "startFrame": 269,
-              "durationFrames": 51
+              "startFrame": 253,
+              "durationFrames": 45
             },
             {
               "text": "有没有人能拦住它。",
-              "startFrame": 319,
-              "durationFrames": 42
+              "startFrame": 297,
+              "durationFrames": 40
             }
           ],
           "order": 2,
@@ -1557,7 +1557,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 361
+          "totalDurationFrames": 338
         },
         {
           "narrativeType": "LOGIC",
@@ -1567,67 +1567,67 @@
             {
               "text": "第二，",
               "startFrame": 0,
-              "durationFrames": 17
+              "durationFrames": 16
             },
             {
               "text": "看规则时，",
-              "startFrame": 16,
-              "durationFrames": 30
+              "startFrame": 15,
+              "durationFrames": 29
             },
             {
               "text": "不要嫌程序麻烦。",
-              "startFrame": 45,
-              "durationFrames": 40
+              "startFrame": 43,
+              "durationFrames": 43
             },
             {
               "text": "程序看起来慢。",
-              "startFrame": 85,
-              "durationFrames": 36
+              "startFrame": 86,
+              "durationFrames": 35
             },
             {
               "text": "可它保护的，",
               "startFrame": 120,
-              "durationFrames": 22
+              "durationFrames": 28
             },
             {
               "text": "正是普通人。",
-              "startFrame": 142,
+              "startFrame": 147,
               "durationFrames": 33
             },
             {
               "text": "敲门很慢。",
-              "startFrame": 174,
-              "durationFrames": 28
-            },
-            {
-              "text": "授权很慢。",
-              "startFrame": 202,
-              "durationFrames": 31
-            },
-            {
-              "text": "审查很慢。",
-              "startFrame": 232,
+              "startFrame": 180,
               "durationFrames": 34
             },
             {
-              "text": "留下记录也很慢。",
-              "startFrame": 266,
-              "durationFrames": 42
+              "text": "授权很慢。",
+              "startFrame": 214,
+              "durationFrames": 30
             },
             {
-              "text": "但这些慢，",
-              "startFrame": 308,
+              "text": "审查很慢。",
+              "startFrame": 243,
               "durationFrames": 29
             },
             {
+              "text": "留下记录也很慢。",
+              "startFrame": 271,
+              "durationFrames": 51
+            },
+            {
+              "text": "但这些慢，",
+              "startFrame": 321,
+              "durationFrames": 31
+            },
+            {
               "text": "都是在告诉权力，",
-              "startFrame": 336,
-              "durationFrames": 37
+              "startFrame": 352,
+              "durationFrames": 38
             },
             {
               "text": "你不是主人。",
-              "startFrame": 372,
-              "durationFrames": 33
+              "startFrame": 389,
+              "durationFrames": 31
             }
           ],
           "order": 3,
@@ -1646,11 +1646,11 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 406
+          "totalDurationFrames": 421
         }
       ],
       "audioSrc": "/audio/权利的边界/scene_6/scene_6.mp3",
-      "totalDurationFrames": 906
+      "totalDurationFrames": 893
     },
     {
       "sceneId": "scene_7",
@@ -1664,17 +1664,17 @@
             {
               "text": "所以，",
               "startFrame": 0,
-              "durationFrames": 21
+              "durationFrames": 20
             },
             {
               "text": "一间破房子挡住国王，",
-              "startFrame": 20,
-              "durationFrames": 56
+              "startFrame": 19,
+              "durationFrames": 53
             },
             {
               "text": "靠的不是锁。",
-              "startFrame": 76,
-              "durationFrames": 22
+              "startFrame": 72,
+              "durationFrames": 31
             }
           ],
           "order": 1,
@@ -1689,7 +1689,7 @@
               }
             ]
           },
-          "totalDurationFrames": 99
+          "totalDurationFrames": 103
         },
         {
           "narrativeType": "LOGIC",
@@ -1699,17 +1699,17 @@
             {
               "text": "靠的是所有人都承认，",
               "startFrame": 0,
-              "durationFrames": 43
+              "durationFrames": 50
             },
             {
               "text": "哪怕他再弱，",
-              "startFrame": 42,
-              "durationFrames": 33
+              "startFrame": 49,
+              "durationFrames": 34
             },
             {
               "text": "这里也有一条线。",
-              "startFrame": 75,
-              "durationFrames": 33
+              "startFrame": 82,
+              "durationFrames": 34
             }
           ],
           "order": 2,
@@ -1718,7 +1718,7 @@
             "conceptName": "私人边界",
             "anchors": []
           },
-          "totalDurationFrames": 108
+          "totalDurationFrames": 117
         },
         {
           "narrativeType": "LOGIC",
@@ -1733,17 +1733,17 @@
             {
               "text": "是公共权力。",
               "startFrame": 20,
-              "durationFrames": 39
+              "durationFrames": 35
             },
             {
               "text": "线内，",
-              "startFrame": 58,
-              "durationFrames": 19
+              "startFrame": 55,
+              "durationFrames": 20
             },
             {
               "text": "是私人生活。",
-              "startFrame": 77,
-              "durationFrames": 38
+              "startFrame": 75,
+              "durationFrames": 35
             }
           ],
           "order": 3,
@@ -1756,7 +1756,7 @@
             "rightShowFrom": 2,
             "anchors": []
           },
-          "totalDurationFrames": 115
+          "totalDurationFrames": 111
         },
         {
           "narrativeType": "LOGIC",
@@ -1766,22 +1766,22 @@
             {
               "text": "权力可以强大。",
               "startFrame": 0,
-              "durationFrames": 37
+              "durationFrames": 36
             },
             {
               "text": "但不能无处不在。",
-              "startFrame": 36,
-              "durationFrames": 43
+              "startFrame": 35,
+              "durationFrames": 36
             },
             {
               "text": "国家确实重要。",
-              "startFrame": 79,
-              "durationFrames": 43
+              "startFrame": 71,
+              "durationFrames": 42
             },
             {
               "text": "但不能吞掉每一个人的门槛。",
-              "startFrame": 121,
-              "durationFrames": 51
+              "startFrame": 113,
+              "durationFrames": 54
             }
           ],
           "order": 4,
@@ -1810,7 +1810,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 173
+          "totalDurationFrames": 167
         },
         {
           "narrativeType": "CASE",
@@ -1820,17 +1820,17 @@
             {
               "text": "房子可以破。",
               "startFrame": 0,
-              "durationFrames": 29
+              "durationFrames": 34
             },
             {
               "text": "墙可以漏。",
-              "startFrame": 28,
-              "durationFrames": 28
+              "startFrame": 33,
+              "durationFrames": 34
             },
             {
               "text": "生活可以艰难。",
-              "startFrame": 55,
-              "durationFrames": 46
+              "startFrame": 67,
+              "durationFrames": 41
             }
           ],
           "order": 5,
@@ -1854,7 +1854,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 102
+          "totalDurationFrames": 108
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1864,12 +1864,12 @@
             {
               "text": "但只要那条边界还在，",
               "startFrame": 0,
-              "durationFrames": 46
+              "durationFrames": 47
             },
             {
               "text": "普通人就还有站立的地方。",
-              "startFrame": 45,
-              "durationFrames": 61
+              "startFrame": 46,
+              "durationFrames": 58
             }
           ],
           "order": 6,
@@ -1892,7 +1892,7 @@
               }
             ]
           },
-          "totalDurationFrames": 106
+          "totalDurationFrames": 105
         },
         {
           "narrativeType": "LOGIC",
@@ -1902,37 +1902,37 @@
             {
               "text": "真正可怕的，",
               "startFrame": 0,
-              "durationFrames": 27
+              "durationFrames": 36
             },
             {
               "text": "不是风进来了，",
-              "startFrame": 26,
-              "durationFrames": 28
-            },
-            {
-              "text": "不是雨进来了。",
-              "startFrame": 53,
-              "durationFrames": 34
-            },
-            {
-              "text": "而是有一天，",
-              "startFrame": 87,
-              "durationFrames": 33
-            },
-            {
-              "text": "国王进来了。",
-              "startFrame": 120,
+              "startFrame": 36,
               "durationFrames": 32
             },
             {
+              "text": "不是雨进来了。",
+              "startFrame": 67,
+              "durationFrames": 40
+            },
+            {
+              "text": "而是有一天，",
+              "startFrame": 106,
+              "durationFrames": 25
+            },
+            {
+              "text": "国王进来了。",
+              "startFrame": 130,
+              "durationFrames": 36
+            },
+            {
               "text": "大家还觉得，",
-              "startFrame": 151,
-              "durationFrames": 30
+              "startFrame": 166,
+              "durationFrames": 27
             },
             {
               "text": "这很正常。",
-              "startFrame": 180,
-              "durationFrames": 30
+              "startFrame": 192,
+              "durationFrames": 33
             }
           ],
           "order": 7,
@@ -1944,7 +1944,7 @@
             "butContentIndex": 4,
             "anchors": []
           },
-          "totalDurationFrames": 210
+          "totalDurationFrames": 226
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1964,7 +1964,7 @@
             {
               "text": "是文明本身。",
               "startFrame": 56,
-              "durationFrames": 52
+              "durationFrames": 54
             }
           ],
           "order": 8,
@@ -1992,11 +1992,11 @@
               }
             ]
           },
-          "totalDurationFrames": 109
+          "totalDurationFrames": 110
         }
       ],
       "audioSrc": "/audio/权利的边界/scene_7/scene_7.mp3",
-      "totalDurationFrames": 1021
+      "totalDurationFrames": 1045
     }
   ],
   "fps": 30,

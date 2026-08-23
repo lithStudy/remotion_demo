@@ -83,14 +83,14 @@ function ChatBubbleBubblesEditor({
 				value={row.bubbleText}
 				onChange={(v) => patch('bubbleText', v)}
 				required={false}
-				description={""}
+				description={"可选；气泡内显示文本。若传入则覆盖对应 content 条目文本；不影响 content 用于时序/字幕。"}
 			/>
 			<ContentIndexField
 				name="showFrom"
 				value={row.showFrom}
 				onChange={(v) => patch('showFrom', v)}
 				required={false}
-				description={""}
+				description={"可选；绑定 content 下标（0-based）。缺省为该行在 bubbles 中的下标。"}
 				contentLength={contentLength}
 			/>
 			<EnumField
@@ -98,7 +98,7 @@ function ChatBubbleBubblesEditor({
 				value={row.align}
 				onChange={(v) => patch('align', v)}
 				required={false}
-				description={""}
+				description={"可选；left 头像在左，right 头像在右。"}
 				options={["left", "right"]}
 			/>
 						</div>

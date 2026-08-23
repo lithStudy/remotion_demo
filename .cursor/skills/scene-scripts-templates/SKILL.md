@@ -1,6 +1,6 @@
 ---
 name: scene-scripts-templates
-description: "scene-scripts.json 中可用的模板详情，在编辑或生成 `scene-scripts.json`时，用于了解如何正确使用模板，响应用户的验证、修改模板的请求。模板包括：BEAT_SEQUENCE、CASE_BREAKDOWN、CAUSE_CHAIN、CENTER_FOCUS、CHAT_BUBBLE、CHECKLIST_REVEAL、COGNITIVE_SHIFT、CONCEPT_CARD、DATA_TABLE、DOS_AND_DONTS、KPI_HERO、MAGNIFYING_GLASS、METHOD_STACK、PANEL_GRID、PEER_INDUCT、PROGRESS_RING、PUNCH_CAPTION、QUOTE_CITATION、SPLIT_COMPARE、STAT_COMPARE、STEP_LIST、TEXT_FOCUS、TIMELINE、TREE_DIAGRAM。"
+description: "scene-scripts.json 中可用的模板详情，在编辑或生成 `scene-scripts.json`时，用于了解如何正确使用模板，响应用户的验证、修改模板的请求。模板包括：BEAT_SEQUENCE、CASE_BREAKDOWN、CAUSE_CHAIN、CENTER_FOCUS、CHAT_BUBBLE、CHECKLIST_REVEAL、COGNITIVE_SHIFT、CONCEPT_CARD、DATA_TABLE、DOS_AND_DONTS、KPI_HERO、MAGNIFYING_GLASS、METHOD_STACK、PANEL_GRID、PEER_INDUCT、PROGRESS_RING、PUNCH_CAPTION、QA_REVEAL、QUOTE_CITATION、SOURCE_CITATION、SPLIT_COMPARE、STAT_COMPARE、STEP_LIST、TEXT_FOCUS、TIMELINE、TREE_DIAGRAM。"
 metadata:
   tags: remotion, scene-scripts, templateMeta, json
 ---
@@ -23,9 +23,9 @@ metadata:
 
 ## 图片类字段
 
-- 工程 `config.json` 中的 `image_style`（供 image_prompt 类字段参考）：
+- 工程 `config.yaml` 中的 `image_style`（供 image_prompt 类字段参考）：
 
-  Minimalist black and white vector illustration, flat design, symbolic icon style, bold high-contrast lines, isolated on white background
+  Bold comic-style illustration with thick black outlines on pure white background, heavy stroke weight, cartoon line art, flat vector icon, high contrast, no thin hairline, no pencil sketch, no shading, no glow, no dark or black background, isolated subject
 
 ## 修改范围
 当用户目的是修改`scene-scripts.json`时，只操作这一个被指定的文件，不要额外修改scene等文件。
@@ -51,7 +51,9 @@ metadata:
 - **PEER_INDUCT**: `references/PEER_INDUCT.md`
 - **PROGRESS_RING**: `references/PROGRESS_RING.md`
 - **PUNCH_CAPTION**: `references/PUNCH_CAPTION.md`
+- **QA_REVEAL**: `references/QA_REVEAL.md`
 - **QUOTE_CITATION**: `references/QUOTE_CITATION.md`
+- **SOURCE_CITATION**: `references/SOURCE_CITATION.md`
 - **SPLIT_COMPARE**: `references/SPLIT_COMPARE.md`
 - **STAT_COMPARE**: `references/STAT_COMPARE.md`
 - **STEP_LIST**: `references/STEP_LIST.md`

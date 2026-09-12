@@ -83,7 +83,13 @@ def analyze_param_for_item(
         return None
 
     try:
-        resp = generate_with_retry(client, model, prompt, append_ai_log=append_ai_log)
+        resp = generate_with_retry(
+            client,
+            model,
+            prompt,
+            append_ai_log=append_ai_log,
+            llm_stage="param",
+        )
         res_json = parse_json_from_response(resp.text)
         res_json = _normalize_param_root(res_json)
         if not isinstance(res_json, dict):

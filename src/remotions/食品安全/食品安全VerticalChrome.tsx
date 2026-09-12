@@ -8,7 +8,7 @@ const FONT_STACK =
     '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
 
 const STATIC_HEADLINE = "食品安全";
-const STATIC_HEADLINE_SUBTITLE = "为什么能管住酒驾，却管不住毒食品？";
+const STATIC_HEADLINE_SUBTITLE = "为什么酒驾能管住，食品安全却总难落地？";
 const STATIC_HEADLINE_SUB = "社会热点深读";
 const STATIC_HEADLINE_SUB_EN = "SOCIAL DEEP DIVE";
 const THEME_ACCENT = "#059669";

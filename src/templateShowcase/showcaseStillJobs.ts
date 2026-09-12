@@ -48,6 +48,14 @@ export const SC_PEER_INDUCT_CONTENT: ContentItem[] = [
 	{ text: "结论：先核对数据再下判断。", startFrame: 76, durationFrames: 32 },
 ];
 
+export const SC_HUB_RADIATE_CONTENT: ContentItem[] = [
+	{ text: "面对差距的时候，", startFrame: 0, durationFrames: 28 },
+	{ text: "不会先问差距怎么来的，", startFrame: 28, durationFrames: 30 },
+	{ text: "也不会想不足该怎么补，", startFrame: 58, durationFrames: 30 },
+	{ text: "更不会对照别人怎么做，", startFrame: 88, durationFrames: 30 },
+	{ text: "甚至不会承认自己落后了。", startFrame: 118, durationFrames: 34 },
+];
+
 export const SC_METHOD_CONTENT: ContentItem[] = [
 	{ text: "第一，警惕情绪画面。", startFrame: 0, durationFrames: 22 },
 	{ text: "先识别这是在煽动情绪。", startFrame: 22, durationFrames: 20 },
@@ -153,6 +161,7 @@ export const SHOWCASE_SEGMENT_TIMINGS: ShowcaseSegmentTiming[] = [
 	{ key: "BEAT_SEQUENCE", durationInFrames: durationFromContent(SC_BEAT_CONTENT) },
 	{ key: "PUNCH_CAPTION", durationInFrames: durationFromContent(SC_PUNCH_CONTENT) },
 	{ key: "PEER_INDUCT", durationInFrames: durationFromContent(SC_PEER_INDUCT_CONTENT) },
+	{ key: "HUB_RADIATE", durationInFrames: durationFromContent(SC_HUB_RADIATE_CONTENT) },
 	{ key: "METHOD_STACK", durationInFrames: durationFromContent(SC_METHOD_CONTENT) },
 	{ key: "CASE_BREAKDOWN", durationInFrames: durationFromContent(SC_CASE_CONTENT) },
 	{ key: "CENTER_FOCUS", durationInFrames: SHOWCASE_FALLBACK_FRAMES },
@@ -165,7 +174,7 @@ export const SHOWCASE_SEGMENT_TIMINGS: ShowcaseSegmentTiming[] = [
 	{ key: "MAGNIFYING_GLASS", durationInFrames: durationFromContent(SC_MAGNIFY_CONTENT) },
 	{ key: "PROGRESS_RING", durationInFrames: durationFromContent(SC_PROGRESS_CONTENT) },
 	{ key: "QUOTE_CITATION", durationInFrames: SHOWCASE_FALLBACK_FRAMES },
-	{ key: "SOURCE_CITATION", durationInFrames: 24 + 4 * 12 + 27 },
+	{ key: "SOURCE_CITATION", durationInFrames: 24 + 4 * 12 + 6 },
 	{ key: "SPLIT_COMPARE", durationInFrames: SHOWCASE_FALLBACK_FRAMES },
 	{ key: "STAT_COMPARE", durationInFrames: durationFromContent(SC_STAT_CONTENT) },
 	{ key: "STEP_LIST", durationInFrames: durationAfterLastStagger(SC_STEP_LIST_LAST_DELAY) },

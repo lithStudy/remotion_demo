@@ -6,6 +6,7 @@ import { Scene4, calculateScene4Duration } from "./scenes/Scene4";
 import { Scene5, calculateScene5Duration } from "./scenes/Scene5";
 import { Scene6, calculateScene6Duration } from "./scenes/Scene6";
 import { Scene7, calculateScene7Duration } from "./scenes/Scene7";
+import { Scene8, calculateScene8Duration } from "./scenes/Scene8";
 
 export const 华为专利论Schema = z.object({});
 
@@ -21,6 +22,7 @@ export const sceneConfigs = [
     { name: "scene5", duration: calculateScene5Duration() + SCENE_END_PADDING, component: Scene5, label: "剖析·专利封锁" },
     { name: "scene6", duration: calculateScene6Duration() + SCENE_END_PADDING, component: Scene6, label: "反转·屠龙变恶龙" },
     { name: "scene7", duration: calculateScene7Duration() + SCENE_END_PADDING, component: Scene7, label: "召唤·护创新还是护垄断" },
+    { name: "scene8", duration: calculateScene8Duration(), component: Scene8, label: "片尾·参考资料" },
 ];
 
 export const MAIN_DURATION_华为专利论 =

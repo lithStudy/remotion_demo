@@ -188,7 +188,8 @@ export const BWDataTable: React.FC<BWDataTableProps> = ({
 	const frame = useCurrentFrame();
 	const { fps, width, height } = useVideoConfig();
 	const isPortrait = height > width;
-	const scale = width / 1080;
+	// 横屏按高度缩放，避免 width/1080 把字号撑大后被 overflow 裁切
+	const scale = isPortrait ? width / 1080 : height / 1080;
 	const horizontalPad = Math.round(width * (isPortrait ? 0.035 : 0.1));
 	const items = normalizeContent(content);
 	const slice = (columns ?? [])

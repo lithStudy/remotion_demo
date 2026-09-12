@@ -535,6 +535,86 @@
         ]
       }
     },
+    "HUB_RADIATE": {
+      "requiredOverrideKeys": [
+        "hub",
+        "rays"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "hub": {
+            "type": "object",
+            "required": [
+              "imageSrc"
+            ],
+            "description": "情境核：居中主图，先于射线出现",
+            "properties": {
+              "imageSrc": {
+                "type": "string",
+                "format": "image_prompt",
+                "description": "情境核配图"
+              },
+              "enterEffect": {
+                "type": "string",
+                "enum": [
+                  "breathe",
+                  "slideLeft",
+                  "slideBottom",
+                  "zoomIn",
+                  "fadeIn"
+                ],
+                "default": "zoomIn"
+              },
+              "showFrom": {
+                "type": "content_index",
+                "minimum": 0,
+                "description": "从该条口播起显示核图；省略为 0"
+              }
+            }
+          },
+          "rays": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 4,
+            "description": "发散支点：横排在核下方；每项 imageSrc、可选 enterEffect、可选 showFrom（content 0-based）",
+            "items": {
+              "type": "object",
+              "required": [
+                "imageSrc"
+              ],
+              "properties": {
+                "imageSrc": {
+                  "type": "string",
+                  "format": "image_prompt",
+                  "description": "射线支点配图"
+                },
+                "enterEffect": {
+                  "type": "string",
+                  "enum": [
+                    "breathe",
+                    "slideLeft",
+                    "slideBottom",
+                    "zoomIn",
+                    "fadeIn"
+                  ],
+                  "default": "fadeIn"
+                },
+                "showFrom": {
+                  "type": "content_index",
+                  "minimum": 0,
+                  "description": "从该条口播起显示本图与到核的连线；省略则与 rays 下标对齐"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "hub",
+          "rays"
+        ]
+      }
+    },
     "KPI_HERO": {
       "requiredOverrideKeys": [
         "blocks"
@@ -1036,6 +1116,57 @@
         },
         "required": [
           "quoteSource"
+        ]
+      }
+    },
+    "SOURCE_CITATION": {
+      "requiredOverrideKeys": [
+        "references"
+      ],
+      "paramSchema": {
+        "type": "object",
+        "properties": {
+          "sectionTitle": {
+            "type": "string",
+            "description": "列表主标题，默认「参考资料」"
+          },
+          "references": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 12,
+            "description": "参考文献条目；title 必填（原文），titleZh/publisherZh 可选（中文主显示）",
+            "items": {
+              "type": "object",
+              "required": [
+                "title"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "文献原文标题（便于读者检索）"
+                },
+                "titleZh": {
+                  "type": "string",
+                  "description": "中文译名（可选，有则作为主标题显示）"
+                },
+                "publisher": {
+                  "type": "string",
+                  "description": "出版方/机构/作者原文（可选）"
+                },
+                "publisherZh": {
+                  "type": "string",
+                  "description": "出版方中文译名（可选，有则作为主显示）"
+                },
+                "year": {
+                  "type": "string",
+                  "description": "发布年份（可选）"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "references"
         ]
       }
     },

@@ -8,7 +8,7 @@ const FONT_STACK =
     '"PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif';
 
 const STATIC_HEADLINE = "华为的5G迷思";
-const STATIC_HEADLINE_SUBTITLE = "无华为，不5G！蠢还是坏？";
+const STATIC_HEADLINE_SUBTITLE = "无华为，不5G？";
 const STATIC_HEADLINE_SUB = "科技热点深读";
 const STATIC_HEADLINE_SUB_EN = "TECH DEEP DIVE";
 const THEME_ACCENT = "#FF6900";

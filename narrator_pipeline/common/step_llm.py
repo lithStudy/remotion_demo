@@ -25,4 +25,11 @@ def create_llm_runtime(
 
     image_style = config.get("image_style", "简洁线条插画风格，无背景，无文字")
     template_guide = generate_ai_prompt_guide(image_style, include_examples=False)
+    if provider == "deepseek":
+        print(
+            "   ⚙️ DeepSeek thinking: "
+            f"default={client.deepseek_thinking_enabled}/{client.deepseek_reasoning_effort or '-'}, "
+            f"param={client.deepseek_param_thinking_enabled}/"
+            f"{client.deepseek_param_reasoning_effort or '-'}"
+        )
     return client, model, provider, template_guide

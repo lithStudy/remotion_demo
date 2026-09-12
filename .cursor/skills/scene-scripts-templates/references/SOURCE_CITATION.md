@@ -10,11 +10,11 @@ metadata:
 {
   "name": "SOURCE_CITATION",
   "componentExport": "BWSourceCitation",
-  "description": "适用：片尾独立 scene，展示支撑全文论点的证据来源列表（类似论文 References），纯视觉无口播。\n差异：正片引述原话/证言用 QUOTE_CITATION；本模板为文献脚注列表，非引号大字。\n位置：建议作为最后一个 scene（scene_references），无 audioSrc，content 为空。\n时长：按 references 条数自动计算，公式 30 + n×15 + 60 帧（@30fps）；超过可视条数时列表向上滚动。\n参数：sectionTitle 可选（默认「参考资料」）；references 必填 1～12 条，每项 title 必填（原文标题，便于检索），titleZh/publisherZh 可选（中文主显示），publisher/year 可选。",
+  "description": "适用：片尾独立 scene，展示支撑全文论点的证据来源列表（类似论文 References），纯视觉无口播。\n差异：正片引述原话/证言用 QUOTE_CITATION；本模板为文献脚注列表，非引号大字。\n位置：建议作为最后一个 scene（scene_references），无 audioSrc，content 为空；模板内自带全局 BGM（与壳层同一音轨）。\n时长：按 references 条数自动计算；双语多行条目每页最多 4 条，超出自动分页；单页溢出时列表向上滚动。\n参数：sectionTitle 可选（默认「参考资料」）；references 必填 1～12 条，每项 title 必填（原文标题，便于检索），titleZh/publisherZh 可选（中文主显示），publisher/year 可选。",
   "chinese_name": "参考资料",
   "image_count": 0,
   "content_optional": true,
-  "duration_formula": "30 + references.length * 15 + 60",
+  "duration_formula": "分页：各页 24+n×12+缓冲(末页6/非末15)，页间叠化12帧；单页：24+n×12+6",
   "param_schema": {
     "type": "object",
     "properties": {

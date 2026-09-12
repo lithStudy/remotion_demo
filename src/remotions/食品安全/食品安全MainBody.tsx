@@ -16,7 +16,7 @@ export const 食品安全MainBody: React.FC = () => (
         <Sequence durationInFrames={COVER_DURATION_FRAMES}>
             <LandscapeCoverPoster
                 title="食品安全"
-                    subtitle="为什么能管住酒驾，却管不住毒食品？"
+                    subtitle="为什么酒驾能管住，食品安全却总难落地？"
                     themeColor="#059669"
                     badge="深度解读 · 理性思考"
                     seriesLabel="社会热点深读"

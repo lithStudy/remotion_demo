@@ -11,6 +11,7 @@ export const 鸿蒙商业圈地Landscape: React.FC = () => {
             designW={DESIGN_W}
             designH={DESIGN_H}
             containScale={LANDSCAPE_CONTAIN_SCALE}
+            showBrandMark={false}
         >
             <鸿蒙商业圈地MainBody />
         </NarratorLandscapeShell>

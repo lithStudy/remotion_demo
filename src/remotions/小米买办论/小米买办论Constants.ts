@@ -3,6 +3,7 @@ import { Scene1, calculateScene1Duration } from "./scenes/Scene1";
 import { Scene2, calculateScene2Duration } from "./scenes/Scene2";
 import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
 import { Scene4, calculateScene4Duration } from "./scenes/Scene4";
+import { Scene5, calculateScene5Duration } from "./scenes/Scene5";
 
 export const 小米买办论Schema = z.object({});
 
@@ -15,6 +16,7 @@ export const sceneConfigs = [
     { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "注册地指控" },
     { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "制裁指控" },
     { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "总结" },
+    { name: "scene5", duration: calculateScene5Duration(), component: Scene5, label: "片尾·参考资料" },
 ];
 
 export const MAIN_DURATION_小米买办论 =

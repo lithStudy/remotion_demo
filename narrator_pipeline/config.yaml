@@ -28,6 +28,14 @@ deepseek_model: deepseek-v4-pro
 # DeepSeek OpenAI 兼容 API 基地址
 deepseek_base_url: https://api.deepseek.com
 
+# DeepSeek thinking（仅 llm_provider=deepseek 时生效；显著影响 Step0/1 耗时）
+# 默认阶段（joint 分镜/模板、scene、fix 等）：建议 medium；质量不够可改 high
+deepseek_thinking_enabled: true
+deepseek_reasoning_effort: medium
+# param 参数细化阶段：默认关闭 thinking 以提速（需要更高质量可 true + low/medium）
+deepseek_param_thinking_enabled: false
+# deepseek_param_reasoning_effort: low
+
 # 小米 MiMo 模型名（llm_provider=mimo 时生效）
 mimo_model: mimo-v2-pro
 # MiMo OpenAI 兼容 API 基地址

@@ -1,0 +1,1181 @@
+{
+  "topic": "你冲华为名头买鸿蒙智行？华为不造车，也不对整车负责",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "名头响不等于更稳",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "该段是引入“有人觉得”的他人观点/证言体，用 QUOTE_CITATION 以引用版心呈现，突出“冲着华为名头更靠谱”的流行看法。",
+          "content": [
+            {
+              "text": "有人觉得，",
+              "startFrame": 0,
+              "durationFrames": 24
+            },
+            {
+              "text": "买鸿蒙智行，",
+              "startFrame": 24,
+              "durationFrames": 35
+            },
+            {
+              "text": "冲着华为的名头，",
+              "startFrame": 58,
+              "durationFrames": 39
+            },
+            {
+              "text": "整车就更靠谱。",
+              "startFrame": 97,
+              "durationFrames": 40
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteSource": "有人觉得",
+            "quoteDisplayText": "买鸿蒙智行，冲着华为的名头，整车就更靠谱。",
+            "showFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 138
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "该段是核心否定对照金句，用 COGNITIVE_SHIFT 表达“名头响≠车更稳”的认知纠偏，并与上一句转折拆开。",
+          "content": [
+            {
+              "text": "先别急着下这个结论。",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "名头响，",
+              "startFrame": 43,
+              "durationFrames": 33
+            },
+            {
+              "text": "不等于车更稳。",
+              "startFrame": 76,
+              "durationFrames": 36
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "名头响",
+            "butText": "车更稳",
+            "butSrc": "images/华为造车论/scene_1_3.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 112
+        }
+      ],
+      "audioSrc": "/audio/华为造车论/scene_1/scene_1.mp3",
+      "totalDurationFrames": 251
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "华为智驾难保命",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CONCEPT_CARD",
+          "reasoning": "首句单独钉住“华为智驾”这一专业名词，用 CONCEPT_CARD 做概念入场，再进入后续吹牛节拍。",
+          "content": [
+            {
+              "text": "先说华为智驾。",
+              "startFrame": 0,
+              "durationFrames": 34
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为造车论/scene_2_1.png",
+            "conceptName": "华为智驾",
+            "anchors": []
+          },
+          "totalDurationFrames": 34
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "PEER_INDUCT",
+          "reasoning": "先并列铺陈全网吹牛、想撞都难、一路睡到目的地三个同级话术前提，末句归纳为敢吹敢信，符合 PEER_INDUCT。",
+          "content": [
+            {
+              "text": "全网牛逼吹的震天响：",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "想撞都难、",
+              "startFrame": 51,
+              "durationFrames": 31
+            },
+            {
+              "text": "一路睡到目的地，",
+              "startFrame": 81,
+              "durationFrames": 34
+            },
+            {
+              "text": "讲究一个敢吹一个敢信。",
+              "startFrame": 115,
+              "durationFrames": 52
+            }
+          ],
+          "order": 2,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "images/华为造车论/scene_2_2_img0.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "imageSrc": "images/华为造车论/scene_2_2_img1.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "images/华为造车论/scene_2_2.png",
+              "showFrom": 3,
+              "enterEffect": "zoomIn",
+              "tone": "alert"
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 168
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "同一句内并列三个事故案例，每例可独立配图，主表达是并列案例宫格，适合用PANEL_GRID。",
+          "content": [
+            {
+              "text": "但我看到的，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "却是问界M7运城高速的追尾、",
+              "startFrame": 30,
+              "durationFrames": 77
+            },
+            {
+              "text": "尊界S800撞向导流线上环卫工、",
+              "startFrame": 106,
+              "durationFrames": 92
+            },
+            {
+              "text": "武汉问界M5撞死误闯超车道的11只羊。",
+              "startFrame": 198,
+              "durationFrames": 117
+            }
+          ],
+          "order": 3,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为造车论/scene_2_3_img0.png",
+                "showFrom": 1,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为造车论/scene_2_3_img1.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为造车论/scene_2_3_img2.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 315
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "该段是案例后的结论落点，有“足够说明”引导核心发现，适合用MAGNIFYING_GLASS聚焦到“智驾还不能保命”。",
+          "content": [
+            {
+              "text": "这些都足够说明，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "华为的智驾还没有强到可以保障你生命安全的程度。",
+              "startFrame": 41,
+              "durationFrames": 102
+            }
+          ],
+          "order": 4,
+          "param": {
+            "anchors": [
+              {
+                "text": "生命安全",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 144
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段是“可为体验买单/不能为吹牛交出方向盘”的强导向对照，主表达是对错建议，适合用DOS_AND_DONTS。",
+          "content": [
+            {
+              "text": "你可以为体验买单。",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "但不能为一些吹牛逼的话，",
+              "startFrame": 43,
+              "durationFrames": 51
+            },
+            {
+              "text": "交出自己的方向盘。",
+              "startFrame": 93,
+              "durationFrames": 43
+            }
+          ],
+          "order": 5,
+          "param": {
+            "left": {
+              "label": "❌ 别交方向盘",
+              "src": "images/华为造车论/scene_2_5_left.png",
+              "showFrom": 1
+            },
+            "right": {
+              "label": "✅ 为体验买单",
+              "src": "images/华为造车论/scene_2_5_right.png",
+              "showFrom": 0
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 137
+        }
+      ],
+      "audioSrc": "/audio/华为造车论/scene_2/scene_2.mp3",
+      "totalDurationFrames": 798
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "整车安全谁兜底",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CONCEPT_CARD",
+          "reasoning": "转入“整车安全”这一核心概念，用 CONCEPT_CARD 钉住术语，并承接智驾不能完全保证安全后的追问。",
+          "content": [
+            {
+              "text": "再看整车安全。",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "既然智驾并不能完全保证安全。",
+              "startFrame": 50,
+              "durationFrames": 67
+            },
+            {
+              "text": "真正撞上以后呢？",
+              "startFrame": 116,
+              "durationFrames": 43
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为造车论/scene_3_1.png",
+            "conceptName": "整车安全",
+            "anchors": []
+          },
+          "totalDurationFrames": 160
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "四个并列安全疑问构成撞击后检查点，每项可独立配宫格图，适合PANEL_GRID展开。",
+          "content": [
+            {
+              "text": "车身能否扛得住？",
+              "startFrame": 0,
+              "durationFrames": 38
+            },
+            {
+              "text": "电池会不会失控？",
+              "startFrame": 37,
+              "durationFrames": 39
+            },
+            {
+              "text": "气囊是否正确打开？",
+              "startFrame": 75,
+              "durationFrames": 53
+            },
+            {
+              "text": "断电后能否开门？",
+              "startFrame": 127,
+              "durationFrames": 50
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为造车论/scene_3_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为造车论/scene_3_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "breathe"
+              },
+              {
+                "src": "images/华为造车论/scene_3_2_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为造车论/scene_3_2_img3.png",
+                "showFrom": 3,
+                "enterEffect": "slideLeft"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 177
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "四个并列被动安全因素，可对应独立宫格图，用PANEL_GRID表达定义性清单。",
+          "content": [
+            {
+              "text": "这些被动安全，",
+              "startFrame": 0,
+              "durationFrames": 37
+            },
+            {
+              "text": "取决于车身结构、",
+              "startFrame": 36,
+              "durationFrames": 41
+            },
+            {
+              "text": "约束系统、",
+              "startFrame": 76,
+              "durationFrames": 30
+            },
+            {
+              "text": "电池布置和机械设计。",
+              "startFrame": 105,
+              "durationFrames": 57
+            }
+          ],
+          "order": 3,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为造车论/scene_3_3_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为造车论/scene_3_3_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/华为造车论/scene_3_3_img2.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为造车论/scene_3_3_img3.png",
+                "showFrom": 3,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 163
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "强结论式反问收束，无需配图，用TEXT_FOCUS做金句冲击锁定责任落点。",
+          "content": [
+            {
+              "text": "华为可以参与定义，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "但作为一个连造车资质都没有的公司，",
+              "startFrame": 41,
+              "durationFrames": 47
+            },
+            {
+              "text": "谁能保障他的参与度与专业度？",
+              "startFrame": 88,
+              "durationFrames": 90
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "华为可以参与定义，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "但作为一个连造车资质都没有的公司，",
+                "showFrom": 1,
+                "endFrom": 1
+              },
+              {
+                "text": "谁能保障他的参与度与专业度？",
+                "showFrom": 2,
+                "endFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "造车资质",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 179
+        }
+      ],
+      "audioSrc": "/audio/华为造车论/scene_3/scene_3.mp3",
+      "totalDurationFrames": 679
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "名在华为锅在车企",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CONCEPT_CARD",
+          "reasoning": "首句单独钉住“制造质量”概念，用 CONCEPT_CARD 做议题入场，再展开工序与供应链并列。",
+          "content": [
+            {
+              "text": "再看制造质量。",
+              "startFrame": 0,
+              "durationFrames": 45
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为造车论/scene_4_1.png",
+            "conceptName": "制造质量",
+            "anchors": []
+          },
+          "totalDurationFrames": 45
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "冲压焊接、涂装总装、装配一致性、零件耐久与工厂供应链五条并列落点，适合宫格随口播逐格显现。",
+          "content": [
+            {
+              "text": "冲压、焊接、",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "涂装、总装，",
+              "startFrame": 34,
+              "durationFrames": 30
+            },
+            {
+              "text": "装配一致性、",
+              "startFrame": 64,
+              "durationFrames": 31
+            },
+            {
+              "text": "零件批次和长期耐久，",
+              "startFrame": 94,
+              "durationFrames": 58
+            },
+            {
+              "text": "都是落在合作车企的工厂和供应链。",
+              "startFrame": 152,
+              "durationFrames": 78
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "images/华为造车论/scene_4_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为造车论/scene_4_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/华为造车论/scene_4_2_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/华为造车论/scene_4_2_img3.png",
+                "showFrom": 3,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 231
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明确“不是华为，而是赛力斯、奇瑞、北汽等车企”的认知反转，适合用认知转换模板。",
+          "content": [
+            {
+              "text": "车辆合格证上的生产者，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "并不是华为，",
+              "startFrame": 50,
+              "durationFrames": 28
+            },
+            {
+              "text": "而是赛力斯、",
+              "startFrame": 77,
+              "durationFrames": 29
+            },
+            {
+              "text": "奇瑞、",
+              "startFrame": 105,
+              "durationFrames": 14
+            },
+            {
+              "text": "北汽等车企。",
+              "startFrame": 118,
+              "durationFrames": 30
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "华为",
+            "butText": "赛力斯、奇瑞、北汽等车企",
+            "butSrc": "images/华为造车论/scene_4_3.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 149
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "缺陷出现与召回责任之间是因果传导关系，适合因果链模板。",
+          "content": [
+            {
+              "text": "真出现缺陷，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "负责召回的也是它们。",
+              "startFrame": 30,
+              "durationFrames": 48
+            }
+          ],
+          "order": 4,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "缺陷出现",
+                "imageSrc": "images/华为造车论/scene_4_4_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "召回启动",
+                "imageSrc": "images/华为造车论/scene_4_4_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "车企负责",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 79
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "发布台话术与合格证主体形成对错对照：名头归华为、责任归车企，适合 DOS_AND_DONTS 左右避坑叙事。",
+          "content": [
+            {
+              "text": "发布台上讲的是华为，",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "合格证上写的却是车企。",
+              "startFrame": 54,
+              "durationFrames": 59
+            }
+          ],
+          "order": 5,
+          "param": {
+            "left": {
+              "label": "❌ 发布台话术",
+              "src": "images/华为造车论/scene_4_5_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 合格证主体",
+              "src": "images/华为造车论/scene_4_5_right.png",
+              "showFrom": 1
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 114
+        }
+      ],
+      "audioSrc": "/audio/华为造车论/scene_4/scene_4.mp3",
+      "totalDurationFrames": 618
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "大脑改不了四肢",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CONCEPT_CARD",
+          "reasoning": "首句单独钉住“操控性能”议题，用 CONCEPT_CARD 做概念入场，再展开途灵平台说明。",
+          "content": [
+            {
+              "text": "操控性能也是同理。",
+              "startFrame": 0,
+              "durationFrames": 51
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/华为造车论/scene_5_1.png",
+            "conceptName": "操控性能",
+            "anchors": []
+          },
+          "totalDurationFrames": 51
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "聚焦途灵平台的核心卖点落点：感知路面与协同动力/制动/悬架，用 MAGNIFYING_GLASS 锁定关键能力短语。",
+          "content": [
+            {
+              "text": "华为途灵平台，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "据说能感知路面。",
+              "startFrame": 41,
+              "durationFrames": 33
+            },
+            {
+              "text": "也能协同动力、制动和悬架。",
+              "startFrame": 74,
+              "durationFrames": 82
+            }
+          ],
+          "order": 2,
+          "param": {
+            "anchors": [
+              {
+                "text": "感知路面",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "动力、制动和悬架",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 156
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "先喻为大脑后转折为硬件四肢，构成认知纠正，适合用COGNITIVE_SHIFT呈现强弱对比。",
+          "content": [
+            {
+              "text": "它可能像一颗聪明的大脑。",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "但悬架结构、",
+              "startFrame": 58,
+              "durationFrames": 35
+            },
+            {
+              "text": "转向控制、",
+              "startFrame": 93,
+              "durationFrames": 33
+            },
+            {
+              "text": "制动硬件和轮胎，",
+              "startFrame": 126,
+              "durationFrames": 45
+            },
+            {
+              "text": "才是车的四肢。",
+              "startFrame": 171,
+              "durationFrames": 39
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "聪明大脑",
+            "butText": "悬架、转向、制动和轮胎",
+            "butSrc": "images/华为造车论/scene_5_3.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 210
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束为短促强结论，强调软件优化无法突破硬件机械上限，适合用TEXT_FOCUS做金句冲击。",
+          "content": [
+            {
+              "text": "大脑也许能优化四肢的协调。",
+              "startFrame": 0,
+              "durationFrames": 69
+            },
+            {
+              "text": "却不能凭空改变四肢的机械上限。",
+              "startFrame": 68,
+              "durationFrames": 83
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "大脑也许能优化四肢的协调。",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "却不能凭空改变四肢的机械上限。",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "机械上限",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 151
+        }
+      ],
+      "audioSrc": "/audio/华为造车论/scene_5/scene_5.mp3",
+      "totalDurationFrames": 569
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "华为不造车不负责",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "车好坏关生死→考虑买鸿蒙智行→别冲华为名头，三环因果传导，适合 CAUSE_CHAIN。",
+          "content": [
+            {
+              "text": "车的好坏有时候会决定你的生死。",
+              "startFrame": 0,
+              "durationFrames": 77
+            },
+            {
+              "text": "所以当你考虑买鸿蒙智行，",
+              "startFrame": 76,
+              "durationFrames": 54
+            },
+            {
+              "text": "别光冲着华为的名头去。",
+              "startFrame": 129,
+              "durationFrames": 46
+            }
+          ],
+          "order": 1,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "好坏定生死",
+                "imageSrc": "images/华为造车论/scene_6_1_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "买车考量",
+                "imageSrc": "images/华为造车论/scene_6_1_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "label": "别冲名头",
+                "imageSrc": "images/华为造车论/scene_6_1_img2.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 176
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "STEP_LIST",
+          "reasoning": "连续两个‘先/再’检查步骤，步骤序列清晰，用STEP_LIST呈现两步；合并避免单句碎裂。",
+          "content": [
+            {
+              "text": "先看具体配置，搭载哪一代系统。",
+              "startFrame": 0,
+              "durationFrames": 87
+            },
+            {
+              "text": "再查具体车型，有没有第三方碰撞成绩。",
+              "startFrame": 86,
+              "durationFrames": 91
+            },
+            {
+              "text": "然后亲自试驾，感受制动和底盘。",
+              "startFrame": 176,
+              "durationFrames": 89
+            },
+            {
+              "text": "最后看清合格证、质保和召回主体。",
+              "startFrame": 264,
+              "durationFrames": 84
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "买车前必查",
+            "steps": [
+              {
+                "text": "先看具体配置",
+                "showFrom": 0
+              },
+              {
+                "text": "再查第三方碰撞成绩",
+                "showFrom": 1
+              },
+              {
+                "text": "然后亲自试驾",
+                "showFrom": 2
+              },
+              {
+                "text": "最后看清合格证主体",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 349
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "过渡铺垫句，单图即可，无独立对比或步骤结构；拆出不与后文强转折混用同一模板。",
+          "content": [
+            {
+              "text": "不管华为有多大的声音，",
+              "startFrame": 0,
+              "durationFrames": 48
+            },
+            {
+              "text": "你始终要记住，",
+              "startFrame": 48,
+              "durationFrames": 35
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/华为造车论/scene_6_5.png",
+            "enterEffect": "zoomIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 83
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "否定‘造车’并替换为‘供应商’，符合认知转换规则，用COGNITIVE_SHIFT突出纠偏。",
+          "content": [
+            {
+              "text": "华为不造车，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "他只是车企的供应商之一。",
+              "startFrame": 30,
+              "durationFrames": 61
+            }
+          ],
+          "order": 6,
+          "param": {
+            "notText": "华为造车",
+            "butText": "车企供应商之一",
+            "butSrc": "images/华为造车论/scene_6_6.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 92
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PUNCH_CAPTION",
+          "reasoning": "三个供应商身份短句连击，适合 PUNCH_CAPTION 居中大字逐句暴击，无需配图。",
+          "content": [
+            {
+              "text": "他是车机软件供应商，",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "他是电驱系统供应商，",
+              "startFrame": 51,
+              "durationFrames": 54
+            },
+            {
+              "text": "他是销售渠道供应商。",
+              "startFrame": 104,
+              "durationFrames": 55
+            }
+          ],
+          "order": 7,
+          "param": {
+            "punches": [
+              {
+                "text": "车机软件供应商",
+                "showFrom": 0,
+                "enterEffect": "popIn",
+                "tone": "calm"
+              },
+              {
+                "text": "电驱系统供应商",
+                "showFrom": 1,
+                "enterEffect": "snap",
+                "tone": "alert"
+              },
+              {
+                "text": "销售渠道供应商",
+                "showFrom": 2,
+                "enterEffect": "shake",
+                "tone": "alert"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "供应商",
+                "showFrom": 0,
+                "color": "#EF4444"
+              },
+              {
+                "text": "供应商",
+                "showFrom": 1,
+                "color": "#EF4444"
+              },
+              {
+                "text": "供应商",
+                "showFrom": 2,
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 159
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片结论短促冲击，无需配图，用TEXT_FOCUS锁定最终责任归属。",
+          "content": [
+            {
+              "text": "但唯独，",
+              "startFrame": 0,
+              "durationFrames": 21
+            },
+            {
+              "text": "他并不对整车负责。",
+              "startFrame": 20,
+              "durationFrames": 45
+            }
+          ],
+          "order": 8,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "但唯独，",
+                "showFrom": 0,
+                "endFrom": 1
+              },
+              {
+                "text": "他并不对整车负责。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "不对整车负责",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 66
+        }
+      ],
+      "audioSrc": "/audio/华为造车论/scene_6/scene_6.mp3",
+      "totalDurationFrames": 924
+    },
+    {
+      "sceneId": "scene_references",
+      "sceneName": "片尾·参考资料",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "CONCLUSION",
+          "template": "SOURCE_CITATION",
+          "reasoning": "片尾展示支撑智驾事故案例、华为不造车定位、整车准入与召回责任主体、途灵底盘能力边界等论点的公开来源，无口播。",
+          "content": [],
+          "param": {
+            "sectionTitle": "参考资料",
+            "references": [
+              {
+                "title": "Technical Clarification on AITO M7 Plus Accident on Houping Expressway, Shanxi",
+                "titleZh": "问界新M7 Plus侯平高速追尾事故相关技术问题说明",
+                "publisher": "AITO",
+                "publisherZh": "问界汽车",
+                "year": "2024"
+              },
+              {
+                "title": "Changsha Traffic Police Response to Maextro S800 Sanitation Worker Collision",
+                "titleZh": "长沙交警回应尊界S800撞导流线环卫工事故",
+                "publisher": "Xin Huanghe / Da Yu Finance",
+                "publisherZh": "新黄河·大鱼财经",
+                "year": "2026"
+              },
+              {
+                "title": "AITO New M5 Hits 11 Sheep on Highway While Smart Driving Engaged",
+                "titleZh": "问界新M5开智驾撞死误闯超车道11只羊",
+                "publisher": "Guancha.cn / Tech Insight",
+                "publisherZh": "观察者网·科技新知",
+                "year": "2024"
+              },
+              {
+                "title": "Resolution on Huawei Not Building Cars",
+                "titleZh": "关于华为不造车的决议：有效期延长五年",
+                "publisher": "Huawei Technologies Co., Ltd.",
+                "publisherZh": "华为技术有限公司",
+                "year": "2023"
+              },
+              {
+                "title": "Measures for the Administration of Road Motor Vehicle Manufacturers and Products Access",
+                "titleZh": "道路机动车辆生产企业及产品准入管理办法",
+                "publisher": "Ministry of Industry and Information Technology",
+                "publisherZh": "工业和信息化部",
+                "year": "2019"
+              },
+              {
+                "title": "Regulation on the Administration of Recall of Defective Auto Products",
+                "titleZh": "缺陷汽车产品召回管理条例：生产者为召回责任主体",
+                "publisher": "State Council of the PRC",
+                "publisherZh": "国务院",
+                "year": "2012"
+              },
+              {
+                "title": "Implementation Measures for the Regulation on Recall of Defective Auto Products",
+                "titleZh": "召回条例实施办法：以其名义颁发合格证的企业为生产者",
+                "publisher": "AQSIQ / SAMR",
+                "publisherZh": "原质检总局 / 市场监管总局",
+                "year": "2015"
+              },
+              {
+                "title": "Harmony Intelligent Mobility Alliance (HIMA)",
+                "titleZh": "鸿蒙智行：与车企共建的智能汽车技术生态联盟",
+                "publisher": "Harmony Intelligent Mobility Alliance",
+                "publisherZh": "鸿蒙智行",
+                "year": "2023"
+              },
+              {
+                "title": "HUAWEI Turing Intelligent Chassis Technical Briefing",
+                "titleZh": "华为途灵智能底盘：路面预瞄与动力制动悬架协同",
+                "publisher": "Huawei / Harmony Intelligent Mobility Alliance",
+                "publisherZh": "华为 / 鸿蒙智行",
+                "year": "2023"
+              }
+            ]
+          },
+          "totalDurationFrames": 192
+        }
+      ],
+      "totalDurationFrames": 192
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "华为造车论",
+    "subtitle": "华为不造车，也不对整车负责",
+    "themeColor": "#FF6900",
+    "surface": "light",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

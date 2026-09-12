@@ -1,19 +1,15 @@
 import React from "react";
-import {
-	AbsoluteFill,
-	Audio,
-	Img,
-	interpolate,
-	staticFile,
-	useCurrentFrame,
-} from "remotion";
+import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 
-import brandLogoBlue from "../templates/images/logo-blue.svg";
+import brandLogo from "../templates/images/logo.svg";
 import { RemotionLayoutMetricsProvider } from "../RemotionLayoutMetricsContext";
+import { NarratorBackgroundMusic } from "./NarratorBackgroundMusic";
 
 /** 品牌角标专用衬线栈，与正文黑体区分，偏书卷/资讯气质 */
 const BRAND_FONT_STACK =
-	'"Source Han Sans Medium", "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", serif';
+	'"Source Han Sans Heavy", "Source Han Sans Bold", "Noto Sans SC", "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", serif';
+
+const BRAND_COLOR = "#334155";
 
 const DEFAULT_BRAND_NAME = "沐时思维";
 
@@ -24,6 +20,8 @@ export type NarratorLandscapeShellProps = {
 	/** 为 true 时不渲染背景 BGM（对齐 step4 mute_audio） */
 	muteAudio?: boolean;
 	brandName?: string;
+	/** 为 false 时不渲染右上角品牌角标 */
+	showBrandMark?: boolean;
 	children: React.ReactNode;
 };
 
@@ -37,24 +35,36 @@ const LandscapeBrandMark: React.FC<{ brandName: string }> = ({ brandName }) => (
 			display: "flex",
 			flexDirection: "row",
 			alignItems: "center",
-			gap: 10,
+			gap: 14,
 			pointerEvents: "none",
 		}}
 	>
-		<Img
-			src={brandLogoBlue}
-			alt=""
-			style={{ width: 34, height: 34, objectFit: "contain", display: "block", flexShrink: 0 }}
+		<div
+			aria-hidden
+			style={{
+				width: 34,
+				height: 34,
+				flexShrink: 0,
+				backgroundColor: BRAND_COLOR,
+				WebkitMaskImage: `url(${brandLogo})`,
+				WebkitMaskSize: "contain",
+				WebkitMaskRepeat: "no-repeat",
+				WebkitMaskPosition: "center",
+				maskImage: `url(${brandLogo})`,
+				maskSize: "contain",
+				maskRepeat: "no-repeat",
+				maskPosition: "center",
+			}}
 		/>
 		<span
 			style={{
 				fontFamily: BRAND_FONT_STACK,
 				fontSize: 28,
-				fontWeight: 600,
-				color: "#334155",
+				fontWeight: 800,
+				color: BRAND_COLOR,
 				letterSpacing: "0.06em",
 				lineHeight: 1.15,
-				whiteSpace: "nowrap",
+				whiteSpace: "nowrap",				
 				textShadow: "0 1px 0 rgba(255, 255, 255, 0.7)",
 			}}
 		>
@@ -70,6 +80,7 @@ export const NarratorLandscapeShell: React.FC<NarratorLandscapeShellProps> = ({
 	containScale,
 	muteAudio = false,
 	brandName = DEFAULT_BRAND_NAME,
+	showBrandMark = true,
 	children,
 }) => {
 	const frame = useCurrentFrame();
@@ -88,14 +99,7 @@ export const NarratorLandscapeShell: React.FC<NarratorLandscapeShellProps> = ({
 
 	return (
 		<AbsoluteFill style={{ background: "#0f172a" }}>
-			{muteAudio ? null : (
-				<Audio
-					src={staticFile("audio/effects/Seven_Measured_Breaths.mp3")}
-					loop
-					volume={0.1}
-					name="Background music"
-				/>
-			)}
+			{muteAudio ? null : <NarratorBackgroundMusic />}
 			<div
 				style={{
 					height: "100%",
@@ -136,7 +140,7 @@ export const NarratorLandscapeShell: React.FC<NarratorLandscapeShellProps> = ({
 					</div>
 				</AbsoluteFill>
 			</RemotionLayoutMetricsProvider>
-			<LandscapeBrandMark brandName={brandName} />
+			{showBrandMark ? <LandscapeBrandMark brandName={brandName} /> : null}
 		</AbsoluteFill>
 	);
 };

@@ -1,9 +1,9 @@
 import React from "react";
-import { AbsoluteFill, Sequence, Audio, staticFile } from "remotion";
+import { AbsoluteFill, Sequence, Audio, staticFile, Freeze } from "remotion";
 import { BWCaseBreakdown, BWCenterFocus, BWCognitiveShift, BWDosAndDonts, BWKpiHero, BWMagnifyingGlass, BWMethodStack, BWSplitCompare, BWTextFocus } from "../../../components";
 
 // 反转：看清真实贡献
-const SCENE_DURATION = 161 + 346 + 415 + 149 + 300 + 167 + 397 + 86 + 174 + 180 + 128 + 87 + 93;
+const SCENE_DURATION = 161 + 346 + 415 + 149 + 300 + 167 + 397 + 86 + 174 + 180 + 128 + 87 + 118;
 
 export const calculateScene3Duration = (): number => {
     return SCENE_DURATION;
@@ -50,6 +50,11 @@ export const Scene3: React.FC = () => {
             </Sequence>
             <Sequence from={2590} durationInFrames={93}>
                 <BWTextFocus content={[{"text": "尊重事实，", "startFrame": 0, "durationFrames": 29}, {"text": "才是对中国科技最大的尊重。", "startFrame": 28, "durationFrames": 65}]} totalDurationFrames={93} coreSentence={[{"text": "尊重事实", "showFrom": 0, "endFrom": 1}, {"text": "才是对中国科技最大的尊重", "showFrom": 1, "endFrom": 1}]} coreSentenceAnchors={[{"coreSentenceAnchor": "尊重事实", "color": "#EF4444"}]} />
+            </Sequence>
+            <Sequence from={2683} durationInFrames={25}>
+                <Freeze frame={92}>
+                    <BWTextFocus content={[{"text": "尊重事实，", "startFrame": 0, "durationFrames": 29}, {"text": "才是对中国科技最大的尊重。", "startFrame": 28, "durationFrames": 65}]} totalDurationFrames={93} coreSentence={[{"text": "尊重事实", "showFrom": 0, "endFrom": 1}, {"text": "才是对中国科技最大的尊重", "showFrom": 1, "endFrom": 1}]} coreSentenceAnchors={[{"coreSentenceAnchor": "尊重事实", "color": "#EF4444"}]} />
+                </Freeze>
             </Sequence>
             <Audio src={staticFile("/audio/华为的5G迷思/scene_3/scene_3.mp3")} />
         </AbsoluteFill>

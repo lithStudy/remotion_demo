@@ -21,6 +21,7 @@ import {
 	BWBeatSequence,
 	BWPunchCaption,
 	BWPeerInduct,
+	BWHubRadiate,
 	BWCognitiveShift,
 	BWMethodStack,
 	BWCaseBreakdown,
@@ -35,6 +36,7 @@ import {
 	SC_BEAT_CONTENT,
 	SC_PUNCH_CONTENT,
 	SC_PEER_INDUCT_CONTENT,
+	SC_HUB_RADIATE_CONTENT,
 	SC_METHOD_CONTENT,
 	SC_CASE_CONTENT,
 	SC_COGNITIVE_CONTENT,
@@ -155,6 +157,30 @@ const SHOWCASE_SEGMENTS: ShowcaseSegment[] = [
 					anchors={[{ text: "幸存者偏差", showFrom: 2, color: "#FF8C00", anim: "popIn" }]}
 				/>
 				<ShowcaseLabel text="PEER_INDUCT · 并列前提 → 归纳收束" />
+			</>
+		),
+	},
+	{
+		key: "HUB_RADIATE",
+		durationInFrames: showcaseDuration("HUB_RADIATE"),
+		content: (
+			<>
+				<BWHubRadiate
+					hub={{
+						imageSrc: img("images/template/scene4_1.png"),
+						enterEffect: "zoomIn",
+						showFrom: 0,
+					}}
+					rays={[
+						{ imageSrc: img("images/template/scene1_1.png"), showFrom: 1, enterEffect: "fadeIn" },
+						{ imageSrc: img("images/template/scene2_1.png"), showFrom: 2, enterEffect: "slideLeft" },
+						{ imageSrc: img("images/template/scene6_15.png"), showFrom: 3, enterEffect: "zoomIn" },
+						{ imageSrc: img("images/template/scene5_2.png"), showFrom: 4, enterEffect: "slideBottom" },
+					]}
+					content={SC_HUB_RADIATE_CONTENT}
+					anchors={[{ text: "面对差距", showFrom: 0, color: "#FF8C00", anim: "popIn" }]}
+				/>
+				<ShowcaseLabel text="HUB_RADIATE · 一核发散（1 核 + 4 并列结果）" />
 			</>
 		),
 	},

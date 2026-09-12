@@ -28,14 +28,14 @@ def _source_citation_items_per_page(has_bilingual: bool) -> int:
 
 def _source_citation_page_duration(page_item_count: int, is_last_page: bool = True) -> int:
 	count = max(1, min(12, int(page_item_count)))
-	read_buffer = 27 if is_last_page else 15
+	read_buffer = 6 if is_last_page else 15
 	return 24 + count * 12 + read_buffer
 
 
 def compute_source_citation_duration(reference_count: int) -> int:
-	"""SOURCE_CITATION 单页：24 + n×12 + 27 帧（与 SourceCitation.tsx 一致）。"""
+	"""SOURCE_CITATION 单页：24 + n×12 + 6 帧（与 SourceCitation.tsx 一致）。"""
 	count = max(1, min(12, int(reference_count)))
-	return 24 + count * 12 + 27
+	return 24 + count * 12 + 6
 
 
 def compute_source_citation_duration_from_references(refs: list) -> int:

@@ -1,9 +1,9 @@
 import React from "react";
-import { AbsoluteFill, Sequence, Audio, staticFile } from "remotion";
+import { AbsoluteFill, Sequence, Audio, staticFile, Freeze } from "remotion";
 import { BWBeatSequence, BWCenterFocus, BWCognitiveShift, BWDosAndDonts, BWPanelGrid, BWTextFocus } from "../../../components";
 
 // 召唤：拒绝捧杀，你就是靠山
-const SCENE_DURATION = 226 + 107 + 106 + 115 + 119 + 269 + 264 + 159 + 114 + 120;
+const SCENE_DURATION = 226 + 107 + 106 + 115 + 119 + 269 + 264 + 159 + 114 + 145;
 
 export const calculateScene5Duration = (): number => {
     return SCENE_DURATION;
@@ -41,6 +41,11 @@ export const Scene5: React.FC = () => {
             </Sequence>
             <Sequence from={1479} durationInFrames={120}>
                 <BWTextFocus content={[{"text": "你为生活流下的每一滴汗，", "startFrame": 0, "durationFrames": 55}, {"text": "早就变成了国产崛起的弹药。", "startFrame": 54, "durationFrames": 65}]} totalDurationFrames={120} coreSentence={[{"text": "你为生活流下的每一滴汗，", "showFrom": 0}, {"text": "早就变成了国产崛起的弹药。", "showFrom": 1}]} coreSentenceAnchors={[{"coreSentenceAnchor": "弹药", "color": "#EF4444"}]} />
+            </Sequence>
+            <Sequence from={1599} durationInFrames={25}>
+                <Freeze frame={119}>
+                    <BWTextFocus content={[{"text": "你为生活流下的每一滴汗，", "startFrame": 0, "durationFrames": 55}, {"text": "早就变成了国产崛起的弹药。", "startFrame": 54, "durationFrames": 65}]} totalDurationFrames={120} coreSentence={[{"text": "你为生活流下的每一滴汗，", "showFrom": 0}, {"text": "早就变成了国产崛起的弹药。", "showFrom": 1}]} coreSentenceAnchors={[{"coreSentenceAnchor": "弹药", "color": "#EF4444"}]} />
+                </Freeze>
             </Sequence>
             <Audio src={staticFile("/audio/国产支持论/scene_5/scene_5.mp3")} />
         </AbsoluteFill>

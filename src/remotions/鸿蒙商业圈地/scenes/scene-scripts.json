@@ -13,12 +13,12 @@
             {
               "text": "别再拿国家安全，",
               "startFrame": 0,
-              "durationFrames": 34
+              "durationFrames": 39
             },
             {
               "text": "来做鸿蒙的挡箭牌了！",
-              "startFrame": 33,
-              "durationFrames": 42
+              "startFrame": 38,
+              "durationFrames": 47
             }
           ],
           "order": 2,
@@ -39,7 +39,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 76
+          "totalDurationFrames": 86
         },
         {
           "narrativeType": "CONCLUSION",
@@ -49,17 +49,17 @@
             {
               "text": "这根本不是什么技术保卫战。",
               "startFrame": 0,
-              "durationFrames": 57
+              "durationFrames": 52
             },
             {
               "text": "这只是一场包装完美的，",
-              "startFrame": 56,
-              "durationFrames": 53
+              "startFrame": 51,
+              "durationFrames": 52
             },
             {
               "text": "商业圈地运动。",
-              "startFrame": 109,
-              "durationFrames": 33
+              "startFrame": 103,
+              "durationFrames": 39
             }
           ],
           "order": 3,
@@ -75,7 +75,7 @@
         }
       ],
       "audioSrc": "/audio/鸿蒙商业圈地/scene_1/scene_1.mp3",
-      "totalDurationFrames": 219
+      "totalDurationFrames": 229
     },
     {
       "sceneId": "scene_2",
@@ -89,12 +89,12 @@
             {
               "text": "有人说安卓不自主，",
               "startFrame": 0,
-              "durationFrames": 45
+              "durationFrames": 46
             },
             {
               "text": "会被卡脖子。",
-              "startFrame": 44,
-              "durationFrames": 33
+              "startFrame": 45,
+              "durationFrames": 36
             }
           ],
           "order": 1,
@@ -103,7 +103,7 @@
             "quoteSource": "网络观点",
             "anchors": []
           },
-          "totalDurationFrames": 78
+          "totalDurationFrames": 82
         },
         {
           "narrativeType": "LOGIC",
@@ -111,14 +111,14 @@
           "reasoning": "对“开源”这一核心概念进行定义性澄清，命名关键属性，符合CONCEPT_CARD解释关键术语的结构。",
           "content": [
             {
-              "text": "但安卓的代码，",
+              "text": "但安卓的主体代码，",
               "startFrame": 0,
-              "durationFrames": 34
+              "durationFrames": 42
             },
             {
               "text": "是全球彻底开源的。",
-              "startFrame": 33,
-              "durationFrames": 49
+              "startFrame": 41,
+              "durationFrames": 48
             }
           ],
           "order": 2,
@@ -127,7 +127,7 @@
             "conceptName": "开源的安卓",
             "anchors": []
           },
-          "totalDurationFrames": 83
+          "totalDurationFrames": 89
         },
         {
           "narrativeType": "CASE",
@@ -137,22 +137,22 @@
             {
               "text": "任何人，",
               "startFrame": 0,
-              "durationFrames": 26
+              "durationFrames": 24
             },
             {
               "text": "包括你————",
-              "startFrame": 25,
-              "durationFrames": 17
+              "startFrame": 24,
+              "durationFrames": 12
             },
             {
               "text": "我的朋友，",
-              "startFrame": 41,
-              "durationFrames": 22
+              "startFrame": 36,
+              "durationFrames": 23
             },
             {
               "text": "你也能下载到完整的代码。",
-              "startFrame": 63,
-              "durationFrames": 52
+              "startFrame": 58,
+              "durationFrames": 49
             }
           ],
           "order": 3,
@@ -161,7 +161,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 116
+          "totalDurationFrames": 108
         },
         {
           "narrativeType": "LOGIC",
@@ -171,12 +171,12 @@
             {
               "text": "你可以下载代码去做安全审计，",
               "startFrame": 0,
-              "durationFrames": 75
+              "durationFrames": 77
             },
             {
               "text": "你也可以下载代码去做深度定制。",
-              "startFrame": 74,
-              "durationFrames": 70
+              "startFrame": 76,
+              "durationFrames": 73
             }
           ],
           "order": 4,
@@ -189,7 +189,7 @@
             "rightShowFrom": 1,
             "anchors": []
           },
-          "totalDurationFrames": 144
+          "totalDurationFrames": 149
         },
         {
           "narrativeType": "CONCLUSION",
@@ -199,16 +199,16 @@
             {
               "text": "你下载到的代码是你自己的，",
               "startFrame": 0,
-              "durationFrames": 59
+              "durationFrames": 56
             },
             {
               "text": "你可以直接本地运行。",
-              "startFrame": 58,
-              "durationFrames": 49
+              "startFrame": 55,
+              "durationFrames": 45
             },
             {
               "text": "没有谁能卡你的脖子。",
-              "startFrame": 107,
+              "startFrame": 99,
               "durationFrames": 51
             }
           ],
@@ -233,7 +233,112 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 158
+          "totalDurationFrames": 151
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用靶子观点“安卓GMS不开源”，与本场景其他“有人说”同理，用QUOTE_CITATION引出伪命题。",
+          "content": [
+            {
+              "text": "有人说安卓的GMS部分是",
+              "startFrame": 0,
+              "durationFrames": 71
+            },
+            {
+              "text": "不开源的。",
+              "startFrame": 70,
+              "durationFrames": 30
+            }
+          ],
+          "order": 6,
+          "param": {
+            "quoteSource": "网络观点",
+            "quoteDisplayText": "安卓的GMS部分是不开源的。",
+            "anchors": []
+          },
+          "totalDurationFrames": 101
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "承认GMS不开源后，钉住GMS这一关键术语并澄清国内无法使用的现实，符合CONCEPT_CARD解释专业名词的结构。",
+          "content": [
+            {
+              "text": "确实不开源，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "但由于中国的网络限制，",
+              "startFrame": 32,
+              "durationFrames": 53
+            },
+            {
+              "text": "我们本来就无法使用GMS。",
+              "startFrame": 85,
+              "durationFrames": 61
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "images/鸿蒙商业圈地/scene_2_7.png",
+            "conceptName": "GMS",
+            "anchors": []
+          },
+          "totalDurationFrames": 146
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "并列展示小米、OPPO、vivo三家国产安卓厂商logo，突出自研GMS这一共性事实，适用PANEL_GRID宫格。",
+          "content": [
+            {
+              "text": "小米、oppo、vivo，",
+              "startFrame": 0,
+              "durationFrames": 54
+            },
+            {
+              "text": "所有的中国安卓手机都是自研的GMS，",
+              "startFrame": 53,
+              "durationFrames": 102
+            },
+            {
+              "text": "这根本不影响安卓主体功能的使用。",
+              "startFrame": 154,
+              "durationFrames": 79
+            }
+          ],
+          "order": 8,
+          "param": {
+            "panels": [
+              {
+                "src": "images/鸿蒙商业圈地/scene_2_8_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/鸿蒙商业圈地/scene_2_8_img1.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/鸿蒙商业圈地/scene_2_8_img2.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "自研的GMS",
+                "showFrom": 1,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 233
         },
         {
           "narrativeType": "LOGIC",
@@ -243,21 +348,21 @@
             {
               "text": "有人说安卓不安全，",
               "startFrame": 0,
-              "durationFrames": 43
+              "durationFrames": 53
             },
             {
               "text": "会被装漏洞。",
-              "startFrame": 42,
-              "durationFrames": 28
+              "startFrame": 52,
+              "durationFrames": 33
             }
           ],
-          "order": 6,
+          "order": 9,
           "param": {
             "quoteSource": "网络观点",
             "quoteDisplayText": "安卓不安全，会被装漏洞。",
             "anchors": []
           },
-          "totalDurationFrames": 71
+          "totalDurationFrames": 86
         },
         {
           "narrativeType": "CONCLUSION",
@@ -267,20 +372,20 @@
             {
               "text": "但我告诉你，",
               "startFrame": 0,
-              "durationFrames": 28
+              "durationFrames": 32
             },
             {
               "text": "开源的安卓，",
-              "startFrame": 27,
-              "durationFrames": 33
+              "startFrame": 31,
+              "durationFrames": 36
             },
             {
               "text": "远比闭源的鸿蒙更安全！",
-              "startFrame": 60,
+              "startFrame": 67,
               "durationFrames": 56
             }
           ],
-          "order": 7,
+          "order": 10,
           "param": {
             "notText": "闭源更安全",
             "butText": "开源更安全",
@@ -289,7 +394,7 @@
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 116
+          "totalDurationFrames": 124
         },
         {
           "narrativeType": "DATA",
@@ -299,25 +404,25 @@
             {
               "text": "因为安卓背后，",
               "startFrame": 0,
-              "durationFrames": 34
+              "durationFrames": 32
             },
             {
               "text": "是全球最顶尖的白客。",
-              "startFrame": 33,
-              "durationFrames": 63
+              "startFrame": 31,
+              "durationFrames": 57
             },
             {
               "text": "成千上万的大脑，",
-              "startFrame": 96,
-              "durationFrames": 43
+              "startFrame": 88,
+              "durationFrames": 42
             },
             {
               "text": "每天帮它找漏洞。",
-              "startFrame": 138,
-              "durationFrames": 42
+              "startFrame": 129,
+              "durationFrames": 43
             }
           ],
-          "order": 8,
+          "order": 11,
           "param": {
             "anchors": [
               {
@@ -336,7 +441,7 @@
               }
             ]
           },
-          "totalDurationFrames": 181
+          "totalDurationFrames": 173
         },
         {
           "narrativeType": "DATA",
@@ -351,25 +456,25 @@
             {
               "text": "作为一个闭源系统。",
               "startFrame": 26,
-              "durationFrames": 41
+              "durationFrames": 42
             },
             {
               "text": "不过是一家公司，",
-              "startFrame": 66,
-              "durationFrames": 40
+              "startFrame": 67,
+              "durationFrames": 36
             },
             {
               "text": "最多一百多号人的开发团队。",
-              "startFrame": 105,
-              "durationFrames": 55
+              "startFrame": 103,
+              "durationFrames": 49
             },
             {
               "text": "拿什么碰瓷安卓的代码安全性？",
-              "startFrame": 160,
-              "durationFrames": 70
+              "startFrame": 151,
+              "durationFrames": 67
             }
           ],
-          "order": 10,
+          "order": 13,
           "param": {
             "blocks": [
               {
@@ -394,7 +499,7 @@
               }
             ]
           },
-          "totalDurationFrames": 230
+          "totalDurationFrames": 219
         },
         {
           "narrativeType": "LOGIC",
@@ -404,16 +509,16 @@
             {
               "text": "有人说国家核心系统不能用安卓，",
               "startFrame": 0,
-              "durationFrames": 79
+              "durationFrames": 71
             }
           ],
-          "order": 12,
+          "order": 15,
           "param": {
             "quoteSource": "网络观点",
             "quoteDisplayText": "国家核心系统不能用安卓",
             "anchors": []
           },
-          "totalDurationFrames": 79
+          "totalDurationFrames": 71
         },
         {
           "narrativeType": "CASE",
@@ -423,25 +528,25 @@
             {
               "text": "但他们不知道，",
               "startFrame": 0,
-              "durationFrames": 33
+              "durationFrames": 30
             },
             {
               "text": "国家需要保密的机构使用的所谓'国产系统'，",
-              "startFrame": 32,
-              "durationFrames": 100
+              "startFrame": 29,
+              "durationFrames": 99
             },
             {
               "text": "包括麒麟、红旗、欧拉，",
-              "startFrame": 132,
-              "durationFrames": 75
+              "startFrame": 127,
+              "durationFrames": 68
             },
             {
               "text": "全部都是基于国外开源的linux打造的。",
-              "startFrame": 206,
-              "durationFrames": 92
+              "startFrame": 195,
+              "durationFrames": 85
             }
           ],
-          "order": 13,
+          "order": 16,
           "param": {
             "imageSrc": "images/鸿蒙商业圈地/scene_2_13.png",
             "enterEffect": "fadeIn",
@@ -455,7 +560,7 @@
               }
             ]
           },
-          "totalDurationFrames": 298
+          "totalDurationFrames": 280
         },
         {
           "narrativeType": "CASE",
@@ -465,25 +570,25 @@
             {
               "text": "鸿蒙的底层，",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 31
             },
             {
               "text": "和小米、OPPO一样。",
-              "startFrame": 34,
+              "startFrame": 30,
               "durationFrames": 51
             },
             {
               "text": "追根溯源，",
-              "startFrame": 85,
-              "durationFrames": 36
+              "startFrame": 80,
+              "durationFrames": 33
             },
             {
               "text": "全都流着开源安卓的血。",
-              "startFrame": 121,
-              "durationFrames": 61
+              "startFrame": 113,
+              "durationFrames": 53
             }
           ],
-          "order": 14,
+          "order": 17,
           "param": {
             "imageSrc": "images/鸿蒙商业圈地/scene_2_14.png",
             "enterEffect": "fadeIn",
@@ -497,7 +602,7 @@
               }
             ]
           },
-          "totalDurationFrames": 182
+          "totalDurationFrames": 167
         },
         {
           "narrativeType": "CONTRAST",
@@ -507,25 +612,25 @@
             {
               "text": "凭什么基于Linux，",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 39
             },
             {
               "text": "就是安全典范？",
-              "startFrame": 34,
-              "durationFrames": 34
+              "startFrame": 38,
+              "durationFrames": 39
             },
             {
               "text": "基于开源安卓，",
-              "startFrame": 68,
-              "durationFrames": 36
+              "startFrame": 76,
+              "durationFrames": 39
             },
             {
               "text": "就成了卖国贼？",
-              "startFrame": 104,
-              "durationFrames": 37
+              "startFrame": 114,
+              "durationFrames": 29
             }
           ],
-          "order": 15,
+          "order": 18,
           "param": {
             "leftSrc": "images/鸿蒙商业圈地/scene_2_15_left.png",
             "rightSrc": "images/鸿蒙商业圈地/scene_2_15_right.png",
@@ -535,7 +640,7 @@
             "rightShowFrom": 2,
             "anchors": []
           },
-          "totalDurationFrames": 141
+          "totalDurationFrames": 144
         },
         {
           "narrativeType": "TRANSITION",
@@ -550,10 +655,10 @@
             {
               "text": "这是赤裸裸的，商业双标！",
               "startFrame": 48,
-              "durationFrames": 60
+              "durationFrames": 58
             }
           ],
-          "order": 16,
+          "order": 19,
           "param": {
             "notText": "技术探讨",
             "butText": "商业双标",
@@ -562,11 +667,11 @@
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 108
+          "totalDurationFrames": 106
         }
       ],
       "audioSrc": "/audio/鸿蒙商业圈地/scene_2/scene_2.mp3",
-      "totalDurationFrames": 1980
+      "totalDurationFrames": 2423
     },
     {
       "sceneId": "scene_3",
@@ -580,27 +685,27 @@
             {
               "text": "我还要告诉你一个事实，",
               "startFrame": 0,
-              "durationFrames": 45
+              "durationFrames": 42
             },
             {
               "text": "安卓因为完全开源，",
-              "startFrame": 44,
-              "durationFrames": 50
+              "startFrame": 41,
+              "durationFrames": 44
             },
             {
               "text": "不需要你付一分钱。",
-              "startFrame": 93,
-              "durationFrames": 36
+              "startFrame": 85,
+              "durationFrames": 35
             },
             {
               "text": "但鸿蒙，",
-              "startFrame": 129,
-              "durationFrames": 22
+              "startFrame": 119,
+              "durationFrames": 26
             },
             {
               "text": "是自家的闭源资产！",
-              "startFrame": 151,
-              "durationFrames": 53
+              "startFrame": 144,
+              "durationFrames": 52
             }
           ],
           "order": 1,
@@ -612,7 +717,7 @@
             "butContentIndex": 3,
             "anchors": []
           },
-          "totalDurationFrames": 204
+          "totalDurationFrames": 196
         },
         {
           "narrativeType": "LOGIC",
@@ -622,21 +727,21 @@
             {
               "text": "现在它不收费，",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 37
             },
             {
               "text": "是因为安卓还没死！",
-              "startFrame": 34,
-              "durationFrames": 45
+              "startFrame": 36,
+              "durationFrames": 44
             },
             {
               "text": "一旦生态封锁完成，",
               "startFrame": 79,
-              "durationFrames": 42
+              "durationFrames": 51
             },
             {
               "text": "彻底垄断市场。",
-              "startFrame": 120,
+              "startFrame": 129,
               "durationFrames": 44
             }
           ],
@@ -671,7 +776,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 165
+          "totalDurationFrames": 174
         },
         {
           "narrativeType": "TRANSITION",
@@ -681,17 +786,17 @@
             {
               "text": "你猜猜看，",
               "startFrame": 0,
-              "durationFrames": 29
+              "durationFrames": 21
             },
             {
               "text": "那几百亿的研发费。",
-              "startFrame": 28,
-              "durationFrames": 48
+              "startFrame": 20,
+              "durationFrames": 50
             },
             {
               "text": "最后是谁来买单？",
-              "startFrame": 76,
-              "durationFrames": 42
+              "startFrame": 70,
+              "durationFrames": 44
             }
           ],
           "order": 3,
@@ -707,7 +812,7 @@
               }
             ]
           },
-          "totalDurationFrames": 118
+          "totalDurationFrames": 114
         },
         {
           "narrativeType": "CASE",
@@ -717,22 +822,22 @@
             {
               "text": "甚至都不用等垄断了，",
               "startFrame": 0,
-              "durationFrames": 48
+              "durationFrames": 44
             },
             {
               "text": "就看现在。",
-              "startFrame": 47,
-              "durationFrames": 24
+              "startFrame": 43,
+              "durationFrames": 26
             },
             {
               "text": "同一个打车软件，",
-              "startFrame": 71,
-              "durationFrames": 42
+              "startFrame": 69,
+              "durationFrames": 39
             },
             {
               "text": "同一个游戏。",
-              "startFrame": 112,
-              "durationFrames": 32
+              "startFrame": 107,
+              "durationFrames": 31
             }
           ],
           "order": 4,
@@ -741,7 +846,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 145
+          "totalDurationFrames": 138
         },
         {
           "narrativeType": "CASE",
@@ -751,17 +856,17 @@
             {
               "text": "为了多适配一个鸿蒙系统。",
               "startFrame": 0,
-              "durationFrames": 58
+              "durationFrames": 57
             },
             {
               "text": "企业就要多花一倍的开发成本。",
-              "startFrame": 57,
+              "startFrame": 56,
               "durationFrames": 77
             },
             {
               "text": "多出一倍的长期维护费。",
               "startFrame": 133,
-              "durationFrames": 55
+              "durationFrames": 57
             }
           ],
           "order": 5,
@@ -785,7 +890,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 189
+          "totalDurationFrames": 190
         },
         {
           "narrativeType": "TRANSITION",
@@ -800,11 +905,11 @@
             {
               "text": "是资本家自己出了？",
               "startFrame": 32,
-              "durationFrames": 44
+              "durationFrames": 42
             },
             {
               "text": "别天真了！",
-              "startFrame": 76,
+              "startFrame": 74,
               "durationFrames": 29
             }
           ],
@@ -820,7 +925,7 @@
               }
             ]
           },
-          "totalDurationFrames": 105
+          "totalDurationFrames": 103
         },
         {
           "narrativeType": "CONCLUSION",
@@ -835,12 +940,12 @@
             {
               "text": "每一分额外的开销，",
               "startFrame": 43,
-              "durationFrames": 51
+              "durationFrames": 42
             },
             {
               "text": "都会转嫁到你的头上。",
-              "startFrame": 93,
-              "durationFrames": 52
+              "startFrame": 84,
+              "durationFrames": 43
             }
           ],
           "order": 7,
@@ -856,11 +961,11 @@
               }
             ]
           },
-          "totalDurationFrames": 146
+          "totalDurationFrames": 128
         }
       ],
       "audioSrc": "/audio/鸿蒙商业圈地/scene_3/scene_3.mp3",
-      "totalDurationFrames": 1070
+      "totalDurationFrames": 1043
     },
     {
       "sceneId": "scene_4",
@@ -879,7 +984,7 @@
             {
               "text": "鸿蒙破坏了开源精神。",
               "startFrame": 32,
-              "durationFrames": 67
+              "durationFrames": 63
             }
           ],
           "order": 1,
@@ -894,7 +999,7 @@
               }
             ]
           },
-          "totalDurationFrames": 100
+          "totalDurationFrames": 95
         },
         {
           "narrativeType": "LOGIC",
@@ -904,17 +1009,17 @@
             {
               "text": "至少在鸿蒙5.0之前，",
               "startFrame": 0,
-              "durationFrames": 57
+              "durationFrames": 56
             },
             {
               "text": "他一边用着安卓的核心代码，",
-              "startFrame": 56,
-              "durationFrames": 58
+              "startFrame": 55,
+              "durationFrames": 63
             },
             {
               "text": "一边却打着百分百国产自研的口号。",
-              "startFrame": 114,
-              "durationFrames": 82
+              "startFrame": 117,
+              "durationFrames": 81
             }
           ],
           "order": 2,
@@ -927,7 +1032,7 @@
             "rightShowFrom": 2,
             "anchors": []
           },
-          "totalDurationFrames": 197
+          "totalDurationFrames": 199
         },
         {
           "narrativeType": "LOGIC",
@@ -937,12 +1042,12 @@
             {
               "text": "这是把当初投身开源的开发者的信任，",
               "startFrame": 0,
-              "durationFrames": 86
+              "durationFrames": 81
             },
             {
               "text": "按在了地上摩擦",
-              "startFrame": 85,
-              "durationFrames": 44
+              "startFrame": 80,
+              "durationFrames": 43
             }
           ],
           "order": 3,
@@ -964,7 +1069,7 @@
               }
             ]
           },
-          "totalDurationFrames": 129
+          "totalDurationFrames": 124
         },
         {
           "narrativeType": "LOGIC",
@@ -974,12 +1079,12 @@
             {
               "text": "当开源的成果被攫取，",
               "startFrame": 0,
-              "durationFrames": 57
+              "durationFrames": 52
             },
             {
               "text": "所有开源者都会失去继续开源的动力。",
-              "startFrame": 56,
-              "durationFrames": 86
+              "startFrame": 51,
+              "durationFrames": 79
             }
           ],
           "order": 4,
@@ -999,7 +1104,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 143
+          "totalDurationFrames": 131
         },
         {
           "narrativeType": "DATA",
@@ -1009,27 +1114,27 @@
             {
               "text": "失去开源社区的普惠，",
               "startFrame": 0,
-              "durationFrames": 55
+              "durationFrames": 51
             },
             {
               "text": "你买的每一件电子产品，",
-              "startFrame": 54,
-              "durationFrames": 48
+              "startFrame": 50,
+              "durationFrames": 55
             },
             {
               "text": "硬件价格会原地翻倍；",
-              "startFrame": 102,
-              "durationFrames": 58
+              "startFrame": 104,
+              "durationFrames": 56
             },
             {
               "text": "你用的每一项互联网服务，",
               "startFrame": 160,
-              "durationFrames": 57
+              "durationFrames": 56
             },
             {
               "text": "开销起码再涨三倍。",
-              "startFrame": 217,
-              "durationFrames": 47
+              "startFrame": 216,
+              "durationFrames": 48
             }
           ],
           "order": 5,
@@ -1067,12 +1172,12 @@
             {
               "text": "商业公司逐利，",
               "startFrame": 0,
-              "durationFrames": 34
+              "durationFrames": 36
             },
             {
               "text": "这无可厚非。",
-              "startFrame": 33,
-              "durationFrames": 35
+              "startFrame": 36,
+              "durationFrames": 33
             }
           ],
           "order": 6,
@@ -1091,12 +1196,12 @@
             {
               "text": "但他们把收割市场的野心，",
               "startFrame": 0,
-              "durationFrames": 53
+              "durationFrames": 55
             },
             {
               "text": "包装成了为国为民的牺牲。",
-              "startFrame": 52,
-              "durationFrames": 68
+              "startFrame": 54,
+              "durationFrames": 62
             }
           ],
           "order": 7,
@@ -1108,7 +1213,7 @@
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 121
+          "totalDurationFrames": 116
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1118,17 +1223,17 @@
             {
               "text": "而你们，我智慧的同胞们",
               "startFrame": 0,
-              "durationFrames": 67
+              "durationFrames": 64
             },
             {
               "text": "被人卖了，",
-              "startFrame": 66,
-              "durationFrames": 28
+              "startFrame": 63,
+              "durationFrames": 27
             },
             {
               "text": "还在热泪盈眶地替他们数钱。",
-              "startFrame": 93,
-              "durationFrames": 56
+              "startFrame": 89,
+              "durationFrames": 57
             }
           ],
           "order": 8,
@@ -1148,11 +1253,87 @@
               }
             ]
           },
-          "totalDurationFrames": 149
+          "totalDurationFrames": 147
         }
       ],
       "audioSrc": "/audio/鸿蒙商业圈地/scene_4/scene_4.mp3",
-      "totalDurationFrames": 1171
+      "totalDurationFrames": 1143
+    },
+    {
+      "sceneId": "scene_references",
+      "sceneName": "片尾·参考资料",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "CONCLUSION",
+          "template": "SOURCE_CITATION",
+          "reasoning": "片尾展示支撑安卓完全开源可下载、国产系统基于 Linux、鸿蒙5.0前整合 AOSP、以及闭源商业化等论点的公开来源，无口播。",
+          "content": [],
+          "param": {
+            "sectionTitle": "参考资料",
+            "references": [
+              {
+                "title": "Download the Android source",
+                "titleZh": "安卓开源项目：可下载完整源代码并本地构建",
+                "publisher": "Android Open Source Project",
+                "publisherZh": "安卓开源项目（Google）",
+                "year": "2024"
+              },
+              {
+                "title": "Android Open Source Project Licenses",
+                "titleZh": "安卓开源许可：核心代码以 Apache 2.0 等开源协议发布",
+                "publisher": "Android Open Source Project",
+                "publisherZh": "安卓开源项目（Google）",
+                "year": "2024"
+              },
+              {
+                "title": "HarmonyOS: “Fake it till you make it” meets OS development",
+                "titleZh": "鸿蒙系统实测：本质是 Android 分支，而非全新操作系统",
+                "publisher": "Ron Amadeo · Ars Technica",
+                "publisherZh": "Ron Amadeo · Ars Technica（科技媒体）",
+                "year": "2021"
+              },
+              {
+                "title": "Huawei officially replaces Android with HarmonyOS, which is also Android",
+                "titleZh": "华为正式用鸿蒙替换 Android，但鸿蒙仍是 Android",
+                "publisher": "Ron Amadeo · Ars Technica",
+                "publisherZh": "Ron Amadeo · Ars Technica（科技媒体）",
+                "year": "2021"
+              },
+              {
+                "title": "Huawei's Harmony OS 2.0 beta appears to be based on Android",
+                "titleZh": "鸿蒙 OS 2.0 测试版基于 Android 框架",
+                "publisher": "XDA Developers",
+                "publisherZh": "XDA Developers（开发者社区）",
+                "year": "2021"
+              },
+              {
+                "title": "HarmonyOS",
+                "titleZh": "鸿蒙系统：2019–2024 整合 AOSP，5.0 前兼容 Android 应用",
+                "publisher": "Wikipedia",
+                "publisherZh": "维基百科",
+                "year": "2024"
+              },
+              {
+                "title": "openEuler",
+                "titleZh": "openEuler：基于 Linux 内核的开源操作系统",
+                "publisher": "openEuler Community",
+                "publisherZh": "openEuler 开源社区",
+                "year": "2024"
+              },
+              {
+                "title": "Kylin Operating System",
+                "titleZh": "麒麟操作系统：基于 Linux 的国产操作系统",
+                "publisher": "KylinSoft / Wikipedia",
+                "publisherZh": "麒麟软件 / 维基百科",
+                "year": "2024"
+              }
+            ]
+          },
+          "totalDurationFrames": 153
+        }
+      ],
+      "totalDurationFrames": 153
     }
   ],
   "fps": 30,

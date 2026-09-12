@@ -179,6 +179,46 @@ def _param_to_jsx_props(
                     parts.append(f'{ck}: {json.dumps(cv, ensure_ascii=False)}')
             if parts:
                 props.append("conclusion={{ " + ", ".join(parts) + " }}")
+        elif key == "hub" and isinstance(value, dict):
+            # HUB_RADIATE：情境核，字段同 conclusion（无 tone）
+            parts = []
+            for hk, hv in value.items():
+                if hk == "imageSrc" and isinstance(hv, str):
+                    parts.append(f'imageSrc: staticFile("{_escape_jsx(hv)}")')
+                elif hk == "enterEffect" and isinstance(hv, str):
+                    parts.append(f'{hk}: "{_escape_jsx(hv)}"')
+                elif isinstance(hv, str):
+                    parts.append(f'{hk}: "{_escape_jsx(hv)}"')
+                elif isinstance(hv, bool):
+                    parts.append(f'{hk}: {str(hv).lower()}')
+                elif isinstance(hv, (int, float)):
+                    parts.append(f'{hk}: {hv}')
+                else:
+                    parts.append(f'{hk}: {json.dumps(hv, ensure_ascii=False)}')
+            if parts:
+                props.append("hub={{ " + ", ".join(parts) + " }}")
+        elif key == "rays" and isinstance(value, list):
+            # HUB_RADIATE：发散支点，序列化同 premises
+            ray_jsx_parts = []
+            for ray in value:
+                if not isinstance(ray, dict):
+                    continue
+                parts = []
+                for rk, rv in ray.items():
+                    if rk == "imageSrc" and isinstance(rv, str):
+                        parts.append(f'imageSrc: staticFile("{_escape_jsx(rv)}")')
+                    elif rk == "enterEffect" and isinstance(rv, str):
+                        parts.append(f'{rk}: "{_escape_jsx(rv)}"')
+                    elif isinstance(rv, str):
+                        parts.append(f'{rk}: "{_escape_jsx(rv)}"')
+                    elif isinstance(rv, bool):
+                        parts.append(f'{rk}: {str(rv).lower()}')
+                    elif isinstance(rv, (int, float)):
+                        parts.append(f'{rk}: {rv}')
+                    else:
+                        parts.append(f'{rk}: {json.dumps(rv, ensure_ascii=False)}')
+                ray_jsx_parts.append("{ " + ", ".join(parts) + " }")
+            props.append(f'rays={{[{", ".join(ray_jsx_parts)}]}}')
         elif key == "nodes" and isinstance(value, list):
             # CAUSE_CHAIN：每项含 label、imageSrc、showFrom、可选 enterEffect
             node_jsx_parts = []

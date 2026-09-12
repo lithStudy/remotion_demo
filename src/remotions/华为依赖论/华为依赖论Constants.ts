@@ -10,6 +10,7 @@ import { Scene8, calculateScene8Duration } from "./scenes/Scene8";
 import { Scene9, calculateScene9Duration } from "./scenes/Scene9";
 import { Scene10, calculateScene10Duration } from "./scenes/Scene10";
 import { Scene11, calculateScene11Duration } from "./scenes/Scene11";
+import { Scene12, calculateScene12Duration } from "./scenes/Scene12";
 
 export const 华为依赖论Schema = z.object({});
 
@@ -29,6 +30,7 @@ export const sceneConfigs = [
     { name: "scene9", duration: calculateScene9Duration() + SCENE_END_PADDING, component: Scene9, label: "召唤：可替代才是竞争" },
     { name: "scene10", duration: calculateScene10Duration() + SCENE_END_PADDING, component: Scene10, label: "反转：身份错位的荒诞" },
     { name: "scene11", duration: calculateScene11Duration() + SCENE_END_PADDING, component: Scene11, label: "召唤：重新定义爱国" },
+    { name: "scene12", duration: calculateScene12Duration(), component: Scene12, label: "片尾·参考资料" },
 ];
 
 export const MAIN_DURATION_华为依赖论 =

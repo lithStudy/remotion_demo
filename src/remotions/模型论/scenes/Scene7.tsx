@@ -1,9 +1,9 @@
 import React from "react";
-import { AbsoluteFill, Sequence, Audio, staticFile } from "remotion";
+import { AbsoluteFill, Sequence, Audio, staticFile, Freeze } from "remotion";
 import { BWDosAndDonts, BWTextFocus } from "../../../components";
 
 // 召唤·拒绝假营销
-const SCENE_DURATION = 132 + 106 + 76 + 151;
+const SCENE_DURATION = 132 + 106 + 76 + 176;
 
 export const calculateScene7Duration = (): number => {
     return SCENE_DURATION;
@@ -23,6 +23,11 @@ export const Scene7: React.FC = () => {
             </Sequence>
             <Sequence from={314} durationInFrames={151}>
                 <BWTextFocus content={[{"text": "但对于普通人来说，", "startFrame": 0, "durationFrames": 35}, {"text": "希望你能学会分辨，", "startFrame": 34, "durationFrames": 42}, {"text": "哪些是真科技，", "startFrame": 76, "durationFrames": 38}, {"text": "哪些是假营销。", "startFrame": 113, "durationFrames": 38}]} totalDurationFrames={151} coreSentence={[{"text": "希望你能学会分辨", "showFrom": 1}, {"text": "哪些是真科技", "showFrom": 2}, {"text": "哪些是假营销", "showFrom": 3}]} coreSentenceAnchors={[{"coreSentenceAnchor": "真科技", "color": "#EF4444"}, {"coreSentenceAnchor": "假营销", "color": "#EF4444"}]} />
+            </Sequence>
+            <Sequence from={465} durationInFrames={25}>
+                <Freeze frame={150}>
+                    <BWTextFocus content={[{"text": "但对于普通人来说，", "startFrame": 0, "durationFrames": 35}, {"text": "希望你能学会分辨，", "startFrame": 34, "durationFrames": 42}, {"text": "哪些是真科技，", "startFrame": 76, "durationFrames": 38}, {"text": "哪些是假营销。", "startFrame": 113, "durationFrames": 38}]} totalDurationFrames={151} coreSentence={[{"text": "希望你能学会分辨", "showFrom": 1}, {"text": "哪些是真科技", "showFrom": 2}, {"text": "哪些是假营销", "showFrom": 3}]} coreSentenceAnchors={[{"coreSentenceAnchor": "真科技", "color": "#EF4444"}, {"coreSentenceAnchor": "假营销", "color": "#EF4444"}]} />
+                </Freeze>
             </Sequence>
             <Audio src={staticFile("/audio/模型论/scene_7/scene_7.mp3")} />
         </AbsoluteFill>

@@ -13,12 +13,12 @@
             {
               "text": "小米车，",
               "startFrame": 0,
-              "durationFrames": 29
+              "durationFrames": 28
             },
             {
               "text": "真的更容易出事吗？",
-              "startFrame": 28,
-              "durationFrames": 50
+              "startFrame": 27,
+              "durationFrames": 46
             }
           ],
           "order": 1,
@@ -36,7 +36,7 @@
             ],
             "coreSentenceAnchors": []
           },
-          "totalDurationFrames": 78
+          "totalDurationFrames": 74
         },
         {
           "narrativeType": "LOGIC",
@@ -46,34 +46,34 @@
             {
               "text": "作为一个有理智的人，",
               "startFrame": 0,
-              "durationFrames": 44
+              "durationFrames": 40
             },
             {
               "text": "看一个品牌有没有问题，",
-              "startFrame": 43,
-              "durationFrames": 52
+              "startFrame": 39,
+              "durationFrames": 47
             },
             {
               "text": "不应该是看热搜，",
-              "startFrame": 94,
+              "startFrame": 86,
               "durationFrames": 36
             },
             {
               "text": "而是看数据。",
-              "startFrame": 130,
-              "durationFrames": 29
+              "startFrame": 122,
+              "durationFrames": 27
             }
           ],
           "order": 2,
           "param": {
             "notText": "看热搜",
             "butText": "看数据",
-            "butSrc": "柱状图与数据表格对照热搜榜单的理性分析简笔画",
+            "butSrc": "images/小米事故论/scene_1_2.png",
             "notContentIndex": 2,
             "butContentIndex": 3,
             "anchors": []
           },
-          "totalDurationFrames": 160
+          "totalDurationFrames": 149
         },
         {
           "narrativeType": "CASE",
@@ -83,51 +83,51 @@
             {
               "text": "你刷到的标题，",
               "startFrame": 0,
-              "durationFrames": 39
+              "durationFrames": 36
             },
             {
               "text": "通常很吓人。",
-              "startFrame": 38,
-              "durationFrames": 39
+              "startFrame": 36,
+              "durationFrames": 43
             },
             {
               "text": "小米又起火了。",
-              "startFrame": 76,
-              "durationFrames": 37
+              "startFrame": 78,
+              "durationFrames": 38
             },
             {
               "text": "小米又撞了。",
-              "startFrame": 112,
+              "startFrame": 115,
               "durationFrames": 31
             },
             {
               "text": "小米又上绿化带了。",
-              "startFrame": 143,
-              "durationFrames": 55
+              "startFrame": 145,
+              "durationFrames": 51
             }
           ],
           "order": 3,
           "param": {
             "panels": [
               {
-                "src": "电动车碰撞后起火冒烟的事故现场简笔画",
+                "src": "images/小米事故论/scene_1_3_img0.png",
                 "showFrom": 2,
                 "enterEffect": "breathe"
               },
               {
-                "src": "两车相撞事故残骸横亘路面的简笔画",
+                "src": "images/小米事故论/scene_1_3_img1.png",
                 "showFrom": 3,
                 "enterEffect": "slideLeft"
               },
               {
-                "src": "汽车冲上路中间绿化带横停的简笔画",
+                "src": "images/小米事故论/scene_1_3_img2.png",
                 "showFrom": 4,
                 "enterEffect": "slideBottom"
               }
             ],
             "anchors": []
           },
-          "totalDurationFrames": 198
+          "totalDurationFrames": 197
         },
         {
           "narrativeType": "TRANSITION",
@@ -137,17 +137,17 @@
             {
               "text": "看多了，",
               "startFrame": 0,
-              "durationFrames": 28
+              "durationFrames": 24
             },
             {
               "text": "你会产生一个感觉：",
-              "startFrame": 27,
-              "durationFrames": 40
+              "startFrame": 23,
+              "durationFrames": 43
             },
             {
               "text": "这车是不是有问题？",
               "startFrame": 66,
-              "durationFrames": 41
+              "durationFrames": 42
             }
           ],
           "order": 4,
@@ -162,7 +162,7 @@
               }
             ]
           },
-          "totalDurationFrames": 107
+          "totalDurationFrames": 109
         },
         {
           "narrativeType": "CONCLUSION",
@@ -182,28 +182,28 @@
             {
               "text": "但感觉真实，",
               "startFrame": 50,
-              "durationFrames": 30
+              "durationFrames": 36
             },
             {
               "text": "不等于概率真实。",
-              "startFrame": 79,
-              "durationFrames": 38
+              "startFrame": 86,
+              "durationFrames": 41
             }
           ],
           "order": 5,
           "param": {
             "notText": "感觉真实",
             "butText": "概率真实",
-            "butSrc": "概率曲线与统计数据对照直觉感觉的理性刻度简笔画",
+            "butSrc": "images/小米事故论/scene_1_5.png",
             "notContentIndex": 1,
             "butContentIndex": 3,
             "anchors": []
           },
-          "totalDurationFrames": 117
+          "totalDurationFrames": 127
         }
       ],
       "audioSrc": "/audio/小米事故论/scene_1/scene_1.mp3",
-      "totalDurationFrames": 661
+      "totalDurationFrames": 655
     },
     {
       "sceneId": "scene_2",
@@ -217,12 +217,12 @@
             {
               "text": "我们先说最敏感的：",
               "startFrame": 0,
-              "durationFrames": 41
+              "durationFrames": 42
             },
             {
               "text": "起火。",
-              "startFrame": 40,
-              "durationFrames": 28
+              "startFrame": 41,
+              "durationFrames": 27
             }
           ],
           "order": 1,
@@ -256,27 +256,27 @@
             {
               "text": "从2025年全年",
               "startFrame": 0,
-              "durationFrames": 46
+              "durationFrames": 44
             },
             {
               "text": "公开报道的燃烧事故，",
-              "startFrame": 45,
-              "durationFrames": 47
+              "startFrame": 43,
+              "durationFrames": 45
             },
             {
               "text": "总共只有6起，",
-              "startFrame": 92,
-              "durationFrames": 42
+              "startFrame": 88,
+              "durationFrames": 36
             },
             {
               "text": "按当时34万保有量估算，",
-              "startFrame": 134,
-              "durationFrames": 72
+              "startFrame": 124,
+              "durationFrames": 68
             },
             {
               "text": "碰撞后燃烧比例，",
-              "startFrame": 206,
-              "durationFrames": 43
+              "startFrame": 192,
+              "durationFrames": 44
             }
           ],
           "order": 2,
@@ -296,7 +296,7 @@
               }
             ]
           },
-          "totalDurationFrames": 249
+          "totalDurationFrames": 236
         },
         {
           "narrativeType": "DATA",
@@ -306,47 +306,47 @@
             {
               "text": "大约是0.00117%。",
               "startFrame": 0,
-              "durationFrames": 72
+              "durationFrames": 67
             },
             {
               "text": "而新能源整体起火率，",
-              "startFrame": 71,
-              "durationFrames": 55
+              "startFrame": 66,
+              "durationFrames": 63
             },
             {
               "text": "约为0.0018%。",
-              "startFrame": 126,
-              "durationFrames": 66
+              "startFrame": 128,
+              "durationFrames": 71
             },
             {
               "text": "燃油车约为0.015%。",
-              "startFrame": 191,
-              "durationFrames": 90
+              "startFrame": 199,
+              "durationFrames": 85
             },
             {
               "text": "看到了吗，",
-              "startFrame": 281,
+              "startFrame": 284,
               "durationFrames": 24
             },
             {
               "text": "你以为新能源比燃油车更容易烧起来，",
-              "startFrame": 305,
-              "durationFrames": 88
+              "startFrame": 308,
+              "durationFrames": 87
             },
             {
               "text": "但其实新能源比燃油车着火事故少一半",
-              "startFrame": 392,
-              "durationFrames": 88
+              "startFrame": 394,
+              "durationFrames": 95
             },
             {
               "text": " 你以为小米比其他电动车更容易烧起来，",
-              "startFrame": 480,
-              "durationFrames": 96
+              "startFrame": 489,
+              "durationFrames": 92
             },
             {
               "text": "但其实小米相比整个行业着火事故更低。",
-              "startFrame": 576,
-              "durationFrames": 103
+              "startFrame": 581,
+              "durationFrames": 90
             }
           ],
           "order": 3,
@@ -381,7 +381,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 679
+          "totalDurationFrames": 671
         },
         {
           "narrativeType": "CONCLUSION",
@@ -391,17 +391,17 @@
             {
               "text": "是不是有点反直觉？",
               "startFrame": 0,
-              "durationFrames": 41
+              "durationFrames": 42
             },
             {
               "text": "你刷到很多，",
-              "startFrame": 40,
-              "durationFrames": 36
+              "startFrame": 41,
+              "durationFrames": 24
             },
             {
               "text": "不等于概率很高。",
-              "startFrame": 76,
-              "durationFrames": 37
+              "startFrame": 65,
+              "durationFrames": 32
             }
           ],
           "order": 6,
@@ -427,7 +427,7 @@
               }
             ]
           },
-          "totalDurationFrames": 113
+          "totalDurationFrames": 98
         },
         {
           "narrativeType": "LOGIC",
@@ -437,44 +437,44 @@
             {
               "text": "更关键的是，",
               "startFrame": 0,
-              "durationFrames": 32
+              "durationFrames": 33
             },
             {
               "text": "公开通报里的多数火情，",
-              "startFrame": 31,
-              "durationFrames": 56
+              "startFrame": 32,
+              "durationFrames": 54
             },
             {
               "text": "不是静置自燃。",
-              "startFrame": 87,
-              "durationFrames": 36
-            },
-            {
-              "text": "都是严重碰撞后起火。",
-              "startFrame": 122,
-              "durationFrames": 55
-            },
-            {
-              "text": "外部火源引燃。",
-              "startFrame": 177,
+              "startFrame": 86,
               "durationFrames": 35
             },
             {
+              "text": "都是严重碰撞后起火。",
+              "startFrame": 120,
+              "durationFrames": 51
+            },
+            {
+              "text": "外部火源引燃。",
+              "startFrame": 170,
+              "durationFrames": 39
+            },
+            {
               "text": "或者其他复杂诱因。",
-              "startFrame": 212,
-              "durationFrames": 44
+              "startFrame": 208,
+              "durationFrames": 43
             }
           ],
           "order": 7,
           "param": {
             "notText": "静置自燃",
             "butText": "外部诱因",
-            "butSrc": "严重碰撞后起火与外部火源引燃的诱因示意简笔画",
+            "butSrc": "images/小米事故论/scene_2_7.png",
             "notContentIndex": 2,
             "butContentIndex": 3,
             "anchors": []
           },
-          "totalDurationFrames": 257
+          "totalDurationFrames": 251
         },
         {
           "narrativeType": "CONCLUSION",
@@ -484,12 +484,12 @@
             {
               "text": "目前也没有一例说明，",
               "startFrame": 0,
-              "durationFrames": 46
+              "durationFrames": 52
             },
             {
               "text": "小米存在系统缺陷性的自燃。",
-              "startFrame": 45,
-              "durationFrames": 78
+              "startFrame": 51,
+              "durationFrames": 75
             }
           ],
           "order": 8,
@@ -511,7 +511,7 @@
               }
             ]
           },
-          "totalDurationFrames": 123
+          "totalDurationFrames": 126
         },
         {
           "narrativeType": "CASE",
@@ -526,22 +526,22 @@
             {
               "text": "很多人一看到事故视频，",
               "startFrame": 32,
-              "durationFrames": 48
+              "durationFrames": 55
             },
             {
               "text": "就下意识得出结论：",
-              "startFrame": 80,
-              "durationFrames": 42
+              "startFrame": 87,
+              "durationFrames": 44
             },
             {
               "text": "绿化带战神。",
-              "startFrame": 122,
-              "durationFrames": 42
+              "startFrame": 130,
+              "durationFrames": 36
             },
             {
               "text": "这是一个极具偏见色彩的标签。",
-              "startFrame": 163,
-              "durationFrames": 75
+              "startFrame": 166,
+              "durationFrames": 77
             }
           ],
           "order": 9,
@@ -556,7 +556,7 @@
               }
             ]
           },
-          "totalDurationFrames": 238
+          "totalDurationFrames": 243
         },
         {
           "narrativeType": "LOGIC",
@@ -566,29 +566,29 @@
             {
               "text": "实际上，事故率没有公开可查的数据，",
               "startFrame": 0,
-              "durationFrames": 89
+              "durationFrames": 88
             },
             {
               "text": "既没有交通部的交通事故率数据，",
-              "startFrame": 88,
-              "durationFrames": 67
+              "startFrame": 87,
+              "durationFrames": 72
             },
             {
               "text": "也没有保险公司的出险率数据。",
-              "startFrame": 154,
-              "durationFrames": 68
+              "startFrame": 159,
+              "durationFrames": 75
             }
           ],
           "order": 10,
           "param": {
-            "leftSrc": "交通部门档案柜空空如也、查无事故率公开数据",
-            "rightSrc": "保险公司档案缺失、无出险率可查",
+            "leftSrc": "images/小米事故论/scene_2_10_left.png",
+            "rightSrc": "images/小米事故论/scene_2_10_right.png",
             "leftLabel": "交通部",
             "rightLabel": "保险公司",
             "leftShowFrom": 1,
             "rightShowFrom": 2
           },
-          "totalDurationFrames": 223
+          "totalDurationFrames": 234
         },
         {
           "narrativeType": "CASE",
@@ -598,22 +598,22 @@
             {
               "text": "但是网上却有很多人张嘴就来：",
               "startFrame": 0,
-              "durationFrames": 66
+              "durationFrames": 70
             },
             {
               "text": "小米的事故率高到离谱。",
-              "startFrame": 65,
-              "durationFrames": 58
+              "startFrame": 69,
+              "durationFrames": 66
             },
             {
               "text": "这就完全是造谣了。",
-              "startFrame": 122,
+              "startFrame": 135,
               "durationFrames": 44
             },
             {
               "text": "高在哪里？你们有任何数据支撑吗？",
-              "startFrame": 166,
-              "durationFrames": 82
+              "startFrame": 179,
+              "durationFrames": 81
             }
           ],
           "order": 11,
@@ -623,11 +623,11 @@
             "showFrom": 1,
             "anchors": []
           },
-          "totalDurationFrames": 248
+          "totalDurationFrames": 260
         }
       ],
       "audioSrc": "/audio/小米事故论/scene_2/scene_2.mp3",
-      "totalDurationFrames": 2197
+      "totalDurationFrames": 2186
     },
     {
       "sceneId": "scene_3",
@@ -641,24 +641,24 @@
             {
               "text": "但是也不能否认，",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 38
             },
             {
               "text": "小米SU7有几个特点。",
-              "startFrame": 34,
-              "durationFrames": 53
+              "startFrame": 37,
+              "durationFrames": 45
             }
           ],
           "order": 1,
           "param": {
             "notText": "否认优点",
             "butText": "有几个特点",
-            "butSrc": "小米SU7轮廓旁标注若干产品特点的简笔画",
+            "butSrc": "images/小米事故论/scene_3_1.png",
             "notContentIndex": 0,
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 88
+          "totalDurationFrames": 82
         },
         {
           "narrativeType": "LOGIC",
@@ -668,54 +668,54 @@
             {
               "text": "第一，",
               "startFrame": 0,
-              "durationFrames": 19
+              "durationFrames": 15
             },
             {
               "text": "车主年轻。",
-              "startFrame": 18,
-              "durationFrames": 29
+              "startFrame": 14,
+              "durationFrames": 31
             },
             {
               "text": "第二，",
-              "startFrame": 47,
-              "durationFrames": 12
+              "startFrame": 45,
+              "durationFrames": 17
             },
             {
               "text": "性能强。",
-              "startFrame": 59,
-              "durationFrames": 30
+              "startFrame": 61,
+              "durationFrames": 32
             },
             {
               "text": "第三，",
-              "startFrame": 88,
+              "startFrame": 93,
               "durationFrames": 19
             },
             {
               "text": "交付初期新手多。",
-              "startFrame": 107,
-              "durationFrames": 52
+              "startFrame": 111,
+              "durationFrames": 58
             }
           ],
           "order": 2,
           "param": {
             "panels": [
               {
-                "src": "年轻车主驾驶高性能电动汽车的简笔画",
+                "src": "images/小米事故论/scene_3_2_img0.png",
                 "showFrom": 0,
                 "enterEffect": "zoomIn"
               },
               {
-                "src": "仪表盘指针飙向极限的高性能跑车简笔画",
+                "src": "images/小米事故论/scene_3_2_img1.png",
                 "showFrom": 2
               },
               {
-                "src": "新手司机手握方向盘神情紧张的简笔画",
+                "src": "images/小米事故论/scene_3_2_img2.png",
                 "showFrom": 4
               }
             ],
             "anchors": []
           },
-          "totalDurationFrames": 159
+          "totalDurationFrames": 170
         },
         {
           "narrativeType": "LOGIC",
@@ -725,17 +725,17 @@
             {
               "text": "这几个因素叠在一起，",
               "startFrame": 0,
-              "durationFrames": 47
+              "durationFrames": 48
             },
             {
               "text": "确实是相对更容易出现事故的情况。",
-              "startFrame": 46,
-              "durationFrames": 75
+              "startFrame": 48,
+              "durationFrames": 74
             }
           ],
           "order": 3,
           "param": {
-            "imageSrc": "年轻车手、强性能、新手三类因素叠压汇聚成事故风险",
+            "imageSrc": "images/小米事故论/scene_3_3.png",
             "enterEffect": "fadeIn",
             "anchors": []
           },
@@ -749,29 +749,29 @@
             {
               "text": "但这不是小米车本身的问题，",
               "startFrame": 0,
-              "durationFrames": 59
+              "durationFrames": 56
             },
             {
               "text": "车只是工具，",
-              "startFrame": 58,
-              "durationFrames": 38
+              "startFrame": 55,
+              "durationFrames": 39
             },
             {
               "text": "它如何被使用是工具无法决定的。",
-              "startFrame": 96,
-              "durationFrames": 75
+              "startFrame": 93,
+              "durationFrames": 71
             }
           ],
           "order": 4,
           "param": {
             "notText": "车本身的问题",
             "butText": "只是工具",
-            "butSrc": "汽车作为中性工具、驾驶方式不由车决定的简笔画",
+            "butSrc": "images/小米事故论/scene_3_4.png",
             "notContentIndex": 0,
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 171
+          "totalDurationFrames": 164
         },
         {
           "narrativeType": "DATA",
@@ -781,36 +781,36 @@
             {
               "text": "J.D. Power，",
               "startFrame": 0,
-              "durationFrames": 29
+              "durationFrames": 27
             },
             {
               "text": "著名的第三方消费者洞察机构。",
-              "startFrame": 28,
-              "durationFrames": 69
+              "startFrame": 26,
+              "durationFrames": 77
             },
             {
               "text": "在它的2025年研究报告中，",
-              "startFrame": 97,
-              "durationFrames": 69
+              "startFrame": 102,
+              "durationFrames": 63
             },
             {
               "text": "小米SU7拿到过，",
-              "startFrame": 165,
-              "durationFrames": 47
+              "startFrame": 164,
+              "durationFrames": 43
             },
             {
               "text": "大型纯电动细分市场，",
-              "startFrame": 212,
-              "durationFrames": 55
+              "startFrame": 207,
+              "durationFrames": 57
             },
             {
               "text": "新车质量排名最高。",
-              "startFrame": 267,
-              "durationFrames": 47
+              "startFrame": 264,
+              "durationFrames": 49
             },
             {
               "text": "这也侧面印证了小米车的质量并不存在问题。",
-              "startFrame": 313,
+              "startFrame": 312,
               "durationFrames": 101
             }
           ],
@@ -821,11 +821,11 @@
             "showFrom": 3,
             "anchors": []
           },
-          "totalDurationFrames": 414
+          "totalDurationFrames": 413
         }
       ],
       "audioSrc": "/audio/小米事故论/scene_3/scene_3.mp3",
-      "totalDurationFrames": 954
+      "totalDurationFrames": 952
     },
     {
       "sceneId": "scene_4",
@@ -839,21 +839,21 @@
             {
               "text": "那为什么很多人还是觉得，",
               "startFrame": 0,
-              "durationFrames": 45
+              "durationFrames": 47
             },
             {
               "text": "小米问题特别多？",
-              "startFrame": 44,
-              "durationFrames": 50
+              "startFrame": 46,
+              "durationFrames": 44
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "围观群众摇头觉得小米问题频出的质疑氛围简笔画",
+            "imageSrc": "images/小米事故论/scene_4_1.png",
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 94
+          "totalDurationFrames": 91
         },
         {
           "narrativeType": "LOGIC",
@@ -863,38 +863,38 @@
             {
               "text": "第一，",
               "startFrame": 0,
-              "durationFrames": 16
+              "durationFrames": 17
             },
             {
               "text": "车的保有量太大。",
-              "startFrame": 15,
-              "durationFrames": 34
+              "startFrame": 16,
+              "durationFrames": 33
             },
             {
               "text": "2026年1月，小米汽车总交付量就已经超过了60万辆",
-              "startFrame": 48,
-              "durationFrames": 134
+              "startFrame": 49,
+              "durationFrames": 131
             },
             {
               "text": "就算一年只有0.1%的事故率，",
-              "startFrame": 181,
-              "durationFrames": 77
+              "startFrame": 180,
+              "durationFrames": 69
             },
             {
               "text": "那也是600起事故。",
-              "startFrame": 257,
-              "durationFrames": 47
+              "startFrame": 248,
+              "durationFrames": 41
             },
             {
               "text": "加上小米自带的流量属性，你看到的新闻自然多",
-              "startFrame": 304,
-              "durationFrames": 116
+              "startFrame": 289,
+              "durationFrames": 103
             }
           ],
           "order": 2,
           "param": {
             "title": "保有量太大",
-            "imageSrc": "六十万辆汽车密密麻麻排布象征巨大保有量基数",
+            "imageSrc": "images/小米事故论/scene_4_2.png",
             "notes": [
               {
                 "text": "交付超60万辆，基数巨大",
@@ -911,7 +911,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 421
+          "totalDurationFrames": 393
         },
         {
           "narrativeType": "LOGIC",
@@ -921,38 +921,38 @@
             {
               "text": "第二，",
               "startFrame": 0,
-              "durationFrames": 19
+              "durationFrames": 18
             },
             {
               "text": "算法会追着兴趣跑。",
-              "startFrame": 18,
-              "durationFrames": 48
+              "startFrame": 17,
+              "durationFrames": 47
             },
             {
               "text": "当你刷到小米汽车事故的视频，",
-              "startFrame": 66,
-              "durationFrames": 60
+              "startFrame": 63,
+              "durationFrames": 68
             },
             {
               "text": "你多停留两秒，",
-              "startFrame": 126,
-              "durationFrames": 36
+              "startFrame": 131,
+              "durationFrames": 35
             },
             {
               "text": "算法就会觉得你对这种视频感兴趣，",
-              "startFrame": 162,
-              "durationFrames": 82
+              "startFrame": 166,
+              "durationFrames": 71
             },
             {
               "text": "它就多喂你十条。",
-              "startFrame": 243,
-              "durationFrames": 43
+              "startFrame": 237,
+              "durationFrames": 40
             }
           ],
           "order": 3,
           "param": {
             "title": "算法追着恐惧跑",
-            "imageSrc": "算法机械臂把人拽向事故短视频的信息流简笔画",
+            "imageSrc": "images/小米事故论/scene_4_3.png",
             "notes": [
               {
                 "text": "停留就是喂养算法",
@@ -965,7 +965,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 287
+          "totalDurationFrames": 277
         },
         {
           "narrativeType": "LOGIC",
@@ -975,38 +975,38 @@
             {
               "text": "第三，",
               "startFrame": 0,
-              "durationFrames": 20
+              "durationFrames": 16
             },
             {
               "text": "重复会制造真实感。",
-              "startFrame": 19,
-              "durationFrames": 56
+              "startFrame": 15,
+              "durationFrames": 47
             },
             {
               "text": "同一起事故，",
-              "startFrame": 75,
-              "durationFrames": 28
+              "startFrame": 62,
+              "durationFrames": 29
             },
             {
               "text": "不同角度剪三遍。",
-              "startFrame": 102,
-              "durationFrames": 46
+              "startFrame": 90,
+              "durationFrames": 41
             },
             {
               "text": "你以为是三起事故。",
-              "startFrame": 148,
-              "durationFrames": 40
+              "startFrame": 130,
+              "durationFrames": 36
             },
             {
               "text": "其实都是一件事。",
-              "startFrame": 187,
-              "durationFrames": 42
+              "startFrame": 166,
+              "durationFrames": 47
             }
           ],
           "order": 4,
           "param": {
             "title": "重复制造真实感",
-            "imageSrc": "同一事故从不同机位剪出三条重复视频的简笔画",
+            "imageSrc": "images/小米事故论/scene_4_4.png",
             "notes": [
               {
                 "text": "同一事故被切分成不同视角",
@@ -1019,7 +1019,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 230
+          "totalDurationFrames": 214
         },
         {
           "narrativeType": "LOGIC",
@@ -1034,48 +1034,48 @@
             {
               "text": "某些下作的攻击者也会借题发挥。",
               "startFrame": 18,
-              "durationFrames": 70
+              "durationFrames": 71
             },
             {
               "text": "把事故、",
               "startFrame": 88,
-              "durationFrames": 23
+              "durationFrames": 20
             },
             {
               "text": "人为操作、",
-              "startFrame": 111,
-              "durationFrames": 28
-            },
-            {
-              "text": "旧视频，",
-              "startFrame": 138,
+              "startFrame": 108,
               "durationFrames": 27
             },
             {
+              "text": "旧视频，",
+              "startFrame": 134,
+              "durationFrames": 23
+            },
+            {
               "text": "混在同一个标签里。",
-              "startFrame": 164,
-              "durationFrames": 51
+              "startFrame": 157,
+              "durationFrames": 50
             },
             {
               "text": "最后留给你的，",
-              "startFrame": 214,
-              "durationFrames": 31
+              "startFrame": 206,
+              "durationFrames": 30
             },
             {
               "text": "就只剩一个印象：",
-              "startFrame": 245,
-              "durationFrames": 40
+              "startFrame": 235,
+              "durationFrames": 47
             },
             {
               "text": "小米怎么天天出事？",
-              "startFrame": 284,
-              "durationFrames": 45
+              "startFrame": 282,
+              "durationFrames": 50
             }
           ],
           "order": 5,
           "param": {
             "title": "借题发挥的陷阱",
-            "imageSrc": "攻击者把事故、旧视频、人为操作混进同一标签的简笔画",
+            "imageSrc": "images/小米事故论/scene_4_5.png",
             "notes": [
               {
                 "text": "恶意炒作攻击者",
@@ -1092,7 +1092,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 329
+          "totalDurationFrames": 332
         },
         {
           "narrativeType": "LOGIC",
@@ -1102,31 +1102,31 @@
             {
               "text": "我们的大脑，",
               "startFrame": 0,
-              "durationFrames": 20
+              "durationFrames": 21
             },
             {
               "text": "天生相信重复。",
-              "startFrame": 19,
-              "durationFrames": 40
+              "startFrame": 20,
+              "durationFrames": 41
             },
             {
               "text": "一件事出现十次，",
-              "startFrame": 58,
-              "durationFrames": 43
+              "startFrame": 61,
+              "durationFrames": 42
             },
             {
               "text": "我们就觉得它常见。",
-              "startFrame": 101,
-              "durationFrames": 40
+              "startFrame": 102,
+              "durationFrames": 36
             },
             {
               "text": "一件事刷屏三天，",
-              "startFrame": 140,
-              "durationFrames": 45
+              "startFrame": 138,
+              "durationFrames": 39
             },
             {
               "text": "我们就觉得它严重。",
-              "startFrame": 185,
+              "startFrame": 176,
               "durationFrames": 41
             }
           ],
@@ -1134,18 +1134,18 @@
           "param": {
             "stages": [
               {
-                "imageSrc": "大脑轮廓中被反复刻印同一信息的简笔画",
+                "imageSrc": "images/小米事故论/scene_4_6_img0.png",
                 "enterEffect": "breathe",
                 "tone": "calm"
               },
               {
-                "imageSrc": "同一事件出现十次被标记为常见的示意",
+                "imageSrc": "images/小米事故论/scene_4_6_img1.png",
                 "enterEffect": "slideBottom",
                 "tone": "alert",
                 "showFrom": 2
               },
               {
-                "imageSrc": "屏幕连刷三天同一新闻被感知为严重的简笔画",
+                "imageSrc": "images/小米事故论/scene_4_6_img2.png",
                 "enterEffect": "slideBottom",
                 "tone": "alert",
                 "showFrom": 4
@@ -1153,7 +1153,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 226
+          "totalDurationFrames": 217
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1163,43 +1163,43 @@
             {
               "text": "但互联网的重复，",
               "startFrame": 0,
-              "durationFrames": 36
+              "durationFrames": 38
             },
             {
               "text": "不是现实的重复。",
-              "startFrame": 36,
+              "startFrame": 37,
               "durationFrames": 38
             },
             {
               "text": "它是流量的重复。",
-              "startFrame": 73,
-              "durationFrames": 42
+              "startFrame": 75,
+              "durationFrames": 39
             },
             {
               "text": "是情绪的重复。",
-              "startFrame": 115,
-              "durationFrames": 42
+              "startFrame": 113,
+              "durationFrames": 34
             },
             {
               "text": "是算法的重复。",
-              "startFrame": 156,
-              "durationFrames": 40
+              "startFrame": 147,
+              "durationFrames": 39
             }
           ],
           "order": 7,
           "param": {
             "notText": "现实的重复",
             "butText": "流量、情绪与算法的重复",
-            "butSrc": "流量、情绪与算法循环推送对照现实偶发事件的对比",
+            "butSrc": "images/小米事故论/scene_4_7.png",
             "notContentIndex": 1,
             "butContentIndex": 2,
             "anchors": []
           },
-          "totalDurationFrames": 197
+          "totalDurationFrames": 186
         }
       ],
       "audioSrc": "/audio/小米事故论/scene_4/scene_4.mp3",
-      "totalDurationFrames": 1782
+      "totalDurationFrames": 1709
     },
     {
       "sceneId": "scene_5",
@@ -1213,21 +1213,21 @@
             {
               "text": "讲到这里，",
               "startFrame": 0,
-              "durationFrames": 26
+              "durationFrames": 24
             },
             {
               "text": "有些人会急。",
-              "startFrame": 25,
-              "durationFrames": 38
+              "startFrame": 24,
+              "durationFrames": 40
             },
             {
               "text": "难道小米不能被质疑吗？",
-              "startFrame": 62,
-              "durationFrames": 45
+              "startFrame": 63,
+              "durationFrames": 46
             },
             {
               "text": "当然不是。",
-              "startFrame": 106,
+              "startFrame": 108,
               "durationFrames": 33
             }
           ],
@@ -1250,7 +1250,7 @@
               }
             ]
           },
-          "totalDurationFrames": 140
+          "totalDurationFrames": 142
         },
         {
           "narrativeType": "LOGIC",
@@ -1260,46 +1260,46 @@
             {
               "text": "车企当然要被质疑。",
               "startFrame": 0,
-              "durationFrames": 44
+              "durationFrames": 45
             },
             {
               "text": "安全当然要被追问。",
-              "startFrame": 43,
-              "durationFrames": 42
+              "startFrame": 44,
+              "durationFrames": 41
             },
             {
               "text": "每一起事故，",
-              "startFrame": 84,
-              "durationFrames": 33
+              "startFrame": 85,
+              "durationFrames": 28
             },
             {
               "text": "都该查清责任。",
-              "startFrame": 117,
-              "durationFrames": 32
+              "startFrame": 112,
+              "durationFrames": 35
             }
           ],
           "order": 2,
           "param": {
             "panels": [
               {
-                "src": "举放大镜审视车企标志的公众监督简笔画",
+                "src": "images/小米事故论/scene_5_2_img0.png",
                 "showFrom": 0,
                 "enterEffect": "fadeIn"
               },
               {
-                "src": "安全盾牌被追问检验的简笔画",
+                "src": "images/小米事故论/scene_5_2_img1.png",
                 "showFrom": 1,
                 "enterEffect": "fadeIn"
               },
               {
-                "src": "事故现场调查人员厘清责任归属的简笔画",
+                "src": "images/小米事故论/scene_5_2_img2.png",
                 "showFrom": 3,
                 "enterEffect": "fadeIn"
               }
             ],
             "anchors": []
           },
-          "totalDurationFrames": 150
+          "totalDurationFrames": 148
         },
         {
           "narrativeType": "LOGIC",
@@ -1309,41 +1309,41 @@
             {
               "text": "尤其是辅助驾驶。",
               "startFrame": 0,
-              "durationFrames": 41
-            },
-            {
-              "text": "尤其是车门结构。",
-              "startFrame": 40,
               "durationFrames": 42
             },
             {
+              "text": "尤其是车门结构。",
+              "startFrame": 41,
+              "durationFrames": 43
+            },
+            {
               "text": "尤其是碰撞后的逃生窗口。",
-              "startFrame": 81,
-              "durationFrames": 63
+              "startFrame": 83,
+              "durationFrames": 68
             }
           ],
           "order": 3,
           "param": {
             "panels": [
               {
-                "src": "辅助驾驶方向盘与路况感应的简笔画",
+                "src": "images/小米事故论/scene_5_3_img0.png",
                 "showFrom": 0,
                 "enterEffect": "fadeIn"
               },
               {
-                "src": "车门结构剖面与碰撞耐受的简笔画",
+                "src": "images/小米事故论/scene_5_3_img1.png",
                 "showFrom": 1,
                 "enterEffect": "fadeIn"
               },
               {
-                "src": "碰撞后有限逃生时间窗口的倒计时示意",
+                "src": "images/小米事故论/scene_5_3_img2.png",
                 "showFrom": 2,
                 "enterEffect": "fadeIn"
               }
             ],
             "anchors": []
           },
-          "totalDurationFrames": 144
+          "totalDurationFrames": 152
         },
         {
           "narrativeType": "LOGIC",
@@ -1353,32 +1353,32 @@
             {
               "text": "这些不是小问题。",
               "startFrame": 0,
-              "durationFrames": 40
+              "durationFrames": 46
             },
             {
               "text": "也不能被一句概率低，",
-              "startFrame": 39,
-              "durationFrames": 42
+              "startFrame": 45,
+              "durationFrames": 46
             },
             {
               "text": "轻轻带过。",
-              "startFrame": 80,
-              "durationFrames": 27
+              "startFrame": 91,
+              "durationFrames": 33
             },
             {
               "text": "但质疑也要有尺子。",
-              "startFrame": 106,
+              "startFrame": 124,
               "durationFrames": 45
             },
             {
               "text": "愤怒也要有分母。",
-              "startFrame": 151,
-              "durationFrames": 50
+              "startFrame": 169,
+              "durationFrames": 41
             }
           ],
           "order": 4,
           "param": {
-            "imageSrc": "手持尺子与分母刻度衡量质疑与愤怒的简笔画",
+            "imageSrc": "images/小米事故论/scene_5_4.png",
             "enterEffect": "fadeIn",
             "anchors": [
               {
@@ -1397,7 +1397,7 @@
               }
             ]
           },
-          "totalDurationFrames": 201
+          "totalDurationFrames": 210
         },
         {
           "narrativeType": "LOGIC",
@@ -1411,13 +1411,13 @@
             },
             {
               "text": "看安全，要看概率。",
-              "startFrame": 47,
-              "durationFrames": 56
+              "startFrame": 48,
+              "durationFrames": 54
             },
             {
               "text": "看质量，要看数据。",
-              "startFrame": 102,
-              "durationFrames": 56
+              "startFrame": 101,
+              "durationFrames": 58
             }
           ],
           "order": 6,
@@ -1451,7 +1451,7 @@
               }
             ]
           },
-          "totalDurationFrames": 159
+          "totalDurationFrames": 160
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1466,17 +1466,17 @@
             {
               "text": "你不是在寻找真相。",
               "startFrame": 22,
-              "durationFrames": 38
+              "durationFrames": 40
             },
             {
               "text": "你只是在被算法和负面营销，",
-              "startFrame": 60,
-              "durationFrames": 62
+              "startFrame": 62,
+              "durationFrames": 60
             },
             {
               "text": "投喂情绪。",
-              "startFrame": 121,
-              "durationFrames": 32
+              "startFrame": 122,
+              "durationFrames": 31
             }
           ],
           "order": 7,
@@ -1511,11 +1511,80 @@
               }
             ]
           },
-          "totalDurationFrames": 153
+          "totalDurationFrames": 154
         }
       ],
       "audioSrc": "/audio/小米事故论/scene_5/scene_5.mp3",
-      "totalDurationFrames": 946
+      "totalDurationFrames": 965
+    },
+    {
+      "sceneId": "scene_references",
+      "sceneName": "片尾·参考资料",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "CONCLUSION",
+          "template": "SOURCE_CITATION",
+          "reasoning": "片尾展示支撑起火诱因通报、出险率谣言澄清、J.D. Power质量排名与交付保有量等论点的公开来源，无口播。",
+          "content": [],
+          "param": {
+            "sectionTitle": "参考资料",
+            "references": [
+              {
+                "title": "2025 China New Energy Vehicle Initial Quality Study (NEV-IQS)",
+                "titleZh": "2025中国新能源汽车新车质量研究：小米SU7获大型纯电动细分市场第一",
+                "publisher": "J.D. Power",
+                "publisherZh": "J.D. Power（君迪）",
+                "year": "2025"
+              },
+              {
+                "title": "Xiaomi Auto Cumulative Deliveries Surpass 600,000 Units",
+                "titleZh": "小米汽车累计交付突破60万台（2025年全年交付超41万）",
+                "publisher": "Xiaomi Auto / Gasgoo",
+                "publisherZh": "小米汽车 / 盖世汽车",
+                "year": "2026"
+              },
+              {
+                "title": "Xiaomi Clarifies Forged Insurance Refusal Notices and Claim-Rate Rumors",
+                "titleZh": "小米辟谣：拒保通知系伪造；“出险率是同价位数倍”毫无依据，已报案",
+                "publisher": "Xiaomi Spokesperson / National Business Daily",
+                "publisherZh": "小米公司发言人 / 每日经济新闻",
+                "year": "2025"
+              },
+              {
+                "title": "Xiaomi Response on Zhanjiang SU7 Fire Cause",
+                "titleZh": "湛江SU7事故：初步了解为电动二轮车锂电池挤压起火再引燃事故车辆",
+                "publisher": "Xiaomi Auto / China Financial Information Network",
+                "publisherZh": "小米汽车 / 中国金融信息网",
+                "year": "2025"
+              },
+              {
+                "title": "Xiaomi Statement on SU7 Collision and Fire on Deshang Expressway, Tongling",
+                "titleZh": "安徽铜陵德上高速SU7碰撞起火：事故前NOA行驶，碰撞后起火，配合警方调查",
+                "publisher": "Xiaomi Spokesperson / Cailian Press",
+                "publisherZh": "小米公司发言人 / 财联社",
+                "year": "2025"
+              },
+              {
+                "title": "National Fire and Rescue Administration: Q1 Traffic Tool and NEV Fire Statistics",
+                "titleZh": "国家消防救援局/应急管理部：一季度交通工具火灾与新能源汽车火灾通报口径",
+                "publisher": "National Fire and Rescue Administration / MEM",
+                "publisherZh": "国家消防救援局 / 应急管理部",
+                "year": "2022"
+              },
+              {
+                "title": "Public Media Tracking of Xiaomi SU7 Fire Incidents in 2025",
+                "titleZh": "公开报道梳理：2025年小米SU7相关火情多为碰撞后起火或外部火源等复杂诱因",
+                "publisher": "BitAuto / Multiple public reports",
+                "publisherZh": "易车 / 多家公开报道汇总",
+                "year": "2025"
+              }
+            ]
+          },
+          "totalDurationFrames": 141
+        }
+      ],
+      "totalDurationFrames": 141
     }
   ],
   "fps": 30,

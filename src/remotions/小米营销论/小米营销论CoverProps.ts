@@ -4,10 +4,10 @@ import type { StaticCoverProps } from "../../components";
 export const 小米营销论_STATIC_COVER_PROPS: StaticCoverProps = {
 	title: "小米营销论",
 	subtitle: "都说小米营销很土，其实它最尊重你的智商。",
-	themeColor: "#2563EB",
-	badge: "认识自我 · 理性思考",
-	seriesLabel: "认知心理学",
-	seriesLabelEn: "COGNITIVE PSYCHOLOGY",
-	methodologySteps: ["觉察", "归因", "调整"],
-	methodologyStepsEn: "OBSERVE · ATTRIBUTE · ADJUST",
+	themeColor: "#FF6900",
+	badge: "深度解读 · 数据与事实",
+	seriesLabel: "科技热点深读",
+	seriesLabelEn: "TECH DEEP DIVE",
+	methodologySteps: ["争议", "数据", "结论"],
+	methodologyStepsEn: "DEBATE · DATA · VERDICT",
 };

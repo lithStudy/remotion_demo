@@ -13,17 +13,17 @@
             {
               "text": "中国最该怕的，",
               "startFrame": 0,
-              "durationFrames": 33
-            },
-            {
-              "text": "不是没有华为，",
-              "startFrame": 32,
               "durationFrames": 31
             },
             {
+              "text": "不是没有华为，",
+              "startFrame": 30,
+              "durationFrames": 29
+            },
+            {
               "text": "而是只有华为。",
-              "startFrame": 63,
-              "durationFrames": 32
+              "startFrame": 58,
+              "durationFrames": 36
             }
           ],
           "order": 1,
@@ -61,27 +61,27 @@
             {
               "text": "你只要用手机，",
               "startFrame": 33,
-              "durationFrames": 38
+              "durationFrames": 34
             },
             {
               "text": "就是在用华为基站。",
-              "startFrame": 70,
+              "startFrame": 67,
               "durationFrames": 39
             },
             {
               "text": "好像中国的通信网络是华为一个人建的。",
-              "startFrame": 108,
-              "durationFrames": 102
+              "startFrame": 106,
+              "durationFrames": 92
             },
             {
               "text": "但凡你去翻过任何一轮运营商的集采公告，",
-              "startFrame": 210,
-              "durationFrames": 89
+              "startFrame": 198,
+              "durationFrames": 94
             },
             {
               "text": "你就知道这话有多离谱。",
-              "startFrame": 298,
-              "durationFrames": 51
+              "startFrame": 291,
+              "durationFrames": 53
             }
           ],
           "order": 1,
@@ -90,7 +90,7 @@
             "showFrom": 1,
             "quoteSource": "智选用户"
           },
-          "totalDurationFrames": 350
+          "totalDurationFrames": 345
         },
         {
           "narrativeType": "CASE",
@@ -119,32 +119,32 @@
             {
               "text": "结果是什么？",
               "startFrame": 0,
-              "durationFrames": 26
+              "durationFrames": 24
             },
             {
               "text": "华为拿大概50%，",
-              "startFrame": 25,
-              "durationFrames": 60
+              "startFrame": 24,
+              "durationFrames": 79
             },
             {
               "text": "中兴拿23%到37%，",
-              "startFrame": 85,
-              "durationFrames": 71
+              "startFrame": 102,
+              "durationFrames": 74
             },
             {
               "text": "剩下的，由爱立信、",
-              "startFrame": 156,
-              "durationFrames": 45
+              "startFrame": 175,
+              "durationFrames": 58
             },
             {
               "text": "诺基亚上海贝尔、",
-              "startFrame": 200,
-              "durationFrames": 35
+              "startFrame": 233,
+              "durationFrames": 39
             },
             {
               "text": "大唐移动瓜分。",
-              "startFrame": 235,
-              "durationFrames": 39
+              "startFrame": 271,
+              "durationFrames": 41
             }
           ],
           "order": 3,
@@ -193,7 +193,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 274
+          "totalDurationFrames": 313
         },
         {
           "narrativeType": "CONCLUSION",
@@ -203,12 +203,12 @@
             {
               "text": "这不是华为\"施舍\"给别人的一点份额，",
               "startFrame": 0,
-              "durationFrames": 65
+              "durationFrames": 70
             },
             {
               "text": "而是运营商主动设计的分配制度。",
-              "startFrame": 64,
-              "durationFrames": 68
+              "startFrame": 69,
+              "durationFrames": 75
             }
           ],
           "order": 4,
@@ -220,11 +220,11 @@
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 132
+          "totalDurationFrames": 145
         }
       ],
       "audioSrc": "/audio/华为依赖论/scene_2/scene_2.mp3",
-      "totalDurationFrames": 924
+      "totalDurationFrames": 970
     },
     {
       "sceneId": "scene_3",
@@ -238,12 +238,12 @@
             {
               "text": "为什么运营商要这么干？",
               "startFrame": 0,
-              "durationFrames": 47
+              "durationFrames": 51
             },
             {
               "text": "两个原因。",
-              "startFrame": 46,
-              "durationFrames": 32
+              "startFrame": 50,
+              "durationFrames": 30
             }
           ],
           "order": 1,
@@ -252,7 +252,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 79
+          "totalDurationFrames": 80
         },
         {
           "narrativeType": "LOGIC",
@@ -267,32 +267,32 @@
             {
               "text": "供应链安全。",
               "startFrame": 17,
-              "durationFrames": 31
+              "durationFrames": 30
             },
             {
               "text": "任何理性的运营商，",
-              "startFrame": 48,
+              "startFrame": 47,
               "durationFrames": 42
             },
             {
               "text": "都不会把事关国民经济命脉的核心网络，",
-              "startFrame": 89,
-              "durationFrames": 81
+              "startFrame": 88,
+              "durationFrames": 84
             },
             {
               "text": "绑死在一家公司身上。",
-              "startFrame": 170,
-              "durationFrames": 45
+              "startFrame": 172,
+              "durationFrames": 44
             },
             {
               "text": "这不是技术判断，",
-              "startFrame": 214,
-              "durationFrames": 39
+              "startFrame": 216,
+              "durationFrames": 34
             },
             {
               "text": "这是生存本能。",
-              "startFrame": 252,
-              "durationFrames": 47
+              "startFrame": 249,
+              "durationFrames": 38
             }
           ],
           "order": 2,
@@ -310,7 +310,7 @@
               }
             ]
           },
-          "totalDurationFrames": 300
+          "totalDurationFrames": 288
         },
         {
           "narrativeType": "LOGIC",
@@ -320,22 +320,22 @@
             {
               "text": "第二，",
               "startFrame": 0,
-              "durationFrames": 18
+              "durationFrames": 15
             },
             {
               "text": "议价能力。",
-              "startFrame": 17,
-              "durationFrames": 29
+              "startFrame": 14,
+              "durationFrames": 33
             },
             {
               "text": "只有让两到三家供应商同时竞标，",
-              "startFrame": 45,
-              "durationFrames": 90
+              "startFrame": 46,
+              "durationFrames": 91
             },
             {
               "text": "运营商才能把采购成本压到最低。",
-              "startFrame": 134,
-              "durationFrames": 85
+              "startFrame": 137,
+              "durationFrames": 81
             }
           ],
           "order": 3,
@@ -349,7 +349,7 @@
               }
             ]
           },
-          "totalDurationFrames": 220
+          "totalDurationFrames": 219
         },
         {
           "narrativeType": "CONCLUSION",
@@ -359,12 +359,12 @@
             {
               "text": "中兴的存在，",
               "startFrame": 0,
-              "durationFrames": 33
+              "durationFrames": 34
             },
             {
               "text": "本身就是对华为最大的制衡筹码。",
-              "startFrame": 32,
-              "durationFrames": 76
+              "startFrame": 33,
+              "durationFrames": 77
             }
           ],
           "order": 4,
@@ -380,11 +380,11 @@
               }
             ]
           },
-          "totalDurationFrames": 109
+          "totalDurationFrames": 111
         }
       ],
       "audioSrc": "/audio/华为依赖论/scene_3/scene_3.mp3",
-      "totalDurationFrames": 709
+      "totalDurationFrames": 698
     },
     {
       "sceneId": "scene_4",
@@ -398,27 +398,27 @@
             {
               "text": "而中兴确实接得住这个角色。",
               "startFrame": 0,
-              "durationFrames": 64
+              "durationFrames": 71
             },
             {
               "text": "7纳米5G基站芯片量产，",
-              "startFrame": 63,
-              "durationFrames": 66
+              "startFrame": 70,
+              "durationFrames": 68
             },
             {
               "text": "5纳米在推进。",
-              "startFrame": 128,
-              "durationFrames": 34
+              "startFrame": 138,
+              "durationFrames": 43
             },
             {
               "text": "核心网云原生化全球55家客户。",
-              "startFrame": 162,
+              "startFrame": 180,
               "durationFrames": 103
             },
             {
               "text": "2024年全年营收约1213亿。",
-              "startFrame": 265,
-              "durationFrames": 98
+              "startFrame": 283,
+              "durationFrames": 108
             }
           ],
           "order": 2,
@@ -453,7 +453,7 @@
               }
             ]
           },
-          "totalDurationFrames": 363
+          "totalDurationFrames": 391
         },
         {
           "narrativeType": "CASE",
@@ -463,12 +463,12 @@
             {
               "text": "中国移动75亿的核心网招标，",
               "startFrame": 0,
-              "durationFrames": 72
+              "durationFrames": 77
             },
             {
               "text": "华为和中兴两家瓜分绝大多数份额。",
-              "startFrame": 72,
-              "durationFrames": 92
+              "startFrame": 76,
+              "durationFrames": 97
             }
           ],
           "order": 3,
@@ -485,7 +485,7 @@
               }
             ]
           },
-          "totalDurationFrames": 164
+          "totalDurationFrames": 173
         },
         {
           "narrativeType": "CONCLUSION",
@@ -493,19 +493,19 @@
           "template": "CONCEPT_CARD",
           "content": [
             {
-              "text": "业内管中兴叫“压舱石”—",
+              "text": "业内管中兴叫“压舱石”，",
               "startFrame": 0,
-              "durationFrames": 62
+              "durationFrames": 66
             },
             {
               "text": "有它在，",
-              "startFrame": 61,
-              "durationFrames": 27
+              "startFrame": 65,
+              "durationFrames": 29
             },
             {
               "text": "运营商就永远有第二选择。",
-              "startFrame": 87,
-              "durationFrames": 65
+              "startFrame": 93,
+              "durationFrames": 66
             }
           ],
           "order": 4,
@@ -514,11 +514,11 @@
             "conceptName": "压舱石",
             "anchors": []
           },
-          "totalDurationFrames": 152
+          "totalDurationFrames": 160
         }
       ],
       "audioSrc": "/audio/华为依赖论/scene_4/scene_4.mp3",
-      "totalDurationFrames": 680
+      "totalDurationFrames": 725
     },
     {
       "sceneId": "scene_5",
@@ -532,17 +532,17 @@
             {
               "text": "有人会说，",
               "startFrame": 0,
-              "durationFrames": 23
+              "durationFrames": 24
             },
             {
               "text": "华为份额那么高，",
-              "startFrame": 22,
-              "durationFrames": 41
+              "startFrame": 24,
+              "durationFrames": 44
             },
             {
               "text": "不就说明技术最好吗？",
-              "startFrame": 63,
-              "durationFrames": 46
+              "startFrame": 67,
+              "durationFrames": 39
             }
           ],
           "order": 1,
@@ -552,7 +552,7 @@
             "showFrom": 1,
             "anchors": []
           },
-          "totalDurationFrames": 109
+          "totalDurationFrames": 107
         },
         {
           "narrativeType": "LOGIC",
@@ -562,12 +562,12 @@
             {
               "text": "你真这么想，",
               "startFrame": 0,
-              "durationFrames": 29
+              "durationFrames": 33
             },
             {
               "text": "说明你没做过B2B的生意。",
-              "startFrame": 28,
-              "durationFrames": 66
+              "startFrame": 32,
+              "durationFrames": 68
             }
           ],
           "order": 2,
@@ -583,7 +583,7 @@
               }
             ]
           },
-          "totalDurationFrames": 94
+          "totalDurationFrames": 101
         },
         {
           "narrativeType": "LOGIC",
@@ -593,47 +593,47 @@
             {
               "text": "但凡不是直接面向普通消费者的招投标，",
               "startFrame": 0,
-              "durationFrames": 91
+              "durationFrames": 84
             },
             {
               "text": "技术能力只是敲门砖—",
-              "startFrame": 90,
-              "durationFrames": 52
+              "startFrame": 84,
+              "durationFrames": 58
             },
             {
               "text": "你够格了，",
               "startFrame": 141,
-              "durationFrames": 28
+              "durationFrames": 30
             },
             {
               "text": "才有资格坐到牌桌上。",
-              "startFrame": 169,
-              "durationFrames": 45
+              "startFrame": 171,
+              "durationFrames": 46
             },
             {
               "text": "但真正决定谁能中标的，",
-              "startFrame": 213,
+              "startFrame": 217,
               "durationFrames": 59
             },
             {
               "text": "跟领导层的关系、",
-              "startFrame": 272,
-              "durationFrames": 42
+              "startFrame": 275,
+              "durationFrames": 44
             },
             {
               "text": "利益绑定、",
-              "startFrame": 313,
-              "durationFrames": 29
+              "startFrame": 319,
+              "durationFrames": 27
             },
             {
               "text": "长期合作默契，",
-              "startFrame": 342,
-              "durationFrames": 42
+              "startFrame": 345,
+              "durationFrames": 41
             },
             {
               "text": "这些才是桌底下的牌。",
-              "startFrame": 383,
-              "durationFrames": 56
+              "startFrame": 386,
+              "durationFrames": 46
             }
           ],
           "order": 3,
@@ -652,7 +652,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 439
+          "totalDurationFrames": 433
         },
         {
           "narrativeType": "CASE",
@@ -662,37 +662,37 @@
             {
               "text": "华为能拿过半份额，",
               "startFrame": 0,
-              "durationFrames": 55
+              "durationFrames": 51
             },
             {
               "text": "技术强是一方面，",
-              "startFrame": 54,
+              "startFrame": 50,
               "durationFrames": 45
             },
             {
               "text": "跟运营商多年深耕绑定的关系网，",
-              "startFrame": 99,
-              "durationFrames": 76
+              "startFrame": 94,
+              "durationFrames": 79
             },
             {
               "text": "才是真正的护城河。",
-              "startFrame": 174,
-              "durationFrames": 49
+              "startFrame": 173,
+              "durationFrames": 45
             },
             {
               "text": "中兴拿23%到37%，",
-              "startFrame": 222,
+              "startFrame": 217,
               "durationFrames": 77
             },
             {
               "text": "不代表技术差到只有华为一半，",
-              "startFrame": 299,
-              "durationFrames": 68
+              "startFrame": 293,
+              "durationFrames": 67
             },
             {
               "text": "而是另一套关系网络的结果。",
-              "startFrame": 366,
-              "durationFrames": 63
+              "startFrame": 360,
+              "durationFrames": 66
             }
           ],
           "order": 5,
@@ -719,11 +719,11 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 429
+          "totalDurationFrames": 427
         }
       ],
       "audioSrc": "/audio/华为依赖论/scene_5/scene_5.mp3",
-      "totalDurationFrames": 1073
+      "totalDurationFrames": 1068
     },
     {
       "sceneId": "scene_6",
@@ -737,16 +737,16 @@
             {
               "text": "有人会说，",
               "startFrame": 0,
-              "durationFrames": 27
+              "durationFrames": 26
             },
             {
               "text": "华为是技术最强的，",
-              "startFrame": 26,
-              "durationFrames": 47
+              "startFrame": 25,
+              "durationFrames": 51
             },
             {
               "text": "换别的就是降级。",
-              "startFrame": 73,
+              "startFrame": 75,
               "durationFrames": 39
             }
           ],
@@ -754,7 +754,7 @@
           "param": {
             "quoteSource": "虚拟观点引述"
           },
-          "totalDurationFrames": 112
+          "totalDurationFrames": 115
         },
         {
           "narrativeType": "LOGIC",
@@ -764,12 +764,12 @@
             {
               "text": "但通信设备的技术领先，",
               "startFrame": 0,
-              "durationFrames": 56
+              "durationFrames": 59
             },
             {
               "text": "是以“月”为单位交替的。",
-              "startFrame": 55,
-              "durationFrames": 57
+              "startFrame": 58,
+              "durationFrames": 54
             }
           ],
           "order": 2,
@@ -788,17 +788,17 @@
             {
               "text": "华为的MetaAAU天线振子翻到384个，",
               "startFrame": 0,
-              "durationFrames": 117
+              "durationFrames": 107
             },
             {
               "text": "能耗降30%—",
-              "startFrame": 116,
-              "durationFrames": 33
+              "startFrame": 106,
+              "durationFrames": 37
             },
             {
               "text": "很强。",
-              "startFrame": 149,
-              "durationFrames": 38
+              "startFrame": 142,
+              "durationFrames": 32
             }
           ],
           "order": 3,
@@ -819,7 +819,7 @@
               }
             ]
           },
-          "totalDurationFrames": 187
+          "totalDurationFrames": 175
         },
         {
           "narrativeType": "CASE",
@@ -829,11 +829,11 @@
             {
               "text": "但中兴、爱立信、诺基亚，",
               "startFrame": 0,
-              "durationFrames": 65
+              "durationFrames": 68
             },
             {
               "text": "也都有同级别的Massive MIMO方案。",
-              "startFrame": 64,
+              "startFrame": 67,
               "durationFrames": 74
             }
           ],
@@ -851,7 +851,7 @@
               }
             ]
           },
-          "totalDurationFrames": 139
+          "totalDurationFrames": 141
         },
         {
           "narrativeType": "LOGIC",
@@ -861,12 +861,12 @@
             {
               "text": "这不是一个永远无法追赶的物理定律，",
               "startFrame": 0,
-              "durationFrames": 72
+              "durationFrames": 77
             },
             {
               "text": "是工程迭代的速度竞赛。",
-              "startFrame": 72,
-              "durationFrames": 62
+              "startFrame": 76,
+              "durationFrames": 52
             }
           ],
           "order": 5,
@@ -878,7 +878,7 @@
             "butContentIndex": 1,
             "anchors": []
           },
-          "totalDurationFrames": 134
+          "totalDurationFrames": 128
         },
         {
           "narrativeType": "CONCLUSION",
@@ -888,12 +888,12 @@
             {
               "text": "全球电信设备市场从来就是七国争霸，",
               "startFrame": 0,
-              "durationFrames": 94
+              "durationFrames": 88
             },
             {
               "text": "不是一人称王。",
-              "startFrame": 93,
-              "durationFrames": 36
+              "startFrame": 87,
+              "durationFrames": 40
             }
           ],
           "order": 8,
@@ -913,11 +913,11 @@
               }
             ]
           },
-          "totalDurationFrames": 130
+          "totalDurationFrames": 128
         }
       ],
       "audioSrc": "/audio/华为依赖论/scene_6/scene_6.mp3",
-      "totalDurationFrames": 814
+      "totalDurationFrames": 799
     },
     {
       "sceneId": "scene_7",
@@ -931,17 +931,17 @@
             {
               "text": "中国通信网络的安全，",
               "startFrame": 0,
-              "durationFrames": 48
+              "durationFrames": 46
             },
             {
               "text": "从来不取决于某一家公司有多强。",
-              "startFrame": 48,
-              "durationFrames": 72
+              "startFrame": 45,
+              "durationFrames": 71
             },
             {
               "text": "它取决于运营商有没有选择。",
-              "startFrame": 119,
-              "durationFrames": 67
+              "startFrame": 116,
+              "durationFrames": 65
             }
           ],
           "order": 1,
@@ -953,7 +953,7 @@
             "butContentIndex": 2,
             "anchors": []
           },
-          "totalDurationFrames": 186
+          "totalDurationFrames": 181
         },
         {
           "narrativeType": "CASE",
@@ -968,27 +968,27 @@
             {
               "text": "大唐、",
               "startFrame": 20,
-              "durationFrames": 17
+              "durationFrames": 24
             },
             {
               "text": "爱立信、",
-              "startFrame": 37,
-              "durationFrames": 19
+              "startFrame": 44,
+              "durationFrames": 21
             },
             {
               "text": "诺基亚，",
-              "startFrame": 55,
-              "durationFrames": 18
+              "startFrame": 65,
+              "durationFrames": 20
             },
             {
               "text": "它们的存在，",
-              "startFrame": 73,
+              "startFrame": 85,
               "durationFrames": 28
             },
             {
               "text": "就是运营商手里最大的底牌。",
-              "startFrame": 100,
-              "durationFrames": 54
+              "startFrame": 112,
+              "durationFrames": 57
             }
           ],
           "order": 2,
@@ -1013,11 +1013,11 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 154
+          "totalDurationFrames": 169
         }
       ],
       "audioSrc": "/audio/华为依赖论/scene_7/scene_7.mp3",
-      "totalDurationFrames": 342
+      "totalDurationFrames": 352
     },
     {
       "sceneId": "scene_8",
@@ -1031,32 +1031,32 @@
             {
               "text": "说句不好听的，",
               "startFrame": 0,
-              "durationFrames": 31
+              "durationFrames": 32
             },
             {
               "text": "就算华为明天消失了，",
-              "startFrame": 30,
-              "durationFrames": 55
+              "startFrame": 31,
+              "durationFrames": 50
             },
             {
               "text": "半年之内，",
-              "startFrame": 85,
-              "durationFrames": 27
+              "startFrame": 80,
+              "durationFrames": 31
             },
             {
               "text": "中兴、大唐等厂商，",
               "startFrame": 111,
-              "durationFrames": 50
+              "durationFrames": 45
             },
             {
               "text": "就能把华为的市场全部接住。",
-              "startFrame": 160,
+              "startFrame": 156,
               "durationFrames": 53
             },
             {
               "text": "从基站硬件到核心网软件，全面替换。",
-              "startFrame": 212,
-              "durationFrames": 93
+              "startFrame": 208,
+              "durationFrames": 104
             }
           ],
           "order": 1,
@@ -1079,7 +1079,7 @@
               }
             ]
           },
-          "totalDurationFrames": 306
+          "totalDurationFrames": 313
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1089,12 +1089,12 @@
             {
               "text": "你在手机上刷视频、打电话，",
               "startFrame": 0,
-              "durationFrames": 70
+              "durationFrames": 69
             },
             {
               "text": "甚至感觉不到任何变化。",
-              "startFrame": 69,
-              "durationFrames": 50
+              "startFrame": 68,
+              "durationFrames": 49
             }
           ],
           "order": 3,
@@ -1110,11 +1110,11 @@
               }
             ]
           },
-          "totalDurationFrames": 120
+          "totalDurationFrames": 118
         }
       ],
       "audioSrc": "/audio/华为依赖论/scene_8/scene_8.mp3",
-      "totalDurationFrames": 427
+      "totalDurationFrames": 432
     },
     {
       "sceneId": "scene_9",
@@ -1128,22 +1128,22 @@
             {
               "text": "真正健康的产业链，",
               "startFrame": 0,
-              "durationFrames": 45
+              "durationFrames": 43
             },
             {
               "text": "不是‘离不开谁’，",
-              "startFrame": 44,
-              "durationFrames": 50
+              "startFrame": 42,
+              "durationFrames": 36
             },
             {
               "text": "而是‘谁都可以被替换，",
-              "startFrame": 93,
-              "durationFrames": 53
+              "startFrame": 78,
+              "durationFrames": 51
             },
             {
               "text": "于是谁都不敢松懈’。",
-              "startFrame": 146,
-              "durationFrames": 48
+              "startFrame": 128,
+              "durationFrames": 45
             }
           ],
           "order": 1,
@@ -1155,7 +1155,7 @@
             "butContentIndex": 2,
             "anchors": []
           },
-          "totalDurationFrames": 194
+          "totalDurationFrames": 173
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1165,7 +1165,7 @@
             {
               "text": "这才是竞争的意义。",
               "startFrame": 0,
-              "durationFrames": 54
+              "durationFrames": 47
             }
           ],
           "order": 2,
@@ -1175,11 +1175,11 @@
             ],
             "coreSentenceAnchors": []
           },
-          "totalDurationFrames": 54
+          "totalDurationFrames": 47
         }
       ],
       "audioSrc": "/audio/华为依赖论/scene_9/scene_9.mp3",
-      "totalDurationFrames": 250
+      "totalDurationFrames": 222
     },
     {
       "sceneId": "scene_10",
@@ -1203,22 +1203,22 @@
             {
               "text": "华为是纯粹的民营企业。",
               "startFrame": 120,
-              "durationFrames": 53
+              "durationFrames": 59
             },
             {
               "text": "不知道从什么时候起，",
-              "startFrame": 172,
-              "durationFrames": 41
+              "startFrame": 178,
+              "durationFrames": 40
             },
             {
               "text": "很多人眼里，",
-              "startFrame": 213,
+              "startFrame": 217,
               "durationFrames": 31
             },
             {
               "text": "华为反倒比中兴更像国家的代言人了。",
-              "startFrame": 243,
-              "durationFrames": 83
+              "startFrame": 247,
+              "durationFrames": 77
             }
           ],
           "order": 1,
@@ -1231,7 +1231,7 @@
             "rightShowFrom": 2,
             "anchors": []
           },
-          "totalDurationFrames": 327
+          "totalDurationFrames": 324
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1241,12 +1241,12 @@
             {
               "text": "你品品，",
               "startFrame": 0,
-              "durationFrames": 27
+              "durationFrames": 28
             },
             {
               "text": "这事本身就够荒诞的。",
-              "startFrame": 26,
-              "durationFrames": 48
+              "startFrame": 27,
+              "durationFrames": 46
             }
           ],
           "order": 3,
@@ -1266,7 +1266,7 @@
         }
       ],
       "audioSrc": "/audio/华为依赖论/scene_10/scene_10.mp3",
-      "totalDurationFrames": 402
+      "totalDurationFrames": 399
     },
     {
       "sceneId": "scene_11",
@@ -1280,32 +1280,32 @@
             {
               "text": "更为神奇的是，",
               "startFrame": 0,
-              "durationFrames": 35
+              "durationFrames": 31
             },
             {
               "text": "这种荒诞不止发生在通信行业。",
-              "startFrame": 34,
-              "durationFrames": 77
+              "startFrame": 30,
+              "durationFrames": 72
             },
             {
               "text": "很多其他华为参与的领域，",
-              "startFrame": 111,
-              "durationFrames": 53
+              "startFrame": 102,
+              "durationFrames": 51
             },
             {
               "text": "都有这种类似的氛围。",
-              "startFrame": 163,
-              "durationFrames": 40
+              "startFrame": 152,
+              "durationFrames": 44
             },
             {
               "text": "至于原因，",
-              "startFrame": 203,
-              "durationFrames": 29
+              "startFrame": 195,
+              "durationFrames": 22
             },
             {
               "text": "咱也不敢说，咱也不敢问。",
-              "startFrame": 232,
-              "durationFrames": 68
+              "startFrame": 217,
+              "durationFrames": 56
             }
           ],
           "order": 1,
@@ -1314,7 +1314,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 300
+          "totalDurationFrames": 274
         },
         {
           "narrativeType": "LOGIC",
@@ -1324,17 +1324,17 @@
             {
               "text": "记住，任何领域，",
               "startFrame": 0,
-              "durationFrames": 51
+              "durationFrames": 45
             },
             {
               "text": "一旦你开始觉得“离不开谁”，",
-              "startFrame": 50,
-              "durationFrames": 54
+              "startFrame": 44,
+              "durationFrames": 59
             },
             {
               "text": "你就已经把主动权交出去了。",
               "startFrame": 103,
-              "durationFrames": 54
+              "durationFrames": 52
             }
           ],
           "order": 2,
@@ -1349,7 +1349,7 @@
               }
             ]
           },
-          "totalDurationFrames": 158
+          "totalDurationFrames": 156
         },
         {
           "narrativeType": "LOGIC",
@@ -1359,22 +1359,22 @@
             {
               "text": "真正强大的系统，",
               "startFrame": 0,
-              "durationFrames": 42
+              "durationFrames": 40
             },
             {
               "text": "从来不是靠某一个不可替代的英雄撑起来的。",
-              "startFrame": 41,
-              "durationFrames": 90
+              "startFrame": 39,
+              "durationFrames": 79
             },
             {
               "text": "而是靠无数个随时可以被替换的零件，",
-              "startFrame": 130,
-              "durationFrames": 71
+              "startFrame": 117,
+              "durationFrames": 77
             },
             {
               "text": "逼着每一个都不敢偷懒。",
-              "startFrame": 201,
-              "durationFrames": 45
+              "startFrame": 194,
+              "durationFrames": 47
             }
           ],
           "order": 3,
@@ -1386,7 +1386,7 @@
             "butContentIndex": 2,
             "anchors": []
           },
-          "totalDurationFrames": 246
+          "totalDurationFrames": 241
         },
         {
           "narrativeType": "CONCLUSION",
@@ -1396,12 +1396,12 @@
             {
               "text": "不要把任何一家公司捧上情绪的神坛，",
               "startFrame": 0,
-              "durationFrames": 87
+              "durationFrames": 94
             },
             {
               "text": "否则垄断的回旋镖，终会打到你自己身上。",
-              "startFrame": 86,
-              "durationFrames": 99
+              "startFrame": 93,
+              "durationFrames": 89
             }
           ],
           "order": 4,
@@ -1421,11 +1421,74 @@
               }
             ]
           },
-          "totalDurationFrames": 186
+          "totalDurationFrames": 183
         }
       ],
       "audioSrc": "/audio/华为依赖论/scene_11/scene_11.mp3",
-      "totalDurationFrames": 890
+      "totalDurationFrames": 854
+    },
+    {
+      "sceneId": "scene_references",
+      "sceneName": "片尾·参考资料",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "CONCLUSION",
+          "template": "SOURCE_CITATION",
+          "reasoning": "片尾展示支撑基站集采多厂商份额、核心网招标、中兴技术与营收、MetaAAU、全球电信设备份额及华为企业属性的公开来源，无口播。",
+          "content": [],
+          "param": {
+            "sectionTitle": "参考资料",
+            "references": [
+              {
+                "title": "China Mobile 2023–2024 5G Wireless Main Equipment Centralized Procurement Bid Results",
+                "titleZh": "中国移动2023–2024年5G无线主设备集采：华为过半，中兴约23%–37%，爱立信、诺基亚贝尔、大唐入围",
+                "publisher": "China Mobile Procurement / Securities Times / C114",
+                "publisherZh": "中国移动采购与招标网 / 证券时报 / C114通信网",
+                "year": "2023"
+              },
+              {
+                "title": "China Mobile 2021 4G/5G Converged Core Network New Equipment Centralized Procurement",
+                "titleZh": "中国移动约75亿元4G/5G融合核心网集采：华为、中兴两家入围并瓜分份额",
+                "publisher": "China Mobile / C114",
+                "publisherZh": "中国移动 / C114通信网",
+                "year": "2021"
+              },
+              {
+                "title": "ZTE: 7nm 5G Base Station Chip in Commercial Use; 5nm Under Development",
+                "titleZh": "中兴通讯：7纳米5G基站芯片已商用量产，5纳米处于技术导入/推进",
+                "publisher": "ZTE Corporation / Shenzhen Stock Exchange interactive platform",
+                "publisherZh": "中兴通讯 / 深交所互动易",
+                "year": "2020"
+              },
+              {
+                "title": "ZTE Corporation 2024 Annual Report",
+                "titleZh": "中兴通讯2024年年度报告：全年营业收入约1213亿元",
+                "publisher": "ZTE Corporation",
+                "publisherZh": "中兴通讯股份有限公司",
+                "year": "2025"
+              },
+              
+              {
+                "title": "Worldwide Telecom Equipment Down 11 Percent in 2024",
+                "titleZh": "2024年全球电信设备市场萎缩约11%（二十年来最严重）；华为份额约30%量级居首",
+                "publisher": "Dell'Oro Group",
+                "publisherZh": "Dell'Oro Group",
+                "year": "2025"
+              },
+              {
+                "title": "ZTE Corporation Annual Report: Shareholding Structure of Zhongxingxin",
+                "titleZh": "中兴通讯年报：控股股东中兴新含西安微电子、航天广宇等国有背景股东参股",
+                "publisher": "ZTE Corporation",
+                "publisherZh": "中兴通讯股份有限公司",
+                "year": "2024"
+              }
+            ]
+          },
+          "totalDurationFrames": 153
+        }
+      ],
+      "totalDurationFrames": 153
     }
   ],
   "fps": 30,

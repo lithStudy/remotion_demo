@@ -1,9 +1,9 @@
 import React from "react";
-import { AbsoluteFill, Sequence, Audio, staticFile } from "remotion";
+import { AbsoluteFill, Sequence, Audio, staticFile, Freeze } from "remotion";
 import { BWCauseChain, BWCenterFocus, BWPanelGrid, BWTextFocus } from "../../../components";
 
 // 反转揭示：高级的底牌
-const SCENE_DURATION = 168 + 139 + 216 + 44 + 180 + 94;
+const SCENE_DURATION = 168 + 139 + 216 + 44 + 180 + 119;
 
 export const calculateScene4Duration = (): number => {
     return SCENE_DURATION;
@@ -29,6 +29,11 @@ export const Scene4: React.FC = () => {
             </Sequence>
             <Sequence from={747} durationInFrames={94}>
                 <BWTextFocus content={[{"text": "这，", "startFrame": 0, "durationFrames": 9}, {"text": "才是最大的自信，", "startFrame": 8, "durationFrames": 39}, {"text": "也是最高级的营销。", "startFrame": 46, "durationFrames": 47}]} totalDurationFrames={94} coreSentence={[{"text": "这，才是最大的自信，", "showFrom": 0}, {"text": "也是最高级的营销。", "showFrom": 2}]} coreSentenceAnchors={[]} />
+            </Sequence>
+            <Sequence from={841} durationInFrames={25}>
+                <Freeze frame={93}>
+                    <BWTextFocus content={[{"text": "这，", "startFrame": 0, "durationFrames": 9}, {"text": "才是最大的自信，", "startFrame": 8, "durationFrames": 39}, {"text": "也是最高级的营销。", "startFrame": 46, "durationFrames": 47}]} totalDurationFrames={94} coreSentence={[{"text": "这，才是最大的自信，", "showFrom": 0}, {"text": "也是最高级的营销。", "showFrom": 2}]} coreSentenceAnchors={[]} />
+                </Freeze>
             </Sequence>
             <Audio src={staticFile("/audio/小米营销论/scene_4/scene_4.mp3")} />
         </AbsoluteFill>

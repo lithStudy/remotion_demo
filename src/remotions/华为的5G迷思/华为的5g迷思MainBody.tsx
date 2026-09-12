@@ -16,7 +16,7 @@ export const 华为的5g迷思MainBody: React.FC = () => (
         <Sequence durationInFrames={COVER_DURATION_FRAMES}>
             <LandscapeCoverPoster
                 title="华为的5G迷思"
-                    subtitle="无华为，不5G！蠢还是坏？"
+                    subtitle="无华为，不5G？"
                     themeColor="#FF6900"
                     surface="light"
                     badge="深度解读 · 数据与事实"

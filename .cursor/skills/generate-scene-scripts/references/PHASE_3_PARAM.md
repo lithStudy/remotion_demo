@@ -138,7 +138,9 @@ TEXT_FOCUS 模板**不使用** `anchors`，而使用：
 | METHOD_STACK | `methodTitle`, `methodSrc`(image_prompt), `anchors` |
 | BEAT_SEQUENCE | `stages`(数组，每项含 `imageSrc`), `anchors` |
 | CAUSE_CHAIN | `nodes`(数组，每项含 `label` + `imageSrc`), `anchors` |
-| PANEL_GRID | `panels`(数组，每项含 `imageSrc` + `showFrom`), `anchors` |
+| PANEL_GRID | `panels`(数组，每项含 `src` + `showFrom`), `anchors` |
+| HUB_RADIATE | `hub`({ imageSrc, showFrom?, enterEffect? }), `rays`(2～4 项，每项 imageSrc + showFrom?), `anchors` |
+| PEER_INDUCT | `premises`(2～3 项), `conclusion`({ imageSrc, showFrom?, tone? }), `anchors` |
 | CASE_BREAKDOWN | `caseSrc`(image_prompt), `caseLabel`, `anchors` |
 | CHECKLIST_REVEAL | `checkItems`(string[]), `anchors` |
 | MAGNIFYING_GLASS | `focusWord`, `imageSrc`(image_prompt), `anchors` |

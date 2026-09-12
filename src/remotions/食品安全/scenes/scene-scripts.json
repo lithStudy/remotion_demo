@@ -7,27 +7,73 @@
       "items": [
         {
           "narrativeType": "HOOK",
-          "template": "CENTER_FOCUS",
-          "reasoning": "平铺引述两种观点，无强烈对比或递进结构，用中心聚焦镜头挂单图平实呈现，保持注意力。",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开篇以两起食安事件递进对比制造冲击，零图纯大字独立成镜，突出「泡药杨梅」「泡甲醛白菜」等关键词。",
           "content": [
             {
-              "text": "有人说果农太黑心，",
+              "text": "泡药杨梅刚过去，",
               "startFrame": 0,
-              "durationFrames": 47
+              "durationFrames": 40
             },
             {
-              "text": "有人说资本家太黑心。",
-              "startFrame": 46,
-              "durationFrames": 59
+              "text": "泡甲醛白菜又来了。",
+              "startFrame": 39,
+              "durationFrames": 48
             }
           ],
           "order": 1,
           "param": {
-            "imageSrc": "images/食品安全/scene_1_1.png",
-            "enterEffect": "fadeIn",
+            "coreSentence": [
+              {
+                "text": "泡药杨梅刚过去，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "泡甲醛白菜又来了。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "泡药杨梅",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "泡甲醛白菜",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 88
+        },
+        {
+          "narrativeType": "HOOK",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "口播并列「果农太黑心」与「资本家太黑心」两种归因观点，左右分屏对照呈现舆论对立，选 SPLIT_COMPARE。",
+          "content": [
+            {
+              "text": "有人说果农太黑心，",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "有人说资本家太黑心。",
+              "startFrame": 50,
+              "durationFrames": 51
+            }
+          ],
+          "order": 2,
+          "param": {
+            "leftSrc": "images/食品安全/scene_1_2_left.png",
+            "rightSrc": "images/食品安全/scene_1_2_right.png",
+            "leftLabel": "果农黑心",
+            "rightLabel": "资本黑心",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
             "anchors": []
           },
-          "totalDurationFrames": 106
+          "totalDurationFrames": 102
         },
         {
           "narrativeType": "CONCLUSION",
@@ -37,25 +83,25 @@
             {
               "text": "但我要说，",
               "startFrame": 0,
-              "durationFrames": 24
+              "durationFrames": 19
             },
             {
               "text": "追根溯源，",
-              "startFrame": 24,
-              "durationFrames": 33
+              "startFrame": 18,
+              "durationFrames": 30
             },
             {
               "text": "一切食品问题，",
-              "startFrame": 56,
-              "durationFrames": 40
+              "startFrame": 48,
+              "durationFrames": 32
             },
             {
               "text": "都是监管问题。",
-              "startFrame": 96,
-              "durationFrames": 30
+              "startFrame": 79,
+              "durationFrames": 31
             }
           ],
-          "order": 2,
+          "order": 3,
           "param": {
             "coreSentence": [
               {
@@ -79,7 +125,7 @@
               }
             ]
           },
-          "totalDurationFrames": 126
+          "totalDurationFrames": 111
         },
         {
           "narrativeType": "LOGIC",
@@ -94,31 +140,31 @@
             {
               "text": "只要是分析有人参与的问题，",
               "startFrame": 26,
-              "durationFrames": 52
+              "durationFrames": 54
             },
             {
               "text": "就必须要考虑一个点：",
-              "startFrame": 77,
-              "durationFrames": 38
-            },
-            {
-              "text": "人性是自私的，",
-              "startFrame": 114,
+              "startFrame": 79,
               "durationFrames": 41
             },
             {
+              "text": "人性是自私的，",
+              "startFrame": 120,
+              "durationFrames": 40
+            },
+            {
               "text": "人性是趋利的。",
-              "startFrame": 154,
-              "durationFrames": 35
+              "startFrame": 159,
+              "durationFrames": 36
             }
           ],
-          "order": 3,
+          "order": 4,
           "param": {
-            "imageSrc": "images/食品安全/scene_1_3.png",
+            "imageSrc": "images/食品安全/scene_1_4.png",
             "conceptName": "人性趋利",
             "anchors": []
           },
-          "totalDurationFrames": 190
+          "totalDurationFrames": 195
         },
         {
           "narrativeType": "LOGIC",
@@ -128,44 +174,44 @@
             {
               "text": "没有什么有利于自己的事情，",
               "startFrame": 0,
-              "durationFrames": 50
+              "durationFrames": 59
             },
             {
               "text": "人类是做不出来的。",
-              "startFrame": 49,
-              "durationFrames": 38
+              "startFrame": 58,
+              "durationFrames": 34
             },
             {
               "text": "无论哪行哪业，",
-              "startFrame": 87,
-              "durationFrames": 42
+              "startFrame": 92,
+              "durationFrames": 35
             },
             {
               "text": "你都不能指望靠人的道德，来自我约束。",
-              "startFrame": 128,
-              "durationFrames": 82
+              "startFrame": 127,
+              "durationFrames": 86
             }
           ],
-          "order": 4,
+          "order": 5,
           "param": {
             "layout": "horizontal",
             "nodes": [
               {
                 "label": "趋利本能",
-                "imageSrc": "images/食品安全/scene_1_4_img0.png",
+                "imageSrc": "images/食品安全/scene_1_5_img0.png",
                 "showFrom": 0,
                 "enterEffect": "breathe"
               },
               {
                 "label": "道德约束",
-                "imageSrc": "images/食品安全/scene_1_4_img1.png",
+                "imageSrc": "images/食品安全/scene_1_5_img1.png",
                 "showFrom": 2,
                 "enterEffect": "slideBottom"
               }
             ],
             "anchors": []
           },
-          "totalDurationFrames": 210
+          "totalDurationFrames": 213
         },
         {
           "narrativeType": "CONCLUSION",
@@ -175,35 +221,35 @@
             {
               "text": "所以我们把监督的权利让渡给市监局，",
               "startFrame": 0,
-              "durationFrames": 83
+              "durationFrames": 84
             },
             {
               "text": "把税收的一部分提供给市监局，",
-              "startFrame": 82,
-              "durationFrames": 1
+              "startFrame": 84,
+              "durationFrames": 75
             },
             {
               "text": "就是为了让第三方来监督人性。",
-              "startFrame": 0,
-              "durationFrames": 574
+              "startFrame": 158,
+              "durationFrames": 75
             }
           ],
-          "order": 5,
+          "order": 6,
           "param": {
             "premises": [
               {
-                "imageSrc": "images/食品安全/scene_1_5_img0.png",
+                "imageSrc": "images/食品安全/scene_1_6_img0.png",
                 "showFrom": 0,
                 "enterEffect": "fadeIn"
               },
               {
-                "imageSrc": "images/食品安全/scene_1_5_img1.png",
+                "imageSrc": "images/食品安全/scene_1_6_img1.png",
                 "showFrom": 1,
                 "enterEffect": "fadeIn"
               }
             ],
             "conclusion": {
-              "imageSrc": "images/食品安全/scene_1_5.png",
+              "imageSrc": "images/食品安全/scene_1_6.png",
               "showFrom": 2,
               "enterEffect": "zoomIn",
               "tone": "alert"
@@ -218,11 +264,11 @@
               }
             ]
           },
-          "totalDurationFrames": 229
+          "totalDurationFrames": 221
         }
       ],
       "audioSrc": "/audio/食品安全/scene_1/scene_1.mp3",
-      "totalDurationFrames": 862
+      "totalDurationFrames": 928
     },
     {
       "sceneId": "scene_2",
@@ -236,22 +282,22 @@
             {
               "text": "但是现在，",
               "startFrame": 0,
-              "durationFrames": 27
+              "durationFrames": 26
             },
             {
-              "text": "三鹿奶粉要靠新西兰政府举报。",
-              "startFrame": 26,
-              "durationFrames": 68
+              "text": "三鹿奶粉要靠境外通报。",
+              "startFrame": 25,
+              "durationFrames": 54
             },
             {
               "text": "煤油车装食用油要靠调查记者举报。",
-              "startFrame": 93,
-              "durationFrames": 82
+              "startFrame": 78,
+              "durationFrames": 80
             },
             {
               "text": "泡药杨梅要靠自媒体举报。",
-              "startFrame": 175,
-              "durationFrames": 55
+              "startFrame": 157,
+              "durationFrames": 69
             }
           ],
           "order": 1,
@@ -275,7 +321,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 231
+          "totalDurationFrames": 227
         },
         {
           "narrativeType": "LOGIC",
@@ -285,17 +331,17 @@
             {
               "text": "这些明显是非个例的广泛性问题，",
               "startFrame": 0,
-              "durationFrames": 79
+              "durationFrames": 78
             },
             {
               "text": "不仅要靠其他人来暴露，",
-              "startFrame": 78,
-              "durationFrames": 50
+              "startFrame": 77,
+              "durationFrames": 53
             },
             {
-              "text": "就算暴露了每次也都只是抓一两个典型草草收场。",
-              "startFrame": 127,
-              "durationFrames": 108
+              "text": "就算暴露了，也往往只是抓一两个典型，震慑不足。",
+              "startFrame": 129,
+              "durationFrames": 114
             }
           ],
           "order": 2,
@@ -304,7 +350,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 235
+          "totalDurationFrames": 244
         },
         {
           "narrativeType": "LOGIC",
@@ -319,7 +365,7 @@
             {
               "text": "也没有对商家或者整个行业震摄性的惩罚。",
               "startFrame": 82,
-              "durationFrames": 92
+              "durationFrames": 89
             }
           ],
           "order": 4,
@@ -338,22 +384,22 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 175
+          "totalDurationFrames": 172
         },
         {
           "narrativeType": "LOGIC",
           "template": "MAGNIFYING_GLASS",
-          "reasoning": "递进到核心批评，有明确落点句“监管缺位的追责”，可提取高价值锚点短语，适合放大镜聚焦。",
+          "reasoning": "递进到核心批评，有明确落点句“监管缺位”，可提取高价值锚点短语，适合放大镜聚焦。",
           "content": [
             {
               "text": "更重要的是，",
               "startFrame": 0,
-              "durationFrames": 28
+              "durationFrames": 33
             },
             {
-              "text": "完全没有对监管缺位的追责。",
-              "startFrame": 27,
-              "durationFrames": 72
+              "text": "监管缺位之后，也缺少结果导向的闭环。",
+              "startFrame": 32,
+              "durationFrames": 93
             }
           ],
           "order": 5,
@@ -368,53 +414,53 @@
               }
             ]
           },
-          "totalDurationFrames": 100
+          "totalDurationFrames": 126
         },
         {
           "narrativeType": "CONCLUSION",
           "template": "TEXT_FOCUS",
-          "reasoning": "全片收尾金句，反问直击灵魂，无需配图，用纯文字聚焦制造冲击力。",
+          "reasoning": "全片收尾金句，强调结果导向责任机制，无需配图，用纯文字聚焦制造冲击力。",
           "content": [
             {
-              "text": "如果一个机构不需要为结果负责，",
+              "text": "如果一个机构不必为结果负责，",
               "startFrame": 0,
-              "durationFrames": 67
+              "durationFrames": 64
             },
             {
-              "text": "那么这个机构还有存在的意义吗？",
-              "startFrame": 66,
-              "durationFrames": 62
+              "text": "结果导向的责任机制就很难落地。",
+              "startFrame": 63,
+              "durationFrames": 74
             }
           ],
           "order": 6,
           "param": {
             "coreSentence": [
               {
-                "text": "如果一个机构不需要为结果负责，",
+                "text": "如果一个机构不必为结果负责，",
                 "showFrom": 0
               },
               {
-                "text": "那么这个机构还有存在的意义吗？",
+                "text": "结果导向的责任机制就很难落地。",
                 "showFrom": 1,
                 "endFrom": 1
               }
             ],
             "coreSentenceAnchors": [
               {
-                "coreSentenceAnchor": "不需要为结果负责",
+                "coreSentenceAnchor": "不必为结果负责",
                 "color": "#EF4444"
               },
               {
-                "coreSentenceAnchor": "存在的意义",
+                "coreSentenceAnchor": "很难落地",
                 "color": "#EF4444"
               }
             ]
           },
-          "totalDurationFrames": 129
+          "totalDurationFrames": 138
         }
       ],
       "audioSrc": "/audio/食品安全/scene_2/scene_2.mp3",
-      "totalDurationFrames": 869
+      "totalDurationFrames": 906
     },
     {
       "sceneId": "scene_3",
@@ -457,12 +503,12 @@
             {
               "text": "交警人少不少？全国的司机多不多？",
               "startFrame": 30,
-              "durationFrames": 85
+              "durationFrames": 79
             },
             {
               "text": "为什么交警就能管住酒驾？",
-              "startFrame": 115,
-              "durationFrames": 55
+              "startFrame": 108,
+              "durationFrames": 59
             }
           ],
           "order": 2,
@@ -471,7 +517,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 171
+          "totalDurationFrames": 168
         },
         {
           "narrativeType": "TRANSITION",
@@ -481,17 +527,17 @@
             {
               "text": "管住食品安全，",
               "startFrame": 0,
-              "durationFrames": 41
+              "durationFrames": 39
             },
             {
               "text": "其实并不需要多高的人力成本，",
-              "startFrame": 40,
-              "durationFrames": 63
+              "startFrame": 38,
+              "durationFrames": 59
             },
             {
               "text": "我有两策：",
-              "startFrame": 102,
-              "durationFrames": 29
+              "startFrame": 97,
+              "durationFrames": 24
             }
           ],
           "order": 3,
@@ -500,7 +546,7 @@
             "enterEffect": "fadeIn",
             "anchors": []
           },
-          "totalDurationFrames": 131
+          "totalDurationFrames": 122
         },
         {
           "narrativeType": "METHOD",
@@ -510,22 +556,22 @@
             {
               "text": "1.重罚。",
               "startFrame": 0,
-              "durationFrames": 39
+              "durationFrames": 38
             },
             {
               "text": "只需要你对一级市场进行抽检，",
-              "startFrame": 38,
-              "durationFrames": 59
+              "startFrame": 37,
+              "durationFrames": 65
             },
             {
               "text": "抽到有问题的就重罚。",
-              "startFrame": 96,
-              "durationFrames": 41
+              "startFrame": 101,
+              "durationFrames": 44
             },
             {
               "text": "怎么叫重罚？",
-              "startFrame": 137,
-              "durationFrames": 43
+              "startFrame": 145,
+              "durationFrames": 35
             },
             {
               "text": "万倍赔偿，",
@@ -535,12 +581,12 @@
             {
               "text": "吊销销售许可，",
               "startFrame": 209,
-              "durationFrames": 41
+              "durationFrames": 43
             },
             {
               "text": "永不允许进入销售市场。",
-              "startFrame": 250,
-              "durationFrames": 57
+              "startFrame": 252,
+              "durationFrames": 60
             }
           ],
           "order": 4,
@@ -559,7 +605,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 307
+          "totalDurationFrames": 312
         },
         {
           "narrativeType": "CONCLUSION",
@@ -569,7 +615,7 @@
             {
               "text": "抓一两个典型看还有没有敢这么干？",
               "startFrame": 0,
-              "durationFrames": 77
+              "durationFrames": 70
             }
           ],
           "order": 6,
@@ -588,7 +634,7 @@
               }
             ]
           },
-          "totalDurationFrames": 77
+          "totalDurationFrames": 70
         },
         {
           "narrativeType": "METHOD",
@@ -603,22 +649,22 @@
             {
               "text": "让百姓监督，",
               "startFrame": 43,
-              "durationFrames": 35
+              "durationFrames": 34
             },
             {
               "text": "在保证隐私安全的前提下，",
-              "startFrame": 78,
-              "durationFrames": 54
+              "startFrame": 77,
+              "durationFrames": 56
             },
             {
               "text": "让百姓举报，",
-              "startFrame": 132,
-              "durationFrames": 30
+              "startFrame": 133,
+              "durationFrames": 31
             },
             {
               "text": "发现一例奖励一例。",
-              "startFrame": 161,
-              "durationFrames": 52
+              "startFrame": 163,
+              "durationFrames": 28
             }
           ],
           "order": 7,
@@ -637,7 +683,7 @@
             ],
             "anchors": []
           },
-          "totalDurationFrames": 213
+          "totalDurationFrames": 192
         },
         {
           "narrativeType": "LOGIC",
@@ -647,7 +693,7 @@
             {
               "text": "自然会有茫茫多的职业打假人和自媒体来帮你监管。",
               "startFrame": 0,
-              "durationFrames": 111
+              "durationFrames": 103
             }
           ],
           "order": 8,
@@ -674,61 +720,123 @@
               }
             ]
           },
-          "totalDurationFrames": 111
+          "totalDurationFrames": 103
         },
         {
           "narrativeType": "CONCLUSION",
           "template": "TEXT_FOCUS",
-          "reasoning": "全片收束反问，短促强结论 → TEXT_FOCUS",
+          "reasoning": "全片收束强调落地，短促强结论 → TEXT_FOCUS",
           "content": [
             {
-              "text": "所以，为什么不做？",
+              "text": "所以，关键在把这两策执行到位。",
               "startFrame": 0,
-              "durationFrames": 48
+              "durationFrames": 72
             },
             {
-              "text": "谁能告诉我，这很难吗？",
-              "startFrame": 48,
-              "durationFrames": 53
+              "text": "难的不是想清楚，是真正落地。",
+              "startFrame": 72,
+              "durationFrames": 80
             }
           ],
           "order": 9,
           "param": {
             "coreSentence": [
               {
-                "text": "所以，为什么不做？",
+                "text": "所以，关键在把这两策执行到位。",
                 "showFrom": 0,
                 "endFrom": 0
               },
               {
-                "text": "谁能告诉我，这很难吗？",
+                "text": "难的不是想清楚，是真正落地。",
                 "showFrom": 1,
                 "endFrom": 1
               }
             ],
             "coreSentenceAnchors": [
               {
-                "coreSentenceAnchor": "为什么不做",
+                "coreSentenceAnchor": "执行到位",
                 "color": "#EF4444"
               },
               {
-                "coreSentenceAnchor": "这很难吗",
+                "coreSentenceAnchor": "真正落地",
                 "color": "#EF4444"
               }
             ]
           },
-          "totalDurationFrames": 101
+          "totalDurationFrames": 152
         }
       ],
       "audioSrc": "/audio/食品安全/scene_3/scene_3.mp3",
-      "totalDurationFrames": 1205
+      "totalDurationFrames": 1213
+    },
+    {
+      "sceneId": "scene_references",
+      "sceneName": "片尾·参考资料",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "CONCLUSION",
+          "template": "SOURCE_CITATION",
+          "reasoning": "片尾展示正片所涉食安事件与监管、执法对比的公开来源，无口播。",
+          "content": [],
+          "param": {
+            "sectionTitle": "参考资料",
+            "references": [
+              {
+                "title": "Sanlu tainted milk powder scandal",
+                "titleZh": "三鹿奶粉三聚氰胺事件：新西兰政府介入通报",
+                "publisher": "Ministry for Primary Industries, New Zealand",
+                "publisherZh": "新西兰初级产业部",
+                "year": "2008"
+              },
+              {
+                "title": "Investigation into mixed transport of edible oil and chemical liquids in tanker trucks",
+                "titleZh": "罐车混装食用油与化工液体未清洗",
+                "publisher": "The Beijing News",
+                "publisherZh": "新京报",
+                "year": "2024"
+              },
+              {
+                "title": "Illegal preservation treatment of bayberries with excessive pesticides",
+                "titleZh": "泡药杨梅：违规使用保鲜剂与农药",
+                "publisher": "China Food Safety News",
+                "publisherZh": "中国食品安全报",
+                "year": "2024"
+              },
+              {
+                "title": "Formaldehyde-treated cabbage sold at agricultural markets",
+                "titleZh": "甲醛白菜：检出违规甲醛添加",
+                "publisher": "Local market supervision bureau reports",
+                "publisherZh": "地方市场监管部门通报",
+                "year": "2025"
+              },
+              {
+                "title": "Food Safety Law of the People's Republic of China",
+                "titleZh": "食品安全法：监管职责与法律责任框架",
+                "publisher": "Standing Committee of the NPC",
+                "publisherZh": "全国人民代表大会常务委员会",
+                "year": "2021"
+              },
+              {
+                "title": "Road Traffic Safety Law of the People's Republic of China",
+                "titleZh": "道路交通安全法：酒驾醉驾处罚与执法威慑",
+                "publisher": "Standing Committee of the NPC",
+                "publisherZh": "全国人民代表大会常务委员会",
+                "year": "2021"
+              }
+            ]
+          },
+          "totalDurationFrames": 129
+        }
+      ],
+      "totalDurationFrames": 129
     }
   ],
   "fps": 30,
   "cover": {
     "durationFrames": 5,
     "title": "食品安全",
-    "subtitle": "为什么能管住酒驾，却管不住毒食品？",
+    "subtitle": "为什么酒驾能管住，食品安全却总难落地？",
     "themeColor": "#059669",
     "badge": "深度解读 · 理性思考",
     "seriesLabel": "社会热点深读",

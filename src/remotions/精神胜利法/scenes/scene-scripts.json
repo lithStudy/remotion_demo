@@ -1,0 +1,1269 @@
+{
+  "topic": "一遇差距就搬出老祖宗？你的大脑在偷偷改解释",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "差距面前先找补",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "引用式钩子，后句<12字且围绕同一引用，合并；主结构为引用与常见性指认，适合 QUOTE_CITATION。",
+          "content": [
+            {
+              "text": "“这东西，",
+              "startFrame": 0,
+              "durationFrames": 26
+            },
+            {
+              "text": "我们老祖宗几千年前就有了。”",
+              "startFrame": 25,
+              "durationFrames": 63
+            },
+            {
+              "text": "这句话，",
+              "startFrame": 88,
+              "durationFrames": 27
+            },
+            {
+              "text": "你一定见过。",
+              "startFrame": 114,
+              "durationFrames": 28
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteDisplayText": "这东西，我们老祖宗几千年前就有了。",
+            "quoteSource": "常见找补话术",
+            "showFrom": 0,
+            "anchors": []
+          },
+          "totalDurationFrames": 142
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CHAT_BUBBLE",
+          "reasoning": "芯片例子的问→答短对话，适合 CHAT_BUBBLE 气泡呈现。",
+          "content": [
+            {
+              "text": "芯片差距怎么追赶？",
+              "startFrame": 0,
+              "durationFrames": 57
+            },
+            {
+              "text": "我们有四大发明。",
+              "startFrame": 56,
+              "durationFrames": 45
+            }
+          ],
+          "order": 2,
+          "param": {
+            "bubbles": [
+              {
+                "bubbleText": "芯片差距怎么追赶？",
+                "showFrom": 0,
+                "align": "left"
+              },
+              {
+                "bubbleText": "我们有四大发明。",
+                "showFrom": 1,
+                "align": "right"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 102
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CHAT_BUBBLE",
+          "reasoning": "火箭例子的问→答短对话，适合 CHAT_BUBBLE 气泡呈现。",
+          "content": [
+            {
+              "text": "火箭差距怎么弥补？",
+              "startFrame": 0,
+              "durationFrames": 50
+            },
+            {
+              "text": "我们有《天工开物》。",
+              "startFrame": 49,
+              "durationFrames": 45
+            }
+          ],
+          "order": 3,
+          "param": {
+            "bubbles": [
+              {
+                "bubbleText": "火箭差距怎么弥补？",
+                "showFrom": 0,
+                "align": "left"
+              },
+              {
+                "bubbleText": "我们有《天工开物》。",
+                "showFrom": 1,
+                "align": "right"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 95
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "HUB_RADIATE",
+          "reasoning": "「面对差距和不足时」为情境核，后接两个并列否定反应「不会思考差距成因」「也不会思考如何弥补」，一核发散 → HUB_RADIATE。",
+          "content": [
+            {
+              "text": "有一些人，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "在面对差距和不足的时候，",
+              "startFrame": 26,
+              "durationFrames": 60
+            },
+            {
+              "text": "第一反应不会是思考差距是如何造成的，",
+              "startFrame": 86,
+              "durationFrames": 87
+            },
+            {
+              "text": "也不会去思考不足该怎样弥补，",
+              "startFrame": 172,
+              "durationFrames": 78
+            }
+          ],
+          "order": 4,
+          "param": {
+            "hub": {
+              "imageSrc": "images/精神胜利法/scene_1_4.png",
+              "showFrom": 0,
+              "enterEffect": "zoomIn"
+            },
+            "rays": [
+              {
+                "imageSrc": "images/精神胜利法/scene_1_4_img0.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "imageSrc": "images/精神胜利法/scene_1_4_img1.png",
+                "showFrom": 3,
+                "enterEffect": "slideLeft"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 250
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "场景级短促结论，单图居中点明“找补”这一第一反应，适合 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "他们的第一反应，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "是想办法让自己从其他地方获得胜利。",
+              "startFrame": 29,
+              "durationFrames": 93
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/精神胜利法/scene_1_5.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "从其他地方获得胜利",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "slideUp",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 123
+        }
+      ],
+      "audioSrc": "/audio/精神胜利法/scene_1/scene_1.mp3",
+      "totalDurationFrames": 710
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "认知失调怎么来",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "该段主表达是命名“认知失调”这一心理术语，用 CONCEPT_CARD 做术语卡以锁定概念。",
+          "content": [
+            {
+              "text": "这背后，",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "是一种很常见的心理机制：",
+              "startFrame": 21,
+              "durationFrames": 58
+            },
+            {
+              "text": "认知失调。",
+              "startFrame": 79,
+              "durationFrames": 41
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/精神胜利法/scene_2_1.png",
+            "conceptName": "认知失调",
+            "anchors": []
+          },
+          "totalDurationFrames": 120
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段主表达是「应该强大」与「确有差距」两极对撞，用 DOS_AND_DONTS 左右分栏呈现冲突两侧，再落到自我价值受威胁。",
+          "content": [
+            {
+              "text": "当我们的心理预期：“我们应该强大”，",
+              "startFrame": 0,
+              "durationFrames": 74
+            },
+            {
+              "text": "撞上真正的现实：“我们确实有差距”，",
+              "startFrame": 73,
+              "durationFrames": 90
+            },
+            {
+              "text": "两种认知互相打架",
+              "startFrame": 162,
+              "durationFrames": 41
+            },
+            {
+              "text": "人的自我价值就会受到威胁。",
+              "startFrame": 202,
+              "durationFrames": 63
+            },
+            {
+              "text": "这种不适会让大脑急着消除它。",
+              "startFrame": 265,
+              "durationFrames": 68
+            }
+          ],
+          "order": 2,
+          "param": {
+            "left": {
+              "label": "❌ 应该强大",
+              "src": "images/精神胜利法/scene_2_2_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "⚠️ 确有差距",
+              "src": "images/精神胜利法/scene_2_2_right.png",
+              "showFrom": 1
+            },
+            "anchors": [
+              {
+                "text": "自我价值受到威胁",
+                "showFrom": 3,
+                "color": "#EF4444",
+                "anim": "slideUp",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 334
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "该段是「承认现实→伤自尊」的因果传导，拆成独立 CAUSE_CHAIN 单镜讲清第一难。",
+          "content": [
+            {
+              "text": "承认现实，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "太伤自尊。",
+              "startFrame": 29,
+              "durationFrames": 29
+            }
+          ],
+          "order": 3,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "承认现实",
+                "imageSrc": "images/精神胜利法/scene_2_3_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "label": "伤自尊",
+                "imageSrc": "images/精神胜利法/scene_2_3_img1.png",
+                "showFrom": 1,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 58
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "该段是「改变现实→太慢太难」的因果传导，拆成独立 CAUSE_CHAIN 单镜讲清第二难。",
+          "content": [
+            {
+              "text": "改变现实，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "又太慢、太难。",
+              "startFrame": 27,
+              "durationFrames": 56
+            }
+          ],
+          "order": 4,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "改变现实",
+                "imageSrc": "images/精神胜利法/scene_2_4_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "label": "太慢太难",
+                "imageSrc": "images/精神胜利法/scene_2_4_img1.png",
+                "showFrom": 1,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 83
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "该段主表达是“不改变事实，只改变解释”的认知转变，选 COGNITIVE_SHIFT 表达替换解释的机制。",
+          "content": [
+            {
+              "text": "于是，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "大脑会选择一条更轻松的路：",
+              "startFrame": 26,
+              "durationFrames": 58
+            },
+            {
+              "text": "不改变事实，",
+              "startFrame": 84,
+              "durationFrames": 30
+            },
+            {
+              "text": "只改变对事实的解释。",
+              "startFrame": 113,
+              "durationFrames": 50
+            }
+          ],
+          "order": 5,
+          "param": {
+            "notText": "改变事实",
+            "butText": "改变解释",
+            "butSrc": "images/精神胜利法/scene_2_5.png",
+            "notContentIndex": 2,
+            "butContentIndex": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 163
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "该句落点是“给自己加分的最简单的方式”，用 MAGNIFYING_GLASS 聚焦这一关键结论。",
+          "content": [
+            {
+              "text": "借祖先的荣光，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "就是一种给自己加分的最简单的方式。",
+              "startFrame": 36,
+              "durationFrames": 75
+            }
+          ],
+          "order": 6,
+          "param": {
+            "anchors": [
+              {
+                "text": "给自己加分",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 111
+        }
+      ],
+      "audioSrc": "/audio/精神胜利法/scene_2/scene_2.mp3",
+      "totalDurationFrames": 870
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "伪史论的双标",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "该句是承上启下的设问，仅抛出问题，无对比、递进或金句结构，默认用 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "但是这种借法有个问题：",
+              "startFrame": 0,
+              "durationFrames": 50
+            },
+            {
+              "text": "要是别人也有荣耀的历史，该怎么办呢？",
+              "startFrame": 49,
+              "durationFrames": 68
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/精神胜利法/scene_3_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 117
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "该段主表达是「剥夺别人来历」与「自称一切源头」的双操作对照，用 DOS_AND_DONTS 左右分栏呈现。",
+          "content": [
+            {
+              "text": "好办！",
+              "startFrame": 0,
+              "durationFrames": 26
+            },
+            {
+              "text": "那就让别人的文明失去来历，",
+              "startFrame": 25,
+              "durationFrames": 57
+            },
+            {
+              "text": "再让自己的文明，成为一切的源头。",
+              "startFrame": 81,
+              "durationFrames": 75
+            }
+          ],
+          "order": 2,
+          "param": {
+            "left": {
+              "label": "剥夺来历",
+              "src": "images/精神胜利法/scene_3_2_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "自称源头",
+              "src": "images/精神胜利法/scene_3_2_right.png",
+              "showFrom": 1
+            },
+            "anchors": []
+          },
+          "totalDurationFrames": 157
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "METHOD_STACK",
+          "reasoning": "先命名「伪史论」再展开三个典型例子，构成标题+解释展开，合并为 METHOD_STACK；末两句并入一条以符合 content 上限。",
+          "content": [
+            {
+              "text": "中文互联网上，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "管这叫“伪史论”。",
+              "startFrame": 36,
+              "durationFrames": 52
+            },
+            {
+              "text": "金字塔是近代用混凝土浇的。",
+              "startFrame": 87,
+              "durationFrames": 77
+            },
+            {
+              "text": "亚里士多德根本不存在。",
+              "startFrame": 163,
+              "durationFrames": 57
+            },
+            {
+              "text": "工业革命的技术，全抄自《永乐大典》。",
+              "startFrame": 220,
+              "durationFrames": 85
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "伪史论",
+            "imageSrc": "images/精神胜利法/scene_3_3.png",
+            "notes": [
+              {
+                "text": "金字塔混凝土浇筑",
+                "showFrom": 2
+              },
+              {
+                "text": "亚里士多德不存在",
+                "showFrom": 3
+              },
+              {
+                "text": "工业技术抄自永乐大典",
+                "showFrom": 4
+              }
+            ]
+          },
+          "totalDurationFrames": 305
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "“判断别人”与“判断自己”构成双标对比，应同框对照，选 SPLIT_COMPARE；48字未超过50字，保持对比完整。",
+          "content": [
+            {
+              "text": "判断别人，",
+              "startFrame": 0,
+              "durationFrames": 29
+            },
+            {
+              "text": "一句\"看着不像真的\"，",
+              "startFrame": 28,
+              "durationFrames": 46
+            },
+            {
+              "text": "就能推翻几千年历史。",
+              "startFrame": 74,
+              "durationFrames": 49
+            },
+            {
+              "text": "判断自己，",
+              "startFrame": 122,
+              "durationFrames": 30
+            },
+            {
+              "text": "古书里一个模糊的词，",
+              "startFrame": 152,
+              "durationFrames": 47
+            },
+            {
+              "text": "就能包揽天下。",
+              "startFrame": 199,
+              "durationFrames": 38
+            }
+          ],
+          "order": 4,
+          "param": {
+            "leftSrc": "images/精神胜利法/scene_3_4_left.png",
+            "rightSrc": "images/精神胜利法/scene_3_4_right.png",
+            "leftLabel": "无限怀疑",
+            "rightLabel": "无限宽容",
+            "leftShowFrom": 0,
+            "rightShowFrom": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 237
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "两句对偶金句是全场景短促强结论，无需配图，选 TEXT_FOCUS 做冲击收束。",
+          "content": [
+            {
+              "text": "对别人，无限怀疑。",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "对自己，无限宽容。",
+              "startFrame": 45,
+              "durationFrames": 45
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "对别人，无限怀疑。",
+                "showFrom": 0
+              },
+              {
+                "text": "对自己，无限宽容。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "无限怀疑",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "无限宽容",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 91
+        }
+      ],
+      "audioSrc": "/audio/精神胜利法/scene_3/scene_3.mp3",
+      "totalDurationFrames": 907
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "文化自信被借壳",
+      "items": [
+        {
+          "narrativeType": "CASE",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "该段是「成就不够→往前翻」的因果传导，拆成独立 CAUSE_CHAIN 单镜讲清第一种人。",
+          "content": [
+            {
+              "text": "自己的成就不够，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "就往前翻。",
+              "startFrame": 36,
+              "durationFrames": 33
+            }
+          ],
+          "order": 1,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "成就不够",
+                "imageSrc": "images/精神胜利法/scene_4_1_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "label": "往前翻",
+                "imageSrc": "images/精神胜利法/scene_4_1_img1.png",
+                "showFrom": 1,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 69
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "该段是「别人成就太多→往后删」的因果传导，拆成独立 CAUSE_CHAIN 单镜讲清第二种人。",
+          "content": [
+            {
+              "text": "别人的成就太多，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "就往后删。",
+              "startFrame": 34,
+              "durationFrames": 29
+            }
+          ],
+          "order": 2,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "成就太多",
+                "imageSrc": "images/精神胜利法/scene_4_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "label": "往后删",
+                "imageSrc": "images/精神胜利法/scene_4_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 64
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "点名「阿Q」作短促定性金句，无需配图，用 TEXT_FOCUS 大字压屏。",
+          "content": [
+            {
+              "text": "这两种人，",
+              "startFrame": 0,
+              "durationFrames": 24
+            },
+            {
+              "text": "都是鲁迅笔下的阿Q。",
+              "startFrame": 24,
+              "durationFrames": 35
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "这两种人，",
+                "showFrom": 0
+              },
+              {
+                "text": "都是鲁迅笔下的阿Q。",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "阿Q",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 59
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "反讽金句是独立强结论，无需配图，用文字聚焦形成冲击。",
+          "content": [
+            {
+              "text": "总能找到赢的心理安慰，",
+              "startFrame": 0,
+              "durationFrames": 54
+            },
+            {
+              "text": "此所谓输有输的赢法。",
+              "startFrame": 53,
+              "durationFrames": 52
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "总能找到赢的心理安慰，",
+                "showFrom": 0
+              },
+              {
+                "text": "此所谓输有输的赢法。",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "输有输的赢法",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 105
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "由让步铺垫到真正危险，形成两段节拍递进，适合节拍序列。",
+          "content": [
+            {
+              "text": "这套精神胜利法，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "如果这只是让人在网上高兴几分钟，",
+              "startFrame": 39,
+              "durationFrames": 66
+            },
+            {
+              "text": "也就罢了。",
+              "startFrame": 104,
+              "durationFrames": 24
+            },
+            {
+              "text": "真正危险的是，",
+              "startFrame": 127,
+              "durationFrames": 36
+            },
+            {
+              "text": "有些人会忘记差距还在。",
+              "startFrame": 163,
+              "durationFrames": 66
+            }
+          ],
+          "order": 8,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/精神胜利法/scene_4_8_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm",
+                "showFrom": 1
+              },
+              {
+                "imageSrc": "images/精神胜利法/scene_4_8_img1.png",
+                "enterEffect": "zoomIn",
+                "tone": "alert",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 230
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "两个并列的“不再是…只是…”偷换概念例子，适合两张宫格卡分别呈现。",
+          "content": [
+            {
+              "text": "差距不再是差距，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "只是别人抢走了我们的功劳。",
+              "startFrame": 41,
+              "durationFrames": 55
+            },
+            {
+              "text": "落后也不再是落后，",
+              "startFrame": 95,
+              "durationFrames": 39
+            },
+            {
+              "text": "只是历史被西方改写。",
+              "startFrame": 133,
+              "durationFrames": 50
+            }
+          ],
+          "order": 9,
+          "param": {
+            "panels": [
+              {
+                "src": "images/精神胜利法/scene_4_9_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/精神胜利法/scene_4_9_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/精神胜利法/scene_4_9_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/精神胜利法/scene_4_9_img3.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 183
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片收束性结论，强调双重失去，适合无配图文字聚焦。",
+          "content": [
+            {
+              "text": "到最后，",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "我们失去的不只是对历史的判断。",
+              "startFrame": 18,
+              "durationFrames": 61
+            },
+            {
+              "text": "还有改造现实的能力。",
+              "startFrame": 79,
+              "durationFrames": 57
+            }
+          ],
+          "order": 10,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "我们失去的不只是对历史的判断。",
+                "showFrom": 1
+              },
+              {
+                "text": "还有改造现实的能力。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "改造现实",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 136
+        }
+      ],
+      "audioSrc": "/audio/精神胜利法/scene_4/scene_4.mp3",
+      "totalDurationFrames": 846
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "真正自信先看清自己",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "「历史应是镜子」与「被改成美颜相机」构成应然/实然对照，用 SPLIT_COMPARE 左右同框呈现。",
+          "content": [
+            {
+              "text": "自己的历史本来应该是一面镜子。",
+              "startFrame": 0,
+              "durationFrames": 68
+            },
+            {
+              "text": "让现在的人明得失。",
+              "startFrame": 67,
+              "durationFrames": 44
+            },
+            {
+              "text": "精神胜利法，",
+              "startFrame": 111,
+              "durationFrames": 31
+            },
+            {
+              "text": "却把它改成了美颜相机。",
+              "startFrame": 142,
+              "durationFrames": 52
+            }
+          ],
+          "order": 1,
+          "param": {
+            "leftSrc": "images/精神胜利法/scene_5_1_left.png",
+            "rightSrc": "images/精神胜利法/scene_5_1_right.png",
+            "leftLabel": "镜子",
+            "rightLabel": "美颜相机",
+            "leftShowFrom": 0,
+            "rightShowFrom": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 194
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PUNCH_CAPTION",
+          "reasoning": "「只美化自己 / 不看清自己」两句短促对仗连击，适合 PUNCH_CAPTION 大字逐句弹出。",
+          "content": [
+            {
+              "text": "只负责美化自己，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "不负责看清自己。",
+              "startFrame": 42,
+              "durationFrames": 37
+            }
+          ],
+          "order": 2,
+          "param": {
+            "punches": [
+              {
+                "text": "只美化自己",
+                "showFrom": 0,
+                "enterEffect": "snap",
+                "tone": "calm"
+              },
+              {
+                "text": "不看清自己",
+                "showFrom": 1,
+                "enterEffect": "shake",
+                "tone": "alert"
+              }
+            ]
+          },
+          "totalDurationFrames": 80
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "对称比喻铺陈别人的历史应像尺子量高低；平叙单图即可 → CENTER_FOCUS；与后句转折拆开。",
+          "content": [
+            {
+              "text": "别人的历史本来应该是一把尺子。",
+              "startFrame": 0,
+              "durationFrames": 67
+            },
+            {
+              "text": "让现在的人量高低。",
+              "startFrame": 66,
+              "durationFrames": 44
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/精神胜利法/scene_5_3.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "尺子",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": null
+              }
+            ]
+          },
+          "totalDurationFrames": 111
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "同一层认知转变与功能对照：从尺子被改成橡皮，只抹掉、不量清 → COGNITIVE_SHIFT；两句弱信号合并。",
+          "content": [
+            {
+              "text": "伪史论，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "却把它改成了一块橡皮。",
+              "startFrame": 27,
+              "durationFrames": 55
+            },
+            {
+              "text": "只负责抹掉别人，",
+              "startFrame": 81,
+              "durationFrames": 44
+            },
+            {
+              "text": "不负责量清自己。",
+              "startFrame": 125,
+              "durationFrames": 39
+            }
+          ],
+          "order": 4,
+          "param": {
+            "notText": "抹掉别人",
+            "butText": "量清自己",
+            "butSrc": "images/精神胜利法/scene_5_4.png",
+            "notContentIndex": 2,
+            "butContentIndex": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 164
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "金字塔与长城左右对仗例证 → SPLIT_COMPARE。",
+          "content": [
+            {
+              "text": "承认金字塔是真的，",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "长城不会变矮。",
+              "startFrame": 43,
+              "durationFrames": 53
+            }
+          ],
+          "order": 6,
+          "param": {
+            "leftSrc": "images/精神胜利法/scene_5_6_left.png",
+            "rightSrc": "images/精神胜利法/scene_5_6_right.png",
+            "leftLabel": "金字塔",
+            "rightLabel": "长城",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 96
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "亚里士多德与孔子左右对仗例证 → SPLIT_COMPARE。",
+          "content": [
+            {
+              "text": "承认亚里士多德存在，",
+              "startFrame": 0,
+              "durationFrames": 46
+            },
+            {
+              "text": "孔子也不会失去光芒。",
+              "startFrame": 45,
+              "durationFrames": 58
+            }
+          ],
+          "order": 7,
+          "param": {
+            "leftSrc": "images/精神胜利法/scene_5_7_left.png",
+            "rightSrc": "images/精神胜利法/scene_5_7_right.png",
+            "leftLabel": "亚里士多德",
+            "rightLabel": "孔子",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 104
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "STEP_LIST",
+          "reasoning": "结论金句拆为短分点清单，无需配图 → STEP_LIST。",
+          "content": [
+            {
+              "text": "真正自信的人，",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "不需要把全世界变矮，",
+              "startFrame": 33,
+              "durationFrames": 45
+            },
+            {
+              "text": "来证明自己高大。",
+              "startFrame": 78,
+              "durationFrames": 40
+            },
+            {
+              "text": "正视差距。",
+              "startFrame": 117,
+              "durationFrames": 30
+            },
+            {
+              "text": "用今天的努力去追赶。",
+              "startFrame": 147,
+              "durationFrames": 47
+            }
+          ],
+          "order": 8,
+          "param": {
+            "title": "真正的自信",
+            "steps": [
+              {
+                "text": "不把别人变矮，来证明自己高大",
+                "showFrom": 1
+              },
+              {
+                "text": "正视差距",
+                "showFrom": 3
+              },
+              {
+                "text": "用今天的努力去追赶。",
+                "showFrom": 4
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 195
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "收束金句、无需配图 → TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "历史留给我们的，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "不该是一份可以反复领取的荣誉。",
+              "startFrame": 34,
+              "durationFrames": 61
+            },
+            {
+              "text": "更该，是一项还没做完的任务。",
+              "startFrame": 95,
+              "durationFrames": 66
+            }
+          ],
+          "order": 9,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "历史留给我们的，",
+                "showFrom": 0
+              },
+              {
+                "text": "不该是一份可以反复领取的荣誉。",
+                "showFrom": 1
+              },
+              {
+                "text": "更该，是一项还没做完的任务。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "荣誉",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "任务",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 161
+        }
+      ],
+      "audioSrc": "/audio/精神胜利法/scene_5/scene_5.mp3",
+      "totalDurationFrames": 1104
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "精神胜利法",
+    "subtitle": "阿Q的工具：老祖宗与伪史论",
+    "themeColor": "#2563EB",
+    "badge": "认识自我 · 理性思考",
+    "seriesLabel": "认知心理学",
+    "seriesLabelEn": "COGNITIVE PSYCHOLOGY",
+    "methodologySteps": [
+      "觉察",
+      "归因",
+      "调整"
+    ],
+    "methodologyStepsEn": "OBSERVE · ATTRIBUTE · ADJUST"
+  }
+}

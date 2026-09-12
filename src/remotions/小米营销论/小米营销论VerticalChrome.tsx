@@ -9,10 +9,10 @@ const FONT_STACK =
 
 const STATIC_HEADLINE = "小米营销论";
 const STATIC_HEADLINE_SUBTITLE = "都说小米营销很土，其实它最尊重你的智商。";
-const STATIC_HEADLINE_SUB = "认知心理学";
-const STATIC_HEADLINE_SUB_EN = "COGNITIVE PSYCHOLOGY";
-const THEME_ACCENT = "#2563EB";
-const THEME_ACCENT_SOFT = "#2563EBD9";
+const STATIC_HEADLINE_SUB = "科技热点深读";
+const STATIC_HEADLINE_SUB_EN = "TECH DEEP DIVE";
+const THEME_ACCENT = "#FF6900";
+const THEME_ACCENT_SOFT = "#FF6900D9";
 
 type TopStaticHeadlineProps = {
     canvasW: number;

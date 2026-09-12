@@ -4,6 +4,7 @@ import { Scene2, calculateScene2Duration } from "./scenes/Scene2";
 import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
 import { Scene4, calculateScene4Duration } from "./scenes/Scene4";
 import { Scene5, calculateScene5Duration } from "./scenes/Scene5";
+import { Scene6, calculateScene6Duration } from "./scenes/Scene6";
 
 export const 国产支持论Schema = z.object({});
 
@@ -17,6 +18,7 @@ export const sceneConfigs = [
     { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "剖析：你的税收是支持本源" },
     { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "反转：关税壁垒的隐性代价" },
     { name: "scene5", duration: calculateScene5Duration() + SCENE_END_PADDING, component: Scene5, label: "召唤：拒绝捧杀，你就是靠山" },
+    { name: "scene6", duration: calculateScene6Duration(), component: Scene6, label: "片尾·参考资料" },
 ];
 
 export const MAIN_DURATION_国产支持论 =

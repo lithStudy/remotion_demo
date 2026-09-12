@@ -2,6 +2,7 @@ import { z } from "zod";
 import { Scene1, calculateScene1Duration } from "./scenes/Scene1";
 import { Scene2, calculateScene2Duration } from "./scenes/Scene2";
 import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
+import { Scene4, calculateScene4Duration } from "./scenes/Scene4";
 
 export const 华为的5g迷思Schema = z.object({});
 
@@ -13,6 +14,7 @@ export const sceneConfigs = [
     { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "揭露：个人英雄主义陷阱" },
     { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "剖析：5G技术的全球拼图" },
     { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "反转：看清真实贡献" },
+    { name: "scene4", duration: calculateScene4Duration(), component: Scene4, label: "片尾·参考资料" },
 ];
 
 export const MAIN_DURATION_华为的5G迷思 =

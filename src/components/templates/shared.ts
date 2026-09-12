@@ -561,6 +561,22 @@ export interface PeerInductConclusionItem {
 	tone?: BeatStageTone;
 }
 
+/** HUB_RADIATE：中心情境核 */
+export interface HubRadiateHubItem {
+	imageSrc: string;
+	enterEffect?: ImageEnterEffect;
+	/** 从第几条口播起显示核图；省略则 0 */
+	showFrom?: number;
+}
+
+/** HUB_RADIATE：从核向外发散的结果/反应支点 */
+export interface HubRadiateRayItem {
+	imageSrc: string;
+	enterEffect?: ImageEnterEffect;
+	/** 从第几条口播起显示本射线；省略则与 rays 下标对齐（并相对 hub 至少 +1） */
+	showFrom?: number;
+}
+
 // ─────────────────────────────────────────────────────────────
 // 模板驱动架构：公共类型
 // ─────────────────────────────────────────────────────────────

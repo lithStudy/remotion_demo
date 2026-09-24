@@ -4,6 +4,7 @@ import {
   getToken,
   isDraftGenerating,
   isJobActive,
+  isStep1JobContext,
   setToken,
   type JobStatus,
   type ProjectInfo,
@@ -130,6 +131,13 @@ export default function App() {
             setSelected({ sceneIdx: 0, itemIdx: null });
             setScreen("scripts");
           }
+        } else if (
+          st.status === "failed" ||
+          st.status === "interrupted" ||
+          st.status === "cancelled" ||
+          st.status === "timed_out"
+        ) {
+          await refreshProjects();
         }
       } catch (e) {
         setError(String(e));
@@ -175,6 +183,15 @@ export default function App() {
 
   async function startGen(name: string) {
     setError(null);
+    const project = projects.find((p) => p.name === name);
+    if (project?.hasStep1Checkpoint) {
+      const resume = window.confirm(
+        "检测到 Step1 断点。\n\n确定 = 从断点续跑 Step1（不重跑场景拆分）\n取消 = 取消本次操作\n\n若要整条管线从头生成，请点「从头生成分镜」。",
+      );
+      if (!resume) return;
+      await startStep1(name, { forceRestart: false });
+      return;
+    }
     const active = await api.activeJob();
     let force = false;
     if (isJobActive(active.job)) {
@@ -186,6 +203,32 @@ export default function App() {
       force = true;
     }
     const res = await api.startGenerate(name, pauseAfterStep0, { force });
+    applyJobStart(setJob, setCurrent, setScreen, name, "generate", res);
+  }
+
+  async function startGenFromScratch(name: string) {
+    setError(null);
+    if (
+      !window.confirm(
+        "将重跑 Step0 场景拆分并清除 Step1 断点，确认从头生成分镜？",
+      )
+    ) {
+      return;
+    }
+    const active = await api.activeJob();
+    let force = false;
+    if (isJobActive(active.job)) {
+      if (
+        !window.confirm("已有生成任务进行中，确认取消并从头重新生成？")
+      ) {
+        return;
+      }
+      force = true;
+    }
+    const res = await api.startGenerate(name, pauseAfterStep0, {
+      force,
+      forceRestart: true,
+    });
     applyJobStart(setJob, setCurrent, setScreen, name, "generate", res);
   }
 
@@ -215,7 +258,8 @@ export default function App() {
     if (!job) return;
     setError(null);
     const forceRestart = opts?.forceRestart ?? false;
-    if (job.kind === "step1") {
+    // generate 任务若已进入/卡在 step1，续跑/重跑只能走 Step1，否则会重跑 Step0 清掉 checkpoint
+    if (isStep1JobContext(job)) {
       const res = await api.continueStep1(job.name, {
         force: true,
         forceRestart,
@@ -231,8 +275,12 @@ export default function App() {
   }
 
   function goProjectHome() {
-    if (current) setScreen("project");
-    else setScreen("list");
+    if (current) {
+      setScreen("project");
+      refreshProjects().catch((e) => setError(String(e)));
+    } else {
+      setScreen("list");
+    }
   }
 
   if (!authed) {
@@ -279,6 +327,9 @@ export default function App() {
             setCurrent(null);
           }}
           onGenerate={() => startGen(currentProject.name)}
+          onGenerateFromScratch={() =>
+            startGenFromScratch(currentProject.name)
+          }
           onOpenDraft={() => openDraft(currentProject.name)}
           onOpenScripts={() => openScripts(currentProject.name)}
           onOpenJob={() => {

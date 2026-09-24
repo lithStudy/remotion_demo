@@ -30,6 +30,7 @@ class ProjectInfo:
     hasNarration: bool
     hasDraft: bool
     hasScripts: bool
+    hasStep1Checkpoint: bool
     topic: str | None
 
 
@@ -103,6 +104,7 @@ def list_projects() -> list[ProjectInfo]:
                     hasNarration=paths.narration_txt.is_file(),
                     hasDraft=paths.scene_split_draft.is_file(),
                     hasScripts=paths.scene_scripts.is_file(),
+                    hasStep1Checkpoint=paths.scene_scripts_checkpoint.is_file(),
                     topic=topic,
                 ),
             )
@@ -126,6 +128,7 @@ def create_project(name: str, narration_text: str) -> ProjectInfo:
         hasNarration=True,
         hasDraft=False,
         hasScripts=False,
+        hasStep1Checkpoint=False,
         topic=None,
     )
 

@@ -9,6 +9,7 @@ type Props = {
   activeJob?: JobStatus | null;
   onBack: () => void;
   onGenerate: () => Promise<void>;
+  onGenerateFromScratch: () => Promise<void>;
   onOpenDraft: () => Promise<void>;
   onOpenScripts: () => Promise<void>;
   onOpenJob?: () => void;
@@ -83,8 +84,30 @@ export function ProjectHomeScreen(props: Props) {
             disabled={!p.hasNarration}
             onClick={() => props.onGenerate().catch((e) => props.onError(String(e)))}
           >
-            {props.activeJob ? "重新生成分镜" : "生成分镜"}
+            {p.hasStep1Checkpoint
+              ? "续跑 Step1"
+              : props.activeJob
+                ? "重新生成分镜"
+                : "生成分镜"}
           </button>
+          {p.hasStep1Checkpoint ? (
+            <button
+              type="button"
+              className="btn-block"
+              style={{ marginTop: 8 }}
+              disabled={!p.hasNarration}
+              onClick={() =>
+                props.onGenerateFromScratch().catch((e) => props.onError(String(e)))
+              }
+            >
+              从头生成分镜
+            </button>
+          ) : null}
+          {p.hasStep1Checkpoint ? (
+            <p className="muted" style={{ marginTop: 8 }}>
+              已检测到 Step1 断点；续跑不会重跑场景拆分。
+            </p>
+          ) : null}
         </section>
 
         <section className="action-grid">

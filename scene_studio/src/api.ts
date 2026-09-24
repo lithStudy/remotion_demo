@@ -45,6 +45,7 @@ export type ProjectInfo = {
   hasNarration: boolean;
   hasDraft: boolean;
   hasScripts: boolean;
+  hasStep1Checkpoint: boolean;
   topic: string | null;
 };
 
@@ -86,7 +87,12 @@ export function isJobActive(job: JobStatus | null | undefined): boolean {
   return Boolean(job && !JOB_TERMINAL_STATUSES.has(job.status));
 }
 
-/** 正在生成草稿（Step0），此时禁止开脚本生成 */
+/** 失败/中断后应走 Step1 续跑或重跑，而不是重跑 Step0 */
+export function isStep1JobContext(job: JobStatus | null | undefined): boolean {
+  if (!job) return false;
+  return job.kind === "step1" || job.phase === "step1";
+}
+
 export function isDraftGenerating(job: JobStatus | null | undefined): boolean {
   return Boolean(
     isJobActive(job) &&

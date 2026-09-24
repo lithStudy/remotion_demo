@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { JobStatus } from "../api";
-import { isJobActive } from "../api";
+import { isJobActive, isStep1JobContext } from "../api";
 import { AppShell } from "../components/AppShell";
 
 type Props = {
@@ -39,6 +39,7 @@ export function JobScreen(props: Props) {
     job.status === "cancelled" ||
     job.status === "failed";
   const remain = remainLabel(job);
+  const step1Context = isStep1JobContext(job);
 
   return (
     <AppShell
@@ -73,28 +74,34 @@ export function JobScreen(props: Props) {
               style={{ marginTop: 12 }}
               onClick={() => {
                 const msg = running
-                  ? "当前生成仍在进行，确认取消并从断点续跑？"
-                  : "确认从断点续跑重新生成？（已完成的 Step1 场景/条目会跳过）";
+                  ? step1Context
+                    ? "当前 Step1 仍在进行，确认取消并从断点续跑？"
+                    : "当前生成仍在进行，确认取消并重新开始？"
+                  : step1Context
+                    ? "确认从断点续跑 Step1？（已完成的场景/条目会跳过）"
+                    : "确认重新生成？";
                 if (!window.confirm(msg)) return;
                 props.onRegenerate();
               }}
             >
-              重新生成（续跑）
+              {step1Context ? "重新生成（续跑）" : "重新生成"}
             </button>
-            <button
-              type="button"
-              className="btn-block"
-              style={{ marginTop: 8 }}
-              onClick={() => {
-                const msg = running
-                  ? "当前生成仍在进行，确认取消并从头重新生成？"
-                  : "确认忽略断点、从头重新生成 Step1？";
-                if (!window.confirm(msg)) return;
-                props.onRestartFromScratch();
-              }}
-            >
-              从头生成
-            </button>
+            {step1Context ? (
+              <button
+                type="button"
+                className="btn-block"
+                style={{ marginTop: 8 }}
+                onClick={() => {
+                  const msg = running
+                    ? "当前 Step1 仍在进行，确认取消并从头重新生成 Step1？"
+                    : "确认忽略断点、从头重新生成 Step1？（不重跑场景拆分）";
+                  if (!window.confirm(msg)) return;
+                  props.onRestartFromScratch();
+                }}
+              >
+                从头生成 Step1
+              </button>
+            ) : null}
           </>
         ) : null}
       </section>

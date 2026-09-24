@@ -1,0 +1,1563 @@
+{
+  "topic": "你以为华为在救赛力斯？每卖一辆，华为先抽走十三四万",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入：华为税",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "“不是…更像…”构成强认知反转，主表达是对照关系，选COGNITIVE_SHIFT；与后续互动场景切换，单独成镜。",
+          "content": [
+            {
+              "text": "华为不是赛力斯的救世主。",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "对赛力斯来说，",
+              "startFrame": 58,
+              "durationFrames": 31
+            },
+            {
+              "text": "华为更像一只吸血鬼。",
+              "startFrame": 89,
+              "durationFrames": 46
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "华为不是赛力斯的救世主。",
+                "showFrom": 0,
+                "endFrom": 1
+              },
+              {
+                "text": "对赛力斯来说，",
+                "showFrom": 1,
+                "endFrom": 1
+              },
+              {
+                "text": "华为更像一只吸血鬼。",
+                "showFrom": 2,
+                "endFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "吸血鬼",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 135
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "四句构成个案→光环误判→财报纠偏→金句收束的案例拆解弧，选CASE_BREAKDOWN；“车越多钱越薄”作为收束并入，避免孤立超短句。",
+          "content": [
+            {
+              "text": "问界车卖的不错。",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "热搜全是华为光环。",
+              "startFrame": 41,
+              "durationFrames": 58
+            },
+            {
+              "text": "可赛力斯的老板打开财报，",
+              "startFrame": 99,
+              "durationFrames": 52
+            },
+            {
+              "text": "手心却要发凉。",
+              "startFrame": 150,
+              "durationFrames": 37
+            },
+            {
+              "text": "车卖的越多，",
+              "startFrame": 186,
+              "durationFrames": 31
+            },
+            {
+              "text": "钱亏得越多。",
+              "startFrame": 217,
+              "durationFrames": 40
+            }
+          ],
+          "order": 2,
+          "param": {
+            "title": "问界利润悖论",
+            "imageSrc": "images/赛力斯之殇/scene_1_2.png",
+            "phases": [
+              {
+                "phaseLabel": "表面繁荣",
+                "showFrom": 0
+              },
+              {
+                "phaseLabel": "光环假象",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "财报反转",
+                "showFrom": 2
+              },
+              {
+                "phaseLabel": "悖论收束",
+                "showFrom": 4
+              }
+            ]
+          },
+          "totalDurationFrames": 257
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CONCEPT_CARD",
+          "reasoning": "同一比喻的铺垫与命名合并为概念揭示结构，引出「华为税」这一术语，选CONCEPT_CARD。",
+          "content": [
+            {
+              "text": "利润像被一根看不见的管子，",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "悄悄抽走。",
+              "startFrame": 54,
+              "durationFrames": 32
+            },
+            {
+              "text": "这根管子叫什么？",
+              "startFrame": 86,
+              "durationFrames": 35
+            },
+            {
+              "text": "有人叫它「华为税」。",
+              "startFrame": 121,
+              "durationFrames": 42
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/赛力斯之殇/scene_1_3.png",
+            "conceptName": "华为税",
+            "anchors": []
+          },
+          "totalDurationFrames": 163
+        }
+      ],
+      "audioSrc": "/audio/赛力斯之殇/scene_1/scene_1.mp3",
+      "totalDurationFrames": 556
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "剖析：单车抽血",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CENTER_FOCUS",
+          "reasoning": "用问界单车均价39万这个核心数值开场，适合用KPI_HERO强化基数；合并两句是因为首句过短且属于同一开场铺垫。",
+          "content": [
+            {
+              "text": "先算一辆车。",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "一辆均价三十九万的问界。",
+              "startFrame": 41,
+              "durationFrames": 64
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/赛力斯之殇/scene_2_1.png",
+            "enterEffect": "zoomIn",
+            "anchors": []
+          },
+          "totalDurationFrames": 105
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CONCEPT_CARD",
+          "reasoning": "围绕“技术费”这一扣款名目展开带吐槽的解释，CONCEPT_CARD适合聚焦一个费用概念；句子本身只有一个结构，不拆分。",
+          "content": [
+            {
+              "text": "第一刀技术费，",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "咱也不知道技术在哪里，",
+              "startFrame": 32,
+              "durationFrames": 46
+            },
+            {
+              "text": "反正大约七八千。",
+              "startFrame": 78,
+              "durationFrames": 41
+            }
+          ],
+          "order": 2,
+          "param": {
+            "imageSrc": "images/赛力斯之殇/scene_2_2.png",
+            "conceptName": "技术费",
+            "anchors": []
+          },
+          "totalDurationFrames": 120
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CONCEPT_CARD",
+          "reasoning": "直接定义渠道费=华为帮忙卖车的广告费，适合用CONCEPT_CARD解释费用概念。",
+          "content": [
+            {
+              "text": "第二刀渠道费，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "也就是华为帮忙卖车的广告费，",
+              "startFrame": 34,
+              "durationFrames": 69
+            },
+            {
+              "text": "大约三万二。",
+              "startFrame": 103,
+              "durationFrames": 33
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/赛力斯之殇/scene_2_3.png",
+            "conceptName": "渠道费",
+            "anchors": []
+          },
+          "totalDurationFrames": 136
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "PROGRESS_RING",
+          "reasoning": "表达两项费用合计占车价约一成，属于占比/达成率，适合用PROGRESS_RING表达接近10%的比例。",
+          "content": [
+            {
+              "text": "这两笔加起来，",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "就接近车价的一成。",
+              "startFrame": 29,
+              "durationFrames": 42
+            }
+          ],
+          "order": 4,
+          "param": {
+            "blocks": [
+              {
+                "percent": 10,
+                "label": "两笔费用占比",
+                "subLabel": "接近一成",
+                "ringColor": "#EF4444",
+                "showFrom": 1
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 71
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CONCEPT_CARD",
+          "reasoning": "“智驾、座舱、三电”是三个并列采购项，适合PANEL_GRID三宫格；“把这些钱摊到每辆车上”为承接短句，合并避免过短碎片。",
+          "content": [
+            {
+              "text": "可还有第三刀。",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "智驾、座舱、三电",
+              "startFrame": 34,
+              "durationFrames": 60
+            },
+            {
+              "text": "只能向华为体系采购。",
+              "startFrame": 94,
+              "durationFrames": 58
+            },
+            {
+              "text": "它说多少钱就是多少钱。",
+              "startFrame": 151,
+              "durationFrames": 44
+            }
+          ],
+          "order": 5,
+          "param": {
+            "imageSrc": "images/赛力斯之殇/scene_2_5.png",
+            "conceptName": "第三刀"
+          },
+          "totalDurationFrames": 196
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "核心结论是单辆问界要给华为体系十三四万，属于单个核心数值强调，用KPI_HERO突出。",
+          "content": [
+            {
+              "text": "把这些钱摊到每辆车上。",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "公开数据粗算，",
+              "startFrame": 52,
+              "durationFrames": 42
+            },
+            {
+              "text": "2025年上半年，",
+              "startFrame": 93,
+              "durationFrames": 43
+            },
+            {
+              "text": "每卖出一辆问界，",
+              "startFrame": 136,
+              "durationFrames": 46
+            },
+            {
+              "text": "大约有十三四万要付给华为体系。",
+              "startFrame": 182,
+              "durationFrames": 92
+            }
+          ],
+          "order": 6,
+          "param": {
+            "blocks": [
+              {
+                "value": 13.5,
+                "decimalPlaces": 1,
+                "suffix": "万",
+                "label": "单车付给华为",
+                "showFrom": 3,
+                "useGrouping": false
+              }
+            ],
+            "countDuration": 28,
+            "anchors": []
+          },
+          "totalDurationFrames": 274
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "先否定“利润被分走”再确立“先付成本”，是典型不是A而是B的认知反转，用COGNITIVE_SHIFT；合并“听清楚”作为强调引导。",
+          "content": [
+            {
+              "text": "听清楚。",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "这不是赛力斯赚钱了再分利润。",
+              "startFrame": 26,
+              "durationFrames": 64
+            },
+            {
+              "text": "而是造车、卖车时，",
+              "startFrame": 89,
+              "durationFrames": 58
+            },
+            {
+              "text": "就要先付出去的成本。",
+              "startFrame": 147,
+              "durationFrames": 43
+            }
+          ],
+          "order": 7,
+          "param": {
+            "notText": "赚钱再分利润",
+            "butText": "卖车先付成本",
+            "butSrc": "images/赛力斯之殇/scene_2_7.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2
+          },
+          "totalDurationFrames": 190
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "三句话形成递进节拍：单车截取→规模截取→越火越大，适合BEAT_SEQUENCE分段强化。",
+          "content": [
+            {
+              "text": "卖一辆，付一笔",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "车越火，这笔成本越高。",
+              "startFrame": 46,
+              "durationFrames": 65
+            }
+          ],
+          "order": 8,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/赛力斯之殇/scene_2_8_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm"
+              },
+              {
+                "imageSrc": "images/赛力斯之殇/scene_2_8_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert"
+              }
+            ]
+          },
+          "totalDurationFrames": 112
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "核心是累计采购规模冲到五百多亿这一数值；虽然存在“从几十亿”的对比，但起点不是精确整数，不用STAT_COMPARE，用KPI_HERO聚焦终值。",
+          "content": [
+            {
+              "text": "四年下来，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "付给华为的采购，",
+              "startFrame": 27,
+              "durationFrames": 43
+            },
+            {
+              "text": "从几十亿涨到五百多亿。",
+              "startFrame": 69,
+              "durationFrames": 60
+            }
+          ],
+          "order": 9,
+          "param": {
+            "blocks": [
+              {
+                "value": 50,
+                "prefix": "约",
+                "suffix": "亿",
+                "label": "四年前",
+                "showFrom": 2,
+                "useGrouping": false
+              },
+              {
+                "value": 500,
+                "prefix": "超",
+                "suffix": "亿",
+                "label": "现在",
+                "showFrom": 2,
+                "useGrouping": true
+              }
+            ],
+            "countDuration": 30,
+            "anchors": []
+          },
+          "totalDurationFrames": 130
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "以“赋能吗”反问后落到“规模化抽血”，形成强对照定性，适合COGNITIVE_SHIFT收束。",
+          "content": [
+            {
+              "text": "这叫赋能吗？",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "这叫规模化抽血。",
+              "startFrame": 34,
+              "durationFrames": 49
+            }
+          ],
+          "order": 10,
+          "param": {
+            "notText": "赋能",
+            "butText": "规模化抽血",
+            "butSrc": "images/赛力斯之殇/scene_2_10.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 84
+        }
+      ],
+      "audioSrc": "/audio/赛力斯之殇/scene_2/scene_2.mp3",
+      "totalDurationFrames": 1416
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "剖析：增收不增利",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "以“更要命的是”为落点锁定核心结论“增收不增利”，首句不足12字合并进同一引论镜头。",
+          "content": [
+            {
+              "text": "先不说这成本对消费者来讲花得值不值。",
+              "startFrame": 0,
+              "durationFrames": 88
+            },
+            {
+              "text": "关键对赛力斯来说，",
+              "startFrame": 87,
+              "durationFrames": 44
+            },
+            {
+              "text": "是「增收不增利」。",
+              "startFrame": 130,
+              "durationFrames": 40
+            }
+          ],
+          "order": 1,
+          "param": {
+            "anchors": [
+              {
+                "text": "增收不增利",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 171
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "STAT_COMPARE",
+          "reasoning": "两项财务指标同框形成强弱反差，用 STAT_COMPARE 呈现营收与净利率对比。",
+          "content": [
+            {
+              "text": "2025年营收一千六百五十亿，",
+              "startFrame": 0,
+              "durationFrames": 86
+            },
+            {
+              "text": "净利率却只有三点六。",
+              "startFrame": 85,
+              "durationFrames": 56
+            },
+            {
+              "text": "一千六百亿体量，",
+              "startFrame": 140,
+              "durationFrames": 43
+            },
+            {
+              "text": "利润却薄得像一张纸。",
+              "startFrame": 183,
+              "durationFrames": 58
+            }
+          ],
+          "order": 2,
+          "param": {
+            "bars": [
+              {
+                "label": "营收（亿）",
+                "value": 1650,
+                "decimalPlaces": 0,
+                "showFrom": 0
+              },
+              {
+                "label": "净利率（%）",
+                "value": 3.6,
+                "decimalPlaces": 1,
+                "showFrom": 1
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 242
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "单一核心亏损数值“净亏损十七亿”需要强强调，前缀时间与情绪合并成同一数据镜头，选 KPI_HERO。",
+          "content": [
+            {
+              "text": "到2026年上半年，",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "更残酷。",
+              "startFrame": 46,
+              "durationFrames": 30
+            },
+            {
+              "text": "净亏损十七亿。",
+              "startFrame": 76,
+              "durationFrames": 51
+            }
+          ],
+          "order": 3,
+          "param": {
+            "blocks": [
+              {
+                "value": 17,
+                "suffix": "亿",
+                "label": "净亏损",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 127
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "半段数据后的短促状态结论，用 TEXT_FOCUS 呈现“从赚钱变成流血”的冲击。",
+          "content": [
+            {
+              "text": "短短半年之间，",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "就从赚钱变成流血。",
+              "startFrame": 38,
+              "durationFrames": 50
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "短短半年之间，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "就从赚钱变成流血。",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "流血",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 89
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "PEER_INDUCT",
+          "reasoning": "三个表面利好短句与账面亏损形成四段节拍递进，用 BEAT_SEQUENCE 分段反转。",
+          "content": [
+            {
+              "text": "车卖出去了。",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "品牌热度有了。",
+              "startFrame": 41,
+              "durationFrames": 35
+            },
+            {
+              "text": "可账上，",
+              "startFrame": 76,
+              "durationFrames": 20
+            },
+            {
+              "text": "是亏的。",
+              "startFrame": 96,
+              "durationFrames": 28
+            }
+          ],
+          "order": 5,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "images/赛力斯之殇/scene_3_5_img0.png",
+                "enterEffect": "fadeIn"
+              },
+              {
+                "imageSrc": "images/赛力斯之殇/scene_3_5_img1.png",
+                "enterEffect": "slideLeft"
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "images/赛力斯之殇/scene_3_5.png",
+              "enterEffect": "zoomIn",
+              "showFrom": 2,
+              "tone": "alert"
+            }
+          },
+          "totalDurationFrames": 124
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "问—驳—收束的情绪递进，用 BEAT_SEQUENCE 呈现质问与否定收束。",
+          "content": [
+            {
+              "text": "你说，",
+              "startFrame": 0,
+              "durationFrames": 20
+            },
+            {
+              "text": "赛力斯的老板看着这种报表，",
+              "startFrame": 19,
+              "durationFrames": 55
+            },
+            {
+              "text": "心里什么滋味？",
+              "startFrame": 74,
+              "durationFrames": 26
+            },
+            {
+              "text": "是感恩吗？",
+              "startFrame": 99,
+              "durationFrames": 26
+            },
+            {
+              "text": "不，",
+              "startFrame": 124,
+              "durationFrames": 7
+            },
+            {
+              "text": "是恐惧。",
+              "startFrame": 131,
+              "durationFrames": 23
+            }
+          ],
+          "order": 6,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "惨淡报表",
+                "imageSrc": "images/赛力斯之殇/scene_3_6_img0.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "label": "恐惧",
+                "imageSrc": "images/赛力斯之殇/scene_3_6_img1.png",
+                "showFrom": 5,
+                "enterEffect": "breathe"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "恐惧",
+                "showFrom": 5,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 154
+        }
+      ],
+      "audioSrc": "/audio/赛力斯之殇/scene_3/scene_3.mp3",
+      "totalDurationFrames": 906
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "剖析：五界稀释",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促悬念金句，主表达为情绪转折，无需配图，适合全屏文字冲击，独立成镜。",
+          "content": [
+            {
+              "text": "更憋屈的还在后面。",
+              "startFrame": 0,
+              "durationFrames": 46
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "更憋屈的还在后面。",
+                "showFrom": 0
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 46
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "存在两环因果传导：问界打响招牌→华为铺五界，适合 CAUSE_CHAIN 呈现因果推进。",
+          "content": [
+            {
+              "text": "问界帮鸿蒙智行把招牌打响之后，",
+              "startFrame": 0,
+              "durationFrames": 77
+            },
+            {
+              "text": "华为开始铺五界。",
+              "startFrame": 76,
+              "durationFrames": 44
+            }
+          ],
+          "order": 2,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "问界打响招牌",
+                "imageSrc": "images/赛力斯之殇/scene_4_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "label": "华为铺五界",
+                "imageSrc": "images/赛力斯之殇/scene_4_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 120
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "PANEL_GRID",
+          "reasoning": "四个品牌并列列举，属于 2～4 个并列点，适合 PANEL_GRID 宫格展示。",
+          "content": [
+            {
+              "text": "智界、",
+              "startFrame": 0,
+              "durationFrames": 19
+            },
+            {
+              "text": "享界、",
+              "startFrame": 18,
+              "durationFrames": 24
+            },
+            {
+              "text": "尊界、",
+              "startFrame": 42,
+              "durationFrames": 20
+            },
+            {
+              "text": "尚界，",
+              "startFrame": 62,
+              "durationFrames": 20
+            },
+            {
+              "text": "一起上桌。",
+              "startFrame": 81,
+              "durationFrames": 35
+            }
+          ],
+          "order": 3,
+          "param": {
+            "panels": [
+              {
+                "src": "images/赛力斯之殇/scene_4_3_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/赛力斯之殇/scene_4_3_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/赛力斯之殇/scene_4_3_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/赛力斯之殇/scene_4_3_img3.png",
+                "showFrom": 3,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/赛力斯之殇/scene_4_3_img4.png",
+                "showFrom": 4,
+                "enterEffect": "breathe"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 117
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "TIMELINE",
+          "reasoning": "销量占比按 2024→2025→2026 时间阶段下滑，明确时间先后，适合 TIMELINE 时间轴呈现。",
+          "content": [
+            {
+              "text": "问界销量占比，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "从2024年大约87%，",
+              "startFrame": 39,
+              "durationFrames": 79
+            },
+            {
+              "text": "掉到2025年70%出头，",
+              "startFrame": 117,
+              "durationFrames": 80
+            },
+            {
+              "text": "再到2026年上半年大约67%。",
+              "startFrame": 197,
+              "durationFrames": 93
+            }
+          ],
+          "order": 4,
+          "param": {
+            "images": [
+              {
+                "src": "images/赛力斯之殇/scene_4_4_img0.png",
+                "enterEffect": "fadeIn",
+                "textIndex": 0,
+                "label": "占比"
+              },
+              {
+                "src": "images/赛力斯之殇/scene_4_4_img1.png",
+                "enterEffect": "zoomIn",
+                "textIndex": 1,
+                "label": "2024"
+              },
+              {
+                "src": "images/赛力斯之殇/scene_4_4_img2.png",
+                "enterEffect": "slideLeft",
+                "textIndex": 2,
+                "label": "2025"
+              },
+              {
+                "src": "images/赛力斯之殇/scene_4_4_img3.png",
+                "enterEffect": "slideLeft",
+                "textIndex": 3,
+                "label": "2026H1"
+              }
+            ]
+          },
+          "totalDurationFrames": 291
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "两句形成强对照：功劳归你但流量给别人，合并为一个对比结构，适合 SPLIT_COMPARE 左右分屏。",
+          "content": [
+            {
+              "text": "招牌是你打的。",
+              "startFrame": 0,
+              "durationFrames": 45
+            },
+            {
+              "text": "流量开始分给别人。",
+              "startFrame": 44,
+              "durationFrames": 41
+            }
+          ],
+          "order": 5,
+          "param": {
+            "leftSrc": "images/赛力斯之殇/scene_4_5_left.png",
+            "rightSrc": "images/赛力斯之殇/scene_4_5_right.png",
+            "leftLabel": "招牌你打",
+            "rightLabel": "流量被分",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 86
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "四界定位为四个并列分点，每点短促独立，适合 PANEL_GRID 四宫格配图。",
+          "content": [
+            {
+              "text": "尊界去冲百万豪车。",
+              "startFrame": 0,
+              "durationFrames": 48
+            },
+            {
+              "text": "智界去抢年轻科技。",
+              "startFrame": 48,
+              "durationFrames": 53
+            },
+            {
+              "text": "享界去打行政豪华。",
+              "startFrame": 100,
+              "durationFrames": 47
+            },
+            {
+              "text": "尚界去卷大众市场。",
+              "startFrame": 147,
+              "durationFrames": 47
+            }
+          ],
+          "order": 6,
+          "param": {
+            "panels": [
+              {
+                "src": "images/赛力斯之殇/scene_4_6_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/赛力斯之殇/scene_4_6_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/赛力斯之殇/scene_4_6_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/赛力斯之殇/scene_4_6_img3.png",
+                "showFrom": 3,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 194
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "BEAT_SEQUENCE",
+          "reasoning": "先提问再连续递进陈述赛力斯困境，属于问→多拍收束的节拍递进，适合 BEAT_SEQUENCE。",
+          "content": [
+            {
+              "text": "赛力斯呢？面对被稀释的市场，",
+              "startFrame": 0,
+              "durationFrames": 75
+            },
+            {
+              "text": "还一样要交高额渠道费。",
+              "startFrame": 74,
+              "durationFrames": 52
+            },
+            {
+              "text": "还在被消费者叫「华为车」。",
+              "startFrame": 125,
+              "durationFrames": 63
+            },
+            {
+              "text": "一边利润被抽走。",
+              "startFrame": 187,
+              "durationFrames": 46
+            },
+            {
+              "text": "一边独特性也被稀释。",
+              "startFrame": 233,
+              "durationFrames": 54
+            }
+          ],
+          "order": 7,
+          "param": {
+            "stages": [
+              {
+                "imageSrc": "images/赛力斯之殇/scene_4_7_img0.png",
+                "enterEffect": "breathe",
+                "tone": "calm",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/赛力斯之殇/scene_4_7_img1.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 1
+              },
+              {
+                "imageSrc": "images/赛力斯之殇/scene_4_7_img2.png",
+                "enterEffect": "slideLeft",
+                "tone": "alert",
+                "showFrom": 2
+              },
+              {
+                "imageSrc": "images/赛力斯之殇/scene_4_7_img3.png",
+                "enterEffect": "slideBottom",
+                "tone": "alert",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 287
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "最终结论句，两个并列缺失形成冲击，适合 TEXT_FOCUS 全屏收束强调。",
+          "content": [
+            {
+              "text": "到最后，",
+              "startFrame": 0,
+              "durationFrames": 18
+            },
+            {
+              "text": "赛力斯既没有实打实利润，",
+              "startFrame": 17,
+              "durationFrames": 53
+            },
+            {
+              "text": "又没有了自己的品牌灵魂。",
+              "startFrame": 69,
+              "durationFrames": 51
+            }
+          ],
+          "order": 8,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "到最后，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "赛力斯既没有实打实利润，",
+                "showFrom": 1,
+                "endFrom": 1
+              },
+              {
+                "text": "又没有了自己的品牌灵魂。",
+                "showFrom": 2,
+                "endFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "品牌灵魂",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 121
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "前后两个时间状态对照，品牌认知被替代，适合 SPLIT_COMPARE 左右分屏对比。",
+          "content": [
+            {
+              "text": "做问界之前，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "好歹大家还知道他是东风小康，",
+              "startFrame": 30,
+              "durationFrames": 70
+            },
+            {
+              "text": "传统面包神车。",
+              "startFrame": 100,
+              "durationFrames": 43
+            },
+            {
+              "text": "做问界之后，",
+              "startFrame": 143,
+              "durationFrames": 32
+            },
+            {
+              "text": "大家只知华为，不知小康了。",
+              "startFrame": 175,
+              "durationFrames": 74
+            }
+          ],
+          "order": 9,
+          "param": {
+            "leftSrc": "images/赛力斯之殇/scene_4_9_left.png",
+            "rightSrc": "images/赛力斯之殇/scene_4_9_right.png",
+            "leftLabel": "东风小康",
+            "rightLabel": "华为车",
+            "leftShowFrom": 0,
+            "rightShowFrom": 3,
+            "anchors": []
+          },
+          "totalDurationFrames": 249
+        }
+      ],
+      "audioSrc": "/audio/赛力斯之殇/scene_4/scene_4.mp3",
+      "totalDurationFrames": 1510
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "反转：拔掉华为",
+      "items": [
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "PUNCH_CAPTION",
+          "reasoning": "该段是反转后的短促强结论，主表达结构为金句冲击；用TEXT_FOCUS更聚焦结论本身，单镜头完整呈现不拆分。",
+          "content": [
+            {
+              "text": "所以对于赛力斯来说，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "拔掉华为，",
+              "startFrame": 41,
+              "durationFrames": 24
+            },
+            {
+              "text": "是迟早的事情。",
+              "startFrame": 65,
+              "durationFrames": 35
+            }
+          ],
+          "order": 1,
+          "param": {
+            "punches": [
+              {
+                "text": "对赛力斯来说",
+                "showFrom": 0,
+                "enterEffect": "slideUp",
+                "tone": "calm"
+              },
+              {
+                "text": "拔掉华为",
+                "showFrom": 1,
+                "enterEffect": "snap",
+                "tone": "alert"
+              },
+              {
+                "text": "迟早的事",
+                "showFrom": 2,
+                "enterEffect": "shake",
+                "tone": "alert"
+              }
+            ]
+          },
+          "totalDurationFrames": 101
+        }
+      ],
+      "audioSrc": "/audio/赛力斯之殇/scene_5/scene_5.mp3",
+      "totalDurationFrames": 103
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "召唤：定义权",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "主表达是从个例否定到普遍规律的认知转换，适合 COGNITIVE_SHIFT；与后文因果链叙事角色不同，独立成镜。",
+          "content": [
+            {
+              "text": "不只是赛力斯。",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "所有跨界合作，",
+              "startFrame": 30,
+              "durationFrames": 33
+            },
+            {
+              "text": "最后都会撞上同一道墙。",
+              "startFrame": 63,
+              "durationFrames": 49
+            }
+          ],
+          "order": 1,
+          "param": {
+            "notText": "只是赛力斯",
+            "butText": "跨界合作撞墙",
+            "butSrc": "images/赛力斯之殇/scene_6_1.png",
+            "notContentIndex": 0,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 112
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "顶针式因果链：定义权→利润分配权→企业生死，主表达为机制传导，故用 CAUSE_CHAIN；两句同链合并至40字仍合适。",
+          "content": [
+            {
+              "text": "谁掌握产品定义权，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "谁就掌握利润分配权。",
+              "startFrame": 42,
+              "durationFrames": 52
+            },
+            {
+              "text": "谁掌握利润分配权，",
+              "startFrame": 93,
+              "durationFrames": 41
+            },
+            {
+              "text": "谁就掌握一个企业的生死。",
+              "startFrame": 134,
+              "durationFrames": 48
+            }
+          ],
+          "order": 2,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "产品定义权",
+                "imageSrc": "images/赛力斯之殇/scene_6_2_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "利润分配权",
+                "imageSrc": "images/赛力斯之殇/scene_6_2_img1.png",
+                "showFrom": 1
+              },
+              {
+                "label": "企业生死",
+                "imageSrc": "images/赛力斯之殇/scene_6_2_img2.png",
+                "showFrom": 3
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 182
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促反问结论，作为独立金句焦点，故用 TEXT_FOCUS；虽11字但属独立收束，不合并。",
+          "content": [
+            {
+              "text": "流水的车厂，",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "铁打的华为。",
+              "startFrame": 31,
+              "durationFrames": 36
+            },
+            {
+              "text": "现在是问界，其他四界还会远吗？",
+              "startFrame": 67,
+              "durationFrames": 72
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "流水的车厂，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "铁打的华为。",
+                "showFrom": 1,
+                "endFrom": 1
+              },
+              {
+                "text": "现在是问界，其他四界还会远吗？",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "铁打的华为",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 140
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "两个节拍递进：转折引入和情绪安抚，主表达为节拍变化，故用 BEAT_SEQUENCE；情绪跳变明显，独立成镜。",
+          "content": [
+            {
+              "text": "哦，对了。",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "这次重组，痛的不只是赛力斯。",
+              "startFrame": 21,
+              "durationFrames": 75
+            }
+          ],
+          "order": 4,
+          "param": {
+            "imageSrc": "images/赛力斯之殇/scene_6_4.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "重组",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 96
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片收束安抚结论，短但独立结尾金句，故用 TEXT_FOCUS；与上一句金句有结论推进，独立成镜。",
+          "content": [
+            {
+              "text": "当初冲着含华量买问界的车主，",
+              "startFrame": 0,
+              "durationFrames": 65
+            },
+            {
+              "text": "你们以后如何看待自己的车？",
+              "startFrame": 64,
+              "durationFrames": 54
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "当初冲着含华量买问界的车主，",
+                "showFrom": 0
+              },
+              {
+                "text": "你们以后如何看待自己的车？",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "含华量",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 118
+        }
+      ],
+      "audioSrc": "/audio/赛力斯之殇/scene_6/scene_6.mp3",
+      "totalDurationFrames": 648
+    },
+    {
+      "sceneId": "scene_references",
+      "sceneName": "参考资料",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "CONCLUSION",
+          "template": "SOURCE_CITATION",
+          "reasoning": "片尾展示支撑「华为税」拆分、关联采购规模、增收不增利、五界销量稀释与问界主导权调整等论点的公开来源，无口播。",
+          "content": [],
+          "param": {
+            "sectionTitle": "参考资料",
+            "references": [
+              {
+                "title": "Seres Group Co., Ltd. 2025 Annual Report",
+                "titleZh": "赛力斯2025年报：营收1650.54亿元，归母净利润59.57亿元（净利率约3.6%）",
+                "publisher": "Seres Group / cninfo",
+                "publisherZh": "赛力斯集团 / 巨潮资讯",
+                "year": "2026"
+              },
+              {
+                "title": "Seres Group 2026 Interim Report: Net Loss of RMB 1.717 Billion",
+                "titleZh": "赛力斯2026年半年报：营收574.93亿元，归母净亏损17.17亿元",
+                "publisher": "Seres Group / WallstreetCN",
+                "publisherZh": "赛力斯集团 / 华尔街见闻",
+                "year": "2026"
+              },
+              {
+                "title": "Seres Takes Over AITO: Stuck Between Huawei Tax and Xiaokang Legacy",
+                "titleZh": "赛力斯接管问界：技术授权约2%、渠道费约8%，叠加硬件采购俗称「华为税」",
+                "publisher": "Yicai",
+                "publisherZh": "第一财经",
+                "year": "2026"
+              },
+              {
+                "title": "Seres IPO Prospectus: Largest Supplier Procurement Rose from RMB 5.8bn to 42bn",
+                "titleZh": "赛力斯招股书：向最大供应商（供应商A）采购额由约58亿升至420亿",
+                "publisher": "21st Century Business Herald",
+                "publisherZh": "21世纪经济报道",
+                "year": "2025"
+              },
+              {
+                "title": "Seres Procurement from Huawei System Reached RMB 56.054 Billion in 2025",
+                "titleZh": "赛力斯2025年向华为体系采购约560.54亿元，约占当年营收三分之一",
+                "publisher": "Yicai / Tencent News",
+                "publisherZh": "第一财经 / 腾讯新闻",
+                "year": "2026"
+              },
+              {
+                "title": "AITO Accounted for About 70% of HIMA Deliveries in 2025",
+                "titleZh": "2025年问界交付约42.3万辆，约占鸿蒙智行全年交付七成",
+                "publisher": "Time Weekly / Yiche",
+                "publisherZh": "时代周报 / 易车",
+                "year": "2026"
+              },
+              {
+                "title": "HIMA Five Brands H1 2026: AITO Share About 67%",
+                "titleZh": "2026年上半年鸿蒙智行五界：问界销量占比约67.19%",
+                "publisher": "Tencent News",
+                "publisherZh": "腾讯新闻",
+                "year": "2026"
+              },
+              {
+                "title": "AITO New Cooperation Model: Seres Leads Product, Brand, Channel and Service",
+                "titleZh": "问界新合作模式：产品定义、设计、营销、渠道与服务由赛力斯主导，华为终端赋能",
+                "publisher": "AITO / HIMA",
+                "publisherZh": "问界汽车 / 鸿蒙智行",
+                "year": "2026"
+              },
+              {
+                "title": "Huawei Steps Back, Seres Takes Over AITO Operations",
+                "titleZh": "华为退到幕后，赛力斯接住问界：主导权交接与经营边界变化",
+                "publisher": "Jiemian News",
+                "publisherZh": "界面新闻",
+                "year": "2026"
+              }
+            ]
+          },
+          "totalDurationFrames": 192
+        }
+      ],
+      "totalDurationFrames": 192
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "赛力斯之殇",
+    "subtitle": "没有产品定义权，就没有利润分配权",
+    "themeColor": "#FF6900",
+    "surface": "light",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

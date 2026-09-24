@@ -68,6 +68,8 @@ python -m narrator_pipeline --name xxx --start 2
 python -m narrator_pipeline --name xxx --only 4
 ```
 
+Step1 中途失败会落盘 checkpoint，再次执行同一命令会从断点续跑；`--force` 可忽略断点从头分析。
+
 分步入口与路径约定见 [`narrator_pipeline/README.md`](./narrator_pipeline/README.md)。
 
 管线步骤概览：

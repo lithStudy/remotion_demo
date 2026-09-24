@@ -1,0 +1,8029 @@
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:17:25
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: default
+thinking_enabled: True
+reasoning_effort: medium
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：你以为华为是救世主？卖一辆问界，华为拿走十几万
+- **当前场景**：看不见的华为税
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+华为不是赛力斯的救世主。对赛力斯来说，华为更像一只吸血鬼。
+
+你先别急着骂。把你自己放进赛力斯老板的椅子上。问界车卖爆了。朋友圈全是华为光环。可你打开财报，手心发凉。车越多，钱越薄。利润像被一根看不见的管子，悄悄抽走。这根管子叫什么？有人叫它「华为税」。
+
+## 可用模板（共 27 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, HUB_RADIATE, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QA_REVEAL, QUOTE_CITATION, SOURCE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### G3. 课后答疑 / 疑点解答（expressionTag≈neutral|focus）
+- 针对本课/本主题的一个疑点，讲师正式解答：`content[0]` 为问句，`content[1..]` 为答句 → `QA_REVEAL`
+- 须有完整问句 + 递进解答；**非**「有人说/网友」对话体（→ `CHAT_BUBBLE`）；**非**多图情绪递进（→ `BEAT_SEQUENCE`）；**非**收束打勾清单（→ `CHECKLIST_REVEAL`）
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:19:59
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "华为不是赛力斯的救世主。对赛力斯来说，华为更像一只吸血鬼。",
+      "narrativeType": "HOOK",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "estimatedSeconds": 6.4,
+      "reasoning": "“不是…而是…”式认知反转，将“救世主”与“吸血鬼”强对照；用 COGNITIVE_SHIFT 表达认知颠覆，开头即建立冲突钩子。"
+    },
+    {
+      "text": "你先别急着骂。把你自己放进赛力斯老板的椅子上。",
+      "narrativeType": "TRANSITION",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "medium",
+      "estimatedSeconds": 5.1,
+      "reasoning": "两句是弱信号场景引导，合并避免短句碎片；主表达为平铺进入角色场景，用 CENTER_FOCUS 单主图承接过渡。"
+    },
+    {
+      "text": "问界车卖爆了。朋友圈全是华为光环。",
+      "narrativeType": "CASE",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "high",
+      "estimatedSeconds": 3.8,
+      "reasoning": "两个并列的外部繁荣现象，适合 PANEL_GRID 分点配图；同属一个场景铺垫，不拆成单句。"
+    },
+    {
+      "text": "可你打开财报，手心发凉。",
+      "narrativeType": "CASE",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "medium",
+      "estimatedSeconds": 2.7,
+      "reasoning": "“可”带出转折性单一画面，情绪跳变后新建镜头；无数据/分点/步骤，用 CENTER_FOCUS 表达内心寒意。"
+    },
+    {
+      "text": "车越多，钱越薄。利润像被一根看不见的管子，悄悄抽走。",
+      "narrativeType": "LOGIC",
+      "template": "CAUSE_CHAIN",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "estimatedSeconds": 5.8,
+      "reasoning": "车越多→钱越薄→利润被无形抽走，是机制传导链路；用 CAUSE_CHAIN 每环一图，与后文命名设问分开。"
+    },
+    {
+      "text": "这根管子叫什么？有人叫它「华为税」。",
+      "narrativeType": "CONCLUSION",
+      "template": "MAGNIFYING_GLASS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "estimatedSeconds": 4.0,
+      "reasoning": "设问后明确落点到“华为税”，核心是聚焦关键命名；用 MAGNIFYING_GLASS 锁定高价值锚点。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:19:59
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: default
+thinking_enabled: True
+reasoning_effort: medium
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：你以为华为是救世主？卖一辆问界，华为拿走十几万
+- **当前场景**：一辆车抽走十几万
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+先算一辆车。一辆均价三十九万的问界。第一刀技术费，咱也不知道技术在哪里，反正大约七八千。第二刀渠道费，也就是华为帮忙卖车的广告费，大约三万二。这两笔加起来，就接近车价的一成。可还有第三刀。智驾、座舱、三电，也要向华为体系采购。把这些钱摊到每辆车上。公开数据粗算，2025年上半年，每卖出一辆问界，大约有十三四万要付给华为体系。听清楚。这不是赛力斯赚到手的利润被分走。这是造车、卖车时，先要付出去的成本。卖一辆，付一截。卖一万辆，付一万截。车越火，这笔成本越大。四年下来，付给华为的采购，从几十亿涨到五百多亿。这叫赋能吗？这叫规模化抽血。
+
+## 可用模板（共 27 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, HUB_RADIATE, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QA_REVEAL, QUOTE_CITATION, SOURCE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### G3. 课后答疑 / 疑点解答（expressionTag≈neutral|focus）
+- 针对本课/本主题的一个疑点，讲师正式解答：`content[0]` 为问句，`content[1..]` 为答句 → `QA_REVEAL`
+- 须有完整问句 + 递进解答；**非**「有人说/网友」对话体（→ `CHAT_BUBBLE`）；**非**多图情绪递进（→ `BEAT_SEQUENCE`）；**非**收束打勾清单（→ `CHECKLIST_REVEAL`）
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:22:54
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "先算一辆车。一辆均价三十九万的问界。",
+      "narrativeType": "HOOK",
+      "template": "KPI_HERO",
+      "expressionTag": "data",
+      "confidence": "high",
+      "reasoning": "主表达结构是引入车辆均价这一核心数值，突出三十九万，适合KPI_HERO。"
+    },
+    {
+      "text": "第一刀技术费，咱也不知道技术在哪里，反正大约七八千。",
+      "narrativeType": "LOGIC",
+      "template": "METHOD_STACK",
+      "expressionTag": "method",
+      "confidence": "high",
+      "reasoning": "主结构是标题式费用项加解释与金额展开，适合METHOD_STACK；与第二刀分开避免长清单。"
+    },
+    {
+      "text": "第二刀渠道费，也就是华为帮忙卖车的广告费，大约三万二。",
+      "narrativeType": "LOGIC",
+      "template": "METHOD_STACK",
+      "expressionTag": "method",
+      "confidence": "high",
+      "reasoning": "同第一刀，为独立费用项，标题式核心加解释和金额展开，选METHOD_STACK。"
+    },
+    {
+      "text": "这两笔加起来，就接近车价的一成。",
+      "narrativeType": "DATA",
+      "template": "PROGRESS_RING",
+      "expressionTag": "data",
+      "confidence": "high",
+      "reasoning": "主表达是两项费用占车价约一成，占比结构明确，适合PROGRESS_RING。"
+    },
+    {
+      "text": "可还有第三刀。智驾、座舱、三电，也要向华为体系采购。把这些钱摊到每辆车上。",
+      "narrativeType": "LOGIC",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "high",
+      "reasoning": "主结构是第三刀下智驾、座舱、三电三个并列采购项，适合PANEL_GRID宫格配图。"
+    },
+    {
+      "text": "公开数据粗算，2025年上半年，每卖出一辆问界，大约有十三四万要付给华为体系。",
+      "narrativeType": "DATA",
+      "template": "KPI_HERO",
+      "expressionTag": "data",
+      "confidence": "high",
+      "reasoning": "主表达是单车支付华为体系的约十三四万这一核心金额结论，适合KPI_HERO强调。"
+    },
+    {
+      "text": "听清楚。这不是赛力斯赚到手的利润被分走。这是造车、卖车时，先要付出去的成本。",
+      "narrativeType": "CONCLUSION",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "reasoning": "明显不是…而是…强对照结构，选COGNITIVE_SHIFT；合并‘听清楚’作为镜头引导。"
+    },
+    {
+      "text": "卖一辆，付一截。卖一万辆，付一万截。车越火，这笔成本越大。",
+      "narrativeType": "LOGIC",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "reasoning": "卖一辆、卖一万辆、车越火三拍递进，适合BEAT_SEQUENCE分段强调。"
+    },
+    {
+      "text": "四年下来，付给华为的采购，从几十亿涨到五百多亿。",
+      "narrativeType": "DATA",
+      "template": "STAT_COMPARE",
+      "expressionTag": "data",
+      "confidence": "high",
+      "reasoning": "从几十亿到五百多亿是前后两个规模的同框对比，适合STAT_COMPARE。"
+    },
+    {
+      "text": "这叫赋能吗？这叫规模化抽血。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "短促反讽金句结论，无需配图，适合TEXT_FOCUS。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:22:54
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: default
+thinking_enabled: True
+reasoning_effort: medium
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：你以为华为是救世主？卖一辆问界，华为拿走十几万
+- **当前场景**：净亏损十七亿
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+先不说这钱花得值不值。对赛力斯来说，更要命的是「增收不增利」。
+2025年营收一千六百五十亿，净利率却只有三点六。一千六百亿体量，利润薄得像一张纸。到2026年上半年，更残酷。净亏损十七亿。短短半年之间，就从赚钱变成流血。
+车卖出去了。热闹有了。品牌热度有了。可账上，是亏的。你说，一个老板看着这种报表，心里什么滋味？是感恩吗？不，是恐惧。
+
+## 可用模板（共 27 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, HUB_RADIATE, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QA_REVEAL, QUOTE_CITATION, SOURCE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### G3. 课后答疑 / 疑点解答（expressionTag≈neutral|focus）
+- 针对本课/本主题的一个疑点，讲师正式解答：`content[0]` 为问句，`content[1..]` 为答句 → `QA_REVEAL`
+- 须有完整问句 + 递进解答；**非**「有人说/网友」对话体（→ `CHAT_BUBBLE`）；**非**多图情绪递进（→ `BEAT_SEQUENCE`）；**非**收束打勾清单（→ `CHECKLIST_REVEAL`）
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:25:47
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "先不说这钱花得值不值。对赛力斯来说，更要命的是「增收不增利」。",
+      "narrativeType": "HOOK",
+      "template": "MAGNIFYING_GLASS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "estimatedSeconds": 6.9,
+      "reasoning": "主表达是把注意力锁定到核心关键词“增收不增利”，前句只是铺垫，落点句明确，因此用 MAGNIFYING_GLASS；并入前句是因为其不足 12 字且非独立金句。"
+    },
+    {
+      "text": "2025年营收一千六百五十亿，净利率却只有三点六。",
+      "narrativeType": "DATA",
+      "template": "KPI_HERO",
+      "expressionTag": "data",
+      "confidence": "medium",
+      "estimatedSeconds": 5.6,
+      "reasoning": "主表达是强调净利率仅有 3.6% 的反差数据，营收数据作为背景；因净利率非整数不满足 STAT_COMPARE 的整数要求，选用 KPI_HERO 聚焦核心数值。"
+    },
+    {
+      "text": "一千六百亿体量，利润薄得像一张纸。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "medium",
+      "estimatedSeconds": 3.8,
+      "reasoning": "主表达是单句比喻式金句，无需配图即可形成冲击，因此用 TEXT_FOCUS。"
+    },
+    {
+      "text": "到2026年上半年，更残酷。净亏损十七亿。",
+      "narrativeType": "DATA",
+      "template": "KPI_HERO",
+      "expressionTag": "data",
+      "confidence": "high",
+      "estimatedSeconds": 4.7,
+      "reasoning": "主表达是净亏损 17 亿这一核心负面数据，前句是语境铺垫，用 KPI_HERO 强调单指标冲击。"
+    },
+    {
+      "text": "短短半年之间，就从赚钱变成流血。",
+      "narrativeType": "CONCLUSION",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "medium",
+      "estimatedSeconds": 3.6,
+      "reasoning": "主表达是从盈利到亏损的认知反转，类似“不是赚钱而是流血”的结构，因此用 COGNITIVE_SHIFT。"
+    },
+    {
+      "text": "车卖出去了。热闹有了。品牌热度有了。可账上，是亏的。",
+      "narrativeType": "CASE",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "estimatedSeconds": 5.8,
+      "reasoning": "主表达是三个表面繁荣节拍后转折到亏损，属于 2-4 段节拍递进，适合 BEAT_SEQUENCE。"
+    },
+    {
+      "text": "你说，一个老板看着这种报表，心里什么滋味？是感恩吗？不，是恐惧。",
+      "narrativeType": "CONCLUSION",
+      "template": "COGNITIVE_SHIFT",
+      "expressionTag": "contrast",
+      "confidence": "high",
+      "estimatedSeconds": 7.1,
+      "reasoning": "主表达是“不是感恩，而是恐惧”的强对照结论，前句只是铺垫问句；为避免用 BEAT_SEQUENCE 硬塞强对照，因此用 COGNITIVE_SHIFT。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:25:47
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: default
+thinking_enabled: True
+reasoning_effort: medium
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：你以为华为是救世主？卖一辆问界，华为拿走十几万
+- **当前场景**：问界被五界分流
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+更憋屈的还在后面。问界帮鸿蒙智行把招牌打响之后，华为开始铺五界。智界、享界、尊界、尚界，一起上桌。问界销量占比，从2024年大约87%，掉到2025年七成出头，再到2026年上半年大约六成七。招牌是你打的。流量开始分给别人。
+尊界去冲百万豪车。智界去抢年轻科技。享界去打行政豪华。尚界去卷大众市场。赛力斯呢？还在交高额渠道费。还在被消费者叫「华为车」。利润被抽走。独特性也被稀释。
+到最后，赛力斯既没有实打实利润，又没有了自己的品牌灵魂。
+
+做问界之前，好歹大家还知道他是东风小康，传统面包神车。做问界之后，大家只知道这是华为的车了。
+
+所以对于赛力斯来说，拔掉华为，是迟早的事情。
+
+## 可用模板（共 27 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, HUB_RADIATE, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QA_REVEAL, QUOTE_CITATION, SOURCE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### G3. 课后答疑 / 疑点解答（expressionTag≈neutral|focus）
+- 针对本课/本主题的一个疑点，讲师正式解答：`content[0]` 为问句，`content[1..]` 为答句 → `QA_REVEAL`
+- 须有完整问句 + 递进解答；**非**「有人说/网友」对话体（→ `CHAT_BUBBLE`）；**非**多图情绪递进（→ `BEAT_SEQUENCE`）；**非**收束打勾清单（→ `CHECKLIST_REVEAL`）
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:28:44
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "更憋屈的还在后面。",
+      "narrativeType": "TRANSITION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "短促转折金句，作为情绪预告独立成镜，用金句聚焦强调，避免与后文背景叙述混杂。",
+      "estimatedSeconds": 2.0
+    },
+    {
+      "text": "问界帮鸿蒙智行把招牌打响之后，华为开始铺五界。",
+      "narrativeType": "LOGIC",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "单句背景铺陈，只含一个因果背景陈述，用默认单图叙述保持信息清晰。",
+      "estimatedSeconds": 5.1
+    },
+    {
+      "text": "智界、享界、尊界、尚界，一起上桌。",
+      "narrativeType": "LOGIC",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "high",
+      "reasoning": "四个品牌名并列出现，适合宫格分图点名，形成并列展示结构。",
+      "estimatedSeconds": 3.8
+    },
+    {
+      "text": "问界销量占比，从2024年大约87%，掉到2025年七成出头，再到2026年上半年大约六成七。",
+      "narrativeType": "DATA",
+      "template": "TIMELINE",
+      "expressionTag": "timeline",
+      "confidence": "medium",
+      "reasoning": "三个时间点的销量占比下滑是时间序列演进，不用两项对比的STAT_COMPARE，而用时间轴呈现趋势。",
+      "estimatedSeconds": 10.4
+    },
+    {
+      "text": "招牌是你打的。流量开始分给别人。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "两句短促强对比结论，无需配图，用金句聚焦强化落差感。",
+      "estimatedSeconds": 3.6
+    },
+    {
+      "text": "尊界去冲百万豪车。智界去抢年轻科技。享界去打行政豪华。尚界去卷大众市场。",
+      "narrativeType": "LOGIC",
+      "template": "PANEL_GRID",
+      "expressionTag": "list",
+      "confidence": "high",
+      "reasoning": "四个品牌与四个定位一一对应并列，适合宫格分图，逐格展示战略分流。",
+      "estimatedSeconds": 8.0
+    },
+    {
+      "text": "赛力斯呢？还在交高额渠道费。还在被消费者叫「华为车」。利润被抽走。独特性也被稀释。",
+      "narrativeType": "CASE",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "medium",
+      "reasoning": "问句引出后三组递进后果构成节拍推进，用BEAT_SEQUENCE让画面随后果升级切换。",
+      "estimatedSeconds": 9.1
+    },
+    {
+      "text": "到最后，赛力斯既没有实打实利润，又没有了自己的品牌灵魂。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "双缺结论句是全段收束，用金句聚焦强调赛力斯的双重损失。",
+      "estimatedSeconds": 6.2
+    },
+    {
+      "text": "做问界之前，好歹大家还知道他是东风小康，传统面包神车。做问界之后，大家只知道这是华为的车了。",
+      "narrativeType": "LOGIC",
+      "template": "SPLIT_COMPARE",
+      "expressionTag": "contrast",
+      "confidence": "medium",
+      "reasoning": "做问界之前与之后形成两个阶段强对比，适合左右分屏对照，比时间轴更突出品牌认知反转。",
+      "estimatedSeconds": 10.2
+    },
+    {
+      "text": "所以对于赛力斯来说，拔掉华为，是迟早的事情。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "high",
+      "reasoning": "最终行动结论短促有力，用金句聚焦收束全场景。",
+      "estimatedSeconds": 4.9
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:28:44
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: default
+thinking_enabled: True
+reasoning_effort: medium
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：你以为华为是救世主？卖一辆问界，华为拿走十几万
+- **当前场景**：定义权决定生死
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+不只是赛力斯。所有跨界合作，最后都会撞上同一道墙。谁掌握产品定义权，谁就掌握利润分配权。谁掌握利润分配权，谁就掌握一个企业的生死。哪个车企会让人掌握呢？
+
+## 可用模板（共 27 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, HUB_RADIATE, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QA_REVEAL, QUOTE_CITATION, SOURCE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### G3. 课后答疑 / 疑点解答（expressionTag≈neutral|focus）
+- 针对本课/本主题的一个疑点，讲师正式解答：`content[0]` 为问句，`content[1..]` 为答句 → `QA_REVEAL`
+- 须有完整问句 + 递进解答；**非**「有人说/网友」对话体（→ `CHAT_BUBBLE`）；**非**多图情绪递进（→ `BEAT_SEQUENCE`）；**非**收束打勾清单（→ `CHECKLIST_REVEAL`）
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:29:56
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "不只是赛力斯。所有跨界合作，最后都会撞上同一道墙。",
+      "narrativeType": "TRANSITION",
+      "template": "BEAT_SEQUENCE",
+      "expressionTag": "beat",
+      "confidence": "medium",
+      "estimatedSeconds": 5.6,
+      "reasoning": "由具体案例过渡到普遍结论，属于铺垫→结论的节拍递进；用 BEAT_SEQUENCE 让“不只是赛力斯”与“撞上同一道墙”分段显现；短句合并避免碎片化。"
+    },
+    {
+      "text": "谁掌握产品定义权，谁就掌握利润分配权。谁掌握利润分配权，谁就掌握一个企业的生死。",
+      "narrativeType": "LOGIC",
+      "template": "CAUSE_CHAIN",
+      "expressionTag": "beat",
+      "confidence": "high",
+      "estimatedSeconds": 8.9,
+      "reasoning": "两句话形成“产品定义权→利润分配权→企业生死”的因果传导链，每一环都递进；用 CAUSE_CHAIN 将三环串成机制图。"
+    },
+    {
+      "text": "哪个车企会让人掌握呢？",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "medium",
+      "estimatedSeconds": 2.4,
+      "reasoning": "结尾反问是短促强结论，无需配图；作为独立金句用 TEXT_FOCUS 锁定冲击感。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:29:56
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: default
+thinking_enabled: True
+reasoning_effort: medium
+
+[PROMPT]
+你是「镜头分镜 + 动画模板选型」联合优化器。你的任务是在**不改写口播原文**的前提下，把场景原文切成更“原子化”的镜头item，并为每个镜头选择最合适的 `template`。
+
+## 🎥 视频大背景
+- **核心主题**：你以为华为是救世主？卖一辆问界，华为拿走十几万
+- **当前场景**：流水车厂铁打华为
+
+## 📄 场景原文（严禁修改、严禁漏字、严禁补字）
+哦，对了。冲着含华量买问界的车主，不要灰心。流水的车厂，铁打的华为。你们还有的选哦。
+
+## 可用模板（共 27 个：`template` 必须且仅能从中选一个）
+
+BEAT_SEQUENCE, CASE_BREAKDOWN, CAUSE_CHAIN, CENTER_FOCUS, CHAT_BUBBLE, CHECKLIST_REVEAL, COGNITIVE_SHIFT, CONCEPT_CARD, DATA_TABLE, DOS_AND_DONTS, HUB_RADIATE, KPI_HERO, MAGNIFYING_GLASS, METHOD_STACK, PANEL_GRID, PEER_INDUCT, PROGRESS_RING, PUNCH_CAPTION, QA_REVEAL, QUOTE_CITATION, SOURCE_CITATION, SPLIT_COMPARE, STAT_COMPARE, STEP_LIST, TEXT_FOCUS, TIMELINE, TREE_DIAGRAM
+
+选型规则以主提示词中的决策树与自检清单为准；参数结构不在此展开，后续步骤会按 Schema 生成 `param`。
+
+---
+
+## 🎯 总目标（必须同时满足）
+1. **逐字一致**：每个 item 的 `text` 必须是原文的连续子串；所有 item 的 `text` 按顺序拼接后必须与原文完全一致（允许忽略空白差异，但不能改变任何非空白字符）。
+2. **覆盖完整**：原文中每一个字符都必须且只能落在一个 item 里（不重叠、不遗漏）。
+3. **表达原子化**：**一个 item 只允许一个主表达结构**（对比/命名/步骤/引用/数据/节拍递进/金句冲击/平铺叙述）。若同一段里混了两种结构，必须拆成多个 item。
+4. **长度合理**：为了避免视觉疲劳，一个item中的text拼接后如果长于 50 字应该拆分成多个item。
+5. 模板是为了更好的表达item中的text
+
+---
+
+## ✂️ 分镜原则
+
+### Phase 1：时长锚点（量化判断基准）
+- 正常语速约 **4~5 字/秒**，单个镜头的理想口播时长：**3~8 秒（约 12~40 字）**
+- ⚠️ **< 12 字**的分段：除非是独立金句，否则**必须合并**到相邻镜头
+- ⚠️ **> 50 字**的分段：意味着画面停留太久，观众注意力衰减，建议拆分，但拆分点本身仍需有叙事依据
+- 在 `estimatedSeconds` 字段中标注预估秒数（字数 ÷ 4.5，保留一位小数）
+- 除非模板使用TextFocus，否则不允许content中只有一个Text的情况
+
+### Phase 2：切分信号强度模型
+按叙事信号强度决定是否新建镜头，**而非按标点机械切分**：
+
+**🔴 强信号（应新建镜头）**：
+- 叙事角色彻底转换：说理/定义 → 举例/场景还原
+- 叙事角色彻底转换：铺垫/铺陈 → 行动号召/结论
+- 情绪段位跳变：平静分析 → 震惊转折 → 收束共情
+- 视觉主体完全更换：讨论 A 话题 → 转到独立的 B 话题
+
+**🟡 中等信号（倾向合并，但单段超过 40 字时可拆）**：
+- 同一论点下的多个分点（第一、第二、第三……）
+- 同一比喻的铺垫与揭示
+- 同一因果链的前提与结论
+
+**🟢 弱信号（严禁作为切分依据）**：
+- 普通逗号、顿号、冒号后的补充说明
+- 同一句话的前后半段
+- "而且""此外""所以"等常见连接词（需配合叙事角色判断）
+
+### Phase 3：合并检查
+拆完后对所有 items 做全局合并检查：
+- 相邻两个 items 若切分信号为"弱"且合并后总字数不超过 45 字 → **强制合并**
+- 相邻两个 items 若叙事角色完全相同、画面视觉重心也相同 → **强制合并**
+
+## 🧭 结构识别 → 模板选型（从上到下命中第一条）
+
+### A. 数据/量化结论（expressionTag=data）
+- 两项指标同框对比（涨跌、前后、A/B）→ `STAT_COMPARE`（必须能抽象出两个非负整数）
+- 单指标完成度/占比/达成率 → `PROGRESS_RING`
+- 单个核心数值/排名/增长率强调 → `KPI_HERO`
+
+### B. 对错/强导向（expressionTag=contrast）
+- 明确“别这样/要这样”“错误/正确” → `DOS_AND_DONTS`
+- “不是…而是…” → `COGNITIVE_SHIFT`
+
+### C. 多分点/清单/步骤（expressionTag=list|steps|method）
+- 两方/两方案并列（更中立的 A vs B）→ `SPLIT_COMPARE`
+- 当前 item 原文明确展开 **2～4** 个并列分点/并列例子，且每点需独立配图（宫格）→ `PANEL_GRID`
+- 明确步骤序列/短清单，且【同一 item 内】可抽取出 2～6 条“短步骤”（如同时出现“第一/第二/第三…”或“1)/2)/3)”），并且每条步骤建议 ≤10 字、无长解释句 → `STEP_LIST`
+  - 反例：只有“第一/第二”这一个标题句（单条）不要选 `STEP_LIST`（至少需要 2 条）
+  - 反例：每条方法/步骤后面还跟较长解释、追问或补充句（例如任一解释段 >30 字）→ 不适合 `STEP_LIST`，应拆分 item，并优先用 `METHOD_STACK`（标题式核心 + 解释展开）或 `CENTER_FOCUS`
+- “一个标题式核心（方法/建议/观点/卖点/亮点/推荐理由）+ 2～4 句解释展开” → `METHOD_STACK`
+- 同一**案例/子话题**、**单主图**，口播 **4～6 句** 呈「个案→误判/推论→纠偏→收束」叙事弧 → `CASE_BREAKDOWN`（非「第一/第二」方法清单、非多图节拍时用本模板；方法要点式仍用 `METHOD_STACK`）
+
+### D. 节拍递进（expressionTag=beat）
+- 同一镜头内 2～4 段口播节拍递进（问→驳→收束；铺垫→转折→结论），希望画面跟着分段变化 → `BEAT_SEQUENCE`
+  - **提示**：如果递进里还夹杂“强对照/命名”，通常应拆成多个 item，不要硬塞一个 `BEAT_SEQUENCE`。
+- 同一镜头内 **因果链 / 机制传导**（因→果→再果，每环一图，无时间轴刻度）→ `CAUSE_CHAIN`
+
+### E. 引用/命名/聚焦（expressionTag=quote|concept|focus）
+- 名言、著作、研究、媒体引用、用户评价、证言摘录 → `QUOTE_CITATION`
+- 对“专业术语、概念、产品名、品牌关键词、功能名等”新名词进行解释→ `CONCEPT_CARD`
+- 需要把注意力锁定到一个关键词/短语/关键细节/核心发现上 → `MAGNIFYING_GLASS`
+  - 必须存在明确落点句（如“关键在于…”“核心是…”“结论是…”）
+  - 需要后续可提取 1～2 个高价值锚点短语（否则不要选）
+
+### F. 金句冲击（expressionTag=focus）
+- 全片级短促强结论、无需配图 → `TEXT_FOCUS`
+
+### G. 时间轴，先后关系（expressionTag=timeline）
+- 明确时间先后/阶段演进（过去→现在→未来）→ `TIMELINE`
+
+### G2. 收束清单（expressionTag≈conclusion|list）
+- 收束、行动检查项、要点复诵，需要**逐项打勾显现**（非编号短步骤、非并列大图组）→ `CHECKLIST_REVEAL`
+
+### G3. 课后答疑 / 疑点解答（expressionTag≈neutral|focus）
+- 针对本课/本主题的一个疑点，讲师正式解答：`content[0]` 为问句，`content[1..]` 为答句 → `QA_REVEAL`
+- 须有完整问句 + 递进解答；**非**「有人说/网友」对话体（→ `CHAT_BUBBLE`）；**非**多图情绪递进（→ `BEAT_SEQUENCE`）；**非**收束打勾清单（→ `CHECKLIST_REVEAL`）
+
+### H. 默认（expressionTag=neutral）
+- 平缓叙述、单图即可、无上述结构 → `CENTER_FOCUS`
+
+---
+
+## ✅ 输出格式（严格 JSON，禁止包含 markdown 代码块）
+{
+  "items": [
+    {
+      "text": "逐字口播片段（必须来自原文，且拼接后覆盖原文）",
+      "narrativeType": "HOOK | LOGIC | CASE | DATA | CONCLUSION | TRANSITION",
+      "template": "必须来自可用模板列表",
+      "expressionTag": "data | contrast | list | steps | method | beat | quote | concept | focus | timeline | neutral",
+      "confidence": "low | medium | high",
+      "reasoning": "一句话说明：该段的主表达结构是什么 → 为什么选该模板 → 若拆分/合并，理由是什么"
+    }
+  ]
+}
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:31:53
+attempt: 1/3
+
+[OUTPUT]
+{
+  "items": [
+    {
+      "text": "哦，对了。冲着含华量买问界的车主，不要灰心。",
+      "narrativeType": "TRANSITION",
+      "template": "CENTER_FOCUS",
+      "expressionTag": "neutral",
+      "confidence": "high",
+      "reasoning": "该段是过渡加安抚，无数据/对比/清单等强结构，主表达为平铺叙述，故用 CENTER_FOCUS；“哦，对了”按弱信号并入本镜头。"
+    },
+    {
+      "text": "流水的车厂，铁打的华为。你们还有的选哦。",
+      "narrativeType": "CONCLUSION",
+      "template": "TEXT_FOCUS",
+      "expressionTag": "focus",
+      "confidence": "medium",
+      "reasoning": "该段是短促金句结论，核心是“铁打的华为”并收束安抚，整体作为单一文本焦点呈现，故用 TEXT_FOCUS；避免将金句与收束过度拆碎。"
+    }
+  ]
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:31:53
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+华为不是赛力斯的救世主。对赛力斯来说，华为更像一只吸血鬼。
+
+你先别急着骂。把你自己放进赛力斯老板的椅子上。问界车卖爆了。朋友圈全是华为光环。可你打开财报，手心发凉。车越多，钱越薄。利润像被一根看不见的管子，悄悄抽走。这根管子叫什么？有人叫它「华为税」。
+
+
+## 🎯 待处理的目标文案
+华为不是赛力斯的救世主。对赛力斯来说，华为更像一只吸血鬼。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "华为不是赛力斯的救世主。"
+  },
+  {
+    "index": 1,
+    "text": "对赛力斯来说，"
+  },
+  {
+    "index": 2,
+    "text": "华为更像一只吸血鬼。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:31:54
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "救世主",
+    "butText": "吸血鬼",
+    "butSrc": "华为标志如一只蝙蝠悬挂在赛力斯财务数据上方",
+    "notContentIndex": 0,
+    "butContentIndex": 2
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:31:54
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+华为不是赛力斯的救世主。对赛力斯来说，华为更像一只吸血鬼。
+
+你先别急着骂。把你自己放进赛力斯老板的椅子上。问界车卖爆了。朋友圈全是华为光环。可你打开财报，手心发凉。车越多，钱越薄。利润像被一根看不见的管子，悄悄抽走。这根管子叫什么？有人叫它「华为税」。
+
+
+## 🎯 待处理的目标文案
+你先别急着骂。把你自己放进赛力斯老板的椅子上。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "你先别急着骂。"
+  },
+  {
+    "index": 1,
+    "text": "把你自己放进赛力斯老板的椅子上。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:31:56
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "一位企业家坐在办公室皮质老板椅上，表情凝重，面前是铺满财报文件的会议桌，窗外是夜色中的城市霓虹，光线昏暗",
+    "enterEffect": "fadeIn",
+    "anchors": []
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:31:56
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+华为不是赛力斯的救世主。对赛力斯来说，华为更像一只吸血鬼。
+
+你先别急着骂。把你自己放进赛力斯老板的椅子上。问界车卖爆了。朋友圈全是华为光环。可你打开财报，手心发凉。车越多，钱越薄。利润像被一根看不见的管子，悄悄抽走。这根管子叫什么？有人叫它「华为税」。
+
+
+## 🎯 待处理的目标文案
+问界车卖爆了。朋友圈全是华为光环。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "问界车卖爆了。"
+  },
+  {
+    "index": 1,
+    "text": "朋友圈全是华为光环。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:31:59
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "panels": [
+      {
+        "src": "新能源汽车展厅内人潮涌动，问界车型前围满顾客，闪光灯不断",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "手机朋友圈界面刷屏，每条动态都带有华为标志的光环和点赞",
+        "showFrom": 1,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "src": "霓虹灯光环笼罩下的汽车轮廓，背景是社交媒体的点赞图标海洋",
+        "showFrom": 1,
+        "enterEffect": "breathe"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:31:59
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+华为不是赛力斯的救世主。对赛力斯来说，华为更像一只吸血鬼。
+
+你先别急着骂。把你自己放进赛力斯老板的椅子上。问界车卖爆了。朋友圈全是华为光环。可你打开财报，手心发凉。车越多，钱越薄。利润像被一根看不见的管子，悄悄抽走。这根管子叫什么？有人叫它「华为税」。
+
+
+## 🎯 待处理的目标文案
+可你打开财报，手心发凉。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "可你打开财报，"
+  },
+  {
+    "index": 1,
+    "text": "手心发凉。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:00
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "一双微微颤抖的手翻开一份财报文件，文件上曲线向下，背景光线冷暗",
+    "enterEffect": "fadeIn",
+    "anchors": []
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:00
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+华为不是赛力斯的救世主。对赛力斯来说，华为更像一只吸血鬼。
+
+你先别急着骂。把你自己放进赛力斯老板的椅子上。问界车卖爆了。朋友圈全是华为光环。可你打开财报，手心发凉。车越多，钱越薄。利润像被一根看不见的管子，悄悄抽走。这根管子叫什么？有人叫它「华为税」。
+
+
+## 🎯 待处理的目标文案
+车越多，钱越薄。利润像被一根看不见的管子，悄悄抽走。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "车越多，"
+  },
+  {
+    "index": 1,
+    "text": "钱越薄。"
+  },
+  {
+    "index": 2,
+    "text": "利润像被一根看不见的管子，"
+  },
+  {
+    "index": 3,
+    "text": "悄悄抽走。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CAUSE_CHAIN
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "layout": {
+      "type": "string",
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "default": "horizontal",
+      "description": "链的排布方向；横屏/常规叙事默认 horizontal，竖屏可设 vertical"
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "因果节点；showFrom 为 content 数组下标（0-based），入场时刻取该条 startFrame",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "imageSrc",
+          "showFrom"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "节点短标签，建议 2～8 字"
+          },
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该环节隐喻配图"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；顶部依次展示锚点词并保留为列表，showFrom 为 content 下标（0-based，非帧数）；保持克制，只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "nodes"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 6 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CAUSE_CHAIN",
+  "param": {
+    "layout": "horizontal",
+    "nodes": [
+      {
+        "label": "刺激",
+        "imageSrc": "闪电击中大脑的简笔画",
+        "showFrom": 0
+      },
+      {
+        "label": "解读",
+        "imageSrc": "放大镜看信息的简笔画",
+        "showFrom": 1
+      },
+      {
+        "label": "行动",
+        "imageSrc": "按下按钮的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:03
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "layout": "horizontal",
+    "nodes": [
+      {
+        "label": "销量暴涨",
+        "imageSrc": "无数车辆从流水线上涌出的简笔画",
+        "showFrom": 0,
+        "enterEffect": "slideLeft"
+      },
+      {
+        "label": "利润变薄",
+        "imageSrc": "一枚金币被压成薄片的简笔画",
+        "showFrom": 1,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "label": "隐性抽成",
+        "imageSrc": "一根透明软管从钱袋中吸走金色液体的简笔画",
+        "showFrom": 2,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "label": "利润流失",
+        "imageSrc": "金币一粒粒飘向远处消失的简笔画",
+        "showFrom": 3,
+        "enterEffect": "fadeIn"
+      }
+    ],
+    "anchors": [
+      {
+        "text": "钱越薄",
+        "showFrom": 1,
+        "color": "#EF4444",
+        "anim": "popIn",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:03
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+华为不是赛力斯的救世主。对赛力斯来说，华为更像一只吸血鬼。
+
+你先别急着骂。把你自己放进赛力斯老板的椅子上。问界车卖爆了。朋友圈全是华为光环。可你打开财报，手心发凉。车越多，钱越薄。利润像被一根看不见的管子，悄悄抽走。这根管子叫什么？有人叫它「华为税」。
+
+
+## 🎯 待处理的目标文案
+这根管子叫什么？有人叫它「华为税」。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "这根管子叫什么？"
+  },
+  {
+    "index": 1,
+    "text": "有人叫它「华为税」。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：MAGNIFYING_GLASS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "anchors": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "description": "必填且非空（建议 1～2 个高价值锚点）；每项通过 showFrom 对齐 content 分句。锚点应落在“揭示性落点句”或其核心关键词上，不要把整段说明塞满锚点",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要聚焦的关键词/短语"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "anchors"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "MAGNIFYING_GLASS",
+  "param": {
+    "anchors": [
+      {
+        "text": "忽略了基础",
+        "showFrom": 0,
+        "color": "#111111",
+        "anim": "popIn",
+        "audioEffect": "ping"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:05
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "anchors": [
+      {
+        "text": "华为税",
+        "showFrom": 1,
+        "color": "#EF4444",
+        "anim": "spring",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:05
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先算一辆车。一辆均价三十九万的问界。第一刀技术费，咱也不知道技术在哪里，反正大约七八千。第二刀渠道费，也就是华为帮忙卖车的广告费，大约三万二。这两笔加起来，就接近车价的一成。可还有第三刀。智驾、座舱、三电，也要向华为体系采购。把这些钱摊到每辆车上。公开数据粗算，2025年上半年，每卖出一辆问界，大约有十三四万要付给华为体系。听清楚。这不是赛力斯赚到手的利润被分走。这是造车、卖车时，先要付出去的成本。卖一辆，付一截。卖一万辆，付一万截。车越火，这笔成本越大。四年下来，付给华为的采购，从几十亿涨到五百多亿。这叫赋能吗？这叫规模化抽血。
+
+
+## 🎯 待处理的目标文案
+先算一辆车。一辆均价三十九万的问界。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "先算一辆车。"
+  },
+  {
+    "index": 1,
+    "text": "一辆均价三十九万的问界。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：KPI_HERO
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "number",
+      "description": "单指标模式：滚动终值（整数或小数）；若提供 blocks 则可省略"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "单指标：数字左侧"
+    },
+    "suffix": {
+      "type": "string",
+      "description": "单指标：数字右侧单位"
+    },
+    "label": {
+      "type": "string",
+      "description": "单指标：数字上方标签（与 blocks[].label 同视觉层级）"
+    },
+    "useGrouping": {
+      "type": "boolean",
+      "description": "单指标：千分位（小数时作用于整数部分）"
+    },
+    "decimalPlaces": {
+      "type": "integer",
+      "description": "单指标：小数位数，缺省按 value 自动推断"
+    },
+    "blocks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "多指标：每项 value、showFrom（content 下标）；可选 prefix、suffix、label、useGrouping",
+      "items": {
+        "type": "object",
+        "required": [
+          "value",
+          "showFrom"
+        ],
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "终值，整数或小数（如 2.5 万人）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "小数位数，缺省按 value 自动推断（如 2.5→1）"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该块出现时机：content 下标，取该条 startFrame"
+          },
+          "prefix": {
+            "type": "string"
+          },
+          "suffix": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string",
+            "description": "数字上方标签（多列时字号已加大）"
+          },
+          "useGrouping": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "countDuration": {
+      "type": "integer",
+      "description": "数字从 0 滚到目标值的 spring 时长（帧），默认 28"
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "KPI_HERO",
+  "param": {
+    "blocks": [
+      {
+        "value": 87,
+        "suffix": "%",
+        "label": "满意度",
+        "showFrom": 0
+      },
+      {
+        "value": 62,
+        "suffix": "%",
+        "label": "留存",
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:07
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "blocks": [
+      {
+        "value": 390000,
+        "prefix": "均价",
+        "suffix": "元",
+        "label": "问界M9",
+        "showFrom": 1,
+        "useGrouping": true,
+        "decimalPlaces": 0
+      }
+    ],
+    "countDuration": 30
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:07
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先算一辆车。一辆均价三十九万的问界。第一刀技术费，咱也不知道技术在哪里，反正大约七八千。第二刀渠道费，也就是华为帮忙卖车的广告费，大约三万二。这两笔加起来，就接近车价的一成。可还有第三刀。智驾、座舱、三电，也要向华为体系采购。把这些钱摊到每辆车上。公开数据粗算，2025年上半年，每卖出一辆问界，大约有十三四万要付给华为体系。听清楚。这不是赛力斯赚到手的利润被分走。这是造车、卖车时，先要付出去的成本。卖一辆，付一截。卖一万辆，付一万截。车越火，这笔成本越大。四年下来，付给华为的采购，从几十亿涨到五百多亿。这叫赋能吗？这叫规模化抽血。
+
+
+## 🎯 待处理的目标文案
+第一刀技术费，咱也不知道技术在哪里，反正大约七八千。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "第一刀技术费，"
+  },
+  {
+    "index": 1,
+    "text": "咱也不知道技术在哪里，"
+  },
+  {
+    "index": 2,
+    "text": "反正大约七八千。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：METHOD_STACK
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "该 item 的方法名/提醒标题/观点标题，建议 4~12 个字"
+    },
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "单张主图描述，用于承接这个方法或观点"
+    },
+    "notes": {
+      "type": "array",
+      "description": "可选；解释短语数组。每项含 text 与 showFrom；showFrom 为 content 下标（0-based，非帧数），须在 0～(content 条数-1) 内",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "解释短语"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "title",
+    "imageSrc"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 5 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "METHOD_STACK",
+  "param": {
+    "title": "警惕情绪画面",
+    "imageSrc": "被耸动新闻画面包围、神情紧张的人物简笔画",
+    "notes": [
+      {
+        "text": "先识别这是情绪刺激",
+        "showFrom": 1
+      },
+      {
+        "text": "再追问它是否只是离奇个案",
+        "showFrom": 3
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:09
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "title": "第一刀：技术费",
+    "imageSrc": "一柄锋利的手术刀切入一辆汽车轮廓，切口处露出齿轮与金属零件，画面冷峻，刀锋泛着寒光",
+    "notes": [
+      {
+        "text": "技术费，名不副实",
+        "showFrom": 0
+      },
+      {
+        "text": "技术在哪？说不清",
+        "showFrom": 1
+      },
+      {
+        "text": "每辆约七八千",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:09
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先算一辆车。一辆均价三十九万的问界。第一刀技术费，咱也不知道技术在哪里，反正大约七八千。第二刀渠道费，也就是华为帮忙卖车的广告费，大约三万二。这两笔加起来，就接近车价的一成。可还有第三刀。智驾、座舱、三电，也要向华为体系采购。把这些钱摊到每辆车上。公开数据粗算，2025年上半年，每卖出一辆问界，大约有十三四万要付给华为体系。听清楚。这不是赛力斯赚到手的利润被分走。这是造车、卖车时，先要付出去的成本。卖一辆，付一截。卖一万辆，付一万截。车越火，这笔成本越大。四年下来，付给华为的采购，从几十亿涨到五百多亿。这叫赋能吗？这叫规模化抽血。
+
+
+## 🎯 待处理的目标文案
+第二刀渠道费，也就是华为帮忙卖车的广告费，大约三万二。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "第二刀渠道费，"
+  },
+  {
+    "index": 1,
+    "text": "也就是华为帮忙卖车的广告费，"
+  },
+  {
+    "index": 2,
+    "text": "大约三万二。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：METHOD_STACK
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "该 item 的方法名/提醒标题/观点标题，建议 4~12 个字"
+    },
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "单张主图描述，用于承接这个方法或观点"
+    },
+    "notes": {
+      "type": "array",
+      "description": "可选；解释短语数组。每项含 text 与 showFrom；showFrom 为 content 下标（0-based，非帧数），须在 0～(content 条数-1) 内",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "解释短语"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "title",
+    "imageSrc"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 5 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "METHOD_STACK",
+  "param": {
+    "title": "警惕情绪画面",
+    "imageSrc": "被耸动新闻画面包围、神情紧张的人物简笔画",
+    "notes": [
+      {
+        "text": "先识别这是情绪刺激",
+        "showFrom": 1
+      },
+      {
+        "text": "再追问它是否只是离奇个案",
+        "showFrom": 3
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:11
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "title": "渠道费",
+    "imageSrc": "一辆崭新的问界汽车停在华为门店前，车身旁有销售人员在挥手介绍，背景是明亮的展厅灯光和品牌标识的氛围",
+    "notes": [
+      {
+        "text": "华为渠道卖车，每辆抽走三万二",
+        "showFrom": 1
+      },
+      {
+        "text": "这笔钱还没造车就要先付",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:11
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先算一辆车。一辆均价三十九万的问界。第一刀技术费，咱也不知道技术在哪里，反正大约七八千。第二刀渠道费，也就是华为帮忙卖车的广告费，大约三万二。这两笔加起来，就接近车价的一成。可还有第三刀。智驾、座舱、三电，也要向华为体系采购。把这些钱摊到每辆车上。公开数据粗算，2025年上半年，每卖出一辆问界，大约有十三四万要付给华为体系。听清楚。这不是赛力斯赚到手的利润被分走。这是造车、卖车时，先要付出去的成本。卖一辆，付一截。卖一万辆，付一万截。车越火，这笔成本越大。四年下来，付给华为的采购，从几十亿涨到五百多亿。这叫赋能吗？这叫规模化抽血。
+
+
+## 🎯 待处理的目标文案
+这两笔加起来，就接近车价的一成。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "这两笔加起来，"
+  },
+  {
+    "index": 1,
+    "text": "就接近车价的一成。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PROGRESS_RING
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "percent": {
+      "type": "integer",
+      "description": "单组模式：进度百分比 0–100；若提供 blocks 则可省略"
+    },
+    "label": {
+      "type": "string",
+      "description": "单组：主标题；多组请用 blocks[].label"
+    },
+    "subLabel": {
+      "type": "string",
+      "description": "单组：副标题或口径说明"
+    },
+    "blocks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "多组：每项 percent、label、showFrom（content 下标）；可选 subLabel、ringColor",
+      "items": {
+        "type": "object",
+        "required": [
+          "percent",
+          "label",
+          "showFrom"
+        ],
+        "properties": {
+          "percent": {
+            "type": "integer",
+            "description": "0–100"
+          },
+          "label": {
+            "type": "string"
+          },
+          "subLabel": {
+            "type": "string"
+          },
+          "ringColor": {
+            "type": "string",
+            "description": "环与进度弧颜色，默认 #2B6CB0"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该列出现时机：content 下标，取该条 startFrame"
+          }
+        }
+      }
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PROGRESS_RING",
+  "param": {
+    "blocks": [
+      {
+        "percent": 78,
+        "label": "项目完成度",
+        "subLabel": "Q1",
+        "showFrom": 0
+      },
+      {
+        "percent": 62,
+        "label": "测试覆盖",
+        "ringColor": "#059669",
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:13
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "percent": 10,
+    "label": "渠道+技术费",
+    "subLabel": "占车价约一成",
+    "ringColor": "#EF4444"
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:13
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先算一辆车。一辆均价三十九万的问界。第一刀技术费，咱也不知道技术在哪里，反正大约七八千。第二刀渠道费，也就是华为帮忙卖车的广告费，大约三万二。这两笔加起来，就接近车价的一成。可还有第三刀。智驾、座舱、三电，也要向华为体系采购。把这些钱摊到每辆车上。公开数据粗算，2025年上半年，每卖出一辆问界，大约有十三四万要付给华为体系。听清楚。这不是赛力斯赚到手的利润被分走。这是造车、卖车时，先要付出去的成本。卖一辆，付一截。卖一万辆，付一万截。车越火，这笔成本越大。四年下来，付给华为的采购，从几十亿涨到五百多亿。这叫赋能吗？这叫规模化抽血。
+
+
+## 🎯 待处理的目标文案
+可还有第三刀。智驾、座舱、三电，也要向华为体系采购。把这些钱摊到每辆车上。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "可还有第三刀。"
+  },
+  {
+    "index": 1,
+    "text": "智驾、"
+  },
+  {
+    "index": 2,
+    "text": "座舱、"
+  },
+  {
+    "index": 3,
+    "text": "三电，"
+  },
+  {
+    "index": 4,
+    "text": "也要向华为体系采购。"
+  },
+  {
+    "index": 5,
+    "text": "把这些钱摊到每辆车上。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:16
+attempt: 1/3
+
+[OUTPUT]
+{"param":{"panels":[{"src":"锋利刀刃切入画面的特写，暗色背景","showFrom":0,"enterEffect":"zoomIn"},{"src":"智能驾驶芯片与电路板的科技感画面，蓝光色调","showFrom":1,"enterEffect":"slideLeft"},{"src":"汽车座舱内部视角，中控屏亮起","showFrom":2,"enterEffect":"fadeIn"},{"src":"电池与电机模组排列的特写，金属质感","showFrom":3,"enterEffect":"slideBottom"},{"src":"华为店铺招牌下的汽车展厅，明亮灯光","showFrom":4,"enterEffect":"fadeIn"},{"src":"成堆金币散落在车顶，钱币滑落","showFrom":5,"enterEffect":"breathe"}]}}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:16
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先算一辆车。一辆均价三十九万的问界。第一刀技术费，咱也不知道技术在哪里，反正大约七八千。第二刀渠道费，也就是华为帮忙卖车的广告费，大约三万二。这两笔加起来，就接近车价的一成。可还有第三刀。智驾、座舱、三电，也要向华为体系采购。把这些钱摊到每辆车上。公开数据粗算，2025年上半年，每卖出一辆问界，大约有十三四万要付给华为体系。听清楚。这不是赛力斯赚到手的利润被分走。这是造车、卖车时，先要付出去的成本。卖一辆，付一截。卖一万辆，付一万截。车越火，这笔成本越大。四年下来，付给华为的采购，从几十亿涨到五百多亿。这叫赋能吗？这叫规模化抽血。
+
+
+## 🎯 待处理的目标文案
+公开数据粗算，2025年上半年，每卖出一辆问界，大约有十三四万要付给华为体系。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "公开数据粗算，"
+  },
+  {
+    "index": 1,
+    "text": "2025年上半年，"
+  },
+  {
+    "index": 2,
+    "text": "每卖出一辆问界，"
+  },
+  {
+    "index": 3,
+    "text": "大约有十三四万要付给华为体系。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：KPI_HERO
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "number",
+      "description": "单指标模式：滚动终值（整数或小数）；若提供 blocks 则可省略"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "单指标：数字左侧"
+    },
+    "suffix": {
+      "type": "string",
+      "description": "单指标：数字右侧单位"
+    },
+    "label": {
+      "type": "string",
+      "description": "单指标：数字上方标签（与 blocks[].label 同视觉层级）"
+    },
+    "useGrouping": {
+      "type": "boolean",
+      "description": "单指标：千分位（小数时作用于整数部分）"
+    },
+    "decimalPlaces": {
+      "type": "integer",
+      "description": "单指标：小数位数，缺省按 value 自动推断"
+    },
+    "blocks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "多指标：每项 value、showFrom（content 下标）；可选 prefix、suffix、label、useGrouping",
+      "items": {
+        "type": "object",
+        "required": [
+          "value",
+          "showFrom"
+        ],
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "终值，整数或小数（如 2.5 万人）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "小数位数，缺省按 value 自动推断（如 2.5→1）"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该块出现时机：content 下标，取该条 startFrame"
+          },
+          "prefix": {
+            "type": "string"
+          },
+          "suffix": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string",
+            "description": "数字上方标签（多列时字号已加大）"
+          },
+          "useGrouping": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "countDuration": {
+      "type": "integer",
+      "description": "数字从 0 滚到目标值的 spring 时长（帧），默认 28"
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "KPI_HERO",
+  "param": {
+    "blocks": [
+      {
+        "value": 87,
+        "suffix": "%",
+        "label": "满意度",
+        "showFrom": 0
+      },
+      {
+        "value": 62,
+        "suffix": "%",
+        "label": "留存",
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:18
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "blocks": [
+      {
+        "value": 13.5,
+        "suffix": "万",
+        "prefix": "约",
+        "label": "每辆问界付给华为体系",
+        "showFrom": 2,
+        "decimalPlaces": 1,
+        "useGrouping": false
+      }
+    ],
+    "countDuration": 32
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:18
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先算一辆车。一辆均价三十九万的问界。第一刀技术费，咱也不知道技术在哪里，反正大约七八千。第二刀渠道费，也就是华为帮忙卖车的广告费，大约三万二。这两笔加起来，就接近车价的一成。可还有第三刀。智驾、座舱、三电，也要向华为体系采购。把这些钱摊到每辆车上。公开数据粗算，2025年上半年，每卖出一辆问界，大约有十三四万要付给华为体系。听清楚。这不是赛力斯赚到手的利润被分走。这是造车、卖车时，先要付出去的成本。卖一辆，付一截。卖一万辆，付一万截。车越火，这笔成本越大。四年下来，付给华为的采购，从几十亿涨到五百多亿。这叫赋能吗？这叫规模化抽血。
+
+
+## 🎯 待处理的目标文案
+听清楚。这不是赛力斯赚到手的利润被分走。这是造车、卖车时，先要付出去的成本。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "听清楚。"
+  },
+  {
+    "index": 1,
+    "text": "这不是赛力斯赚到手的利润被分走。"
+  },
+  {
+    "index": 2,
+    "text": "这是造车、"
+  },
+  {
+    "index": 3,
+    "text": "卖车时，"
+  },
+  {
+    "index": 4,
+    "text": "先要付出去的成本。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:20
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "利润被分走",
+    "butText": "先付的成本",
+    "butSrc": "流水线上正在组装汽车的机械臂与车架",
+    "notContentIndex": 1,
+    "butContentIndex": 4
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:20
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先算一辆车。一辆均价三十九万的问界。第一刀技术费，咱也不知道技术在哪里，反正大约七八千。第二刀渠道费，也就是华为帮忙卖车的广告费，大约三万二。这两笔加起来，就接近车价的一成。可还有第三刀。智驾、座舱、三电，也要向华为体系采购。把这些钱摊到每辆车上。公开数据粗算，2025年上半年，每卖出一辆问界，大约有十三四万要付给华为体系。听清楚。这不是赛力斯赚到手的利润被分走。这是造车、卖车时，先要付出去的成本。卖一辆，付一截。卖一万辆，付一万截。车越火，这笔成本越大。四年下来，付给华为的采购，从几十亿涨到五百多亿。这叫赋能吗？这叫规模化抽血。
+
+
+## 🎯 待处理的目标文案
+卖一辆，付一截。卖一万辆，付一万截。车越火，这笔成本越大。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "卖一辆，"
+  },
+  {
+    "index": 1,
+    "text": "付一截。"
+  },
+  {
+    "index": 2,
+    "text": "卖一万辆，"
+  },
+  {
+    "index": 3,
+    "text": "付一万截。"
+  },
+  {
+    "index": 4,
+    "text": "车越火，"
+  },
+  {
+    "index": 5,
+    "text": "这笔成本越大。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:22
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "一条汽车生产线上一辆车被推走，旁白节奏感强的剪影式画面，黑色背景",
+        "enterEffect": "slideLeft",
+        "tone": "calm",
+        "showFrom": 0
+      },
+      {
+        "imageSrc": "大量汽车排满画面，层层叠加形成堆积感，氛围压抑",
+        "enterEffect": "zoomIn",
+        "tone": "alert",
+        "showFrom": 2
+      },
+      {
+        "imageSrc": "火苗在车阵上方蔓延，车越多火越旺，视觉压迫感强",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 4
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:22
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先算一辆车。一辆均价三十九万的问界。第一刀技术费，咱也不知道技术在哪里，反正大约七八千。第二刀渠道费，也就是华为帮忙卖车的广告费，大约三万二。这两笔加起来，就接近车价的一成。可还有第三刀。智驾、座舱、三电，也要向华为体系采购。把这些钱摊到每辆车上。公开数据粗算，2025年上半年，每卖出一辆问界，大约有十三四万要付给华为体系。听清楚。这不是赛力斯赚到手的利润被分走。这是造车、卖车时，先要付出去的成本。卖一辆，付一截。卖一万辆，付一万截。车越火，这笔成本越大。四年下来，付给华为的采购，从几十亿涨到五百多亿。这叫赋能吗？这叫规模化抽血。
+
+
+## 🎯 待处理的目标文案
+四年下来，付给华为的采购，从几十亿涨到五百多亿。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "四年下来，"
+  },
+  {
+    "index": 1,
+    "text": "付给华为的采购，"
+  },
+  {
+    "index": 2,
+    "text": "从几十亿涨到五百多亿。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：STAT_COMPARE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "bars": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "多条柱状对比；每项须含 label、value（非负数，整数或小数）、showFrom（content 下标），从该条 startFrame 起显示本柱",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "value",
+          "showFrom"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "短标签"
+          },
+          "value": {
+            "type": "number",
+            "description": "数值（非负，整数或小数）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "小数位数；缺省按 value 自动推断"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该柱出现时机：content 数组下标（0-based），取该条 startFrame 作为入场起点"
+          }
+        }
+      }
+    },
+    "leftValue": {
+      "type": "number",
+      "description": "左侧数值（非负），旧版两柱模式"
+    },
+    "rightValue": {
+      "type": "number",
+      "description": "右侧数值（非负），旧版两柱模式"
+    },
+    "leftLabel": {
+      "type": "string",
+      "description": "左侧标签"
+    },
+    "rightLabel": {
+      "type": "string",
+      "description": "右侧标签"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；顶部锚点词列表，showFrom 为 content 下标（取该条 startFrame），与 KPI_HERO / DATA_TABLE 一致",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "锚点词文案"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "STAT_COMPARE",
+  "param": {
+    "bars": [
+      {
+        "label": "去年",
+        "value": 32,
+        "showFrom": 0
+      },
+      {
+        "label": "今年",
+        "value": 68,
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:25
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "bars": [
+      {
+        "label": "初期",
+        "value": 30,
+        "showFrom": 0
+      },
+      {
+        "label": "四年后",
+        "value": 500,
+        "showFrom": 2
+      }
+    ],
+    "anchors": [
+      {
+        "text": "五百多亿",
+        "showFrom": 2,
+        "color": "#EF4444",
+        "anim": "spring",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:25
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先算一辆车。一辆均价三十九万的问界。第一刀技术费，咱也不知道技术在哪里，反正大约七八千。第二刀渠道费，也就是华为帮忙卖车的广告费，大约三万二。这两笔加起来，就接近车价的一成。可还有第三刀。智驾、座舱、三电，也要向华为体系采购。把这些钱摊到每辆车上。公开数据粗算，2025年上半年，每卖出一辆问界，大约有十三四万要付给华为体系。听清楚。这不是赛力斯赚到手的利润被分走。这是造车、卖车时，先要付出去的成本。卖一辆，付一截。卖一万辆，付一万截。车越火，这笔成本越大。四年下来，付给华为的采购，从几十亿涨到五百多亿。这叫赋能吗？这叫规模化抽血。
+
+
+## 🎯 待处理的目标文案
+这叫赋能吗？这叫规模化抽血。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "这叫赋能吗？"
+  },
+  {
+    "index": 1,
+    "text": "这叫规模化抽血。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:27
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "这叫赋能吗？",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "这叫规模化抽血。",
+        "showFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "规模化抽血",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:27
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先不说这钱花得值不值。对赛力斯来说，更要命的是「增收不增利」。
+2025年营收一千六百五十亿，净利率却只有三点六。一千六百亿体量，利润薄得像一张纸。到2026年上半年，更残酷。净亏损十七亿。短短半年之间，就从赚钱变成流血。
+车卖出去了。热闹有了。品牌热度有了。可账上，是亏的。你说，一个老板看着这种报表，心里什么滋味？是感恩吗？不，是恐惧。
+
+
+## 🎯 待处理的目标文案
+先不说这钱花得值不值。对赛力斯来说，更要命的是「增收不增利」。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "先不说这钱花得值不值。"
+  },
+  {
+    "index": 1,
+    "text": "对赛力斯来说，"
+  },
+  {
+    "index": 2,
+    "text": "更要命的是「增收不增利」。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：MAGNIFYING_GLASS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "anchors": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "description": "必填且非空（建议 1～2 个高价值锚点）；每项通过 showFrom 对齐 content 分句。锚点应落在“揭示性落点句”或其核心关键词上，不要把整段说明塞满锚点",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要聚焦的关键词/短语"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "anchors"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "MAGNIFYING_GLASS",
+  "param": {
+    "anchors": [
+      {
+        "text": "忽略了基础",
+        "showFrom": 0,
+        "color": "#111111",
+        "anim": "popIn",
+        "audioEffect": "ping"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:28
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "anchors": [
+      {
+        "text": "增收不增利",
+        "showFrom": 2,
+        "color": "#EF4444",
+        "anim": "popIn",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:28
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先不说这钱花得值不值。对赛力斯来说，更要命的是「增收不增利」。
+2025年营收一千六百五十亿，净利率却只有三点六。一千六百亿体量，利润薄得像一张纸。到2026年上半年，更残酷。净亏损十七亿。短短半年之间，就从赚钱变成流血。
+车卖出去了。热闹有了。品牌热度有了。可账上，是亏的。你说，一个老板看着这种报表，心里什么滋味？是感恩吗？不，是恐惧。
+
+
+## 🎯 待处理的目标文案
+2025年营收一千六百五十亿，净利率却只有三点六。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "2025年营收一千六百五十亿，"
+  },
+  {
+    "index": 1,
+    "text": "净利率却只有三点六。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：KPI_HERO
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "number",
+      "description": "单指标模式：滚动终值（整数或小数）；若提供 blocks 则可省略"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "单指标：数字左侧"
+    },
+    "suffix": {
+      "type": "string",
+      "description": "单指标：数字右侧单位"
+    },
+    "label": {
+      "type": "string",
+      "description": "单指标：数字上方标签（与 blocks[].label 同视觉层级）"
+    },
+    "useGrouping": {
+      "type": "boolean",
+      "description": "单指标：千分位（小数时作用于整数部分）"
+    },
+    "decimalPlaces": {
+      "type": "integer",
+      "description": "单指标：小数位数，缺省按 value 自动推断"
+    },
+    "blocks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "多指标：每项 value、showFrom（content 下标）；可选 prefix、suffix、label、useGrouping",
+      "items": {
+        "type": "object",
+        "required": [
+          "value",
+          "showFrom"
+        ],
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "终值，整数或小数（如 2.5 万人）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "小数位数，缺省按 value 自动推断（如 2.5→1）"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该块出现时机：content 下标，取该条 startFrame"
+          },
+          "prefix": {
+            "type": "string"
+          },
+          "suffix": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string",
+            "description": "数字上方标签（多列时字号已加大）"
+          },
+          "useGrouping": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "countDuration": {
+      "type": "integer",
+      "description": "数字从 0 滚到目标值的 spring 时长（帧），默认 28"
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "KPI_HERO",
+  "param": {
+    "blocks": [
+      {
+        "value": 87,
+        "suffix": "%",
+        "label": "满意度",
+        "showFrom": 0
+      },
+      {
+        "value": 62,
+        "suffix": "%",
+        "label": "留存",
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:30
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "blocks": [
+      {
+        "value": 1650,
+        "suffix": "亿",
+        "label": "2025年营收",
+        "useGrouping": true,
+        "showFrom": 0
+      },
+      {
+        "value": 3.6,
+        "suffix": "%",
+        "label": "净利率",
+        "decimalPlaces": 1,
+        "showFrom": 1
+      }
+    ],
+    "countDuration": 28
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:30
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先不说这钱花得值不值。对赛力斯来说，更要命的是「增收不增利」。
+2025年营收一千六百五十亿，净利率却只有三点六。一千六百亿体量，利润薄得像一张纸。到2026年上半年，更残酷。净亏损十七亿。短短半年之间，就从赚钱变成流血。
+车卖出去了。热闹有了。品牌热度有了。可账上，是亏的。你说，一个老板看着这种报表，心里什么滋味？是感恩吗？不，是恐惧。
+
+
+## 🎯 待处理的目标文案
+一千六百亿体量，利润薄得像一张纸。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "一千六百亿体量，"
+  },
+  {
+    "index": 1,
+    "text": "利润薄得像一张纸。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:32
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "一千六百亿体量，",
+        "showFrom": 0,
+        "endFrom": 1
+      },
+      {
+        "text": "利润薄得像一张纸。",
+        "showFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "薄得像一张纸",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:32
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先不说这钱花得值不值。对赛力斯来说，更要命的是「增收不增利」。
+2025年营收一千六百五十亿，净利率却只有三点六。一千六百亿体量，利润薄得像一张纸。到2026年上半年，更残酷。净亏损十七亿。短短半年之间，就从赚钱变成流血。
+车卖出去了。热闹有了。品牌热度有了。可账上，是亏的。你说，一个老板看着这种报表，心里什么滋味？是感恩吗？不，是恐惧。
+
+
+## 🎯 待处理的目标文案
+到2026年上半年，更残酷。净亏损十七亿。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "到2026年上半年，"
+  },
+  {
+    "index": 1,
+    "text": "更残酷。"
+  },
+  {
+    "index": 2,
+    "text": "净亏损十七亿。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：KPI_HERO
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "number",
+      "description": "单指标模式：滚动终值（整数或小数）；若提供 blocks 则可省略"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "单指标：数字左侧"
+    },
+    "suffix": {
+      "type": "string",
+      "description": "单指标：数字右侧单位"
+    },
+    "label": {
+      "type": "string",
+      "description": "单指标：数字上方标签（与 blocks[].label 同视觉层级）"
+    },
+    "useGrouping": {
+      "type": "boolean",
+      "description": "单指标：千分位（小数时作用于整数部分）"
+    },
+    "decimalPlaces": {
+      "type": "integer",
+      "description": "单指标：小数位数，缺省按 value 自动推断"
+    },
+    "blocks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "description": "多指标：每项 value、showFrom（content 下标）；可选 prefix、suffix、label、useGrouping",
+      "items": {
+        "type": "object",
+        "required": [
+          "value",
+          "showFrom"
+        ],
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "终值，整数或小数（如 2.5 万人）"
+          },
+          "decimalPlaces": {
+            "type": "integer",
+            "description": "小数位数，缺省按 value 自动推断（如 2.5→1）"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "该块出现时机：content 下标，取该条 startFrame"
+          },
+          "prefix": {
+            "type": "string"
+          },
+          "suffix": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string",
+            "description": "数字上方标签（多列时字号已加大）"
+          },
+          "useGrouping": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "countDuration": {
+      "type": "integer",
+      "description": "数字从 0 滚到目标值的 spring 时长（帧），默认 28"
+    }
+  },
+  "required": []
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "KPI_HERO",
+  "param": {
+    "blocks": [
+      {
+        "value": 87,
+        "suffix": "%",
+        "label": "满意度",
+        "showFrom": 0
+      },
+      {
+        "value": 62,
+        "suffix": "%",
+        "label": "留存",
+        "showFrom": 1
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:34
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "blocks": [
+      {
+        "value": 2026,
+        "label": "到这一刻",
+        "suffix": "上半年",
+        "showFrom": 0,
+        "useGrouping": false
+      },
+      {
+        "value": 17,
+        "prefix": "净亏损",
+        "suffix": "亿",
+        "label": "更残酷",
+        "showFrom": 2,
+        "useGrouping": false
+      }
+    ],
+    "countDuration": 30
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:34
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先不说这钱花得值不值。对赛力斯来说，更要命的是「增收不增利」。
+2025年营收一千六百五十亿，净利率却只有三点六。一千六百亿体量，利润薄得像一张纸。到2026年上半年，更残酷。净亏损十七亿。短短半年之间，就从赚钱变成流血。
+车卖出去了。热闹有了。品牌热度有了。可账上，是亏的。你说，一个老板看着这种报表，心里什么滋味？是感恩吗？不，是恐惧。
+
+
+## 🎯 待处理的目标文案
+短短半年之间，就从赚钱变成流血。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "短短半年之间，"
+  },
+  {
+    "index": 1,
+    "text": "就从赚钱变成流血。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:36
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "赚钱",
+    "butText": "流血",
+    "butSrc": "财务报表上的数字渐渐模糊，纸面渗出暗红色液体，滴落在桌面上，冷色调办公室灯光下，一片灰暗压抑的氛围",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:36
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先不说这钱花得值不值。对赛力斯来说，更要命的是「增收不增利」。
+2025年营收一千六百五十亿，净利率却只有三点六。一千六百亿体量，利润薄得像一张纸。到2026年上半年，更残酷。净亏损十七亿。短短半年之间，就从赚钱变成流血。
+车卖出去了。热闹有了。品牌热度有了。可账上，是亏的。你说，一个老板看着这种报表，心里什么滋味？是感恩吗？不，是恐惧。
+
+
+## 🎯 待处理的目标文案
+车卖出去了。热闹有了。品牌热度有了。可账上，是亏的。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "车卖出去了。"
+  },
+  {
+    "index": 1,
+    "text": "热闹有了。"
+  },
+  {
+    "index": 2,
+    "text": "品牌热度有了。"
+  },
+  {
+    "index": 3,
+    "text": "可账上，"
+  },
+  {
+    "index": 4,
+    "text": "是亏的。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:38
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "一排新车从工厂驶离，车灯亮着，远处城市天际线",
+        "enterEffect": "slideLeft",
+        "tone": "calm"
+      },
+      {
+        "imageSrc": "夜晚霓虹灯闪耀，人群聚集，气氛热烈",
+        "enterEffect": "breathe",
+        "tone": "calm"
+      },
+      {
+        "imageSrc": "品牌标志在摩天大楼大屏上闪烁，社交媒体点赞图标跳动",
+        "enterEffect": "breathe",
+        "tone": "calm"
+      },
+      {
+        "imageSrc": "办公桌上财务报表特写，红色钢笔划出负数，灯光突然变暗",
+        "enterEffect": "zoomIn",
+        "tone": "alert"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:38
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+先不说这钱花得值不值。对赛力斯来说，更要命的是「增收不增利」。
+2025年营收一千六百五十亿，净利率却只有三点六。一千六百亿体量，利润薄得像一张纸。到2026年上半年，更残酷。净亏损十七亿。短短半年之间，就从赚钱变成流血。
+车卖出去了。热闹有了。品牌热度有了。可账上，是亏的。你说，一个老板看着这种报表，心里什么滋味？是感恩吗？不，是恐惧。
+
+
+## 🎯 待处理的目标文案
+你说，一个老板看着这种报表，心里什么滋味？是感恩吗？不，是恐惧。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "你说，"
+  },
+  {
+    "index": 1,
+    "text": "一个老板看着这种报表，"
+  },
+  {
+    "index": 2,
+    "text": "心里什么滋味？"
+  },
+  {
+    "index": 3,
+    "text": "是感恩吗？"
+  },
+  {
+    "index": 4,
+    "text": "不，"
+  },
+  {
+    "index": 5,
+    "text": "是恐惧。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：COGNITIVE_SHIFT
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "notText": {
+      "type": "string",
+      "description": "被否认知（‘不是’后面的内容）的精炼短句，不超过12个字，"
+    },
+    "butText": {
+      "type": "string",
+      "description": "真实认知（‘而是’后面的内容）的精炼短句，不超过12个字"
+    },
+    "butSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "真实认知的配图"
+    },
+    "notContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「不是」动画的字幕段索引（默认 0）"
+    },
+    "butContentIndex": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "触发「而是」动画的字幕段索引（默认 1）"
+    }
+  },
+  "required": [
+    "notText",
+    "butText"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "COGNITIVE_SHIFT",
+  "content": [
+    "我们都不应该靠勤奋拼命",
+    "我们都应该是靠认知和选择",
+    "这样我才能成功"
+  ],
+  "param": {
+    "notText": "靠勤奋拼命",
+    "butText": "靠认知和选择",
+    "butSrc": "站在高处看地图的思考者",
+    "notContentIndex": 0,
+    "butContentIndex": 1
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:40
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "notText": "感恩",
+    "butText": "恐惧",
+    "butSrc": "深夜办公室，一个西装男子独自坐在老板椅上，手中拿着财务报表，眉头紧锁，窗外城市夜景，桌面灯光昏暗，气氛压抑",
+    "notContentIndex": 3,
+    "butContentIndex": 5
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:40
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+更憋屈的还在后面。问界帮鸿蒙智行把招牌打响之后，华为开始铺五界。智界、享界、尊界、尚界，一起上桌。问界销量占比，从2024年大约87%，掉到2025年七成出头，再到2026年上半年大约六成七。招牌是你打的。流量开始分给别人。
+尊界去冲百万豪车。智界去抢年轻科技。享界去打行政豪华。尚界去卷大众市场。赛力斯呢？还在交高额渠道费。还在被消费者叫「华为车」。利润被抽走。独特性也被稀释。
+到最后，赛力斯既没有实打实利润，又没有了自己的品牌灵魂。
+
+做问界之前，好歹大家还知道他是东风小康，传统面包神车。做问界之后，大家只知道这是华为的车了。
+
+所以对于赛力斯来说，拔掉华为，是迟早的事情。
+
+
+## 🎯 待处理的目标文案
+更憋屈的还在后面。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "更憋屈的还在后面。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:41
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "更憋屈的还在后面。",
+        "showFrom": 0
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "更憋屈",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:41
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+更憋屈的还在后面。问界帮鸿蒙智行把招牌打响之后，华为开始铺五界。智界、享界、尊界、尚界，一起上桌。问界销量占比，从2024年大约87%，掉到2025年七成出头，再到2026年上半年大约六成七。招牌是你打的。流量开始分给别人。
+尊界去冲百万豪车。智界去抢年轻科技。享界去打行政豪华。尚界去卷大众市场。赛力斯呢？还在交高额渠道费。还在被消费者叫「华为车」。利润被抽走。独特性也被稀释。
+到最后，赛力斯既没有实打实利润，又没有了自己的品牌灵魂。
+
+做问界之前，好歹大家还知道他是东风小康，传统面包神车。做问界之后，大家只知道这是华为的车了。
+
+所以对于赛力斯来说，拔掉华为，是迟早的事情。
+
+
+## 🎯 待处理的目标文案
+问界帮鸿蒙智行把招牌打响之后，华为开始铺五界。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "问界帮鸿蒙智行把招牌打响之后，"
+  },
+  {
+    "index": 1,
+    "text": "华为开始铺五界。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:43
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "一辆汽车标志在聚光灯下闪耀，背景逐渐展开五条分支路线，象征品牌扩张",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "五界",
+        "showFrom": 1,
+        "color": "#EF4444",
+        "anim": "popIn",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:43
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+更憋屈的还在后面。问界帮鸿蒙智行把招牌打响之后，华为开始铺五界。智界、享界、尊界、尚界，一起上桌。问界销量占比，从2024年大约87%，掉到2025年七成出头，再到2026年上半年大约六成七。招牌是你打的。流量开始分给别人。
+尊界去冲百万豪车。智界去抢年轻科技。享界去打行政豪华。尚界去卷大众市场。赛力斯呢？还在交高额渠道费。还在被消费者叫「华为车」。利润被抽走。独特性也被稀释。
+到最后，赛力斯既没有实打实利润，又没有了自己的品牌灵魂。
+
+做问界之前，好歹大家还知道他是东风小康，传统面包神车。做问界之后，大家只知道这是华为的车了。
+
+所以对于赛力斯来说，拔掉华为，是迟早的事情。
+
+
+## 🎯 待处理的目标文案
+智界、享界、尊界、尚界，一起上桌。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "智界、"
+  },
+  {
+    "index": 1,
+    "text": "享界、"
+  },
+  {
+    "index": 2,
+    "text": "尊界、"
+  },
+  {
+    "index": 3,
+    "text": "尚界，"
+  },
+  {
+    "index": 4,
+    "text": "一起上桌。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:46
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "panels": [
+      {
+        "src": "四个不同标志的汽车品牌剪影同时出现在一张餐桌上",
+        "showFrom": 0,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "src": "四个汽车标志汇聚于桌面中央，桌面光芒渐亮",
+        "showFrom": 1,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "俯视角四宫格渐次点亮，每个格子浮现不同车型轮廓",
+        "showFrom": 2,
+        "enterEffect": "slideLeft"
+      },
+      {
+        "src": "四辆不同定位的汽车并排驶入画面，停在同一展台",
+        "showFrom": 3,
+        "enterEffect": "slideBottom"
+      },
+      {
+        "src": "四辆车同时亮相，车灯依次点亮后镜头拉远展示全景",
+        "showFrom": 4,
+        "enterEffect": "fadeIn"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:46
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+更憋屈的还在后面。问界帮鸿蒙智行把招牌打响之后，华为开始铺五界。智界、享界、尊界、尚界，一起上桌。问界销量占比，从2024年大约87%，掉到2025年七成出头，再到2026年上半年大约六成七。招牌是你打的。流量开始分给别人。
+尊界去冲百万豪车。智界去抢年轻科技。享界去打行政豪华。尚界去卷大众市场。赛力斯呢？还在交高额渠道费。还在被消费者叫「华为车」。利润被抽走。独特性也被稀释。
+到最后，赛力斯既没有实打实利润，又没有了自己的品牌灵魂。
+
+做问界之前，好歹大家还知道他是东风小康，传统面包神车。做问界之后，大家只知道这是华为的车了。
+
+所以对于赛力斯来说，拔掉华为，是迟早的事情。
+
+
+## 🎯 待处理的目标文案
+问界销量占比，从2024年大约87%，掉到2025年七成出头，再到2026年上半年大约六成七。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "问界销量占比，"
+  },
+  {
+    "index": 1,
+    "text": "从2024年大约87%，"
+  },
+  {
+    "index": 2,
+    "text": "掉到2025年七成出头，"
+  },
+  {
+    "index": 3,
+    "text": "再到2026年上半年大约六成七。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TIMELINE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "images": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 5,
+      "description": "时间轴节点配图（3～5 项）；顺序即时间先后，横向从左到右均分",
+      "items": {
+        "type": "object",
+        "required": [
+          "src"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节点配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe"
+          },
+          "textIndex": {
+            "type": "integer",
+            "format": "content_index"
+          },
+          "startFrame": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string",
+            "description": "节点短标注（建议 2～12 字）；轴上方节点显示在配图上方，轴下方节点显示在配图下方"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "images"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TIMELINE",
+  "param": {
+    "images": [
+      {
+        "src": "1990年代电脑图标",
+        "enterEffect": "slideLeft",
+        "label": "1990s"
+      },
+      {
+        "src": "2010年代笔记本图标",
+        "enterEffect": "fadeIn",
+        "label": "2010s"
+      },
+      {
+        "src": "2020年代手机图标",
+        "enterEffect": "slideLeft",
+        "label": "2020s"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:50
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "images": [
+      {
+        "src": "一个向上的绿色箭头柱状图图标，顶部标有一辆白色SUV轮廓，背景为璀璨星空，柱状图高度处于最高状态",
+        "enterEffect": "zoomIn",
+        "label": "2024年 87%",
+        "textIndex": 1,
+        "startFrame": 0
+      },
+      {
+        "src": "同一个向上的绿色箭头柱状图图标但高度明显下降，顶部有一辆白色SUV轮廓变淡，背景渐变略暗，柱状图高度下降明显",
+        "enterEffect": "fadeIn",
+        "label": "2025年 70%",
+        "textIndex": 2,
+        "startFrame": 30
+      },
+      {
+        "src": "绿色箭头柱状图继续下降变成半透明，顶部白色SUV几乎模糊消散，背景变成其他深色车影先后驶离的光轨，柱状图处于更低水平",
+        "enterEffect": "slideLeft",
+        "label": "2026年 67%",
+        "textIndex": 3,
+        "startFrame": 60
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:50
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+更憋屈的还在后面。问界帮鸿蒙智行把招牌打响之后，华为开始铺五界。智界、享界、尊界、尚界，一起上桌。问界销量占比，从2024年大约87%，掉到2025年七成出头，再到2026年上半年大约六成七。招牌是你打的。流量开始分给别人。
+尊界去冲百万豪车。智界去抢年轻科技。享界去打行政豪华。尚界去卷大众市场。赛力斯呢？还在交高额渠道费。还在被消费者叫「华为车」。利润被抽走。独特性也被稀释。
+到最后，赛力斯既没有实打实利润，又没有了自己的品牌灵魂。
+
+做问界之前，好歹大家还知道他是东风小康，传统面包神车。做问界之后，大家只知道这是华为的车了。
+
+所以对于赛力斯来说，拔掉华为，是迟早的事情。
+
+
+## 🎯 待处理的目标文案
+招牌是你打的。流量开始分给别人。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "招牌是你打的。"
+  },
+  {
+    "index": 1,
+    "text": "流量开始分给别人。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:52
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "招牌是你打的。",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "流量开始分给别人。",
+        "showFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "分给别人",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:52
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+更憋屈的还在后面。问界帮鸿蒙智行把招牌打响之后，华为开始铺五界。智界、享界、尊界、尚界，一起上桌。问界销量占比，从2024年大约87%，掉到2025年七成出头，再到2026年上半年大约六成七。招牌是你打的。流量开始分给别人。
+尊界去冲百万豪车。智界去抢年轻科技。享界去打行政豪华。尚界去卷大众市场。赛力斯呢？还在交高额渠道费。还在被消费者叫「华为车」。利润被抽走。独特性也被稀释。
+到最后，赛力斯既没有实打实利润，又没有了自己的品牌灵魂。
+
+做问界之前，好歹大家还知道他是东风小康，传统面包神车。做问界之后，大家只知道这是华为的车了。
+
+所以对于赛力斯来说，拔掉华为，是迟早的事情。
+
+
+## 🎯 待处理的目标文案
+尊界去冲百万豪车。智界去抢年轻科技。享界去打行政豪华。尚界去卷大众市场。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "尊界去冲百万豪车。"
+  },
+  {
+    "index": 1,
+    "text": "智界去抢年轻科技。"
+  },
+  {
+    "index": 2,
+    "text": "享界去打行政豪华。"
+  },
+  {
+    "index": 3,
+    "text": "尚界去卷大众市场。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：PANEL_GRID
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "panels": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 6,
+      "description": "宫格配图；showFrom 为 content 下标（0-based），在该条 startFrame 显现",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "showFrom"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该宫格配图提示词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "position": {
+            "type": "string",
+            "enum": [
+              "center",
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ],
+            "description": "可选；弱提示，布局以宫格为准"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "panels"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 8 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "PANEL_GRID",
+  "param": {
+    "panels": [
+      {
+        "src": "问号堵住去路的简笔画",
+        "showFrom": 0,
+        "enterEffect": "zoomIn"
+      },
+      {
+        "src": "放大镜只看一角的简笔画",
+        "showFrom": 1
+      },
+      {
+        "src": "两人各执一词的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:55
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "panels": [
+      {
+        "src": "豪车在雨夜中行驶，车头灯扫过路面，地面反射出冷冽的光",
+        "showFrom": 0,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "src": "科技感十足的流线型跑车在霓虹街道上飞驰，周围光线拉出残影",
+        "showFrom": 1,
+        "enterEffect": "slideLeft"
+      },
+      {
+        "src": "宽敞的行政级轿车缓缓停在一栋写字楼门前，内饰低调奢华",
+        "showFrom": 2,
+        "enterEffect": "slideBottom"
+      },
+      {
+        "src": "经济型轿车穿梭在拥挤的城市街道中，旁边是菜市场和公交站",
+        "showFrom": 3,
+        "enterEffect": "slideLeft"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:55
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+更憋屈的还在后面。问界帮鸿蒙智行把招牌打响之后，华为开始铺五界。智界、享界、尊界、尚界，一起上桌。问界销量占比，从2024年大约87%，掉到2025年七成出头，再到2026年上半年大约六成七。招牌是你打的。流量开始分给别人。
+尊界去冲百万豪车。智界去抢年轻科技。享界去打行政豪华。尚界去卷大众市场。赛力斯呢？还在交高额渠道费。还在被消费者叫「华为车」。利润被抽走。独特性也被稀释。
+到最后，赛力斯既没有实打实利润，又没有了自己的品牌灵魂。
+
+做问界之前，好歹大家还知道他是东风小康，传统面包神车。做问界之后，大家只知道这是华为的车了。
+
+所以对于赛力斯来说，拔掉华为，是迟早的事情。
+
+
+## 🎯 待处理的目标文案
+赛力斯呢？还在交高额渠道费。还在被消费者叫「华为车」。利润被抽走。独特性也被稀释。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "赛力斯呢？"
+  },
+  {
+    "index": 1,
+    "text": "还在交高额渠道费。"
+  },
+  {
+    "index": 2,
+    "text": "还在被消费者叫「华为车」。"
+  },
+  {
+    "index": 3,
+    "text": "利润被抽走。"
+  },
+  {
+    "index": 4,
+    "text": "独特性也被稀释。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:32:59
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "一个男人站在迷雾中，神情困惑，周围是模糊的华为门店轮廓",
+        "enterEffect": "breathe",
+        "tone": "calm",
+        "showFrom": 0
+      },
+      {
+        "imageSrc": "金钱从一辆赛力斯汽车上方不断被抽离，飞向远处的华为标志性建筑",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 1
+      },
+      {
+        "imageSrc": "消费者手指指向赛力斯汽车，却喊着旁边的华为标识，赛力斯车标逐渐淡出",
+        "enterEffect": "slideBottom",
+        "tone": "alert",
+        "showFrom": 2
+      },
+      {
+        "imageSrc": "赛力斯汽车在画面中央逐渐褪色，变成半透明轮廓，背景中其他品牌汽车越来越清晰",
+        "enterEffect": "zoomIn",
+        "tone": "alert",
+        "showFrom": 3
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:32:59
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+更憋屈的还在后面。问界帮鸿蒙智行把招牌打响之后，华为开始铺五界。智界、享界、尊界、尚界，一起上桌。问界销量占比，从2024年大约87%，掉到2025年七成出头，再到2026年上半年大约六成七。招牌是你打的。流量开始分给别人。
+尊界去冲百万豪车。智界去抢年轻科技。享界去打行政豪华。尚界去卷大众市场。赛力斯呢？还在交高额渠道费。还在被消费者叫「华为车」。利润被抽走。独特性也被稀释。
+到最后，赛力斯既没有实打实利润，又没有了自己的品牌灵魂。
+
+做问界之前，好歹大家还知道他是东风小康，传统面包神车。做问界之后，大家只知道这是华为的车了。
+
+所以对于赛力斯来说，拔掉华为，是迟早的事情。
+
+
+## 🎯 待处理的目标文案
+到最后，赛力斯既没有实打实利润，又没有了自己的品牌灵魂。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "到最后，"
+  },
+  {
+    "index": 1,
+    "text": "赛力斯既没有实打实利润，"
+  },
+  {
+    "index": 2,
+    "text": "又没有了自己的品牌灵魂。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:33:01
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "到最后，赛力斯既没有实打实利润，",
+        "showFrom": 0,
+        "endFrom": 1
+      },
+      {
+        "text": "又没有了自己的品牌灵魂。",
+        "showFrom": 2
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "品牌灵魂",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:33:01
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+更憋屈的还在后面。问界帮鸿蒙智行把招牌打响之后，华为开始铺五界。智界、享界、尊界、尚界，一起上桌。问界销量占比，从2024年大约87%，掉到2025年七成出头，再到2026年上半年大约六成七。招牌是你打的。流量开始分给别人。
+尊界去冲百万豪车。智界去抢年轻科技。享界去打行政豪华。尚界去卷大众市场。赛力斯呢？还在交高额渠道费。还在被消费者叫「华为车」。利润被抽走。独特性也被稀释。
+到最后，赛力斯既没有实打实利润，又没有了自己的品牌灵魂。
+
+做问界之前，好歹大家还知道他是东风小康，传统面包神车。做问界之后，大家只知道这是华为的车了。
+
+所以对于赛力斯来说，拔掉华为，是迟早的事情。
+
+
+## 🎯 待处理的目标文案
+做问界之前，好歹大家还知道他是东风小康，传统面包神车。做问界之后，大家只知道这是华为的车了。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "做问界之前，"
+  },
+  {
+    "index": 1,
+    "text": "好歹大家还知道他是东风小康，"
+  },
+  {
+    "index": 2,
+    "text": "传统面包神车。"
+  },
+  {
+    "index": 3,
+    "text": "做问界之后，"
+  },
+  {
+    "index": 4,
+    "text": "大家只知道这是华为的车了。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：SPLIT_COMPARE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "leftSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "左侧图片描述"
+    },
+    "rightSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "右侧图片描述"
+    },
+    "leftLabel": {
+      "type": "string",
+      "description": "左侧标签（2～6 字为宜）"
+    },
+    "rightLabel": {
+      "type": "string",
+      "description": "右侧标签（2～6 字为宜）"
+    },
+    "leftShowFrom": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "左侧图与标签出现的时刻：取 content 数组下标（0-based），入场帧为该条的 startFrame；省略或越界则从 0 帧起"
+    },
+    "rightShowFrom": {
+      "type": "integer",
+      "format": "content_index",
+      "description": "右侧图与标签出现的时刻：取 content 数组下标（0-based），入场帧为该条的 startFrame；省略或越界则从 0 帧起"
+    }
+  },
+  "required": [
+    "leftSrc",
+    "rightSrc",
+    "leftLabel",
+    "rightLabel"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "SPLIT_COMPARE",
+  "param": {
+    "leftSrc": "传统低效工作图标",
+    "rightSrc": "高效数字工具图标",
+    "leftLabel": "旧方法",
+    "rightLabel": "新方法"
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:33:03
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "leftSrc": "一辆朴素的东风小康面包车停在路边，背景是早期中国城镇街景，画面色调偏旧",
+    "rightSrc": "同一辆汽车挂着华为品牌标识，现代展厅灯光，科技感十足",
+    "leftLabel": "做问界之前",
+    "rightLabel": "做问界之后",
+    "leftShowFrom": 0,
+    "rightShowFrom": 3
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:33:03
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+更憋屈的还在后面。问界帮鸿蒙智行把招牌打响之后，华为开始铺五界。智界、享界、尊界、尚界，一起上桌。问界销量占比，从2024年大约87%，掉到2025年七成出头，再到2026年上半年大约六成七。招牌是你打的。流量开始分给别人。
+尊界去冲百万豪车。智界去抢年轻科技。享界去打行政豪华。尚界去卷大众市场。赛力斯呢？还在交高额渠道费。还在被消费者叫「华为车」。利润被抽走。独特性也被稀释。
+到最后，赛力斯既没有实打实利润，又没有了自己的品牌灵魂。
+
+做问界之前，好歹大家还知道他是东风小康，传统面包神车。做问界之后，大家只知道这是华为的车了。
+
+所以对于赛力斯来说，拔掉华为，是迟早的事情。
+
+
+## 🎯 待处理的目标文案
+所以对于赛力斯来说，拔掉华为，是迟早的事情。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "所以对于赛力斯来说，"
+  },
+  {
+    "index": 1,
+    "text": "拔掉华为，"
+  },
+  {
+    "index": 2,
+    "text": "是迟早的事情。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:33:05
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "所以对于赛力斯来说，",
+        "showFrom": 0
+      },
+      {
+        "text": "拔掉华为，",
+        "showFrom": 1
+      },
+      {
+        "text": "是迟早的事情。",
+        "showFrom": 2
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "拔掉华为",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:33:05
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+不只是赛力斯。所有跨界合作，最后都会撞上同一道墙。谁掌握产品定义权，谁就掌握利润分配权。谁掌握利润分配权，谁就掌握一个企业的生死。哪个车企会让人掌握呢？
+
+
+## 🎯 待处理的目标文案
+不只是赛力斯。所有跨界合作，最后都会撞上同一道墙。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "不只是赛力斯。"
+  },
+  {
+    "index": 1,
+    "text": "所有跨界合作，"
+  },
+  {
+    "index": 2,
+    "text": "最后都会撞上同一道墙。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：BEAT_SEQUENCE
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "配图序列：每条 stage 一张图；imageSrc、enterEffect、可选 tone（calm|alert）、可选 showFrom（对齐镜头外层 content[] 下标）",
+      "items": {
+        "type": "object",
+        "required": [
+          "imageSrc"
+        ],
+        "properties": {
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该节拍配图提示词"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "breathe",
+            "description": "入场效果"
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "alert"
+            ],
+            "description": "首条可 calm，其余默认可 alert"
+          },
+          "showFrom": {
+            "type": "content_index",
+            "minimum": 0,
+            "description": "镜头 item 外层 content 数组（与 param 同级）的 0-based 下标；从该条 startFrame 起显示本图。省略则等于当前 stages 下标 i（与第 i 条口播同步）"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 4 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "BEAT_SEQUENCE",
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "问句配图简笔画",
+        "enterEffect": "breathe"
+      },
+      {
+        "imageSrc": "转折警示配图",
+        "enterEffect": "slideBottom"
+      },
+      {
+        "imageSrc": "结论冲击配图",
+        "enterEffect": "slideBottom"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:33:07
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "stages": [
+      {
+        "imageSrc": "一辆汽车驶入朦胧的十字路口，周围是模糊交错的合作标志剪影",
+        "enterEffect": "breathe",
+        "tone": "calm"
+      },
+      {
+        "imageSrc": "多辆车从不同方向汇聚，车流开始密集，画面色调逐渐偏冷",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      },
+      {
+        "imageSrc": "所有车流猛然撞向一堵巨大的半透明高墙，光线碎裂飞溅，冲击感强烈",
+        "enterEffect": "slideBottom",
+        "tone": "alert"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:33:07
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+不只是赛力斯。所有跨界合作，最后都会撞上同一道墙。谁掌握产品定义权，谁就掌握利润分配权。谁掌握利润分配权，谁就掌握一个企业的生死。哪个车企会让人掌握呢？
+
+
+## 🎯 待处理的目标文案
+谁掌握产品定义权，谁就掌握利润分配权。谁掌握利润分配权，谁就掌握一个企业的生死。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "谁掌握产品定义权，"
+  },
+  {
+    "index": 1,
+    "text": "谁就掌握利润分配权。"
+  },
+  {
+    "index": 2,
+    "text": "谁掌握利润分配权，"
+  },
+  {
+    "index": 3,
+    "text": "谁就掌握一个企业的生死。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CAUSE_CHAIN
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "layout": {
+      "type": "string",
+      "enum": [
+        "horizontal",
+        "vertical"
+      ],
+      "default": "horizontal",
+      "description": "链的排布方向；横屏/常规叙事默认 horizontal，竖屏可设 vertical"
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "description": "因果节点；showFrom 为 content 数组下标（0-based），入场时刻取该条 startFrame",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "imageSrc",
+          "showFrom"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "节点短标签，建议 2～8 字"
+          },
+          "imageSrc": {
+            "type": "string",
+            "format": "image_prompt",
+            "description": "该环节隐喻配图"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 下标（0-based），非帧数"
+          },
+          "enterEffect": {
+            "type": "string",
+            "enum": [
+              "breathe",
+              "slideLeft",
+              "slideBottom",
+              "zoomIn",
+              "fadeIn"
+            ],
+            "default": "fadeIn"
+          }
+        }
+      }
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；顶部依次展示锚点词并保留为列表，showFrom 为 content 下标（0-based，非帧数）；保持克制，只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "nodes"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句（item.content）至少 2 条；口播分句至多 6 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CAUSE_CHAIN",
+  "param": {
+    "layout": "horizontal",
+    "nodes": [
+      {
+        "label": "刺激",
+        "imageSrc": "闪电击中大脑的简笔画",
+        "showFrom": 0
+      },
+      {
+        "label": "解读",
+        "imageSrc": "放大镜看信息的简笔画",
+        "showFrom": 1
+      },
+      {
+        "label": "行动",
+        "imageSrc": "按下按钮的简笔画",
+        "showFrom": 2
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:33:10
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "layout": "horizontal",
+    "nodes": [
+      {
+        "label": "产品定义权",
+        "imageSrc": "一只手紧握方向盘的特写，背景是汽车设计图纸",
+        "showFrom": 0,
+        "enterEffect": "fadeIn"
+      },
+      {
+        "label": "利润分配权",
+        "imageSrc": "金币堆叠的简笔画，顶部一枚硬币正在被取下",
+        "showFrom": 1,
+        "enterEffect": "slideLeft"
+      },
+      {
+        "label": "生死",
+        "imageSrc": "悬崖边一颗摇摇欲坠的石块，暗示企业命运悬于一线",
+        "showFrom": 3,
+        "enterEffect": "zoomIn"
+      }
+    ],
+    "anchors": [
+      {
+        "text": "生死",
+        "showFrom": 3,
+        "color": "#EF4444",
+        "anim": "popIn",
+        "audioEffect": "impact_thud"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:33:10
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+不只是赛力斯。所有跨界合作，最后都会撞上同一道墙。谁掌握产品定义权，谁就掌握利润分配权。谁掌握利润分配权，谁就掌握一个企业的生死。哪个车企会让人掌握呢？
+
+
+## 🎯 待处理的目标文案
+哪个车企会让人掌握呢？
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "哪个车企会让人掌握呢？"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:33:11
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "哪个车企会让人掌握呢？",
+        "showFrom": 0
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "会让人掌握",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:33:11
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+哦，对了。冲着含华量买问界的车主，不要灰心。流水的车厂，铁打的华为。你们还有的选哦。
+
+
+## 🎯 待处理的目标文案
+哦，对了。冲着含华量买问界的车主，不要灰心。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "哦，"
+  },
+  {
+    "index": 1,
+    "text": "对了。"
+  },
+  {
+    "index": 2,
+    "text": "冲着含华量买问界的车主，"
+  },
+  {
+    "index": 3,
+    "text": "不要灰心。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：CENTER_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "imageSrc": {
+      "type": "string",
+      "format": "image_prompt",
+      "description": "主图描述"
+    },
+    "enterEffect": {
+      "type": "string",
+      "enum": [
+        "fadeIn",
+        "slideLeft",
+        "slideBottom",
+        "zoomIn"
+      ],
+      "default": "fadeIn",
+      "description": "图片入场方式（breathe 呼吸效果始终常驻，无需指定）"
+    },
+    "anchors": {
+      "type": "array",
+      "description": "可选；用于锚点词展示（顶部依次出现并保留为列表），并绑定锚点出现时机的音效。showFrom 须落在当前 content 条数范围内。注意 **保持克制，尽量少设置锚点** 只提取整段里真正的高潮、反转或核心名词",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "showFrom"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "要展示的锚点词"
+          },
+          "showFrom": {
+            "type": "integer",
+            "format": "content_index",
+            "description": "content 数组下标（0-based），非帧数；合法范围 0～(content 条数-1)，超出会被校验丢弃"
+          },
+          "color": {
+            "type": "string"
+          },
+          "anim": {
+            "type": "string",
+            "enum": [
+              "spring",
+              "slideUp",
+              "popIn",
+              "highlight"
+            ]
+          },
+          "audioEffect": {
+            "type": "string",
+            "enum": [
+              "impact_thud",
+              "ping",
+              "woosh"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "imageSrc"
+  ]
+}
+
+
+模板该项的示例供参考：
+
+{
+  "template": "CENTER_FOCUS",
+  "param": {
+    "imageSrc": "上班族坐在电脑前的简笔画图标",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "可得性启发",
+        "showFrom": 0,
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:33:14
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "imageSrc": "一辆问界汽车停在展示台上，车头正对镜头，背景是简洁的科技感展厅，柔和的顶光打在车身",
+    "enterEffect": "fadeIn",
+    "anchors": [
+      {
+        "text": "含华量",
+        "showFrom": 2,
+        "color": "#EF4444",
+        "anim": "popIn",
+        "audioEffect": "ping"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------
+
+======================================== REQUEST ========================================
+time: 2026-09-17 00:33:14
+provider: deepseek
+model: deepseek-v4-pro
+retries: 3
+llm_stage: param
+thinking_enabled: False
+reasoning_effort: 
+
+[PROMPT]
+你是短视频字幕与画面细节处理专家。请把指定台词细化为字模显示参数。
+
+
+## 完整段落上下文（仅供理解整体语境，判断当前句子的重要性）
+哦，对了。冲着含华量买问界的车主，不要灰心。流水的车厂，铁打的华为。你们还有的选哦。
+
+
+## 🎯 待处理的目标文案
+流水的车厂，铁打的华为。你们还有的选哦。
+
+## 目标文案content的数组结构
+生成模板参数时，format为content_index的字段依据此数组选择匹配的索引，用于决定相应内容出现在动画中的时机
+
+[
+  {
+    "index": 0,
+    "text": "流水的车厂，"
+  },
+  {
+    "index": 1,
+    "text": "铁打的华为。"
+  },
+  {
+    "index": 2,
+    "text": "你们还有的选哦。"
+  }
+]
+
+
+## 选定模板及参数规范
+
+模板名称：TEXT_FOCUS
+
+参数 Schema 说明：
+
+{
+  "type": "object",
+  "properties": {
+    "coreSentence": {
+      "type": "array",
+      "minItems": 1,
+      "description": "大屏核心文案，每元素一行：可为 string，或 { text, showFrom, endFrom? }；showFrom/endFrom 为 content 下标（0-based），非帧数：在该条 startFrame 显现；可选 endFrom 表示在该条播完（startFrame+durationFrames）后起淡出。纯 string 等价于 showFrom=0、无 endFrom。锚点校验时各段 text 按顺序直接拼接（无分隔符）。",
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "required": [
+              "text",
+              "showFrom"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "该行大屏文案"
+              },
+              "showFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "content 下标（0-based），非帧数"
+              },
+              "endFrom": {
+                "type": "integer",
+                "format": "content_index",
+                "description": "可选；content 下标（0-based），非帧数；该行在对应条字幕结束帧（startFrame+durationFrames）起淡出"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coreSentenceAnchors": {
+      "type": "array",
+      "description": "可选；在 coreSentence 各段拼接后的全文内按顺序高亮子串。每项 coreSentenceAnchor 须为该拼接串的子串，否则会被校验丢弃",
+      "items": {
+        "type": "object",
+        "required": [
+          "coreSentenceAnchor"
+        ],
+        "properties": {
+          "coreSentenceAnchor": {
+            "type": "string",
+            "description": "要高亮的子串，须出现在各 coreSentence 段拼接后的全文内"
+          },
+          "color": {
+            "type": "string",
+            "description": "高亮颜色，省略时默认强调色"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "coreSentence"
+  ]
+}
+
+// 口播条数（已由程序写入 CONTENT_STR，勿在 param 中输出 content）：口播分句至多 3 条（超出会被校验器告警）
+
+
+模板该项的示例供参考：
+
+{
+  "template": "TEXT_FOCUS",
+  "param": {
+    "coreSentence": [
+      {
+        "text": "承认自己“可能错了”并不是一种软弱",
+        "showFrom": 0,
+        "endFrom": 0
+      },
+      {
+        "text": "而是成长的开始",
+        "showFrom": 1,
+        "endFrom": 1
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "可能错了",
+        "color": "red"
+      }
+    ]
+  }
+}
+
+
+注意：如果该模板生成的参数包含图片视觉描述（如 imageSrc / leftSrc / rightSrc 等等），请只描述纯视觉场景与动作，绝不要包含任何文字、标语或注音。
+
+
+## 其他通用说明
+1. 锚点（Anchor）— 克制与高价值（适用于 SCHEMA 或上文允许出现锚点/高亮时）：
+   - 多数句子应**无锚点**；拿不准就留空或 `[]`，避免满屏高亮。
+   - 如果一定需要锚点，只选**整段里真正的高潮、反转或核心名词**（宜 2～4 字、有记忆点）；平庸词、铺垫句不要做成锚点。
+   - 颜色建议：`#EF4444`（警示/反转/负面/结论）、`#000000`（事实/术语/数据）。动画 `anim`：`spring` | `slideUp` | `popIn` | `highlight`。
+   - 音效可选(仅写在锚点对象上的 `audioEffect`)：`impact_thud` | `ping` | `woosh`
+
+2. 视觉标题与字幕分离（仅当 SCHEMA 要求 `notText` / `butText` / `conceptName`、或 DOS_AND_DONTS 的 `left.label` / `right.label` 等时）：
+
+   - 填**极简关键词（约 2～6 字）**，禁止把整句台词搬进标题字段。
+
+
+
+## 输出格式（严格 JSON，不要 markdown 代码块）
+补全当前模板的param,非数组：
+{ "param": { ... } }
+
+===========================================================================================
+---------------------------------------- RESPONSE ----------------------------------------
+time: 2026-09-17 00:33:15
+attempt: 1/3
+
+[OUTPUT]
+{
+  "param": {
+    "coreSentence": [
+      {
+        "text": "流水的车厂，铁打的华为。",
+        "showFrom": 0,
+        "endFrom": 1
+      },
+      {
+        "text": "你们还有的选哦。",
+        "showFrom": 2
+      }
+    ],
+    "coreSentenceAnchors": [
+      {
+        "coreSentenceAnchor": "铁打的华为",
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
+-------------------------------------------------------------------------------------------

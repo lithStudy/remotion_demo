@@ -2,7 +2,7 @@ import React from "react";
 import { AbsoluteFill, Sequence, Audio, staticFile } from "remotion";
 import { BWCauseChain, BWCenterFocus, BWQuoteCitation } from "../../../components";
 
-// 引入·爱国支持逻辑
+// 爱国支持逻辑
 const SCENE_DURATION = 130 + 138 + 111 + 188;
 
 export const calculateScene1Duration = (): number => {

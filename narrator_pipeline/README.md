@@ -51,6 +51,13 @@ python -m narrator_pipeline --name xxx --start 2
 python -m narrator_pipeline --name xxx --only 4
 ```
 
+Step1 内部也会自动写 checkpoint（`scenes/scene-scripts.checkpoint.json`）：中途失败后再次执行会跳过已完成的 scene/item。若要忽略断点从头分析：
+
+```bash
+python -m narrator_pipeline --name xxx --only 1 --force
+python -m narrator_pipeline.analysis.step1 --name xxx --force
+```
+
 校验：
 
 ```bash

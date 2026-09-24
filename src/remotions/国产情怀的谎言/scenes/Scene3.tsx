@@ -1,9 +1,9 @@
 import React from "react";
-import { AbsoluteFill, Sequence, Audio, staticFile } from "remotion";
+import { AbsoluteFill, Sequence, Audio, staticFile, Freeze } from "remotion";
 import { BWCenterFocus, BWTextFocus } from "../../../components";
 
-// 召唤·价值投票即爱国
-const SCENE_DURATION = 122 + 221 + 177;
+// 价值投票即爱国
+const SCENE_DURATION = 122 + 221 + 202;
 
 export const calculateScene3Duration = (): number => {
     return SCENE_DURATION;
@@ -20,6 +20,11 @@ export const Scene3: React.FC = () => {
             </Sequence>
             <Sequence from={343} durationInFrames={177}>
                 <BWTextFocus content={[{"text": "如果你真的爱国，", "startFrame": 0, "durationFrames": 42}, {"text": "想看到国货屹立不倒。", "startFrame": 41, "durationFrames": 53}, {"text": "别做他们的遮阳伞，", "startFrame": 93, "durationFrames": 41}, {"text": "去做他们的磨刀石。", "startFrame": 134, "durationFrames": 42}]} totalDurationFrames={177} coreSentence={["别做他们的遮阳伞，", "去做他们的磨刀石。"]} coreSentenceAnchors={[{"coreSentenceAnchor": "遮阳伞", "color": "#EF4444"}, {"coreSentenceAnchor": "磨刀石", "color": "#EF4444"}]} />
+            </Sequence>
+            <Sequence from={520} durationInFrames={25}>
+                <Freeze frame={176}>
+                    <BWTextFocus content={[{"text": "如果你真的爱国，", "startFrame": 0, "durationFrames": 42}, {"text": "想看到国货屹立不倒。", "startFrame": 41, "durationFrames": 53}, {"text": "别做他们的遮阳伞，", "startFrame": 93, "durationFrames": 41}, {"text": "去做他们的磨刀石。", "startFrame": 134, "durationFrames": 42}]} totalDurationFrames={177} coreSentence={["别做他们的遮阳伞，", "去做他们的磨刀石。"]} coreSentenceAnchors={[{"coreSentenceAnchor": "遮阳伞", "color": "#EF4444"}, {"coreSentenceAnchor": "磨刀石", "color": "#EF4444"}]} />
+                </Freeze>
             </Sequence>
             <Audio src={staticFile("/audio/国产情怀的谎言/scene_3/scene_3.mp3")} />
         </AbsoluteFill>

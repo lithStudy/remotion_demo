@@ -286,6 +286,7 @@ def start_generate(
     llm_provider: str | None,
     llm_model: str | None,
     force: bool = False,
+    force_restart: bool = False,
 ) -> Job:
     with _lock:
         _expire_locked()
@@ -304,7 +305,7 @@ def start_generate(
 
     thread = threading.Thread(
         target=_run_generate,
-        args=(job.jobId, pause_after_step0, llm_provider, llm_model),
+        args=(job.jobId, pause_after_step0, llm_provider, llm_model, force_restart),
         daemon=True,
     )
     thread.start()
@@ -317,6 +318,7 @@ def start_step1_only(
     llm_provider: str | None,
     llm_model: str | None,
     force: bool = False,
+    force_restart: bool = False,
 ) -> Job:
     with _lock:
         _expire_locked()
@@ -338,7 +340,7 @@ def start_step1_only(
 
     thread = threading.Thread(
         target=_run_step1_only,
-        args=(job.jobId, llm_provider, llm_model),
+        args=(job.jobId, llm_provider, llm_model, force_restart),
         daemon=True,
     )
     thread.start()
@@ -385,6 +387,7 @@ def _run_generate(
     pause_after_step0: bool,
     llm_provider: str | None,
     llm_model: str | None,
+    force_restart: bool,
 ) -> None:
     job = get_job(job_id)
     if job is None:
@@ -414,6 +417,7 @@ def _run_generate(
                 config,
                 llm_provider=llm_provider,
                 llm_model=llm_model,
+                force_restart=force_restart,
             )
             if not _still_active(job):
                 return
@@ -431,6 +435,7 @@ def _run_step1_only(
     job_id: str,
     llm_provider: str | None,
     llm_model: str | None,
+    force_restart: bool,
 ) -> None:
     job = get_job(job_id)
     if job is None:
@@ -447,6 +452,7 @@ def _run_step1_only(
                 config,
                 llm_provider=llm_provider,
                 llm_model=llm_model,
+                force_restart=force_restart,
             )
             if not _still_active(job):
                 return

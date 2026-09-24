@@ -2172,6 +2172,82 @@
       ],
       "audioSrc": "/audio/华为韬定律/scene_7/scene_7.mp3",
       "totalDurationFrames": 846
+    },
+    {
+      "sceneId": "scene_references",
+      "sceneName": "片尾·参考资料",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "CONCLUSION",
+          "template": "SOURCE_CITATION",
+          "reasoning": "片尾展示支撑韬定律官方表述、逻辑折叠工程本质、行业立体堆叠路线，以及三进制/光子/四重图案化等营销包装案例的公开来源，无口播。",
+          "content": [],
+          "param": {
+            "sectionTitle": "参考资料",
+            "references": [
+              {
+                "title": "Huawei Announces Tau (τ) Law at IEEE ISCAS 2026",
+                "titleZh": "华为发表韬(τ)定律：以时间缩微替代几何缩微",
+                "publisher": "Huawei",
+                "publisherZh": "华为",
+                "year": "2026"
+              },
+              {
+                "title": "A Time Scaling Theory for Multi-Layer Electronic Systems",
+                "titleZh": "面向多层级电子系统的时间缩微理论（韬定律）",
+                "publisher": "He Tingbo · ChinaXiv / Huawei",
+                "publisherZh": "何庭波 · 中国科学院科技论文预发布平台 / 华为",
+                "year": "2026"
+              },
+              {
+                "title": "Cramming More Components onto Integrated Circuits",
+                "titleZh": "摩尔定律原文：集成电路元件数目约每两年翻倍",
+                "publisher": "Gordon E. Moore · Electronics Magazine",
+                "publisherZh": "Gordon E. Moore · Electronics 杂志",
+                "year": "1965"
+              },
+              {
+                "title": "TSMC-SoIC: System on Integrated Chips",
+                "titleZh": "台积电 SoIC：晶圆级三维堆叠与混合键合平台",
+                "publisher": "Taiwan Semiconductor Manufacturing Company",
+                "publisherZh": "台积电",
+                "year": "2025"
+              },
+              {
+                "title": "Foveros Direct 3D Technology Brief",
+                "titleZh": "英特尔 Foveros：有源芯片垂直堆叠与混合键合",
+                "publisher": "Intel Foundry",
+                "publisherZh": "英特尔代工",
+                "year": "2025"
+              },
+              {
+                "title": "CN119652311A: Ternary Logic Gate Circuit, Computing Circuit, Chip and Electronic Device",
+                "titleZh": "华为三进制逻辑门专利：局部电路结构简化与功耗优化",
+                "publisher": "China National Intellectual Property Administration",
+                "publisherZh": "国家知识产权局",
+                "year": "2025"
+              },
+              {
+                "title": "CN117406352A / CN115515027A: Silicon Photonics Module and Optoelectronic Hybrid Packaging",
+                "titleZh": "华为硅光模块与光电混合封装专利：面向数据传输与互联",
+                "publisher": "China National Intellectual Property Administration",
+                "publisherZh": "国家知识产权局",
+                "year": "2023"
+              },
+              {
+                "title": "CN117751427A: Method for Manufacturing Semiconductor Device with Self-Aligned Quadruple Patterning",
+                "titleZh": "华为自对准四重图案化（SAQP）专利：以多重曝光补偿先进光刻短板",
+                "publisher": "China National Intellectual Property Administration",
+                "publisherZh": "国家知识产权局",
+                "year": "2024"
+              }
+            ]
+          },
+          "totalDurationFrames": 153
+        }
+      ],
+      "totalDurationFrames": 153
     }
   ],
   "fps": 30,

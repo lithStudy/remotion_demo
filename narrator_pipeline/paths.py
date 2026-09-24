@@ -13,6 +13,7 @@ NARRATIONS_DIR = REPO_ROOT / "narrations"
 
 
 GENERATE_JOB_FILENAME = "generate-job.json"
+SCENE_SCRIPTS_CHECKPOINT_FILENAME = "scene-scripts.checkpoint.json"
 
 
 @dataclass(frozen=True)
@@ -24,6 +25,7 @@ class VideoPaths:
     scenes_dir: Path
     scene_split_draft: Path
     scene_scripts: Path
+    scene_scripts_checkpoint: Path
     generate_job: Path
     images_dir: Path
     audio_dir: Path
@@ -40,6 +42,7 @@ def resolve_video_paths(name: str, config: dict) -> VideoPaths:
         scenes_dir=scenes_dir,
         scene_split_draft=scenes_dir / SCENE_SPLIT_DRAFT_FILENAME,
         scene_scripts=scenes_dir / "scene-scripts.json",
+        scene_scripts_checkpoint=scenes_dir / SCENE_SCRIPTS_CHECKPOINT_FILENAME,
         generate_job=scenes_dir / GENERATE_JOB_FILENAME,
         images_dir=project_root / "public" / "images" / name,
         audio_dir=project_root / "public" / "audio" / name,

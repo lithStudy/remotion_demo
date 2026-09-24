@@ -2,7 +2,7 @@ import React from "react";
 import { AbsoluteFill, Sequence, Audio, staticFile } from "remotion";
 import { BWCenterFocus, BWCognitiveShift, BWDosAndDonts, BWKpiHero, BWMagnifyingGlass, BWTextFocus } from "../../../components";
 
-// 剖析·人性与商业骗局
+// 人性与商业骗局
 const SCENE_DURATION = 105 + 105 + 182 + 139 + 118 + 134 + 118 + 88 + 151 + 126 + 98 + 203 + 139 + 192 + 159 + 116 + 144 + 89 + 251 + 123 + 121 + 215;
 
 export const calculateScene2Duration = (): number => {

@@ -189,7 +189,7 @@ export default function App() {
     applyJobStart(setJob, setCurrent, setScreen, name, "generate", res);
   }
 
-  async function startStep1(name: string) {
+  async function startStep1(name: string, opts?: { forceRestart?: boolean }) {
     setError(null);
     const active = await api.activeJob();
     if (isDraftGenerating(active.job)) {
@@ -204,20 +204,28 @@ export default function App() {
       }
       force = true;
     }
-    const res = await api.continueStep1(name, { force });
+    const res = await api.continueStep1(name, {
+      force,
+      forceRestart: opts?.forceRestart ?? false,
+    });
     applyJobStart(setJob, setCurrent, setScreen, name, "step1", res);
   }
 
-  async function regenerateCurrentJob() {
+  async function regenerateCurrentJob(opts?: { forceRestart?: boolean }) {
     if (!job) return;
     setError(null);
+    const forceRestart = opts?.forceRestart ?? false;
     if (job.kind === "step1") {
-      const res = await api.continueStep1(job.name, { force: true });
+      const res = await api.continueStep1(job.name, {
+        force: true,
+        forceRestart,
+      });
       applyJobStart(setJob, setCurrent, setScreen, job.name, "step1", res);
       return;
     }
     const res = await api.startGenerate(job.name, pauseAfterStep0, {
       force: true,
+      forceRestart,
     });
     applyJobStart(setJob, setCurrent, setScreen, job.name, "generate", res);
   }
@@ -314,6 +322,11 @@ export default function App() {
           onRegenerate={() =>
             regenerateCurrentJob().catch((e) => setError(String(e)))
           }
+          onRestartFromScratch={() =>
+            regenerateCurrentJob({ forceRestart: true }).catch((e) =>
+              setError(String(e)),
+            )
+          }
           error={error}
         />
       ) : null}
@@ -362,14 +375,14 @@ export default function App() {
             setSyncOpen(true);
           }}
           onRegenAllScripts={async () => {
-            await startStep1(current);
+            await startStep1(current, { forceRestart: true });
           }}
           onRegenChangedScripts={async (payload) => {
             const res = await api.syncConfirm(current, payload, false);
             setScripts(res.scripts as Record<string, unknown>);
             setDraft(res.draft as Record<string, unknown>);
             setWarnings((res.warnings as string[]) || []);
-            await startStep1(current);
+            await startStep1(current, { forceRestart: true });
           }}
         />
       ) : null}

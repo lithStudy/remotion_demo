@@ -6,6 +6,7 @@ Step 1: 口播文案分析（模板驱动 v3）
 用法（仓库根目录）:
   python -m narrator_pipeline.analysis.step1 --name video_name
   python -m narrator_pipeline.analysis.step1 --name video_name --skip-validate
+  python -m narrator_pipeline.analysis.step1 --name video_name --force
 
 分析与校验均以 Step0 草稿为准：分镜用各 scene.text；校验/自动修订对照文本
 为草稿中 scene.text 按顺序拼接（不再读取 narrations/{name}.txt）。
@@ -26,6 +27,15 @@ from narrator_pipeline.analysis.stages import (
     analyze_items_for_scene,
     analyze_param_for_item,
     gemini_fix_after_warnings,
+)
+from narrator_pipeline.analysis.step1_checkpoint import (
+    clear_checkpoint,
+    compute_draft_hash,
+    item_param_done,
+    load_checkpoint,
+    save_checkpoint,
+    scene_items_done,
+    summarize_progress,
 )
 from narrator_pipeline.common.step_llm import create_llm_runtime
 from narrator_pipeline.contracts.template_registry import TEMPLATE_REGISTRY
@@ -240,16 +250,35 @@ def _merge_dash_only_captions(scene_scripts: dict) -> None:
 # AI 分析管线（拆分为职责单一的子函数）
 # ─────────────────────────────────────────────────────────────
 
+def _persist_step1_checkpoint(
+    checkpoint_path: Path | None,
+    draft_hash: str | None,
+    phase: str,
+    result: dict,
+) -> None:
+    if checkpoint_path is None or draft_hash is None:
+        return
+    save_checkpoint(
+        checkpoint_path,
+        draft_hash=draft_hash,
+        phase=phase,
+        result=result,
+    )
+
+
 def _run_items_and_params_pipeline(
     client,
     model: str,
     result: dict,
     template_guide: str,
     ai_logger: AiLogger | None,
+    *,
+    checkpoint_path: Path | None = None,
+    draft_hash: str | None = None,
 ) -> dict:
     """
     阶段 2 + 3：Item 分镜/模板匹配与参数细化。
-    要求 result 已含 topic 与 scenes（每项含 text，尚无 items）。
+    要求 result 已含 topic 与 scenes（每项含 text；续跑时可已有部分 items/param）。
     """
     append_log = ai_logger.append if ai_logger else None
     scenes = result.get("scenes", [])
@@ -257,9 +286,14 @@ def _run_items_and_params_pipeline(
 
     print("   [Step 2/3] 正在两阶段拆解 Items（2A 分镜 + 2B 模板匹配）...")
     for scene in scenes:
+        scene_id = scene.get("sceneId", "?")
+        if scene_items_done(scene):
+            print(f"      Scene {scene_id}: 跳过（checkpoint 已有 items）")
+            continue
         analyze_items_for_scene(
             client, model, topic, scene, template_guide, append_ai_log=append_log
         )
+        _persist_step1_checkpoint(checkpoint_path, draft_hash, "items", result)
 
     total_items = sum(len(s.get("items", [])) for s in scenes)
     print(f"   ✅ [Step 2/3] 完成，共拆解为 {total_items} 个 Item。")
@@ -278,8 +312,14 @@ def _run_items_and_params_pipeline(
 
     print("   [Step 3/3] 正在循环拆解 Text 与 Anchors...")
     for scene in scenes:
+        scene_id = scene.get("sceneId", "?")
         scene_text_full = scene.get("text", "")
         for item in scene.get("items", []):
+            order = item.get("order", "?")
+            if item_param_done(item):
+                print(f"      Scene {scene_id} item#{order}: 跳过（checkpoint 已有 param）")
+                continue
+
             allowed_keys = {
                 "order",
                 "narrativeType",
@@ -288,6 +328,7 @@ def _run_items_and_params_pipeline(
                 "text",
                 "groupKey",
                 "content",
+                "param",
             }
             for rk in [k for k in list(item.keys()) if k not in allowed_keys]:
                 item.pop(rk)
@@ -300,23 +341,34 @@ def _run_items_and_params_pipeline(
                 TEMPLATE_REGISTRY,
                 append_ai_log=append_log,
             )
+            _persist_step1_checkpoint(checkpoint_path, draft_hash, "params", result)
 
     print("   ✅ [Step 3/3] 完成。")
+    _persist_step1_checkpoint(checkpoint_path, draft_hash, "params_done", result)
     return result
 
 
 def _run_ai_analysis_pipeline(
     client,
     model: str,
-    scene_split: dict,
+    working: dict,
     template_guide: str,
     ai_logger: AiLogger | None,
+    *,
+    checkpoint_path: Path | None = None,
+    draft_hash: str | None = None,
 ) -> dict:
-    """从 Step0 场景草稿继续：Item 分镜+模板匹配 → Item 参数细化。"""
-    scenes = scene_split.get("scenes", [])
-    print(f"   📂 使用场景草稿，共 {len(scenes)} 个 Scene。")
+    """从 Step0 场景草稿（或 checkpoint）继续：Item 分镜+模板匹配 → Item 参数细化。"""
+    scenes = working.get("scenes", [])
+    print(f"   📂 使用场景数据，共 {len(scenes)} 个 Scene。")
     return _run_items_and_params_pipeline(
-        client, model, scene_split, template_guide, ai_logger
+        client,
+        model,
+        working,
+        template_guide,
+        ai_logger,
+        checkpoint_path=checkpoint_path,
+        draft_hash=draft_hash,
     )
 
 
@@ -425,16 +477,18 @@ def _validate_and_auto_fix(
 
 def analyze_with_llm(
     text: str,
-    scene_split: dict,
+    working: dict,
     config: dict,
     ai_logger: AiLogger | None,
     *,
     llm_provider: str | None = None,
     llm_model: str | None = None,
     skip_validate: bool = False,
+    checkpoint_path: Path | None = None,
+    draft_hash: str | None = None,
 ) -> dict:
     """
-    从场景草稿继续分析，返回 scene-scripts 字典。
+    从场景草稿或 checkpoint 继续分析，返回 scene-scripts 字典。
     编排 _run_ai_analysis_pipeline → _cleanup_intermediate_fields → _validate_and_auto_fix。
     """
     client, model, provider, template_guide = create_llm_runtime(
@@ -450,9 +504,11 @@ def analyze_with_llm(
     result = _run_ai_analysis_pipeline(
         client,
         model,
-        scene_split,
+        working,
         template_guide,
         ai_logger,
+        checkpoint_path=checkpoint_path,
+        draft_hash=draft_hash,
     )
     _cleanup_intermediate_fields(result)
     result["fps"] = fps
@@ -482,26 +538,43 @@ def run_step1_for_video(
     llm_provider: str | None = None,
     llm_model: str | None = None,
     skip_validate: bool | None = None,
+    force_restart: bool = False,
 ) -> dict:
     """
     加载草稿 → cleanup → LLM 分析 → 后处理 → 写入 scene-scripts.json。
+    默认读取 checkpoint 续跑；force_restart=True 时清除 checkpoint 从头分析。
     返回 scene-scripts 字典。草稿缺失或对照文本为空时抛 ValueError。
     """
     script_dir = PACKAGE_ROOT
     paths = resolve_video_paths(video_name, config)
     draft_path = paths.scene_split_draft
     output_dir = paths.scenes_dir
+    checkpoint_path = paths.scene_scripts_checkpoint
 
     if not draft_path.exists():
         raise ValueError(f"场景拆分草稿不存在: {draft_path}")
 
     cleanup_before_step1(video_name, output_dir, config, script_dir)
 
+    if force_restart:
+        clear_checkpoint(checkpoint_path)
+
     ai_logger = AiLogger(output_dir, video_name, step="step1")
 
     scene_split = load_scene_split_draft(draft_path)
     print(f"📂 已加载场景拆分草稿: {draft_path}")
     print(f"   🎬 场景数: {len(scene_split.get('scenes', []))}")
+
+    draft_hash = compute_draft_hash(scene_split)
+    working = scene_split
+    if not force_restart:
+        resumed = load_checkpoint(checkpoint_path, expected_draft_hash=draft_hash)
+        if resumed is not None:
+            working = resumed
+            sd, st, pd, pt = summarize_progress(working)
+            print(
+                f"   ⏩ 续跑进度: items {sd}/{st} scenes，params {pd}/{pt} items"
+            )
 
     text = _source_text_from_draft(scene_split)
     if not text.strip():
@@ -513,12 +586,14 @@ def run_step1_for_video(
 
     result = analyze_with_llm(
         text,
-        scene_split,
+        working,
         config,
         ai_logger,
         llm_provider=llm_provider,
         llm_model=llm_model,
         skip_validate=skip,
+        checkpoint_path=checkpoint_path,
+        draft_hash=draft_hash,
     )
     _merge_dash_only_captions(result)
     finalize_step1_content_and_anchors(result)
@@ -529,6 +604,8 @@ def run_step1_for_video(
 
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
+
+    clear_checkpoint(checkpoint_path)
 
     scenes = result.get("scenes", [])
     total_items = sum(len(s.get("items", [])) for s in scenes)
@@ -573,6 +650,11 @@ def main():
         action="store_true",
         help="跳过 scene-scripts 校验（等同 config step1_skip_validate=true；未跳过时必有告警则自动修订）",
     )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="忽略 Step1 checkpoint，从头重新分析（默认自动续跑）",
+    )
     args = parser.parse_args()
 
     load_env(PACKAGE_ROOT)
@@ -585,6 +667,7 @@ def main():
             llm_provider=args.llm_provider,
             llm_model=args.llm_model,
             skip_validate=True if args.skip_validate else None,
+            force_restart=bool(args.force),
         )
     except ValueError as e:
         print(f"❌ {e}")

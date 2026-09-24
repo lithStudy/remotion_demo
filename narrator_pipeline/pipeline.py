@@ -79,6 +79,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Step 1 跳过 scene-scripts 校验",
     )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Step 1 忽略 checkpoint，从头重新分析",
+    )
     args = parser.parse_args(argv)
 
     config_path = PACKAGE_ROOT / "config.yaml"
@@ -109,6 +114,8 @@ def main(argv: list[str] | None = None) -> int:
     step1_args = ["--name", name]
     if args.skip_validate:
         step1_args.append("--skip-validate")
+    if args.force:
+        step1_args.append("--force")
 
     steps: dict[int, tuple[str, Callable[[], bool], list[str]]] = {
         0: ("场景拆分", step0_main, ["--name", name]),
@@ -125,6 +132,12 @@ def main(argv: list[str] | None = None) -> int:
             print(f"   修复后可使用 --name {name} --start {step_num} 从此步骤重新开始")
             if step_num == 0:
                 print(f"   审阅场景草稿: {paths.scene_split_draft}")
+            if step_num == 1:
+                print(
+                    f"   Step1 默认续跑 checkpoint；若需从头分析请加 --force"
+                )
+                if paths.scene_scripts_checkpoint.is_file():
+                    print(f"   checkpoint: {paths.scene_scripts_checkpoint}")
             return 1
 
     if args.only == 1:

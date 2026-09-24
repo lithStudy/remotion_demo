@@ -32,6 +32,7 @@ class GenerateParam(BaseModel):
     name: str = Field(..., min_length=1)
     pauseAfterStep0: bool = False
     force: bool = False
+    forceRestart: bool = False
     llmProvider: str | None = None
     llmModel: str | None = None
 
@@ -52,6 +53,7 @@ class SaveDraftParam(BaseModel):
 class ContinueStep1Param(BaseModel):
     name: str = Field(..., min_length=1)
     force: bool = False
+    forceRestart: bool = False
     llmProvider: str | None = None
     llmModel: str | None = None
 

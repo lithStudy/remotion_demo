@@ -112,6 +112,7 @@ def create_app() -> FastAPI:
                 llm_provider=param.llmProvider,
                 llm_model=param.llmModel,
                 force=param.force,
+                force_restart=param.forceRestart,
             )
         except RuntimeError as e:
             raise HTTPException(status_code=409, detail=str(e)) from e
@@ -128,6 +129,7 @@ def create_app() -> FastAPI:
                 llm_provider=param.llmProvider,
                 llm_model=param.llmModel,
                 force=param.force,
+                force_restart=param.forceRestart,
             )
         except RuntimeError as e:
             raise HTTPException(status_code=409, detail=str(e)) from e

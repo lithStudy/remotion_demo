@@ -2,6 +2,7 @@ import { z } from "zod";
 import { Scene1, calculateScene1Duration } from "./scenes/Scene1";
 import { Scene2, calculateScene2Duration } from "./scenes/Scene2";
 import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
+import { Scene4, calculateScene4Duration } from "./scenes/Scene4";
 
 export const 国产情怀的谎言Schema = z.object({});
 
@@ -10,9 +11,10 @@ export const SCENE_END_PADDING = 20;
 export const COVER_DURATION_FRAMES = 5;
 
 export const sceneConfigs = [
-    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引入·爱国支持逻辑" },
-    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "剖析·人性与商业骗局" },
-    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "召唤·价值投票即爱国" },
+    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "爱国支持逻辑" },
+    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "人性与商业骗局" },
+    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "价值投票即爱国" },
+    { name: "scene4", duration: calculateScene4Duration(), component: Scene4, label: "片尾·参考资料" },
 ];
 
 export const MAIN_DURATION_国产情怀的谎言 =

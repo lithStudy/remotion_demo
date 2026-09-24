@@ -156,6 +156,7 @@ export const api = {
     pauseAfterStep0: boolean,
     opts?: {
       force?: boolean;
+      forceRestart?: boolean;
       llmProvider?: string | null;
       llmModel?: string | null;
     },
@@ -166,6 +167,7 @@ export const api = {
         name,
         pauseAfterStep0,
         force: opts?.force ?? false,
+        forceRestart: opts?.forceRestart ?? false,
         llmProvider: opts?.llmProvider,
         llmModel: opts?.llmModel,
       },
@@ -175,6 +177,7 @@ export const api = {
     name: string,
     opts?: {
       force?: boolean;
+      forceRestart?: boolean;
       llmProvider?: string | null;
       llmModel?: string | null;
     },
@@ -184,6 +187,7 @@ export const api = {
       {
         name,
         force: opts?.force ?? false,
+        forceRestart: opts?.forceRestart ?? false,
         llmProvider: opts?.llmProvider,
         llmModel: opts?.llmModel,
       },

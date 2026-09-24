@@ -8,6 +8,7 @@ type Props = {
   onBack: () => void;
   onReviewDraft: () => void;
   onRegenerate: () => void;
+  onRestartFromScratch: () => void;
   error: string | null;
 };
 
@@ -65,20 +66,36 @@ export function JobScreen(props: Props) {
           </button>
         ) : null}
         {showRegen ? (
-          <button
-            type="button"
-            className="btn-block"
-            style={{ marginTop: 12 }}
-            onClick={() => {
-              const msg = running
-                ? "当前生成仍在进行，确认取消并重新生成？"
-                : "确认重新生成？";
-              if (!window.confirm(msg)) return;
-              props.onRegenerate();
-            }}
-          >
-            重新生成
-          </button>
+          <>
+            <button
+              type="button"
+              className="btn-block"
+              style={{ marginTop: 12 }}
+              onClick={() => {
+                const msg = running
+                  ? "当前生成仍在进行，确认取消并从断点续跑？"
+                  : "确认从断点续跑重新生成？（已完成的 Step1 场景/条目会跳过）";
+                if (!window.confirm(msg)) return;
+                props.onRegenerate();
+              }}
+            >
+              重新生成（续跑）
+            </button>
+            <button
+              type="button"
+              className="btn-block"
+              style={{ marginTop: 8 }}
+              onClick={() => {
+                const msg = running
+                  ? "当前生成仍在进行，确认取消并从头重新生成？"
+                  : "确认忽略断点、从头重新生成 Step1？";
+                if (!window.confirm(msg)) return;
+                props.onRestartFromScratch();
+              }}
+            >
+              从头生成
+            </button>
+          </>
         ) : null}
       </section>
     </AppShell>

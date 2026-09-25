@@ -26,7 +26,6 @@ JobStatus = Literal[
     "interrupted",
 ]
 
-JOB_TIMEOUT_SEC = 600
 _DRAFT_PHASES = frozenset({"starting", "step0"})
 _TERMINAL = frozenset(
     {"succeeded", "failed", "cancelled", "timed_out", "interrupted"}
@@ -136,11 +135,7 @@ def _load_job_file(name: str) -> Job | None:
     )
 
 
-def _parse_created_at(job: Job) -> datetime:
-    try:
-        return datetime.fromisoformat(job.createdAt)
-    except ValueError:
-        return datetime.now(timezone.utc)
+
 
 
 def _is_draft_generating(job: Job) -> bool:
@@ -219,25 +214,8 @@ def recover_from_disk() -> None:
 
 
 def _expire_locked() -> None:
-    global _running, _active_job_id
-    if _active_job_id is None:
-        return
-    job = _jobs.get(_active_job_id)
-    if job is None or job.status != "running":
-        return
-    created = _parse_created_at(job)
-    now = datetime.now(timezone.utc)
-    if created.tzinfo is None:
-        created = created.replace(tzinfo=timezone.utc)
-    if (now - created).total_seconds() < JOB_TIMEOUT_SEC:
-        return
-    job.status = "timed_out"
-    job.error = f"生成超时（{JOB_TIMEOUT_SEC // 60} 分钟），可重新生成"
-    job.finishedAt = now.isoformat()
-    _running = False
-    _active_job_id = None
-    _persist_job(job)
-    _persist_active(None)
+    """保留钩子：历史上用于任务超时；现已取消限时，状态靠轮询/落盘随时查看。"""
+    return
 
 
 def _cancel_active_locked(*, reason: str) -> Job | None:

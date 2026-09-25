@@ -148,7 +148,6 @@ def create_app() -> FastAPI:
             "error": job.error,
             "createdAt": job.createdAt,
             "finishedAt": job.finishedAt,
-            "timeoutSec": job_service.JOB_TIMEOUT_SEC,
         }
 
     @app.post("/api/jobs/status")

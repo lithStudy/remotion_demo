@@ -72,7 +72,6 @@ export type JobStatus = {
   error: string | null;
   createdAt: string;
   finishedAt: string | null;
-  timeoutSec?: number;
 };
 
 export const JOB_TERMINAL_STATUSES = new Set([

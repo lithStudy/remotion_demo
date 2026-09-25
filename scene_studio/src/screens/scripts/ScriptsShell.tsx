@@ -5,7 +5,6 @@ import { TemplatePicker } from "../../components/TemplatePicker";
 import { useIsNarrow } from "../../hooks/useIsNarrow";
 import { ParamForm } from "../../ParamForm";
 import {
-  itemParamHasChanges,
   moveContentAcrossItems,
   reorderItemOrders,
   sceneHasScriptContent,
@@ -223,9 +222,6 @@ export function ScriptsShell(props: Props) {
   }
 
   async function onRegenParam(itemIdx: number) {
-    if (!itemParamHasChanges(scenes, sceneIdx, itemIdx, lastSavedJsonRef.current)) {
-      return;
-    }
     const requestScripts = scriptsRef.current;
     setRegenBusy(true);
     props.onError(null);
@@ -538,25 +534,7 @@ export function ScriptsShell(props: Props) {
                       </button>
                       <button
                         type="button"
-                        disabled={
-                          regenBusy ||
-                          !itemParamHasChanges(
-                            scenes,
-                            sceneIdx,
-                            ii,
-                            lastSavedJsonRef.current,
-                          )
-                        }
-                        title={
-                          !itemParamHasChanges(
-                            scenes,
-                            sceneIdx,
-                            ii,
-                            lastSavedJsonRef.current,
-                          )
-                            ? "参数无变更"
-                            : undefined
-                        }
+                        disabled={regenBusy}
                         onClick={() => onRegenParam(ii)}
                       >
                         {regenBusy ? "重生中…" : "局部参数重生"}
@@ -850,25 +828,7 @@ export function ScriptsShell(props: Props) {
             <div className="param-toolbar">
               <button
                 type="button"
-                disabled={
-                  regenBusy ||
-                  !itemParamHasChanges(
-                    scenes,
-                    sceneIdx,
-                    paramItemIdx,
-                    lastSavedJsonRef.current,
-                  )
-                }
-                title={
-                  !itemParamHasChanges(
-                    scenes,
-                    sceneIdx,
-                    paramItemIdx,
-                    lastSavedJsonRef.current,
-                  )
-                    ? "参数无变更"
-                    : undefined
-                }
+                disabled={regenBusy}
                 onClick={() => onRegenParam(paramItemIdx)}
               >
                 {regenBusy ? "重生中…" : "局部参数重生"}

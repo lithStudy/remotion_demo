@@ -6,39 +6,12 @@ export function reorderItemOrders(items: Item[]): Item[] {
   return items.map((it, i) => ({ ...it, order: i + 1 }));
 }
 
-function parseSavedScripts(savedJson: string | null): Record<string, unknown> | null {
-  if (savedJson === null) return null;
-  try {
-    return JSON.parse(savedJson) as Record<string, unknown>;
-  } catch {
-    return null;
-  }
-}
-
 export function scriptsHasChanges(
   current: Record<string, unknown>,
   savedJson: string | null,
 ): boolean {
   if (savedJson === null) return false;
   return JSON.stringify(current) !== savedJson;
-}
-
-export function itemParamHasChanges(
-  scenes: Scene[],
-  sceneIdx: number,
-  itemIdx: number,
-  savedJson: string | null,
-): boolean {
-  const saved = parseSavedScripts(savedJson);
-  if (!saved) return false;
-  const savedScenes = (saved.scenes as Scene[]) || [];
-  const savedItem = savedScenes[sceneIdx]?.items?.[itemIdx];
-  const currentItem = scenes[sceneIdx]?.items?.[itemIdx];
-  if (!currentItem) return false;
-  return (
-    JSON.stringify(currentItem.param ?? {}) !==
-    JSON.stringify(savedItem?.param ?? {})
-  );
 }
 
 export function itemHasContent(it: Item): boolean {

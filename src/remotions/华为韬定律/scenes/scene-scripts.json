@@ -2175,19 +2175,19 @@
     },
     {
       "sceneId": "scene_references",
-      "sceneName": "片尾·参考资料",
+      "sceneName": "参考资料",
       "items": [
         {
           "order": 1,
           "narrativeType": "CONCLUSION",
           "template": "SOURCE_CITATION",
-          "reasoning": "片尾展示支撑韬定律官方表述、逻辑折叠工程本质、行业立体堆叠路线，以及三进制/光子/四重图案化等营销包装案例的公开来源，无口播。",
+          "reasoning": "片尾展示支撑韬定律官方表述与论文、摩尔定律原文、行业立体堆叠路线，以及三进制/光芯片/四重图案化等营销包装案例的公开来源，无口播。",
           "content": [],
           "param": {
             "sectionTitle": "参考资料",
             "references": [
               {
-                "title": "Huawei Announces Tau (τ) Law at IEEE ISCAS 2026",
+                "title": "HUAWEI Presents the Tau (τ) Scaling Law, Enabling Breakthroughs in Transistor Density and System Performance",
                 "titleZh": "华为发表韬(τ)定律：以时间缩微替代几何缩微",
                 "publisher": "Huawei",
                 "publisherZh": "华为",
@@ -2195,9 +2195,9 @@
               },
               {
                 "title": "A Time Scaling Theory for Multi-Layer Electronic Systems",
-                "titleZh": "面向多层级电子系统的时间缩微理论（韬定律）",
-                "publisher": "He Tingbo · ChinaXiv / Huawei",
-                "publisherZh": "何庭波 · 中国科学院科技论文预发布平台 / 华为",
+                "titleZh": "多层电子系统的时间缩微理论（韬定律）",
+                "publisher": "Tingbo He · ChinaXiv / Science China Information Sciences",
+                "publisherZh": "何庭波 · ChinaXiv / 《中国科学：信息科学》",
                 "year": "2026"
               },
               {
@@ -2229,8 +2229,8 @@
                 "year": "2025"
               },
               {
-                "title": "CN117406352A / CN115515027A: Silicon Photonics Module and Optoelectronic Hybrid Packaging",
-                "titleZh": "华为硅光模块与光电混合封装专利：面向数据传输与互联",
+                "title": "CN116841060A: Optical Chip, Optical Module and Communication Device",
+                "titleZh": "华为光芯片专利：硅光集成面向数据传输，可降低光模块尺寸与功耗",
                 "publisher": "China National Intellectual Property Administration",
                 "publisherZh": "国家知识产权局",
                 "year": "2023"

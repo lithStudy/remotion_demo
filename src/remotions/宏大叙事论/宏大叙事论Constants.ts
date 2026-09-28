@@ -5,32 +5,28 @@ import { Scene3, calculateScene3Duration } from "./scenes/Scene3";
 import { Scene4, calculateScene4Duration } from "./scenes/Scene4";
 import { Scene5, calculateScene5Duration } from "./scenes/Scene5";
 import { Scene6, calculateScene6Duration } from "./scenes/Scene6";
-import { Scene7, calculateScene7Duration } from "./scenes/Scene7";
-import { Scene8, calculateScene8Duration } from "./scenes/Scene8";
 
-export const 华为韬定律Schema = z.object({});
+export const 宏大叙事论Schema = z.object({});
 
 export const TRANSITION_DURATION = 15;
 export const SCENE_END_PADDING = 20;
 export const COVER_DURATION_FRAMES = 5;
 
 export const sceneConfigs = [
-    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引入·科学神话" },
-    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "剖析·时间缩微" },
-    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "反转·逻辑折叠" },
-    { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "揭示·定律革命" },
-    { name: "scene5", duration: calculateScene5Duration() + SCENE_END_PADDING, component: Scene5, label: "例证·营销套路" },
-    { name: "scene6", duration: calculateScene6Duration() + SCENE_END_PADDING, component: Scene6, label: "剖析·四大伤害" },
-    { name: "scene7", duration: calculateScene7Duration() + SCENE_END_PADDING, component: Scene7, label: "召唤·真正自强" },
-    { name: "scene8", duration: calculateScene8Duration(), component: Scene8, label: "参考资料" },
+    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引入·被大局观堵嘴" },
+    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "反转·核心是收割架构" },
+    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "剖析·目的倒置与权责不等" },
+    { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "剖析·免责与空头支票" },
+    { name: "scene5", duration: calculateScene5Duration() + SCENE_END_PADDING, component: Scene5, label: "召唤·谁受益谁买单" },
+    { name: "scene6", duration: calculateScene6Duration(), component: Scene6, label: "片尾·参考资料" },
 ];
 
-export const MAIN_DURATION_华为韬定律 =
+export const MAIN_DURATION_宏大叙事论 =
     sceneConfigs.reduce((total, c) => total + c.duration, 0) -
     (sceneConfigs.length - 1) * TRANSITION_DURATION;
 
-export const TOTAL_DURATION_华为韬定律 =
-    COVER_DURATION_FRAMES + MAIN_DURATION_华为韬定律;
+export const TOTAL_DURATION_宏大叙事论 =
+    COVER_DURATION_FRAMES + MAIN_DURATION_宏大叙事论;
 
 /** 版心：与 BW_LAYOUT_*、横屏主片一致 1920×1080 */
 export const DESIGN_W = 1920;

@@ -1,0 +1,1710 @@
+{
+  "topic": "你看到的华为“突破冯·诺依曼”，英文官网只写了“扩展”",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "华为又突破冯架构",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促反讽判断作为全片钩子，主表达是金句焦点冲击，选 TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "留给华为突破的世纪发明，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "真的不多了。",
+              "startFrame": 58,
+              "durationFrames": 39
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "留给华为突破的世纪发明，",
+                "showFrom": 0
+              },
+              {
+                "text": "真的不多了。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "世纪发明",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 98
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "TIMELINE",
+          "reasoning": "该段内有两个节拍：‘继韬定律之后’铺垫，‘这次…突破冯·诺依曼架构’转折揭示，适合 BEAT_SEQUENCE；专有名词仅为节点不作解释，故不拆。",
+          "content": [
+            {
+              "text": "继，光子芯片突破光刻机限制，",
+              "startFrame": 0,
+              "durationFrames": 84
+            },
+            {
+              "text": "三进制突破二进制限制，",
+              "startFrame": 84,
+              "durationFrames": 58
+            },
+            {
+              "text": "韬定律突破芯片极限之后，",
+              "startFrame": 141,
+              "durationFrames": 63
+            },
+            {
+              "text": "这次，",
+              "startFrame": 204,
+              "durationFrames": 22
+            },
+            {
+              "text": "他们又突破冯·诺依曼架构了！",
+              "startFrame": 225,
+              "durationFrames": 58
+            }
+          ],
+          "order": 2,
+          "param": {
+            "images": [
+              {
+                "src": "images/冯诺依曼突破论/scene_1_2_img0.png",
+                "enterEffect": "slideLeft",
+                "textIndex": 0,
+                "label": "光子芯片",
+                "startFrame": 0
+              },
+              {
+                "src": "images/冯诺依曼突破论/scene_1_2_img1.png",
+                "enterEffect": "fadeIn",
+                "textIndex": 1,
+                "label": "三进制",
+                "startFrame": 30
+              },
+              {
+                "src": "images/冯诺依曼突破论/scene_1_2_img2.png",
+                "enterEffect": "zoomIn",
+                "textIndex": 2,
+                "label": "韬定律",
+                "startFrame": 60
+              },
+              {
+                "src": "images/冯诺依曼突破论/scene_1_2_img3.png",
+                "enterEffect": "breathe",
+                "textIndex": 4,
+                "label": "冯·诺依曼架构",
+                "startFrame": 90
+              }
+            ]
+          },
+          "totalDurationFrames": 284
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "独立短促收束金句，情绪反转且无需配图，选 TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "先别急着沸腾。",
+              "startFrame": 0,
+              "durationFrames": 50
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "先别急着沸腾。",
+                "showFrom": 0
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 50
+        }
+      ],
+      "audioSrc": "/audio/冯诺依曼突破论/scene_1/scene_1.mp3",
+      "totalDurationFrames": 432
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "冯诺依曼核心",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "CONCEPT_CARD",
+          "reasoning": "该段是设问开场后连续否定两个常见误解，形成三段节拍递进；选BEAT_SEQUENCE让画面随问与两个否定分段切换，同时避免过短问句单独成镜。",
+          "content": [
+            {
+              "text": "什么叫冯·诺依曼架构？",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "它的核心，",
+              "startFrame": 50,
+              "durationFrames": 26
+            },
+            {
+              "text": "是存储程序。",
+              "startFrame": 75,
+              "durationFrames": 40
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/冯诺依曼突破论/scene_2_1.png",
+            "conceptName": "存储程序"
+          },
+          "totalDurationFrames": 115
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "存储程序执行的三步流程，每条短句可独立成步骤，选STEP_LIST按步骤展示。",
+          "content": [
+            {
+              "text": "程序和数据，都放进存储器。",
+              "startFrame": 0,
+              "durationFrames": 69
+            },
+            {
+              "text": "处理器读取指令。",
+              "startFrame": 68,
+              "durationFrames": 51
+            },
+            {
+              "text": "再按照指令处理数据。",
+              "startFrame": 118,
+              "durationFrames": 53
+            },
+            {
+              "text": "凡是遵循这种处理逻辑的，都是冯诺依曼体制。",
+              "startFrame": 171,
+              "durationFrames": 99
+            }
+          ],
+          "order": 2,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "存储程序",
+                "imageSrc": "images/冯诺依曼突破论/scene_2_2_img0.png",
+                "showFrom": 0
+              },
+              {
+                "label": "读取指令",
+                "imageSrc": "images/冯诺依曼突破论/scene_2_2_img1.png",
+                "showFrom": 1
+              },
+              {
+                "label": "执行处理",
+                "imageSrc": "images/冯诺依曼突破论/scene_2_2_img2.png",
+                "showFrom": 2
+              }
+            ],
+            "anchors": [
+              {
+                "text": "冯诺依曼体制",
+                "showFrom": 3,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 270
+        }
+      ],
+      "audioSrc": "/audio/冯诺依曼突破论/scene_2/scene_2.mp3",
+      "totalDurationFrames": 386
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "百万处理器协作",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "设问引入，未形成列表/对比/因果等强结构，用 CENTER_FOCUS 承接开场。",
+          "content": [
+            {
+              "text": "华为的Peerium，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "做了什么？",
+              "startFrame": 39,
+              "durationFrames": 23
+            }
+          ],
+          "order": 1,
+          "param": {
+            "anchors": [
+              {
+                "text": "Peerium",
+                "showFrom": 0,
+                "color": "#000000",
+                "anim": "slideUp",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 63
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "三项并列术语，适合宫格分点展示，选 PANEL_GRID。",
+          "content": [
+            {
+              "text": "嵌套并行。",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "统一内存寻址。",
+              "startFrame": 41,
+              "durationFrames": 44
+            },
+            {
+              "text": "平等互联。",
+              "startFrame": 85,
+              "durationFrames": 38
+            },
+            {
+              "text": "说人话。",
+              "startFrame": 122,
+              "durationFrames": 29
+            },
+            {
+              "text": "就是把计算任务分层。",
+              "startFrame": 150,
+              "durationFrames": 55
+            },
+            {
+              "text": "把分散的内存统一编址。",
+              "startFrame": 205,
+              "durationFrames": 65
+            },
+            {
+              "text": "再用灵衢高速互联。",
+              "startFrame": 269,
+              "durationFrames": 55
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "images/冯诺依曼突破论/scene_3_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/冯诺依曼突破论/scene_3_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/冯诺依曼突破论/scene_3_2_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              }
+            ]
+          },
+          "totalDurationFrames": 324
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "“别…而要…”强对照，选 COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "让百万处理器，",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "别各自为战。",
+              "startFrame": 39,
+              "durationFrames": 35
+            },
+            {
+              "text": "而要像一台机器那样协作。",
+              "startFrame": 74,
+              "durationFrames": 56
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "各自为战",
+            "butText": "如一台机器协作",
+            "butSrc": "images/冯诺依曼突破论/scene_3_3.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 130
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "HUB_RADIATE",
+          "reasoning": "问—答—原因构成节拍递进，且问句短不能独立，合并为 BEAT_SEQUENCE。",
+          "content": [
+            {
+              "text": "这有没有价值？",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "当然有。",
+              "startFrame": 31,
+              "durationFrames": 20
+            },
+            {
+              "text": "人工智能集群越大。",
+              "startFrame": 51,
+              "durationFrames": 62
+            },
+            {
+              "text": "通信和同步越容易拖后腿。",
+              "startFrame": 112,
+              "durationFrames": 73
+            },
+            {
+              "text": "Peerium就是要把路修宽。",
+              "startFrame": 184,
+              "durationFrames": 47
+            },
+            {
+              "text": "把地址统一。",
+              "startFrame": 231,
+              "durationFrames": 35
+            },
+            {
+              "text": "把调度重新设计。",
+              "startFrame": 266,
+              "durationFrames": 48
+            }
+          ],
+          "order": 4,
+          "param": {
+            "hub": {
+              "imageSrc": "images/冯诺依曼突破论/scene_3_4.png",
+              "enterEffect": "zoomIn",
+              "showFrom": 0
+            },
+            "rays": [
+              {
+                "imageSrc": "images/冯诺依曼突破论/scene_3_4_img0.png",
+                "enterEffect": "zoomIn",
+                "showFrom": 4
+              },
+              {
+                "imageSrc": "images/冯诺依曼突破论/scene_3_4_img1.png",
+                "enterEffect": "zoomIn",
+                "showFrom": 5
+              },
+              {
+                "imageSrc": "images/冯诺依曼突破论/scene_3_4_img2.png",
+                "enterEffect": "zoomIn",
+                "showFrom": 6
+              }
+            ]
+          },
+          "totalDurationFrames": 315
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促结论金句，无需配图，选 TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "做成了，",
+              "startFrame": 0,
+              "durationFrames": 22
+            },
+            {
+              "text": "就是重要的工程进步。",
+              "startFrame": 21,
+              "durationFrames": 48
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "做成了，",
+                "showFrom": 0
+              },
+              {
+                "text": "就是重要的工程进步。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "重要的工程进步",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 70
+        }
+      ],
+      "audioSrc": "/audio/冯诺依曼突破论/scene_3/scene_3.mp3",
+      "totalDurationFrames": 903
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "工程进步非突破",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "DOS_AND_DONTS",
+          "reasoning": "铺垫→设问→否答形成三段节拍递进，适合同镜头分段变化，故用 BEAT_SEQUENCE。",
+          "content": [
+            {
+              "text": "可工程进步。",
+              "startFrame": 0,
+              "durationFrames": 34
+            },
+            {
+              "text": "等于突破冯·诺依曼架构吗？",
+              "startFrame": 33,
+              "durationFrames": 56
+            },
+            {
+              "text": "不等于。",
+              "startFrame": 89,
+              "durationFrames": 23
+            }
+          ],
+          "order": 1,
+          "param": {
+            "left": {
+              "label": "❌ 误区",
+              "src": "images/冯诺依曼突破论/scene_4_1_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 实际",
+              "src": "images/冯诺依曼突破论/scene_4_1_right.png",
+              "showFrom": 1
+            }
+          },
+          "totalDurationFrames": 112
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "三项否定并列，每项可独立配图，适合宫格式并列呈现，故用 PANEL_GRID。",
+          "content": [
+            {
+              "text": "它没有抛弃存储程序。",
+              "startFrame": 0,
+              "durationFrames": 51
+            },
+            {
+              "text": "没有取消指令和数据。",
+              "startFrame": 50,
+              "durationFrames": 48
+            },
+            {
+              "text": "也没有创造全新的计算范式。",
+              "startFrame": 98,
+              "durationFrames": 69
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "images/冯诺依曼突破论/scene_4_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/冯诺依曼突破论/scene_4_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/冯诺依曼突破论/scene_4_2_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 167
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "单一核心肯定句，无强列表/对比/步骤，平铺聚焦说明，故用 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "它只是把大量处理器。",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "组织得更加紧密。",
+              "startFrame": 42,
+              "durationFrames": 45
+            }
+          ],
+          "order": 3,
+          "param": {
+            "imageSrc": "images/冯诺依曼突破论/scene_4_3.png",
+            "enterEffect": "zoomIn",
+            "anchors": [
+              {
+                "text": "组织规模",
+                "showFrom": 3,
+                "color": "#000000",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 88
+        },
+        {
+          "order": 4,
+          "template": "DOS_AND_DONTS",
+          "narrativeType": "LOGIC",
+          "content": [
+            {
+              "text": "就像公司从十人扩张到十万人。",
+              "startFrame": 0,
+              "durationFrames": 77
+            },
+            {
+              "text": "组织规模确实扩大了。",
+              "startFrame": 76,
+              "durationFrames": 52
+            },
+            {
+              "text": "但依然还是公司这种组织形式，",
+              "startFrame": 127,
+              "durationFrames": 64
+            }
+          ],
+          "param": {
+            "left": {
+              "label": "❌ 常见误解",
+              "src": "images/冯诺依曼突破论/scene_4_4_left.png",
+              "showFrom": 0
+            },
+            "right": {
+              "label": "✅ 正确理解",
+              "src": "images/冯诺依曼突破论/scene_4_4_right.png",
+              "showFrom": 2
+            }
+          },
+          "totalDurationFrames": 191
+        }
+      ],
+      "audioSrc": "/audio/冯诺依曼突破论/scene_4/scene_4.mp3",
+      "totalDurationFrames": 558
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "优化不是革命",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "METHOD_STACK",
+          "reasoning": "引出“分布式共享内存”这一术语并点明其早已存在，主结构是概念说明，适合用 CONCEPT_CARD 聚焦。",
+          "content": [
+            {
+              "text": "实际上，",
+              "startFrame": 0,
+              "durationFrames": 24
+            },
+            {
+              "text": "分布式共享内存，",
+              "startFrame": 24,
+              "durationFrames": 41
+            },
+            {
+              "text": "几十年前就有。",
+              "startFrame": 64,
+              "durationFrames": 37
+            },
+            {
+              "text": "物理内存受限于硬件大小，是分散的，",
+              "startFrame": 100,
+              "durationFrames": 89
+            },
+            {
+              "text": "但可以把逻辑地址进行统一。",
+              "startFrame": 188,
+              "durationFrames": 60
+            }
+          ],
+          "order": 1,
+          "param": {
+            "title": "分布式共享内存",
+            "imageSrc": "images/冯诺依曼突破论/scene_5_1.png",
+            "notes": [
+              {
+                "text": "几十年前就已提出",
+                "showFrom": 2
+              },
+              {
+                "text": "物理分散，逻辑统一",
+                "showFrom": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 249
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "以“BSP并行模型”加 1990 年形成术语与时间锚点，主结构是概念命名与时间事实，适合 CONCEPT_CARD。",
+          "content": [
+            {
+              "text": "BSP并行模型。",
+              "startFrame": 0,
+              "durationFrames": 54
+            },
+            {
+              "text": "一九九零年就已公开提出。",
+              "startFrame": 53,
+              "durationFrames": 68
+            },
+            {
+              "text": "一九九九年的NestStep研究。",
+              "startFrame": 121,
+              "durationFrames": 75
+            },
+            {
+              "text": "也讨论过嵌套并行。",
+              "startFrame": 196,
+              "durationFrames": 62
+            },
+            {
+              "text": "这是非常直接有效的优化思路。",
+              "startFrame": 257,
+              "durationFrames": 78
+            }
+          ],
+          "order": 2,
+          "param": {
+            "leftSrc": "images/冯诺依曼突破论/scene_5_2_left.png",
+            "rightSrc": "images/冯诺依曼突破论/scene_5_2_right.png",
+            "leftLabel": "BSP模型",
+            "rightLabel": "NestStep研究",
+            "leftShowFrom": 0,
+            "rightShowFrom": 2
+          },
+          "totalDurationFrames": 335
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "KPI_HERO",
+          "reasoning": "“百万处理器规模”是核心数量结果，主结构是数据强调，适合 KPI_HERO。",
+          "content": [
+            {
+              "text": "华为也是沿着这些思路，",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "做到了百万处理器规模。",
+              "startFrame": 51,
+              "durationFrames": 54
+            }
+          ],
+          "order": 3,
+          "param": {
+            "value": 1000000,
+            "prefix": "华为",
+            "suffix": "处理器",
+            "label": "百万规模",
+            "useGrouping": true,
+            "countDuration": 40,
+            "anchors": []
+          },
+          "totalDurationFrames": 105
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "“协议、芯片、内存、软件”是四项并列组件，主结构为并列清单，适合 PANEL_GRID。",
+          "content": [
+            {
+              "text": "把协议、",
+              "startFrame": 0,
+              "durationFrames": 24
+            },
+            {
+              "text": "芯片、",
+              "startFrame": 24,
+              "durationFrames": 20
+            },
+            {
+              "text": "内存",
+              "startFrame": 43,
+              "durationFrames": 18
+            },
+            {
+              "text": "和软件打通。",
+              "startFrame": 61,
+              "durationFrames": 34
+            },
+            {
+              "text": "确实不是容易的工程。",
+              "startFrame": 94,
+              "durationFrames": 49
+            }
+          ],
+          "order": 4,
+          "param": {
+            "panels": [
+              {
+                "src": "images/冯诺依曼突破论/scene_5_4_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "src": "images/冯诺依曼突破论/scene_5_4_img1.png",
+                "showFrom": 1,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/冯诺依曼突破论/scene_5_4_img2.png",
+                "showFrom": 2,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/冯诺依曼突破论/scene_5_4_img3.png",
+                "showFrom": 3,
+                "enterEffect": "zoomIn"
+              }
+            ]
+          },
+          "totalDurationFrames": 144
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "让步后转折，把“优化”与“突破架构本身”做强对照，主结构为认知转变，适合 COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "但优化终究是优化，",
+              "startFrame": 0,
+              "durationFrames": 48
+            },
+            {
+              "text": "扩充架构的规模上限。",
+              "startFrame": 48,
+              "durationFrames": 48
+            },
+            {
+              "text": "和突破架构本身。",
+              "startFrame": 96,
+              "durationFrames": 45
+            },
+            {
+              "text": "根本不是一回事。",
+              "startFrame": 140,
+              "durationFrames": 42
+            }
+          ],
+          "order": 5,
+          "param": {
+            "leftSrc": "images/冯诺依曼突破论/scene_5_5_left.png",
+            "rightSrc": "images/冯诺依曼突破论/scene_5_5_right.png",
+            "leftLabel": "优化扩充",
+            "rightLabel": "架构突破",
+            "leftShowFrom": 0,
+            "rightShowFrom": 2
+          },
+          "totalDurationFrames": 183
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "用“不等于”形成高铁时速与轮轨交通的类比反驳，主结构为强对照转变，适合 COGNITIVE_SHIFT。",
+          "content": [
+            {
+              "text": "就像高铁突破时速四百公里。",
+              "startFrame": 0,
+              "durationFrames": 69
+            },
+            {
+              "text": "不等于高铁突破了轮轨交通。",
+              "startFrame": 68,
+              "durationFrames": 68
+            }
+          ],
+          "order": 6,
+          "param": {
+            "notText": "突破时速四百公里",
+            "butText": "突破轮轨交通",
+            "butSrc": "images/冯诺依曼突破论/scene_5_6.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 137
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片级收束金句，情绪冲击强且无需配图，适合 TEXT_FOCUS。",
+          "content": [
+            {
+              "text": "你再吹牛逼，",
+              "startFrame": 0,
+              "durationFrames": 28
+            },
+            {
+              "text": "也不该碰瓷奠基整个信息化时代的冯·诺依曼。",
+              "startFrame": 27,
+              "durationFrames": 91
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "不该碰瓷",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "奠基整个信息化时代的冯·诺依曼。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "冯·诺依曼",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 119
+        }
+      ],
+      "audioSrc": "/audio/冯诺依曼突破论/scene_5/scene_5.mp3",
+      "totalDurationFrames": 1270
+    },
+    {
+      "sceneId": "scene_6",
+      "sceneName": "官网英文说扩展",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "PUNCH_CAPTION",
+          "reasoning": "开篇点出中英文官网两方说辞不一致，用SPLIT_COMPARE左右同框建立冲突。",
+          "content": [
+            {
+              "text": "更何况，",
+              "startFrame": 0,
+              "durationFrames": 18
+            },
+            {
+              "text": "华为自己的中英文官网。",
+              "startFrame": 17,
+              "durationFrames": 51
+            },
+            {
+              "text": "给出了两种完全不同的说辞。",
+              "startFrame": 67,
+              "durationFrames": 60
+            }
+          ],
+          "order": 1,
+          "param": {
+            "punches": [
+              {
+                "text": "更何况，",
+                "showFrom": 0,
+                "enterEffect": "slideUp",
+                "tone": "calm"
+              },
+              {
+                "text": "华为自己的官网",
+                "showFrom": 1,
+                "enterEffect": "snap",
+                "tone": "alert"
+              },
+              {
+                "text": "两种不同说辞",
+                "showFrom": 2,
+                "enterEffect": "shake",
+                "tone": "alert"
+              }
+            ]
+          },
+          "totalDurationFrames": 127
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "QUOTE_CITATION",
+          "reasoning": "英文官网引述后紧跟质疑，构成来源呈现与疑问两段节拍递进，用BEAT_SEQUENCE分段推进。",
+          "content": [
+            {
+              "text": "华为中文官网写的是：",
+              "startFrame": 0,
+              "durationFrames": 56
+            },
+            {
+              "text": "突破，",
+              "startFrame": 55,
+              "durationFrames": 17
+            },
+            {
+              "text": "冯·诺依曼单机架构。",
+              "startFrame": 72,
+              "durationFrames": 54
+            }
+          ],
+          "order": 2,
+          "param": {
+            "quoteSource": "华为中文官网",
+            "quoteDisplayText": "突破，冯·诺依曼单机架构。",
+            "showFrom": 1
+          },
+          "totalDurationFrames": 126
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "QUOTE_CITATION",
+          "reasoning": "英文官网引述后紧跟质疑，构成来源呈现与疑问两段节拍递进，用BEAT_SEQUENCE分段推进。",
+          "content": [
+            {
+              "text": "可同一篇新闻的英文官网写的是：",
+              "startFrame": 0,
+              "durationFrames": 72
+            },
+            {
+              "text": "extends the von Neumann single-machine architecture。",
+              "startFrame": 72,
+              "durationFrames": 105
+            }
+          ],
+          "order": 3,
+          "param": {
+            "quoteSource": "华为英文官网",
+            "quoteDisplayText": "extends the von Neumann single-machine architecture。",
+            "showFrom": 1
+          },
+          "totalDurationFrames": 177
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "HUB_RADIATE",
+          "reasoning": "先肯定扩展，再否定replace、overturn、abandon，最后回到扩展，是认知纠正，用COGNITIVE_SHIFT呈现反转。",
+          "content": [
+            {
+              "text": "这句英文什么意思？",
+              "startFrame": 0,
+              "durationFrames": 40
+            },
+            {
+              "text": "扩展，冯·诺依曼单机架构。",
+              "startFrame": 39,
+              "durationFrames": 72
+            },
+            {
+              "text": "不是replace。",
+              "startFrame": 111,
+              "durationFrames": 40
+            },
+            {
+              "text": "不是overturn。",
+              "startFrame": 151,
+              "durationFrames": 26
+            },
+            {
+              "text": "更不是abandon。",
+              "startFrame": 176,
+              "durationFrames": 34
+            }
+          ],
+          "order": 4,
+          "param": {
+            "hub": {
+              "imageSrc": "images/冯诺依曼突破论/scene_6_4.png",
+              "enterEffect": "zoomIn",
+              "showFrom": 1
+            },
+            "rays": [
+              {
+                "imageSrc": "images/冯诺依曼突破论/scene_6_4_img0.png",
+                "enterEffect": "fadeIn",
+                "showFrom": 2
+              },
+              {
+                "imageSrc": "images/冯诺依曼突破论/scene_6_4_img1.png",
+                "enterEffect": "slideLeft",
+                "showFrom": 3
+              },
+              {
+                "imageSrc": "images/冯诺依曼突破论/scene_6_4_img2.png",
+                "enterEffect": "slideBottom",
+                "showFrom": 4
+              }
+            ],
+            "anchors": [
+              {
+                "text": "扩展",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 210
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "三个短句层层推进，从工程师懂用词到对懂技术同行说扩展，用BEAT_SEQUENCE分步呈现论证。",
+          "content": [
+            {
+              "text": "你看。",
+              "startFrame": 0,
+              "durationFrames": 18
+            },
+            {
+              "text": "扩展这个词用的就很好。",
+              "startFrame": 17,
+              "durationFrames": 55
+            },
+            {
+              "text": "其实华为的工程师，",
+              "startFrame": 71,
+              "durationFrames": 42
+            },
+            {
+              "text": "是懂用词的。",
+              "startFrame": 113,
+              "durationFrames": 40
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "扩展",
+                "showFrom": 1,
+                "endFrom": 3
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 153
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "两个并列变化都是A变成B的夸大，用PANEL_GRID双格并列对照。",
+          "content": [
+            {
+              "text": "面对懂技术的全球同行。",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "它知道这叫扩展。",
+              "startFrame": 52,
+              "durationFrames": 43
+            },
+            {
+              "text": "到了中文舆论场。",
+              "startFrame": 94,
+              "durationFrames": 44
+            },
+            {
+              "text": "扩展就变成了突破。",
+              "startFrame": 138,
+              "durationFrames": 47
+            },
+            {
+              "text": "扩大规模就变成了改写规则。",
+              "startFrame": 185,
+              "durationFrames": 77
+            }
+          ],
+          "order": 6,
+          "param": {
+            "leftSrc": "images/冯诺依曼突破论/scene_6_6_left.png",
+            "rightSrc": "images/冯诺依曼突破论/scene_6_6_right.png",
+            "leftLabel": "全球同行",
+            "rightLabel": "中文舆论场",
+            "leftShowFrom": 0,
+            "rightShowFrom": 2
+          },
+          "totalDurationFrames": 262
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "从低成本到敢吹牛形成因果递进，用BEAT_SEQUENCE两拍呈现因与果。",
+          "content": [
+            {
+              "text": "国内忽悠人，几乎没有成本。",
+              "startFrame": 0,
+              "durationFrames": 62
+            },
+            {
+              "text": "所以你就可劲吹牛逼呗？",
+              "startFrame": 61,
+              "durationFrames": 51
+            }
+          ],
+          "order": 7,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "忽悠无成本",
+                "imageSrc": "images/冯诺依曼突破论/scene_6_7_img0.png",
+                "showFrom": 0,
+                "enterEffect": "breathe"
+              },
+              {
+                "label": "可劲吹牛",
+                "imageSrc": "images/冯诺依曼突破论/scene_6_7_img1.png",
+                "showFrom": 1,
+                "enterEffect": "breathe"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "忽悠人",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              },
+              {
+                "text": "可劲吹",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 113
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "HUB_RADIATE",
+          "reasoning": "两个并列的“把…说成…”例证揭露套路，用PANEL_GRID双格对照组。",
+          "content": [
+            {
+              "text": "华为系营销号的套路。",
+              "startFrame": 0,
+              "durationFrames": 55
+            },
+            {
+              "text": "一直都是这样。",
+              "startFrame": 54,
+              "durationFrames": 32
+            },
+            {
+              "text": "把工程优化，",
+              "startFrame": 86,
+              "durationFrames": 33
+            },
+            {
+              "text": "说成理论革命。",
+              "startFrame": 119,
+              "durationFrames": 43
+            },
+            {
+              "text": "把解决瓶颈，",
+              "startFrame": 161,
+              "durationFrames": 32
+            },
+            {
+              "text": "说成改写规则。",
+              "startFrame": 193,
+              "durationFrames": 41
+            }
+          ],
+          "order": 8,
+          "param": {
+            "hub": {
+              "imageSrc": "images/冯诺依曼突破论/scene_6_8.png",
+              "enterEffect": "zoomIn",
+              "showFrom": 0
+            },
+            "rays": [
+              {
+                "imageSrc": "images/冯诺依曼突破论/scene_6_8_img0.png",
+                "showFrom": 2,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "imageSrc": "images/冯诺依曼突破论/scene_6_8_img1.png",
+                "showFrom": 4,
+                "enterEffect": "slideLeft"
+              }
+            ]
+          },
+          "totalDurationFrames": 234
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促收束，用TEXT_FOCUS放大关键结论，无需配图。",
+          "content": [
+            {
+              "text": "韬定律之后。",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "这次轮到了冯·诺依曼。",
+              "startFrame": 36,
+              "durationFrames": 48
+            }
+          ],
+          "order": 9,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "韬定律之后。",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "这次轮到了冯·诺依曼。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "冯·诺依曼",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 84
+        }
+      ],
+      "audioSrc": "/audio/冯诺依曼突破论/scene_6/scene_6.mp3",
+      "totalDurationFrames": 1485
+    },
+    {
+      "sceneId": "scene_7",
+      "sceneName": "贡献与成绩单",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CENTER_FOCUS",
+          "reasoning": "过渡句与结论句合并，避免短句过碎；主表达为平缓结论叙述，默认用 CENTER_FOCUS。",
+          "content": [
+            {
+              "text": "最后，",
+              "startFrame": 0,
+              "durationFrames": 16
+            },
+            {
+              "text": "客观的说一下。",
+              "startFrame": 15,
+              "durationFrames": 41
+            },
+            {
+              "text": "Peerium没有颠覆冯·诺依曼架构。",
+              "startFrame": 55,
+              "durationFrames": 61
+            },
+            {
+              "text": "它有没有贡献？",
+              "startFrame": 116,
+              "durationFrames": 33
+            },
+            {
+              "text": "有的，",
+              "startFrame": 149,
+              "durationFrames": 20
+            },
+            {
+              "text": "兄弟。",
+              "startFrame": 168,
+              "durationFrames": 20
+            },
+            {
+              "text": "理论上有的。",
+              "startFrame": 188,
+              "durationFrames": 32
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/冯诺依曼突破论/scene_7_1.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "冯·诺依曼架构",
+                "showFrom": 2,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 221
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "PANEL_GRID",
+          "reasoning": "主题句引出三个并列贡献点，需宫格独立配图，用 PANEL_GRID；三点的并列结构不宜拆散。",
+          "content": [
+            {
+              "text": "它的贡献。",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "是挑战超大集群的通信瓶颈。",
+              "startFrame": 26,
+              "durationFrames": 90
+            },
+            {
+              "text": "是统一异构设备的互联。",
+              "startFrame": 116,
+              "durationFrames": 65
+            },
+            {
+              "text": "是降低百万处理器的协作成本。",
+              "startFrame": 180,
+              "durationFrames": 87
+            }
+          ],
+          "order": 2,
+          "param": {
+            "panels": [
+              {
+                "src": "images/冯诺依曼突破论/scene_7_2_img0.png",
+                "showFrom": 1,
+                "enterEffect": "slideBottom"
+              },
+              {
+                "src": "images/冯诺依曼突破论/scene_7_2_img1.png",
+                "showFrom": 2,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/冯诺依曼突破论/scene_7_2_img2.png",
+                "showFrom": 3,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 267
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CASE_BREAKDOWN",
+          "reasoning": "同一验证子话题内：质疑真伪→真实部署→外部验证（第三方测试+功耗生态）→且听龙吟收束，单主图贯穿、右侧阶段轨对齐口播，适合 CASE_BREAKDOWN。",
+          "content": [
+            {
+              "text": "至于这些贡献到底是嘴上说说还是工程实现了呢？",
+              "startFrame": 0,
+              "durationFrames": 111
+            },
+            {
+              "text": "还要看真实部署。",
+              "startFrame": 110,
+              "durationFrames": 45
+            },
+            {
+              "text": "看第三方测试。",
+              "startFrame": 155,
+              "durationFrames": 43
+            },
+            {
+              "text": "看功耗和软件生态。",
+              "startFrame": 198,
+              "durationFrames": 51
+            },
+            {
+              "text": "毕竟，华为“且听龙吟”的次数已经太多了。",
+              "startFrame": 249,
+              "durationFrames": 105
+            },
+            {
+              "text": "实在不应该光听他们怎么吹。",
+              "startFrame": 353,
+              "durationFrames": 60
+            }
+          ],
+          "order": 3,
+          "param": {
+            "title": "贡献真伪三验",
+            "imageSrc": "images/冯诺依曼突破论/scene_7_3.png",
+            "phases": [
+              {
+                "phaseLabel": "真实部署",
+                "showFrom": 1
+              },
+              {
+                "phaseLabel": "外部验证",
+                "showFrom": 2
+              },
+              {
+                "phaseLabel": "功耗和软件生态",
+                "showFrom": 3
+              }
+            ],
+            "anchors": [
+              {
+                "text": "且听龙吟",
+                "showFrom": 4,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 414
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "PEER_INDUCT",
+          "reasoning": "两个希望与‘但’构成递进转折，情绪有节拍变化，用 BEAT_SEQUENCE 做分段强调。",
+          "content": [
+            {
+              "text": "我希望真的有技术突破，",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "我希望能卡别人的脖子，",
+              "startFrame": 46,
+              "durationFrames": 56
+            },
+            {
+              "text": "但要给我看真正的成绩单。",
+              "startFrame": 102,
+              "durationFrames": 64
+            }
+          ],
+          "order": 4,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "images/冯诺依曼突破论/scene_7_4_img0.png",
+                "enterEffect": "fadeIn",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/冯诺依曼突破论/scene_7_4_img1.png",
+                "enterEffect": "slideBottom",
+                "showFrom": 1
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "images/冯诺依曼突破论/scene_7_4.png",
+              "enterEffect": "zoomIn",
+              "tone": "alert",
+              "showFrom": 2
+            }
+          },
+          "totalDurationFrames": 167
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "两句短促强结论，无需配图，适合 TEXT_FOCUS 金句聚焦。",
+          "content": [
+            {
+              "text": "说到底，真正有价值的工程。",
+              "startFrame": 0,
+              "durationFrames": 72
+            },
+            {
+              "text": "不需要冒充理论革命。",
+              "startFrame": 72,
+              "durationFrames": 44
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "真正有价值的工程。",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "不需要冒充理论革命。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "理论革命",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 116
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "明确‘要尊重’与‘别硬吹’的强导向，用 DOS_AND_DONTS 呈现对错对比。",
+          "content": [
+            {
+              "text": "尊重工程师。",
+              "startFrame": 0,
+              "durationFrames": 39
+            },
+            {
+              "text": "就别把五十度的水。",
+              "startFrame": 38,
+              "durationFrames": 42
+            },
+            {
+              "text": "硬吹成一百度。",
+              "startFrame": 79,
+              "durationFrames": 39
+            }
+          ],
+          "order": 6,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "尊重工程师。",
+                "showFrom": 0
+              },
+              {
+                "text": "就别把五十度的水。",
+                "showFrom": 1
+              },
+              {
+                "text": "硬吹成一百度。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "五十度",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "一百度",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 119
+        }
+      ],
+      "audioSrc": "/audio/冯诺依曼突破论/scene_7/scene_7.mp3",
+      "totalDurationFrames": 1302
+    },
+    {
+      "sceneId": "scene_references",
+      "sceneName": "片尾·参考资料",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "CONCLUSION",
+          "template": "SOURCE_CITATION",
+          "reasoning": "片尾展示支撑 Peerium 中英文官网表述差异、Nested BSP/嵌套并行学术渊源，以及冯·诺依曼存储程序体制定义的公开来源，无口播。",
+          "content": [],
+          "param": {
+            "sectionTitle": "参考资料",
+            "references": [
+              {
+                "title": "华为开创AI时代计算架构：让百万处理器成为一台计算机",
+                "titleZh": "华为中文官网：Peerium「突破」冯·诺依曼单机架构，提出 Nested BSP",
+                "publisher": "Huawei",
+                "publisherZh": "华为",
+                "year": "2026"
+              },
+              {
+                "title": "Huawei Pioneers a New Computing Architecture for the AI Era: Making One Million Processors Work as One Computer",
+                "titleZh": "华为英文官网：Peerium「扩展」冯·诺依曼单机架构（extends）",
+                "publisher": "Huawei",
+                "publisherZh": "华为",
+                "year": "2026"
+              },
+              {
+                "title": "Nested Parallel von Neumann Architecture and Nested BSP",
+                "titleZh": "预印本：嵌套并行冯·诺依曼架构与 Nested BSP（定位为扩展而非抛弃）",
+                "publisher": "Heng Liao · arXiv",
+                "publisherZh": "廖恒 · arXiv",
+                "year": "2026"
+              },
+              {
+                "title": "A Bridging Model for Parallel Computation",
+                "titleZh": "BSP（批量同步并行）模型原文：并行计算的桥接模型",
+                "publisher": "Leslie G. Valiant · Communications of the ACM",
+                "publisherZh": "Leslie G. Valiant · ACM 通讯",
+                "year": "1990"
+              },
+              {
+                "title": "NestStep: Nested Parallelism and Virtual Shared Memory for the BSP Model",
+                "titleZh": "NestStep：面向 BSP 的嵌套并行与虚拟共享内存",
+                "publisher": "Christoph W. Keßler · PDPTA",
+                "publisherZh": "Christoph W. Keßler · PDPTA",
+                "year": "1999"
+              },
+              {
+                "title": "First Draft of a Report on the EDVAC",
+                "titleZh": "冯·诺依曼存储程序体制奠基文献：EDVAC 报告初稿",
+                "publisher": "John von Neumann",
+                "publisherZh": "John von Neumann",
+                "year": "1945"
+              },
+              {
+                "title": "Huawei Unveils New UnifiedBus Computing Architecture for SuperPoDs and Clusters",
+                "titleZh": "华为灵衢（UnifiedBus）：超节点与集群的平等互联总线",
+                "publisher": "Huawei",
+                "publisherZh": "华为",
+                "year": "2026"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "冯诺依曼突破论",
+    "subtitle": "留给华为的世纪突破已经不多了",
+    "themeColor": "#FF6900",
+    "badge": "深度解读 · 数据与事实",
+    "seriesLabel": "科技热点深读",
+    "seriesLabelEn": "TECH DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

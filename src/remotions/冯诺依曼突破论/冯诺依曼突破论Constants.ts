@@ -8,29 +8,29 @@ import { Scene6, calculateScene6Duration } from "./scenes/Scene6";
 import { Scene7, calculateScene7Duration } from "./scenes/Scene7";
 import { Scene8, calculateScene8Duration } from "./scenes/Scene8";
 
-export const 华为韬定律Schema = z.object({});
+export const 冯诺依曼突破论Schema = z.object({});
 
 export const TRANSITION_DURATION = 15;
 export const SCENE_END_PADDING = 20;
 export const COVER_DURATION_FRAMES = 5;
 
 export const sceneConfigs = [
-    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "引入·科学神话" },
-    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "剖析·时间缩微" },
-    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "反转·逻辑折叠" },
-    { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "揭示·定律革命" },
-    { name: "scene5", duration: calculateScene5Duration() + SCENE_END_PADDING, component: Scene5, label: "例证·营销套路" },
-    { name: "scene6", duration: calculateScene6Duration() + SCENE_END_PADDING, component: Scene6, label: "剖析·四大伤害" },
-    { name: "scene7", duration: calculateScene7Duration() + SCENE_END_PADDING, component: Scene7, label: "召唤·真正自强" },
-    { name: "scene8", duration: calculateScene8Duration(), component: Scene8, label: "参考资料" },
+    { name: "scene1", duration: calculateScene1Duration() + SCENE_END_PADDING, component: Scene1, label: "华为又突破冯架构" },
+    { name: "scene2", duration: calculateScene2Duration() + SCENE_END_PADDING, component: Scene2, label: "冯诺依曼核心" },
+    { name: "scene3", duration: calculateScene3Duration() + SCENE_END_PADDING, component: Scene3, label: "百万处理器协作" },
+    { name: "scene4", duration: calculateScene4Duration() + SCENE_END_PADDING, component: Scene4, label: "工程进步非突破" },
+    { name: "scene5", duration: calculateScene5Duration() + SCENE_END_PADDING, component: Scene5, label: "优化不是革命" },
+    { name: "scene6", duration: calculateScene6Duration() + SCENE_END_PADDING, component: Scene6, label: "官网英文说扩展" },
+    { name: "scene7", duration: calculateScene7Duration() + SCENE_END_PADDING, component: Scene7, label: "贡献与成绩单" },
+    { name: "scene8", duration: calculateScene8Duration(), component: Scene8, label: "片尾·参考资料" },
 ];
 
-export const MAIN_DURATION_华为韬定律 =
+export const MAIN_DURATION_冯诺依曼突破论 =
     sceneConfigs.reduce((total, c) => total + c.duration, 0) -
     (sceneConfigs.length - 1) * TRANSITION_DURATION;
 
-export const TOTAL_DURATION_华为韬定律 =
-    COVER_DURATION_FRAMES + MAIN_DURATION_华为韬定律;
+export const TOTAL_DURATION_冯诺依曼突破论 =
+    COVER_DURATION_FRAMES + MAIN_DURATION_冯诺依曼突破论;
 
 /** 版心：与 BW_LAYOUT_*、横屏主片一致 1920×1080 */
 export const DESIGN_W = 1920;

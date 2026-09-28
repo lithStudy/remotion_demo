@@ -49,8 +49,6 @@ import { Ai普惠执剑人, Ai普惠执剑人竖屏, Ai普惠执剑人Schema, TO
 import { Ai普惠执剑人封面横屏, Ai普惠执剑人封面竖屏 } from "./remotions/AI普惠执剑人/Ai普惠执剑人CoverStills";
 import { 纳税人, 纳税人竖屏, 纳税人Schema, TOTAL_DURATION_纳税人 } from "./remotions/纳税人/纳税人";
 import { 纳税人封面横屏, 纳税人封面竖屏 } from "./remotions/纳税人/纳税人CoverStills";
-import { 华为韬定律, 华为韬定律竖屏, 华为韬定律Schema, TOTAL_DURATION_华为韬定律 } from "./remotions/华为韬定律/华为韬定律";
-import { 华为韬定律封面横屏, 华为韬定律封面竖屏 } from "./remotions/华为韬定律/华为韬定律CoverStills";
 import { 华为高价论, 华为高价论竖屏, 华为高价论Schema, TOTAL_DURATION_华为高价论 } from "./remotions/华为高价论/华为高价论";
 import { 华为高价论封面横屏, 华为高价论封面竖屏 } from "./remotions/华为高价论/华为高价论CoverStills";
 import { 权利与责任, 权利与责任竖屏, 权利与责任Schema, TOTAL_DURATION_权利与责任 } from "./remotions/权利与责任/权利与责任";
@@ -97,6 +95,12 @@ import { 国产情怀的谎言, 国产情怀的谎言竖屏, 国产情怀的谎�
 import { 国产情怀的谎言封面横屏, 国产情怀的谎言封面竖屏 } from "./remotions/国产情怀的谎言/国产情怀的谎言CoverStills";
 import { 千年传承论, 千年传承论竖屏, 千年传承论Schema, TOTAL_DURATION_千年传承论 } from "./remotions/千年传承论/千年传承论";
 import { 千年传承论封面横屏, 千年传承论封面竖屏 } from "./remotions/千年传承论/千年传承论CoverStills";
+import { 冯诺依曼突破论, 冯诺依曼突破论竖屏, 冯诺依曼突破论Schema, TOTAL_DURATION_冯诺依曼突破论 } from "./remotions/冯诺依曼突破论/冯诺依曼突破论";
+import { 冯诺依曼突破论封面横屏, 冯诺依曼突破论封面竖屏 } from "./remotions/冯诺依曼突破论/冯诺依曼突破论CoverStills";
+import { 华为韬定律, 华为韬定律竖屏, 华为韬定律Schema, TOTAL_DURATION_华为韬定律 } from "./remotions/华为韬定律/华为韬定律";
+import { 华为韬定律封面横屏, 华为韬定律封面竖屏 } from "./remotions/华为韬定律/华为韬定律CoverStills";
+import { 宏大叙事论, 宏大叙事论竖屏, 宏大叙事论Schema, TOTAL_DURATION_宏大叙事论 } from "./remotions/宏大叙事论/宏大叙事论";
+import { 宏大叙事论封面横屏, 宏大叙事论封面竖屏 } from "./remotions/宏大叙事论/宏大叙事论CoverStills";
 // Each <Composition> is an entry in the sidebar!
 
 export const RemotionRoot: React.FC = () => {
@@ -338,59 +342,7 @@ export const RemotionRoot: React.FC = () => {
         coverVertical={抵制特斯拉的伪爱国封面竖屏}
       />
 
-      
-      */}
-
-
-
-      
-
-
-      <NarratorTopicCompositions
-        id="智驾兜底论"
-        landscape={智驾兜底论}
-        vertical={智驾兜底论竖屏}
-        durationInFrames={TOTAL_DURATION_智驾兜底论}
-        schema={智驾兜底论Schema}
-        coverLandscape={智驾兜底论封面横屏}
-        coverVertical={智驾兜底论封面竖屏}
-      />
-
-
-      <NarratorTopicCompositions
-        id="智驾论之瓶颈"
-        landscape={智驾论之瓶颈}
-        vertical={智驾论之瓶颈竖屏}
-        durationInFrames={TOTAL_DURATION_智驾论之瓶颈}
-        schema={智驾论之瓶颈Schema}
-        coverLandscape={智驾论之瓶颈封面横屏}
-        coverVertical={智驾论之瓶颈封面竖屏}
-      />
-
-      <NarratorTopicCompositions
-        id="智驾论之性价比"
-        landscape={智驾论之性价比}
-        vertical={智驾论之性价比竖屏}
-        durationInFrames={TOTAL_DURATION_智驾论之性价比}
-        schema={智驾论之性价比Schema}
-        coverLandscape={智驾论之性价比封面横屏}
-        coverVertical={智驾论之性价比封面竖屏}
-      />
-      
-
-      <NarratorTopicCompositions
-        id="华为抹黑论"
-        landscape={华为抹黑论}
-        vertical={华为抹黑论竖屏}
-        durationInFrames={TOTAL_DURATION_华为抹黑论}
-        schema={华为抹黑论Schema}
-        coverLandscape={华为抹黑论封面横屏}
-        coverVertical={华为抹黑论封面竖屏}
-      />
-
-      
-
-      <NarratorTopicCompositions
+        <NarratorTopicCompositions
         id="权利的边界"
         landscape={权利的边界}
         vertical={权利的边界竖屏}
@@ -420,17 +372,15 @@ export const RemotionRoot: React.FC = () => {
         coverLandscape={爱国先爱同胞封面横屏}
         coverVertical={爱国先爱同胞封面竖屏}
       />
-      
 
-      <NarratorTopicCompositions
-        id="华为韬定律"
-        landscape={华为韬定律}
-        vertical={华为韬定律竖屏}
-        durationInFrames={TOTAL_DURATION_华为韬定律}
-        fps={30}
-        schema={华为韬定律Schema}
-        coverLandscape={华为韬定律封面横屏}
-        coverVertical={华为韬定律封面竖屏}
+        <NarratorTopicCompositions
+        id="华为抹黑论"
+        landscape={华为抹黑论}
+        vertical={华为抹黑论竖屏}
+        durationInFrames={TOTAL_DURATION_华为抹黑论}
+        schema={华为抹黑论Schema}
+        coverLandscape={华为抹黑论封面横屏}
+        coverVertical={华为抹黑论封面竖屏}
       />
       <NarratorTopicCompositions
         id="华为高价论"
@@ -442,33 +392,8 @@ export const RemotionRoot: React.FC = () => {
         coverLandscape={华为高价论封面横屏}
         coverVertical={华为高价论封面竖屏}
       />
-      
-      <NarratorTopicCompositions
-        id="碎片认知"
-        landscape={碎片认知}
-        vertical={碎片认知竖屏}
-        durationInFrames={TOTAL_DURATION_碎片认知}
-        fps={30}
-        schema={碎片认知Schema}
-        coverLandscape={碎片认知封面横屏}
-        coverVertical={碎片认知封面竖屏}
-      />
 
-
-      <NarratorTopicCompositions
-        id="客户提纯论"
-        landscape={客户提纯论}
-        vertical={客户提纯论竖屏}
-        durationInFrames={TOTAL_DURATION_客户提纯论}
-        fps={30}
-        schema={客户提纯论Schema}
-        coverLandscape={客户提纯论封面横屏}
-        coverVertical={客户提纯论封面竖屏}
-      />
-
-
-
-      <NarratorTopicCompositions
+       <NarratorTopicCompositions
         id="开源精神"
         landscape={开源精神}
         vertical={开源精神竖屏}
@@ -536,6 +461,7 @@ export const RemotionRoot: React.FC = () => {
         coverVertical={大模型先驱论封面竖屏}
       />
 
+      
       <NarratorTopicCompositions
         id="华为造车论"
         landscape={华为造车论}
@@ -557,21 +483,6 @@ export const RemotionRoot: React.FC = () => {
         coverLandscape={鸿蒙商业圈地封面横屏}
         coverVertical={鸿蒙商业圈地封面竖屏}
       />
-
-
-
-
-      <NarratorTopicCompositions
-        id="精神胜利法"
-        landscape={精神胜利法}
-        vertical={精神胜利法竖屏}
-        durationInFrames={TOTAL_DURATION_精神胜利法}
-        fps={30}
-        schema={精神胜利法Schema}
-        coverLandscape={精神胜利法封面横屏}
-        coverVertical={精神胜利法封面竖屏}
-      />
-
 
       <NarratorTopicCompositions
         id="问界之殇"
@@ -604,6 +515,84 @@ export const RemotionRoot: React.FC = () => {
         coverLandscape={国产情怀的谎言封面横屏}
         coverVertical={国产情怀的谎言封面竖屏}
       />
+      
+      */}
+
+
+
+      
+
+
+      <NarratorTopicCompositions
+        id="智驾兜底论"
+        landscape={智驾兜底论}
+        vertical={智驾兜底论竖屏}
+        durationInFrames={TOTAL_DURATION_智驾兜底论}
+        schema={智驾兜底论Schema}
+        coverLandscape={智驾兜底论封面横屏}
+        coverVertical={智驾兜底论封面竖屏}
+      />
+
+
+      <NarratorTopicCompositions
+        id="智驾论之瓶颈"
+        landscape={智驾论之瓶颈}
+        vertical={智驾论之瓶颈竖屏}
+        durationInFrames={TOTAL_DURATION_智驾论之瓶颈}
+        schema={智驾论之瓶颈Schema}
+        coverLandscape={智驾论之瓶颈封面横屏}
+        coverVertical={智驾论之瓶颈封面竖屏}
+      />
+
+      <NarratorTopicCompositions
+        id="智驾论之性价比"
+        landscape={智驾论之性价比}
+        vertical={智驾论之性价比竖屏}
+        durationInFrames={TOTAL_DURATION_智驾论之性价比}
+        schema={智驾论之性价比Schema}
+        coverLandscape={智驾论之性价比封面横屏}
+        coverVertical={智驾论之性价比封面竖屏}
+      />
+
+    
+      
+      <NarratorTopicCompositions
+        id="碎片认知"
+        landscape={碎片认知}
+        vertical={碎片认知竖屏}
+        durationInFrames={TOTAL_DURATION_碎片认知}
+        fps={30}
+        schema={碎片认知Schema}
+        coverLandscape={碎片认知封面横屏}
+        coverVertical={碎片认知封面竖屏}
+      />
+
+
+      <NarratorTopicCompositions
+        id="客户提纯论"
+        landscape={客户提纯论}
+        vertical={客户提纯论竖屏}
+        durationInFrames={TOTAL_DURATION_客户提纯论}
+        fps={30}
+        schema={客户提纯论Schema}
+        coverLandscape={客户提纯论封面横屏}
+        coverVertical={客户提纯论封面竖屏}
+      />
+
+
+      <NarratorTopicCompositions
+        id="精神胜利法"
+        landscape={精神胜利法}
+        vertical={精神胜利法竖屏}
+        durationInFrames={TOTAL_DURATION_精神胜利法}
+        fps={30}
+        schema={精神胜利法Schema}
+        coverLandscape={精神胜利法封面横屏}
+        coverVertical={精神胜利法封面竖屏}
+      />
+
+
+      
 
       <NarratorTopicCompositions
         id="千年传承论"
@@ -614,6 +603,39 @@ export const RemotionRoot: React.FC = () => {
         schema={千年传承论Schema}
         coverLandscape={千年传承论封面横屏}
         coverVertical={千年传承论封面竖屏}
+      />
+
+      <NarratorTopicCompositions
+        id="冯诺依曼突破论"
+        landscape={冯诺依曼突破论}
+        vertical={冯诺依曼突破论竖屏}
+        durationInFrames={TOTAL_DURATION_冯诺依曼突破论}
+        fps={30}
+        schema={冯诺依曼突破论Schema}
+        coverLandscape={冯诺依曼突破论封面横屏}
+        coverVertical={冯诺依曼突破论封面竖屏}
+      />
+
+      <NarratorTopicCompositions
+        id="华为韬定律"
+        landscape={华为韬定律}
+        vertical={华为韬定律竖屏}
+        durationInFrames={TOTAL_DURATION_华为韬定律}
+        fps={30}
+        schema={华为韬定律Schema}
+        coverLandscape={华为韬定律封面横屏}
+        coverVertical={华为韬定律封面竖屏}
+      />
+
+      <NarratorTopicCompositions
+        id="宏大叙事论"
+        landscape={宏大叙事论}
+        vertical={宏大叙事论竖屏}
+        durationInFrames={TOTAL_DURATION_宏大叙事论}
+        fps={30}
+        schema={宏大叙事论Schema}
+        coverLandscape={宏大叙事论封面横屏}
+        coverVertical={宏大叙事论封面竖屏}
       />
     </>
   );

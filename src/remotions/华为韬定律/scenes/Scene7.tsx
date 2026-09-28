@@ -1,9 +1,9 @@
 import React from "react";
-import { AbsoluteFill, Sequence, Audio, staticFile } from "remotion";
+import { AbsoluteFill, Sequence, Audio, staticFile, Freeze } from "remotion";
 import { BWCenterFocus, BWDosAndDonts, BWPanelGrid, BWTextFocus } from "../../../components";
 
 // 召唤·真正自强
-const SCENE_DURATION = 113 + 87 + 76 + 86 + 309 + 176;
+const SCENE_DURATION = 113 + 87 + 76 + 86 + 309 + 201;
 
 export const calculateScene7Duration = (): number => {
     return SCENE_DURATION;
@@ -29,6 +29,11 @@ export const Scene7: React.FC = () => {
             </Sequence>
             <Sequence from={671} durationInFrames={176}>
                 <BWTextFocus content={[{"text": "真正的自强，", "startFrame": 0, "durationFrames": 30}, {"text": "不是重新定义开水，", "startFrame": 29, "durationFrames": 43}, {"text": "而是承认五十度的水还不够。", "startFrame": 72, "durationFrames": 54}, {"text": "然后继续烧。", "startFrame": 126, "durationFrames": 50}]} totalDurationFrames={176} coreSentence={[{"text": "真正的自强，不是重新定义“开水”", "showFrom": 0, "endFrom": 3}, {"text": "而是承认五十度的水还不够", "showFrom": 2, "endFrom": 3}, {"text": "然后继续烧", "showFrom": 3, "endFrom": 3}]} coreSentenceAnchors={[{"coreSentenceAnchor": "真正的自强", "color": "#EF4444"}, {"coreSentenceAnchor": "还不够", "color": "#EF4444"}, {"coreSentenceAnchor": "继续烧", "color": "#EF4444"}]} />
+            </Sequence>
+            <Sequence from={847} durationInFrames={25}>
+                <Freeze frame={175}>
+                    <BWTextFocus content={[{"text": "真正的自强，", "startFrame": 0, "durationFrames": 30}, {"text": "不是重新定义开水，", "startFrame": 29, "durationFrames": 43}, {"text": "而是承认五十度的水还不够。", "startFrame": 72, "durationFrames": 54}, {"text": "然后继续烧。", "startFrame": 126, "durationFrames": 50}]} totalDurationFrames={176} coreSentence={[{"text": "真正的自强，不是重新定义“开水”", "showFrom": 0, "endFrom": 3}, {"text": "而是承认五十度的水还不够", "showFrom": 2, "endFrom": 3}, {"text": "然后继续烧", "showFrom": 3, "endFrom": 3}]} coreSentenceAnchors={[{"coreSentenceAnchor": "真正的自强", "color": "#EF4444"}, {"coreSentenceAnchor": "还不够", "color": "#EF4444"}, {"coreSentenceAnchor": "继续烧", "color": "#EF4444"}]} />
+                </Freeze>
             </Sequence>
             <Audio src={staticFile("/audio/华为韬定律/scene_7/scene_7.mp3")} />
         </AbsoluteFill>

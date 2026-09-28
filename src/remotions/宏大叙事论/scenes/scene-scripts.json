@@ -1,0 +1,1500 @@
+{
+  "topic": "一句“你怎么没大局观”，正在把你变成代价",
+  "scenes": [
+    {
+      "sceneId": "scene_1",
+      "sceneName": "引入·被大局观堵嘴",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "QUOTE_CITATION",
+          "reasoning": "两段节拍递进：先抛刺耳原话再拉近共鸣；长度约27字，合并后保持单一节拍结构，避免碎片化。",
+          "content": [
+            {
+              "text": "“你这人怎么一点大局观都没有？”",
+              "startFrame": 0,
+              "durationFrames": 65
+            },
+            {
+              "text": "这种话，",
+              "startFrame": 64,
+              "durationFrames": 26
+            },
+            {
+              "text": "你一定听到过。",
+              "startFrame": 89,
+              "durationFrames": 30
+            }
+          ],
+          "order": 1,
+          "param": {
+            "quoteDisplayText": "你这人怎么一点大局观都没有？",
+            "quoteSource": "常见道德绑架话术",
+            "showFrom": 0
+          },
+          "totalDurationFrames": 119
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "主表达是“触发条件→群体动作→结果压制”的因果链，选择因果传导模板分环节呈现。",
+          "content": [
+            {
+              "text": "只要你争取自己的合法权益的时候，",
+              "startFrame": 0,
+              "durationFrames": 64
+            },
+            {
+              "text": "就会有一群人用大局观的话术，",
+              "startFrame": 63,
+              "durationFrames": 70
+            },
+            {
+              "text": "瞬间把你淹没，",
+              "startFrame": 133,
+              "durationFrames": 44
+            },
+            {
+              "text": "逼你闭嘴。",
+              "startFrame": 176,
+              "durationFrames": 34
+            }
+          ],
+          "order": 2,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "争取权益",
+                "imageSrc": "images/宏大叙事论/scene_1_2_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "大局话术",
+                "imageSrc": "images/宏大叙事论/scene_1_2_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "label": "逼你闭嘴",
+                "imageSrc": "images/宏大叙事论/scene_1_2_img2.png",
+                "showFrom": 3,
+                "enterEffect": "slideBottom"
+              }
+            ]
+          },
+          "totalDurationFrames": 210
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "主表达是“不是…而是…”的纠偏式对照，选择认知反转模板突出核心转折。",
+          "content": [
+            {
+              "text": "他讲大局观，并不是在请你参与建设大局。",
+              "startFrame": 0,
+              "durationFrames": 94
+            },
+            {
+              "text": "他是在用一套精心设计的语言机制，",
+              "startFrame": 93,
+              "durationFrames": 70
+            },
+            {
+              "text": "剥夺你作为“人”的合法性。",
+              "startFrame": 163,
+              "durationFrames": 54
+            }
+          ],
+          "order": 3,
+          "param": {
+            "notText": "请你参与建设",
+            "butText": "语言机制",
+            "butSrc": "images/宏大叙事论/scene_1_3.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 218
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "短句完成概念命名，落点明确，适合聚焦锁定“宏大叙事”；虽短但作为独立命名金句成立。",
+          "content": [
+            {
+              "text": "这套机制，",
+              "startFrame": 0,
+              "durationFrames": 27
+            },
+            {
+              "text": "叫宏大叙事。",
+              "startFrame": 26,
+              "durationFrames": 41
+            }
+          ],
+          "order": 4,
+          "param": {
+            "anchors": [
+              {
+                "text": "宏大叙事",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 67
+        }
+      ],
+      "audioSrc": "/audio/宏大叙事论/scene_1/scene_1.mp3",
+      "totalDurationFrames": 613
+    },
+    {
+      "sceneId": "scene_2",
+      "sceneName": "反转·核心是收割架构",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "铺垫大众误识，平铺叙述，无对比/清单结构；用 CENTER_FOCUS 单焦点陈述作为反转前锚点。",
+          "content": [
+            {
+              "text": "很多人以为，",
+              "startFrame": 0,
+              "durationFrames": 29
+            },
+            {
+              "text": "宏大叙事只是理念不同，",
+              "startFrame": 28,
+              "durationFrames": 57
+            },
+            {
+              "text": "或者价值观站位太高。",
+              "startFrame": 85,
+              "durationFrames": 48
+            }
+          ],
+          "order": 1,
+          "param": {
+            "leftSrc": "images/宏大叙事论/scene_2_1_left.png",
+            "rightSrc": "images/宏大叙事论/scene_2_1_right.png",
+            "leftLabel": "理念不同",
+            "rightLabel": "站位太高",
+            "leftShowFrom": 1,
+            "rightShowFrom": 2
+          },
+          "totalDurationFrames": 134
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "主结构是‘不是…而是…’的认知反转，用 COGNITIVE_SHIFT 呈现从理念问题到收割架构的认知推翻。",
+          "content": [
+            {
+              "text": "错。",
+              "startFrame": 0,
+              "durationFrames": 15
+            },
+            {
+              "text": "宏大叙事，就是一套极其精密的权力与利益收割架构。",
+              "startFrame": 14,
+              "durationFrames": 111
+            },
+            {
+              "text": "它把自己伪装成，都是为了大家好的样子，",
+              "startFrame": 124,
+              "durationFrames": 98
+            }
+          ],
+          "order": 2,
+          "param": {
+            "notText": "理念问题",
+            "butText": "权力与利益收割架构",
+            "butSrc": "images/宏大叙事论/scene_2_2.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 222
+        },
+        {
+          "narrativeType": "DATA",
+          "template": "TEXT_FOCUS",
+          "reasoning": "该句重点落在数量‘四个’上，适合抽象为单一核心数值强调；用 KPI_HERO 突出‘4’并收束为下文清单引出。",
+          "content": [
+            {
+              "text": "它的底层逻辑，",
+              "startFrame": 0,
+              "durationFrames": 36
+            },
+            {
+              "text": "存在四个无法洗白的核心病灶。",
+              "startFrame": 36,
+              "durationFrames": 68
+            }
+          ],
+          "order": 3,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "它的底层逻辑，",
+                "showFrom": 0
+              },
+              {
+                "text": "存在四个无法洗白的核心病灶。",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "核心病灶",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 104
+        }
+      ],
+      "audioSrc": "/audio/宏大叙事论/scene_2/scene_2.mp3",
+      "totalDurationFrames": 461
+    },
+    {
+      "sceneId": "scene_3",
+      "sceneName": "剖析·目的倒置与权责不等",
+      "items": [
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CONCEPT_CARD",
+          "reasoning": "该段是论点标题，镜头锁定“目的与手段的彻底倒置”关键词，未展开解释。",
+          "content": [
+            {
+              "text": "第一，",
+              "startFrame": 0,
+              "durationFrames": 18
+            },
+            {
+              "text": "目的与手段的彻底倒置。",
+              "startFrame": 17,
+              "durationFrames": 59
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/宏大叙事论/scene_3_1.png",
+            "conceptName": "目的与手段倒置"
+          },
+          "totalDurationFrames": 77
+        },
+        {
+          "order": 2,
+          "template": "MAGNIFYING_GLASS",
+          "narrativeType": "LOGIC",
+          "content": [
+            {
+              "text": "社会、集体、国家，",
+              "startFrame": 0,
+              "durationFrames": 53
+            },
+            {
+              "text": "发展的终极目的是什么？",
+              "startFrame": 52,
+              "durationFrames": 40
+            }
+          ],
+          "param": {
+            "anchors": [
+              {
+                "text": "终极目的",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "spring",
+                "audioEffect": "ping"
+              }
+            ]
+          },
+          "totalDurationFrames": 92
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "HUB_RADIATE",
+          "reasoning": "该段解释核心概念“人是目的，发展是手段”，适合概念卡突出定义。",
+          "content": [
+            {
+              "text": "是为了每一个具体的人，",
+              "startFrame": 0,
+              "durationFrames": 43
+            },
+            {
+              "text": "能活得更有尊严、更幸福。",
+              "startFrame": 42,
+              "durationFrames": 55
+            },
+            {
+              "text": "人才是目的，",
+              "startFrame": 97,
+              "durationFrames": 32
+            },
+            {
+              "text": "发展只是手段。",
+              "startFrame": 128,
+              "durationFrames": 42
+            }
+          ],
+          "order": 3,
+          "param": {
+            "hub": {
+              "imageSrc": "images/宏大叙事论/scene_3_3.png",
+              "enterEffect": "zoomIn",
+              "showFrom": 0
+            },
+            "rays": [
+              {
+                "imageSrc": "images/宏大叙事论/scene_3_3_img0.png",
+                "enterEffect": "slideLeft",
+                "showFrom": 2
+              },
+              {
+                "imageSrc": "images/宏大叙事论/scene_3_3_img1.png",
+                "enterEffect": "slideBottom",
+                "showFrom": 3
+              }
+            ]
+          },
+          "totalDurationFrames": 171
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "“就是”引出核心动作“偷偷掉包”，用放大镜聚焦其转折性关键。",
+          "content": [
+            {
+              "text": "但宏大叙事第一步，",
+              "startFrame": 0,
+              "durationFrames": 45
+            },
+            {
+              "text": "就是把这个关系偷偷掉包。",
+              "startFrame": 44,
+              "durationFrames": 49
+            }
+          ],
+          "order": 4,
+          "param": {},
+          "totalDurationFrames": 94
+        },
+        {
+          "order": 5,
+          "template": "CAUSE_CHAIN",
+          "narrativeType": "LOGIC",
+          "content": [
+            {
+              "text": "它把集体和抽象的概念捧成唯一的“目的”，",
+              "startFrame": 0,
+              "durationFrames": 104
+            },
+            {
+              "text": "把每一个有血有肉、有痛感的人，",
+              "startFrame": 103,
+              "durationFrames": 75
+            },
+            {
+              "text": "降格成了实现这个抽象蓝图的“燃料”与“代价”。",
+              "startFrame": 177,
+              "durationFrames": 102
+            }
+          ],
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "抽象成目的",
+                "imageSrc": "images/宏大叙事论/scene_3_5_img0.png",
+                "showFrom": 0,
+                "enterEffect": "fadeIn"
+              },
+              {
+                "label": "具体的人",
+                "imageSrc": "images/宏大叙事论/scene_3_5_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "label": "燃料与代价",
+                "imageSrc": "images/宏大叙事论/scene_3_5_img2.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              }
+            ]
+          },
+          "totalDurationFrames": 280
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "“不再是…而变成了…”是明确的认知转变，用COGNITIVE_SHIFT强调移位。",
+          "content": [
+            {
+              "text": "当个体的幸福不再是目的，",
+              "startFrame": 0,
+              "durationFrames": 54
+            },
+            {
+              "text": "而变成了损耗品。",
+              "startFrame": 53,
+              "durationFrames": 43
+            },
+            {
+              "text": "你的痛苦就不再是痛苦，",
+              "startFrame": 96,
+              "durationFrames": 56
+            },
+            {
+              "text": "只是机器运转时磨掉的一层皮。",
+              "startFrame": 151,
+              "durationFrames": 69
+            }
+          ],
+          "order": 6,
+          "param": {
+            "notText": "目的",
+            "butText": "损耗品",
+            "butSrc": "images/宏大叙事论/scene_3_6.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 221
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CONCEPT_CARD",
+          "reasoning": "第二个论点标题，镜头锁定“权责利的极度不对等”核心短语。",
+          "content": [
+            {
+              "text": "宏大叙事的第二个问题，",
+              "startFrame": 0,
+              "durationFrames": 50
+            },
+            {
+              "text": "是权责利的极度不对等。",
+              "startFrame": 49,
+              "durationFrames": 54
+            },
+            {
+              "text": "在这个宏大游戏里，",
+              "startFrame": 102,
+              "durationFrames": 42
+            },
+            {
+              "text": "利益和代价的分配是完全脱节的。",
+              "startFrame": 143,
+              "durationFrames": 69
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "images/宏大叙事论/scene_3_7.png",
+            "conceptName": "权责利失衡"
+          },
+          "totalDurationFrames": 213
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CENTER_FOCUS",
+          "reasoning": "受益方单方陈述，用居中聚焦呈现权力与利益被独占。",
+          "content": [
+            {
+              "text": "推行宏大叙事的人，",
+              "startFrame": 0,
+              "durationFrames": 42
+            },
+            {
+              "text": "独占了抽象的成就、政绩与话语权；",
+              "startFrame": 41,
+              "durationFrames": 88
+            }
+          ],
+          "order": 8,
+          "param": {
+            "imageSrc": "images/宏大叙事论/scene_3_8.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "独占",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 129
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PEER_INDUCT",
+          "reasoning": "“具体痛苦、经济损失、生命代价”是三个并列代价，适合宫格并列展示。",
+          "content": [
+            {
+              "text": "而为了这个“宏大”所付出的具体痛苦、",
+              "startFrame": 0,
+              "durationFrames": 78
+            },
+            {
+              "text": "经济损失，",
+              "startFrame": 77,
+              "durationFrames": 32
+            },
+            {
+              "text": "甚至生命代价，",
+              "startFrame": 109,
+              "durationFrames": 40
+            },
+            {
+              "text": "被100%外部化，",
+              "startFrame": 148,
+              "durationFrames": 44
+            },
+            {
+              "text": "推给了毫无话语权的普通个体。",
+              "startFrame": 192,
+              "durationFrames": 61
+            }
+          ],
+          "order": 9,
+          "param": {
+            "premises": [
+              {
+                "imageSrc": "images/宏大叙事论/scene_3_9_img0.png",
+                "enterEffect": "fadeIn",
+                "showFrom": 0
+              },
+              {
+                "imageSrc": "images/宏大叙事论/scene_3_9_img1.png",
+                "enterEffect": "slideBottom",
+                "showFrom": 1
+              },
+              {
+                "imageSrc": "images/宏大叙事论/scene_3_9_img2.png",
+                "enterEffect": "breathe",
+                "showFrom": 2
+              }
+            ],
+            "conclusion": {
+              "imageSrc": "images/宏大叙事论/scene_3_9.png",
+              "enterEffect": "zoomIn",
+              "showFrom": 4,
+              "tone": "alert"
+            }
+          },
+          "totalDurationFrames": 253
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "掌权者与底层个体形成两方对立画面，适合左右分裂对比。",
+          "content": [
+            {
+              "text": "掌权者高高在上收割红利，",
+              "startFrame": 0,
+              "durationFrames": 71
+            },
+            {
+              "text": "底层个体在泥泞里独自买单。",
+              "startFrame": 70,
+              "durationFrames": 78
+            }
+          ],
+          "order": 10,
+          "param": {
+            "leftSrc": "images/宏大叙事论/scene_3_10_left.png",
+            "rightSrc": "images/宏大叙事论/scene_3_10_right.png",
+            "leftLabel": "掌权者",
+            "rightLabel": "底层个体",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 149
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "“不是…而是…”点睛结论，用COGNITIVE_SHIFT完成认知反转。",
+          "content": [
+            {
+              "text": "这根本不是什么同舟共济，",
+              "startFrame": 0,
+              "durationFrames": 56
+            },
+            {
+              "text": "这是一场披着崇高外衣的利益掠夺。",
+              "startFrame": 55,
+              "durationFrames": 77
+            }
+          ],
+          "order": 11,
+          "param": {
+            "notText": "同舟共济",
+            "butText": "披着崇高外衣的利益掠夺",
+            "butSrc": "images/宏大叙事论/scene_3_11.png",
+            "notContentIndex": 0,
+            "butContentIndex": 1,
+            "anchors": []
+          },
+          "totalDurationFrames": 133
+        }
+      ],
+      "audioSrc": "/audio/宏大叙事论/scene_3/scene_3.mp3",
+      "totalDurationFrames": 1808
+    },
+    {
+      "sceneId": "scene_4",
+      "sceneName": "剖析·免责与空头支票",
+      "items": [
+        {
+          "narrativeType": "LOGIC",
+          "template": "CONCEPT_CARD",
+          "reasoning": "首句命名“免责护身符”，后句紧接定义解释，主结构为概念说明；合并后46字，不超过50字，故不拆。",
+          "content": [
+            {
+              "text": "宏大叙事的第三个问题，",
+              "startFrame": 0,
+              "durationFrames": 47
+            },
+            {
+              "text": "是不可证伪的免责护身符。",
+              "startFrame": 46,
+              "durationFrames": 56
+            },
+            {
+              "text": "这是宏大叙事最阴暗的功能—",
+              "startFrame": 102,
+              "durationFrames": 59
+            },
+            {
+              "text": "为管理无能和制度缺陷提供终极避难所。",
+              "startFrame": 161,
+              "durationFrames": 93
+            }
+          ],
+          "order": 1,
+          "param": {
+            "imageSrc": "images/宏大叙事论/scene_4_1.png",
+            "conceptName": "免责护身符"
+          },
+          "totalDurationFrames": 254
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "两个并列的免责话术例子，适合两宫格并列配图；合并42字，避免切碎同一组例证。",
+          "content": [
+            {
+              "text": "决策失误了？",
+              "startFrame": 0,
+              "durationFrames": 33
+            },
+            {
+              "text": "那是“探索付出的必要学费”。",
+              "startFrame": 32,
+              "durationFrames": 53
+            },
+            {
+              "text": "分配不公了？",
+              "startFrame": 85,
+              "durationFrames": 33
+            },
+            {
+              "text": "那是“发展过程中的阶段性阵痛”。",
+              "startFrame": 117,
+              "durationFrames": 78
+            }
+          ],
+          "order": 2,
+          "param": {
+            "leftSrc": "images/宏大叙事论/scene_4_2_left.png",
+            "rightSrc": "images/宏大叙事论/scene_4_2_right.png",
+            "leftLabel": "高层的说辞",
+            "rightLabel": "底层的现实",
+            "leftShowFrom": 0,
+            "rightShowFrom": 2
+          },
+          "totalDurationFrames": 196
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "PANEL_GRID",
+          "reasoning": "三个具体问题并列，适合三宫格呈现；与后文因果结论结构不同，故单独拆出。",
+          "content": [
+            {
+              "text": "食品安全出问题、",
+              "startFrame": 0,
+              "durationFrames": 44
+            },
+            {
+              "text": "维权困难、",
+              "startFrame": 43,
+              "durationFrames": 26
+            },
+            {
+              "text": "规则被破坏…",
+              "startFrame": 68,
+              "durationFrames": 39
+            }
+          ],
+          "order": 3,
+          "param": {
+            "panels": [
+              {
+                "src": "images/宏大叙事论/scene_4_3_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "src": "images/宏大叙事论/scene_4_3_img1.png",
+                "showFrom": 1,
+                "enterEffect": "slideLeft"
+              },
+              {
+                "src": "images/宏大叙事论/scene_4_3_img2.png",
+                "showFrom": 2,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 107
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "“盖印章→责任稀释”是机制传导关系，用因果链表现；为保持单一表达结构，与前句列举分开。",
+          "content": [
+            {
+              "text": "只要盖上“为了大局”的印章，",
+              "startFrame": 0,
+              "durationFrames": 60
+            },
+            {
+              "text": "所有的具体责任瞬间被稀释干净。",
+              "startFrame": 60,
+              "durationFrames": 79
+            }
+          ],
+          "order": 4,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "盖印",
+                "imageSrc": "images/宏大叙事论/scene_4_4_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "label": "稀释",
+                "imageSrc": "images/宏大叙事论/scene_4_4_img1.png",
+                "showFrom": 1,
+                "enterEffect": "fadeIn"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "责任稀释",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 139
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "短促结论句，无需配图，文字聚焦表达金句冲击。",
+          "content": [
+            {
+              "text": "它让你连扣问真相的权利都没有。",
+              "startFrame": 0,
+              "durationFrames": 68
+            }
+          ],
+          "order": 5,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "它让你连扣问真相的权利都没有。",
+                "showFrom": 0,
+                "endFrom": 0
+              }
+            ],
+            "coreSentenceAnchors": []
+          },
+          "totalDurationFrames": 68
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "CAUSE_CHAIN",
+          "reasoning": "“质问具体问题→被扣道德帽子”为因果关系，适合因果链；与前句合计超50字，故拆分。",
+          "content": [
+            {
+              "text": "因为你一开口质问具体问题，",
+              "startFrame": 0,
+              "durationFrames": 60
+            },
+            {
+              "text": "你就会被扣上“破坏大局”、",
+              "startFrame": 60,
+              "durationFrames": 54
+            },
+            {
+              "text": " “缺乏大观”的道德帽子。",
+              "startFrame": 113,
+              "durationFrames": 52
+            }
+          ],
+          "order": 6,
+          "param": {
+            "layout": "horizontal",
+            "nodes": [
+              {
+                "label": "开口质问",
+                "imageSrc": "images/宏大叙事论/scene_4_6_img0.png",
+                "showFrom": 0,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "label": "被扣大帽",
+                "imageSrc": "images/宏大叙事论/scene_4_6_img1.png",
+                "showFrom": 1,
+                "enterEffect": "zoomIn"
+              },
+              {
+                "label": "道德帽子",
+                "imageSrc": "images/宏大叙事论/scene_4_6_img2.png",
+                "showFrom": 2,
+                "enterEffect": "zoomIn"
+              }
+            ],
+            "anchors": [
+              {
+                "text": "道德帽子",
+                "showFrom": 2,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 166
+        },
+        {
+          "narrativeType": "TRANSITION",
+          "template": "CONCEPT_CARD",
+          "reasoning": "第四点标题，居中点题即可；与后文解释合计超50字，故单列。",
+          "content": [
+            {
+              "text": "宏大叙事的第四个问题，",
+              "startFrame": 0,
+              "durationFrames": 52
+            },
+            {
+              "text": "是兑现期无限推迟的远期空头支票。",
+              "startFrame": 51,
+              "durationFrames": 93
+            },
+            {
+              "text": "它永远在用一个遥不可及、",
+              "startFrame": 143,
+              "durationFrames": 47
+            },
+            {
+              "text": "无法验证的“美好未来”，",
+              "startFrame": 190,
+              "durationFrames": 44
+            },
+            {
+              "text": "强行清零你眼下具体的合法权益。",
+              "startFrame": 233,
+              "durationFrames": 89
+            }
+          ],
+          "order": 7,
+          "param": {
+            "imageSrc": "images/宏大叙事论/scene_4_7.png",
+            "conceptName": "空头支票"
+          },
+          "totalDurationFrames": 323
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CHAT_BUBBLE",
+          "reasoning": "转述对方劝说话术，适合引用卡；两句建议保持在同一引用卡内。",
+          "content": [
+            {
+              "text": "他们会告诉你：",
+              "startFrame": 0,
+              "durationFrames": 30
+            },
+            {
+              "text": "再忍一忍，为了下一代；",
+              "startFrame": 29,
+              "durationFrames": 58
+            },
+            {
+              "text": "再等一等，为了长远发展。",
+              "startFrame": 87,
+              "durationFrames": 59
+            }
+          ],
+          "order": 8,
+          "param": {
+            "bubbles": [
+              {
+                "bubbleText": "再忍一忍，为了下一代；",
+                "showFrom": 1,
+                "align": "left"
+              },
+              {
+                "bubbleText": "再等一等，为了长远发展。",
+                "showFrom": 2,
+                "align": "left"
+              }
+            ]
+          },
+          "totalDurationFrames": 146
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "反问金句，强情绪收束，文字聚焦即可，不需要配图。",
+          "content": [
+            {
+              "text": "但当下这一代人的尊严和生存，",
+              "startFrame": 0,
+              "durationFrames": 59
+            },
+            {
+              "text": "难道就该被白白牺牲吗？",
+              "startFrame": 58,
+              "durationFrames": 49
+            }
+          ],
+          "order": 9,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "但当下这一代人的尊严和生存，",
+                "showFrom": 0,
+                "endFrom": 1
+              },
+              {
+                "text": "难道就该被白白牺牲吗？",
+                "showFrom": 1,
+                "endFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "尊严和生存",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 108
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片收束反问，短促强结论，选文字聚焦。",
+          "content": [
+            {
+              "text": "一个连当下具体的个人都无法保障的叙事，",
+              "startFrame": 0,
+              "durationFrames": 87
+            },
+            {
+              "text": "凭什么让人相信它能兑现美好的未来？",
+              "startFrame": 86,
+              "durationFrames": 79
+            }
+          ],
+          "order": 10,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "无法保障当下的叙事，",
+                "showFrom": 0
+              },
+              {
+                "text": "如何兑现美好的未来？",
+                "showFrom": 1
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "当下的叙事",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "美好的未来",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 166
+        }
+      ],
+      "audioSrc": "/audio/宏大叙事论/scene_4/scene_4.mp3",
+      "totalDurationFrames": 1672
+    },
+    {
+      "sceneId": "scene_5",
+      "sceneName": "召唤·谁受益谁买单",
+      "items": [
+        {
+          "narrativeType": "HOOK",
+          "template": "TEXT_FOCUS",
+          "reasoning": "开篇定义式结论，短促定调；选TEXT_FOCUS聚焦金句；独立成镜避免与后续解释混结构。",
+          "content": [
+            {
+              "text": "这就是宏大叙事最最毒之处。",
+              "startFrame": 0,
+              "durationFrames": 65
+            }
+          ],
+          "order": 1,
+          "param": {
+            "coreSentence": [
+              "这就是宏大叙事最毒之处。"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "最毒之处",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 65
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "SPLIT_COMPARE",
+          "reasoning": "三层递进解释毒性（剥削→教化→被剥削感崇高）；选BEAT_SEQUENCE呈现节拍递进；与开篇金句分开。",
+          "content": [
+            {
+              "text": "它不仅剥削你，",
+              "startFrame": 0,
+              "durationFrames": 31
+            },
+            {
+              "text": "它还教化你，",
+              "startFrame": 30,
+              "durationFrames": 29
+            },
+            {
+              "text": "让你觉得被剥削是一种崇高。",
+              "startFrame": 58,
+              "durationFrames": 58
+            }
+          ],
+          "order": 2,
+          "param": {
+            "leftSrc": "images/宏大叙事论/scene_5_2_left.png",
+            "rightSrc": "images/宏大叙事论/scene_5_2_right.png",
+            "leftLabel": "剥削",
+            "rightLabel": "崇高",
+            "leftShowFrom": 0,
+            "rightShowFrom": 1
+          },
+          "totalDurationFrames": 117
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "MAGNIFYING_GLASS",
+          "reasoning": "明确不要/要导向（不要入云端，要拉回地面盯问题）；选DOS_AND_DONTS呈现强导向；长度未超50，保留为完整导向结构。",
+          "content": [
+            {
+              "text": "当有人用抽象的高尚来偷换具体的责任，",
+              "startFrame": 0,
+              "durationFrames": 96
+            },
+            {
+              "text": "你不要被他带进云端。",
+              "startFrame": 96,
+              "durationFrames": 43
+            },
+            {
+              "text": "把视角拉回地面，",
+              "startFrame": 138,
+              "durationFrames": 42
+            },
+            {
+              "text": "只盯死三个最具体的问题：",
+              "startFrame": 179,
+              "durationFrames": 58
+            }
+          ],
+          "order": 3,
+          "param": {
+            "anchors": [
+              {
+                "text": "具体的责任",
+                "showFrom": 0,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "ping"
+              },
+              {
+                "text": "三个最具体的词",
+                "showFrom": 3,
+                "color": "#000000",
+                "anim": "highlight",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 238
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "TEXT_FOCUS",
+          "reasoning": "两个并列核心问题，短促冲击；选TEXT_FOCUS聚焦文字；虽短于12字但为独立金句。",
+          "content": [
+            {
+              "text": "谁受益？",
+              "startFrame": 0,
+              "durationFrames": 32
+            },
+            {
+              "text": "谁买单？",
+              "startFrame": 31,
+              "durationFrames": 19
+            },
+            {
+              "text": "谁负责？",
+              "startFrame": 49,
+              "durationFrames": 26
+            }
+          ],
+          "order": 4,
+          "param": {
+            "coreSentence": [
+              "谁受益？",
+              "谁买单？",
+              "谁负责？"
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "受益",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "买单",
+                "color": "#EF4444"
+              },
+              {
+                "coreSentenceAnchor": "负责",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 75
+        },
+        {
+          "narrativeType": "LOGIC",
+          "template": "COGNITIVE_SHIFT",
+          "reasoning": "明显不是…而是…认知转变；选COGNITIVE_SHIFT表达转变；长度适中不拆。",
+          "content": [
+            {
+              "text": "记住：",
+              "startFrame": 0,
+              "durationFrames": 21
+            },
+            {
+              "text": "历史从来不是由抽象的名词构成的，",
+              "startFrame": 20,
+              "durationFrames": 76
+            },
+            {
+              "text": "历史是由无数个会流血、",
+              "startFrame": 96,
+              "durationFrames": 45
+            },
+            {
+              "text": "会流泪的具体个人构成的。",
+              "startFrame": 140,
+              "durationFrames": 57
+            }
+          ],
+          "order": 5,
+          "param": {
+            "notText": "抽象名词",
+            "butText": "具体个人",
+            "butSrc": "images/宏大叙事论/scene_5_5.png",
+            "notContentIndex": 1,
+            "butContentIndex": 2,
+            "anchors": []
+          },
+          "totalDurationFrames": 197
+        },
+        {
+          "narrativeType": "CASE",
+          "template": "CENTER_FOCUS",
+          "reasoning": "条件→禁止的节拍递进；选BEAT_SEQUENCE；因后文原因句使总长超50，从“因为”前拆出。",
+          "content": [
+            {
+              "text": "当有其他人被以宏大叙事为理由，",
+              "startFrame": 0,
+              "durationFrames": 83
+            },
+            {
+              "text": "成为代价的时候，",
+              "startFrame": 82,
+              "durationFrames": 38
+            },
+            {
+              "text": "不要叫好，",
+              "startFrame": 120,
+              "durationFrames": 38
+            }
+          ],
+          "order": 6,
+          "param": {
+            "imageSrc": "images/宏大叙事论/scene_5_6.png",
+            "enterEffect": "fadeIn",
+            "anchors": [
+              {
+                "text": "代价",
+                "showFrom": 1,
+                "color": "#EF4444",
+                "anim": "popIn",
+                "audioEffect": "impact_thud"
+              }
+            ]
+          },
+          "totalDurationFrames": 158
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "承接原因警示，短促结论；选TEXT_FOCUS聚焦后果金句；与上句拆分以保证长度和表达单一。",
+          "content": [
+            {
+              "text": "因为总有一天，",
+              "startFrame": 0,
+              "durationFrames": 35
+            },
+            {
+              "text": "你或者你的孩子，",
+              "startFrame": 34,
+              "durationFrames": 35
+            },
+            {
+              "text": "也会变成那个代价。",
+              "startFrame": 69,
+              "durationFrames": 42
+            }
+          ],
+          "order": 7,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "因为总有一天，",
+                "showFrom": 0
+              },
+              {
+                "text": "你或者你的孩子，",
+                "showFrom": 1
+              },
+              {
+                "text": "也会变成那个代价。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "那个代价",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 112
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "CHECKLIST_REVEAL",
+          "reasoning": "背景+两个守护行动项；选CHECKLIST_REVEAL逐项打勾；合并逗号弱信号的分句以承接行动号召。",
+          "content": [
+            {
+              "text": "在这个动辄用宏大概念压人的时代，",
+              "startFrame": 0,
+              "durationFrames": 79
+            },
+            {
+              "text": "守护你自己的具体感受，",
+              "startFrame": 78,
+              "durationFrames": 55
+            },
+            {
+              "text": "守护你身边人的具体权益。",
+              "startFrame": 133,
+              "durationFrames": 62
+            }
+          ],
+          "order": 8,
+          "param": {
+            "title": "守住具体",
+            "rows": [
+              {
+                "text": "警惕宏大概念",
+                "showFrom": 0
+              },
+              {
+                "text": "守护自己的具体感受",
+                "showFrom": 1
+              },
+              {
+                "text": "守护身边人的具体权益",
+                "showFrom": 2
+              }
+            ],
+            "anchors": []
+          },
+          "totalDurationFrames": 195
+        },
+        {
+          "narrativeType": "CONCLUSION",
+          "template": "TEXT_FOCUS",
+          "reasoning": "全片收束金句；选TEXT_FOCUS；独立成镜避免与行动清单混合。",
+          "content": [
+            {
+              "text": "因为，",
+              "startFrame": 0,
+              "durationFrames": 10
+            },
+            {
+              "text": "具体的你，",
+              "startFrame": 9,
+              "durationFrames": 27
+            },
+            {
+              "text": "才是这个世界唯一的真实。",
+              "startFrame": 36,
+              "durationFrames": 57
+            }
+          ],
+          "order": 9,
+          "param": {
+            "coreSentence": [
+              {
+                "text": "因为，",
+                "showFrom": 0,
+                "endFrom": 0
+              },
+              {
+                "text": "具体的你，",
+                "showFrom": 1
+              },
+              {
+                "text": "才是这个世界唯一的真实。",
+                "showFrom": 2
+              }
+            ],
+            "coreSentenceAnchors": [
+              {
+                "coreSentenceAnchor": "唯一的真实",
+                "color": "#EF4444"
+              }
+            ]
+          },
+          "totalDurationFrames": 93
+        }
+      ],
+      "audioSrc": "/audio/宏大叙事论/scene_5/scene_5.mp3",
+      "totalDurationFrames": 1248
+    },
+    {
+      "sceneId": "scene_references",
+      "sceneName": "片尾·参考资料",
+      "items": [
+        {
+          "order": 1,
+          "narrativeType": "CONCLUSION",
+          "template": "SOURCE_CITATION",
+          "reasoning": "片尾展示支撑宏大叙事概念、人是目的、历史决定论批判、个体工具化、话语权力与意识形态普遍利益化等论点的公开学术来源，无口播。",
+          "content": [],
+          "param": {
+            "sectionTitle": "参考资料",
+            "references": [
+              {
+                "title": "La condition postmoderne: rapport sur le savoir",
+                "titleZh": "后现代状态：对元叙事（宏大叙事）合法性的不信任",
+                "publisher": "Jean-François Lyotard · Les Éditions de Minuit",
+                "publisherZh": "让-弗朗索瓦·利奥塔 · 午夜出版社",
+                "year": "1979"
+              },
+              {
+                "title": "Groundwork of the Metaphysics of Morals",
+                "titleZh": "道德形而上学奠基：人永远是目的，不可仅作手段",
+                "publisher": "Immanuel Kant",
+                "publisherZh": "伊曼努尔·康德",
+                "year": "1785"
+              },
+              {
+                "title": "The Poverty of Historicism",
+                "titleZh": "历史决定论的贫困：批判以历史必然性牺牲当下具体人的乌托邦构想",
+                "publisher": "Karl Popper · Routledge",
+                "publisherZh": "卡尔·波普尔 · Routledge",
+                "year": "1957"
+              },
+              {
+                "title": "The Origins of Totalitarianism",
+                "titleZh": "极权主义的起源：极权叙事如何把具体人工具化",
+                "publisher": "Hannah Arendt · Harcourt",
+                "publisherZh": "汉娜·阿伦特 · Harcourt",
+                "year": "1951"
+              },
+              {
+                "title": "Discipline and Punish: The Birth of the Prison",
+                "titleZh": "规训与惩罚：话语与权力如何定义何为「正当」",
+                "publisher": "Michel Foucault · Gallimard",
+                "publisherZh": "米歇尔·福柯 · 伽利玛出版社",
+                "year": "1975"
+              },
+              {
+                "title": "The German Ideology",
+                "titleZh": "德意志意识形态：统治阶级思想如何被表述为普遍利益",
+                "publisher": "Karl Marx & Friedrich Engels",
+                "publisherZh": "卡尔·马克思 & 弗里德里希·恩格斯",
+                "year": "1845"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "fps": 30,
+  "cover": {
+    "durationFrames": 5,
+    "title": "宏大叙事论",
+    "subtitle": "具体的你，才是这个世界唯一的真实。",
+    "themeColor": "#059669",
+    "badge": "深度解读 · 理性思考",
+    "seriesLabel": "社会热点深读",
+    "seriesLabelEn": "SOCIAL DEEP DIVE",
+    "methodologySteps": [
+      "争议",
+      "数据",
+      "结论"
+    ],
+    "methodologyStepsEn": "DEBATE · DATA · VERDICT"
+  }
+}

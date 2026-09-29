@@ -80,7 +80,7 @@ Step1 的分析与校验只读场景草稿：对照文本为草稿中各 `scene.
 云端工作台：异步跑 Step0/1，可视化编辑 `scene-scripts`，ZIP 导入/导出（目录对齐仓库约定）。
 
 ```bash
-# .env 中设置 SCENE_STUDIO_PASSWORD；可选 SCENE_STUDIO_WORKSPACE
+# .env 中设置 SCENE_STUDIO_PASSWORD。工程目录是仓库根目录
 pip install -r narrator_pipeline/requirements.txt
 python -m narrator_pipeline.web
 
@@ -92,4 +92,4 @@ cd scene_studio && npm install && npm run dev
 
 ## 配置
 
-见 `config.yaml`（模型、画布、TTS、`project_root` 等，支持 `#` 注释）与 `.env`。
+见 `config.yaml`（模型、画布、TTS 等，支持 `#` 注释）与 `.env`。工程目录是仓库根目录。

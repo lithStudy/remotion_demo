@@ -87,7 +87,7 @@ Step1 中途失败会落盘 checkpoint，再次执行同一命令会从断点续
 
 ```bash
 # 终端 1：API（默认 :21119）
-# .env 中设置 SCENE_STUDIO_PASSWORD，可选 SCENE_STUDIO_WORKSPACE
+# .env 中设置 SCENE_STUDIO_PASSWORD。工程目录是仓库根目录
 python -m narrator_pipeline.web
 
 # 终端 2：前端（默认 :21118，代理 /api → :21119）

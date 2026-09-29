@@ -9,10 +9,8 @@ from narrator_pipeline.paths import PACKAGE_ROOT, REPO_ROOT
 
 
 def workspace_root() -> Path:
-    raw = os.environ.get("SCENE_STUDIO_WORKSPACE", "").strip()
-    if raw:
-        return Path(raw).resolve()
-    return (REPO_ROOT / "scene_studio_workspace").resolve()
+    """网页工程目录，即脚本所在的仓库根目录。"""
+    return REPO_ROOT
 
 
 def auth_password() -> str:
@@ -45,22 +43,6 @@ def assert_preview_port_available() -> int:
             f"（接口 {api_port}，网页 {ui_port}）。请改成一个未占用的端口。"
         )
     return port
-
-
-def assert_workspace_is_project_root() -> Path:
-    """步骤 2–4 与 Studio 必须写进、编译同一份仓库。"""
-    from narrator_pipeline.common import load_config
-
-    config = load_config(PACKAGE_ROOT)
-    configured = Path(config.get("project_root", REPO_ROOT)).resolve()
-    workspace = workspace_root()
-    if workspace != configured:
-        raise ValueError(
-            "SCENE_STUDIO_WORKSPACE 必须是 Remotion 仓库根目录，"
-            f"与 config.yaml 的 project_root 一致。当前工作区 {workspace}，"
-            f"project_root {configured}"
-        )
-    return workspace
 
 
 def pipeline_config_with_workspace() -> dict:

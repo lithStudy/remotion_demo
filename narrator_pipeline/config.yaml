@@ -118,12 +118,6 @@ fps: 30
 width: 960
 height: 1280
 
-# Remotion 工程根目录；产物路径均相对此目录：
-#   narrations/{name}.txt
-#   src/remotions/{name}/scenes/scene-scripts.json
-#   public/images/{name}/、public/audio/{name}/
-project_root: d:/code/study/remotion_test
-
 # 场景切换转场时长（帧），写入 constants 的 TRANSITION_DURATION
 transition_duration_frames: 15
 # 每个场景末尾留白（帧），写入 SCENE_END_PADDING

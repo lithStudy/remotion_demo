@@ -43,11 +43,7 @@ from narrator_pipeline.web.schemas import (
     SaveDraftParam,
     SaveScriptsParam,
 )
-from narrator_pipeline.web.settings import (
-    assert_workspace_is_project_root,
-    preview_port,
-    workspace_root,
-)
+from narrator_pipeline.web.settings import preview_port, workspace_root
 from narrator_pipeline.web.studio import ensure_running, is_running as studio_is_running
 from narrator_pipeline.web.workspace import ensure_workspace
 
@@ -175,7 +171,6 @@ def create_app() -> FastAPI:
     def generate_run_steps(_auth: AuthDep, param: RunStepsParam):
         try:
             workspace.assert_valid_name(param.name)
-            assert_workspace_is_project_root()
             job = job_service.start_steps(
                 param.name,
                 start_step=param.startStep,

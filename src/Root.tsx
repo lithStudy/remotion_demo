@@ -95,12 +95,12 @@ import { 国产情怀的谎言, 国产情怀的谎言竖屏, 国产情怀的谎�
 import { 国产情怀的谎言封面横屏, 国产情怀的谎言封面竖屏 } from "./remotions/国产情怀的谎言/国产情怀的谎言CoverStills";
 import { 千年传承论, 千年传承论竖屏, 千年传承论Schema, TOTAL_DURATION_千年传承论 } from "./remotions/千年传承论/千年传承论";
 import { 千年传承论封面横屏, 千年传承论封面竖屏 } from "./remotions/千年传承论/千年传承论CoverStills";
-import { 冯诺依曼突破论, 冯诺依曼突破论竖屏, 冯诺依曼突破论Schema, TOTAL_DURATION_冯诺依曼突破论 } from "./remotions/冯诺依曼突破论/冯诺依曼突破论";
-import { 冯诺依曼突破论封面横屏, 冯诺依曼突破论封面竖屏 } from "./remotions/冯诺依曼突破论/冯诺依曼突破论CoverStills";
 import { 华为韬定律, 华为韬定律竖屏, 华为韬定律Schema, TOTAL_DURATION_华为韬定律 } from "./remotions/华为韬定律/华为韬定律";
 import { 华为韬定律封面横屏, 华为韬定律封面竖屏 } from "./remotions/华为韬定律/华为韬定律CoverStills";
 import { 宏大叙事论, 宏大叙事论竖屏, 宏大叙事论Schema, TOTAL_DURATION_宏大叙事论 } from "./remotions/宏大叙事论/宏大叙事论";
 import { 宏大叙事论封面横屏, 宏大叙事论封面竖屏 } from "./remotions/宏大叙事论/宏大叙事论CoverStills";
+import { 冯诺依曼突破论, 冯诺依曼突破论竖屏, 冯诺依曼突破论Schema, TOTAL_DURATION_冯诺依曼突破论 } from "./remotions/冯诺依曼突破论/冯诺依曼突破论";
+import { 冯诺依曼突破论封面横屏, 冯诺依曼突破论封面竖屏 } from "./remotions/冯诺依曼突破论/冯诺依曼突破论CoverStills";
 // Each <Composition> is an entry in the sidebar!
 
 export const RemotionRoot: React.FC = () => {
@@ -605,16 +605,6 @@ export const RemotionRoot: React.FC = () => {
         coverVertical={千年传承论封面竖屏}
       />
 
-      <NarratorTopicCompositions
-        id="冯诺依曼突破论"
-        landscape={冯诺依曼突破论}
-        vertical={冯诺依曼突破论竖屏}
-        durationInFrames={TOTAL_DURATION_冯诺依曼突破论}
-        fps={30}
-        schema={冯诺依曼突破论Schema}
-        coverLandscape={冯诺依曼突破论封面横屏}
-        coverVertical={冯诺依曼突破论封面竖屏}
-      />
 
       <NarratorTopicCompositions
         id="华为韬定律"
@@ -636,6 +626,16 @@ export const RemotionRoot: React.FC = () => {
         schema={宏大叙事论Schema}
         coverLandscape={宏大叙事论封面横屏}
         coverVertical={宏大叙事论封面竖屏}
+      />
+      <NarratorTopicCompositions
+        id="冯诺依曼突破论"
+        landscape={冯诺依曼突破论}
+        vertical={冯诺依曼突破论竖屏}
+        durationInFrames={TOTAL_DURATION_冯诺依曼突破论}
+        fps={30}
+        schema={冯诺依曼突破论Schema}
+        coverLandscape={冯诺依曼突破论封面横屏}
+        coverVertical={冯诺依曼突破论封面竖屏}
       />
     </>
   );

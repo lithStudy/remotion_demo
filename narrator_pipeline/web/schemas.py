@@ -50,6 +50,14 @@ class SaveDraftParam(BaseModel):
     draft: dict[str, Any]
 
 
+class RunStepsParam(BaseModel):
+    """从 Step 2/3/4 起跑后续管线。only 为真时只跑 startStep。"""
+
+    name: str = Field(..., min_length=1)
+    startStep: int = Field(..., ge=2, le=4)
+    only: bool = False
+
+
 class ContinueStep1Param(BaseModel):
     name: str = Field(..., min_length=1)
     force: bool = False

@@ -23,6 +23,7 @@ async function postJson<T>(path: string, body: unknown, auth = true): Promise<T>
   const res = await fetch(`${API_BASE}${path}`, {
     method: "POST",
     headers,
+    credentials: "include",
     body: JSON.stringify(body ?? {}),
   });
   if (!res.ok) {
@@ -104,6 +105,20 @@ export function isDraftGenerating(job: JobStatus | null | undefined): boolean {
 export const api = {
   login: (password: string) =>
     postJson<{ token: string }>("/api/login", { password }, false),
+
+  logout: () => postJson<{ ok: boolean }>("/api/logout", {}),
+
+  ensureStudio: () =>
+    postJson<{ previewPort: number; running: boolean; state: string }>(
+      "/api/studio/ensure",
+      {},
+    ),
+
+  runSteps: (name: string, startStep: 2 | 3 | 4, only: boolean) =>
+    postJson<{ jobId: string; status: string; phase: string }>(
+      "/api/generate/run-steps",
+      { name, startStep, only },
+    ),
 
   listProjects: () =>
     postJson<{ projects: ProjectInfo[] }>("/api/projects/list", {}),

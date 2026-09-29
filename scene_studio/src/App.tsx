@@ -71,6 +71,8 @@ export default function App() {
     narrationText: string;
   } | null>(null);
   const [updateNarration, setUpdateNarration] = useState(true);
+  const [previewStarting, setPreviewStarting] = useState(false);
+  const [previewReadyHref, setPreviewReadyHref] = useState<string | null>(null);
 
   const tmap = useMemo(() => templateMap(templates), [templates]);
 
@@ -119,6 +121,9 @@ export default function App() {
         setJob(st);
         if (st.status === "succeeded") {
           await refreshProjects();
+          if (st.kind === "steps") {
+            return;
+          }
           if (st.phase === "awaiting_draft_review") {
             const d = await api.getDraft(st.name);
             setDraft(d.draft);
@@ -254,6 +259,19 @@ export default function App() {
     applyJobStart(setJob, setCurrent, setScreen, name, "step1", res);
   }
 
+  async function startSteps(name: string, startStep: 2 | 3 | 4, only: boolean) {
+    setError(null);
+    const res = await api.runSteps(name, startStep, only);
+    applyJobStart(setJob, setCurrent, setScreen, name, "steps", res);
+  }
+
+  async function logout() {
+    setError(null);
+    await api.logout();
+    setToken(null);
+    setAuthed(false);
+  }
+
   async function regenerateCurrentJob(opts?: { forceRestart?: boolean }) {
     if (!job) return;
     setError(null);
@@ -283,6 +301,29 @@ export default function App() {
     }
   }
 
+  function openPreview(compositionId: string) {
+    setPreviewStarting(true);
+    setPreviewReadyHref(null);
+    setError(null);
+    api
+      .ensureStudio()
+      .then((info) => {
+        const href = `${window.location.protocol}//${window.location.hostname}:${info.previewPort}/${encodeURIComponent(compositionId)}`;
+        const popup = window.open(href, "_blank");
+        if (!popup) setPreviewReadyHref(href);
+      })
+      .catch((e) => {
+        setError(String(e));
+      })
+      .finally(() => setPreviewStarting(false));
+  }
+
+  function openReadyPreview() {
+    if (!previewReadyHref) return;
+    window.open(previewReadyHref, "_blank");
+    setPreviewReadyHref(null);
+  }
+
   if (!authed) {
     return (
       <LoginScreen
@@ -308,8 +349,7 @@ export default function App() {
           onRefresh={refreshProjects}
           onOpenProject={openProject}
           onLogout={() => {
-            setToken(null);
-            setAuthed(false);
+            logout().catch((e) => setError(String(e)));
           }}
           onError={setError}
           error={error}
@@ -335,6 +375,12 @@ export default function App() {
           onOpenJob={() => {
             if (job) setScreen("job");
           }}
+          onRunSteps={(startStep, only) => startSteps(currentProject.name, startStep, only)}
+          generationBusy={isJobActive(job)}
+          previewStarting={previewStarting}
+          previewReady={previewReadyHref != null}
+          onOpenPreview={openPreview}
+          onOpenReadyPreview={openReadyPreview}
           onDeleted={async () => {
             setCurrent(null);
             setScreen("list");
@@ -357,8 +403,7 @@ export default function App() {
           onRefresh={refreshProjects}
           onOpenProject={openProject}
           onLogout={() => {
-            setToken(null);
-            setAuthed(false);
+            logout().catch((e) => setError(String(e)));
           }}
           onError={setError}
           error={error || `工程 ${current} 不存在或已删除`}
@@ -378,6 +423,10 @@ export default function App() {
               setError(String(e)),
             )
           }
+          previewStarting={previewStarting}
+          previewReady={previewReadyHref != null}
+          onOpenPreview={openPreview}
+          onOpenReadyPreview={openReadyPreview}
           error={error}
         />
       ) : null}

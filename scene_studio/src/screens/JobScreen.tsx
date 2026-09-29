@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { JobStatus } from "../api";
 import { isJobActive, isStep1JobContext } from "../api";
 import { AppShell } from "../components/AppShell";
@@ -8,6 +9,10 @@ type Props = {
   onReviewDraft: () => void;
   onRegenerate: () => void;
   onRestartFromScratch: () => void;
+  previewStarting: boolean;
+  previewReady: boolean;
+  onOpenPreview: (compositionId: string) => void;
+  onOpenReadyPreview: () => void;
   error: string | null;
 };
 
@@ -25,13 +30,17 @@ export function JobScreen(props: Props) {
   const { job } = props;
   const running = isJobActive(job);
   const showRegen =
-    running ||
-    job.status === "timed_out" ||
-    job.status === "interrupted" ||
-    job.status === "cancelled" ||
-    job.status === "failed";
+    job.kind !== "steps" &&
+    (running ||
+      job.status === "timed_out" ||
+      job.status === "interrupted" ||
+      job.status === "cancelled" ||
+      job.status === "failed");
   const elapsed = elapsedLabel(job);
   const step1Context = isStep1JobContext(job);
+  const [previewKind, setPreviewKind] = useState<
+    "横屏" | "竖屏" | "封面横屏" | "封面竖屏"
+  >("横屏");
 
   return (
     <AppShell
@@ -49,6 +58,45 @@ export function JobScreen(props: Props) {
         </p>
         {job.error ? <pre className="error">{job.error}</pre> : null}
         <pre className="logs job-logs">{job.logs.join("\n")}</pre>
+        {job.kind === "steps" && job.status === "succeeded" ? (
+          <>
+            <select
+              value={previewKind}
+              disabled={props.previewStarting}
+              onChange={(e) =>
+                setPreviewKind(
+                  e.target.value as "横屏" | "竖屏" | "封面横屏" | "封面竖屏",
+                )
+              }
+            >
+              <option value="横屏">横屏</option>
+              <option value="竖屏">竖屏</option>
+              <option value="封面横屏">封面横屏</option>
+              <option value="封面竖屏">封面竖屏</option>
+            </select>
+            <button
+              type="button"
+              className="primary btn-block"
+              style={{ marginTop: 8 }}
+              disabled={props.previewStarting}
+              onClick={() =>
+                props.onOpenPreview(`${job.name}${previewKind}`)
+              }
+            >
+              {props.previewStarting ? "正在启动预览…" : "打开预览"}
+            </button>
+          </>
+        ) : null}
+        {props.previewReady ? (
+          <button
+            type="button"
+            className="primary btn-block"
+            style={{ marginTop: 8 }}
+            onClick={props.onOpenReadyPreview}
+          >
+            预览已就绪，打开
+          </button>
+        ) : null}
         {job.status === "succeeded" && job.phase === "awaiting_draft_review" ? (
           <button
             type="button"

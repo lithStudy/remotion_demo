@@ -409,6 +409,104 @@ def _run_generate(
             _finish(job, ok=False, error=f"{e}\n{traceback.format_exc()}")
 
 
+def start_steps(name: str, *, start_step: int, only: bool) -> Job:
+    if start_step not in (2, 3, 4):
+        raise ValueError("startStep 只能是 2、3 或 4")
+    with _lock:
+        _expire_locked()
+        if _running:
+            raise RuntimeError("已有生成任务在运行（全局单飞）")
+        job = Job(
+            jobId=str(uuid.uuid4()),
+            name=name,
+            kind="steps",
+            status="running",
+            phase="starting",
+        )
+        _begin_job(job)
+
+    thread = threading.Thread(
+        target=_run_steps,
+        args=(job.jobId, start_step, only),
+        daemon=True,
+    )
+    thread.start()
+    return job
+
+
+def _load_step(step_num: int) -> tuple[str, Callable[[], bool]]:
+    if step_num == 2:
+        from narrator_pipeline.audio.step2 import main as step_main
+
+        return "语音合成", step_main
+    if step_num == 3:
+        from narrator_pipeline.images.step3 import main as step_main
+
+        return "配图生成", step_main
+    if step_num == 4:
+        from narrator_pipeline.codegen.step4 import main as step_main
+
+        return "Remotion 代码生成", step_main
+    raise RuntimeError(f"不支持的步骤: {step_num}")
+
+
+def _invoke_step(step_num: int, title: str, main_fn: Callable[[], bool], argv: list[str]) -> None:
+    import sys
+
+    print(f"\n{'=' * 60}")
+    print(f"📌 Step {step_num}: {title}")
+    print(f"{'=' * 60}")
+    print(f"🔧 参数: {' '.join(argv)}\n")
+    old_argv = sys.argv
+    try:
+        sys.argv = [f"narrator_pipeline.step{step_num}"] + argv
+        try:
+            result = main_fn()
+        except SystemExit as exc:
+            result = exc.code in (0, None)
+        ok = True if result is None else bool(result)
+    finally:
+        sys.argv = old_argv
+    if not ok:
+        raise RuntimeError(f"Step {step_num} 失败")
+    print(f"\n✅ Step {step_num} 完成")
+
+
+def _run_steps(job_id: str, start_step: int, only: bool) -> None:
+    job = get_job(job_id)
+    if job is None:
+        return
+    end_step = start_step if only else 4
+    try:
+
+        def work() -> None:
+            from narrator_pipeline.web.studio import ensure_running
+
+            argv = ["--name", job.name]
+            for step_num in range(start_step, end_step + 1):
+                if not _still_active(job):
+                    return
+                title, main_fn = _load_step(step_num)
+                _set_phase(job, f"step{step_num}")
+                _invoke_step(step_num, title, main_fn, argv)
+            if not _still_active(job):
+                return
+            _set_phase(job, "studio")
+            state = ensure_running()
+            if state == "already":
+                print("Remotion Studio 已在运行，不重启")
+            else:
+                print("Remotion Studio 已启动")
+
+        _with_stdout_capture(job, work)
+        if _still_active(job):
+            _set_phase(job, "done")
+            _finish(job, ok=True)
+    except (Exception, SystemExit) as e:
+        if _still_active(job):
+            _finish(job, ok=False, error=f"{e}\n{traceback.format_exc()}")
+
+
 def _run_step1_only(
     job_id: str,
     llm_provider: str | None,

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { JobStatus, ProjectInfo } from "../api";
 import { api } from "../api";
 import { AppShell } from "../components/AppShell";
@@ -13,6 +14,12 @@ type Props = {
   onOpenDraft: () => Promise<void>;
   onOpenScripts: () => Promise<void>;
   onOpenJob?: () => void;
+  onRunSteps: (startStep: 2 | 3 | 4, only: boolean) => Promise<void>;
+  generationBusy: boolean;
+  previewStarting: boolean;
+  previewReady: boolean;
+  onOpenPreview: (compositionId: string) => void;
+  onOpenReadyPreview: () => void;
   onDeleted: () => Promise<void>;
   onError: (e: string | null) => void;
   error: string | null;
@@ -20,6 +27,12 @@ type Props = {
 
 export function ProjectHomeScreen(props: Props) {
   const p = props.project;
+  const [startStep, setStartStep] = useState<2 | 3 | 4>(4);
+  const [onlyStep, setOnlyStep] = useState(true);
+  const [previewKind, setPreviewKind] = useState<
+    "横屏" | "竖屏" | "封面横屏" | "封面竖屏"
+  >("横屏");
+  const stepsBusy = props.generationBusy;
   return (
     <AppShell
       title={p.name}
@@ -108,6 +121,79 @@ export function ProjectHomeScreen(props: Props) {
               已检测到 Step1 断点；续跑不会重跑场景拆分。
             </p>
           ) : null}
+        </section>
+
+        <section className="panel">
+          <h3 className="panel-title">成片步骤</h3>
+          <select
+            value={startStep}
+            disabled={!p.hasScripts || stepsBusy}
+            onChange={(e) =>
+              setStartStep(Number(e.target.value) as 2 | 3 | 4)
+            }
+          >
+            <option value={2}>Step 2 语音合成</option>
+            <option value={3}>Step 3 配图生成</option>
+            <option value={4}>Step 4 代码生成</option>
+          </select>
+          <label className="check">
+            <input
+              type="checkbox"
+              checked={onlyStep}
+              disabled={!p.hasScripts || stepsBusy}
+              onChange={(e) => setOnlyStep(e.target.checked)}
+            />
+            只跑这一步
+          </label>
+          <button
+            type="button"
+            className="primary btn-block"
+            disabled={!p.hasScripts || stepsBusy}
+            onClick={() =>
+              props
+                .onRunSteps(startStep, onlyStep)
+                .catch((e) => props.onError(String(e)))
+            }
+          >
+            {onlyStep ? `只跑 Step ${startStep}` : `从 Step ${startStep} 跑到 Step 4`}
+          </button>
+          <select
+            value={previewKind}
+            disabled={props.previewStarting}
+            onChange={(e) =>
+              setPreviewKind(
+                e.target.value as "横屏" | "竖屏" | "封面横屏" | "封面竖屏",
+              )
+            }
+            style={{ marginTop: 8 }}
+          >
+            <option value="横屏">横屏</option>
+            <option value="竖屏">竖屏</option>
+            <option value="封面横屏">封面横屏</option>
+            <option value="封面竖屏">封面竖屏</option>
+          </select>
+          <button
+            type="button"
+            className="btn-block"
+            style={{ marginTop: 8 }}
+            disabled={props.previewStarting}
+            onClick={() => props.onOpenPreview(`${p.name}${previewKind}`)}
+          >
+            {props.previewStarting ? "正在启动预览…" : "打开预览"}
+          </button>
+          {props.previewReady ? (
+            <button
+              type="button"
+              className="primary btn-block"
+              style={{ marginTop: 8 }}
+              onClick={props.onOpenReadyPreview}
+            >
+              预览已就绪，打开
+            </button>
+          ) : null}
+          <p className="muted" style={{ marginTop: 8 }}>
+            默认只跑选中的这一步。取消勾选后，会从选中的步骤跑到 Step 4。打开预览会在 Studio 未运行时先启动它，已经在跑则不重启。
+          </p>
         </section>
 
         <section className="action-grid">

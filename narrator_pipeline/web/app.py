@@ -3,14 +3,24 @@
 from __future__ import annotations
 
 from dataclasses import asdict
+from typing import Annotated
 from urllib.parse import quote
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, Header, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
+from fastapi.responses import JSONResponse, Response
 
 from narrator_pipeline.contracts.validation_errors import ScriptValidationError
-from narrator_pipeline.web.auth import AuthDep, issue_token
+from narrator_pipeline.web.auth import (
+    AuthDep,
+    COOKIE_NAME,
+    apply_session_cookie,
+    bearer_token,
+    clear_session_cookie,
+    issue_token,
+    revoke_token,
+    token_valid,
+)
 from narrator_pipeline.web import jobs as job_service
 from narrator_pipeline.web import workspace
 from narrator_pipeline.web.schemas import (
@@ -28,11 +38,17 @@ from narrator_pipeline.web.schemas import (
     LoginParam,
     PreviewSyncFromScriptsParam,
     ProjectNameParam,
+    RunStepsParam,
     RegenParamParam,
     SaveDraftParam,
     SaveScriptsParam,
 )
-from narrator_pipeline.web.settings import workspace_root
+from narrator_pipeline.web.settings import (
+    assert_workspace_is_project_root,
+    preview_port,
+    workspace_root,
+)
+from narrator_pipeline.web.studio import ensure_running, is_running as studio_is_running
 from narrator_pipeline.web.workspace import ensure_workspace
 
 
@@ -51,7 +67,25 @@ def create_app() -> FastAPI:
     @app.post("/api/login")
     def login(param: LoginParam):
         token = issue_token(param.password)
-        return {"token": token}
+        response = JSONResponse({"token": token})
+        apply_session_cookie(response, token)
+        return response
+
+    @app.post("/api/logout")
+    def logout(
+        request: Request,
+        authorization: Annotated[str | None, Header()] = None,
+    ):
+        bearer = bearer_token(authorization)
+        cookie = request.cookies.get(COOKIE_NAME)
+        if not token_valid(bearer) and not token_valid(cookie):
+            raise HTTPException(status_code=401, detail="无效或过期的 token")
+        revoke_token(bearer)
+        if cookie != bearer:
+            revoke_token(cookie)
+        response = JSONResponse({"ok": True})
+        clear_session_cookie(response)
+        return response
 
     @app.post("/api/workspace/info")
     def workspace_info(_auth: AuthDep, _param: EmptyParam):
@@ -136,6 +170,38 @@ def create_app() -> FastAPI:
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e)) from e
         return {"jobId": job.jobId, "status": job.status, "phase": job.phase}
+
+    @app.post("/api/generate/run-steps")
+    def generate_run_steps(_auth: AuthDep, param: RunStepsParam):
+        try:
+            workspace.assert_valid_name(param.name)
+            assert_workspace_is_project_root()
+            job = job_service.start_steps(
+                param.name,
+                start_step=param.startStep,
+                only=param.only,
+            )
+        except RuntimeError as e:
+            raise HTTPException(status_code=409, detail=str(e)) from e
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e)) from e
+        return {"jobId": job.jobId, "status": job.status, "phase": job.phase}
+
+    @app.post("/api/studio/info")
+    def studio_info(_auth: AuthDep, _param: EmptyParam):
+        return {"previewPort": preview_port(), "running": studio_is_running()}
+
+    @app.post("/api/studio/ensure")
+    def studio_ensure(_auth: AuthDep, _param: EmptyParam):
+        try:
+            state = ensure_running()
+        except RuntimeError as e:
+            raise HTTPException(status_code=503, detail=str(e)) from e
+        return {
+            "previewPort": preview_port(),
+            "running": True,
+            "state": state,
+        }
 
     def _job_payload(job: job_service.Job) -> dict:
         return {

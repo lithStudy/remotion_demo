@@ -24,6 +24,45 @@ def auth_password() -> str:
     return password
 
 
+def remotion_port() -> int:
+    """本机 Remotion Studio 端口。不要把这个端口映射到公网。"""
+    return int(os.environ.get("SCENE_STUDIO_REMOTION_PORT", "3000"))
+
+
+def preview_port() -> int:
+    """对外预览端口：校验登录 Cookie 后转发到本机 Studio。"""
+    return int(os.environ.get("SCENE_STUDIO_PREVIEW_PORT", "21122"))
+
+
+def assert_preview_port_available() -> int:
+    """预览端口不能和网页端口、接口端口相同。"""
+    port = preview_port()
+    api_port = int(os.environ.get("SCENE_STUDIO_PORT", "21119"))
+    ui_port = int(os.environ.get("SCENE_STUDIO_UI_PORT", "21118"))
+    if port == api_port or port == ui_port:
+        raise RuntimeError(
+            f"SCENE_STUDIO_PREVIEW_PORT={port} 与网页或接口端口重复"
+            f"（接口 {api_port}，网页 {ui_port}）。请改成一个未占用的端口。"
+        )
+    return port
+
+
+def assert_workspace_is_project_root() -> Path:
+    """步骤 2–4 与 Studio 必须写进、编译同一份仓库。"""
+    from narrator_pipeline.common import load_config
+
+    config = load_config(PACKAGE_ROOT)
+    configured = Path(config.get("project_root", REPO_ROOT)).resolve()
+    workspace = workspace_root()
+    if workspace != configured:
+        raise ValueError(
+            "SCENE_STUDIO_WORKSPACE 必须是 Remotion 仓库根目录，"
+            f"与 config.yaml 的 project_root 一致。当前工作区 {workspace}，"
+            f"project_root {configured}"
+        )
+    return workspace
+
+
 def pipeline_config_with_workspace() -> dict:
     from narrator_pipeline.common import load_config, load_env
 
